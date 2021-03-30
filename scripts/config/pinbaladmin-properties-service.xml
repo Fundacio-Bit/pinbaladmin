@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<server>
+  <mbean code="org.jboss.varia.property.SystemPropertiesService" name="jboss:type=Service,name=pinbaladminSystemProperties">
+    <attribute name="Properties">
+	  <!-- Propietat que indica als projectes que activins les caracteristiques
+      especials requerides en l'entorn de la CAIB (Govern Balear) si es true -->
+	  org.fundaciobit.pinbaladmin.iscaib=false
+	
+	
+      # Dialecte de Hibernate
+      org.fundaciobit.pinbaladmin.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+      # org.fundaciobit.pinbaladmin.hibernate.dialect=org.hibernate.dialect.MySQLDialect      
+      # org.fundaciobit.pinbaladmin.hibernate.dialect=org.hibernate.dialect.DB2Dialect
+      # org.fundaciobit.pinbaladmin.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+      # org.fundaciobit.pinbaladmin.hibernate.dialect=net.sf.hibernate.dialect.Oracle9Dialect
+      # org.fundaciobit.pinbaladmin.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+      # org.fundaciobit.pinbaladmin.hibernate.query.substitutions=true 1, false 0
+
+      <!-- Directori on es guardaran tots els fitxers de PinbalAdmin-->
+      org.fundaciobit.pinbaladmin.filesdirectory=c:\\tmp\\pinbaladminfiles
+      org.fundaciobit.pinbaladmin.template_formulari=D:\\dades\\dades\\CarpetesPersonals\\Programacio\\pinbaladmin_files\\plantilla_formulari.odt
+      
+      <!-- Accés HTTP a l'aplicació (Important que sigui http, no https)  -->
+      org.fundaciobit.pinbaladmin.url=http://localhost:8080/pinbaladmin
+      org.fundaciobit.pinbaladmin.email.from=pinbaladmin@pinbaladmin.org
+      org.fundaciobit.pinbaladmin.defaultlanguage=ca
+      org.fundaciobit.pinbaladmin.development=false
+      <!-- Tamany màxim de pujada de fitxers en bytes. No definit significa sense límit -->
+      org.fundaciobit.pinbaladmin.maxuploadsizeinbytes=
+      <!-- Tamany màxim del fitxer PDF una vegada se li han afegit els annexes i taula de firmes. No definit significa sense límit -->
+      org.fundaciobit.pinbaladmin.maxfitxeradaptatsizeinbytes=
+      <!-- Clau per encriptar l'identificador del fitxers a descarregar (IMPORTANT tamany de 16 caràcters) -->
+      org.fundaciobit.pinbaladmin.encryptkey=1234567890123456
+      org.fundaciobit.pinbaladmin.name=PinbalAdmin
+      
+      org.fundaciobit.pinbaladmin.versiopinbal=1.4.15
+      
+    </attribute>
+  </mbean>
+</server>

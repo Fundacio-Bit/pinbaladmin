@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<datasources>
+    <local-tx-datasource>
+        <jndi-name>org.fundaciobit.pinbaladmin.db</jndi-name>
+        <connection-url>jdbc:postgresql://localhost:5432/pinbaladmin</connection-url>
+        <driver-class>org.postgresql.Driver</driver-class>
+        <user-name>pinbaladmin</user-name>
+        <password>pinbaladmin</password>
+    </local-tx-datasource>
+</datasources>
