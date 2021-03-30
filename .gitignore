@@ -21,3 +21,55 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/back/.project
+/back/.settings
+/back/.classpath
+/back/.settings
+/ws/domini-sistra-server/.settings
+/utils/.settings
+/model/.settings
+/logic/.settings
+/jpa/.settings
+/ejb/.settings
+/jpa/.classpath
+/back/.classpath
+/ws/domini-sistra-server/.classpath
+/logic/.classpath
+/ejb/.classpath
+/utils/.classpath
+/model/.classpath
+/jpa/.project
+/model/.project
+/ws/domini-sistra-server/.project
+/logic/.project
+/ejb/.project
+/back/.project
+/utils/.project
+/ANTIC.sql
+/CAID_omplir_dades.html
+/all.sql
+/back/Dades_de_la_sol·licitud (1).pdf
+/back/Formulario - OK.odt
+/back/Formulario.doc
+/back/Formulario.odt
+/back/content.xml
+/back/formulario Ajunt Maó.xml
+/back/formulario DG Pol. Ling.xml
+/back/formulario IBAVI.xml
+/back/formulario IBDONA.xml
+/back/formulario.properties
+/back/formulario.xml
+/back/formulario2.xml
+/back/formulario_2.properties
+/back/formulario_Error.xml
+/compil.bat
+/compile.bat
+/compile.sh
+/ejb/src/main/resources/genapp_en.properties
+/lib/install_axis_jaxrpc_jar.bat
+/lib/install_axis_jaxrpc_jar.sh
+/logic/departaments.txt
+/logic/entitatsconvertidesacaib.txt
+/logic/src/main/java/org/fundaciobit/pinbaladmin/logic/Esborrar.java
+/scripts/genapp/lastconfig.properties
+/scripts/templates/plantilla_formulari.odt
