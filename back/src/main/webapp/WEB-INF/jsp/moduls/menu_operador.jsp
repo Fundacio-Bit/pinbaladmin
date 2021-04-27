@@ -35,6 +35,13 @@
         <span style="${(fn:contains(url, '/servei/'))? "font-weight: bold;" : ""}"><fmt:message key="servei.servei.plural" /></span>
       </a>
     </li>
+    
+    <li style="list-style-type: disc; list-style-position: inside;">
+      <a href="<c:url value="/operador/actualitzarserveis"/>">
+        <span style="${(fn:contains(url, '/operador/actualitzarserveis'))? "font-weight: bold;" : ""}">Actualitzar Serveis</span>
+      </a>
+    </li>
+    
     <li><hr  style="margin-top: 6px;  margin-bottom: 6px;" /></li>
     
     <li style="list-style-type: disc; list-style-position: inside;">

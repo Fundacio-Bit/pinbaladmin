@@ -101,10 +101,8 @@
     <definition name="entitatServeiListWebDB_operador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatServeiList.jsp" />
     </definition>
-    
-    
-    
-   <definition name="solicitudListWebDB_FullView_operador" extends="operador_base">
+
+    <definition name="solicitudListWebDB_FullView_operador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/solicitudFormFullView.jsp" />
     </definition>
     
@@ -186,6 +184,11 @@
     <definition name="formularicaidOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/formularicaid.jsp" />
     </definition>
+    
+    <definition name="actualitzarserveis" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/actualitzarserveis.jsp" />
+    </definition>
+    
 
     <!--  ===========  DESENVOLUPAMENT ================== -->
     
