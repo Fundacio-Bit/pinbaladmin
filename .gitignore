@@ -35,6 +35,7 @@ hs_err_pid*
 /back/.classpath
 /ws/domini-sistra-server/.classpath
 /logic/.classpath
+/logic/target
 /ejb/.classpath
 /utils/.classpath
 /model/.classpath
@@ -44,6 +45,7 @@ hs_err_pid*
 /logic/.project
 /ejb/.project
 /back/.project
+/back/target
 /utils/.project
 /ANTIC.sql
 /CAID_omplir_dades.html
@@ -81,3 +83,12 @@ hs_err_pid*
 /back/src/main/resources/logicmissatges_es.properties
 /back/src/main/resources/pinbaladmin_genapp_ca.properties
 /back/src/main/resources/pinbaladmin_genapp_es.properties
+/ear/target
+/logic/src/main/resources/genapp_ca.properties
+/logic/src/main/resources/genapp_en.properties
+/logic/src/main/resources/genapp_es.properties
+/logic/src/main/resources/pinbaladmin_genapp_ca.properties
+/logic/src/main/resources/pinbaladmin_genapp_es.properties
+/ws/domini-sistra-server/target
+/persistence/jta/target
+/persistence/reslocal/target

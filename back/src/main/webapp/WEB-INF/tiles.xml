@@ -152,41 +152,64 @@
     <definition name="emailListOperator" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/emailList.jsp" />
     </definition>
-    
-    
+
     <definition name="departamentFormOperador" extends="operador_base">
         <put-attribute name="titol" value="departament.departament" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/departamentForm.jsp" />
     </definition>
-    
+
     <definition name="departamentListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/departamentList.jsp" />
     </definition>
-    
-        <definition name="grupEntitatCedentFormOperador" extends="operador_base">
+
+    <definition name="grupEntitatCedentFormOperador" extends="operador_base">
         <put-attribute name="titol" value="grupEntitatCedent.grupEntitatCedent" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/grupEntitatCedentForm.jsp" />
     </definition>
-    
+
     <definition name="grupEntitatCedentListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/grupEntitatCedentList.jsp" />
     </definition>
-    
+
     <definition name="areaFormOperador" extends="operador_base">
         <put-attribute name="titol" value="area.area" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/areaForm.jsp" />
     </definition>
-    
+
     <definition name="areaListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/areaList.jsp" />
     </definition>
-    
+
     <definition name="formularicaidOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/formularicaid.jsp" />
     </definition>
-    
+
     <definition name="actualitzarserveis" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/actualitzarserveis.jsp" />
+    </definition>
+
+
+    <definition name="eventFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="event.event" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
+    </definition>
+
+    <definition name="eventFormOperadorPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="titol" value="event.event" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
+    </definition>
+
+      
+    <definition name="eventListOperador" template="/WEB-INF/jsp/layout/onlycontentwithoutimportslayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/common/events.jsp" />
+    </definition>
+    
+     <definition name="eventListOperadorIframe" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
+    </definition>
+    
+     <definition name="eventListOperadorIframePublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
     </definition>
     
 
@@ -372,6 +395,16 @@
     
     <definition name="estatTiquetListWebDB" extends="webdb">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatTiquetList.jsp" />
+    </definition>
+
+
+    <definition name="eventFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="event.event" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
+    </definition>
+    
+    <definition name="eventListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventList.jsp" />
     </definition>
 
 

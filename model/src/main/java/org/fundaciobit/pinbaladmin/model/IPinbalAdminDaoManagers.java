@@ -18,6 +18,7 @@ public interface IPinbalAdminDaoManagers {
 	public IEstatSolicitudManager getEstatSolicitudManager();
 	public IEstatSolicitudServeiManager getEstatSolicitudServeiManager();
 	public IEstatTiquetManager getEstatTiquetManager();
+	public IEventManager getEventManager();
 	public IFitxerManager getFitxerManager();
 	public IFormulariManager getFormulariManager();
 	public IGrupEntitatManager getGrupEntitatManager();

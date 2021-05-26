@@ -4,11 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,12 +18,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.plugins.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,6 +52,9 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
   public static final String NOMES_FITXERS = "NOMES_FITXERS";
   
   public static final String DEPARTAMENT = "DEPARTAMENT";
+  
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventLocal.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.EventLocal eventEjb;
 
   @RequestMapping(value = "/nou", method = RequestMethod.GET)
   public String nou(HttpServletRequest request) throws Exception {
@@ -93,12 +100,10 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
       }
 
       log.info(" ES NOU !!!!!!!!!!!!!!!!!!!");
-      ;
 
     } else {
 
       log.info(" ES EDIT !!!!!!!!!!!!!!!!!!!");
-      ;
 
     }
 
@@ -273,6 +278,28 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
 
     }
   }
+  
+  @Override
+  public SolicitudJPA create(HttpServletRequest request, SolicitudJPA solicitud)
+      throws Exception,I18NException, I18NValidationException {
+    SolicitudJPA soli = (SolicitudJPA) solicitudEjb.create(solicitud);
+
+    try {
+      java.lang.Long _solicitudID_ = soli.getSolicitudID();
+      java.lang.Long _tascaTecnicaID_ = null;
+      java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+      int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+      java.lang.String _persona_ = request.getUserPrincipal().getName();
+      java.lang.String _comentari_="S'ha creat la sol·licitud a partir de fitxer XML";
+      java.lang.Long _fitxerID_ = null;
+      boolean _noLlegit_ = false;
+      eventEjb.create(_solicitudID_,  _tascaTecnicaID_, _dataEvent_, _tipus_,  _persona_,  _comentari_,  _fitxerID_,  _noLlegit_);
+    } catch(Throwable th) {
+      log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
+    }
+    return soli;
+  }
+  
 
   @Override
   public String getTileForm() {

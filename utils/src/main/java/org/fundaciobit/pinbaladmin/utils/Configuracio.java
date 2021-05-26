@@ -8,7 +8,7 @@ import java.io.File;
  * 
  */
 public class Configuracio implements Constants {
- 
+
   public static boolean isCAIB() {
     return Boolean.getBoolean(PINBALADMIN_PROPERTY_BASE + "iscaib");
   }
@@ -17,12 +17,11 @@ public class Configuracio implements Constants {
     String path = System.getProperty(PINBALADMIN_PROPERTY_BASE + "filesdirectory");
     return new File(path);
   }
-  
+
   public static boolean isDesenvolupament() {
     return Boolean.getBoolean(PINBALADMIN_PROPERTY_BASE + "development");
   }
 
-  
   public static String getVersioPinbal() {
     return System.getProperty(PINBALADMIN_PROPERTY_BASE + "versiopinbal");
   }
@@ -43,9 +42,9 @@ public class Configuracio implements Constants {
     return System.getProperty(PINBALADMIN_PROPERTY_BASE + "defaultlanguage", "ca");
   }
 
-
   public static byte[] getEncryptKey() {
-    return System.getProperty(PINBALADMIN_PROPERTY_BASE + "encryptkey", "0123456789123456").getBytes();
+    return System.getProperty(PINBALADMIN_PROPERTY_BASE + "encryptkey", "0123456789123456")
+        .getBytes();
   }
 
   public static Long getMaxUploadSizeInBytes() {
@@ -56,4 +55,23 @@ public class Configuracio implements Constants {
     return Long.getLong(PINBALADMIN_PROPERTY_BASE + "maxfitxeradaptatsizeinbytes");
   }
 
+  public static boolean isTipusTramitador(int tipus) {
+    switch (tipus) {
+
+    case EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT: // PRIVAT - TRAMITADOR
+      return true;
+    case EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC: // PUBLIC - TRAMITADOR
+      return true;
+    default:
+    case EVENT_TIPUS_COMENTARI_CONTACTE: // PUBLIC - CONTACTE
+      return false;
+    case EVENT_TIPUS_TIQUET_MINHAP: // PRIVAT - TRAMITADOR
+      return true;
+    }
+
+  }
+
+  public static boolean isTipusEventPublic(int tipus) {
+    return tipus > 0;
+  }
 }

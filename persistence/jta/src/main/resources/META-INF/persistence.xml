@@ -24,6 +24,7 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 		<class>org.fundaciobit.pinbaladmin.jpa.EstatSolicitudJPA</class>
 		<class>org.fundaciobit.pinbaladmin.jpa.EstatSolicitudServeiJPA</class>
 		<class>org.fundaciobit.pinbaladmin.jpa.EstatTiquetJPA</class>
+		<class>org.fundaciobit.pinbaladmin.jpa.EventJPA</class>
 		<class>org.fundaciobit.pinbaladmin.jpa.FitxerJPA</class>
 		<class>org.fundaciobit.pinbaladmin.jpa.FormulariJPA</class>
 		<class>org.fundaciobit.pinbaladmin.jpa.GrupEntitatJPA</class>

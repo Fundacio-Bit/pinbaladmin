@@ -21,6 +21,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final EstatSolicitudJPAManager pad_estatsolicitud;
    private final EstatSolicitudServeiJPAManager pad_estatsolicitudservei;
    private final EstatTiquetJPAManager pad_estattiquet;
+   private final EventJPAManager pad_event;
    private final FitxerJPAManager pad_fitxer;
    private final FormulariJPAManager pad_formulari;
    private final GrupEntitatJPAManager pad_grupentitat;
@@ -49,6 +50,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_estatsolicitud = new EstatSolicitudJPAManager(__em);
     this.pad_estatsolicitudservei = new EstatSolicitudServeiJPAManager(__em);
     this.pad_estattiquet = new EstatTiquetJPAManager(__em);
+    this.pad_event = new EventJPAManager(__em);
     this.pad_fitxer = new FitxerJPAManager(__em);
     this.pad_formulari = new FormulariJPAManager(__em);
     this.pad_grupentitat = new GrupEntitatJPAManager(__em);
@@ -120,6 +122,10 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
 	public IEstatTiquetManager getEstatTiquetManager() {
 	  return this.pad_estattiquet;
+	};
+
+	public IEventManager getEventManager() {
+	  return this.pad_event;
 	};
 
 	public IFitxerManager getFitxerManager() {

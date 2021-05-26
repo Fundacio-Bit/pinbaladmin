@@ -5,16 +5,16 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Id;
-import javax.persistence.GenerationType;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.ForeignKey;
 import java.util.HashSet;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Entity;
+import javax.persistence.GenerationType;
 import java.util.Set;
-import javax.persistence.FetchType;
+import org.hibernate.annotations.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
+import org.hibernate.annotations.ForeignKey;
 import javax.persistence.GeneratedValue;
 
 
@@ -351,6 +351,19 @@ private static final long serialVersionUID = -1746697545L;
 	}
 
 
+// EXP  Field:solicitudid | Table: pad_event | Type: 0  
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitud")
+	private Set<EventJPA> events = new HashSet<EventJPA>(0);
+	public  Set<EventJPA> getEvents() {
+    return this.events;
+  }
+
+	public void setEvents(Set<EventJPA> events) {
+	  this.events = events;
+	}
+
+
 // EXP  Field:solicitudid | Table: pad_solicitudservei | Type: 0  
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitud")
@@ -485,6 +498,10 @@ private static final long serialVersionUID = -1746697545L;
     if(!"SolicitudServeiJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServeis) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServeis())) ) {
       __tmp.setSolicitudServeis(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServeis(), __alreadyCopied,"SolicitudJPA"));
+    }
+    if(!"EventJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
+      __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"SolicitudJPA"));
     }
     if(!"DocumentSolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentSolicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentSolicituds())) ) {

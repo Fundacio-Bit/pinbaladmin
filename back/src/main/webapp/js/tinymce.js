@@ -31,7 +31,7 @@ tinyMCE.init({
         // Example content CSS (should be your site CSS)  
         // using false to ensure that the default browser settings are used for best Accessibility  
         // ACCESSIBILITY SETTINGS  
-        content_css : "/portafib/css/default.css,/portafib/css/bootstrap.css,/portafib/css/bootstrap.min.css",  
+        content_css : "/pinbaladmin/css/default.css,/pinbaladmin/css/bootstrap.css,/pinbaladmin/css/bootstrap.min.css",  
         // Use browser preferred colors for dialogs.  
         browser_preferred_colors : true,  
         detect_highcontrast : true,
@@ -48,11 +48,11 @@ tinyMCE.init({
 	    editor_selector : "mceEditorReadOnly",
 	    theme : "advanced",
 	    readonly : "true",
-	    //plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave",  
+	    //plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave",  
 	    language : lang, 
 	  
 	    // ACCESSIBILITY SETTINGS  
-	    content_css : "/portafib/css/default.css,/portafib/css/bootstrap.css,/portafib/css/bootstrap.min.css",
+	    content_css : "/pinbaladmin/css/default.css,/pinbaladmin/css/bootstrap.css,/pinbaladmin/css/bootstrap.min.css",
 	    // Use browser preferred colors for dialogs.  
 	    browser_preferred_colors : true,  
 	    detect_highcontrast : true,

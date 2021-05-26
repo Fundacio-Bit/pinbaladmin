@@ -37,7 +37,15 @@ public interface Constants {
    */
   public static final int TIPUSCONSENTIMENT_NOOP_LLEI = 0;
   public static final int TIPUSCONSENTIMENT_SI_LLEI = 1;
-
-
-
+  
+  
+  /**
+   * Tipus EVENTs
+   * 
+   */  
+  public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT - TRAMITADOR
+  public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1;  // PUBLIC - TRAMITADOR
+  public static final int EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC - CONTACTE
+  public static final int EVENT_TIPUS_TIQUET_MINHAP = -2; // PRIVAT - TRAMITADOR
+  
 }

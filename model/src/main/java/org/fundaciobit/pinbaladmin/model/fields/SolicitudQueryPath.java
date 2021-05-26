@@ -119,6 +119,20 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
+  public EventQueryPath EVENTS() {
+    return new EventQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "events" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
   public SolicitudServeiQueryPath SOLICITUDSERVEIS() {
     return new SolicitudServeiQueryPath(new QueryPath() {
       public String getQueryPath() {

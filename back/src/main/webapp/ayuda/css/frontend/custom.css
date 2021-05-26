@@ -1,0 +1,292 @@
+/* Colors */
+
+#header > div, #headerContent, #headerBar, #footer {
+    background-color: #39C;
+}
+
+.ie7 #header > div, .ie8 #header > div {
+	background-color: #39C;
+	}
+
+#mainWindow {
+   background-color: #DED8E0;
+   background-color: #DEE9F4;
+   border-radius: 7px 7px 7px 7px;
+   border: 3px solid white;
+}
+
+div#container {
+   background: -moz-linear-gradient(center top , #F4F4F4 0%, #FFFFFF 100%) repeat scroll 0 0 transparent;
+}
+
+.sandboxd #contentData {
+   background-color: #EDF6FF;
+   border: 1px solid #85C0C8;
+
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   border-radius: 3px;
+}
+
+table.data thead th, table.data thead td {
+   background-color: #BE86B6;
+   border: 1px solid #D6D6D6;
+   color: #FFF;
+}
+
+table.sortable th a.sort, table.sortable th a.sorted_up, table.sortable th a.sorted_down {
+    padding: 0.7em 16px 0.7em 0.5em;
+}
+
+table.data thead th a {
+	color: #FFF;
+	font-weight: normal;
+	}
+
+table.data tbody tr:nth-child(2n) {
+   background-color: #F7F7F7;
+}
+
+table.data tbody tr:nth-child(2n+1) {
+   background-color: #F4E7F3;
+}
+
+.pagination ol li.numResults, .pagination ol li.summary, .pagination ol li.selected {
+   background-color: #BE86B6;
+   border: 1px solid #DEFFFC;
+   color: white;
+}
+
+a.sorted_up {
+    background-image: url("images/sort_up_w.png");
+}
+
+a.sorted_down {
+	background-image: url("images/sort_down_w.png");
+	}
+
+a.sort {
+    background-image: url("images/sort_w.png");
+}
+
+/* Layout */
+
+#header {
+	margin-bottom: 20px;
+	}
+
+.sandboxd #contentData {
+	margin-top: 10px;
+	}
+
+.sandboxd .windowHeader {
+	padding: 0;
+	border: none;
+	margin: 20px 20px 0 20px;
+	}
+
+.windowHeader .windowToolbar {
+	margin: 0;
+	}
+
+.windowHeader h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding-top: 0.3em;
+}
+
+.windowHeader h4 {
+	font-size: 1.4em;
+	}
+
+textarea {
+	height: auto;
+	}
+
+form.filterForm input[type="submit"] {
+	margin-top: 2em;
+	}
+
+form.filterForm a.clearForm {
+	margin-top: 2em;
+	}
+
+/* */
+
+div.selectedDepartamentoContainer {
+	margin-left: 120px;
+	margin-right: 152px;
+
+	background: #FFF;
+	padding: 5px;
+	border: 1px solid #CCC;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+div#DepartamentoDestinoContainer span.ui-icon {
+	background-image: url('images/ui-icons_888888_256x240.png');
+}
+
+#ConsultarDepartamentoDestino {
+	float: right;
+	width: 28px;
+	height: 22px;
+	text-indent: -99999em;
+
+	background: #FFF url('images/agenda.png') no-repeat center center;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+
+	-moz-box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+
+	border: 1px solid #EEE;
+}
+
+.ie7 #ConsultarDepartamentoDestino, .ie8 #ConsultarDepartamentoDestino {
+	border: 1px solid #CCC;
+	}
+
+#ConsultarDepartamentoDestino span {
+	display: none;
+	}
+
+.star{ color:red; }
+
+#lista_aplicaciones li{ font-size:14px; padding:4px;}
+#lista_aplicaciones li a:hover { color: #000; }
+#lista_aplicaciones li a:visited { color: #000; }
+#lista_aplicaciones li a:link { color: #000; }
+#lista_aplicaciones li:hover{ background-color: #DEE9F4; }
+
+.fb, fieldset{
+    padding-top: 1em;
+    margin-bottom: 1em;
+}
+.cmp, .fld {
+    clear: both;
+    margin: 5px 0;
+    margin: 0 0 0.5em 0;
+}
+
+
+ol.listfaqs{margin:0;}
+ol.listfaqs li{padding: 25px 10px;list-style:none outside none;overflow:hidden;background-color: #F2F8FF;}
+ol.listfaqs li .preg-resp{ display:block; padding-left:10px;}
+ol.listfaqs li .faqnumber{height:100px; color:#D9E7F6; float:left;font-size:50px;font-weight:bold;left:0px;letter-spacing:-4px;line-height:50px;position:relative;top:-2px;}
+ol.listfaqs li .faqrespuesta{color:#666666;font-size:12px;font-weight:normal;}
+ol.listfaqs li h3.faqpregunta{font-size:18px;font-style:italic; padding-bottom: 10px;}
+ol.listfaqs li.odd { background-color:#D9E7F6;}
+ol.listfaqs li.odd .faqnumber { color:#FFF;}
+
+#tipologias_faqs { font-size:13px; list-style:none outside none; margin:10px 0 0; padding:0;}
+#tipologias_faqs li {margin:0px 0;overflow:hidden;padding:5px;}
+#tipologias_faqs li:hover {-moz-border-radius:10px 0 0 10px;background-color:#D9E7F6;border-bottom:medium none; text-decoration: none;}
+#tipologias_faqs li.selected {color: #000000;font-weight: bold;-moz-border-radius:4px 0 0 4px;background-color:#D9E7F6;border-bottom:medium none;}
+#tipologias_faqs li span.marque {padding-right:5px;}
+#tipologias_faqs li span.question {width:265px;}
+#tipologias_faqs li a {padding:0 0px; text-decoration: none; color: #000000;}
+
+
+
+.table-faq { width:100%;}
+.table-faq td { padding-left:0px; padding-right:0px; vertical-align: top}
+.table-faq td.faqLeft { width:260px; border-right: 1px solid #FEFEFE; }
+.table-faq td.faqRight { padding-left: 0; padding-top:0px;}
+
+
+
+
+div.selectedEntContainer {
+    margin-left: 120px;
+    margin-right: 42px;
+
+    background: #FFF;
+    padding: 5px;
+    border: 1px solid #CCC;
+
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    }
+
+div#EntidadDestinoContainer span.ui-icon {
+    background-image: url('../jquery/images/ui-icons_888888_256x240.png');
+    }
+
+#ConsultarDirectorioComun {
+    float: right;
+    width: 28px;
+    height: 22px;
+    text-indent: -99999em;
+
+    background: #FFF url('images/agenda.png') no-repeat center center;
+
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+
+    border: 1px solid #EEE;
+    }
+.ui-autocomplete-category {
+        font-weight: bold;
+        padding: .2em .4em;
+        margin: .8em 0 .2em;
+        line-height: 1.5;
+}
+
+
+
+div.mptFile{
+    margin-left:120px;
+ }
+
+
+#marco_mensaje_extranjeria
+{
+    text-align: left;
+    background-color: lightcoral;
+
+    float: left;
+    width: 85%;
+    padding: 10px;
+
+    border-radius: 5px;
+    color: #2b4853;
+}
+
+#marco_mensaje_tic
+{
+    text-align: left;
+    background-color: moccasin;
+
+    float: left;
+    padding: 10px;
+
+    border-radius: 5px;
+    color: #2b4853;
+}
+
+.capa_boton_enviar_extranjeria
+{
+    float: left;
+    width: 10%;
+    padding: 10px;
+}
+
+.enlace_custom{
+
+    color: #2b4853 !important;
+    text-decoration: underline !important;
+}
+

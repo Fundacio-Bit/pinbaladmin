@@ -292,6 +292,25 @@
       </ul>
     </li>
 
+    <%-- Event --%>
+    <li>
+      <a href="#" role="branch" class="tree-toggle ${fn:contains(url, 'event/')? "" : "closed"}" data-toggle="branch" data-value="suportada"><span style="${fn:contains(url, 'event/')? "font-weight: bold;" : ""}"><fmt:message key="event.event"/></span></a>
+      <ul class="${fn:contains(url, 'event/')? "branch in" : "branch"}">
+        <li style="list-style-type: disc; list-style-position: inside;" ><a href="<c:url value="/webdb/event/new"/>" ><span style="${(fn:contains(url, 'event/') && fn:contains(url, '/new'))? "font-weight: bold;" : ""}" >
+       <fmt:message var="entityname" key="event.event"/>
+       <fmt:message key="genapp.createtitle" >
+         <fmt:param value="${entityname}"/>
+       </fmt:message>
+       </span></a></li>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/event/list/1"/>" ><span style="${(fn:contains(url, 'event/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+        <fmt:message key="genapp.listtitle" >
+         <fmt:param value="${entityname}"/>
+       </fmt:message>
+        </span></a>
+        </li>
+      </ul>
+    </li>
+
     <%-- Fitxer --%>
     <li>
       <a href="#" role="branch" class="tree-toggle ${fn:contains(url, 'fitxer/')? "" : "closed"}" data-toggle="branch" data-value="suportada"><span style="${fn:contains(url, 'fitxer/')? "font-weight: bold;" : ""}"><fmt:message key="fitxer.fitxer"/></span></a>

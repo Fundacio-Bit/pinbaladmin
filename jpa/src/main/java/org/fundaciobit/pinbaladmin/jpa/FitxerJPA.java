@@ -178,6 +178,19 @@ private static final long serialVersionUID = -252813913L;
 	}
 
 
+// EXP  Field:fitxerid | Table: pad_event | Type: 0  
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxerID")
+	private Set<EventJPA> events = new HashSet<EventJPA>(0);
+	public  Set<EventJPA> getEvents() {
+    return this.events;
+  }
+
+	public void setEvents(Set<EventJPA> events) {
+	  this.events = events;
+	}
+
+
 // EXP  Field:fitxerid | Table: pad_formulari | Type: 0  
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxerID")
@@ -339,6 +352,10 @@ private static final long serialVersionUID = -252813913L;
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_documentsolicitudids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_documentsolicitudids())) ) {
       __tmp.setSolicitud_documentsolicitudids(SolicitudJPA.copyJPA(__jpa.getSolicitud_documentsolicitudids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"EventJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
+      __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"DocumentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.document_fitxeroriginalids) || org.hibernate.Hibernate.isInitialized(__jpa.getDocument_fitxeroriginalids())) ) {

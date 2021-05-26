@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -124,6 +125,12 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
     }
 
     return files;
+  }
+  
+  @Override
+  @PermitAll
+  public SolicitudJPA findByPrimaryKey(Long _ID_) {
+     return super.findByPrimaryKey(_ID_);
   }
 
 }
