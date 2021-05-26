@@ -92,3 +92,6 @@ hs_err_pid*
 /ws/domini-sistra-server/target
 /persistence/jta/target
 /persistence/reslocal/target
+/model/target
+/jpa/target
+/ejb/target
