@@ -1,4 +1,4 @@
-# pinbaladmin
+# PinbalAdmin 1.0
 
 
 
