@@ -14,7 +14,7 @@ public interface EventFields extends java.io.Serializable {
 
 	 public static final LongField EVENTID = new LongField(_TABLE_MODEL, "eventID", "eventid");  // PK
 	 public static final LongField SOLICITUDID = new LongField(_TABLE_MODEL, "solicitudID", "solicitudid");
-	 public static final LongField TASCATECNICAID = new LongField(_TABLE_MODEL, "tascaTecnicaID", "tascatecnicaid");
+	 public static final LongField INCIDENCIATECNICAID = new LongField(_TABLE_MODEL, "incidenciaTecnicaID", "incidenciatecnicaid");
 	 public static final TimestampField DATAEVENT = new TimestampField(_TABLE_MODEL, "dataEvent", "dataevent");
 	 public static final IntegerField TIPUS = new IntegerField(_TABLE_MODEL, "tipus", "tipus");
 	 public static final StringField PERSONA = new StringField(_TABLE_MODEL, "persona", "persona");
@@ -26,7 +26,7 @@ public interface EventFields extends java.io.Serializable {
   public static final Field<?>[] ALL_EVENT_FIELDS = {
     EVENTID,
     SOLICITUDID,
-    TASCATECNICAID,
+    INCIDENCIATECNICAID,
     DATAEVENT,
     TIPUS,
     PERSONA,

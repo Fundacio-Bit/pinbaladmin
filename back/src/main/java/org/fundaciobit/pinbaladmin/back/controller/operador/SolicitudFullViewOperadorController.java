@@ -180,9 +180,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
         Properties prop = SolicitudDesDeXmlOperador.getPropertiesFromFormulario(xml);
 
-        generarServeis(soliID, prop);
+        generarServeis(request,soliID, prop);
 
-        generarFormulari(soliID, prop);
+        generarFormulari(request, soliID, prop);
 
       } catch (Exception e) {
         log.error(e.getMessage(), e);
@@ -299,7 +299,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       } else {
 
-        HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram");
+        HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
 
       }
 

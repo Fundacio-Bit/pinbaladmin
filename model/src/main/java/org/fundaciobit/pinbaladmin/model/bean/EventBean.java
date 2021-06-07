@@ -12,7 +12,7 @@ private static final long serialVersionUID = 2034842954L;
 
 	long eventID;// PK
 	java.lang.Long solicitudID;
-	java.lang.Long tascaTecnicaID;
+	java.lang.Long incidenciaTecnicaID;
 	java.sql.Timestamp dataEvent;
 	int tipus;
 	java.lang.String persona;
@@ -26,10 +26,10 @@ private static final long serialVersionUID = 2034842954L;
   }
 
   /** Constructor amb tots els camps  */
-  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long tascaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
     this.eventID=eventID;
     this.solicitudID=solicitudID;
-    this.tascaTecnicaID=tascaTecnicaID;
+    this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
     this.tipus=tipus;
     this.persona=persona;
@@ -38,9 +38,9 @@ private static final long serialVersionUID = 2034842954L;
     this.noLlegit=noLlegit;
 }
   /** Constructor sense valors autoincrementals */
-  public EventBean(java.lang.Long solicitudID , java.lang.Long tascaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventBean(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
     this.solicitudID=solicitudID;
-    this.tascaTecnicaID=tascaTecnicaID;
+    this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
     this.tipus=tipus;
     this.persona=persona;
@@ -59,7 +59,7 @@ private static final long serialVersionUID = 2034842954L;
   public EventBean(Event __bean) {
     this.setEventID(__bean.getEventID());
     this.setSolicitudID(__bean.getSolicitudID());
-    this.setTascaTecnicaID(__bean.getTascaTecnicaID());
+    this.setIncidenciaTecnicaID(__bean.getIncidenciaTecnicaID());
     this.setDataEvent(__bean.getDataEvent());
     this.setTipus(__bean.getTipus());
     this.setPersona(__bean.getPersona());
@@ -84,11 +84,11 @@ private static final long serialVersionUID = 2034842954L;
 		this.solicitudID = _solicitudID_;
 	};
 
-	public java.lang.Long getTascaTecnicaID() {
-		return(tascaTecnicaID);
+	public java.lang.Long getIncidenciaTecnicaID() {
+		return(incidenciaTecnicaID);
 	};
-	public void setTascaTecnicaID(java.lang.Long _tascaTecnicaID_) {
-		this.tascaTecnicaID = _tascaTecnicaID_;
+	public void setIncidenciaTecnicaID(java.lang.Long _incidenciaTecnicaID_) {
+		this.incidenciaTecnicaID = _incidenciaTecnicaID_;
 	};
 
 	public java.sql.Timestamp getDataEvent() {
@@ -142,7 +142,7 @@ private static final long serialVersionUID = 2034842954L;
     EventBean __tmp = new EventBean();
     __tmp.setEventID(__bean.getEventID());
     __tmp.setSolicitudID(__bean.getSolicitudID());
-    __tmp.setTascaTecnicaID(__bean.getTascaTecnicaID());
+    __tmp.setIncidenciaTecnicaID(__bean.getIncidenciaTecnicaID());
     __tmp.setDataEvent(__bean.getDataEvent());
     __tmp.setTipus(__bean.getTipus());
     __tmp.setPersona(__bean.getPersona());

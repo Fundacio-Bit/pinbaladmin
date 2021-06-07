@@ -35,8 +35,9 @@ private static final long serialVersionUID = 342741761L;
 	@Column(name="solicitudid",length = 19)
 	java.lang.Long solicitudID;
 
-	@Column(name="tascatecnicaid",length = 19)
-	java.lang.Long tascaTecnicaID;
+	@Index(name="pad_event_inctecnicaid_fk_i")
+	@Column(name="incidenciatecnicaid",length = 19)
+	java.lang.Long incidenciaTecnicaID;
 
 	@Column(name="dataevent",nullable = false,length = 29,precision = 6)
 	java.sql.Timestamp dataEvent;
@@ -64,10 +65,10 @@ private static final long serialVersionUID = 342741761L;
   }
 
   /** Constructor amb tots els camps  */
-  public EventJPA(long eventID , java.lang.Long solicitudID , java.lang.Long tascaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventJPA(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
     this.eventID=eventID;
     this.solicitudID=solicitudID;
-    this.tascaTecnicaID=tascaTecnicaID;
+    this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
     this.tipus=tipus;
     this.persona=persona;
@@ -76,9 +77,9 @@ private static final long serialVersionUID = 342741761L;
     this.noLlegit=noLlegit;
 }
   /** Constructor sense valors autoincrementals */
-  public EventJPA(java.lang.Long solicitudID , java.lang.Long tascaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventJPA(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
     this.solicitudID=solicitudID;
-    this.tascaTecnicaID=tascaTecnicaID;
+    this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
     this.tipus=tipus;
     this.persona=persona;
@@ -97,7 +98,7 @@ private static final long serialVersionUID = 342741761L;
   public EventJPA(Event __bean) {
     this.setEventID(__bean.getEventID());
     this.setSolicitudID(__bean.getSolicitudID());
-    this.setTascaTecnicaID(__bean.getTascaTecnicaID());
+    this.setIncidenciaTecnicaID(__bean.getIncidenciaTecnicaID());
     this.setDataEvent(__bean.getDataEvent());
     this.setTipus(__bean.getTipus());
     this.setPersona(__bean.getPersona());
@@ -122,11 +123,11 @@ private static final long serialVersionUID = 342741761L;
 		this.solicitudID = _solicitudID_;
 	};
 
-	public java.lang.Long getTascaTecnicaID() {
-		return(tascaTecnicaID);
+	public java.lang.Long getIncidenciaTecnicaID() {
+		return(incidenciaTecnicaID);
 	};
-	public void setTascaTecnicaID(java.lang.Long _tascaTecnicaID_) {
-		this.tascaTecnicaID = _tascaTecnicaID_;
+	public void setIncidenciaTecnicaID(java.lang.Long _incidenciaTecnicaID_) {
+		this.incidenciaTecnicaID = _incidenciaTecnicaID_;
 	};
 
 	public java.sql.Timestamp getDataEvent() {
@@ -201,6 +202,21 @@ private static final long serialVersionUID = 342741761L;
     this.solicitud = solicitud;
   }
 
+// IMP Field:incidenciatecnicaid | Table: pad_incidenciatecnica | Type: 1  
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@ForeignKey(name="pad_event_inctecnica_it_fk")
+	@JoinColumn(name = "incidenciatecnicaid", referencedColumnName ="incidenciaTecnicaID", nullable = true, insertable=false, updatable=false)
+	private IncidenciaTecnicaJPA incidenciaTecnica;
+
+	public IncidenciaTecnicaJPA getIncidenciaTecnica() {
+    return this.incidenciaTecnica;
+  }
+
+	public  void setIncidenciaTecnica(IncidenciaTecnicaJPA incidenciaTecnica) {
+    this.incidenciaTecnica = incidenciaTecnica;
+  }
+
 // IMP Field:fitxerid | Table: pad_fitxer | Type: 1  
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -223,7 +239,7 @@ private static final long serialVersionUID = 342741761L;
     EventJPA __tmp = new EventJPA();
     __tmp.setEventID(__bean.getEventID());
     __tmp.setSolicitudID(__bean.getSolicitudID());
-    __tmp.setTascaTecnicaID(__bean.getTascaTecnicaID());
+    __tmp.setIncidenciaTecnicaID(__bean.getIncidenciaTecnicaID());
     __tmp.setDataEvent(__bean.getDataEvent());
     __tmp.setTipus(__bean.getTipus());
     __tmp.setPersona(__bean.getPersona());
@@ -262,6 +278,10 @@ private static final long serialVersionUID = 342741761L;
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     // Copia de beans complexes (IMP)
+    if(!"IncidenciaTecnicaJPA".equals(origenJPA) && 
+       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.incidenciaTecnica) || org.hibernate.Hibernate.isInitialized(__jpa.getIncidenciaTecnica()) ) ) {
+      __tmp.setIncidenciaTecnica(IncidenciaTecnicaJPA.copyJPA(__jpa.getIncidenciaTecnica(), __alreadyCopied,"EventJPA"));
+    }
     if(!"SolicitudJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud()) ) ) {
       __tmp.setSolicitud(SolicitudJPA.copyJPA(__jpa.getSolicitud(), __alreadyCopied,"EventJPA"));

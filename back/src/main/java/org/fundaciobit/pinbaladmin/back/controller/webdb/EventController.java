@@ -66,6 +66,10 @@ public class EventController
   @Autowired
   protected SolicitudRefList solicitudRefList;
 
+  // References 
+  @Autowired
+  protected IncidenciaTecnicaRefList incidenciaTecnicaRefList;
+
   /**
    * Llistat de totes Event
    */
@@ -196,6 +200,16 @@ public class EventController
       };
     }
 
+    // Field incidenciaTecnicaID
+    {
+      _listSKV = getReferenceListForIncidenciaTecnicaID(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfIncidenciaTecnicaForIncidenciaTecnicaID(_tmp);
+      if (filterForm.getGroupByFields().contains(INCIDENCIATECNICAID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, INCIDENCIATECNICAID, false);
+      };
+    }
+
     // Field tipus
     {
       _listSKV = getReferenceListForTipus(request, mav, filterForm, list, groupByItemsMap, null);
@@ -225,6 +239,7 @@ public class EventController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(SOLICITUDID, filterForm.getMapOfSolicitudForSolicitudID());
+    __mapping.put(INCIDENCIATECNICAID, filterForm.getMapOfIncidenciaTecnicaForIncidenciaTecnicaID());
     __mapping.put(TIPUS, filterForm.getMapOfValuesForTipus());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
@@ -281,6 +296,15 @@ public class EventController
       java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
     }
       eventForm.setListOfSolicitudForSolicitudID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (eventForm.getListOfIncidenciaTecnicaForIncidenciaTecnicaID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForIncidenciaTecnicaID(request, mav, eventForm, null);
+
+ if (!_listSKV.isEmpty())    {
+      java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+    }
+      eventForm.setListOfIncidenciaTecnicaForIncidenciaTecnicaID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (eventForm.getListOfValuesForTipus() == null) {
@@ -665,6 +689,46 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForSolicitudID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return solicitudRefList.getReferenceList(SolicitudFields.SOLICITUDID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForIncidenciaTecnicaID(HttpServletRequest request,
+       ModelAndView mav, EventForm eventForm, Where where)  throws I18NException {
+    if (eventForm.isHiddenField(INCIDENCIATECNICAID)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    Where _where = null;
+    if (eventForm.isReadOnlyField(INCIDENCIATECNICAID)) {
+      _where = IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(eventForm.getEvent().getIncidenciaTecnicaID());
+    }
+    return getReferenceListForIncidenciaTecnicaID(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForIncidenciaTecnicaID(HttpServletRequest request,
+       ModelAndView mav, EventFilterForm eventFilterForm,
+       List<Event> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (eventFilterForm.isHiddenField(INCIDENCIATECNICAID)
+      && !eventFilterForm.isGroupByField(INCIDENCIATECNICAID)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(INCIDENCIATECNICAID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Event _item : list) {
+        if(_item.getIncidenciaTecnicaID() == null) { continue; };
+        _pkList.add(_item.getIncidenciaTecnicaID());
+        }
+        _w = IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(_pkList);
+      }
+    return getReferenceListForIncidenciaTecnicaID(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForIncidenciaTecnicaID(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return incidenciaTecnicaRefList.getReferenceList(IncidenciaTecnicaFields.INCIDENCIATECNICAID, where );
   }
 
 

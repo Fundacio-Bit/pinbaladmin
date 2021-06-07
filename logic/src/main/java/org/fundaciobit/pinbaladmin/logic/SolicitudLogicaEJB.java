@@ -117,7 +117,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
     }
     
     this.delete(solicitud);
-    
 
     // Si to ha anat be llavors borram els fitxers
     if (deleteFiles) {

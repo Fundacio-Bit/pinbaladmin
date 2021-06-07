@@ -52,7 +52,7 @@ height:inherit;
       <td><img src="<c:url value="/img/caibbg.png"/>"/>
     </td>
     <td>
-        <h3 class="windowTitle">Sol·licitud</h3>
+        <h3 class="windowTitle">${tipus}</h3>
     <h4 class="windowSubtitle">${titol}</h4>
     
     </td>

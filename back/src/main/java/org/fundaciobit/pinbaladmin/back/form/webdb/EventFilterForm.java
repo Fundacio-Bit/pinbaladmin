@@ -65,25 +65,25 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
   }
 
 
-  private java.lang.Long tascaTecnicaIDDesde;
+  private java.lang.Long incidenciaTecnicaIDDesde;
 
-  public java.lang.Long getTascaTecnicaIDDesde() {
-    return this.tascaTecnicaIDDesde;
+  public java.lang.Long getIncidenciaTecnicaIDDesde() {
+    return this.incidenciaTecnicaIDDesde;
   }
 
-  public void setTascaTecnicaIDDesde(java.lang.Long tascaTecnicaIDDesde) {
-    this.tascaTecnicaIDDesde = tascaTecnicaIDDesde;
+  public void setIncidenciaTecnicaIDDesde(java.lang.Long incidenciaTecnicaIDDesde) {
+    this.incidenciaTecnicaIDDesde = incidenciaTecnicaIDDesde;
   }
 
 
-  private java.lang.Long tascaTecnicaIDFins;
+  private java.lang.Long incidenciaTecnicaIDFins;
 
-  public java.lang.Long getTascaTecnicaIDFins() {
-    return this.tascaTecnicaIDFins;
+  public java.lang.Long getIncidenciaTecnicaIDFins() {
+    return this.incidenciaTecnicaIDFins;
   }
 
-  public void setTascaTecnicaIDFins(java.lang.Long tascaTecnicaIDFins) {
-    this.tascaTecnicaIDFins = tascaTecnicaIDFins;
+  public void setIncidenciaTecnicaIDFins(java.lang.Long incidenciaTecnicaIDFins) {
+    this.incidenciaTecnicaIDFins = incidenciaTecnicaIDFins;
   }
 
 
@@ -162,8 +162,8 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
     this.eventIDFins = __toClone.eventIDFins;
     this.solicitudIDDesde = __toClone.solicitudIDDesde;
     this.solicitudIDFins = __toClone.solicitudIDFins;
-    this.tascaTecnicaIDDesde = __toClone.tascaTecnicaIDDesde;
-    this.tascaTecnicaIDFins = __toClone.tascaTecnicaIDFins;
+    this.incidenciaTecnicaIDDesde = __toClone.incidenciaTecnicaIDDesde;
+    this.incidenciaTecnicaIDFins = __toClone.incidenciaTecnicaIDFins;
     this.dataEventDesde = __toClone.dataEventDesde;
     this.dataEventFins = __toClone.dataEventFins;
     this.tipusDesde = __toClone.tipusDesde;
@@ -171,6 +171,7 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
     this.persona = __toClone.persona;
     this.comentari = __toClone.comentari;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
+    this.mapOfIncidenciaTecnicaForIncidenciaTecnicaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaTecnicaID;
     this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
   }
   
@@ -214,6 +215,18 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
 
   public void setMapOfSolicitudForSolicitudID(Map<String, String> mapOfSolicitudForSolicitudID) {
     this.mapOfSolicitudForSolicitudID = mapOfSolicitudForSolicitudID;
+  }
+
+
+
+  private Map<String, String> mapOfIncidenciaTecnicaForIncidenciaTecnicaID;
+
+  public Map<String, String> getMapOfIncidenciaTecnicaForIncidenciaTecnicaID() {
+    return this.mapOfIncidenciaTecnicaForIncidenciaTecnicaID;
+  }
+
+  public void setMapOfIncidenciaTecnicaForIncidenciaTecnicaID(Map<String, String> mapOfIncidenciaTecnicaForIncidenciaTecnicaID) {
+    this.mapOfIncidenciaTecnicaForIncidenciaTecnicaID = mapOfIncidenciaTecnicaForIncidenciaTecnicaID;
   }
 
 

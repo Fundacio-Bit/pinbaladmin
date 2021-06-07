@@ -25,6 +25,7 @@ public class EventForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.event = __toClone.event;
     this.listOfSolicitudForSolicitudID = __toClone.listOfSolicitudForSolicitudID;
+    this.listOfIncidenciaTecnicaForIncidenciaTecnicaID = __toClone.listOfIncidenciaTecnicaForIncidenciaTecnicaID;
     this.listOfValuesForTipus = __toClone.listOfValuesForTipus;
   }
   
@@ -63,6 +64,18 @@ public class EventForm extends PinbalAdminBaseForm {
 
   public void setListOfSolicitudForSolicitudID(List<StringKeyValue> listOfSolicitudForSolicitudID) {
     this.listOfSolicitudForSolicitudID = listOfSolicitudForSolicitudID;
+  }
+
+
+
+  private List<StringKeyValue> listOfIncidenciaTecnicaForIncidenciaTecnicaID;
+
+  public List<StringKeyValue> getListOfIncidenciaTecnicaForIncidenciaTecnicaID() {
+    return this.listOfIncidenciaTecnicaForIncidenciaTecnicaID;
+  }
+
+  public void setListOfIncidenciaTecnicaForIncidenciaTecnicaID(List<StringKeyValue> listOfIncidenciaTecnicaForIncidenciaTecnicaID) {
+    this.listOfIncidenciaTecnicaForIncidenciaTecnicaID = listOfIncidenciaTecnicaForIncidenciaTecnicaID;
   }
 
 

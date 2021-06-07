@@ -5,7 +5,9 @@
 
 <c:if test="${showOnlyPublic==false}">
 
-    <a class="minibutton" href="<c:url value="/operador/event/${event.eventID}/edit"/>"
+    <c:set var="tipusevent" value="${isSolicitud?'solicitud':'incidenciatecnica' }" />
+
+    <a class="minibutton" href="<c:url value="/operador/event${tipusevent}/${event.eventID}/edit"/>"
         onclick="" title="Modificar">
         <div style="color: #FFFFFF">
             <i class="iconpencil"></i>Editar

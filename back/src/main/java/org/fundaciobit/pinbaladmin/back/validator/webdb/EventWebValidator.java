@@ -29,6 +29,9 @@ public class EventWebValidator  implements Validator, EventFields {
   @javax.ejb.EJB(mappedName = "pinbaladmin/EventEJB/local")
   protected org.fundaciobit.pinbaladmin.ejb.EventLocal eventEjb;
 
+  @javax.ejb.EJB(mappedName = "pinbaladmin/IncidenciaTecnicaEJB/local")
+  protected org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaLocal incidenciaTecnicaEjb;
+
   @javax.ejb.EJB(mappedName = "pinbaladmin/SolicitudEJB/local")
   protected org.fundaciobit.pinbaladmin.ejb.SolicitudLocal solicitudEjb;
 
@@ -64,7 +67,7 @@ public class EventWebValidator  implements Validator, EventFields {
       // Fitxers 
     }
     validator.validate(wvr, target,
-      isNou, eventEjb, solicitudEjb);
+      isNou, eventEjb, incidenciaTecnicaEjb, solicitudEjb);
 
   } // Final de metode
 

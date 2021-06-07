@@ -86,19 +86,19 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.TASCATECNICAID)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.INCIDENCIATECNICAID)}">
             <%-- FILTRE NUMERO --%>      
             <div class="input-prepend input-append" style="padding-right: 4px;padding-bottom: 4px;">
-              <span class="add-on"><fmt:message key="event.tascaTecnicaID" />:</span>
+              <span class="add-on"><fmt:message key="event.incidenciaTecnicaID" />:</span>
 
               <span class="add-on"><fmt:message key="genapp.from" /></span>
               
-              <form:input cssClass="input-append input-small" path="tascaTecnicaIDDesde" />
+              <form:input cssClass="input-append input-small" path="incidenciaTecnicaIDDesde" />
 
 
               <span class="add-on"><fmt:message key="genapp.to" /></span>
 
-              <form:input cssClass="input-append input-small search-query" path="tascaTecnicaIDFins" />
+              <form:input cssClass="input-append input-small search-query" path="incidenciaTecnicaIDFins" />
 
             </div>
 

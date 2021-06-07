@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
 public class EventSolicitudOperadorController extends AbstractEventSolicitudController  {
 
-  public static final String CONTEXT_PATH = "/operador/event";
+  public static final String CONTEXT_PATH = "/operador/eventsolicitud";
 
   @Override
   public boolean isPublic() {

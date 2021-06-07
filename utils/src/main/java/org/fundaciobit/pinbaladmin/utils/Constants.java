@@ -32,8 +32,8 @@ public interface Constants {
   public static final int ESTATTIQUET_ARREGLAT =4;
   public static final int ESTATTIQUET_NO_ARREGLAT =5;
 
-  /*
-  Tipus de consentiment que poden acceptar els Serveis, o bé 'No oposició / Llei' o bé 'Sí / Llei'
+  /**
+   * Tipus de consentiment que poden acceptar els Serveis, o bé 'No oposició / Llei' o bé 'Sí / Llei'
    */
   public static final int TIPUSCONSENTIMENT_NOOP_LLEI = 0;
   public static final int TIPUSCONSENTIMENT_SI_LLEI = 1;
@@ -41,11 +41,20 @@ public interface Constants {
   
   /**
    * Tipus EVENTs
-   * 
    */  
   public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT - TRAMITADOR
   public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1;  // PUBLIC - TRAMITADOR
   public static final int EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC - CONTACTE
   public static final int EVENT_TIPUS_TIQUET_MINHAP = -2; // PRIVAT - TRAMITADOR
+  
+  
+  /**
+   * Estat de Incidències Tecniques
+   */  
+  public static final int ESTAT_INCIDENCIA_TECNICA_OBERTA = 0;
+  public static final int ESTAT_INCIDENCIA_TECNICA_TANCADA = 1;
+  public static final int ESTAT_INCIDENCIA_TECNICA_PENDENT_DE_TERCER = 2;
+  
+  
   
 }

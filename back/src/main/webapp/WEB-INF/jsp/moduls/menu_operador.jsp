@@ -82,6 +82,12 @@
         <span style="${(fn:contains(url, '/tiquet/'))? "font-weight: bold;" : ""}"><fmt:message key="tiquet.tiquet.plural" /></span>
       </a>
     </li>
+
+    <li style="list-style-type: disc; list-style-position: inside;">
+      <a href="<c:url value="/operador/incidenciatecnica/list"/>">
+        <span style="${(fn:contains(url, '/incidenciatecnica/'))? "font-weight: bold;" : ""}">Incid&egrave;ncia T&egrave;cnica</span>
+      </a>
+    </li>
     
      <li>
     <hr  style="margin-top: 6px;  margin-bottom: 6px;" />

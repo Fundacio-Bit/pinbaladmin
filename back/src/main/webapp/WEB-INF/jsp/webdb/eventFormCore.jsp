@@ -31,20 +31,31 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.TASCATECNICAID)}">
-        <tr id="event_tascaTecnicaID_rowid">
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.INCIDENCIATECNICAID)}">
+        <tr id="event_incidenciaTecnicaID_rowid">
           <td>
             <label>
-              <fmt:message key="${(empty __theForm.labels[EventFields.TASCATECNICAID])?'event.tascaTecnicaID':__theForm.labels[EventFields.TASCATECNICAID]}" />
-              <c:if test="${not empty __theForm.help[EventFields.TASCATECNICAID]}">
-              <i class="icon-info-sign" title="${__theForm.help[EventFields.TASCATECNICAID]}" ></i>
+              <fmt:message key="${(empty __theForm.labels[EventFields.INCIDENCIATECNICAID])?'event.incidenciaTecnicaID':__theForm.labels[EventFields.INCIDENCIATECNICAID]}" />
+              <c:if test="${not empty __theForm.help[EventFields.INCIDENCIATECNICAID]}">
+              <i class="icon-info-sign" title="${__theForm.help[EventFields.INCIDENCIATECNICAID]}" ></i>
               </c:if>
              </label>
             </td>
             <td>
-            <form:errors path="event.tascaTecnicaID" cssClass="errorField alert alert-error" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.TASCATECNICAID)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,EventFields.TASCATECNICAID)? 'input-mini uneditable-input' : 'input-mini'}"   path="event.tascaTecnicaID"   />
-
+          <form:errors path="event.incidenciaTecnicaID" cssClass="errorField alert alert-error" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,EventFields.INCIDENCIATECNICAID)}" >
+          <form:hidden path="event.incidenciaTecnicaID"/>
+          <input type="text" readonly="true" class="input-xxlarge uneditable-input" value="${gen:findValue(__theForm.event.incidenciaTecnicaID,__theForm.listOfIncidenciaTecnicaForIncidenciaTecnicaID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,EventFields.INCIDENCIATECNICAID)}" >
+          <form:select id="event_incidenciaTecnicaID"  onchange="if(typeof onChangeIncidenciaTecnicaID == 'function') {  onChangeIncidenciaTecnicaID(this); };"  cssClass="input-xxlarge" path="event.incidenciaTecnicaID">
+          <%-- El camp pot ser null, per la qual cosa afegim una entrada buida --%>
+          <form:option value="" ></form:option>
+            <c:forEach items="${__theForm.listOfIncidenciaTecnicaForIncidenciaTecnicaID}" var="tmp">
+            <form:option value="${tmp.key}" >${tmp.value}</form:option>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

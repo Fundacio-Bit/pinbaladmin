@@ -8,8 +8,8 @@ public interface Event extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getSolicitudID();
 	public void setSolicitudID(java.lang.Long _solicitudID_);
 
-	public java.lang.Long getTascaTecnicaID();
-	public void setTascaTecnicaID(java.lang.Long _tascaTecnicaID_);
+	public java.lang.Long getIncidenciaTecnicaID();
+	public void setIncidenciaTecnicaID(java.lang.Long _incidenciaTecnicaID_);
 
 	public java.sql.Timestamp getDataEvent();
 	public void setDataEvent(java.sql.Timestamp _dataEvent_);

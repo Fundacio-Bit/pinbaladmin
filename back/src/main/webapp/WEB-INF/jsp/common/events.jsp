@@ -155,8 +155,8 @@ width: 14px;
                     <h5>Número: ${ID}</h5>
                     <br> Estat: <strong class="label-custom">${estat}</strong>
                     <hr>
-                    Nom Contacte: ${soli.personaContacte}<br>
-                    Email Contacte: ${soli.personaContacteEmail}<br>
+                    Nom Contacte: ${personaContacte}<br>
+                    Email Contacte: ${personaContacteEmail}<br>
                     
 
                 </div>

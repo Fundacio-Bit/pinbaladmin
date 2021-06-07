@@ -18,8 +18,8 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.SOLICITUDID)}">
         <th>${pad:getSortIcons(__theFilterForm,EventFields.SOLICITUDID)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.TASCATECNICAID)}">
-        <th>${pad:getSortIcons(__theFilterForm,EventFields.TASCATECNICAID)}</th>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.INCIDENCIATECNICAID)}">
+        <th>${pad:getSortIcons(__theFilterForm,EventFields.INCIDENCIATECNICAID)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.DATAEVENT)}">
         <th>${pad:getSortIcons(__theFilterForm,EventFields.DATAEVENT)}</th>

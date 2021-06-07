@@ -199,7 +199,6 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
     </definition>
 
-      
     <definition name="eventListOperador" template="/WEB-INF/jsp/layout/onlycontentwithoutimportslayout.jsp">
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/events.jsp" />
     </definition>
@@ -210,6 +209,15 @@
     
      <definition name="eventListOperadorIframePublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
+    </definition>
+    
+    <definition name="incidenciaTecnicaFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="incidenciaTecnica.incidenciaTecnica" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
+    </definition>
+    
+    <definition name="incidenciaTecnicaListOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
     
 
@@ -455,6 +463,16 @@
     
     <definition name="idiomaListWebDB" extends="webdb">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/idiomaList.jsp" />
+    </definition>
+
+
+    <definition name="incidenciaTecnicaFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="incidenciaTecnica.incidenciaTecnica" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
+    </definition>
+    
+    <definition name="incidenciaTecnicaListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
 
 

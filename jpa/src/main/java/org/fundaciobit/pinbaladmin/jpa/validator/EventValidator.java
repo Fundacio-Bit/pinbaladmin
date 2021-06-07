@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
@@ -27,6 +28,7 @@ public class EventValidator<T> implements EventFields {
   /** Constructor */
   public void validate(IValidatorResult<T> __vr, T __target__, boolean __isNou__
     ,org.fundaciobit.pinbaladmin.model.dao.IEventManager __eventManager
+    ,org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
 
     // Valors Not Null
@@ -89,6 +91,20 @@ public class EventValidator<T> implements EventFields {
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("solicitud.solicitud"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("solicitud.solicitudID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__solicitudid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(INCIDENCIATECNICAID) == 0) {
+      java.lang.Long __incidenciatecnicaid = (java.lang.Long)__vr.getFieldValue(__target__,INCIDENCIATECNICAID);
+      if (__incidenciatecnicaid != null ) {
+        Long __count_ = null;
+        try { __count_ = __incidenciaTecnicaManager.count(IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(__incidenciatecnicaid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(INCIDENCIATECNICAID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("incidenciaTecnica.incidenciaTecnica"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("incidenciaTecnica.incidenciaTecnicaID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__incidenciatecnicaid)));
         }
       }
     }

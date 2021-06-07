@@ -37,9 +37,12 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.TASCATECNICAID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.INCIDENCIATECNICAID)}">
           <td>
-          ${event.tascaTecnicaID}
+          <c:set var="tmp">${event.incidenciaTecnicaID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfIncidenciaTecnicaForIncidenciaTecnicaID[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.DATAEVENT)}">

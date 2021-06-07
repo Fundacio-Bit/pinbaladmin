@@ -7,7 +7,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 public interface IEventManager extends org.fundaciobit.genapp.common.query.ITableManager<Event, Long> {
 
 
-	public Event create( java.lang.Long _solicitudID_, java.lang.Long _tascaTecnicaID_, java.sql.Timestamp _dataEvent_, int _tipus_, java.lang.String _persona_, java.lang.String _comentari_, java.lang.Long _fitxerID_, boolean _noLlegit_) throws I18NException;
+	public Event create( java.lang.Long _solicitudID_, java.lang.Long _incidenciaTecnicaID_, java.sql.Timestamp _dataEvent_, int _tipus_, java.lang.String _persona_, java.lang.String _comentari_, java.lang.Long _fitxerID_, boolean _noLlegit_) throws I18NException;
 
 	public Event findByPrimaryKey(long _eventID_);
 

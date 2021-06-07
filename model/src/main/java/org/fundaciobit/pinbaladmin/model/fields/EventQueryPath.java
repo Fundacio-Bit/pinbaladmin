@@ -19,8 +19,8 @@ public class EventQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new LongField(getQueryPath(), EventFields.SOLICITUDID);
   }
 
-  public LongField TASCATECNICAID() {
-    return new LongField(getQueryPath(), EventFields.TASCATECNICAID);
+  public LongField INCIDENCIATECNICAID() {
+    return new LongField(getQueryPath(), EventFields.INCIDENCIATECNICAID);
   }
 
   public TimestampField DATAEVENT() {
@@ -60,6 +60,14 @@ public class EventQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new SolicitudQueryPath(new QueryPath() {
       public String getQueryPath() {
           return EventQueryPath.this.getQueryPath() + "solicitud" + ".";
+      }
+    });
+  }
+
+  public IncidenciaTecnicaQueryPath INCIDENCIATECNICA() {
+    return new IncidenciaTecnicaQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return EventQueryPath.this.getQueryPath() + "incidenciaTecnica" + ".";
       }
     });
   }
