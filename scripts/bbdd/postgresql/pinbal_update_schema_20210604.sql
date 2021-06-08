@@ -22,5 +22,8 @@ ALTER TABLE pad_event
 
 create index pad_event_inctecnicaid_fk_i on pad_event (incidenciatecnicaid);
 create index pad_incidenciatecnica_pk_i on pad_incidenciatecnica (incidenciatecnicaid);
+
+
+ALTER TABLE public.pad_event DROP COLUMN privat;
  
  
