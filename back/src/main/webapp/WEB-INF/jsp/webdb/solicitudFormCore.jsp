@@ -56,6 +56,35 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PROCEDIMENTTIPUS)}">
+        <tr id="solicitud_procedimentTipus_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PROCEDIMENTTIPUS])?'solicitud.procedimentTipus':__theForm.labels[SolicitudFields.PROCEDIMENTTIPUS]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.PROCEDIMENTTIPUS]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.PROCEDIMENTTIPUS]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+          <form:errors path="solicitud.procedimentTipus" cssClass="errorField alert alert-error" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PROCEDIMENTTIPUS)}" >
+          <form:hidden path="solicitud.procedimentTipus"/>
+          <input type="text" readonly="true" class="input-xxlarge uneditable-input" value="${gen:findValue(__theForm.solicitud.procedimentTipus,__theForm.listOfValuesForProcedimentTipus)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.PROCEDIMENTTIPUS)}" >
+          <form:select id="solicitud_procedimentTipus"  onchange="if(typeof onChangeProcedimentTipus == 'function') {  onChangeProcedimentTipus(this); };"  cssClass="input-xxlarge" path="solicitud.procedimentTipus">
+          <%-- El camp pot ser null, per la qual cosa afegim una entrada buida --%>
+          <form:option value="" ></form:option>
+            <c:forEach items="${__theForm.listOfValuesForProcedimentTipus}" var="tmp">
+            <form:option value="${tmp.key}" >${tmp.value}</form:option>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATID)}">
         <tr id="solicitud_estatID_rowid">
           <td>
@@ -294,6 +323,42 @@
             <td>
             <form:errors path="solicitud.personaContacteEmail" cssClass="errorField alert alert-error" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAIL)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAIL)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="solicitud.personaContacteEmail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOM)}">
+        <tr id="solicitud_responsableProcNom_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCNOM])?'solicitud.responsableProcNom':__theForm.labels[SolicitudFields.RESPONSABLEPROCNOM]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCNOM]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCNOM]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitud.responsableProcNom" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOM)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOM)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="solicitud.responsableProcNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAIL)}">
+        <tr id="solicitud_responsableProcEmail_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCEMAIL])?'solicitud.responsableProcEmail':__theForm.labels[SolicitudFields.RESPONSABLEPROCEMAIL]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCEMAIL]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCEMAIL]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitud.responsableProcEmail" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAIL)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAIL)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="solicitud.responsableProcEmail"   />
 
            </td>
         </tr>

@@ -186,6 +186,28 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
   }
 
 
+  private java.lang.String caduca;
+
+  public java.lang.String getCaduca() {
+    return this.caduca;
+  }
+
+  public void setCaduca(java.lang.String caduca) {
+    this.caduca = caduca;
+  }
+
+
+  private java.lang.String fechaCaduca;
+
+  public java.lang.String getFechaCaduca() {
+    return this.fechaCaduca;
+  }
+
+  public void setFechaCaduca(java.lang.String fechaCaduca) {
+    this.fechaCaduca = fechaCaduca;
+  }
+
+
   public SolicitudServeiFilterForm() {
   }
   
@@ -206,6 +228,8 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
     this.consentiment = __toClone.consentiment;
     this.enllazConsentiment = __toClone.enllazConsentiment;
     this.notes = __toClone.notes;
+    this.caduca = __toClone.caduca;
+    this.fechaCaduca = __toClone.fechaCaduca;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfServeiForServeiID = __toClone.mapOfServeiForServeiID;
     this.mapOfEstatSolicitudServeiForEstatSolicitudServeiID = __toClone.mapOfEstatSolicitudServeiForEstatSolicitudServeiID;

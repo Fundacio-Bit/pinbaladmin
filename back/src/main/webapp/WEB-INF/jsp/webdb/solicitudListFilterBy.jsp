@@ -107,6 +107,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.PROCEDIMENTTIPUS)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.procedimentTipus" var="procedimentTipus" />
+              <fmt:message key="genapp.form.searchby" var="cercaperprocedimentTipus" >                
+                 <fmt:param value="${procedimentTipus}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${procedimentTipus}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperprocedimentTipus}" path="procedimentTipus" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ESTATID)}">
             <%-- FILTRE NUMERO --%>      
             <div class="input-prepend input-append" style="padding-right: 4px;padding-bottom: 4px;">
@@ -309,6 +322,32 @@
               </fmt:message>
               <span class="add-on"><c:out value="${personaContacteEmail}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperpersonaContacteEmail}" path="personaContacteEmail" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.RESPONSABLEPROCNOM)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.responsableProcNom" var="responsableProcNom" />
+              <fmt:message key="genapp.form.searchby" var="cercaperresponsableProcNom" >                
+                 <fmt:param value="${responsableProcNom}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${responsableProcNom}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperresponsableProcNom}" path="responsableProcNom" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.RESPONSABLEPROCEMAIL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.responsableProcEmail" var="responsableProcEmail" />
+              <fmt:message key="genapp.form.searchby" var="cercaperresponsableProcEmail" >                
+                 <fmt:param value="${responsableProcEmail}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${responsableProcEmail}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperresponsableProcEmail}" path="responsableProcEmail" />
             </div>
 
 

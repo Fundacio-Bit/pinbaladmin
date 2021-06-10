@@ -4,7 +4,6 @@ import javax.ejb.EJB;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
-
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;

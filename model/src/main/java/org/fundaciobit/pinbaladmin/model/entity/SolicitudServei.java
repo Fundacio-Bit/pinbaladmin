@@ -35,6 +35,12 @@ public interface SolicitudServei extends org.fundaciobit.genapp.common.IGenAppEn
 	public java.lang.String getNotes();
 	public void setNotes(java.lang.String _notes_);
 
+	public java.lang.String getCaduca();
+	public void setCaduca(java.lang.String _caduca_);
+
+	public java.lang.String getFechaCaduca();
+	public void setFechaCaduca(java.lang.String _fechaCaduca_);
+
 
 
   // ======================================

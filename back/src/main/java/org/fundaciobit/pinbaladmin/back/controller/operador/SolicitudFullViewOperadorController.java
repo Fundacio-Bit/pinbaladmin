@@ -15,6 +15,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.jpa.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.FitxerJPA;
@@ -23,6 +24,7 @@ import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.utils.Configuracio;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -178,7 +180,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           xml = new String(xmlData, "UTF-8");
         }
 
-        Properties prop = SolicitudDesDeXmlOperador.getPropertiesFromFormulario(xml);
+        Properties prop = CrearExcelDeServeis.getPropertiesFromFormulario(xml);
 
         generarServeis(request,soliID, prop);
 
@@ -193,26 +195,25 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return "redirect:" + getContextWeb() + "/view/" + soliID;
   }
 
-  protected void generarFormulari(HttpServletRequest request, Long solicitudID,
+  public static  void generarFormulari(HttpServletRequest request, Long solicitudID,
       Properties prop) throws Exception, I18NException {
 
     File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
     File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
-    File plantilla = new File(
-        System.getProperty("org.fundaciobit.pinbaladmin.template_formulari"));
+    File plantilla = new File(Configuracio.getTemplateFormulari());
 
     ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
 
     {
-      FitxerJPA fitxer = new FitxerJPA("Formulario_Ramon_Roca.pdf", outputPDF.length(),
+      FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(),
           "application/pdf", "");
 
       fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
 
       FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
 
-      Document doc = documentEjb.create("Formulario_Ramon_Roca (PDF)", fitxer.getFitxerID(),
+      Document doc = documentEjb.create("Formulario_Director_General (PDF)", fitxer.getFitxerID(),
           null, null);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
@@ -221,7 +222,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
 
     {
-      FitxerJPA fitxer = new FitxerJPA("Formulario_Ramon_Roca.odt", outputODT.length(),
+      FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
           "application/vnd.oasis.opendocument.text", "");
 
       fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
@@ -284,6 +285,10 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CONSENTIMIENTO");
       java.lang.String enllazConsentiment = prop
           .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".ENLACECON");
+      
+      String caducafecha = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
+      String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
+      
 
       Long count = solicitudServeiEjb
           .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
@@ -293,7 +298,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
         SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID,
             estatSolicitudServeiID, normaLegal, enllazNormaLegal, articles, tipusConsentiment,
-            consentiment, enllazConsentiment, notes);
+            consentiment, enllazConsentiment, notes, caduca, caducafecha);
 
         solicitudServeiEjb.create(ss);
 

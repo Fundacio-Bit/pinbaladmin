@@ -34,6 +34,11 @@
       org.fundaciobit.pinbaladmin.name=PinbalAdmin
       
       org.fundaciobit.pinbaladmin.versiopinbal=1.4.15
+
+	  org.fundaciobit.pinbaladmin.template_serveis_excel=D:\\dades\\dades\\CarpetesPersonals\\Programacio\\pinbaladmin_files\\Plantilla-Procedimientos.xlsx
+	  
+	  
+	  
       
     </attribute>
   </mbean>

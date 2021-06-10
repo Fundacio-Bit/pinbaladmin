@@ -92,6 +92,14 @@ public class ParserFormulariXML {
     data.put("props", props);
     data.put("data", new Date());
     
+    
+    String cp = props.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
+    if (cp == null || cp.trim().length() == 0 ) {
+      cp = "";
+    }
+    data.put("cp", new Date());
+    
+    
     String entorn = props.getProperty("FORMULARIO.DATOS_SOLICITUD.LDAENTORNOCULTO");
     if (entorn.indexOf("Producció") == -1) {
       data.put("produccion", false);
@@ -250,6 +258,7 @@ public class ParserFormulariXML {
 //    }
 //  }
 
+  /*
   protected static long creaSolicitud(String creador, Properties prop) throws IOException {
     long solicitudID;
     {
@@ -269,6 +278,10 @@ public class ParserFormulariXML {
           .getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE");
       java.lang.String personaContacteEmail = prop
           .getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE");
+      
+      
+      
+      
       java.lang.String notes;
       {
         StringWriter writer = new StringWriter();
@@ -293,6 +306,7 @@ public class ParserFormulariXML {
     }
     return solicitudID;
   }
+  */
 
   // XYZ ZZZ TODO
   public static long FINDSERVEIBYCODI(String codi) {
@@ -301,7 +315,7 @@ public class ParserFormulariXML {
 
   };
 
-  protected static Properties getPropertiesFromFormulario(String xml)
+  public static Properties getPropertiesFromFormulario(String xml)
       throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
     DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     InputSource is = new InputSource();

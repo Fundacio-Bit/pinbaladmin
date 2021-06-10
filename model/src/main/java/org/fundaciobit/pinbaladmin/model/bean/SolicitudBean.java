@@ -14,6 +14,7 @@ private static final long serialVersionUID = 1686733908L;
 	java.lang.String procedimentCodi;
 	java.lang.String codiDescriptiu;
 	java.lang.String procedimentNom;
+	java.lang.String procedimentTipus;
 	java.lang.Long estatID;
 	java.lang.String ticketAssociat;
 	java.lang.String ticketNumeroSeguiment;
@@ -24,6 +25,8 @@ private static final long serialVersionUID = 1686733908L;
 	java.sql.Timestamp dataFi;
 	java.lang.String personaContacte;
 	java.lang.String personaContacteEmail;
+	java.lang.String responsableProcNom;
+	java.lang.String responsableProcEmail;
 	java.lang.String notes;
 	java.lang.Long documentSolicitudID;
 	java.lang.Long solicitudXmlID;
@@ -37,11 +40,12 @@ private static final long serialVersionUID = 1686733908L;
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
+    this.procedimentTipus=procedimentTipus;
     this.estatID=estatID;
     this.ticketAssociat=ticketAssociat;
     this.ticketNumeroSeguiment=ticketNumeroSeguiment;
@@ -52,6 +56,8 @@ private static final long serialVersionUID = 1686733908L;
     this.dataFi=dataFi;
     this.personaContacte=personaContacte;
     this.personaContacteEmail=personaContacteEmail;
+    this.responsableProcNom=responsableProcNom;
+    this.responsableProcEmail=responsableProcEmail;
     this.notes=notes;
     this.documentSolicitudID=documentSolicitudID;
     this.solicitudXmlID=solicitudXmlID;
@@ -60,10 +66,11 @@ private static final long serialVersionUID = 1686733908L;
     this.creador=creador;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
+  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
+    this.procedimentTipus=procedimentTipus;
     this.estatID=estatID;
     this.ticketAssociat=ticketAssociat;
     this.ticketNumeroSeguiment=ticketNumeroSeguiment;
@@ -74,6 +81,8 @@ private static final long serialVersionUID = 1686733908L;
     this.dataFi=dataFi;
     this.personaContacte=personaContacte;
     this.personaContacteEmail=personaContacteEmail;
+    this.responsableProcNom=responsableProcNom;
+    this.responsableProcEmail=responsableProcEmail;
     this.notes=notes;
     this.documentSolicitudID=documentSolicitudID;
     this.solicitudXmlID=solicitudXmlID;
@@ -96,6 +105,7 @@ private static final long serialVersionUID = 1686733908L;
     this.setProcedimentCodi(__bean.getProcedimentCodi());
     this.setCodiDescriptiu(__bean.getCodiDescriptiu());
     this.setProcedimentNom(__bean.getProcedimentNom());
+    this.setProcedimentTipus(__bean.getProcedimentTipus());
     this.setEstatID(__bean.getEstatID());
     this.setTicketAssociat(__bean.getTicketAssociat());
     this.setTicketNumeroSeguiment(__bean.getTicketNumeroSeguiment());
@@ -106,6 +116,8 @@ private static final long serialVersionUID = 1686733908L;
     this.setDataFi(__bean.getDataFi());
     this.setPersonaContacte(__bean.getPersonaContacte());
     this.setPersonaContacteEmail(__bean.getPersonaContacteEmail());
+    this.setResponsableProcNom(__bean.getResponsableProcNom());
+    this.setResponsableProcEmail(__bean.getResponsableProcEmail());
     this.setNotes(__bean.getNotes());
     this.setDocumentSolicitudID(__bean.getDocumentSolicitudID());
     this.setSolicitudXmlID(__bean.getSolicitudXmlID());
@@ -144,6 +156,13 @@ private static final long serialVersionUID = 1686733908L;
 	};
 	public void setProcedimentNom(java.lang.String _procedimentNom_) {
 		this.procedimentNom = _procedimentNom_;
+	};
+
+	public java.lang.String getProcedimentTipus() {
+		return(procedimentTipus);
+	};
+	public void setProcedimentTipus(java.lang.String _procedimentTipus_) {
+		this.procedimentTipus = _procedimentTipus_;
 	};
 
 	public java.lang.Long getEstatID() {
@@ -216,6 +235,20 @@ private static final long serialVersionUID = 1686733908L;
 		this.personaContacteEmail = _personaContacteEmail_;
 	};
 
+	public java.lang.String getResponsableProcNom() {
+		return(responsableProcNom);
+	};
+	public void setResponsableProcNom(java.lang.String _responsableProcNom_) {
+		this.responsableProcNom = _responsableProcNom_;
+	};
+
+	public java.lang.String getResponsableProcEmail() {
+		return(responsableProcEmail);
+	};
+	public void setResponsableProcEmail(java.lang.String _responsableProcEmail_) {
+		this.responsableProcEmail = _responsableProcEmail_;
+	};
+
 	public java.lang.String getNotes() {
 		return(notes);
 	};
@@ -269,6 +302,7 @@ private static final long serialVersionUID = 1686733908L;
     __tmp.setProcedimentCodi(__bean.getProcedimentCodi());
     __tmp.setCodiDescriptiu(__bean.getCodiDescriptiu());
     __tmp.setProcedimentNom(__bean.getProcedimentNom());
+    __tmp.setProcedimentTipus(__bean.getProcedimentTipus());
     __tmp.setEstatID(__bean.getEstatID());
     __tmp.setTicketAssociat(__bean.getTicketAssociat());
     __tmp.setTicketNumeroSeguiment(__bean.getTicketNumeroSeguiment());
@@ -279,6 +313,8 @@ private static final long serialVersionUID = 1686733908L;
     __tmp.setDataFi(__bean.getDataFi());
     __tmp.setPersonaContacte(__bean.getPersonaContacte());
     __tmp.setPersonaContacteEmail(__bean.getPersonaContacteEmail());
+    __tmp.setResponsableProcNom(__bean.getResponsableProcNom());
+    __tmp.setResponsableProcEmail(__bean.getResponsableProcEmail());
     __tmp.setNotes(__bean.getNotes());
     __tmp.setDocumentSolicitudID(__bean.getDocumentSolicitudID());
     __tmp.setSolicitudXmlID(__bean.getSolicitudXmlID());

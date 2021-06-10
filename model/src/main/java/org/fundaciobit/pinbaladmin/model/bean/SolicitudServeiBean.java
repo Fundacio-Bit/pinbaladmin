@@ -21,6 +21,8 @@ private static final long serialVersionUID = -1540821074L;
 	java.lang.String consentiment;
 	java.lang.String enllazConsentiment;
 	java.lang.String notes;
+	java.lang.String caduca;
+	java.lang.String fechaCaduca;
 
 
   /** Constructor Buit */
@@ -28,7 +30,7 @@ private static final long serialVersionUID = -1540821074L;
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudServeiBean(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes) {
+  public SolicitudServeiBean(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes , java.lang.String caduca , java.lang.String fechaCaduca) {
     this.id=id;
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
@@ -40,9 +42,11 @@ private static final long serialVersionUID = -1540821074L;
     this.consentiment=consentiment;
     this.enllazConsentiment=enllazConsentiment;
     this.notes=notes;
+    this.caduca=caduca;
+    this.fechaCaduca=fechaCaduca;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudServeiBean(long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes) {
+  public SolicitudServeiBean(long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes , java.lang.String caduca , java.lang.String fechaCaduca) {
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
     this.estatSolicitudServeiID=estatSolicitudServeiID;
@@ -53,6 +57,8 @@ private static final long serialVersionUID = -1540821074L;
     this.consentiment=consentiment;
     this.enllazConsentiment=enllazConsentiment;
     this.notes=notes;
+    this.caduca=caduca;
+    this.fechaCaduca=fechaCaduca;
 }
   /** Constructor dels valors Not Null */
   public SolicitudServeiBean(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID) {
@@ -73,6 +79,8 @@ private static final long serialVersionUID = -1540821074L;
     this.setConsentiment(__bean.getConsentiment());
     this.setEnllazConsentiment(__bean.getEnllazConsentiment());
     this.setNotes(__bean.getNotes());
+    this.setCaduca(__bean.getCaduca());
+    this.setFechaCaduca(__bean.getFechaCaduca());
 	}
 
 	public long getId() {
@@ -152,6 +160,20 @@ private static final long serialVersionUID = -1540821074L;
 		this.notes = _notes_;
 	};
 
+	public java.lang.String getCaduca() {
+		return(caduca);
+	};
+	public void setCaduca(java.lang.String _caduca_) {
+		this.caduca = _caduca_;
+	};
+
+	public java.lang.String getFechaCaduca() {
+		return(fechaCaduca);
+	};
+	public void setFechaCaduca(java.lang.String _fechaCaduca_) {
+		this.fechaCaduca = _fechaCaduca_;
+	};
+
 
 
   // ======================================
@@ -170,6 +192,8 @@ private static final long serialVersionUID = -1540821074L;
     __tmp.setConsentiment(__bean.getConsentiment());
     __tmp.setEnllazConsentiment(__bean.getEnllazConsentiment());
     __tmp.setNotes(__bean.getNotes());
+    __tmp.setCaduca(__bean.getCaduca());
+    __tmp.setFechaCaduca(__bean.getFechaCaduca());
 		return __tmp;
 	}
 

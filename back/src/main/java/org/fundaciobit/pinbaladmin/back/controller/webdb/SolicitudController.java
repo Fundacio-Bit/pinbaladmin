@@ -190,6 +190,16 @@ public class SolicitudController
     Map<String, String> _tmp;
     List<StringKeyValue> _listSKV;
 
+    // Field procedimentTipus
+    {
+      _listSKV = getReferenceListForProcedimentTipus(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForProcedimentTipus(_tmp);
+      if (filterForm.getGroupByFields().contains(PROCEDIMENTTIPUS)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, PROCEDIMENTTIPUS, false);
+      };
+    }
+
     // Field estatID
     {
       _listSKV = getReferenceListForEstatID(request, mav, filterForm, list, groupByItemsMap, null);
@@ -231,6 +241,7 @@ public class SolicitudController
 
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
+    __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ESTATID, filterForm.getMapOfEstatSolicitudForEstatID());
     __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
     exportData(request, response, dataExporterID, filterForm,
@@ -280,6 +291,15 @@ public class SolicitudController
 
   public void fillReferencesForForm(SolicitudForm solicitudForm,
     HttpServletRequest request, ModelAndView mav) throws I18NException {
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForProcedimentTipus() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForProcedimentTipus(request, mav, solicitudForm, null);
+
+ if (!_listSKV.isEmpty())    {
+      java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+    }
+      solicitudForm.setListOfValuesForProcedimentTipus(_listSKV);
+    }
     // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfEstatSolicitudForEstatID() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForEstatID(request, mav, solicitudForm, null);
@@ -643,6 +663,39 @@ public java.lang.Long stringToPK(String value) {
 
   public boolean isActiveFormView() {
     return isActiveFormEdit();
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(PROCEDIMENTTIPUS)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    return getReferenceListForProcedimentTipus(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(PROCEDIMENTTIPUS)
+      && !solicitudFilterForm.isGroupByField(PROCEDIMENTTIPUS)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    Where _w = null;
+    return getReferenceListForProcedimentTipus(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("1" , "1"));
+    __tmp.add(new StringKeyValue("2" , "2"));
+    __tmp.add(new StringKeyValue("3" , "3"));
+    __tmp.add(new StringKeyValue("4" , "4"));
+    __tmp.add(new StringKeyValue("5" , "5"));
+    return __tmp;
   }
 
 

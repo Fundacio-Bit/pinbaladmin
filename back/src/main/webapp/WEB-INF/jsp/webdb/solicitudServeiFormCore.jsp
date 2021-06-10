@@ -247,3 +247,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.CADUCA)}">
+        <tr id="solicitudServei_caduca_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.CADUCA])?'solicitudServei.caduca':__theForm.labels[SolicitudServeiFields.CADUCA]}" />
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.CADUCA]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudServeiFields.CADUCA]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitudServei.caduca" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="solicitudServei.caduca"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">
+        <tr id="solicitudServei_fechaCaduca_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.FECHACADUCA])?'solicitudServei.fechaCaduca':__theForm.labels[SolicitudServeiFields.FECHACADUCA]}" />
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.FECHACADUCA]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudServeiFields.FECHACADUCA]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitudServei.fechaCaduca" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="solicitudServei.fechaCaduca"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

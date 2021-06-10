@@ -76,6 +76,17 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String procedimentTipus;
+
+  public java.lang.String getProcedimentTipus() {
+    return this.procedimentTipus;
+  }
+
+  public void setProcedimentTipus(java.lang.String procedimentTipus) {
+    this.procedimentTipus = procedimentTipus;
+  }
+
+
   private java.lang.Long estatIDDesde;
 
   public java.lang.Long getEstatIDDesde() {
@@ -230,6 +241,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String responsableProcNom;
+
+  public java.lang.String getResponsableProcNom() {
+    return this.responsableProcNom;
+  }
+
+  public void setResponsableProcNom(java.lang.String responsableProcNom) {
+    this.responsableProcNom = responsableProcNom;
+  }
+
+
+  private java.lang.String responsableProcEmail;
+
+  public java.lang.String getResponsableProcEmail() {
+    return this.responsableProcEmail;
+  }
+
+  public void setResponsableProcEmail(java.lang.String responsableProcEmail) {
+    this.responsableProcEmail = responsableProcEmail;
+  }
+
+
   private java.lang.String notes;
 
   public java.lang.String getNotes() {
@@ -262,6 +295,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.procedimentCodi = __toClone.procedimentCodi;
     this.codiDescriptiu = __toClone.codiDescriptiu;
     this.procedimentNom = __toClone.procedimentNom;
+    this.procedimentTipus = __toClone.procedimentTipus;
     this.estatIDDesde = __toClone.estatIDDesde;
     this.estatIDFins = __toClone.estatIDFins;
     this.ticketAssociat = __toClone.ticketAssociat;
@@ -276,8 +310,11 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.dataFiFins = __toClone.dataFiFins;
     this.personaContacte = __toClone.personaContacte;
     this.personaContacteEmail = __toClone.personaContacteEmail;
+    this.responsableProcNom = __toClone.responsableProcNom;
+    this.responsableProcEmail = __toClone.responsableProcEmail;
     this.notes = __toClone.notes;
     this.creador = __toClone.creador;
+    this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfEstatSolicitudForEstatID = __toClone.mapOfEstatSolicitudForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
   }
@@ -314,6 +351,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
    // -----------------------
    // Maps de referencies.
    // -----------------------
+  private Map<String, String> mapOfValuesForProcedimentTipus;
+
+  public Map<String, String> getMapOfValuesForProcedimentTipus() {
+    return this.mapOfValuesForProcedimentTipus;
+  }
+
+  public void setMapOfValuesForProcedimentTipus(Map<String, String> mapOfValuesForProcedimentTipus) {
+    this.mapOfValuesForProcedimentTipus = mapOfValuesForProcedimentTipus;
+  }
+
+
+
   private Map<String, String> mapOfEstatSolicitudForEstatID;
 
   public Map<String, String> getMapOfEstatSolicitudForEstatID() {

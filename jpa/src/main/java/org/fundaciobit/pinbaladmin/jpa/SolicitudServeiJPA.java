@@ -69,6 +69,12 @@ private static final long serialVersionUID = 1197229085L;
 	@Column(name="notes",length = 2000)
 	java.lang.String notes;
 
+	@Column(name="caduca",length = 255)
+	java.lang.String caduca;
+
+	@Column(name="fechacaduca",length = 255)
+	java.lang.String fechaCaduca;
+
 
 
   /** Constructor Buit */
@@ -76,7 +82,7 @@ private static final long serialVersionUID = 1197229085L;
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudServeiJPA(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes) {
+  public SolicitudServeiJPA(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes , java.lang.String caduca , java.lang.String fechaCaduca) {
     this.id=id;
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
@@ -88,9 +94,11 @@ private static final long serialVersionUID = 1197229085L;
     this.consentiment=consentiment;
     this.enllazConsentiment=enllazConsentiment;
     this.notes=notes;
+    this.caduca=caduca;
+    this.fechaCaduca=fechaCaduca;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudServeiJPA(long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes) {
+  public SolicitudServeiJPA(long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String normaLegal , java.lang.String enllazNormaLegal , java.lang.String articles , java.lang.String tipusConsentiment , java.lang.String consentiment , java.lang.String enllazConsentiment , java.lang.String notes , java.lang.String caduca , java.lang.String fechaCaduca) {
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
     this.estatSolicitudServeiID=estatSolicitudServeiID;
@@ -101,6 +109,8 @@ private static final long serialVersionUID = 1197229085L;
     this.consentiment=consentiment;
     this.enllazConsentiment=enllazConsentiment;
     this.notes=notes;
+    this.caduca=caduca;
+    this.fechaCaduca=fechaCaduca;
 }
   /** Constructor dels valors Not Null */
   public SolicitudServeiJPA(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID) {
@@ -121,6 +131,8 @@ private static final long serialVersionUID = 1197229085L;
     this.setConsentiment(__bean.getConsentiment());
     this.setEnllazConsentiment(__bean.getEnllazConsentiment());
     this.setNotes(__bean.getNotes());
+    this.setCaduca(__bean.getCaduca());
+    this.setFechaCaduca(__bean.getFechaCaduca());
 	}
 
 	public long getId() {
@@ -198,6 +210,20 @@ private static final long serialVersionUID = 1197229085L;
 	};
 	public void setNotes(java.lang.String _notes_) {
 		this.notes = _notes_;
+	};
+
+	public java.lang.String getCaduca() {
+		return(caduca);
+	};
+	public void setCaduca(java.lang.String _caduca_) {
+		this.caduca = _caduca_;
+	};
+
+	public java.lang.String getFechaCaduca() {
+		return(fechaCaduca);
+	};
+	public void setFechaCaduca(java.lang.String _fechaCaduca_) {
+		this.fechaCaduca = _fechaCaduca_;
 	};
 
 
@@ -289,6 +315,8 @@ private static final long serialVersionUID = 1197229085L;
     __tmp.setConsentiment(__bean.getConsentiment());
     __tmp.setEnllazConsentiment(__bean.getEnllazConsentiment());
     __tmp.setNotes(__bean.getNotes());
+    __tmp.setCaduca(__bean.getCaduca());
+    __tmp.setFechaCaduca(__bean.getFechaCaduca());
 		return __tmp;
 	}
 

@@ -1,9 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,9 +9,6 @@ import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -23,6 +17,7 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
@@ -33,11 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+
 
 /**
  * 
@@ -61,6 +52,9 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
     request.getSession().removeAttribute(NOMES_FITXERS);
     return "redirect:" + getContextWeb() + "/new";
   }
+  
+
+  
 
   @Override
   public SolicitudForm getSolicitudForm(SolicitudJPA _jpa, boolean __isView,
@@ -88,6 +82,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         all.remove(SOLICITUDXMLID);
         all.remove(DOCUMENTSOLICITUDID);
         all.remove(ESTATID);
+        all.remove(PROCEDIMENTTIPUS);
         all.remove(DEPARTAMENTID);
 
         form.setHiddenFields(all);
@@ -139,7 +134,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         
         String xml = new String(xmlData, "UTF-8");
 
-        Properties prop = getPropertiesFromFormulario(xml);
+        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
 
         // prop.store(new FileOutputStream("formulario.properties"),
         // "PINBAL_TRAMIT");
@@ -152,12 +147,21 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         solicitud.setCodiDescriptiu(null);
         
         
-        
-        java.lang.String nomProcediment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
-        if (nomProcediment != null && nomProcediment.length() > 250) {
-          nomProcediment = nomProcediment.substring(0,250);
+        {
+          java.lang.String nomProcediment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
+          if (nomProcediment != null && nomProcediment.length() > 250) {
+            nomProcediment = nomProcediment.substring(0,250);
+          }
+          solicitud.setProcedimentNom(nomProcediment);
         }
-        solicitud.setProcedimentNom(nomProcediment);
+        {
+          String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
+          if (codiDescriptiu != null && codiDescriptiu.length() > 250) {
+            codiDescriptiu = codiDescriptiu.substring(0,250);
+          }
+          solicitud.setCodiDescriptiu(codiDescriptiu);
+        }
+        
         // java.lang.Long estatID = null;
         solicitud.setEstatID(10L);
         // java.lang.String ticketAssociat = null;
@@ -169,11 +173,16 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         // java.sql.Timestamp dataFi = null;
         // java.lang.String personaContacte =
         solicitud
-            .setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE"));
+            .setResponsableProcNom(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE"));
         // java.lang.String personaContacteEmail =
         solicitud
-            .setPersonaContacteEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
-
+            .setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
+        
+        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
+        // TODO XYZ ZZZ FALTA 
+        // java.lang.String personaContacteEmail =        
+        solicitud.setPersonaContacteEmail("");
+        
         
         {
 //          StringWriter writer = new StringWriter();
@@ -233,52 +242,6 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
     return "redirect:/operador/solicitudfullview/generarserveis/" + solicitudForm.getSolicitud().getSolicitudID();
   }
 
-  public static Properties getPropertiesFromFormulario(String xml)
-      throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
-    DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    InputSource is = new InputSource();
-    is.setCharacterStream(new StringReader(xml));
-
-    org.w3c.dom.Document doc = db.parse(is);
-
-    NodeList nodesForm = ((org.w3c.dom.Document) doc).getElementsByTagName("FORMULARIO");
-
-    Properties prop = new Properties();
-
-    findAttrInChildren("", nodesForm.item(0), prop);
-    return prop;
-  }
-
-  private static void findAttrInChildren(String base, Node element, Properties prop) {
-    // if (!element.getAttribute(tag).isEmpty()) {
-    // return element.getAttribute(tag);
-    // }
-
-    String name = element.getNodeName();
-
-    if (name.equals("FORMULARIO") || name.equals("DATOS_SOLICITUD")
-        || name.equals("DATOS_REGISTRO") || name.equals("LELSERVICIOS")
-        || name.startsWith("ID") || name.equals("LELSERVICIOSOCULEXCEL")) {
-      NodeList children = element.getChildNodes();
-      for (int i = 0, len = children.getLength(); i < len; i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          Element childElement = (Element) children.item(i);
-          findAttrInChildren(base + name + ".", childElement, prop);
-        }
-      }
-    } else {
-
-      String key = base + element.getNodeName();
-      String value = element.getTextContent();
-      System.out.println("Item NAME => " + key);
-      System.out.println("Item VALUE => " + value);
-      System.out.println();
-
-      prop.setProperty(key, value);
-
-    }
-  }
-  
   @Override
   public SolicitudJPA create(HttpServletRequest request, SolicitudJPA solicitud)
       throws Exception,I18NException, I18NValidationException {

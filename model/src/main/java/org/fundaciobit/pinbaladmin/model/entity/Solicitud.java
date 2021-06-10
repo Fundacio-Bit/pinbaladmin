@@ -14,6 +14,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getProcedimentNom();
 	public void setProcedimentNom(java.lang.String _procedimentNom_);
 
+	public java.lang.String getProcedimentTipus();
+	public void setProcedimentTipus(java.lang.String _procedimentTipus_);
+
 	public java.lang.Long getEstatID();
 	public void setEstatID(java.lang.Long _estatID_);
 
@@ -43,6 +46,12 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.String getPersonaContacteEmail();
 	public void setPersonaContacteEmail(java.lang.String _personaContacteEmail_);
+
+	public java.lang.String getResponsableProcNom();
+	public void setResponsableProcNom(java.lang.String _responsableProcNom_);
+
+	public java.lang.String getResponsableProcEmail();
+	public void setResponsableProcEmail(java.lang.String _responsableProcEmail_);
 
 	public java.lang.String getNotes();
 	public void setNotes(java.lang.String _notes_);

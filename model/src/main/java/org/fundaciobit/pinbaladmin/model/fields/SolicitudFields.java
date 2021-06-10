@@ -16,6 +16,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField PROCEDIMENTCODI = new StringField(_TABLE_MODEL, "procedimentCodi", "procedimentcodi");
 	 public static final StringField CODIDESCRIPTIU = new StringField(_TABLE_MODEL, "codiDescriptiu", "codidescriptiu");
 	 public static final StringField PROCEDIMENTNOM = new StringField(_TABLE_MODEL, "procedimentNom", "procedimentnom");
+	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
 	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
 	 public static final StringField TICKETASSOCIAT = new StringField(_TABLE_MODEL, "ticketAssociat", "ticketassociat");
 	 public static final StringField TICKETNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "ticketNumeroSeguiment", "ticketnumeroseguiment");
@@ -26,6 +27,8 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
 	 public static final StringField PERSONACONTACTE = new StringField(_TABLE_MODEL, "personaContacte", "personacontacte");
 	 public static final StringField PERSONACONTACTEEMAIL = new StringField(_TABLE_MODEL, "personaContacteEmail", "personacontacteemail");
+	 public static final StringField RESPONSABLEPROCNOM = new StringField(_TABLE_MODEL, "responsableProcNom", "responsableprocnom");
+	 public static final StringField RESPONSABLEPROCEMAIL = new StringField(_TABLE_MODEL, "responsableProcEmail", "responsableprocemail");
 	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "estat");
 	 public static final LongField DOCUMENTSOLICITUDID = new LongField(_TABLE_MODEL, "documentSolicitudID", "documentsolicitudid");
 	 public static final LongField SOLICITUDXMLID = new LongField(_TABLE_MODEL, "solicitudXmlID", "solicitudxmlid");
@@ -39,6 +42,7 @@ public interface SolicitudFields extends java.io.Serializable {
     PROCEDIMENTCODI,
     CODIDESCRIPTIU,
     PROCEDIMENTNOM,
+    PROCEDIMENTTIPUS,
     ESTATID,
     TICKETASSOCIAT,
     TICKETNUMEROSEGUIMENT,
@@ -49,6 +53,8 @@ public interface SolicitudFields extends java.io.Serializable {
     DATAFI,
     PERSONACONTACTE,
     PERSONACONTACTEEMAIL,
+    RESPONSABLEPROCNOM,
+    RESPONSABLEPROCEMAIL,
     NOTES,
     DOCUMENTSOLICITUDID,
     SOLICITUDXMLID,

@@ -213,6 +213,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.CADUCA)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.caduca" var="caduca" />
+              <fmt:message key="genapp.form.searchby" var="cercapercaduca" >                
+                 <fmt:param value="${caduca}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${caduca}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercaduca}" path="caduca" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.FECHACADUCA)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.fechaCaduca" var="fechaCaduca" />
+              <fmt:message key="genapp.form.searchby" var="cercaperfechaCaduca" >                
+                 <fmt:param value="${fechaCaduca}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${fechaCaduca}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperfechaCaduca}" path="fechaCaduca" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

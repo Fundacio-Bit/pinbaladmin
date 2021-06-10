@@ -74,4 +74,16 @@ public class Configuracio implements Constants {
   public static boolean isTipusEventPublic(int tipus) {
     return tipus > 0;
   }
+  
+  
+  public static String getTemplateFormulari() {
+    return System.getProperty(PINBALADMIN_PROPERTY_BASE + "template_formulari");
+  }
+  
+  
+  public static String getTemplateServeisExcel() {
+    return System.getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
+  }
+  
+  
 }

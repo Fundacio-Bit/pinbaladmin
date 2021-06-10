@@ -28,6 +28,7 @@ public class SolicitudForm extends PinbalAdminBaseForm {
   public SolicitudForm(SolicitudForm __toClone) {
     super(__toClone);
       this.solicitud = __toClone.solicitud;
+    this.listOfValuesForProcedimentTipus = __toClone.listOfValuesForProcedimentTipus;
     this.listOfEstatSolicitudForEstatID = __toClone.listOfEstatSolicitudForEstatID;
     this.listOfDepartamentForDepartamentID = __toClone.listOfDepartamentForDepartamentID;
   }
@@ -73,6 +74,18 @@ public class SolicitudForm extends PinbalAdminBaseForm {
   public void setSolicitudXmlIDDelete(boolean solicitudXmlIDDelete) {
     this.solicitudXmlIDDelete = solicitudXmlIDDelete;
    }
+  private List<StringKeyValue> listOfValuesForProcedimentTipus;
+
+  public List<StringKeyValue> getListOfValuesForProcedimentTipus() {
+    return this.listOfValuesForProcedimentTipus;
+  }
+
+  public void setListOfValuesForProcedimentTipus(List<StringKeyValue> listOfValuesForProcedimentTipus) {
+    this.listOfValuesForProcedimentTipus = listOfValuesForProcedimentTipus;
+  }
+
+
+
   private List<StringKeyValue> listOfEstatSolicitudForEstatID;
 
   public List<StringKeyValue> getListOfEstatSolicitudForEstatID() {

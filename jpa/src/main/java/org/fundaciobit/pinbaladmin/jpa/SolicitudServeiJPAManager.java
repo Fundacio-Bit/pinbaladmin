@@ -66,8 +66,8 @@ public class SolicitudServeiJPAManager
 		return list.toArray(new SolicitudServei[list.size()]);
 	};
 
-	public synchronized SolicitudServei create( long _solicitudID_, long _serveiID_, java.lang.Long _estatSolicitudServeiID_, java.lang.String _normaLegal_, java.lang.String _enllazNormaLegal_, java.lang.String _articles_, java.lang.String _tipusConsentiment_, java.lang.String _consentiment_, java.lang.String _enllazConsentiment_, java.lang.String _notes_) throws I18NException {
-		SolicitudServeiJPA __bean =  new SolicitudServeiJPA(_solicitudID_,_serveiID_,_estatSolicitudServeiID_,_normaLegal_,_enllazNormaLegal_,_articles_,_tipusConsentiment_,_consentiment_,_enllazConsentiment_,_notes_);
+	public synchronized SolicitudServei create( long _solicitudID_, long _serveiID_, java.lang.Long _estatSolicitudServeiID_, java.lang.String _normaLegal_, java.lang.String _enllazNormaLegal_, java.lang.String _articles_, java.lang.String _tipusConsentiment_, java.lang.String _consentiment_, java.lang.String _enllazConsentiment_, java.lang.String _notes_, java.lang.String _caduca_, java.lang.String _fechaCaduca_) throws I18NException {
+		SolicitudServeiJPA __bean =  new SolicitudServeiJPA(_solicitudID_,_serveiID_,_estatSolicitudServeiID_,_normaLegal_,_enllazNormaLegal_,_articles_,_tipusConsentiment_,_consentiment_,_enllazConsentiment_,_notes_,_caduca_,_fechaCaduca_);
 		return create(__bean);
 	}
 

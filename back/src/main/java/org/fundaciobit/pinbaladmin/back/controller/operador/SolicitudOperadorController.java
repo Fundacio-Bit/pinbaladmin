@@ -212,10 +212,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     if (isestatal == null) {
       // NO SABEM SI ES ESTATAL O LOCAL
-      log.info("XYZ ZZZ __isView = " + __isView);
+      //log.info("XYZ ZZZ __isView = " + __isView);
       if (__isView) {
 
-        log.info("XYZ ZZZ _jpa.getDepartamentID() = " + _jpa.getDepartamentID());
+        //log.info("XYZ ZZZ _jpa.getDepartamentID() = " + _jpa.getDepartamentID());
 
         if (_jpa.getDepartamentID() == null) {
           // solicitudForm.addHiddenField(ENTITATLOCALID);
@@ -280,11 +280,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   public void postValidate(HttpServletRequest request, SolicitudForm solicitudForm,
       BindingResult result) throws I18NException {
 
-    log.info(" XYZ ZZZ postValidate");
+    //log.info(" XYZ ZZZ postValidate");
 
     Boolean isestatal = isEstatal();
 
-    log.info(" XYZ ZZZ postValidate => isestatal = " + isestatal);
+    //log.info(" XYZ ZZZ postValidate => isestatal = " + isestatal);
 
     if (isestatal != null) {
 
@@ -356,6 +356,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * result.rejectValue(get(DEPARTAMENTID), "error.departamentincorrecte",
          * "El departament seleccionat no forma part de l'àrea elegida"); }
          */
+
       }
     }
 
@@ -898,9 +899,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     List<StringKeyValue> listSKV = departamentEjb.executeQuery(smkv, null);
 
-    for (StringKeyValue skv : listSKV) {
-      log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());
-    }
+//    for (StringKeyValue skv : listSKV) {
+//      log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());
+//    }
 
     return listSKV;
 
@@ -1039,6 +1040,35 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     return super.getReferenceListForEstatID(request, mav, solicitudForm, where);
 
   }
+  
+  
+  @Override
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+      ModelAndView mav, Where where)  throws I18NException {
+   List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+   __tmp.add(new StringKeyValue("Aduanero", "Aduanero"));
+   __tmp.add(new StringKeyValue("Afiliación y cotización a la Seguridad Social", "Afiliación y cotización a la Seguridad Social"));
+   __tmp.add(new StringKeyValue("Autorizaciones, licencias y homologaciones", "Autorizaciones, licencias y homologaciones"));
+   __tmp.add(new StringKeyValue("Ayudas, Becas y Subvenciones", "Ayudas, Becas y Subvenciones"));
+   __tmp.add(new StringKeyValue("Certificados", "Certificados"));
+   __tmp.add(new StringKeyValue("Contratación pública", "Contratación pública"));
+   __tmp.add(new StringKeyValue("Convenios de colaboración y comunicaciones administrativas", "Convenios de colaboración y comunicaciones administrativas"));
+   __tmp.add(new StringKeyValue("Gestión Económica y Patrimonial", "Gestión Económica y Patrimonial"));
+   __tmp.add(new StringKeyValue("Declaraciones y comunicaciones de los interesados", "Declaraciones y comunicaciones de los interesados"));
+   __tmp.add(new StringKeyValue("Inspector", "Inspector"));
+   __tmp.add(new StringKeyValue("Premios", "Premios"));
+   __tmp.add(new StringKeyValue("Prestaciones", "Prestaciones"));
+   __tmp.add(new StringKeyValue("Recursos Humanos", "Recursos Humanos"));
+   __tmp.add(new StringKeyValue("Registros y Censos", "Registros y Censos"));
+   __tmp.add(new StringKeyValue("Responsabilidad patrimonial y otras solicitudes de indemnización", "Responsabilidad patrimonial y otras solicitudes de indemnización"));
+   __tmp.add(new StringKeyValue("Revisión de Actos administrativos y Recursos", "Revisión de Actos administrativos y Recursos"));
+   __tmp.add(new StringKeyValue("Sancionador", "Sancionador"));
+   __tmp.add(new StringKeyValue("Sugerencias, Quejasy Denuncias", "Sugerencias, Quejasy Denuncias"));
+   __tmp.add(new StringKeyValue("Tributario", "Tributario"));
+   return __tmp;
+ }
+  
+  
 
   /*
    * 

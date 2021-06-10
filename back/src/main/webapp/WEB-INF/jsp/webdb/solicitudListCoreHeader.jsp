@@ -24,6 +24,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTNOM)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PROCEDIMENTNOM)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTTIPUS)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PROCEDIMENTTIPUS)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ESTATID)}</th>
         </c:if>
@@ -53,6 +56,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAIL)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PERSONACONTACTEEMAIL)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOM)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.RESPONSABLEPROCNOM)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAIL)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.RESPONSABLEPROCEMAIL)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NOTES)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.NOTES)}</th>

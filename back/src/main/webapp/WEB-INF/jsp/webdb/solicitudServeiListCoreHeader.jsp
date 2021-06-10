@@ -45,6 +45,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NOTES)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.NOTES)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CADUCA)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.CADUCA)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.FECHACADUCA)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

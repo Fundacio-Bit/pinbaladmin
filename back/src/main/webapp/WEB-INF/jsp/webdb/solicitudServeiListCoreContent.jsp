@@ -94,6 +94,16 @@
           ${solicitudServei.notes}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CADUCA)}">
+          <td>
+          ${solicitudServei.caduca}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">
+          <td>
+          ${solicitudServei.fechaCaduca}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

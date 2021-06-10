@@ -103,6 +103,22 @@ public class SolicitudServeiValidator<T> implements SolicitudServeiFields {
       }
     }
     
+    if (__vr.getFieldErrorCount(CADUCA) == 0) {
+      java.lang.String __caduca = (java.lang.String)__vr.getFieldValue(__target__,CADUCA);
+      if (__caduca!= null && __caduca.length() > 255) {
+        __vr.rejectValue(CADUCA, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(FECHACADUCA) == 0) {
+      java.lang.String __fechacaduca = (java.lang.String)__vr.getFieldValue(__target__,FECHACADUCA);
+      if (__fechacaduca!= null && __fechacaduca.length() > 255) {
+        __vr.rejectValue(FECHACADUCA, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(FECHACADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+    
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

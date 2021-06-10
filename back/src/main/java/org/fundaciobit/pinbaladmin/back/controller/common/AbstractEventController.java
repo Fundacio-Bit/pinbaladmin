@@ -91,7 +91,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
       String itemNom = isSolicitud()? "solicituID" : "incidenciaTecnicaID";
       
       HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom+ " a traves de la sessio "
+          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
               + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
       
       mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
@@ -99,6 +99,16 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     T item = findItemByPrimaryKey(itemID);
+    
+    if (item == null) {
+      String itemNom = isSolicitud()? "solicitud" : "incidenciaTecnica";
+      HtmlUtils.saveMessageError(request,
+          "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( " + itemID + ") retorna un element null.");
+      
+      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      return eventForm;
+    }
+    
 
     if (isSolicitud()) {
       eventForm.addHiddenField(INCIDENCIATECNICAID);
@@ -141,7 +151,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
       mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
     }
 
-    mav.addObject("persona_contacte", getPersonaContacteEmail(item));
+    String email = getPersonaContacteEmail(item);
+    if (email == null || email.trim().length() == 0) {
+      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+      HtmlUtils.saveMessageError(request,
+          "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
+      mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID), true));
+      return eventForm;
+    }
+    
+    
+
+    mav.addObject("persona_contacte", email);
 
     eventForm.setAttachedAdditionalJspCode(true);
 
@@ -150,7 +171,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   public abstract T findItemByPrimaryKey(Long itemID);
   
-  public abstract  String redirectWhenSessionItemIDNotDefined();
+  public abstract String redirectWhenSessionItemIDNotDefined();
   
   public abstract String getPersonaContacteEmail(T item);
   
@@ -201,12 +222,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request, EventForm eventForm) {
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-
-    String item = isPublic() ? HibernateFileUtil.encryptFileID(itemID)
-        : String.valueOf(itemID);
-
-    return "redirect:" + getContextWeb() + "/veureevents/" + item;
+    return getRedirectWhenCancel(request, eventForm.getEvent().getEventID());
   }
 
   @Override
@@ -227,8 +243,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long eventID) {
+    
+    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
-    return "redirect:" + getContextWeb() + "/list";
+    String item = isPublic() ? HibernateFileUtil.encryptFileID(itemID)
+        : String.valueOf(itemID);
+
+    return "redirect:" + getContextWeb() + "/veureevents/" + item;
+
+    //return "redirect:" + getContextWeb() + "/list";
   }
 
   @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
@@ -297,10 +320,16 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     T item = findItemByPrimaryKey(itemID);
     mav.addObject("personaContacte", getPersonaContacteNom(item));
-    mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
+    String email = getPersonaContacteEmail(item);
+    
+    
+    mav.addObject("personaContacteEmail", email);
 
     mav.addObject("ID", itemID);
     mav.addObject("titol", getTitol(item));
+    mav.addObject("isPublic", isPublic());    
+    mav.addObject("isSolicitud", isSolicitud());
+    mav.addObject("contextweb", getContextWeb());
 
     String estat = getEstat(item);
     mav.addObject("estat", estat);

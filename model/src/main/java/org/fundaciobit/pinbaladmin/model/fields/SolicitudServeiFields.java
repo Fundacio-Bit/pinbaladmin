@@ -23,6 +23,8 @@ public interface SolicitudServeiFields extends java.io.Serializable {
 	 public static final StringField CONSENTIMENT = new StringField(_TABLE_MODEL, "consentiment", "consentiment");
 	 public static final StringField ENLLAZCONSENTIMENT = new StringField(_TABLE_MODEL, "enllazConsentiment", "enllazconsentiment");
 	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "notes");
+	 public static final StringField CADUCA = new StringField(_TABLE_MODEL, "caduca", "caduca");
+	 public static final StringField FECHACADUCA = new StringField(_TABLE_MODEL, "fechaCaduca", "fechacaduca");
 
 
   public static final Field<?>[] ALL_SOLICITUDSERVEI_FIELDS = {
@@ -36,7 +38,9 @@ public interface SolicitudServeiFields extends java.io.Serializable {
     TIPUSCONSENTIMENT,
     CONSENTIMENT,
     ENLLAZCONSENTIMENT,
-    NOTES
+    NOTES,
+    CADUCA,
+    FECHACADUCA
   };
 
 

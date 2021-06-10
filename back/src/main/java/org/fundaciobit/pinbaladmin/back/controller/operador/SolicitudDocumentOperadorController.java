@@ -1,26 +1,36 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
+import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.jpa.DocumentJPA;
+import org.fundaciobit.pinbaladmin.jpa.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.utils.Configuracio;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -107,6 +117,10 @@ public class SolicitudDocumentOperadorController
         documentFilterForm.setAddButtonVisible(false);
         documentFilterForm.addAdditionalButton(new AdditionalButton("icon-plus-sign",
             "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", ""));
+        
+        documentFilterForm.addAdditionalButton(
+            new AdditionalButton("icon-repeat", "solicitudservei.generarformularidirectorgeneral",
+                getContextWeb() + "/generarformularidirectorgeneral", ""));
 
         documentFilterForm.setVisibleMultipleSelection(false);
 
@@ -140,6 +154,36 @@ public class SolicitudDocumentOperadorController
     }
     return soli;
   }
+  
+  
+  
+  @RequestMapping(value = "/generarformularidirectorgeneral", method = RequestMethod.GET)
+  public String generarFormulariDirectorGeneral(HttpServletRequest request) throws Exception {
+
+    Long solicitudID = getSolicitudID(request);
+
+    if (solicitudID == null) {
+      throw new Exception("generaPlantillaExcelDeServeis() :: El valor per soli val null");
+    }
+
+    try {
+
+      log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
+
+      SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKeyFull(solicitudID);
+
+    
+
+    } catch (I18NException ie) {
+
+      HtmlUtils.saveMessageError(request, I18NUtils.getMessage(ie));
+
+    }
+    return getRedirectWhen(solicitudID);
+  }
+
+  
+  
   
   @Override
   public DocumentForm getDocumentForm(DocumentJPA _jpa,

@@ -55,6 +55,14 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
     return new StringField(getQueryPath(), SolicitudServeiFields.NOTES);
   }
 
+  public StringField CADUCA() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.CADUCA);
+  }
+
+  public StringField FECHACADUCA() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.FECHACADUCA);
+  }
+
 
 
   @Override

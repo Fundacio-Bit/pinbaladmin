@@ -31,4 +31,7 @@ public interface SolicitudLogicaLocal extends SolicitudLocal {
   @PermitAll
   public SolicitudJPA findByPrimaryKey(Long _ID_);
   
+
+  public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException;
+  
 }

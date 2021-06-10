@@ -27,6 +27,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.PROCEDIMENTNOM);
   }
 
+  public StringField PROCEDIMENTTIPUS() {
+    return new StringField(getQueryPath(), SolicitudFields.PROCEDIMENTTIPUS);
+  }
+
   public LongField ESTATID() {
     return new LongField(getQueryPath(), SolicitudFields.ESTATID);
   }
@@ -65,6 +69,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
   public StringField PERSONACONTACTEEMAIL() {
     return new StringField(getQueryPath(), SolicitudFields.PERSONACONTACTEEMAIL);
+  }
+
+  public StringField RESPONSABLEPROCNOM() {
+    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCNOM);
+  }
+
+  public StringField RESPONSABLEPROCEMAIL() {
+    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCEMAIL);
   }
 
   public StringField NOTES() {
