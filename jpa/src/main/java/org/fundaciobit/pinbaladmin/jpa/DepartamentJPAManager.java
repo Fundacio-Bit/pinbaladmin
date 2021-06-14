@@ -66,7 +66,7 @@ public class DepartamentJPAManager
 		return list.toArray(new Departament[list.size()]);
 	};
 
-	public synchronized Departament create( java.lang.String _nom_, long _areaID_) throws I18NException {
+	public Departament create( java.lang.String _nom_, long _areaID_) throws I18NException {
 		DepartamentJPA __bean =  new DepartamentJPA(_nom_,_areaID_);
 		return create(__bean);
 	}

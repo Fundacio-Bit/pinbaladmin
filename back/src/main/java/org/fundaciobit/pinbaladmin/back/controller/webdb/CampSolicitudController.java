@@ -441,7 +441,7 @@ public class CampSolicitudController
       return null;
     }
     try {
-      CampSolicitud campSolicitud = campSolicitudEjb.findByPrimaryKey(campSolicitudID);
+      CampSolicitud campSolicitud = findByPrimaryKey(request, campSolicitudID);
       if (campSolicitud == null) {
         String __msg =createMessageError(request, "error.notfound", campSolicitudID);
         return getRedirectWhenDelete(request, campSolicitudID, new Exception(__msg));
@@ -535,8 +535,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("campSolicitudID");
-
+    initDisallowedFields(binder, "campSolicitud.campSolicitudID");
   }
 
   public CampSolicitudWebValidator getWebValidator() {

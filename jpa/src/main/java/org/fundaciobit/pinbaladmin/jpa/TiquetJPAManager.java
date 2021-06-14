@@ -66,7 +66,7 @@ public class TiquetJPAManager
 		return list.toArray(new Tiquet[list.size()]);
 	};
 
-	public synchronized Tiquet create( java.lang.String _titol_, java.lang.String _descripcio_, java.lang.String _informador_, java.sql.Timestamp _dataAlta_, long _estatTiquetID_, long _tipusTiquetID_, java.lang.String _versioPinbal_, java.sql.Timestamp _dataInici_, java.sql.Timestamp _dataIncidencia_, java.lang.String _solucionatPer_, java.sql.Timestamp _datafi_, java.lang.String _notes_, int _entorn_, java.lang.Long _adjunt1ID_, java.lang.Long _adjunt2ID_) throws I18NException {
+	public Tiquet create( java.lang.String _titol_, java.lang.String _descripcio_, java.lang.String _informador_, java.sql.Timestamp _dataAlta_, long _estatTiquetID_, long _tipusTiquetID_, java.lang.String _versioPinbal_, java.sql.Timestamp _dataInici_, java.sql.Timestamp _dataIncidencia_, java.lang.String _solucionatPer_, java.sql.Timestamp _datafi_, java.lang.String _notes_, int _entorn_, java.lang.Long _adjunt1ID_, java.lang.Long _adjunt2ID_) throws I18NException {
 		TiquetJPA __bean =  new TiquetJPA(_titol_,_descripcio_,_informador_,_dataAlta_,_estatTiquetID_,_tipusTiquetID_,_versioPinbal_,_dataInici_,_dataIncidencia_,_solucionatPer_,_datafi_,_notes_,_entorn_,_adjunt1ID_,_adjunt2ID_);
 		return create(__bean);
 	}

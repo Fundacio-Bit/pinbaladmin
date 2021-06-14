@@ -431,7 +431,7 @@ public class DocumentEntitatController
       return null;
     }
     try {
-      DocumentEntitat documentEntitat = documentEntitatEjb.findByPrimaryKey(documentEntitatID);
+      DocumentEntitat documentEntitat = findByPrimaryKey(request, documentEntitatID);
       if (documentEntitat == null) {
         String __msg =createMessageError(request, "error.notfound", documentEntitatID);
         return getRedirectWhenDelete(request, documentEntitatID, new Exception(__msg));
@@ -525,8 +525,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("documentEntitatID");
-
+    initDisallowedFields(binder, "documentEntitat.documentEntitatID");
   }
 
   public DocumentEntitatWebValidator getWebValidator() {

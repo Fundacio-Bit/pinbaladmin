@@ -388,7 +388,7 @@ public class EstatSolicitudServeiController
       return null;
     }
     try {
-      EstatSolicitudServei estatSolicitudServei = estatSolicitudServeiEjb.findByPrimaryKey(estatSolicitudServeiID);
+      EstatSolicitudServei estatSolicitudServei = findByPrimaryKey(request, estatSolicitudServeiID);
       if (estatSolicitudServei == null) {
         String __msg =createMessageError(request, "error.notfound", estatSolicitudServeiID);
         return getRedirectWhenDelete(request, estatSolicitudServeiID, new Exception(__msg));
@@ -482,7 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-
+    initDisallowedFields(binder);
   }
 
   public EstatSolicitudServeiWebValidator getWebValidator() {

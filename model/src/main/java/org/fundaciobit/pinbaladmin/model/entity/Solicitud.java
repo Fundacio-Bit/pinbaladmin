@@ -71,6 +71,15 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getCreador();
 	public void setCreador(java.lang.String _creador_);
 
+	public java.lang.String getDenominacio();
+	public void setDenominacio(java.lang.String _denominacio_);
+
+	public java.lang.String getDir3();
+	public void setDir3(java.lang.String _dir3_);
+
+	public java.lang.String getNif();
+	public void setNif(java.lang.String _nif_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

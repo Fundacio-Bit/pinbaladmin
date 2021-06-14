@@ -545,3 +545,57 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
+        <tr id="solicitud_denominacio_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.DENOMINACIO])?'solicitud.denominacio':__theForm.labels[SolicitudFields.DENOMINACIO]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.DENOMINACIO]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.DENOMINACIO]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitud.denominacio" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.DENOMINACIO)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.DENOMINACIO)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="solicitud.denominacio"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.DIR3)}">
+        <tr id="solicitud_dir3_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.DIR3])?'solicitud.dir3':__theForm.labels[SolicitudFields.DIR3]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.DIR3]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.DIR3]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitud.dir3" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.DIR3)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.DIR3)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="50" path="solicitud.dir3"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.NIF)}">
+        <tr id="solicitud_nif_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.NIF])?'solicitud.nif':__theForm.labels[SolicitudFields.NIF]}" />
+              <c:if test="${not empty __theForm.help[SolicitudFields.NIF]}">
+              <i class="icon-info-sign" title="${__theForm.help[SolicitudFields.NIF]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="solicitud.nif" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.NIF)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.NIF)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="40" path="solicitud.nif"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

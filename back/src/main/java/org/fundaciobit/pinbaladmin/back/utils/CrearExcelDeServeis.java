@@ -134,8 +134,7 @@ public class CrearExcelDeServeis {
 
       dadesByServeiSolicitudID.put(ss.getId(), dades);
 
-    }
-    ;
+    }    
 
     return dadesByServeiSolicitudID;
   }
@@ -154,8 +153,37 @@ public class CrearExcelDeServeis {
       XSSFWorkbook my_xlsx_workbook = new XSSFWorkbook(input_document);
       // Read excel sheet that needs to be updated
       XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
+      
+      
+      
 
-      int row = 9;
+      
+// Primera FILA és 2
+      String[][] capzalera = new String[][] {
+        { soli.getDenominacio(), "'Entitat Nom'", "1", "0" },
+        { soli.getNif(), "'Entitat NIF'", "1", "1" },
+        { soli.getDir3(), "'Entitat DIR3'", "1", "2" },
+      };
+      
+      for (String[] valors : capzalera) {
+        
+        String valor = valors[0];
+        
+        if (valor == null || valor.trim().length() == 0) {
+          throw new Exception("El camp '" + valors[1] + "' de la sol·licitud amb ID "
+            +  soliID + " val null ");
+        }
+        Cell cell = my_worksheet.getRow(Integer.parseInt(valors[2])).getCell(Integer.parseInt(valors[3]));
+        cell.setCellValue(valor);
+      }
+      
+      
+      
+      
+      
+      
+
+      int row = 6;
 
       for (Long serveiSolicitudID : dadesByServeiSolicitudID.keySet()) {
 

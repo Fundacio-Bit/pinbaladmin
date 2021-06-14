@@ -417,7 +417,7 @@ public class AreaController
       return null;
     }
     try {
-      Area area = areaEjb.findByPrimaryKey(areaID);
+      Area area = findByPrimaryKey(request, areaID);
       if (area == null) {
         String __msg =createMessageError(request, "error.notfound", areaID);
         return getRedirectWhenDelete(request, areaID, new Exception(__msg));
@@ -511,8 +511,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("areaID");
-
+    initDisallowedFields(binder, "area.areaID");
   }
 
   public AreaWebValidator getWebValidator() {

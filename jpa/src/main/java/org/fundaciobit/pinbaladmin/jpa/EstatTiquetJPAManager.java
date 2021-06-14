@@ -66,7 +66,7 @@ public class EstatTiquetJPAManager
 		return list.toArray(new EstatTiquet[list.size()]);
 	};
 
-	public synchronized EstatTiquet create( long _estatTiquetID_, java.lang.String _nom_) throws I18NException {
+	public EstatTiquet create( long _estatTiquetID_, java.lang.String _nom_) throws I18NException {
 		EstatTiquetJPA __bean =  new EstatTiquetJPA(_estatTiquetID_,_nom_);
 		return create(__bean);
 	}

@@ -54,7 +54,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
   public static final String SESSIO_SOLIID_MANAGE_SERVEIS = "SESSIO_SOLIID_MANAGE_SERVEIS";
   
-  protected static final  SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH.mm_");
+  public static final  SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH.mm_");
   
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudLocal.JNDI_NAME)

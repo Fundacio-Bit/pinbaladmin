@@ -66,7 +66,7 @@ public class EventJPAManager
 		return list.toArray(new Event[list.size()]);
 	};
 
-	public synchronized Event create( java.lang.Long _solicitudID_, java.lang.Long _incidenciaTecnicaID_, java.sql.Timestamp _dataEvent_, int _tipus_, java.lang.String _persona_, java.lang.String _comentari_, java.lang.Long _fitxerID_, boolean _noLlegit_) throws I18NException {
+	public Event create( java.lang.Long _solicitudID_, java.lang.Long _incidenciaTecnicaID_, java.sql.Timestamp _dataEvent_, int _tipus_, java.lang.String _persona_, java.lang.String _comentari_, java.lang.Long _fitxerID_, boolean _noLlegit_) throws I18NException {
 		EventJPA __bean =  new EventJPA(_solicitudID_,_incidenciaTecnicaID_,_dataEvent_,_tipus_,_persona_,_comentari_,_fitxerID_,_noLlegit_);
 		return create(__bean);
 	}

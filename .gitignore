@@ -95,3 +95,5 @@ hs_err_pid*
 /model/target
 /jpa/target
 /ejb/target
+/back/serveis
+/back/formularis

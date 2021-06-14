@@ -47,6 +47,14 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     return new StringField(getQueryPath(), IncidenciaTecnicaFields.CONTACTETELEFON);
   }
 
+  public StringField CAIDIDENTIFICADORCONSULTA() {
+    return new StringField(getQueryPath(), IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA);
+  }
+
+  public StringField CAIDNUMEROSEGUIMENT() {
+    return new StringField(getQueryPath(), IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT);
+  }
+
 
 
   @Override

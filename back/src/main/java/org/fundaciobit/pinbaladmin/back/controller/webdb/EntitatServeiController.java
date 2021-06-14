@@ -391,7 +391,7 @@ public class EntitatServeiController
       return null;
     }
     try {
-      EntitatServei entitatServei = entitatServeiEjb.findByPrimaryKey(entitatServeiID);
+      EntitatServei entitatServei = findByPrimaryKey(request, entitatServeiID);
       if (entitatServei == null) {
         String __msg =createMessageError(request, "error.notfound", entitatServeiID);
         return getRedirectWhenDelete(request, entitatServeiID, new Exception(__msg));
@@ -485,8 +485,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("entitatServeiID");
-
+    initDisallowedFields(binder, "entitatServei.entitatServeiID");
   }
 
   public EntitatServeiWebValidator getWebValidator() {

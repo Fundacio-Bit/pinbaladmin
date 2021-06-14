@@ -66,7 +66,7 @@ public class GrupEntitatCedentJPAManager
 		return list.toArray(new GrupEntitatCedent[list.size()]);
 	};
 
-	public synchronized GrupEntitatCedent create( long _grupEntitatID_, long _cedentID_) throws I18NException {
+	public GrupEntitatCedent create( long _grupEntitatID_, long _cedentID_) throws I18NException {
 		GrupEntitatCedentJPA __bean =  new GrupEntitatCedentJPA(_grupEntitatID_,_cedentID_);
 		return create(__bean);
 	}

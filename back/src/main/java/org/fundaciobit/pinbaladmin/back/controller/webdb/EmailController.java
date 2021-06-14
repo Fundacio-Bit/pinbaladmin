@@ -388,7 +388,7 @@ public class EmailController
       return null;
     }
     try {
-      Email email = emailEjb.findByPrimaryKey(emailID);
+      Email email = findByPrimaryKey(request, emailID);
       if (email == null) {
         String __msg =createMessageError(request, "error.notfound", emailID);
         return getRedirectWhenDelete(request, emailID, new Exception(__msg));
@@ -482,8 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("emailID");
-
+    initDisallowedFields(binder, "email.emailID");
   }
 
   public EmailWebValidator getWebValidator() {

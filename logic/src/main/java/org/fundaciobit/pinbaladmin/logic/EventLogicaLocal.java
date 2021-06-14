@@ -1,5 +1,8 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 
@@ -21,6 +24,8 @@ public interface EventLogicaLocal extends EventLocal {
   @PermitAll
   public Event create(Event bean) throws I18NException;
 
+  public Set<Long> deleteFull(Long eventID) throws I18NException;
   
+  public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException;
   
 }

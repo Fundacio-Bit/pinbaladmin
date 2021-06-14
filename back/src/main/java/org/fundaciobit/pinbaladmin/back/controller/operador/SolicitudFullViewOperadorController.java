@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.ejb.EJB;
@@ -13,9 +14,9 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.jpa.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.FitxerJPA;
@@ -87,15 +88,19 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     if (__isView) {
       // Canviam el cancel·lar per un tornar.....
       solicitudForm.setCancelButtonVisible(false);
+      Long soliID = + solicitudForm.getSolicitud().getSolicitudID();
       String urlTornar = "/operador/solicitudfullview/"
-          + solicitudForm.getSolicitud().getSolicitudID() + " /cancel";
+          + soliID + " /cancel";
       solicitudForm.addAdditionalButton(
           new AdditionalButton("icon-arrow-left", "tornar", urlTornar, "btn-info"));
+      
+      solicitudForm.addAdditionalButton(
+          new AdditionalButton("icon-repeat", "solicitud.generarformularidirectorgeneral",
+              getContextWeb() + "/generarformularidirectorgeneral/" + soliID, ""));
 
       solicitudForm.addAdditionalButton(new AdditionalButton(" icon-pencil", "solicitud.edit",
           "/operador/solicitud" + (_jpa.getDepartamentID() == null ? "estatal" : "local") + "/"
-              + solicitudForm.getSolicitud().getSolicitudID() + "/edit",
-          ""));
+              + soliID + "/edit", ""));
 
       solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
           "solicitud.caid",
@@ -156,7 +161,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
   @RequestMapping(value = "/generarserveis/{soliID}", method = RequestMethod.GET)
   public String generarServeisAndFormulari(HttpServletRequest request,
-      HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
+      HttpServletResponse response, @PathVariable Long soliID)  {
 
     SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
@@ -180,12 +185,68 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           xml = new String(xmlData, "UTF-8");
         }
 
-        Properties prop = CrearExcelDeServeis.getPropertiesFromFormulario(xml);
+        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
 
         generarServeis(request,soliID, prop);
 
-        generarFormulari(request, soliID, prop);
+        generarFormulari(request, soliID, prop, "");
 
+      } catch (I18NException ie) {
+        String msg = I18NUtils.getMessage(ie);
+        log.error(msg, ie);
+        HtmlUtils.saveMessageError(request, msg);
+      
+      } catch (Exception e) {
+        log.error(e.getMessage(), e);
+        HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
+      }
+    }
+
+    return "redirect:" + getContextWeb() + "/view/" + soliID;
+  }
+  
+  
+  
+  
+  
+
+  
+  @RequestMapping(value = "/generarformularidirectorgeneral/{soliID}", method = RequestMethod.GET)
+  public String generarFormulariDirectorGeneral(HttpServletRequest request, @PathVariable Long soliID) throws Exception {
+
+    
+    SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+
+    Long fitxerID = soli.getSolicitudXmlID();
+
+    log.info(" FITXER ID => " + fitxerID);
+
+    if (fitxerID == null) {
+
+      HtmlUtils.saveMessageError(request,
+          "NO ES PODEN GENERAR ELS SERVEIS JA QUE NO HI HA EL FITXER DE XML !!!!!!");
+
+    } else {
+
+      try {
+
+        String xml;
+        {
+          byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
+
+          xml = new String(xmlData, "UTF-8");
+        }
+
+        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+
+
+        generarFormulari(request, soliID, prop, SolicitudServeiOperadorController.SDF.format(new Date()));
+
+      } catch (I18NException ie) {
+        String msg = I18NUtils.getMessage(ie);
+        log.error(msg, ie);
+        HtmlUtils.saveMessageError(request, msg);
+      
       } catch (Exception e) {
         log.error(e.getMessage(), e);
         HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
@@ -195,8 +256,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return "redirect:" + getContextWeb() + "/view/" + soliID;
   }
 
-  public static  void generarFormulari(HttpServletRequest request, Long solicitudID,
-      Properties prop) throws Exception, I18NException {
+  
+  
+  
+
+  public  void generarFormulari(HttpServletRequest request, Long solicitudID,
+      Properties prop, String prefix) throws Exception, I18NException {
 
     File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
     File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
@@ -213,7 +278,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
 
-      Document doc = documentEjb.create("Formulario_Director_General (PDF)", fitxer.getFitxerID(),
+      Document doc = documentEjb.create(prefix + "Formulario_Director_General (PDF)", fitxer.getFitxerID(),
           null, null);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
@@ -222,14 +287,14 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
 
     {
-      FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
+      FitxerJPA fitxer = new FitxerJPA(prefix + "Formulario_Director_General.odt", outputODT.length(),
           "application/vnd.oasis.opendocument.text", "");
 
       fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
 
       FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
 
-      Document doc = documentEjb.create("Formulario_Ramon_Roca (ODT)", fitxer.getFitxerID(),
+      Document doc = documentEjb.create(prefix + "Formulario_Director_General (ODT)", fitxer.getFitxerID(),
           null, null);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);

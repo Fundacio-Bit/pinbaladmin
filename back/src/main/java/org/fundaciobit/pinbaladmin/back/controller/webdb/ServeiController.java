@@ -488,7 +488,7 @@ public class ServeiController
       return null;
     }
     try {
-      Servei servei = serveiEjb.findByPrimaryKey(serveiID);
+      Servei servei = findByPrimaryKey(request, serveiID);
       if (servei == null) {
         String __msg =createMessageError(request, "error.notfound", serveiID);
         return getRedirectWhenDelete(request, serveiID, new Exception(__msg));
@@ -582,8 +582,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("serveiID");
-
+    initDisallowedFields(binder, "servei.serveiID");
   }
 
   public ServeiWebValidator getWebValidator() {

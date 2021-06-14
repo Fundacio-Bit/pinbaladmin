@@ -70,6 +70,16 @@
           ${incidenciaTecnica.contacteTelefon}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}">
+          <td>
+          ${incidenciaTecnica.caidIdentificadorConsulta}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
+          <td>
+          ${incidenciaTecnica.caidNumeroSeguiment}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

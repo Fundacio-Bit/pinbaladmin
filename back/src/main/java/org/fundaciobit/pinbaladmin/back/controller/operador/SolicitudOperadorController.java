@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
+import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.EstatSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -189,7 +190,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   @Override
   public void delete(HttpServletRequest request, Solicitud solicitud)
       throws Exception, I18NException {
-    solicitudLogicaEjb.deleteFull(solicitud.getSolicitudID(), true);
+    Set<Long> deleteFiles = solicitudLogicaEjb.deleteFull(solicitud.getSolicitudID(), true);
+    
+    // Si tot ha anat be llavors borram els fitxers
+    if (deleteFiles.size() != 0) {
+      LogicUtils.deleteFiles(deleteFiles, fitxerEjb);
+    }
   }
 
   @Override

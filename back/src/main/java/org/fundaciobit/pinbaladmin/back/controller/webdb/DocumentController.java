@@ -402,7 +402,7 @@ public class DocumentController
       return null;
     }
     try {
-      Document document = documentEjb.findByPrimaryKey(documentID);
+      Document document = findByPrimaryKey(request, documentID);
       if (document == null) {
         String __msg =createMessageError(request, "error.notfound", documentID);
         return getRedirectWhenDelete(request, documentID, new Exception(__msg));
@@ -496,8 +496,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("documentID");
-
+    initDisallowedFields(binder, "document.documentID");
   }
 
   public DocumentWebValidator getWebValidator() {

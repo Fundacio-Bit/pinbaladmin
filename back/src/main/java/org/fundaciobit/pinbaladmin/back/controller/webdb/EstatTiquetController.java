@@ -388,7 +388,7 @@ public class EstatTiquetController
       return null;
     }
     try {
-      EstatTiquet estatTiquet = estatTiquetEjb.findByPrimaryKey(estatTiquetID);
+      EstatTiquet estatTiquet = findByPrimaryKey(request, estatTiquetID);
       if (estatTiquet == null) {
         String __msg =createMessageError(request, "error.notfound", estatTiquetID);
         return getRedirectWhenDelete(request, estatTiquetID, new Exception(__msg));
@@ -482,7 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-
+    initDisallowedFields(binder);
   }
 
   public EstatTiquetWebValidator getWebValidator() {

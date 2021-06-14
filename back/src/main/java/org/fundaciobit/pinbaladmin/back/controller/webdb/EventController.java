@@ -478,7 +478,7 @@ public class EventController
       return null;
     }
     try {
-      Event event = eventEjb.findByPrimaryKey(eventID);
+      Event event = findByPrimaryKey(request, eventID);
       if (event == null) {
         String __msg =createMessageError(request, "error.notfound", eventID);
         return getRedirectWhenDelete(request, eventID, new Exception(__msg));
@@ -572,8 +572,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("eventID");
-
+    initDisallowedFields(binder, "event.eventID");
   }
 
   public EventWebValidator getWebValidator() {

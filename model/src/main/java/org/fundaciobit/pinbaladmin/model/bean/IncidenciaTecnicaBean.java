@@ -19,6 +19,8 @@ private static final long serialVersionUID = 301195586L;
 	java.lang.String contacteNom;
 	java.lang.String contacteEmail;
 	java.lang.String contacteTelefon;
+	java.lang.String caidIdentificadorConsulta;
+	java.lang.String caidNumeroSeguiment;
 
 
   /** Constructor Buit */
@@ -26,7 +28,7 @@ private static final long serialVersionUID = 301195586L;
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon) {
+  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
@@ -36,9 +38,11 @@ private static final long serialVersionUID = 301195586L;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
     this.contacteTelefon=contacteTelefon;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon) {
+  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
@@ -47,6 +51,8 @@ private static final long serialVersionUID = 301195586L;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
     this.contacteTelefon=contacteTelefon;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor dels valors Not Null */
   public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String contacteNom , java.lang.String contacteEmail) {
@@ -68,6 +74,8 @@ private static final long serialVersionUID = 301195586L;
     this.setContacteNom(__bean.getContacteNom());
     this.setContacteEmail(__bean.getContacteEmail());
     this.setContacteTelefon(__bean.getContacteTelefon());
+    this.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    this.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
 	}
 
 	public long getIncidenciaTecnicaID() {
@@ -133,6 +141,20 @@ private static final long serialVersionUID = 301195586L;
 		this.contacteTelefon = _contacteTelefon_;
 	};
 
+	public java.lang.String getCaidIdentificadorConsulta() {
+		return(caidIdentificadorConsulta);
+	};
+	public void setCaidIdentificadorConsulta(java.lang.String _caidIdentificadorConsulta_) {
+		this.caidIdentificadorConsulta = _caidIdentificadorConsulta_;
+	};
+
+	public java.lang.String getCaidNumeroSeguiment() {
+		return(caidNumeroSeguiment);
+	};
+	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_) {
+		this.caidNumeroSeguiment = _caidNumeroSeguiment_;
+	};
+
 
 
   // ======================================
@@ -149,6 +171,8 @@ private static final long serialVersionUID = 301195586L;
     __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setContacteEmail(__bean.getContacteEmail());
     __tmp.setContacteTelefon(__bean.getContacteTelefon());
+    __tmp.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    __tmp.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
 		return __tmp;
 	}
 

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +20,6 @@ import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
-import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.hibernate.Hibernate;
@@ -44,6 +42,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
 
   @EJB(mappedName = SolicitudServeiLogicaLocal.JNDI_NAME)
   protected SolicitudServeiLogicaLocal solicitudServeiLogicaEJB;
+  
+  @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
+  protected EventLogicaLocal eventLogicaEjb;
 
   @Override
   public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
@@ -115,13 +116,20 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
     if (solicitud.getDocumentSolicitudID() != null) {
       files.add(solicitud.getDocumentSolicitudID());
     }
+    
+    
+    // Esborram events
+    files.addAll(eventLogicaEjb.deleteFullBySolicitantID(solicitudId));
+    
 
     this.delete(solicitud);
 
-    // Si to ha anat be llavors borram els fitxers
+   /*
+     Si tot ha anat be llavors borram els fitxers
     if (deleteFiles) {
       LogicUtils.deleteFiles(files, fitxerEjb);
     }
+    */
 
     return files;
   }

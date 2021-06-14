@@ -388,7 +388,7 @@ public class GrupEntitatController
       return null;
     }
     try {
-      GrupEntitat grupEntitat = grupEntitatEjb.findByPrimaryKey(grupEntitatID);
+      GrupEntitat grupEntitat = findByPrimaryKey(request, grupEntitatID);
       if (grupEntitat == null) {
         String __msg =createMessageError(request, "error.notfound", grupEntitatID);
         return getRedirectWhenDelete(request, grupEntitatID, new Exception(__msg));
@@ -482,8 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("grupEntitatID");
-
+    initDisallowedFields(binder, "grupEntitat.grupEntitatID");
   }
 
   public GrupEntitatWebValidator getWebValidator() {

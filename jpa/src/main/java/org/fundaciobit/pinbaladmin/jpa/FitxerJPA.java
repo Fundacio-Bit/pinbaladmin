@@ -37,7 +37,7 @@ private static final long serialVersionUID = -252813913L;
 	@Column(name="tamany",nullable = false,length = 19)
 	long tamany;
 
-	@Column(name="mime",nullable = false,length = 45)
+	@Column(name="mime",nullable = false,length = 100)
 	java.lang.String mime;
 
 	@Column(name="descripcio",length = 1000)

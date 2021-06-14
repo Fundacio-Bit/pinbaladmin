@@ -29,6 +29,12 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public java.lang.String getContacteTelefon();
 	public void setContacteTelefon(java.lang.String _contacteTelefon_);
 
+	public java.lang.String getCaidIdentificadorConsulta();
+	public void setCaidIdentificadorConsulta(java.lang.String _caidIdentificadorConsulta_);
+
+	public java.lang.String getCaidNumeroSeguiment();
+	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_);
+
 
 
   // ======================================

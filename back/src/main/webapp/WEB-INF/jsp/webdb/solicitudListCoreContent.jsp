@@ -146,6 +146,21 @@
           ${solicitud.creador}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
+          <td>
+          ${solicitud.denominacio}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DIR3)}">
+          <td>
+          ${solicitud.dir3}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NIF)}">
+          <td>
+          ${solicitud.nif}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

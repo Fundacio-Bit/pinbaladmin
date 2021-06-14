@@ -388,7 +388,7 @@ public class TraduccioController
       return null;
     }
     try {
-      Traduccio traduccio = traduccioEjb.findByPrimaryKey(traduccioID);
+      Traduccio traduccio = findByPrimaryKey(request, traduccioID);
       if (traduccio == null) {
         String __msg =createMessageError(request, "error.notfound", traduccioID);
         return getRedirectWhenDelete(request, traduccioID, new Exception(__msg));
@@ -482,8 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("traduccioID");
-
+    initDisallowedFields(binder, "traduccio.traduccioID");
   }
 
   public TraduccioWebValidator getWebValidator() {

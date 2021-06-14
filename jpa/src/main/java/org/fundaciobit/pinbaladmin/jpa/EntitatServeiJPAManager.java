@@ -66,7 +66,7 @@ public class EntitatServeiJPAManager
 		return list.toArray(new EntitatServei[list.size()]);
 	};
 
-	public synchronized EntitatServei create( java.lang.String _nom_, java.lang.String _descripcio_, boolean _balears_) throws I18NException {
+	public EntitatServei create( java.lang.String _nom_, java.lang.String _descripcio_, boolean _balears_) throws I18NException {
 		EntitatServeiJPA __bean =  new EntitatServeiJPA(_nom_,_descripcio_,_balears_);
 		return create(__bean);
 	}

@@ -441,7 +441,7 @@ public class GrupEntitatCedentController
       return null;
     }
     try {
-      GrupEntitatCedent grupEntitatCedent = grupEntitatCedentEjb.findByPrimaryKey(grupEntitatCedentID);
+      GrupEntitatCedent grupEntitatCedent = findByPrimaryKey(request, grupEntitatCedentID);
       if (grupEntitatCedent == null) {
         String __msg =createMessageError(request, "error.notfound", grupEntitatCedentID);
         return getRedirectWhenDelete(request, grupEntitatCedentID, new Exception(__msg));
@@ -535,8 +535,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("grupEntitatCedentID");
-
+    initDisallowedFields(binder, "grupEntitatCedent.grupEntitatCedentID");
   }
 
   public GrupEntitatCedentWebValidator getWebValidator() {

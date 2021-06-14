@@ -21,6 +21,8 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
 	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contacteNom", "contactenom");
 	 public static final StringField CONTACTEEMAIL = new StringField(_TABLE_MODEL, "contacteEmail", "contacteemail");
 	 public static final StringField CONTACTETELEFON = new StringField(_TABLE_MODEL, "contacteTelefon", "contactetelefon");
+	 public static final StringField CAIDIDENTIFICADORCONSULTA = new StringField(_TABLE_MODEL, "caidIdentificadorConsulta", "caididentificadorconsulta");
+	 public static final StringField CAIDNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "caidNumeroSeguiment", "caidnumeroseguiment");
 
 
   public static final Field<?>[] ALL_INCIDENCIATECNICA_FIELDS = {
@@ -32,7 +34,9 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
     NOMENTITAT,
     CONTACTENOM,
     CONTACTEEMAIL,
-    CONTACTETELEFON
+    CONTACTETELEFON,
+    CAIDIDENTIFICADORCONSULTA,
+    CAIDNUMEROSEGUIMENT
   };
 
 

@@ -417,7 +417,7 @@ public class DepartamentController
       return null;
     }
     try {
-      Departament departament = departamentEjb.findByPrimaryKey(departamentID);
+      Departament departament = findByPrimaryKey(request, departamentID);
       if (departament == null) {
         String __msg =createMessageError(request, "error.notfound", departamentID);
         return getRedirectWhenDelete(request, departamentID, new Exception(__msg));
@@ -511,8 +511,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("departamentID");
-
+    initDisallowedFields(binder, "departament.departamentID");
   }
 
   public DepartamentWebValidator getWebValidator() {

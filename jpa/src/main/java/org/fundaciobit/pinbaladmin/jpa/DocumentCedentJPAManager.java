@@ -66,7 +66,7 @@ public class DocumentCedentJPAManager
 		return list.toArray(new DocumentCedent[list.size()]);
 	};
 
-	public synchronized DocumentCedent create( java.lang.String _titol_, java.lang.String _descripcio_, long _entitatServeiID_, java.sql.Timestamp _dataCreacio_, java.lang.Long _fitxerID_) throws I18NException {
+	public DocumentCedent create( java.lang.String _titol_, java.lang.String _descripcio_, long _entitatServeiID_, java.sql.Timestamp _dataCreacio_, java.lang.Long _fitxerID_) throws I18NException {
 		DocumentCedentJPA __bean =  new DocumentCedentJPA(_titol_,_descripcio_,_entitatServeiID_,_dataCreacio_,_fitxerID_);
 		return create(__bean);
 	}

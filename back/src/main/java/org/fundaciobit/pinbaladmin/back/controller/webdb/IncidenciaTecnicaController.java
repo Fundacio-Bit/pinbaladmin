@@ -413,7 +413,7 @@ public class IncidenciaTecnicaController
       return null;
     }
     try {
-      IncidenciaTecnica incidenciaTecnica = incidenciaTecnicaEjb.findByPrimaryKey(incidenciaTecnicaID);
+      IncidenciaTecnica incidenciaTecnica = findByPrimaryKey(request, incidenciaTecnicaID);
       if (incidenciaTecnica == null) {
         String __msg =createMessageError(request, "error.notfound", incidenciaTecnicaID);
         return getRedirectWhenDelete(request, incidenciaTecnicaID, new Exception(__msg));
@@ -507,8 +507,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("incidenciaTecnicaID");
-
+    initDisallowedFields(binder, "incidenciaTecnica.incidenciaTecnicaID");
   }
 
   public IncidenciaTecnicaWebValidator getWebValidator() {

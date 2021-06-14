@@ -71,13 +71,56 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getTileList() {
-    return "eventListOperador";
+    return isPublic() ? "eventListOperadorIframePublic" : "eventListOperadorIframe"; //"eventListOperador";
   }
 
   @Override
   public String getSessionAttributeFilterForm() {
     return "EventOperador_FilterForm_" + isPublic() + "_" + isSolicitud();
   }
+  
+  
+  
+  @RequestMapping(value = "/new", method = RequestMethod.GET)
+  public ModelAndView crearEventGet(HttpServletRequest request,
+      HttpServletResponse response) throws I18NException {
+
+    log.info("\n\n ENTRA A NEW");
+    
+    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+    if (itemID == null) {
+      
+      String itemNom = isSolicitud()? "solicituID" : "incidenciaTecnicaID";
+      
+      HtmlUtils.saveMessageError(request,
+          "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
+              + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+      
+      return new ModelAndView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      
+    }
+
+    T item = findItemByPrimaryKey(itemID);
+    
+    String email = getPersonaContacteEmail(item);
+    if (email == null || email.trim().length() == 0) {
+      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+      
+      log.info("\n\n Passa per NEW AMB ERROR");
+      
+      HtmlUtils.saveMessageError(request,
+          "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la " + itemNom);
+      return new ModelAndView(new RedirectView(getRedirectWhenCancel(request, itemID), true));
+    }
+ 
+    ModelAndView mav = super.crearEventGet(request, response);
+  
+    return mav;
+  }
+  
+  
+  
+  
 
   @Override
   public EventForm getEventForm(EventJPA _jpa, boolean __isView, HttpServletRequest request,
@@ -119,13 +162,13 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     if (eventForm.isNou()) {
-
+/*
       if (isPublic()) {
         mav.setViewName("eventFormOperadorPublic");
       } else {
         mav.setViewName("eventFormOperador");
       }
-
+*/
       eventForm.getEvent().setDataEvent(new Timestamp(System.currentTimeMillis()));
       if (isSolicitud()) {
         eventForm.getEvent().setSolicitudID(itemID);
@@ -143,8 +186,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
         eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
         eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
       }
-    } else {
-      mav.setViewName("eventFormOperadorPublic");
     }
 
     if (!isPublic()) {
@@ -180,7 +221,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
   
 
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
-  public ModelAndView veureEvents(HttpServletRequest request, HttpServletResponse response,
+  public String veureEvents(HttpServletRequest request, HttpServletResponse response,
       @PathVariable String itemStrID) throws I18NException {
 
     Long itemID;
@@ -191,27 +232,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
-
-    String tile = isPublic() ? "eventListOperadorIframePublic" : "eventListOperadorIframe";
-
-    ModelAndView mav = new ModelAndView(tile);
-    T item = findItemByPrimaryKey(itemID);
     
-    mav.addObject("personaContacte", getPersonaContacteNom(item));
-    mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
+    return "redirect:" + getContextWeb() + "/list";
 
-    mav.addObject("ID", itemID);
-    mav.addObject("tipus", isSolicitud()?"Sol·licitud":"Incidència Tècnica");
-    mav.addObject("titol", getTitol(item));
-    mav.addObject("iframe", request.getContextPath() + getContextWeb() + "/list");
 
-    mav.addObject("isPublic", isPublic());
-    
-    mav.addObject("isSolicitud", isSolicitud());
-
-    mav.addObject("contextweb", getContextWeb());
-
-    return mav;
 
   }
   
@@ -243,15 +267,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long eventID) {
-    
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
-    String item = isPublic() ? HibernateFileUtil.encryptFileID(itemID)
-        : String.valueOf(itemID);
-
-    return "redirect:" + getContextWeb() + "/veureevents/" + item;
-
-    //return "redirect:" + getContextWeb() + "/list";
+    return "redirect:" + getContextWeb() + "/list";
   }
 
   @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
@@ -307,7 +324,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
       HttpServletRequest request) throws I18NException {
 
     EventFilterForm eventFilterForm = super.getEventFilterForm(pagina, mav, request);
-
+    
     Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     if (itemID == null) {
       String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
@@ -317,19 +334,24 @@ public abstract class AbstractEventController<T> extends EventController impleme
       mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
       return eventFilterForm;
     }
-
+    
+    
     T item = findItemByPrimaryKey(itemID);
+    
     mav.addObject("personaContacte", getPersonaContacteNom(item));
-    String email = getPersonaContacteEmail(item);
-    
-    
-    mav.addObject("personaContacteEmail", email);
+    mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
 
     mav.addObject("ID", itemID);
+    mav.addObject("tipus", isSolicitud()?"Sol·licitud":"Incidència Tècnica");
     mav.addObject("titol", getTitol(item));
-    mav.addObject("isPublic", isPublic());    
+    mav.addObject("iframe", request.getContextPath() + getContextWeb() + "/list");
+
+    mav.addObject("isPublic", isPublic());
+    
     mav.addObject("isSolicitud", isSolicitud());
+
     mav.addObject("contextweb", getContextWeb());
+  
 
     String estat = getEstat(item);
     mav.addObject("estat", estat);
@@ -350,6 +372,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     return eventFilterForm;
   }
+
+  
 
   public abstract String getEstat(T item)  throws I18NException;
   

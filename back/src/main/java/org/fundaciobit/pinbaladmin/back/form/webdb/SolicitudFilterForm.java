@@ -285,6 +285,39 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String denominacio;
+
+  public java.lang.String getDenominacio() {
+    return this.denominacio;
+  }
+
+  public void setDenominacio(java.lang.String denominacio) {
+    this.denominacio = denominacio;
+  }
+
+
+  private java.lang.String dir3;
+
+  public java.lang.String getDir3() {
+    return this.dir3;
+  }
+
+  public void setDir3(java.lang.String dir3) {
+    this.dir3 = dir3;
+  }
+
+
+  private java.lang.String nif;
+
+  public java.lang.String getNif() {
+    return this.nif;
+  }
+
+  public void setNif(java.lang.String nif) {
+    this.nif = nif;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -314,6 +347,9 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.responsableProcEmail = __toClone.responsableProcEmail;
     this.notes = __toClone.notes;
     this.creador = __toClone.creador;
+    this.denominacio = __toClone.denominacio;
+    this.dir3 = __toClone.dir3;
+    this.nif = __toClone.nif;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfEstatSolicitudForEstatID = __toClone.mapOfEstatSolicitudForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;

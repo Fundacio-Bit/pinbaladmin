@@ -89,18 +89,6 @@ public class SolicitudValidator<T> implements SolicitudFields {
       }
     }
     
-    /*
-    if (__vr.getFieldErrorCount(PROCEDIMENTTIPUS) == 0) {
-      String val = String.valueOf(__vr.getFieldValue(__target__,PROCEDIMENTTIPUS));
-      if (val != null && val.trim().length() != 0) {
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile("(1|2|3|4|5)");
-        if (!p.matcher(val).matches()) {
-          __vr.rejectValue(PROCEDIMENTTIPUS, "genapp.validation.malformed",
-             new org.fundaciobit.genapp.common.i18n.I18NArgumentString(val), new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PROCEDIMENTTIPUS)));
-        }
-      }
-    }
-    */
 
     if (__vr.getFieldErrorCount(TICKETASSOCIAT) == 0) {
       java.lang.String __ticketassociat = (java.lang.String)__vr.getFieldValue(__target__,TICKETASSOCIAT);
@@ -179,6 +167,30 @@ public class SolicitudValidator<T> implements SolicitudFields {
       if (__creador!= null && __creador.length() > 100) {
         __vr.rejectValue(CREADOR, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(DENOMINACIO) == 0) {
+      java.lang.String __denominacio = (java.lang.String)__vr.getFieldValue(__target__,DENOMINACIO);
+      if (__denominacio!= null && __denominacio.length() > 255) {
+        __vr.rejectValue(DENOMINACIO, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DENOMINACIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(DIR3) == 0) {
+      java.lang.String __dir3 = (java.lang.String)__vr.getFieldValue(__target__,DIR3);
+      if (__dir3!= null && __dir3.length() > 50) {
+        __vr.rejectValue(DIR3, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DIR3)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(50)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(NIF) == 0) {
+      java.lang.String __nif = (java.lang.String)__vr.getFieldValue(__target__,NIF);
+      if (__nif!= null && __nif.length() > 40) {
+        __vr.rejectValue(NIF, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(40)));
       }
     }
     

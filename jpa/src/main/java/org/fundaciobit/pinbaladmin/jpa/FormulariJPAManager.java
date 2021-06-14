@@ -66,7 +66,7 @@ public class FormulariJPAManager
 		return list.toArray(new Formulari[list.size()]);
 	};
 
-	public synchronized Formulari create( java.lang.String _nom_, java.lang.String _descripcio_, java.lang.Long _fitxerID_) throws I18NException {
+	public Formulari create( java.lang.String _nom_, java.lang.String _descripcio_, java.lang.Long _fitxerID_) throws I18NException {
 		FormulariJPA __bean =  new FormulariJPA(_nom_,_descripcio_,_fitxerID_);
 		return create(__bean);
 	}

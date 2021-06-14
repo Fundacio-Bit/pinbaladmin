@@ -103,6 +103,18 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.CREADOR);
   }
 
+  public StringField DENOMINACIO() {
+    return new StringField(getQueryPath(), SolicitudFields.DENOMINACIO);
+  }
+
+  public StringField DIR3() {
+    return new StringField(getQueryPath(), SolicitudFields.DIR3);
+  }
+
+  public StringField NIF() {
+    return new StringField(getQueryPath(), SolicitudFields.NIF);
+  }
+
 
 
   @Override

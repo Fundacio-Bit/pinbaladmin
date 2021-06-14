@@ -109,7 +109,7 @@
 		<dependency>
           <groupId>org.fundaciobit.genapp</groupId>
           <artifactId>genapp-web</artifactId>
-          <version>1.0</version>
+          <version>1.0.2</version>
           <scope>compile</scope>
         </dependency>
 		

@@ -198,11 +198,11 @@
         <put-attribute name="titol" value="event.event" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
     </definition>
-
-    <definition name="eventListOperador" template="/WEB-INF/jsp/layout/onlycontentwithoutimportslayout.jsp">
+<!-- 
+    <definition name="eventListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/events.jsp" />
     </definition>
-    
+     -->
      <definition name="eventListOperadorIframe" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
     </definition>

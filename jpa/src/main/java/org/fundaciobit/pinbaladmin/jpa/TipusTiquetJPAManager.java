@@ -66,7 +66,7 @@ public class TipusTiquetJPAManager
 		return list.toArray(new TipusTiquet[list.size()]);
 	};
 
-	public synchronized TipusTiquet create( long _tipusTiquetID_, java.lang.String _nom_) throws I18NException {
+	public TipusTiquet create( long _tipusTiquetID_, java.lang.String _nom_) throws I18NException {
 		TipusTiquetJPA __bean =  new TipusTiquetJPA(_tipusTiquetID_,_nom_);
 		return create(__bean);
 	}

@@ -66,7 +66,7 @@ public class AreaJPAManager
 		return list.toArray(new Area[list.size()]);
 	};
 
-	public synchronized Area create( java.lang.String _nom_, long _entitatID_) throws I18NException {
+	public Area create( java.lang.String _nom_, long _entitatID_) throws I18NException {
 		AreaJPA __bean =  new AreaJPA(_nom_,_entitatID_);
 		return create(__bean);
 	}

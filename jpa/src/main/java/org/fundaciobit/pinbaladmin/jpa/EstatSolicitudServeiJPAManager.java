@@ -66,7 +66,7 @@ public class EstatSolicitudServeiJPAManager
 		return list.toArray(new EstatSolicitudServei[list.size()]);
 	};
 
-	public synchronized EstatSolicitudServei create( long _estatSolicitudServeiID_, java.lang.String _nom_, java.lang.String _descripcio_) throws I18NException {
+	public EstatSolicitudServei create( long _estatSolicitudServeiID_, java.lang.String _nom_, java.lang.String _descripcio_) throws I18NException {
 		EstatSolicitudServeiJPA __bean =  new EstatSolicitudServeiJPA(_estatSolicitudServeiID_,_nom_,_descripcio_);
 		return create(__bean);
 	}

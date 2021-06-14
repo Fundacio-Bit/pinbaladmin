@@ -66,7 +66,7 @@ public class DocumentSolicitudJPAManager
 		return list.toArray(new DocumentSolicitud[list.size()]);
 	};
 
-	public synchronized DocumentSolicitud create( long _documentID_, long _solicitudID_) throws I18NException {
+	public DocumentSolicitud create( long _documentID_, long _solicitudID_) throws I18NException {
 		DocumentSolicitudJPA __bean =  new DocumentSolicitudJPA(_documentID_,_solicitudID_);
 		return create(__bean);
 	}

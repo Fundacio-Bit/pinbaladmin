@@ -481,7 +481,7 @@ public class SolicitudController
       return null;
     }
     try {
-      Solicitud solicitud = solicitudEjb.findByPrimaryKey(solicitudID);
+      Solicitud solicitud = findByPrimaryKey(request, solicitudID);
       if (solicitud == null) {
         String __msg =createMessageError(request, "error.notfound", solicitudID);
         return getRedirectWhenDelete(request, solicitudID, new Exception(__msg));
@@ -575,8 +575,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("solicitudID");
-
+    initDisallowedFields(binder, "solicitud.solicitudID");
   }
 
   public SolicitudWebValidator getWebValidator() {

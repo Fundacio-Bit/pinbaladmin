@@ -39,6 +39,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTETELEFON)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.CONTACTETELEFON)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

@@ -431,7 +431,7 @@ public class DocumentCedentController
       return null;
     }
     try {
-      DocumentCedent documentCedent = documentCedentEjb.findByPrimaryKey(documentCedentID);
+      DocumentCedent documentCedent = findByPrimaryKey(request, documentCedentID);
       if (documentCedent == null) {
         String __msg =createMessageError(request, "error.notfound", documentCedentID);
         return getRedirectWhenDelete(request, documentCedentID, new Exception(__msg));
@@ -525,8 +525,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("documentCedentID");
-
+    initDisallowedFields(binder, "documentCedent.documentCedentID");
   }
 
   public DocumentCedentWebValidator getWebValidator() {

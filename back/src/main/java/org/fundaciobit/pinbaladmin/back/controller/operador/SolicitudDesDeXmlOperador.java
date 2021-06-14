@@ -178,12 +178,14 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         solicitud
             .setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
         
-        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
-        // TODO XYZ ZZZ FALTA 
-        // java.lang.String personaContacteEmail =        
+        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
+        solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
+        solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
+        // TODO XYZ ZZZ FALTA     
         solicitud.setPersonaContacteEmail("");
-        
-        
+
+        solicitud.setDenominacio(xml);
+
         {
 //          StringWriter writer = new StringWriter();
 //          prop.store(writer, "NO NODIFICAR");

@@ -402,7 +402,7 @@ public class FormulariController
       return null;
     }
     try {
-      Formulari formulari = formulariEjb.findByPrimaryKey(formulariid);
+      Formulari formulari = findByPrimaryKey(request, formulariid);
       if (formulari == null) {
         String __msg =createMessageError(request, "error.notfound", formulariid);
         return getRedirectWhenDelete(request, formulariid, new Exception(__msg));
@@ -496,8 +496,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("formulariid");
-
+    initDisallowedFields(binder, "formulari.formulariid");
   }
 
   public FormulariWebValidator getWebValidator() {

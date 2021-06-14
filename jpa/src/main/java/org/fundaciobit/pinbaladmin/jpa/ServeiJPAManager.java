@@ -66,7 +66,7 @@ public class ServeiJPAManager
 		return list.toArray(new Servei[list.size()]);
 	};
 
-	public synchronized Servei create( java.lang.String _codi_, java.lang.String _nom_, java.lang.String _descripcio_, java.lang.Long _formulariID_, java.lang.Long _entitatServeiID_, java.lang.Long _estatServeiID_, int _tipusConsentiment_, boolean _ocult_) throws I18NException {
+	public Servei create( java.lang.String _codi_, java.lang.String _nom_, java.lang.String _descripcio_, java.lang.Long _formulariID_, java.lang.Long _entitatServeiID_, java.lang.Long _estatServeiID_, int _tipusConsentiment_, boolean _ocult_) throws I18NException {
 		ServeiJPA __bean =  new ServeiJPA(_codi_,_nom_,_descripcio_,_formulariID_,_entitatServeiID_,_estatServeiID_,_tipusConsentiment_,_ocult_);
 		return create(__bean);
 	}

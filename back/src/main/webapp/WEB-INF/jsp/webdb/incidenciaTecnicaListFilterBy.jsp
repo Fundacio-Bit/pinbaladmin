@@ -210,6 +210,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.caidIdentificadorConsulta" var="caidIdentificadorConsulta" />
+              <fmt:message key="genapp.form.searchby" var="cercapercaidIdentificadorConsulta" >                
+                 <fmt:param value="${caidIdentificadorConsulta}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${caidIdentificadorConsulta}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercaidIdentificadorConsulta}" path="caidIdentificadorConsulta" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.caidNumeroSeguiment" var="caidNumeroSeguiment" />
+              <fmt:message key="genapp.form.searchby" var="cercapercaidNumeroSeguiment" >                
+                 <fmt:param value="${caidNumeroSeguiment}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${caidNumeroSeguiment}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercaidNumeroSeguiment}" path="caidNumeroSeguiment" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

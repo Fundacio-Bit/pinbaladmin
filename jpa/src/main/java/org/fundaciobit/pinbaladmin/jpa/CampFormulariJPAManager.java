@@ -66,7 +66,7 @@ public class CampFormulariJPAManager
 		return list.toArray(new CampFormulari[list.size()]);
 	};
 
-	public synchronized CampFormulari create( java.lang.String _nom_, java.lang.String _campPDF_, long _formulariID_) throws I18NException {
+	public CampFormulari create( java.lang.String _nom_, java.lang.String _campPDF_, long _formulariID_) throws I18NException {
 		CampFormulariJPA __bean =  new CampFormulariJPA(_nom_,_campPDF_,_formulariID_);
 		return create(__bean);
 	}

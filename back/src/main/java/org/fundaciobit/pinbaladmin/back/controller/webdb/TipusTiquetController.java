@@ -388,7 +388,7 @@ public class TipusTiquetController
       return null;
     }
     try {
-      TipusTiquet tipusTiquet = tipusTiquetEjb.findByPrimaryKey(tipusTiquetID);
+      TipusTiquet tipusTiquet = findByPrimaryKey(request, tipusTiquetID);
       if (tipusTiquet == null) {
         String __msg =createMessageError(request, "error.notfound", tipusTiquetID);
         return getRedirectWhenDelete(request, tipusTiquetID, new Exception(__msg));
@@ -482,7 +482,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-
+    initDisallowedFields(binder);
   }
 
   public TipusTiquetWebValidator getWebValidator() {

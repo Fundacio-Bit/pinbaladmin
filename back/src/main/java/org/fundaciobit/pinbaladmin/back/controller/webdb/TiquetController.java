@@ -475,7 +475,7 @@ public class TiquetController
       return null;
     }
     try {
-      Tiquet tiquet = tiquetEjb.findByPrimaryKey(tiquetID);
+      Tiquet tiquet = findByPrimaryKey(request, tiquetID);
       if (tiquet == null) {
         String __msg =createMessageError(request, "error.notfound", tiquetID);
         return getRedirectWhenDelete(request, tiquetID, new Exception(__msg));
@@ -569,8 +569,7 @@ public java.lang.Long stringToPK(String value) {
 
     binder.setValidator(getWebValidator());
 
-    binder.setDisallowedFields("tiquetID");
-
+    initDisallowedFields(binder, "tiquet.tiquetID");
   }
 
   public TiquetWebValidator getWebValidator() {

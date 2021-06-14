@@ -66,7 +66,7 @@ public class CampSolicitudJPAManager
 		return list.toArray(new CampSolicitud[list.size()]);
 	};
 
-	public synchronized CampSolicitud create( long _campFormulariID_, long _solicitudServeiID_, java.lang.String _valor_) throws I18NException {
+	public CampSolicitud create( long _campFormulariID_, long _solicitudServeiID_, java.lang.String _valor_) throws I18NException {
 		CampSolicitudJPA __bean =  new CampSolicitudJPA(_campFormulariID_,_solicitudServeiID_,_valor_);
 		return create(__bean);
 	}

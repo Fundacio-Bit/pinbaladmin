@@ -118,9 +118,6 @@ public class SolicitudDocumentOperadorController
         documentFilterForm.addAdditionalButton(new AdditionalButton("icon-plus-sign",
             "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", ""));
         
-        documentFilterForm.addAdditionalButton(
-            new AdditionalButton("icon-repeat", "solicitudservei.generarformularidirectorgeneral",
-                getContextWeb() + "/generarformularidirectorgeneral", ""));
 
         documentFilterForm.setVisibleMultipleSelection(false);
 
@@ -156,32 +153,6 @@ public class SolicitudDocumentOperadorController
   }
   
   
-  
-  @RequestMapping(value = "/generarformularidirectorgeneral", method = RequestMethod.GET)
-  public String generarFormulariDirectorGeneral(HttpServletRequest request) throws Exception {
-
-    Long solicitudID = getSolicitudID(request);
-
-    if (solicitudID == null) {
-      throw new Exception("generaPlantillaExcelDeServeis() :: El valor per soli val null");
-    }
-
-    try {
-
-      log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
-
-      SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKeyFull(solicitudID);
-
-    
-
-    } catch (I18NException ie) {
-
-      HtmlUtils.saveMessageError(request, I18NUtils.getMessage(ie));
-
-    }
-    return getRedirectWhen(solicitudID);
-  }
-
   
   
   

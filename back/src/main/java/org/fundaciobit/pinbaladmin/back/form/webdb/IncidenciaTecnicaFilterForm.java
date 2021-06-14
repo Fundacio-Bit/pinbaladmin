@@ -153,6 +153,28 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.lang.String caidIdentificadorConsulta;
+
+  public java.lang.String getCaidIdentificadorConsulta() {
+    return this.caidIdentificadorConsulta;
+  }
+
+  public void setCaidIdentificadorConsulta(java.lang.String caidIdentificadorConsulta) {
+    this.caidIdentificadorConsulta = caidIdentificadorConsulta;
+  }
+
+
+  private java.lang.String caidNumeroSeguiment;
+
+  public java.lang.String getCaidNumeroSeguiment() {
+    return this.caidNumeroSeguiment;
+  }
+
+  public void setCaidNumeroSeguiment(java.lang.String caidNumeroSeguiment) {
+    this.caidNumeroSeguiment = caidNumeroSeguiment;
+  }
+
+
   public IncidenciaTecnicaFilterForm() {
   }
   
@@ -170,6 +192,8 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.contacteNom = __toClone.contacteNom;
     this.contacteEmail = __toClone.contacteEmail;
     this.contacteTelefon = __toClone.contacteTelefon;
+    this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
+    this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
   }
   

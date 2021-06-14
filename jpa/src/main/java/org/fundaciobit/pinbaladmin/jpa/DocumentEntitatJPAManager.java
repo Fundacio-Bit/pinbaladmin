@@ -66,7 +66,7 @@ public class DocumentEntitatJPAManager
 		return list.toArray(new DocumentEntitat[list.size()]);
 	};
 
-	public synchronized DocumentEntitat create( java.lang.String _titol_, java.lang.String _descripcio_, long _entitatID_, java.lang.Long _fitxerID_, java.sql.Timestamp _dataAlta_) throws I18NException {
+	public DocumentEntitat create( java.lang.String _titol_, java.lang.String _descripcio_, long _entitatID_, java.lang.Long _fitxerID_, java.sql.Timestamp _dataAlta_) throws I18NException {
 		DocumentEntitatJPA __bean =  new DocumentEntitatJPA(_titol_,_descripcio_,_entitatID_,_fitxerID_,_dataAlta_);
 		return create(__bean);
 	}

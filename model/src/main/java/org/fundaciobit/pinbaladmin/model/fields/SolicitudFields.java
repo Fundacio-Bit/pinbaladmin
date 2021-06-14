@@ -35,6 +35,9 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final BooleanField FIRMATDOCSOLICITUD = new BooleanField(_TABLE_MODEL, "firmatDocSolicitud", "firmatdocsolicitud");
 	 public static final BooleanField PRODUCCIO = new BooleanField(_TABLE_MODEL, "produccio", "produccio");
 	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
+	 public static final StringField DENOMINACIO = new StringField(_TABLE_MODEL, "denominacio", "denominacio");
+	 public static final StringField DIR3 = new StringField(_TABLE_MODEL, "dir3", "dir3");
+	 public static final StringField NIF = new StringField(_TABLE_MODEL, "nif", "nif");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -60,7 +63,10 @@ public interface SolicitudFields extends java.io.Serializable {
     SOLICITUDXMLID,
     FIRMATDOCSOLICITUD,
     PRODUCCIO,
-    CREADOR
+    CREADOR,
+    DENOMINACIO,
+    DIR3,
+    NIF
   };
 
 

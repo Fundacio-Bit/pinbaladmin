@@ -180,3 +180,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}">
+        <tr id="incidenciaTecnica_caidIdentificadorConsulta_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA])?'incidenciaTecnica.caidIdentificadorConsulta':__theForm.labels[IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA]}" />
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA]}">
+              <i class="icon-info-sign" title="${__theForm.help[IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="incidenciaTecnica.caidIdentificadorConsulta" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="incidenciaTecnica.caidIdentificadorConsulta"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
+        <tr id="incidenciaTecnica_caidNumeroSeguiment_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT])?'incidenciaTecnica.caidNumeroSeguiment':__theForm.labels[IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT]}" />
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT]}">
+              <i class="icon-info-sign" title="${__theForm.help[IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="incidenciaTecnica.caidNumeroSeguiment" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="incidenciaTecnica.caidNumeroSeguiment"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

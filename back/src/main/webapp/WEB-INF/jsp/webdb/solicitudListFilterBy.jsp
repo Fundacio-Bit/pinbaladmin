@@ -414,6 +414,45 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.DENOMINACIO)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.denominacio" var="denominacio" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdenominacio" >                
+                 <fmt:param value="${denominacio}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${denominacio}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdenominacio}" path="denominacio" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.DIR3)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.dir3" var="dir3" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdir3" >                
+                 <fmt:param value="${dir3}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${dir3}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdir3}" path="dir3" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.NIF)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.nif" var="nif" />
+              <fmt:message key="genapp.form.searchby" var="cercapernif" >                
+                 <fmt:param value="${nif}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${nif}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernif}" path="nif" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

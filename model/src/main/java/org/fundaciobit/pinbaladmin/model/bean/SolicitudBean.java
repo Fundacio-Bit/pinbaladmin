@@ -33,6 +33,9 @@ private static final long serialVersionUID = 1686733908L;
 	boolean firmatDocSolicitud;
 	boolean produccio;
 	java.lang.String creador;
+	java.lang.String denominacio;
+	java.lang.String dir3;
+	java.lang.String nif;
 
 
   /** Constructor Buit */
@@ -40,7 +43,7 @@ private static final long serialVersionUID = 1686733908L;
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -64,9 +67,12 @@ private static final long serialVersionUID = 1686733908L;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
     this.creador=creador;
+    this.denominacio=denominacio;
+    this.dir3=dir3;
+    this.nif=nif;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador) {
+  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
@@ -89,6 +95,9 @@ private static final long serialVersionUID = 1686733908L;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
     this.creador=creador;
+    this.denominacio=denominacio;
+    this.dir3=dir3;
+    this.nif=nif;
 }
   /** Constructor dels valors Not Null */
   public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio) {
@@ -124,6 +133,9 @@ private static final long serialVersionUID = 1686733908L;
     this.setFirmatDocSolicitud(__bean.isFirmatDocSolicitud());
     this.setProduccio(__bean.isProduccio());
     this.setCreador(__bean.getCreador());
+    this.setDenominacio(__bean.getDenominacio());
+    this.setDir3(__bean.getDir3());
+    this.setNif(__bean.getNif());
     // Fitxer
     this.setDocumentSolicitud(FitxerBean.toBean(__bean.getDocumentSolicitud()));
     // Fitxer
@@ -291,6 +303,27 @@ private static final long serialVersionUID = 1686733908L;
 		this.creador = _creador_;
 	};
 
+	public java.lang.String getDenominacio() {
+		return(denominacio);
+	};
+	public void setDenominacio(java.lang.String _denominacio_) {
+		this.denominacio = _denominacio_;
+	};
+
+	public java.lang.String getDir3() {
+		return(dir3);
+	};
+	public void setDir3(java.lang.String _dir3_) {
+		this.dir3 = _dir3_;
+	};
+
+	public java.lang.String getNif() {
+		return(nif);
+	};
+	public void setNif(java.lang.String _nif_) {
+		this.nif = _nif_;
+	};
+
 
 
   // ======================================
@@ -321,6 +354,9 @@ private static final long serialVersionUID = 1686733908L;
     __tmp.setFirmatDocSolicitud(__bean.isFirmatDocSolicitud());
     __tmp.setProduccio(__bean.isProduccio());
     __tmp.setCreador(__bean.getCreador());
+    __tmp.setDenominacio(__bean.getDenominacio());
+    __tmp.setDir3(__bean.getDir3());
+    __tmp.setNif(__bean.getNif());
     // Fitxer
     __tmp.setDocumentSolicitud(FitxerBean.toBean(__bean.getDocumentSolicitud()));
     // Fitxer

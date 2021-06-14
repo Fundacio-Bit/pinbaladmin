@@ -101,6 +101,22 @@ public class IncidenciaTecnicaValidator<T> implements IncidenciaTecnicaFields {
       }
     }
     
+    if (__vr.getFieldErrorCount(CAIDIDENTIFICADORCONSULTA) == 0) {
+      java.lang.String __caididentificadorconsulta = (java.lang.String)__vr.getFieldValue(__target__,CAIDIDENTIFICADORCONSULTA);
+      if (__caididentificadorconsulta!= null && __caididentificadorconsulta.length() > 100) {
+        __vr.rejectValue(CAIDIDENTIFICADORCONSULTA, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CAIDIDENTIFICADORCONSULTA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(CAIDNUMEROSEGUIMENT) == 0) {
+      java.lang.String __caidnumeroseguiment = (java.lang.String)__vr.getFieldValue(__target__,CAIDNUMEROSEGUIMENT);
+      if (__caidnumeroseguiment!= null && __caidnumeroseguiment.length() > 100) {
+        __vr.rejectValue(CAIDNUMEROSEGUIMENT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CAIDNUMEROSEGUIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+    
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

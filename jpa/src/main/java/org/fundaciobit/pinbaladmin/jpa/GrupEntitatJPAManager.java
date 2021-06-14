@@ -66,7 +66,7 @@ public class GrupEntitatJPAManager
 		return list.toArray(new GrupEntitat[list.size()]);
 	};
 
-	public synchronized GrupEntitat create( java.lang.String _nom_, java.lang.String _descripcio_) throws I18NException {
+	public GrupEntitat create( java.lang.String _nom_, java.lang.String _descripcio_) throws I18NException {
 		GrupEntitatJPA __bean =  new GrupEntitatJPA(_nom_,_descripcio_);
 		return create(__bean);
 	}
