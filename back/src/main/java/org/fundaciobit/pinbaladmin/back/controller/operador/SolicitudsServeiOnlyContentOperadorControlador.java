@@ -23,7 +23,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends
 
   @Override
   public boolean isActiveFormNew() {
-    return false;
+    return true;
   }
 
   @Override
