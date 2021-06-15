@@ -178,22 +178,24 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         solicitud
             .setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
         
-        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
-        solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
-        solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
+        
+        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
         // TODO XYZ ZZZ FALTA     
         solicitud.setPersonaContacteEmail("");
+        
+        solicitud.setDenominacio(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
+        solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
+        solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
 
-        solicitud.setDenominacio(xml);
 
         {
-//          StringWriter writer = new StringWriter();
-//          prop.store(writer, "NO NODIFICAR");
-//          java.lang.String notes = writer.getBuffer().toString();
-//          solicitud.setNotes(notes.substring(0, 2300));
+//        StringWriter writer = new StringWriter();
+//        prop.store(writer, "NO NODIFICAR");
+//        java.lang.String notes = writer.getBuffer().toString();
+//        solicitud.setNotes(notes.substring(0, 2300));
           solicitud.setNotes("");
         }
-        
+
         // java.lang.Long documentSolicitudID = null;
         // java.lang.Long documentSolicitudXmlID = null;
         // boolean firmatDocSolicitud = false;
