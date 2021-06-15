@@ -97,7 +97,7 @@ public class ParserFormulariXML {
     if (cp == null || cp.trim().length() == 0 ) {
       cp = "";
     }
-    data.put("cp", new Date());
+    data.put("cp", "");
     
     
     String entorn = props.getProperty("FORMULARIO.DATOS_SOLICITUD.LDAENTORNOCULTO");

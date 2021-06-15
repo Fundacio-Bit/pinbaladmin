@@ -238,6 +238,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
         }
 
         Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+        
+        String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
+        
+        if (cp == null)  {
+          prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CP", "");
+        }
 
 
         generarFormulari(request, soliID, prop, SolicitudServeiOperadorController.SDF.format(new Date()));
