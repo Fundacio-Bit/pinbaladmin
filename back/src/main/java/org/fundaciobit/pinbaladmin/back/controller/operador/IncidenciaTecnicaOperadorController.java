@@ -125,7 +125,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       java.lang.Long _fitxerID_ = null;
       boolean _noLlegit_ = false;
       eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
-          _comentari_, _fitxerID_, _noLlegit_);
+          _comentari_, _fitxerID_, _noLlegit_, null, null);
     } catch (Throwable th) {
       log.error("Error creant el primer event de la incidència tecnica: " + th.getMessage(),
           th);

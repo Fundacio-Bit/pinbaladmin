@@ -1214,7 +1214,7 @@
                             </td>
                             <td>
                                 <!--  =============  INICI ===============   -->
-                                <table style="padding: 0px; min-height:140px" border="0">
+                                <table style="padding: 0px; min-height:170px" border="0">
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td style="width: 3px; background-color: #CCCCCC"

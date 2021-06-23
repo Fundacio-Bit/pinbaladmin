@@ -19,6 +19,8 @@ private static final long serialVersionUID = 2034842954L;
 	java.lang.String comentari;
 	java.lang.Long fitxerID;
 	boolean noLlegit;
+	java.lang.String caidIdentificadorConsulta;
+	java.lang.String caidNumeroSeguiment;
 
 
   /** Constructor Buit */
@@ -26,7 +28,7 @@ private static final long serialVersionUID = 2034842954L;
   }
 
   /** Constructor amb tots els camps  */
-  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.eventID=eventID;
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
@@ -36,9 +38,11 @@ private static final long serialVersionUID = 2034842954L;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public EventBean(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventBean(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
@@ -47,6 +51,8 @@ private static final long serialVersionUID = 2034842954L;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor dels valors Not Null */
   public EventBean(long eventID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , boolean noLlegit) {
@@ -66,6 +72,8 @@ private static final long serialVersionUID = 2034842954L;
     this.setComentari(__bean.getComentari());
     this.setFitxerID(__bean.getFitxerID());
     this.setNoLlegit(__bean.isNoLlegit());
+    this.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    this.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
     // Fitxer
     this.setFitxer(FitxerBean.toBean(__bean.getFitxer()));
 	}
@@ -133,6 +141,20 @@ private static final long serialVersionUID = 2034842954L;
 		this.noLlegit = _noLlegit_;
 	};
 
+	public java.lang.String getCaidIdentificadorConsulta() {
+		return(caidIdentificadorConsulta);
+	};
+	public void setCaidIdentificadorConsulta(java.lang.String _caidIdentificadorConsulta_) {
+		this.caidIdentificadorConsulta = _caidIdentificadorConsulta_;
+	};
+
+	public java.lang.String getCaidNumeroSeguiment() {
+		return(caidNumeroSeguiment);
+	};
+	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_) {
+		this.caidNumeroSeguiment = _caidNumeroSeguiment_;
+	};
+
 
 
   // ======================================
@@ -149,6 +171,8 @@ private static final long serialVersionUID = 2034842954L;
     __tmp.setComentari(__bean.getComentari());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setNoLlegit(__bean.isNoLlegit());
+    __tmp.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    __tmp.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
     // Fitxer
     __tmp.setFitxer(FitxerBean.toBean(__bean.getFitxer()));
 		return __tmp;

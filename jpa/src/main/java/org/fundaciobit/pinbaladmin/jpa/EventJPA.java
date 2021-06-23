@@ -58,6 +58,12 @@ private static final long serialVersionUID = 342741761L;
 	@Column(name="nollegit",nullable = false,length = 1)
 	boolean noLlegit;
 
+	@Column(name="caididentificadorconsulta",length = 100)
+	java.lang.String caidIdentificadorConsulta;
+
+	@Column(name="caidnumeroseguiment",length = 100)
+	java.lang.String caidNumeroSeguiment;
+
 
 
   /** Constructor Buit */
@@ -65,7 +71,7 @@ private static final long serialVersionUID = 342741761L;
   }
 
   /** Constructor amb tots els camps  */
-  public EventJPA(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventJPA(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.eventID=eventID;
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
@@ -75,9 +81,11 @@ private static final long serialVersionUID = 342741761L;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public EventJPA(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit) {
+  public EventJPA(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
@@ -86,6 +94,8 @@ private static final long serialVersionUID = 342741761L;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
+    this.caidIdentificadorConsulta=caidIdentificadorConsulta;
+    this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor dels valors Not Null */
   public EventJPA(long eventID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , boolean noLlegit) {
@@ -105,6 +115,8 @@ private static final long serialVersionUID = 342741761L;
     this.setComentari(__bean.getComentari());
     this.setFitxerID(__bean.getFitxerID());
     this.setNoLlegit(__bean.isNoLlegit());
+    this.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    this.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
     // Fitxer
     this.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
 	}
@@ -170,6 +182,20 @@ private static final long serialVersionUID = 342741761L;
 	};
 	public void setNoLlegit(boolean _noLlegit_) {
 		this.noLlegit = _noLlegit_;
+	};
+
+	public java.lang.String getCaidIdentificadorConsulta() {
+		return(caidIdentificadorConsulta);
+	};
+	public void setCaidIdentificadorConsulta(java.lang.String _caidIdentificadorConsulta_) {
+		this.caidIdentificadorConsulta = _caidIdentificadorConsulta_;
+	};
+
+	public java.lang.String getCaidNumeroSeguiment() {
+		return(caidNumeroSeguiment);
+	};
+	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_) {
+		this.caidNumeroSeguiment = _caidNumeroSeguiment_;
 	};
 
 
@@ -246,6 +272,8 @@ private static final long serialVersionUID = 342741761L;
     __tmp.setComentari(__bean.getComentari());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setNoLlegit(__bean.isNoLlegit());
+    __tmp.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
+    __tmp.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
     // Fitxer
     __tmp.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
 		return __tmp;

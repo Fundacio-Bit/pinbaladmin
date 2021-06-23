@@ -190,6 +190,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     if (!isPublic()) {
       mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
+      request.getSession().setAttribute("persona_tramitador", request.getUserPrincipal().getName());
     }
 
     String email = getPersonaContacteEmail(item);
@@ -200,10 +201,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
       mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID), true));
       return eventForm;
     }
-    
-    
 
     mav.addObject("persona_contacte", email);
+    request.getSession().setAttribute("persona_contacte", email);
 
     eventForm.setAttachedAdditionalJspCode(true);
 
@@ -424,6 +424,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
   @Override
   public void postValidate(HttpServletRequest request, EventForm eventForm,
       BindingResult result) throws I18NException {
+    
+    
+    if(eventForm.getEvent().getTipus() == EVENT_TIPUS_TIQUET_MINHAP) {
+      org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace(result,
+          get(CAIDIDENTIFICADORCONSULTA), "genapp.validation.required",
+          new Object[] { I18NUtils.tradueix(CAIDIDENTIFICADORCONSULTA.fullName) });
+      org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace(result,
+          get(CAIDNUMEROSEGUIMENT), "genapp.validation.required",
+          new Object[] { I18NUtils.tradueix(CAIDNUMEROSEGUIMENT.fullName) });
+    }
+    
+    
 
     boolean inclouFitxer = false;
     if (eventForm.getFitxerID() == null) {

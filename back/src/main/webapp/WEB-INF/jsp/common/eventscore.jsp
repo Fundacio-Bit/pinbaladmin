@@ -13,8 +13,7 @@
     <c:if test="${empty personaContacteEmail}">                       
        <c:set var="urlnou" value="javascript:alert('La sol·licitud no te definit el correu del contacte');" />
     </c:if>
-    
-        
+
     <button class="btn btn-mini btn-danger" onclick="${urlnou}"
         onclick="" title="Modificar">
             <i class="icon-pencil iconpencil"></i>Editar
@@ -24,15 +23,28 @@
 </c:if>
 
 
-<c:out escapeXml="false" value="${event.comentari}" />
+<c:out value="${event.comentari}" />
 
 
 <c:if test="${event.tipus == -2 }">
-    <br/>
+    <table border="0">
+    <tr>
+    <td>
     <a class="btn btn-mini btn-warning" target="_blank"
         href="https://ssweb.seap.minhap.es/ayuda/seguimiento" onclick="" title="Seguiment">
-        <div style="color: #FFFFFF">Seguiment CAID</div>
-    </a>  
+        <div style="color: #FFFFFF">Seguiment<br/>CAID</div>
+    </a>
+    </td>
+    <td> 
+    <small>
+    CAID::Correu = <b>gd.pinbal@fundaciobit.org</b>
+    <br/>CAID::Identificador de Consulta = <b>${event.caidIdentificadorConsulta}</b>
+    <br/>CAID::N&uacute;mero de Seguiment = <b>${event.caidNumeroSeguiment}</b>
+    </small>
+    </td>
+    </tr>
+    
+    </table>
 <%--
     <form id="form${event.eventID}" target="_blank"
         action="https://ssweb.seap.minhap.es/ayuda/seguimiento" method="post">

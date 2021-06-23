@@ -21,6 +21,8 @@ public interface EventFields extends java.io.Serializable {
 	 public static final StringField COMENTARI = new StringField(_TABLE_MODEL, "comentari", "comentari");
 	 public static final LongField FITXERID = new LongField(_TABLE_MODEL, "fitxerID", "fitxerid");
 	 public static final BooleanField NOLLEGIT = new BooleanField(_TABLE_MODEL, "noLlegit", "nollegit");
+	 public static final StringField CAIDIDENTIFICADORCONSULTA = new StringField(_TABLE_MODEL, "caidIdentificadorConsulta", "caididentificadorconsulta");
+	 public static final StringField CAIDNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "caidNumeroSeguiment", "caidnumeroseguiment");
 
 
   public static final Field<?>[] ALL_EVENT_FIELDS = {
@@ -32,7 +34,9 @@ public interface EventFields extends java.io.Serializable {
     PERSONA,
     COMENTARI,
     FITXERID,
-    NOLLEGIT
+    NOLLEGIT,
+    CAIDIDENTIFICADORCONSULTA,
+    CAIDNUMEROSEGUIMENT
   };
 
 

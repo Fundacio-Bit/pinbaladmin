@@ -260,7 +260,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
       java.lang.String _comentari_="S'ha creat la sol·licitud a partir de fitxer XML";
       java.lang.Long _fitxerID_ = null;
       boolean _noLlegit_ = false;
-      eventEjb.create(_solicitudID_,  _incidenciaTecnicaID_, _dataEvent_, _tipus_,  _persona_,  _comentari_,  _fitxerID_,  _noLlegit_);
+      eventEjb.create(_solicitudID_,  _incidenciaTecnicaID_, _dataEvent_, _tipus_,  _persona_,  _comentari_,  _fitxerID_,  _noLlegit_, null,null);
     } catch(Throwable th) {
       log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
     }

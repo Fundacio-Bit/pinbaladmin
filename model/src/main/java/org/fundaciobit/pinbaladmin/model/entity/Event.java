@@ -29,6 +29,12 @@ public interface Event extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public boolean isNoLlegit();
 	public void setNoLlegit(boolean _noLlegit_);
 
+	public java.lang.String getCaidIdentificadorConsulta();
+	public void setCaidIdentificadorConsulta(java.lang.String _caidIdentificadorConsulta_);
+
+	public java.lang.String getCaidNumeroSeguiment();
+	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_);
+
   // Fitxer
   public <F extends Fitxer> F getFitxer();
 

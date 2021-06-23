@@ -78,6 +78,16 @@
             <img height="18" width="18" src="<c:url value="/img/icn_alert_${event.noLlegit?'success':'error'}.png"/>">
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDIDENTIFICADORCONSULTA)}">
+          <td>
+          ${event.caidIdentificadorConsulta}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDNUMEROSEGUIMENT)}">
+          <td>
+          ${event.caidNumeroSeguiment}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

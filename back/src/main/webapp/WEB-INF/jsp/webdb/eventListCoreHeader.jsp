@@ -39,6 +39,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.NOLLEGIT)}">
         <th>${pad:getSortIcons(__theFilterForm,EventFields.NOLLEGIT)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDIDENTIFICADORCONSULTA)}">
+        <th>${pad:getSortIcons(__theFilterForm,EventFields.CAIDIDENTIFICADORCONSULTA)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDNUMEROSEGUIMENT)}">
+        <th>${pad:getSortIcons(__theFilterForm,EventFields.CAIDNUMEROSEGUIMENT)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

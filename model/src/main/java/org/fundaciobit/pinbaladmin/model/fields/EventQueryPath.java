@@ -47,6 +47,14 @@ public class EventQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new BooleanField(getQueryPath(), EventFields.NOLLEGIT);
   }
 
+  public StringField CAIDIDENTIFICADORCONSULTA() {
+    return new StringField(getQueryPath(), EventFields.CAIDIDENTIFICADORCONSULTA);
+  }
+
+  public StringField CAIDNUMEROSEGUIMENT() {
+    return new StringField(getQueryPath(), EventFields.CAIDNUMEROSEGUIMENT);
+  }
+
 
 
   @Override

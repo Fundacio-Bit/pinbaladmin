@@ -16,18 +16,32 @@ function onChangeTipus(select) {
    }
 
    if (select.value == -2) {
+       /*
        tinymce.get("event.comentari").setContent(          
        '<p0>correu=gd.pinbal@fundaciobit.org</p>'
           + '<p>IdentificadorConsulta=ESCRIU AQUI EL Identificador de consulta</p>'
           + '<p>NumeroSeguimiento=ESCRIU AQUI EL N&uacute;mero de seguimiento</p>');
 
+       */
        document.getElementById("event_fitxerID_rowid").style.display = "none";
        
+       document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "";
+       document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "";
+
    } else {
        document.getElementById("event_fitxerID_rowid").style.display = "";
-       tinymce.get("event.comentari").setContent("");
+       //tinymce.get("event.comentari").setContent("");
+       
+       document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "none";
+       document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "none";
    }
 
 }
+
+
+onChangeTipus(document.getElementById("event_tipus"));
  
 </script>
+
+
+

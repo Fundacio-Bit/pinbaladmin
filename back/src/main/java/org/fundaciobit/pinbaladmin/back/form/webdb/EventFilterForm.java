@@ -153,6 +153,28 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
   }
 
 
+  private java.lang.String caidIdentificadorConsulta;
+
+  public java.lang.String getCaidIdentificadorConsulta() {
+    return this.caidIdentificadorConsulta;
+  }
+
+  public void setCaidIdentificadorConsulta(java.lang.String caidIdentificadorConsulta) {
+    this.caidIdentificadorConsulta = caidIdentificadorConsulta;
+  }
+
+
+  private java.lang.String caidNumeroSeguiment;
+
+  public java.lang.String getCaidNumeroSeguiment() {
+    return this.caidNumeroSeguiment;
+  }
+
+  public void setCaidNumeroSeguiment(java.lang.String caidNumeroSeguiment) {
+    this.caidNumeroSeguiment = caidNumeroSeguiment;
+  }
+
+
   public EventFilterForm() {
   }
   
@@ -170,6 +192,8 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
     this.tipusFins = __toClone.tipusFins;
     this.persona = __toClone.persona;
     this.comentari = __toClone.comentari;
+    this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
+    this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfIncidenciaTecnicaForIncidenciaTecnicaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaTecnicaID;
     this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;

@@ -233,3 +233,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.CAIDIDENTIFICADORCONSULTA)}">
+        <tr id="event_caidIdentificadorConsulta_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EventFields.CAIDIDENTIFICADORCONSULTA])?'event.caidIdentificadorConsulta':__theForm.labels[EventFields.CAIDIDENTIFICADORCONSULTA]}" />
+              <c:if test="${not empty __theForm.help[EventFields.CAIDIDENTIFICADORCONSULTA]}">
+              <i class="icon-info-sign" title="${__theForm.help[EventFields.CAIDIDENTIFICADORCONSULTA]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="event.caidIdentificadorConsulta" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.CAIDIDENTIFICADORCONSULTA)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,EventFields.CAIDIDENTIFICADORCONSULTA)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="event.caidIdentificadorConsulta"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.CAIDNUMEROSEGUIMENT)}">
+        <tr id="event_caidNumeroSeguiment_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EventFields.CAIDNUMEROSEGUIMENT])?'event.caidNumeroSeguiment':__theForm.labels[EventFields.CAIDNUMEROSEGUIMENT]}" />
+              <c:if test="${not empty __theForm.help[EventFields.CAIDNUMEROSEGUIMENT]}">
+              <i class="icon-info-sign" title="${__theForm.help[EventFields.CAIDNUMEROSEGUIMENT]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="event.caidNumeroSeguiment" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.CAIDNUMEROSEGUIMENT)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,EventFields.CAIDNUMEROSEGUIMENT)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="event.caidNumeroSeguiment"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
