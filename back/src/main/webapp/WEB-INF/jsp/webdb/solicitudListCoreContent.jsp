@@ -26,22 +26,22 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.SOLICITUDID)}">
           <td>
-          ${solicitud.solicitudID}
+          <c:out value="${solicitud.solicitudID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTCODI)}">
           <td>
-          ${solicitud.procedimentCodi}
+          <c:out value="${solicitud.procedimentCodi}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CODIDESCRIPTIU)}">
           <td>
-          ${solicitud.codiDescriptiu}
+          <c:out value="${solicitud.codiDescriptiu}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTNOM)}">
           <td>
-          ${solicitud.procedimentNom}
+          <c:out value="${solicitud.procedimentNom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTTIPUS)}">
@@ -62,12 +62,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TICKETASSOCIAT)}">
           <td>
-          ${solicitud.ticketAssociat}
+          <c:out value="${solicitud.ticketAssociat}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TICKETNUMEROSEGUIMENT)}">
           <td>
-          ${solicitud.ticketNumeroSeguiment}
+          <c:out value="${solicitud.ticketNumeroSeguiment}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
@@ -80,12 +80,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ENTITATESTATAL)}">
           <td>
-          ${solicitud.entitatEstatal}
+          <c:out value="${solicitud.entitatEstatal}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PINFO)}">
           <td>
-          ${solicitud.pinfo}
+          <c:out value="${solicitud.pinfo}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATAINICI)}">
@@ -96,27 +96,27 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTE)}">
           <td>
-          ${solicitud.personaContacte}
+          <c:out value="${solicitud.personaContacte}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAIL)}">
           <td>
-          ${solicitud.personaContacteEmail}
+          <c:out value="${solicitud.personaContacteEmail}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOM)}">
           <td>
-          ${solicitud.responsableProcNom}
+          <c:out value="${solicitud.responsableProcNom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAIL)}">
           <td>
-          ${solicitud.responsableProcEmail}
+          <c:out value="${solicitud.responsableProcEmail}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NOTES)}">
           <td>
-          ${solicitud.notes}
+          <c:out value="${solicitud.notes}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DOCUMENTSOLICITUDID)}">
@@ -143,22 +143,22 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CREADOR)}">
           <td>
-          ${solicitud.creador}
+          <c:out value="${solicitud.creador}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
           <td>
-          ${solicitud.denominacio}
+          <c:out value="${solicitud.denominacio}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DIR3)}">
           <td>
-          ${solicitud.dir3}
+          <c:out value="${solicitud.dir3}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NIF)}">
           <td>
-          ${solicitud.nif}
+          <c:out value="${solicitud.nif}" />
           </td>
         </c:if>
 

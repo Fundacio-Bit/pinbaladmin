@@ -26,12 +26,12 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.DOCUMENTID)}">
           <td>
-          ${document.documentID}
+          <c:out value="${document.documentID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.NOM)}">
           <td>
-          ${document.nom}
+          <c:out value="${document.nom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.FITXERORIGINALID)}">
@@ -50,7 +50,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.NOTES)}">
           <td>
-          ${document.notes}
+          <c:out value="${document.notes}" />
           </td>
         </c:if>
 

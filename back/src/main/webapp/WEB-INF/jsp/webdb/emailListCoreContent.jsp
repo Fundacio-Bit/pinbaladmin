@@ -26,22 +26,22 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.EMAILID)}">
           <td>
-          ${email.emailID}
+          <c:out value="${email.emailID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DESTINATARIS)}">
           <td>
-          ${email.destinataris}
+          <c:out value="${email.destinataris}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.SUBJECT)}">
           <td>
-          ${email.subject}
+          <c:out value="${email.subject}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.MESSAGE)}">
           <td>
-          ${email.message}
+          <c:out value="${email.message}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DATAENVIAMENT)}">
@@ -49,7 +49,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.ENVIADOR)}">
           <td>
-          ${email.enviador}
+          <c:out value="${email.enviador}" />
           </td>
         </c:if>
 

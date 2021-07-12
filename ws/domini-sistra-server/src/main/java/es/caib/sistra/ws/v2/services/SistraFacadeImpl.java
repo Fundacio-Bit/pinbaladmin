@@ -187,7 +187,7 @@ public class SistraFacadeImpl implements SistraFacade {
          
          Columna col2 = new Columna();         
          col2.setCodigo("nom");
-         col2.setValor(servei.getNom());
+         col2.setValor("(" + servei.getCodi() + ") " + servei.getNom());
          
          fila.getColumna().add(col1);
          fila.getColumna().add(col2);

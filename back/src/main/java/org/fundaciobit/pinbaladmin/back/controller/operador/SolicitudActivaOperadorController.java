@@ -48,4 +48,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
     return null; // Significa que gestiona els dos tipus
   }
 
+
+  @Override
+  public boolean showAdvancedFilter() {    
+    return false;
+  }
+
 }

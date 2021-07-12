@@ -21,5 +21,10 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
     return false;
   }
 
+  @Override
+  public boolean showAdvancedFilter() {
+    return true;
+  }
+
   
 }

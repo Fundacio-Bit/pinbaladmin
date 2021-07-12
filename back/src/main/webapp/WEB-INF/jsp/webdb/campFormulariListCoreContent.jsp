@@ -26,17 +26,17 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampFormulariFields.CAMPFORMULARIID)}">
           <td>
-          ${campFormulari.campFormulariID}
+          <c:out value="${campFormulari.campFormulariID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampFormulariFields.NOM)}">
           <td>
-          ${campFormulari.nom}
+          <c:out value="${campFormulari.nom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampFormulariFields.CAMPPDF)}">
           <td>
-          ${campFormulari.campPDF}
+          <c:out value="${campFormulari.campPDF}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampFormulariFields.FORMULARIID)}">

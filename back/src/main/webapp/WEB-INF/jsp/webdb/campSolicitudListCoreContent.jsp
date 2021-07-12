@@ -26,7 +26,7 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampSolicitudFields.CAMPSOLICITUDID)}">
           <td>
-          ${campSolicitud.campSolicitudID}
+          <c:out value="${campSolicitud.campSolicitudID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampSolicitudFields.CAMPFORMULARIID)}">
@@ -47,7 +47,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,CampSolicitudFields.VALOR)}">
           <td>
-          ${campSolicitud.valor}
+          <c:out value="${campSolicitud.valor}" />
           </td>
         </c:if>
 

@@ -26,22 +26,22 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.TIQUETID)}">
           <td>
-          ${tiquet.tiquetID}
+          <c:out value="${tiquet.tiquetID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.TITOL)}">
           <td>
-          ${tiquet.titol}
+          <c:out value="${tiquet.titol}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.DESCRIPCIO)}">
           <td>
-          ${tiquet.descripcio}
+          <c:out value="${tiquet.descripcio}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.INFORMADOR)}">
           <td>
-          ${tiquet.informador}
+          <c:out value="${tiquet.informador}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.DATAALTA)}">
@@ -65,7 +65,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.VERSIOPINBAL)}">
           <td>
-          ${tiquet.versioPinbal}
+          <c:out value="${tiquet.versioPinbal}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.DATAINICI)}">
@@ -76,7 +76,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.SOLUCIONATPER)}">
           <td>
-          ${tiquet.solucionatPer}
+          <c:out value="${tiquet.solucionatPer}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.DATAFI)}">
@@ -84,7 +84,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.NOTES)}">
           <td>
-          ${tiquet.notes}
+          <c:out value="${tiquet.notes}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TiquetFields.ENTORN)}">

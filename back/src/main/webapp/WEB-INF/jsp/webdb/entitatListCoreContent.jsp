@@ -26,22 +26,22 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.ENTITATID)}">
           <td>
-          ${entitat.entitatID}
+          <c:out value="${entitat.entitatID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.NOM)}">
           <td>
-          ${entitat.nom}
+          <c:out value="${entitat.nom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.PERSONACONTACTE)}">
           <td>
-          ${entitat.personaContacte}
+          <c:out value="${entitat.personaContacte}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.CIF)}">
           <td>
-          ${entitat.CIF}
+          <c:out value="${entitat.CIF}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.GRUPENTITATID)}">

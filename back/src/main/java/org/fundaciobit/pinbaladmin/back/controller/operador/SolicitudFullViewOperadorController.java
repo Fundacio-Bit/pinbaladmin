@@ -442,4 +442,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return null;
   }
 
+  @Override
+  public boolean showAdvancedFilter() {
+    return false;
+  }
+
 }

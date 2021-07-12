@@ -26,17 +26,17 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.INCIDENCIATECNICAID)}">
           <td>
-          ${incidenciaTecnica.incidenciaTecnicaID}
+          <c:out value="${incidenciaTecnica.incidenciaTecnicaID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TITOL)}">
           <td>
-          ${incidenciaTecnica.titol}
+          <c:out value="${incidenciaTecnica.titol}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DESCRIPCIO)}">
           <td>
-          ${incidenciaTecnica.descripcio}
+          <c:out value="${incidenciaTecnica.descripcio}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DATAINICI)}">
@@ -52,32 +52,32 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
           <td>
-          ${incidenciaTecnica.nomEntitat}
+          <c:out value="${incidenciaTecnica.nomEntitat}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTENOM)}">
           <td>
-          ${incidenciaTecnica.contacteNom}
+          <c:out value="${incidenciaTecnica.contacteNom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTEEMAIL)}">
           <td>
-          ${incidenciaTecnica.contacteEmail}
+          <c:out value="${incidenciaTecnica.contacteEmail}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTETELEFON)}">
           <td>
-          ${incidenciaTecnica.contacteTelefon}
+          <c:out value="${incidenciaTecnica.contacteTelefon}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA)}">
           <td>
-          ${incidenciaTecnica.caidIdentificadorConsulta}
+          <c:out value="${incidenciaTecnica.caidIdentificadorConsulta}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
           <td>
-          ${incidenciaTecnica.caidNumeroSeguiment}
+          <c:out value="${incidenciaTecnica.caidNumeroSeguiment}" />
           </td>
         </c:if>
 

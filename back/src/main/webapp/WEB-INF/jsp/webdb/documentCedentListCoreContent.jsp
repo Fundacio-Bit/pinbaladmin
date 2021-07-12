@@ -26,17 +26,17 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentCedentFields.DOCUMENTCEDENTID)}">
           <td>
-          ${documentCedent.documentCedentID}
+          <c:out value="${documentCedent.documentCedentID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentCedentFields.TITOL)}">
           <td>
-          ${documentCedent.titol}
+          <c:out value="${documentCedent.titol}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentCedentFields.DESCRIPCIO)}">
           <td>
-          ${documentCedent.descripcio}
+          <c:out value="${documentCedent.descripcio}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentCedentFields.ENTITATSERVEIID)}">

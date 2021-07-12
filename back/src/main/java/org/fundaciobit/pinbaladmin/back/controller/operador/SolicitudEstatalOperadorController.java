@@ -21,4 +21,9 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
     return true;
   }
 
+  @Override
+  public boolean showAdvancedFilter() {
+    return false;
+  }
+
 }

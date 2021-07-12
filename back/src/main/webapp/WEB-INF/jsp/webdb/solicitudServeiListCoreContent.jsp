@@ -26,7 +26,7 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ID)}">
           <td>
-          ${solicitudServei.id}
+          <c:out value="${solicitudServei.id}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.SOLICITUDID)}">
@@ -55,7 +55,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NORMALEGAL)}">
           <td>
-          ${solicitudServei.normaLegal}
+          <c:out value="${solicitudServei.normaLegal}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ENLLAZNORMALEGAL)}">
@@ -68,17 +68,17 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ARTICLES)}">
           <td>
-          ${solicitudServei.articles}
+          <c:out value="${solicitudServei.articles}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.TIPUSCONSENTIMENT)}">
           <td>
-          ${solicitudServei.tipusConsentiment}
+          <c:out value="${solicitudServei.tipusConsentiment}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CONSENTIMENT)}">
           <td>
-          ${solicitudServei.consentiment}
+          <c:out value="${solicitudServei.consentiment}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ENLLAZCONSENTIMENT)}">
@@ -91,17 +91,17 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NOTES)}">
           <td>
-          ${solicitudServei.notes}
+          <c:out value="${solicitudServei.notes}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CADUCA)}">
           <td>
-          ${solicitudServei.caduca}
+          <c:out value="${solicitudServei.caduca}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">
           <td>
-          ${solicitudServei.fechaCaduca}
+          <c:out value="${solicitudServei.fechaCaduca}" />
           </td>
         </c:if>
 

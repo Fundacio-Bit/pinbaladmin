@@ -60,7 +60,9 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       incidenciaTecnicaFilterForm.addHiddenField(DESCRIPCIO);
       incidenciaTecnicaFilterForm.addHiddenField(CONTACTEEMAIL);
       incidenciaTecnicaFilterForm.addHiddenField(CONTACTETELEFON);
-      
+      incidenciaTecnicaFilterForm.addHiddenField(CAIDIDENTIFICADORCONSULTA);
+      incidenciaTecnicaFilterForm.addHiddenField(CAIDNUMEROSEGUIMENT);
+
       incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn",
           "conversa", /*"javascript:window.open('" +  request.getContextPath() +*/ EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}" /*','_blank');"*/,
           "btn-success"));

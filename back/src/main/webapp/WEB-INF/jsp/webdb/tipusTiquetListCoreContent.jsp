@@ -26,12 +26,12 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TipusTiquetFields.TIPUSTIQUETID)}">
           <td>
-          ${tipusTiquet.tipusTiquetID}
+          <c:out value="${tipusTiquet.tipusTiquetID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TipusTiquetFields.NOM)}">
           <td>
-          ${tipusTiquet.nom}
+          <c:out value="${tipusTiquet.nom}" />
           </td>
         </c:if>
 

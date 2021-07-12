@@ -26,7 +26,7 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.EVENTID)}">
           <td>
-          ${event.eventID}
+          <c:out value="${event.eventID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.SOLICITUDID)}">
@@ -58,12 +58,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.PERSONA)}">
           <td>
-          ${event.persona}
+          <c:out value="${event.persona}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.COMENTARI)}">
           <td>
-          ${event.comentari}
+          <c:out value="${event.comentari}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.FITXERID)}">
@@ -80,12 +80,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDIDENTIFICADORCONSULTA)}">
           <td>
-          ${event.caidIdentificadorConsulta}
+          <c:out value="${event.caidIdentificadorConsulta}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.CAIDNUMEROSEGUIMENT)}">
           <td>
-          ${event.caidNumeroSeguiment}
+          <c:out value="${event.caidNumeroSeguiment}" />
           </td>
         </c:if>
 

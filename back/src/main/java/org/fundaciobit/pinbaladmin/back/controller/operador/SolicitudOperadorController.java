@@ -77,6 +77,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
       .ENTITAT().ENTITATID();
+  
+  
+  
 
   public static final int ENTITAT_COLUMN = 1;
 
@@ -117,6 +120,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   // true => Estatal
   // false => Local
   public abstract Boolean isEstatal();
+  
+  
+  // NULL => Els dos
+  // true => Estatal
+  // false => Local
+  public abstract boolean showAdvancedFilter();
 
   @Override
   public String getTileForm() {
@@ -429,7 +438,44 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         solicitudFilterForm.setFilterByFields(filterList);
         solicitudFilterForm.setGroupByFields(groupList);
+
       }
+      
+      
+      
+      if (showAdvancedFilter()) {
+       
+        String af = getSessionAdvancedFilter(request);
+        
+        log.info("AdvancedFilter: ]" + af + "[");
+        
+        if (af == null) {
+          // Mostrar boto crear filtre
+          
+          solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=Filtre",
+               "javascript:showAdvancedFilter()" , "btn-info"));
+          
+        } else {
+          
+          //Editar i esborrar filtre
+          
+         mav.addObject("filtreavanzat", getSessionAdvancedFilter(request));
+          
+         solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=EditarFiltre",
+             "javascript:showAdvancedFilter()" , "btn-info"));
+         
+         solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=EditarFiltre",
+             "javascript:deleteAdvancedFilter()" , "btn-info"));
+          
+        }
+        
+        
+        
+        
+        
+      }
+      
+      
 
       solicitudFilterForm.setHiddenFields(hiddenFields);
 
@@ -523,6 +569,42 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     return solicitudFilterForm;
   }
+  
+  
+  
+  
+  public String getSessionAdvancedFilter(HttpServletRequest request) {
+    return (String)request.getSession().getAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName());
+  }
+  
+  
+  
+  public void setSessionAdvancedFilter(HttpServletRequest request, String advancedFilter) {
+    
+    if (advancedFilter == null || advancedFilter.trim().length() == 0) {
+      request.getSession().removeAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName()); 
+    } else {
+      request.getSession().setAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName(), advancedFilter);
+    }
+  }
+  
+  
+  @RequestMapping(value = "/advancedfilter", method = RequestMethod.GET)
+  public String advancedFilter(HttpServletRequest request, 
+      HttpServletResponse response) throws Exception, I18NException {
+    
+    
+    String advancedFilter = request.getParameter("filter"); 
+    
+    setSessionAdvancedFilter(request, advancedFilter);
+    
+    
+    return "redirect:" + getContextWeb() + "/list";
+    
+  }
+  
+  
+  
 
   @RequestMapping(value = "/fullexport", method = RequestMethod.GET)
   public ModelAndView exportFull(HttpServletRequest request, HttpServletResponse response,
@@ -1046,6 +1128,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     return super.getReferenceListForEstatID(request, mav, solicitudForm, where);
 
   }
+  
+  
   
   
   @Override

@@ -26,12 +26,12 @@
 
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DepartamentFields.DEPARTAMENTID)}">
           <td>
-          ${departament.departamentID}
+          <c:out value="${departament.departamentID}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DepartamentFields.NOM)}">
           <td>
-          ${departament.nom}
+          <c:out value="${departament.nom}" />
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DepartamentFields.AREAID)}">
