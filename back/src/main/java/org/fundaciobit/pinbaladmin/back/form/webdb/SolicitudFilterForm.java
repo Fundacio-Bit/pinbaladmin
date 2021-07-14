@@ -359,7 +359,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,CODIDESCRIPTIU ,PROCEDIMENTNOM ,ESTATID ,TICKETASSOCIAT ,DEPARTAMENTID ,ENTITATESTATAL ,PINFO }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,ESTATID ,TICKETASSOCIAT ,ENTITATESTATAL ,PINFO }));
   }
 
   @Override

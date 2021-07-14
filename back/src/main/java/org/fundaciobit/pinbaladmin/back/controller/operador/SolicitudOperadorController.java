@@ -20,14 +20,18 @@ import org.fundaciobit.genapp.common.query.CustomField;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.GroupByValueItem;
+import org.fundaciobit.genapp.common.query.ITableManager;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Select;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
+import org.fundaciobit.genapp.common.query.StringField;
+import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.utils.Utils;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
@@ -35,15 +39,18 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
+import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.EstatSolicitud;
+import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -62,26 +69,25 @@ import org.springframework.web.servlet.view.RedirectView;
  * @author anadal
  *
  */
-/*
- * @Controller
- * 
- * @RequestMapping(value = "/operador/solicitud")
- * 
- * @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class
- * })
- */
 public abstract class SolicitudOperadorController extends SolicitudController {
 
   public static final Field<?> AREA_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
       .AREAID();
 
-  public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
-      .ENTITAT().ENTITATID();
-  
-  
-  
 
   public static final int ENTITAT_COLUMN = 1;
+  
+  public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
+      .ENTITAT().ENTITATID();
+
+
+  
+  
+  public static final int FILTRE_AVANZAT_COLUMN = -1;
+  
+  public static final StringField FILTRE_AVANZAT_FIELD = CODIDESCRIPTIU; //new StringField("filtreavtable", "filtreavjava", "filtreavsql");
+  
+  
 
   public static final CustomField BALEARS;
 
@@ -110,6 +116,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DepartamentLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.DepartamentLocal departamentEjb;
+  
+  @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
+  protected EventLogicaLocal eventLogicaEjb;
 
   @Autowired
   protected AreaRefList areaNovaRefList;
@@ -438,43 +447,33 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         solicitudFilterForm.setFilterByFields(filterList);
         solicitudFilterForm.setGroupByFields(groupList);
+       
 
       }
       
       
       
       if (showAdvancedFilter()) {
-       
-        String af = getSessionAdvancedFilter(request);
         
-        log.info("AdvancedFilter: ]" + af + "[");
+
+        AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+        adfield4.setCodeName("solicitud.filtreavanzat");
+        adfield4.setPosition(FILTRE_AVANZAT_COLUMN);
         
-        if (af == null) {
-          // Mostrar boto crear filtre
-          
-          solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=Filtre",
-               "javascript:showAdvancedFilter()" , "btn-info"));
-          
-        } else {
-          
-          //Editar i esborrar filtre
-          
-         mav.addObject("filtreavanzat", getSessionAdvancedFilter(request));
-          
-         solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=EditarFiltre",
-             "javascript:showAdvancedFilter()" , "btn-info"));
-         
-         solicitudFilterForm.addAdditionalButton(new AdditionalButton("icon-filter", "=EditarFiltre",
-             "javascript:deleteAdvancedFilter()" , "btn-info"));
-          
-        }
+        adfield4.setEscapeXml(false);
+        adfield4.setSearchBy(FILTRE_AVANZAT_FIELD);
+
+        solicitudFilterForm.addAdditionalField(adfield4);
+
+        hiddenFields.add(FILTRE_AVANZAT_FIELD);
         
         
-        
-        
-        
+        //solicitudFilterForm.getFilterByFields().add(FILTRE_AVANZAT_FIELD);
+
       }
       
+      
+      solicitudFilterForm.setAddButtonVisible(false);
       
 
       solicitudFilterForm.setHiddenFields(hiddenFields);
@@ -572,38 +571,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   
   
   
-  
-  public String getSessionAdvancedFilter(HttpServletRequest request) {
-    return (String)request.getSession().getAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName());
-  }
-  
-  
-  
-  public void setSessionAdvancedFilter(HttpServletRequest request, String advancedFilter) {
-    
-    if (advancedFilter == null || advancedFilter.trim().length() == 0) {
-      request.getSession().removeAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName()); 
-    } else {
-      request.getSession().setAttribute("SESSION_ADVANCED_FILTER_" + this.getClass().getName(), advancedFilter);
-    }
-  }
-  
-  
-  @RequestMapping(value = "/advancedfilter", method = RequestMethod.GET)
-  public String advancedFilter(HttpServletRequest request, 
-      HttpServletResponse response) throws Exception, I18NException {
-    
-    
-    String advancedFilter = request.getParameter("filter"); 
-    
-    setSessionAdvancedFilter(request, advancedFilter);
-    
-    
-    return "redirect:" + getContextWeb() + "/list";
-    
-  }
-  
-  
+
   
 
   @RequestMapping(value = "/fullexport", method = RequestMethod.GET)
@@ -855,10 +823,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     Map<Field<?>, GroupByItem> groupByItemsMap = super.fillReferencesForList(filterForm,
         request, mav, list, groupItems);
 
+    /*
     log.info("SolicitudOperadorController::GroupBy = " + filterForm.getGroupBy());
     log.info(
         "SolicitudOperadorController::GroupByValue = ]" + filterForm.getGroupValue() + "[");
-
+   */
     // GROUP BY BALEARS
 
     final boolean selected = BALEARS.javaName.equals(filterForm.getGroupBy());
@@ -1104,11 +1073,133 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         tipusEstatalLocal = SolicitudFields.DEPARTAMENTID.isNotNull();
       }
     }
+    
+    
+    // FILTRE AVANÇAT PER CERCA
+    
 
     return Where.AND(getAdditionalConditionFine(request), wBalears,
-        super.getAdditionalCondition(request), tipusEstatalLocal);
+        super.getAdditionalCondition(request), tipusEstatalLocal, getAdditionaConditionAdvancedFilter(request));
 
   }
+  
+  
+  
+  
+  
+  
+  
+  protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
+    
+    
+    String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
+    log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
+
+    
+    if (af == null || af.trim().length() == 0) {
+      log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
+      return null;
+    } else {
+      
+      final String likeStr = "%" + af + "%";
+      
+      final boolean isNumber = isNumber(af);  
+      
+      // PInfo, Departament, Area o Entitat
+      Where w = Where.OR(
+          PINFO.like(likeStr),
+          new SolicitudQueryPath().DEPARTAMENT().NOM().like(likeStr),
+          new SolicitudQueryPath().DEPARTAMENT().AREA().NOM().like(likeStr),          
+          new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().NOM().like(likeStr) );
+      
+      
+      // identificador de consulta o numero seguiment de la solicitud
+      if (isNumber) {
+        w = Where.OR(w, SolicitudFields.TICKETASSOCIAT.like(likeStr), SolicitudFields.TICKETNUMEROSEGUIMENT.like(likeStr));
+      }
+      
+      // Procediment: codi i nom
+      w = Where.OR(w, SolicitudFields.PROCEDIMENTNOM.like(likeStr), SolicitudFields.PROCEDIMENTCODI.like(likeStr));
+      
+      // Comentari dels Events
+      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.COMENTARI.like(likeStr)));      
+      w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery1));
+      
+      // identificador de consulta o numero seguiment dels events
+      if (isNumber) {
+        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));      
+        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
+        w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a), SolicitudFields.SOLICITUDID.in(subquery2b) );
+      }
+
+      
+      log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
+      
+      return w;
+    }
+    
+    
+  }
+  
+  
+  @Override
+  protected List<Solicitud> processarLlistat(ITableManager<Solicitud, Long> ejb,
+      BaseFilterForm filterForm, int pagina,
+      Where whereAdditionalCondition, ModelAndView mav) throws I18NException {
+    if (filterForm == null) {
+      throw new NullPointerException("FilterForm mai pot ser NULL !!!!");
+    }
+   
+    // Eliminam temporalment el filtre especial, per a que no doni problemes internament.
+    
+    AdditionalField<?,?> filtreAvanzatField = null;
+    if (showAdvancedFilter()) {
+      filtreAvanzatField = filterForm.getAdditionalFields().remove(FILTRE_AVANZAT_COLUMN);
+    }
+    
+    
+    List<Solicitud> list = super.processarLlistat(ejb, filterForm, pagina, whereAdditionalCondition, mav);
+    
+    
+    if (filtreAvanzatField != null) {
+      
+      filterForm.getAdditionalFields().put(FILTRE_AVANZAT_COLUMN, filtreAvanzatField);
+      
+      
+      String valorFA = filtreAvanzatField.getSearchByValue();
+      
+      
+      if (valorFA != null && valorFA.trim().length() != 0) {
+        filterForm.setVisibleFilterBy(true);
+      }
+      
+      
+    }
+    
+    
+    return list;
+    
+    
+  }
+  
+  
+  
+
+
+  private boolean isNumber(String af) {
+    
+    try {  
+      Integer.parseInt(af);  
+      return true;
+    } catch(NumberFormatException e){  
+      return false; 
+    }
+    
+  }
+  
+  
+  
+  
 
   @Override
   public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,

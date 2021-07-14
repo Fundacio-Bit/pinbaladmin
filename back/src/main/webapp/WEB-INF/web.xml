@@ -184,12 +184,12 @@
 
 	<security-role>
 		<description>Administrador de PinbalAdmin</description>
-		<role-name>pad_ADMIN</role-name>
+		<role-name>PAD_ADMIN</role-name>
 	</security-role>
 
 	<security-role>
 		<description>Usuari de PinbalAdmin</description>
-		<role-name>pad_USER</role-name>
+		<role-name>PAD_USER</role-name>
 	</security-role>
 
 	<listener>
