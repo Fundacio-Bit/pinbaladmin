@@ -82,7 +82,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         all.remove(SOLICITUDXMLID);
         all.remove(DOCUMENTSOLICITUDID);
         all.remove(ESTATID);
-        all.remove(PROCEDIMENTTIPUS);
+        //all.remove(PROCEDIMENTTIPUS);
         all.remove(DEPARTAMENTID);
 
         form.setHiddenFields(all);
@@ -177,15 +177,14 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         // java.lang.String personaContacteEmail =
         solicitud
             .setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
-        
-        
+
         solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
-        // TODO XYZ ZZZ FALTA     
-        solicitud.setPersonaContacteEmail("");
-        
+        solicitud.setPersonaContacteEmail(prop.getProperty("FORMULARIO.DATOS_REGISTRO.EMAIL"));
+
         solicitud.setDenominacio(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
         solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
         solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
+        solicitud.setProcedimentTipus(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO"));
 
 
         {
