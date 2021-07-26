@@ -84,6 +84,9 @@ public class Configuracio implements Constants {
   public static String getTemplateServeisExcel() {
     return System.getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
   }
-  
+
+  public static String getCAIDSeleniumUrl() {
+    return System.getProperty(PINBALADMIN_PROPERTY_BASE + "caidseleniumurl");
+  }
   
 }

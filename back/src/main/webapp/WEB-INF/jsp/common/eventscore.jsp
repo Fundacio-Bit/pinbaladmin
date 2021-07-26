@@ -1,3 +1,4 @@
+<%@page import="org.fundaciobit.pinbaladmin.utils.Configuracio"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%><%@ include
     file="/WEB-INF/jsp/moduls/includes.jsp"%>
 
@@ -27,24 +28,30 @@
 
 
 <c:if test="${event.tipus == -2 }">
+
+ <form id ="form_${event}" action="<%=Configuracio.getCAIDSeleniumUrl()%>/RemoteSeleniumConsulta" target="_blank">
+
+  <input type="hidden" id="email" name="email" value="gd.pinbal@fundaciobit.org"><br>
+  <input type="hidden" id="incidencia" name="incidencia" value="${event.caidIdentificadorConsulta}">
+  <input type="hidden" id="seguimiento" name="seguimiento" value="${event.caidNumeroSeguiment}">
+  
     <table border="0">
     <tr>
     <td>
-    <a class="btn btn-mini btn-warning" target="_blank"
-        href="https://ssweb.seap.minhap.es/ayuda/seguimiento" onclick="" title="Seguiment">
-        <div style="color: #FFFFFF">Seguiment<br/>CAID</div>
-    </a>
+        <input class="btn btn-mini btn-warning" type="submit" value="Seguiment">
     </td>
     <td> 
     <small>
-    CAID::Correu = <b>gd.pinbal@fundaciobit.org</b>
-    <br/>CAID::Identificador de Consulta = <b>${event.caidIdentificadorConsulta}</b>
-    <br/>CAID::N&uacute;mero de Seguiment = <b>${event.caidNumeroSeguiment}</b>
+    CAID::Correu = <b>gd.pinbal@fundaciobit.org</b><br/>
+    CAID::Identificador = <b>${event.caidIdentificadorConsulta}</b><br/>
+    CAID::N&uacute;m. Seguiment = <b>${event.caidNumeroSeguiment}</b>
     </small>
     </td>
     </tr>
     
     </table>
+    
+    </form> 
 <%--
     <form id="form${event.eventID}" target="_blank"
         action="https://ssweb.seap.minhap.es/ayuda/seguimiento" method="post">

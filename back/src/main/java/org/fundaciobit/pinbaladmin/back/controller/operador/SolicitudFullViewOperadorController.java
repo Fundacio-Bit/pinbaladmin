@@ -102,10 +102,26 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           "/operador/solicitud" + (_jpa.getDepartamentID() == null ? "estatal" : "local") + "/"
               + soliID + "/edit", ""));
 
-      solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
-          "solicitud.caid",
-          getContextWeb() + "/formularicaid/" + solicitudForm.getSolicitud().getSolicitudID(),
-          ""));
+      if (solicitudForm.getSolicitud().getTicketNumeroSeguiment() == null) {
+        solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
+            "solicitud.caid",
+            getContextWeb() + "/formularicaid/" + solicitudForm.getSolicitud().getSolicitudID(),
+            ""));
+      } else {
+        
+        
+        String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
+            +  "email=gd.pinbal@fundaciobit.org"
+            + "&incidencia=" + solicitudForm.getSolicitud().getTicketAssociat()
+            + "&seguimiento=" + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
+        
+        
+        solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
+            "consulta.caid", "javascript:window.open('"+ url + "', '_blank')", ""));
+      }
+        
+        // 
+     
       /*
        * solicitudForm.addAdditionalButton(new AdditionalButton( "icon-play",
        * "solicitud.generarfitxes", getContextWeb() +

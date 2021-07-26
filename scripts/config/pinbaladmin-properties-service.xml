@@ -37,7 +37,7 @@
 
 	  org.fundaciobit.pinbaladmin.template_serveis_excel=D:\\dades\\dades\\CarpetesPersonals\\Programacio\\pinbaladmin_files\\Plantilla-Procedimientos.xlsx
 	  
-	  
+	  org.fundaciobit.pinbaladmin.caidseleniumurl=http://localhost:80/pinbaladmin-selenium
 	  
       
     </attribute>
