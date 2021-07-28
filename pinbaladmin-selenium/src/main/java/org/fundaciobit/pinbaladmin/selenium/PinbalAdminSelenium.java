@@ -23,6 +23,7 @@ public class PinbalAdminSelenium {
         try {
             //JavascriptExecutor js;
             driver = getDriver(true);
+            System.out.println("consultaIncidencia: getDriver OCULT !!!");
 
             //js = (JavascriptExecutor) driver;
             // vars = new HashMap<String, Object>();
@@ -30,6 +31,10 @@ public class PinbalAdminSelenium {
             System.out.println(" ENTRA");
 
             driver.get("https://ssweb.seap.minhap.es/ayuda/seguimiento");
+            
+            driver.manage().window().setSize(new Dimension(1296, 1000));
+            System.out.println("consultaIncidencia: Posat nou tamany !!!");
+            
             driver.findElement(By.id("data_email")).click();
             driver.findElement(By.id("data_email")).click();
             driver.findElement(By.id("data_email")).sendKeys(email);

@@ -242,10 +242,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         //log.info("XYZ ZZZ _jpa.getDepartamentID() = " + _jpa.getDepartamentID());
 
         if (_jpa.getDepartamentID() == null) {
-          // solicitudForm.addHiddenField(ENTITATLOCALID);
-          solicitudForm.addHiddenField(DEPARTAMENTID);
-          // solicitudForm.addHiddenField(AREAID);
+          // Es Estatal
+          
+          amagarCampsEstatal(solicitudForm);
         } else {
+          // Es Local
           solicitudForm.addHiddenField(ENTITATESTATAL);
         }
       } else {
@@ -266,10 +267,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       if (isestatal) {
 
         // solicitudForm.addHiddenField(ENTITATLOCALID);
-        solicitudForm.addHiddenField(DEPARTAMENTID);
-        solicitudForm.addHiddenField(PINFO);
-        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
-        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
+        amagarCampsEstatal(solicitudForm);
+
+
 
       } else {
         solicitudForm.addHiddenField(ENTITATESTATAL);
@@ -298,6 +298,26 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      */
 
     return solicitudForm;
+  }
+
+
+  private void amagarCampsEstatal(SolicitudForm solicitudForm) {
+    solicitudForm.addHiddenField(DEPARTAMENTID);
+    solicitudForm.addHiddenField(PINFO);
+    solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
+    solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
+
+    solicitudForm.addHiddenField(SolicitudFields.TICKETNUMEROSEGUIMENT);
+    
+    solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCEMAIL);
+    solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCNOM);
+    
+    
+    solicitudForm.addHiddenField(SolicitudFields.DENOMINACIO);
+    solicitudForm.addHiddenField(SolicitudFields.DIR3);
+    solicitudForm.addHiddenField(SolicitudFields.NIF);
+    
+    solicitudForm.addHiddenField(SolicitudFields.CODIDESCRIPTIU);
   }
 
   @Override
@@ -405,7 +425,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       hiddenFields.remove(SolicitudFields.ESTATID);
       hiddenFields.remove(SolicitudFields.DATAINICI);
 
-      hiddenFields.remove(SolicitudFields.DEPARTAMENTID);
+      
       // hiddenFields.remove(SolicitudFields.AREAID);
 
       if (isestatal == null) {
@@ -431,9 +451,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.getDefaultGroupByFields());
         if (isestatal) {
           hiddenFields.remove(ENTITATESTATAL);
+          hiddenFields.add(SolicitudFields.DEPARTAMENTID);
           // filterList.remove(ENTITATLOCALID);
           filterList.remove(PINFO);
           // groupList.remove(ENTITATLOCALID);
+               
+          
+          
         } else {
           // hiddenFields.remove(ENTITATLOCALID);
           // hiddenFields.remove(DEPARTAMENTID);
@@ -473,7 +497,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       }
       
       
-      solicitudFilterForm.setAddButtonVisible(false);
+      //solicitudFilterForm.setAddButtonVisible(false);
       
 
       solicitudFilterForm.setHiddenFields(hiddenFields);

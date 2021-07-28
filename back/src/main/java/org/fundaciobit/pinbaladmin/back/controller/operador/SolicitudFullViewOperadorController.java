@@ -94,31 +94,41 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       solicitudForm.addAdditionalButton(
           new AdditionalButton("icon-arrow-left", "tornar", urlTornar, "btn-info"));
       
-      solicitudForm.addAdditionalButton(
-          new AdditionalButton("icon-repeat", "solicitud.generarformularidirectorgeneral",
-              getContextWeb() + "/generarformularidirectorgeneral/" + soliID, ""));
-
+      
       solicitudForm.addAdditionalButton(new AdditionalButton(" icon-pencil", "solicitud.edit",
           "/operador/solicitud" + (_jpa.getDepartamentID() == null ? "estatal" : "local") + "/"
               + soliID + "/edit", ""));
-
-      if (solicitudForm.getSolicitud().getTicketNumeroSeguiment() == null) {
-        solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
-            "solicitud.caid",
-            getContextWeb() + "/formularicaid/" + solicitudForm.getSolicitud().getSolicitudID(),
-            ""));
-      } else {
+     
+      
+      if (solicitudForm.getSolicitud().getEntitatEstatal() == null) {
+        solicitudForm.addAdditionalButton(
+          new AdditionalButton("icon-repeat", "solicitud.generarformularidirectorgeneral",
+              getContextWeb() + "/generarformularidirectorgeneral/" + soliID, ""));
         
         
-        String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
-            +  "email=gd.pinbal@fundaciobit.org"
-            + "&incidencia=" + solicitudForm.getSolicitud().getTicketAssociat()
-            + "&seguimiento=" + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
+        if (solicitudForm.getSolicitud().getTicketNumeroSeguiment() == null) {
+          solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
+              "solicitud.caid",
+              getContextWeb() + "/formularicaid/" + solicitudForm.getSolicitud().getSolicitudID(),
+              ""));
+        } else {
+          
+          
+          String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
+              +  "email=gd.pinbal@fundaciobit.org"
+              + "&incidencia=" + solicitudForm.getSolicitud().getTicketAssociat()
+              + "&seguimiento=" + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
+          
+          
+          solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
+              "consulta.caid", "javascript:window.open('"+ url + "', '_blank')", ""));
+        }
         
         
-        solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
-            "consulta.caid", "javascript:window.open('"+ url + "', '_blank')", ""));
       }
+
+
+     
         
         // 
      

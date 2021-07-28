@@ -195,10 +195,15 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         solicitudServeiFilterForm.setAddButtonVisible(false);
         solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton("icon-plus-sign",
             "solicitudservei.afegirservei", getContextWeb() + "/new", ""));
+        
+        
+        String entEstatal = solicitudLogicaEjb.executeQueryOne(SolicitudFields.ENTITATESTATAL, SolicitudFields.SOLICITUDID.equal(soli));
 
-        solicitudServeiFilterForm.addAdditionalButton(
+        if (entEstatal == null) {
+          solicitudServeiFilterForm.addAdditionalButton(
             new AdditionalButton("icon-repeat", "solicitudservei.generarplantillaexcel",
                 getContextWeb() + "/generaplantillaexcelserveis", ""));
+        }
 
       }
 
