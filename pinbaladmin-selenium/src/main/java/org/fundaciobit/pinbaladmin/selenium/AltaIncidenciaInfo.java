@@ -62,7 +62,7 @@ public class AltaIncidenciaInfo {
     }
 
     public String getLlinatge2() {
-        return llinatge2;
+        return llinatge2==null?"":llinatge2;
     }
 
     public void setLlinatge2(String llinatge2) {

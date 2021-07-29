@@ -19,11 +19,9 @@ import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
-import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.hibernate.Hibernate;
-import org.jboss.ejb3.annotation.SecurityDomain;
 
 /**
  * 
@@ -31,7 +29,8 @@ import org.jboss.ejb3.annotation.SecurityDomain;
  * @author areus
  */
 @Stateless(name = "SolicitudLogicaEJB")
-@SecurityDomain("seycon")
+//@SecurityDomain("seycon")
+@PermitAll
 public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaLocal {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerLocal.JNDI_NAME)
@@ -157,5 +156,23 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
     return s;
 
   }
+  
+  
+  
+  @Override
+  @PermitAll
+  public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException {
+    
+    
+       SolicitudJPA soli = this.findByPrimaryKey(soliID);
+       
+       soli.setTicketAssociat(incidencia);
+       soli.setTicketNumeroSeguiment(seguiment);
+       
+       this.update(soli);
+    
+  }
+  
+  
 
 }

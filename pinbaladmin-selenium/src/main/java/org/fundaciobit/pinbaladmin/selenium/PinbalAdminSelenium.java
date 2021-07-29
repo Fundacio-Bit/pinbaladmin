@@ -1,8 +1,12 @@
 package org.fundaciobit.pinbaladmin.selenium;
 
+import java.io.File;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -105,11 +109,11 @@ public class PinbalAdminSelenium {
     
     
 
-    public static String altaIncidencia(AltaIncidenciaInfo alta) {
+    public static String altaIncidencia(AltaIncidenciaInfo alta, boolean debug) {
 
         WebDriver driver = null;
         try {
-            driver = getDriver(true); // new FirefoxDriver();
+            driver = getDriver(!debug); // new FirefoxDriver();
             JavascriptExecutor js = (JavascriptExecutor) driver;
 
             driver.get("https://sede.administracionespublicas.gob.es/ayuda/consulta/CAID");
@@ -181,17 +185,40 @@ public class PinbalAdminSelenium {
             driver.findElement(By.id("data_comentario")).click();
             driver.findElement(By.id("data_comentario")).sendKeys(alta.getConsulta());
 
-            driver.findElement(By.cssSelector(".primary")).click();
+            if (!debug) {
+              driver.findElement(By.cssSelector(".primary")).click();
+            }
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            
+            
+            if (debug) {
+                
+                
+                TakesScreenshot scrShot =((TakesScreenshot)driver);
 
-            System.out.println("PRE GETPAGESOURCE:");
+               
 
-            return driver.getPageSource();
+                File srcFile=scrShot.getScreenshotAs(OutputType.FILE);
+                
+                
+                System.out.println();
+                        
+                System.out.println("SCREEN SHOT :" + srcFile.getAbsolutePath());
+                
+                System.out.println();
+                
+                
+            }
+
+            String p = driver.getPageSource();
+            System.out.println("PRE GETPAGESOURCE:\n" + p);
+
+            return p;
         
         } finally {
             if (driver != null) {
@@ -199,6 +226,34 @@ public class PinbalAdminSelenium {
             }
         }
 
+    }
+    
+    
+
+
+    public static Incidencia extractIncidencia(String html) {
+        /*
+        <p>Número de la incidencia: 983032</p>
+        <p>Número de seguimiento: <strong>54607720212907</strong></p>
+
+        <p>Se ha enviado un email a su dirección de correo: gd.pinbal@fundaciobit.org</p>*/
+
+        String inci= extractResults(html, "<p>Número de la incidencia: ", "</p>");
+        String segui= extractResults(html, "<p>Número de seguimiento: <strong>", "</strong></p>");
+        String email= extractResults(html, "<p>Se ha enviado un email a su dirección de correo: ", "</p>");
+        
+        Incidencia i = new Incidencia(email, inci, segui);
+        return i;
+    }
+
+
+    protected static String extractResults(String html, String base, String strFinal) {
+                
+        int pos1 = html.indexOf(base) + base.length();
+        int pos2 = html.indexOf(strFinal, pos1);
+        
+        String r = html.substring(pos1, pos2);
+        return r;
     }
     
 }
