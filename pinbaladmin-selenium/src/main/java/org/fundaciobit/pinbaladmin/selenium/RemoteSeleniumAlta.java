@@ -72,7 +72,7 @@ public class RemoteSeleniumAlta extends HttpServlet {
 
             byte[] fitxerBytes = Base64.getDecoder().decode(fitxerB64);
 
-            File fitxer = File.createTempFile("pinbaladmin_", "_Plantilla-Procedimientos.xlsx");
+            File fitxer = File.createTempFile("pinbaladmin_", "_documentos.zip");
             fitxer.deleteOnExit();
 
             FileOutputStream fos = new FileOutputStream(fitxer);

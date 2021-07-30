@@ -1,9 +1,14 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +33,7 @@ import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
@@ -40,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import fr.opensagres.odfdom.converter.core.utils.ByteArrayOutputStream;
 
 /**
  * 
@@ -95,48 +103,41 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     if (__isView) {
       // Canviam el cancel·lar per un tornar.....
       solicitudForm.setCancelButtonVisible(false);
-      Long soliID = + solicitudForm.getSolicitud().getSolicitudID();
-      String urlTornar = "/operador/solicitudfullview/"
-          + soliID + " /cancel";
+      Long soliID = +solicitudForm.getSolicitud().getSolicitudID();
+      String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
       solicitudForm.addAdditionalButton(
           new AdditionalButton("icon-arrow-left", "tornar", urlTornar, "btn-info"));
-      
-      
+
       solicitudForm.addAdditionalButton(new AdditionalButton(" icon-pencil", "solicitud.edit",
           "/operador/solicitud" + (_jpa.getDepartamentID() == null ? "estatal" : "local") + "/"
-              + soliID + "/edit", ""));
+              + soliID + "/edit",
+          ""));
 
       if (solicitudForm.getSolicitud().getEntitatEstatal() == null) {
         solicitudForm.addAdditionalButton(
-          new AdditionalButton("icon-repeat", "solicitud.generarformularidirectorgeneral",
-              getContextWeb() + "/generarformularidirectorgeneral/" + soliID, ""));
+            new AdditionalButton("icon-repeat", "solicitud.generarformularidirectorgeneral",
+                getContextWeb() + "/generarformularidirectorgeneral/" + soliID, ""));
 
         if (solicitudForm.getSolicitud().getTicketNumeroSeguiment() == null) {
           solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
-              "solicitud.caid",
-              getContextWeb() + "/formularicaid/" + solicitudForm.getSolicitud().getSolicitudID(),
+              "solicitud.caid", getContextWeb() + "/formularicaidfitxers/"
+                  + solicitudForm.getSolicitud().getSolicitudID(),
               ""));
         } else {
-          
-          
+
           String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
-              +  "email=gd.pinbal@fundaciobit.org"
-              + "&incidencia=" + solicitudForm.getSolicitud().getTicketAssociat()
-              + "&seguimiento=" + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
-          
-          
+              + "email=gd.pinbal@fundaciobit.org" + "&incidencia="
+              + solicitudForm.getSolicitud().getTicketAssociat() + "&seguimiento="
+              + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
+
           solicitudForm.addAdditionalButton(new AdditionalButton(" icon-envelope",
-              "consulta.caid", "javascript:window.open('"+ url + "', '_blank')", ""));
+              "consulta.caid", "javascript:window.open('" + url + "', '_blank')", ""));
         }
-        
-        
+
       }
 
+      //
 
-     
-        
-        // 
-     
       /*
        * solicitudForm.addAdditionalButton(new AdditionalButton( "icon-play",
        * "solicitud.generarfitxes", getContextWeb() +
@@ -157,113 +158,132 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return solicitudForm;
   }
 
-  @RequestMapping(value = "/formularicaid/{soliID}", method = RequestMethod.GET)
-  public ModelAndView generarFormulariCaidGet(HttpServletRequest request,
+  @RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
+  public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request,
       HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
 
-    final String backurl = getContextWeb() +  "/view/"+ soliID;
-    
-    
-    SubQuery<DocumentSolicitud, Long> subQueryDocSoli = documentSolicitudEjb.getSubQuery(DocumentSolicitudFields.DOCUMENTID, DocumentSolicitudFields.SOLICITUDID.equal(soliID));
-    
-    final String nomPlantilla = "_Plantilla-Procedimientos.xlsx";
-    
-    Where w1 = DocumentFields.DOCUMENTID.in(subQueryDocSoli);
-    Where w2 = DocumentFields.NOM.like("%" + nomPlantilla);
-    
-    List<Long> fitxersID = documentEjb.executeQuery(DocumentFields.FITXERORIGINALID, Where.AND(w1,w2));
-    
-    log.info("\n # FITXERS amb nom '" + nomPlantilla + "' => " + fitxersID.size());
-    
-    FitxerJPA fitxer = null;
-    Date lastDate = new Date(1000);
-        
-    for (Long fID : fitxersID) {
-      FitxerJPA f = fitxerEjb.findByPrimaryKey(fID);
-      
-      String n = f.getNom();
-      
-      log.info("\n Nom ]" + n + "[ => " + fitxersID.size());
-      
-      if (n.endsWith(nomPlantilla)) {
-        try {
-          Date d = SolicitudServeiOperadorController.SDF.parse(n.substring(0, n.lastIndexOf('_') + 1));
-          log.info("Compara dates => " + d.getTime() + " > " + lastDate.getTime());
-          if (d.getTime() > lastDate.getTime()) {
-            lastDate = d;
-            fitxer = f;
-          }
-        } catch (Exception e) {
-          log.error("Error parsejant Nom de fitxer de Procediments (" + n + "): " + e.getMessage(), e);
-        }
-      }
-    }
-        
+    ModelAndView mav = new ModelAndView("formularicaidfitxersOperador");
 
-    if (fitxer == null) {
-      HtmlUtils.saveMessageError(request, "Es necessita un Document-Solicitud amb nom Plantilla-Procedimientos.xlsx per poder crear la incidència.");
+    mav.addObject("action", request.getContextPath() + getContextWeb() + "/formularicaid/" + soliID);
+
+    SubQuery<DocumentSolicitud, Long> subQueryDocSoli = documentSolicitudEjb.getSubQuery(
+        DocumentSolicitudFields.DOCUMENTID, DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+
+    List<Document> docs = documentEjb.select(DocumentFields.DOCUMENTID.in(subQueryDocSoli));
+
+    mav.addObject("documents", docs);
+
+    return mav;
+
+  }
+
+  @RequestMapping(value = "/formularicaid/{soliID}", method = RequestMethod.POST)
+  public ModelAndView generarFormulariCaid(HttpServletRequest request,
+      HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
+
+    final String backurl = getContextWeb() + "/view/" + soliID;
+
+    String[] fitxersID = request.getParameterValues("fitxerID");
+
+    // Cercar fitxer
+
+    List<Fitxer> fitxers = new ArrayList<Fitxer>();
+
+    for (String fid : fitxersID) {
+      log.info("Fitxer Seleccionats => " + fid);
+
+      Fitxer f = fitxerEjb.findByPrimaryKey(Long.parseLong(fid));
+
+      fitxers.add(f);
+
+    }
+
+    if (fitxersID == null || fitxersID.length == 0) {
+      HtmlUtils.saveMessageError(request,
+          "Es necessita sellecionar com a mínim un Document-Solicitud per poder crear la incidència.");
+      return new ModelAndView(new RedirectView(backurl, true));
+    }
+
+    // Fer zip
+    byte[] fitxersContent;
+    try {
+
+      // File zipFile = File.createTempFile("pinbaladmin_", ".zip");
+
+      ByteArrayOutputStream fos = new ByteArrayOutputStream();
+      ZipOutputStream zos = new ZipOutputStream(fos);
+
+      for (Fitxer aFile : fitxers) {
+
+        zos.putNextEntry(new ZipEntry(aFile.getNom()));
+
+        byte[] bytes = FileSystemManager.getFileContent(aFile.getFitxerID());
+        zos.write(bytes, 0, bytes.length);
+        zos.closeEntry();
+      }
+
+      zos.close();
+
+      fitxersContent = fos.toByteArray();
+
+    } catch (Exception ex) {
+      String msg = "Error creant zip: " + ex.getMessage();
+      log.error(msg, ex);
+      HtmlUtils.saveMessageError(request, msg);
       return new ModelAndView(new RedirectView(backurl, true));
     }
 
     ModelAndView mav = new ModelAndView("formularicaidOperador");
 
-    byte[] fitxerContent;
-    try {
-      fitxerContent = FileSystemManager.getFileContent(fitxer.getFitxerID());
-    } catch (Exception e) {
-      HtmlUtils.saveMessageError(request, "Error accedint al fitxer amb nom " + fitxer.getNom() + " (ID=" + fitxer.getFitxerID() + ")");
-      return new ModelAndView(new RedirectView(backurl, true));
-    }    
-    String fitxerB64 = Base64.encode(fitxerContent);
+    mav.addObject("fitxers", fitxers);
+
+    String fitxerB64 = Base64.encode(fitxersContent);
     mav.addObject("fitxerB64", fitxerB64);
-    
+
     SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
+    String callback = Configuracio.getAppUrl()
+        + CallbackSeleniumController.CALLBACK_SELENIUM_CONTEXT + "/" + soli.getSolicitudID();
 
-    
-    String callback = Configuracio.getAppUrl() + CallbackSeleniumController.CALLBACK_SELENIUM_CONTEXT + "/" + soli.getSolicitudID();
-
-    
-    mav.addObject("backurl",request.getContextPath() + backurl);
+    mav.addObject("backurl", request.getContextPath() + backurl);
     mav.addObject("callback", callback);
-    mav.addObject("action",Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumAlta");
-
+    mav.addObject("action", Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumAlta");
 
     String username = request.getUserPrincipal().getName();
-    
+
     String nom;
     String llinatge1;
     String llinatge2;
     String email = "gd.pinbal@fundaciobit.org";
 
     if ("pvico".equals(username)) {
-      nom ="Pilar";
+      nom = "Pilar";
       llinatge1 = "Vico";
       llinatge2 = "Hervas";
-    } else if("mcapo".equals(username)) {
-        nom ="Maria Antonia";
-        llinatge1 = "Capo";
-        llinatge2 = "Santandreu";
-    } else if("anadal".equals(username)) {
-      nom ="Antoni";
+    } else if ("mcapo".equals(username)) {
+      nom = "Maria Antonia";
+      llinatge1 = "Capo";
+      llinatge2 = "Santandreu";
+    } else if ("anadal".equals(username)) {
+      nom = "Antoni";
       llinatge1 = "Nadal";
       llinatge2 = "Bennasar";
-      email="anadal@fundaciobit.org";
+      //email = "anadal@fundaciobit.org";
     } else {
-      HtmlUtils.saveMessageError(request, "L'username " + username + " no està mapejat a cap nom i llinatges");
-      nom ="Pilar";
+      HtmlUtils.saveMessageError(request,
+          "L'username " + username + " no està mapejat a cap nom i llinatges");
+      nom = "Pilar";
       llinatge1 = "Vico";
       llinatge2 = "";
     }
-    
-    
-    mav.addObject("nombre",nom);
+
+    mav.addObject("nombre", nom);
     mav.addObject("apellido1", llinatge1);
     mav.addObject("apellido2", llinatge2);
     mav.addObject("organismo",
         "Consejería de Administraciones Públicas y Modernización » (A04027005) Dirección General de Modernización y Administración Digital");
     mav.addObject("email", email);
-    mav.addObject("asunto", "Alta Servicios");    
+    mav.addObject("asunto", "Alta Servicios");
     mav.addObject("produccio", soli.isProduccio());
 
     if (soli.getEntitatEstatal() == null) {
@@ -280,16 +300,17 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     return mav;
   }
-  
-  
 
-  
-  
-  
-
+  /**
+   * 
+   * @param request
+   * @param response
+   * @param soliID
+   * @return
+   */
   @RequestMapping(value = "/generarserveis/{soliID}", method = RequestMethod.GET)
   public String generarServeisAndFormulari(HttpServletRequest request,
-      HttpServletResponse response, @PathVariable Long soliID)  {
+      HttpServletResponse response, @PathVariable Long soliID) {
 
     SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
@@ -315,7 +336,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
         Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
 
-        generarServeis(request,soliID, prop);
+        generarServeis(request, soliID, prop);
 
         generarFormulari(request, soliID, prop, "");
 
@@ -323,7 +344,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
         String msg = I18NUtils.getMessage(ie);
         log.error(msg, ie);
         HtmlUtils.saveMessageError(request, msg);
-      
+
       } catch (Exception e) {
         log.error(e.getMessage(), e);
         HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
@@ -332,17 +353,11 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     return "redirect:" + getContextWeb() + "/view/" + soliID;
   }
-  
-  
-  
-  
-  
 
-  
   @RequestMapping(value = "/generarformularidirectorgeneral/{soliID}", method = RequestMethod.GET)
-  public String generarFormulariDirectorGeneral(HttpServletRequest request, @PathVariable Long soliID) throws Exception {
+  public String generarFormulariDirectorGeneral(HttpServletRequest request,
+      @PathVariable Long soliID) throws Exception {
 
-    
     SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
     Long fitxerID = soli.getSolicitudXmlID();
@@ -366,21 +381,21 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
         }
 
         Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
-        
+
         String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
-        
-        if (cp == null)  {
+
+        if (cp == null) {
           prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CP", "");
         }
 
-
-        generarFormulari(request, soliID, prop, SolicitudServeiOperadorController.SDF.format(new Date()));
+        generarFormulari(request, soliID, prop,
+            SolicitudServeiOperadorController.SDF.format(new Date()));
 
       } catch (I18NException ie) {
         String msg = I18NUtils.getMessage(ie);
         log.error(msg, ie);
         HtmlUtils.saveMessageError(request, msg);
-      
+
       } catch (Exception e) {
         log.error(e.getMessage(), e);
         HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
@@ -390,12 +405,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return "redirect:" + getContextWeb() + "/view/" + soliID;
   }
 
-  
-  
-  
-
-  public  void generarFormulari(HttpServletRequest request, Long solicitudID,
-      Properties prop, String prefix) throws Exception, I18NException {
+  public void generarFormulari(HttpServletRequest request, Long solicitudID, Properties prop,
+      String prefix) throws Exception, I18NException {
 
     File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
     File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
@@ -412,8 +423,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
 
-      Document doc = documentEjb.create(prefix + "Formulario_Director_General (PDF)", fitxer.getFitxerID(),
-          null, null);
+      Document doc = documentEjb.create(prefix + "Formulario_Director_General (PDF)",
+          fitxer.getFitxerID(), null, null);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
 
@@ -421,15 +432,15 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
 
     {
-      FitxerJPA fitxer = new FitxerJPA(prefix + "Formulario_Director_General.odt", outputODT.length(),
-          "application/vnd.oasis.opendocument.text", "");
+      FitxerJPA fitxer = new FitxerJPA(prefix + "Formulario_Director_General.odt",
+          outputODT.length(), "application/vnd.oasis.opendocument.text", "");
 
       fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
 
       FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
 
-      Document doc = documentEjb.create(prefix + "Formulario_Director_General (ODT)", fitxer.getFitxerID(),
-          null, null);
+      Document doc = documentEjb.create(prefix + "Formulario_Director_General (ODT)",
+          fitxer.getFitxerID(), null, null);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
 
@@ -484,10 +495,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CONSENTIMIENTO");
       java.lang.String enllazConsentiment = prop
           .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".ENLACECON");
-      
+
       String caducafecha = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
       String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
-      
 
       Long count = solicitudServeiEjb
           .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
@@ -503,7 +513,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       } else {
 
-        HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
+        HtmlUtils.saveMessageWarning(request,
+            "El servei [" + x + "] ja existeix. L'ignoram ...");
 
       }
 
