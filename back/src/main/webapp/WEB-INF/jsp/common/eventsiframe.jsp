@@ -1097,6 +1097,9 @@
 }
 </style>
 
+<!--  Missatges  -->
+<jsp:include page="/WEB-INF/jsp/moduls/missatges.jsp" />
+
 
 <div class="mainwindow">
 
@@ -1115,12 +1118,15 @@
             <td>&nbsp;&nbsp;</td>
             <td>
                 <div>
-                    <c:if test="${not empty personaContacteEmail}">
-                       <c:url var="theurl" value="${contextweb}/new"/>
-                       <c:set var="urlnou" value="document.location.href='${theurl}'"/>
-                    </c:if>
-                    <c:if test="${empty personaContacteEmail}">                       
-                       <c:set var="urlnou" value="javascript:alert('La sol·licitud no te definit el correu del contacte');" />
+                    <c:url var="theurl" value="${contextweb}/new"/>
+                    <c:set var="urlnou" value="javascript:document.location.href='${theurl}'"/>
+                    
+                    <c:if test="${not isEstatal}">
+
+                        <c:if test="${empty personaContacteEmail}">                       
+                           <c:set var="urlnou" value="javascript:alert('La sol·licitud no te definit el correu del contacte EF');" />
+                        </c:if>
+
                     </c:if>
 
                     <button class="btn btn-small" role="button" data-toggle="modal"  onclick="${urlnou}">

@@ -64,7 +64,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       incidenciaTecnicaFilterForm.addHiddenField(CAIDNUMEROSEGUIMENT);
 
       incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn",
-          "conversa", /*"javascript:window.open('" +  request.getContextPath() +*/ EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}" /*','_blank');"*/,
+          "Comentaris", EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}" ,
           "btn-success"));
     }
 

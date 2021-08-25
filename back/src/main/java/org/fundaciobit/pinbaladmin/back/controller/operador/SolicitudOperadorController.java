@@ -543,7 +543,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
           "exportacio.soli_servei", getContextWeb() + "/fullexport", "btn-info"));
 
       solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn",
-          "conversa", /*"javascript:window.open('" +  request.getContextPath() +*/ EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}" /*','_blank');"*/,
+          "conversa", /*"javascript:window.open('" +  request.getContextPath() +*/ 
+          EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}/" + isEstatal() /*','_blank');"*/,
           "btn-success"));
 
       solicitudFilterForm.setVisibleMultipleSelection(true);

@@ -41,6 +41,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
   
   
   public static final String SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID = "SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID";
+  
+  public static final String SESSION_EVENT_IS_ESTATAL = "SESSION_EVENT_IS_ESTATAL";
+  
+  
+  
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
@@ -96,7 +101,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
           "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
               + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
       
-      return new ModelAndView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      return new ModelAndView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       
     }
 
@@ -106,11 +111,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
     if (email == null || email.trim().length() == 0) {
       String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
       
-      log.info("\n\n Passa per NEW AMB ERROR");
-      
-      HtmlUtils.saveMessageError(request,
-          "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la " + itemNom);
-      return new ModelAndView(new RedirectView(getRedirectWhenCancel(request, itemID), true));
+      Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+      if (!Boolean.TRUE.equals(isEstatal)) {
+        
+        log.info("\n\n Passa per NEW AMB ERROR");
+        
+        HtmlUtils.saveMessageError(request,
+            "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la " + itemNom);
+        return new ModelAndView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+      }
     }
  
     ModelAndView mav = super.crearEventGet(request, response);
@@ -137,7 +146,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
           "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
               + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
       
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventForm;
     }
 
@@ -148,7 +157,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
       HtmlUtils.saveMessageError(request,
           "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( " + itemID + ") retorna un element null.");
       
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventForm;
     }
     
@@ -195,11 +204,16 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     String email = getPersonaContacteEmail(item);
     if (email == null || email.trim().length() == 0) {
-      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
-      HtmlUtils.saveMessageError(request,
-          "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
-      mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID), true));
-      return eventForm;
+      
+      Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+      if (!Boolean.TRUE.equals(isEstatal)) {
+      
+        String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+        HtmlUtils.saveMessageError(request,
+            "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
+        mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+        return eventForm;
+      }
     }
 
     mav.addObject("persona_contacte", email);
@@ -219,10 +233,27 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getPersonaContacteNom(T item);
   
   
-
+  
+  
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
   public String veureEvents(HttpServletRequest request, HttpServletResponse response,
       @PathVariable String itemStrID) throws I18NException {
+    
+    Boolean isEstatal = Boolean.FALSE;
+    
+    return veureEvents(request, response, itemStrID,  isEstatal);
+    
+  }
+  
+  
+  
+  @RequestMapping(value = "/veureevents/{itemStrID}/{isEstatal}", method = RequestMethod.GET)
+  public String veureEvents(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable("itemStrID") String itemStrID,  @PathVariable("isEstatal") Boolean isEstatal) throws I18NException {
+  
+  
+
+ 
 
     Long itemID;
     if (isPublic()) {
@@ -232,6 +263,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
+    request.getSession().setAttribute(SESSION_EVENT_IS_ESTATAL, isEstatal);
     
     return "redirect:" + getContextWeb() + "/list";
 
@@ -331,7 +363,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
       HtmlUtils.saveMessageError(request,
           "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
               + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined(), true));
+      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventFilterForm;
     }
     
@@ -340,6 +372,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
+    mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
 
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud()?"Sol·licitud":"Incidència Tècnica");

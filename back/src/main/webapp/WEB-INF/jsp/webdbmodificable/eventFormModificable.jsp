@@ -10,7 +10,13 @@
 --%>
 function onChangeTipus(select) {
    if(select.value == 2) {
-       document.getElementById("event.persona").value='${persona_contacte}';
+       <c:if test="${empty persona_contacte}">
+           alert("Persona de Contacte Buida");
+           select.value = -1;
+       </c:if>
+       <c:if test="${not empty persona_contacte}">
+           document.getElementById("event.persona").value='${persona_contacte}';
+       </c:if>
    } else {
        document.getElementById("event.persona").value='${persona_tramitador}';
    }
