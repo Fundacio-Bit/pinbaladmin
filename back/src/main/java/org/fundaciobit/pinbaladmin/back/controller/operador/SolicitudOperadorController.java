@@ -148,7 +148,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   @Override
   public String getSessionAttributeFilterForm() {
-    return "SolicitudWeb" + isEstatal() + "DB_FilterForm_Operador";
+    return "SolicitudWeb" + isEstatal() + "DB_FilterForm_Operador_";
   }
 
   // protected DepartamentRefList departamentRefListPerLlistat;
