@@ -1,8 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.ByteArrayInputStream;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

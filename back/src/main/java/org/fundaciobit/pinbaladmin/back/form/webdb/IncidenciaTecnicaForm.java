@@ -20,6 +20,7 @@ public class IncidenciaTecnicaForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.incidenciaTecnica = __toClone.incidenciaTecnica;
     this.listOfValuesForEstat = __toClone.listOfValuesForEstat;
+    this.listOfValuesForTipus = __toClone.listOfValuesForTipus;
   }
   
   public IncidenciaTecnicaForm(IncidenciaTecnicaJPA incidenciaTecnica, boolean nou) {
@@ -43,6 +44,18 @@ public class IncidenciaTecnicaForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForEstat(List<StringKeyValue> listOfValuesForEstat) {
     this.listOfValuesForEstat = listOfValuesForEstat;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForTipus;
+
+  public List<StringKeyValue> getListOfValuesForTipus() {
+    return this.listOfValuesForTipus;
+  }
+
+  public void setListOfValuesForTipus(List<StringKeyValue> listOfValuesForTipus) {
+    this.listOfValuesForTipus = listOfValuesForTipus;
   }
 
 

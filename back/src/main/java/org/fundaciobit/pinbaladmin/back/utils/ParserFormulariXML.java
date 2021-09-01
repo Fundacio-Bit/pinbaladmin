@@ -2,14 +2,11 @@ package org.fundaciobit.pinbaladmin.back.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +16,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.plugins.utils.FileUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

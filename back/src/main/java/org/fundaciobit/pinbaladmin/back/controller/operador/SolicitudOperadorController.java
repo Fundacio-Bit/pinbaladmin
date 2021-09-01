@@ -33,6 +33,7 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.IncidenciaTecnicaOperadorController.VistaIncidencia;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
@@ -56,6 +57,7 @@ import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -196,9 +198,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       return "solicitud.solicitudactiva";
     }
 
-    return isestatal ? "solicitud.estatal" : "solicitud.local";
-
+    if(isestatal) {
+       return "solicitud.estatal";
+    } else {
+      return "solicitud.local";
+    }
   }
+  
 
   @Override
   public String getEntityNameCodePlural() {
@@ -1128,7 +1134,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       
       final String likeStr = "%" + af + "%";
       
-      final boolean isNumber = isNumber(af);  
+      final boolean isNumber = PinbalAdminUtils.isNumber(af);  
       
       // PInfo, Departament, Area o Entitat
       Where w = Where.OR(
@@ -1206,24 +1212,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     
     
   }
-  
-  
-  
-
-
-  private boolean isNumber(String af) {
-    
-    try {  
-      Integer.parseInt(af);  
-      return true;
-    } catch(NumberFormatException e){  
-      return false; 
-    }
-    
-  }
-  
-  
-  
   
 
   @Override

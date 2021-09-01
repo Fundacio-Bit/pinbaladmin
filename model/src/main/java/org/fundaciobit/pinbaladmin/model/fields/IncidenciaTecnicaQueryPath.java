@@ -31,6 +31,14 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.ESTAT);
   }
 
+  public StringField CREADOR() {
+    return new StringField(getQueryPath(), IncidenciaTecnicaFields.CREADOR);
+  }
+
+  public IntegerField TIPUS() {
+    return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.TIPUS);
+  }
+
   public StringField NOMENTITAT() {
     return new StringField(getQueryPath(), IncidenciaTecnicaFields.NOMENTITAT);
   }

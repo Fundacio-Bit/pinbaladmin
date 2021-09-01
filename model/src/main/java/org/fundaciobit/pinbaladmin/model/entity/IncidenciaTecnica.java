@@ -17,6 +17,12 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public int getEstat();
 	public void setEstat(int _estat_);
 
+	public java.lang.String getCreador();
+	public void setCreador(java.lang.String _creador_);
+
+	public int getTipus();
+	public void setTipus(int _tipus_);
+
 	public java.lang.String getNomEntitat();
 	public void setNomEntitat(java.lang.String _nomEntitat_);
 

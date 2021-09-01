@@ -50,6 +50,19 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
+          <td>
+          <c:out value="${incidenciaTecnica.creador}" />
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
+          <td>
+          <c:set var="tmp">${incidenciaTecnica.tipus}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForTipus[tmp]}
+          </c:if>
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
           <td>
           <c:out value="${incidenciaTecnica.nomEntitat}" />

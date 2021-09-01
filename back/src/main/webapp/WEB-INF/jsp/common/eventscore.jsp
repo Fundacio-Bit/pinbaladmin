@@ -18,6 +18,9 @@
         onclick="" title="Modificar">
             <i class="icon-pencil iconpencil"></i>Editar
     </button>
+    <c:if test="${event.noLlegit}">
+    <span style='font-size:40px;color:red;float:right;-webkit-text-fill-color:red;'>&#8859;</span>
+    </c:if>    
     <br />
 
 </c:if>
@@ -28,9 +31,9 @@
 
 <c:if test="${event.tipus == -2 }">
 
- <form id ="form_${event}" action="<%=Configuracio.getCAIDSeleniumUrl()%>/RemoteSeleniumConsulta" target="_blank">
+ <form id ="form_${event}" style="margin: 0 0 0 0" action="<%=Configuracio.getCAIDSeleniumUrl()%>/RemoteSeleniumConsulta" target="_blank">
 
-  <input type="hidden" id="email" name="email" value="gd.pinbal@fundaciobit.org"><br>
+  <input type="hidden" id="email" name="email" value="gd.pinbal@fundaciobit.org">
   <input type="hidden" id="incidencia" name="incidencia" value="${event.caidIdentificadorConsulta}">
   <input type="hidden" id="seguimiento" name="seguimiento" value="${event.caidNumeroSeguiment}">
   

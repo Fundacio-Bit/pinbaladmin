@@ -21,6 +21,7 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.jpa.EventJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
+import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.utils.Constants;
@@ -38,20 +39,16 @@ import org.springframework.web.servlet.view.RedirectView;
  *
  */
 public abstract class AbstractEventController<T> extends EventController implements Constants {
-  
-  
+
   public static final String SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID = "SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID";
-  
+
   public static final String SESSION_EVENT_IS_ESTATAL = "SESSION_EVENT_IS_ESTATAL";
-  
-  
-  
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
 
   public abstract boolean isPublic();
-  
+
   public abstract boolean isSolicitud();
 
   @Override
@@ -76,60 +73,59 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getTileList() {
-    return isPublic() ? "eventListOperadorIframePublic" : "eventListOperadorIframe"; //"eventListOperador";
+    return isPublic() ? "eventListOperadorIframePublic" : "eventListOperadorIframe"; // "eventListOperador";
   }
 
   @Override
   public String getSessionAttributeFilterForm() {
     return "EventOperador_FilterForm_" + isPublic() + "_" + isSolicitud();
   }
-  
-  
-  
+
   @RequestMapping(value = "/new", method = RequestMethod.GET)
-  public ModelAndView crearEventGet(HttpServletRequest request,
-      HttpServletResponse response) throws I18NException {
+  public ModelAndView crearEventGet(HttpServletRequest request, HttpServletResponse response)
+      throws I18NException {
 
     log.info("\n\n ENTRA A NEW");
-    
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+
+    Long itemID = (Long) request.getSession()
+        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     if (itemID == null) {
-      
-      String itemNom = isSolicitud()? "solicituID" : "incidenciaTecnicaID";
-      
+
+      String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
+
       HtmlUtils.saveMessageError(request,
-          "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
-              + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-      
-      return new ModelAndView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
-      
+          "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
+              + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+
+      return new ModelAndView(new RedirectView(
+          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+
     }
 
     T item = findItemByPrimaryKey(itemID);
-    
+
     String email = getPersonaContacteEmail(item);
     if (email == null || email.trim().length() == 0) {
-      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
-      
-      Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+
+      Boolean isEstatal = (Boolean) request.getSession()
+          .getAttribute(SESSION_EVENT_IS_ESTATAL);
       if (!Boolean.TRUE.equals(isEstatal)) {
-        
+
         log.info("\n\n Passa per NEW AMB ERROR");
-        
+
         HtmlUtils.saveMessageError(request,
-            "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la " + itemNom);
-        return new ModelAndView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+            "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la "
+                + itemNom);
+        return new ModelAndView(new RedirectView(
+            getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
       }
     }
- 
+
     ModelAndView mav = super.crearEventGet(request, response);
-  
+
     return mav;
   }
-  
-  
-  
-  
 
   @Override
   public EventForm getEventForm(EventJPA _jpa, boolean __isView, HttpServletRequest request,
@@ -137,30 +133,33 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     EventForm eventForm = super.getEventForm(_jpa, __isView, request, mav);
 
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+    Long itemID = (Long) request.getSession()
+        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     if (itemID == null) {
-      
-      String itemNom = isSolicitud()? "solicituID" : "incidenciaTecnicaID";
-      
+
+      String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
+
       HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
-              + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-      
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
+              + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+
+      mav.setView(new RedirectView(
+          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventForm;
     }
 
     T item = findItemByPrimaryKey(itemID);
-    
+
     if (item == null) {
-      String itemNom = isSolicitud()? "solicitud" : "incidenciaTecnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidenciaTecnica";
       HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( " + itemID + ") retorna un element null.");
-      
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+          "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( " + itemID
+              + ") retorna un element null.");
+
+      mav.setView(new RedirectView(
+          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventForm;
     }
-    
 
     if (isSolicitud()) {
       eventForm.addHiddenField(INCIDENCIATECNICAID);
@@ -171,13 +170,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     if (eventForm.isNou()) {
-/*
-      if (isPublic()) {
-        mav.setViewName("eventFormOperadorPublic");
-      } else {
-        mav.setViewName("eventFormOperador");
-      }
-*/
+      /*
+       * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
+       * mav.setViewName("eventFormOperador"); }
+       */
       eventForm.getEvent().setDataEvent(new Timestamp(System.currentTimeMillis()));
       if (isSolicitud()) {
         eventForm.getEvent().setSolicitudID(itemID);
@@ -199,19 +195,22 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     if (!isPublic()) {
       mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
-      request.getSession().setAttribute("persona_tramitador", request.getUserPrincipal().getName());
+      request.getSession().setAttribute("persona_tramitador",
+          request.getUserPrincipal().getName());
     }
 
     String email = getPersonaContacteEmail(item);
     if (email == null || email.trim().length() == 0) {
-      
-      Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+
+      Boolean isEstatal = (Boolean) request.getSession()
+          .getAttribute(SESSION_EVENT_IS_ESTATAL);
       if (!Boolean.TRUE.equals(isEstatal)) {
-      
-        String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+
+        String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
         HtmlUtils.saveMessageError(request,
             "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
-        mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+        mav.setView(new RedirectView(
+            getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
         return eventForm;
       }
     }
@@ -225,35 +224,27 @@ public abstract class AbstractEventController<T> extends EventController impleme
   }
 
   public abstract T findItemByPrimaryKey(Long itemID);
-  
+
   public abstract String redirectWhenSessionItemIDNotDefined();
-  
+
   public abstract String getPersonaContacteEmail(T item);
-  
+
   public abstract String getPersonaContacteNom(T item);
-  
-  
-  
-  
+
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
   public String veureEvents(HttpServletRequest request, HttpServletResponse response,
       @PathVariable String itemStrID) throws I18NException {
-    
+
     Boolean isEstatal = Boolean.FALSE;
-    
-    return veureEvents(request, response, itemStrID,  isEstatal);
-    
+
+    return veureEvents(request, response, itemStrID, isEstatal);
+
   }
-  
-  
-  
+
   @RequestMapping(value = "/veureevents/{itemStrID}/{isEstatal}", method = RequestMethod.GET)
   public String veureEvents(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable("itemStrID") String itemStrID,  @PathVariable("isEstatal") Boolean isEstatal) throws I18NException {
-  
-  
-
- 
+      @PathVariable("itemStrID") String itemStrID,
+      @PathVariable("isEstatal") Boolean isEstatal) throws I18NException {
 
     Long itemID;
     if (isPublic()) {
@@ -264,20 +255,59 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
     request.getSession().setAttribute(SESSION_EVENT_IS_ESTATAL, isEstatal);
-    
+
     return "redirect:" + getContextWeb() + "/list";
 
-
-
   }
-  
-  
+
   public abstract String getTitol(T item);
-  
-  
 
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request, EventForm eventForm) {
+
+    log.info("Entra a getRedirectWhenCreated ... Princial => " + request.getUserPrincipal() );
+    
+    
+    
+    if (request.getUserPrincipal() != null) {
+      // Accés loguejat
+      Event ev = eventForm.getEvent();
+
+      if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
+
+        String subject;
+        Long itemID;
+        if (isSolicitud()) {
+          subject = "Sol·licitud Modificada";
+          itemID = ev.getSolicitudID();
+        } else {
+          subject = "Incidència Modificada";
+          itemID = ev.getIncidenciaTecnicaID();
+        }
+        String from = "pinbal@fundaciobit.org";
+        String message = "Bones: <br/>" + "Pot revisar els canvis accedint al següent enllaç: "
+            + "<a href=\"" + getLinkPublic(itemID) + "\" >" + subject + "</a>";
+        final boolean isHtml = true;
+        try {
+          EmailUtil.postMail(subject, message, isHtml, from,
+              getPersonaContacteEmailByItemID(itemID));
+        } catch (Throwable th) {
+
+          String msg;
+          if (th instanceof I18NException) {
+            msg = I18NUtils.getMessage((I18NException) th);
+          } else {
+            msg = th.getMessage();
+          }
+
+          HtmlUtils.saveMessageError(request, "Error enviant correu: " + msg);
+
+        }
+
+      }
+
+    }
+
     return getRedirectWhenCancel(request, eventForm.getEvent().getEventID());
   }
 
@@ -309,9 +339,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     String email = getPersonaContacteEmailByItemID(itemID);
 
-    String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+    String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
     if (email == null) {
-      
+
       HtmlUtils.saveMessageError(request,
           "El contacte de la " + itemNom + "  " + itemID + " és buit.");
     } else {
@@ -324,12 +354,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
       for (String address : emails) {
         try {
 
-          String url = Configuracio.getAppUrl() + getPublicContextPath()
-              + "/veureevents/" + HibernateFileUtil.encryptFileID(itemID);
+          String url = getLinkPublic(itemID);
 
           EmailUtil.postMail("Enllaç la gestió de la seva petició de permisos", "Bones:\n"
-              + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició, així com afegir informació addicional a la seva " + itemNom + ": "
-              + url, isHtml,
+              + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició, així com afegir informació addicional a la seva "
+              + itemNom + ": " + url, isHtml,
 
               Configuracio.getAppEmail(), address);
 
@@ -345,10 +374,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
   }
-  
-  
+
+  private String getLinkPublic(Long itemID) {
+    String url = Configuracio.getAppUrl() + getPublicContextPath() + "/veureevents/"
+        + HibernateFileUtil.encryptFileID(itemID);
+    return url;
+  }
+
   public abstract String getPublicContextPath();
-  
+
   public abstract String getPersonaContacteEmailByItemID(Long itemID) throws I18NException;
 
   @Override
@@ -356,35 +390,35 @@ public abstract class AbstractEventController<T> extends EventController impleme
       HttpServletRequest request) throws I18NException {
 
     EventFilterForm eventFilterForm = super.getEventFilterForm(pagina, mav, request);
-    
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+
+    Long itemID = (Long) request.getSession()
+        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     if (itemID == null) {
-      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
       HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom + " a traves de la sessio "
-              + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-      mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
+              + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+      mav.setView(new RedirectView(
+          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       return eventFilterForm;
     }
-    
-    
+
     T item = findItemByPrimaryKey(itemID);
-    
+
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
 
     mav.addObject("ID", itemID);
-    mav.addObject("tipus", isSolicitud()?"Sol·licitud":"Incidència Tècnica");
+    mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència Tècnica");
     mav.addObject("titol", getTitol(item));
     mav.addObject("iframe", request.getContextPath() + getContextWeb() + "/list");
 
     mav.addObject("isPublic", isPublic());
-    
+
     mav.addObject("isSolicitud", isSolicitud());
 
     mav.addObject("contextweb", getContextWeb());
-  
 
     String estat = getEstat(item);
     mav.addObject("estat", estat);
@@ -406,26 +440,26 @@ public abstract class AbstractEventController<T> extends EventController impleme
     return eventFilterForm;
   }
 
-  
+  public abstract String getEstat(T item) throws I18NException;
 
-  public abstract String getEstat(T item)  throws I18NException;
-  
-  
   @Override
   public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
 
-    Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+    Long itemID = (Long) request.getSession()
+        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
     Where w;
     if (itemID == null) {
       w = EventFields.DATAEVENT.isNull();
-      String itemNom = isSolicitud()? "solicitud" : "incidència tècnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
       HtmlUtils.saveMessageError(request,
-          "S'ha cridat a veure event d'una sol·licitud però no s'ha registrat en la sessio el " + itemNom+ " emprant la sessio "
+          "S'ha cridat a veure event d'una sol·licitud però no s'ha registrat en la sessio el "
+              + itemNom + " emprant la sessio "
               + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
     } else {
-      w =  isSolicitud()? EventFields.SOLICITUDID.equal(itemID) :  EventFields.INCIDENCIATECNICAID.equal(itemID);
+      w = isSolicitud() ? EventFields.SOLICITUDID.equal(itemID)
+          : EventFields.INCIDENCIATECNICAID.equal(itemID);
     }
 
     return w;
@@ -457,9 +491,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   @Override
   public void postValidate(HttpServletRequest request, EventForm eventForm,
       BindingResult result) throws I18NException {
-    
-    
-    if(eventForm.getEvent().getTipus() == EVENT_TIPUS_TIQUET_MINHAP) {
+
+    if (eventForm.getEvent().getTipus() == EVENT_TIPUS_TIQUET_MINHAP) {
       org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace(result,
           get(CAIDIDENTIFICADORCONSULTA), "genapp.validation.required",
           new Object[] { I18NUtils.tradueix(CAIDIDENTIFICADORCONSULTA.fullName) });
@@ -467,8 +500,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
           get(CAIDNUMEROSEGUIMENT), "genapp.validation.required",
           new Object[] { I18NUtils.tradueix(CAIDNUMEROSEGUIMENT.fullName) });
     }
-    
-    
 
     boolean inclouFitxer = false;
     if (eventForm.getFitxerID() == null) {

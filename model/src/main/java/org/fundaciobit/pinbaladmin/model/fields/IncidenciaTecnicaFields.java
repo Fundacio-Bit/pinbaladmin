@@ -17,6 +17,8 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
 	 public static final StringField DESCRIPCIO = new StringField(_TABLE_MODEL, "descripcio", "descripcio");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
 	 public static final IntegerField ESTAT = new IntegerField(_TABLE_MODEL, "estat", "estat");
+	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
+	 public static final IntegerField TIPUS = new IntegerField(_TABLE_MODEL, "tipus", "tipus");
 	 public static final StringField NOMENTITAT = new StringField(_TABLE_MODEL, "nomEntitat", "nomentitat");
 	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contacteNom", "contactenom");
 	 public static final StringField CONTACTEEMAIL = new StringField(_TABLE_MODEL, "contacteEmail", "contacteemail");
@@ -31,6 +33,8 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
     DESCRIPCIO,
     DATAINICI,
     ESTAT,
+    CREADOR,
+    TIPUS,
     NOMENTITAT,
     CONTACTENOM,
     CONTACTEEMAIL,

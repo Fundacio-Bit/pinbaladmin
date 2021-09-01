@@ -108,6 +108,51 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
+        <tr id="incidenciaTecnica_creador_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CREADOR])?'incidenciaTecnica.creador':__theForm.labels[IncidenciaTecnicaFields.CREADOR]}" /> &nbsp;(*)
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CREADOR]}">
+              <i class="icon-info-sign" title="${__theForm.help[IncidenciaTecnicaFields.CREADOR]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+            <form:errors path="incidenciaTecnica.creador" cssClass="errorField alert alert-error" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="incidenciaTecnica.creador"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
+        <tr id="incidenciaTecnica_tipus_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.TIPUS])?'incidenciaTecnica.tipus':__theForm.labels[IncidenciaTecnicaFields.TIPUS]}" /> &nbsp;(*)
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.TIPUS]}">
+              <i class="icon-info-sign" title="${__theForm.help[IncidenciaTecnicaFields.TIPUS]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+          <form:errors path="incidenciaTecnica.tipus" cssClass="errorField alert alert-error" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.TIPUS)}" >
+          <form:hidden path="incidenciaTecnica.tipus"/>
+          <input type="text" readonly="true" class="input-xxlarge uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.tipus,__theForm.listOfValuesForTipus)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.TIPUS)}" >
+          <form:select id="incidenciaTecnica_tipus"  onchange="if(typeof onChangeTipus == 'function') {  onChangeTipus(this); };"  cssClass="input-xxlarge" path="incidenciaTecnica.tipus">
+            <c:forEach items="${__theForm.listOfValuesForTipus}" var="tmp">
+            <form:option value="${tmp.key}" >${tmp.value}</form:option>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
         <tr id="incidenciaTecnica_nomEntitat_rowid">
           <td>

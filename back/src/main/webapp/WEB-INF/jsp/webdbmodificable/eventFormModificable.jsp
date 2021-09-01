@@ -9,6 +9,18 @@
   public static final int EVENT_TIPUS_TIQUET_MINHAP = -2; // PRIVAT - TRAMITADOR
 --%>
 function onChangeTipus(select) {
+
+   if(select === null) {
+       //document.getElementById("event_fitxerID_rowid").style.display = "";
+       //tinymce.get("event.comentari").setContent("");
+       
+       document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "none";
+       document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "none";
+       
+       return;
+   } 
+
+
    if(select.value == 2) {
        <c:if test="${empty persona_contacte}">
            alert("Persona de Contacte Buida");

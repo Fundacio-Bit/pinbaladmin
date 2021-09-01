@@ -43,6 +43,12 @@ private static final long serialVersionUID = 979554313L;
 	@Column(name="estat",nullable = false,length = 10)
 	int estat;
 
+	@Column(name="creador",nullable = false,length = 255)
+	java.lang.String creador;
+
+	@Column(name="tipus",nullable = false,length = 10)
+	int tipus;
+
 	@Column(name="nomentitat",length = 255)
 	java.lang.String nomEntitat;
 
@@ -68,12 +74,14 @@ private static final long serialVersionUID = 979554313L;
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.estat=estat;
+    this.creador=creador;
+    this.tipus=tipus;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -82,11 +90,13 @@ private static final long serialVersionUID = 979554313L;
     this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.estat=estat;
+    this.creador=creador;
+    this.tipus=tipus;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -95,12 +105,14 @@ private static final long serialVersionUID = 979554313L;
     this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor dels valors Not Null */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String contacteNom , java.lang.String contacteEmail) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String contacteNom , java.lang.String contacteEmail) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.estat=estat;
+    this.creador=creador;
+    this.tipus=tipus;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
 }
@@ -110,6 +122,8 @@ private static final long serialVersionUID = 979554313L;
     this.setDescripcio(__bean.getDescripcio());
     this.setDataInici(__bean.getDataInici());
     this.setEstat(__bean.getEstat());
+    this.setCreador(__bean.getCreador());
+    this.setTipus(__bean.getTipus());
     this.setNomEntitat(__bean.getNomEntitat());
     this.setContacteNom(__bean.getContacteNom());
     this.setContacteEmail(__bean.getContacteEmail());
@@ -151,6 +165,20 @@ private static final long serialVersionUID = 979554313L;
 	};
 	public void setEstat(int _estat_) {
 		this.estat = _estat_;
+	};
+
+	public java.lang.String getCreador() {
+		return(creador);
+	};
+	public void setCreador(java.lang.String _creador_) {
+		this.creador = _creador_;
+	};
+
+	public int getTipus() {
+		return(tipus);
+	};
+	public void setTipus(int _tipus_) {
+		this.tipus = _tipus_;
 	};
 
 	public java.lang.String getNomEntitat() {
@@ -233,6 +261,8 @@ private static final long serialVersionUID = 979554313L;
     __tmp.setDescripcio(__bean.getDescripcio());
     __tmp.setDataInici(__bean.getDataInici());
     __tmp.setEstat(__bean.getEstat());
+    __tmp.setCreador(__bean.getCreador());
+    __tmp.setTipus(__bean.getTipus());
     __tmp.setNomEntitat(__bean.getNomEntitat());
     __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setContacteEmail(__bean.getContacteEmail());

@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;

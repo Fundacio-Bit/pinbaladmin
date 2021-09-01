@@ -27,6 +27,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.ESTAT)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.ESTAT)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.CREADOR)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.TIPUS)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.NOMENTITAT)}</th>
         </c:if>

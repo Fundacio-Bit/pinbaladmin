@@ -25,7 +25,7 @@ public abstract class AbstractEventIncidenciaTecnicaController
 
   @Override
   public String redirectWhenSessionItemIDNotDefined() {
-    return "/operador/incidenciatecnica/list";
+    return "/operador/incidencia/list";
   }
   
   

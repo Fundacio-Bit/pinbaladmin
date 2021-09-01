@@ -109,6 +109,39 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.lang.String creador;
+
+  public java.lang.String getCreador() {
+    return this.creador;
+  }
+
+  public void setCreador(java.lang.String creador) {
+    this.creador = creador;
+  }
+
+
+  private java.lang.Integer tipusDesde;
+
+  public java.lang.Integer getTipusDesde() {
+    return this.tipusDesde;
+  }
+
+  public void setTipusDesde(java.lang.Integer tipusDesde) {
+    this.tipusDesde = tipusDesde;
+  }
+
+
+  private java.lang.Integer tipusFins;
+
+  public java.lang.Integer getTipusFins() {
+    return this.tipusFins;
+  }
+
+  public void setTipusFins(java.lang.Integer tipusFins) {
+    this.tipusFins = tipusFins;
+  }
+
+
   private java.lang.String nomEntitat;
 
   public java.lang.String getNomEntitat() {
@@ -188,6 +221,9 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.dataIniciFins = __toClone.dataIniciFins;
     this.estatDesde = __toClone.estatDesde;
     this.estatFins = __toClone.estatFins;
+    this.creador = __toClone.creador;
+    this.tipusDesde = __toClone.tipusDesde;
+    this.tipusFins = __toClone.tipusFins;
     this.nomEntitat = __toClone.nomEntitat;
     this.contacteNom = __toClone.contacteNom;
     this.contacteEmail = __toClone.contacteEmail;
@@ -195,18 +231,19 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
     this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
+    this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
   }
   
   /* ========= UTILS ========== */
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { TITOL ,DESCRIPCIO ,NOMENTITAT ,CONTACTEEMAIL }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { TITOL ,DESCRIPCIO ,CREADOR ,TIPUS ,NOMENTITAT ,CONTACTEEMAIL }));
   }
 
   @Override
   public List<Field<?>> getDefaultGroupByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT ,TIPUS }));
   }
 
 
@@ -237,6 +274,18 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   public void setMapOfValuesForEstat(Map<String, String> mapOfValuesForEstat) {
     this.mapOfValuesForEstat = mapOfValuesForEstat;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForTipus;
+
+  public Map<String, String> getMapOfValuesForTipus() {
+    return this.mapOfValuesForTipus;
+  }
+
+  public void setMapOfValuesForTipus(Map<String, String> mapOfValuesForTipus) {
+    this.mapOfValuesForTipus = mapOfValuesForTipus;
   }
 
 

@@ -158,6 +158,37 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CREADOR)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.creador" var="creador" />
+              <fmt:message key="genapp.form.searchby" var="cercapercreador" >                
+                 <fmt:param value="${creador}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${creador}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercreador}" path="creador" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.TIPUS)}">
+            <%-- FILTRE NUMERO --%>      
+            <div class="input-prepend input-append" style="padding-right: 4px;padding-bottom: 4px;">
+              <span class="add-on"><fmt:message key="incidenciaTecnica.tipus" />:</span>
+
+              <span class="add-on"><fmt:message key="genapp.from" /></span>
+              
+              <form:input cssClass="input-append input-small" path="tipusDesde" />
+
+
+              <span class="add-on"><fmt:message key="genapp.to" /></span>
+
+              <form:input cssClass="input-append input-small search-query" path="tipusFins" />
+
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.NOMENTITAT)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">

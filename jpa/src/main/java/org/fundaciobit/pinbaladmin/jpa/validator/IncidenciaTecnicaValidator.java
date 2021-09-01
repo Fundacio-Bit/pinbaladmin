@@ -44,6 +44,14 @@ public class IncidenciaTecnicaValidator<T> implements IncidenciaTecnicaFields {
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTAT)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,CREADOR, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)));
+
+    __vr.rejectIfEmptyOrWhitespace(__target__,TIPUS, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
+
     __vr.rejectIfEmptyOrWhitespace(__target__,CONTACTENOM, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONTACTENOM)));
@@ -66,6 +74,14 @@ public class IncidenciaTecnicaValidator<T> implements IncidenciaTecnicaFields {
       if (__descripcio!= null && __descripcio.length() > 4000) {
         __vr.rejectValue(DESCRIPCIO, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(4000)));
+      }
+    }
+    
+    if (__vr.getFieldErrorCount(CREADOR) == 0) {
+      java.lang.String __creador = (java.lang.String)__vr.getFieldValue(__target__,CREADOR);
+      if (__creador!= null && __creador.length() > 255) {
+        __vr.rejectValue(CREADOR, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
     
