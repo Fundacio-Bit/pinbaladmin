@@ -174,8 +174,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       incidenciaTecnicaFilterForm.getFilterByFields().add(CREADOR);
 
       if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
-        incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_TECNICA_OBERTA);
-        incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_TECNICA_OBERTA);
+        incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_OBERTA);
+        incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_PENDENT_DE_TERCER);
       }
       incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
 
@@ -230,7 +230,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
       incidenciaTecnicaForm.getIncidenciaTecnica()
           .setDataInici(new Timestamp(System.currentTimeMillis()));
-      incidenciaTecnicaForm.getIncidenciaTecnica().setEstat(ESTAT_INCIDENCIA_TECNICA_OBERTA);
+      incidenciaTecnicaForm.getIncidenciaTecnica().setEstat(ESTAT_INCIDENCIA_OBERTA);
 
       incidenciaTecnicaForm.addReadOnlyField(DATAINICI);
       incidenciaTecnicaForm.addReadOnlyField(ESTAT);
@@ -344,10 +344,10 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
   public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
       ModelAndView mav, Where where) throws I18NException {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_TECNICA_OBERTA), "Oberta"));
-    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_TECNICA_PENDENT_DE_TERCER),
+    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_OBERTA), "Oberta"));
+    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_PENDENT_DE_TERCER),
         "Pendent de Tercer"));
-    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_TECNICA_TANCADA), "Tancada"));
+    __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_TANCADA), "Tancada"));
     return __tmp;
   }
 
@@ -376,7 +376,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
       int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
       java.lang.String _persona_ = request.getUserPrincipal().getName();
-      java.lang.String _comentari_ = "S'ha creat la Incidència Tècnica";
+      java.lang.String _comentari_ = "S'ha creat la Incidència";
       java.lang.Long _fitxerID_ = null;
       boolean _noLlegit_ = false;
       eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_,

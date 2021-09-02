@@ -65,11 +65,11 @@ public abstract class AbstractEventIncidenciaTecnicaController
   public String getEstat(IncidenciaTecnica item) throws I18NException {
 
     switch (item.getEstat()) {
-    case ESTAT_INCIDENCIA_TECNICA_OBERTA:
+    case ESTAT_INCIDENCIA_OBERTA:
       return "Oberta";
-    case ESTAT_INCIDENCIA_TECNICA_TANCADA:
+    case ESTAT_INCIDENCIA_TANCADA:
       return "Tancada";
-    case ESTAT_INCIDENCIA_TECNICA_PENDENT_DE_TERCER:
+    case ESTAT_INCIDENCIA_PENDENT_DE_TERCER:
       return "Pendent de Tercer";
 
     }

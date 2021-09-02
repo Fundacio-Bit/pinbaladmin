@@ -51,9 +51,9 @@ public interface Constants {
   /**
    * Estat de Incidències Tecniques
    */  
-  public static final int ESTAT_INCIDENCIA_TECNICA_OBERTA = 0;
-  public static final int ESTAT_INCIDENCIA_TECNICA_PENDENT_DE_TERCER = 1;
-  public static final int ESTAT_INCIDENCIA_TECNICA_TANCADA = 2;
+  public static final int ESTAT_INCIDENCIA_OBERTA = 0;
+  public static final int ESTAT_INCIDENCIA_PENDENT_DE_TERCER = 1;
+  public static final int ESTAT_INCIDENCIA_TANCADA = 2;
 
   
   

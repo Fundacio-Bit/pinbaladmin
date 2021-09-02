@@ -106,7 +106,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     String email = getPersonaContacteEmail(item);
     if (email == null || email.trim().length() == 0) {
-      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidència";
 
       Boolean isEstatal = (Boolean) request.getSession()
           .getAttribute(SESSION_EVENT_IS_ESTATAL);
@@ -206,7 +206,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
           .getAttribute(SESSION_EVENT_IS_ESTATAL);
       if (!Boolean.TRUE.equals(isEstatal)) {
 
-        String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+        String itemNom = isSolicitud() ? "solicitud" : "incidència";
         HtmlUtils.saveMessageError(request,
             "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
         mav.setView(new RedirectView(
@@ -339,7 +339,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     String email = getPersonaContacteEmailByItemID(itemID);
 
-    String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+    String itemNom = isSolicitud() ? "solicitud" : "incidència";
     if (email == null) {
 
       HtmlUtils.saveMessageError(request,
@@ -394,7 +394,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     Long itemID = (Long) request.getSession()
         .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     if (itemID == null) {
-      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidència";
       HtmlUtils.saveMessageError(request,
           "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
               + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
@@ -410,7 +410,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
 
     mav.addObject("ID", itemID);
-    mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència Tècnica");
+    mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
     mav.addObject("titol", getTitol(item));
     mav.addObject("iframe", request.getContextPath() + getContextWeb() + "/list");
 
@@ -451,7 +451,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     Where w;
     if (itemID == null) {
       w = EventFields.DATAEVENT.isNull();
-      String itemNom = isSolicitud() ? "solicitud" : "incidència tècnica";
+      String itemNom = isSolicitud() ? "solicitud" : "incidència";
       HtmlUtils.saveMessageError(request,
           "S'ha cridat a veure event d'una sol·licitud però no s'ha registrat en la sessio el "
               + itemNom + " emprant la sessio "
