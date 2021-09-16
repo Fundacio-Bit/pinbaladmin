@@ -95,7 +95,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
       HtmlUtils.saveMessageError(request,
           "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
-              + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+              + " a través de la sessié " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
       return new ModelAndView(new RedirectView(
           redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));

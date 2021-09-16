@@ -131,9 +131,12 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
         request);
     
     if (solicitudFilterForm.isNou()) {
+      
+      solicitudFilterForm.getHiddenFields().remove(DEPARTAMENTID);
+      
       if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
-        solicitudFilterForm.setEstatIDDesde(-1L);
-        solicitudFilterForm.setEstatIDFins(50L);
+        //solicitudFilterForm.setEstatIDDesde(-1L);
+        //solicitudFilterForm.setEstatIDFins(50L);
       } else {
         
         if (getVistaIncidencia() == VistaIncidencia.NOLLEGITSMEUS) {
@@ -141,13 +144,9 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
         }
         solicitudFilterForm.setAddButtonVisible(false);
       }
-     
-      
-      
       
     }
-   
-    
+
     return solicitudFilterForm;
     
   }
