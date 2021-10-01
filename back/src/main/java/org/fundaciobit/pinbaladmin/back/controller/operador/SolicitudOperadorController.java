@@ -58,6 +58,7 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
+import org.fundaciobit.pinbaladmin.utils.TipusProcediments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -76,20 +77,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   public static final Field<?> AREA_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
       .AREAID();
 
-
   public static final int ENTITAT_COLUMN = 1;
-  
+
   public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
       .ENTITAT().ENTITATID();
 
-
-  
-  
   public static final int FILTRE_AVANZAT_COLUMN = -1;
-  
-  public static final StringField FILTRE_AVANZAT_FIELD = CODIDESCRIPTIU; //new StringField("filtreavtable", "filtreavjava", "filtreavsql");
-  
-  
+
+  public static final StringField FILTRE_AVANZAT_FIELD = CODIDESCRIPTIU; // new
+                                                                         // StringField("filtreavtable",
+                                                                         // "filtreavjava",
+                                                                         // "filtreavsql");
 
   public static final CustomField BALEARS;
 
@@ -118,7 +116,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DepartamentLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.DepartamentLocal departamentEjb;
-  
+
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
 
@@ -131,8 +129,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   // true => Estatal
   // false => Local
   public abstract Boolean isEstatal();
-  
-  
+
   // NULL => Els dos
   // true => Estatal
   // false => Local
@@ -198,13 +195,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       return "solicitud.solicitudactiva";
     }
 
-    if(isestatal) {
-       return "solicitud.estatal";
+    if (isestatal) {
+      return "solicitud.estatal";
     } else {
       return "solicitud.local";
     }
   }
-  
 
   @Override
   public String getEntityNameCodePlural() {
@@ -215,7 +211,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   public void delete(HttpServletRequest request, Solicitud solicitud)
       throws Exception, I18NException {
     Set<Long> deleteFiles = solicitudLogicaEjb.deleteFull(solicitud.getSolicitudID(), true);
-    
+
     // Si tot ha anat be llavors borram els fitxers
     if (deleteFiles.size() != 0) {
       LogicUtils.deleteFiles(deleteFiles, fitxerEjb);
@@ -242,14 +238,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     if (isestatal == null) {
       // NO SABEM SI ES ESTATAL O LOCAL
-      //log.info("XYZ ZZZ __isView = " + __isView);
+      // log.info("XYZ ZZZ __isView = " + __isView);
       if (__isView) {
 
-        //log.info("XYZ ZZZ _jpa.getDepartamentID() = " + _jpa.getDepartamentID());
+        // log.info("XYZ ZZZ _jpa.getDepartamentID() = " +
+        // _jpa.getDepartamentID());
 
         if (_jpa.getDepartamentID() == null) {
           // Es Estatal
-          
+
           amagarCampsEstatal(solicitudForm);
         } else {
           // Es Local
@@ -274,8 +271,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         // solicitudForm.addHiddenField(ENTITATLOCALID);
         amagarCampsEstatal(solicitudForm);
-
-
 
       } else {
         solicitudForm.addHiddenField(ENTITATESTATAL);
@@ -306,7 +301,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     return solicitudForm;
   }
 
-
   private void amagarCampsEstatal(SolicitudForm solicitudForm) {
     solicitudForm.addHiddenField(DEPARTAMENTID);
     solicitudForm.addHiddenField(PINFO);
@@ -314,15 +308,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
 
     solicitudForm.addHiddenField(SolicitudFields.TICKETNUMEROSEGUIMENT);
-    
+
     solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCEMAIL);
     solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCNOM);
-    
-    
+
     solicitudForm.addHiddenField(SolicitudFields.DENOMINACIO);
     solicitudForm.addHiddenField(SolicitudFields.DIR3);
     solicitudForm.addHiddenField(SolicitudFields.NIF);
-    
+
     solicitudForm.addHiddenField(SolicitudFields.CODIDESCRIPTIU);
   }
 
@@ -330,11 +323,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   public void postValidate(HttpServletRequest request, SolicitudForm solicitudForm,
       BindingResult result) throws I18NException {
 
-    //log.info(" XYZ ZZZ postValidate");
+    // log.info(" XYZ ZZZ postValidate");
 
     Boolean isestatal = isEstatal();
 
-    //log.info(" XYZ ZZZ postValidate => isestatal = " + isestatal);
+    // log.info(" XYZ ZZZ postValidate => isestatal = " + isestatal);
 
     if (isestatal != null) {
 
@@ -431,7 +424,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       hiddenFields.remove(SolicitudFields.ESTATID);
       hiddenFields.remove(SolicitudFields.DATAINICI);
 
-      
       // hiddenFields.remove(SolicitudFields.AREAID);
 
       if (isestatal == null) {
@@ -461,9 +453,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
           // filterList.remove(ENTITATLOCALID);
           filterList.remove(PINFO);
           // groupList.remove(ENTITATLOCALID);
-               
-          
-          
+
         } else {
           // hiddenFields.remove(ENTITATLOCALID);
           // hiddenFields.remove(DEPARTAMENTID);
@@ -477,34 +467,27 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         solicitudFilterForm.setFilterByFields(filterList);
         solicitudFilterForm.setGroupByFields(groupList);
-       
 
       }
-      
-      
-      
+
       if (showAdvancedFilter()) {
-        
 
         AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
         adfield4.setCodeName("solicitud.filtreavanzat");
         adfield4.setPosition(FILTRE_AVANZAT_COLUMN);
-        
+
         adfield4.setEscapeXml(false);
         adfield4.setSearchBy(FILTRE_AVANZAT_FIELD);
 
         solicitudFilterForm.addAdditionalField(adfield4);
 
         hiddenFields.add(FILTRE_AVANZAT_FIELD);
-        
-        
-        //solicitudFilterForm.getFilterByFields().add(FILTRE_AVANZAT_FIELD);
+
+        // solicitudFilterForm.getFilterByFields().add(FILTRE_AVANZAT_FIELD);
 
       }
-      
-      
-      //solicitudFilterForm.setAddButtonVisible(false);
-      
+
+      // solicitudFilterForm.setAddButtonVisible(false);
 
       solicitudFilterForm.setHiddenFields(hiddenFields);
 
@@ -531,12 +514,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         solicitudFilterForm.getGroupByFields().add(BALEARS);
       }
-      
-      
+
       solicitudFilterForm.setAttachedAdditionalJspCode(true);
-      
-      //solicitudFilterForm.setActionsRenderer(2);
-      
+
+      // solicitudFilterForm.setActionsRenderer(2);
 
       solicitudFilterForm.addAdditionalButtonForEachItem(
           new AdditionalButton("icon-th-list", "servei.servei.plural",
@@ -549,8 +530,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
           "exportacio.soli_servei", getContextWeb() + "/fullexport", "btn-info"));
 
       solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn",
-          "conversa", /*"javascript:window.open('" +  request.getContextPath() +*/ 
-          EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}/" + isEstatal() /*','_blank');"*/,
+          "conversa", /*
+                       * "javascript:window.open('" + request.getContextPath() +
+                       */
+          EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}/"
+              + isEstatal() /* ','_blank');" */,
           "btn-success"));
 
       solicitudFilterForm.setVisibleMultipleSelection(true);
@@ -599,11 +583,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     return solicitudFilterForm;
   }
-  
-  
-  
-
-  
 
   @RequestMapping(value = "/fullexport", method = RequestMethod.GET)
   public ModelAndView exportFull(HttpServletRequest request, HttpServletResponse response,
@@ -636,8 +615,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      * 
      */
   }
-
-  
 
   @Override
   public void postList(HttpServletRequest request, ModelAndView mav,
@@ -817,18 +794,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     mav.addObject("codiDescriptiuSolicitud", codiDescriptiuSolicitud);
 
     /*
-    {
-      for (Solicitud soli : list) {
-        if (soli.getPersonaContacteEmail() != null) {
-          filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
-              new AdditionalButton(
-                  "icon-envelope", "enviar enllaç conversa", 
-                       getContextWeb() + "/enviarcorreu/" + soli.getSolicitudID(),
-                  "btn-danger"));
-        }
-      }
-    }
-    */
+     * { for (Solicitud soli : list) { if (soli.getPersonaContacteEmail() !=
+     * null) { filterForm.addAdditionalButtonByPK(soli.getSolicitudID(), new
+     * AdditionalButton( "icon-envelope", "enviar enllaç conversa",
+     * getContextWeb() + "/enviarcorreu/" + soli.getSolicitudID(),
+     * "btn-danger")); } } }
+     */
 
   }
 
@@ -855,10 +826,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         request, mav, list, groupItems);
 
     /*
-    log.info("SolicitudOperadorController::GroupBy = " + filterForm.getGroupBy());
-    log.info(
-        "SolicitudOperadorController::GroupByValue = ]" + filterForm.getGroupValue() + "[");
-   */
+     * log.info("SolicitudOperadorController::GroupBy = " +
+     * filterForm.getGroupBy()); log.info(
+     * "SolicitudOperadorController::GroupByValue = ]" +
+     * filterForm.getGroupValue() + "[");
+     */
     // GROUP BY BALEARS
 
     final boolean selected = BALEARS.javaName.equals(filterForm.getGroupBy());
@@ -987,9 +959,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     List<StringKeyValue> listSKV = departamentEjb.executeQuery(smkv, null);
 
-//    for (StringKeyValue skv : listSKV) {
-//      log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());
-//    }
+    // for (StringKeyValue skv : listSKV) {
+    // log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());
+    // }
 
     return listSKV;
 
@@ -1104,115 +1076,104 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         tipusEstatalLocal = SolicitudFields.DEPARTAMENTID.isNotNull();
       }
     }
-    
-    
+
     // FILTRE AVANÇAT PER CERCA
-    
 
     return Where.AND(getAdditionalConditionFine(request), wBalears,
-        super.getAdditionalCondition(request), tipusEstatalLocal, getAdditionaConditionAdvancedFilter(request));
+        super.getAdditionalCondition(request), tipusEstatalLocal,
+        getAdditionaConditionAdvancedFilter(request));
 
   }
-  
-  
-  
-  
-  
-  
-  
-  protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
-    
-    
+
+  protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request)
+      throws I18NException {
+
     String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
     log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
-    
     if (af == null || af.trim().length() == 0) {
       log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
       return null;
     } else {
-      
+
       final String likeStr = "%" + af + "%";
-      
-      final boolean isNumber = PinbalAdminUtils.isNumber(af);  
-      
+
+      final boolean isNumber = PinbalAdminUtils.isNumber(af);
+
       // PInfo, Departament, Area o Entitat
-      Where w = Where.OR(
-          PINFO.like(likeStr),
+      Where w = Where.OR(PINFO.like(likeStr),
           new SolicitudQueryPath().DEPARTAMENT().NOM().like(likeStr),
-          new SolicitudQueryPath().DEPARTAMENT().AREA().NOM().like(likeStr),          
-          new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().NOM().like(likeStr) );
-      
-      
+          new SolicitudQueryPath().DEPARTAMENT().AREA().NOM().like(likeStr),
+          new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().NOM().like(likeStr));
+
       // identificador de consulta o numero seguiment de la solicitud
       if (isNumber) {
-        w = Where.OR(w, SolicitudFields.TICKETASSOCIAT.like(likeStr), SolicitudFields.TICKETNUMEROSEGUIMENT.like(likeStr));
-      }
-      
-      // Procediment: codi i nom
-      w = Where.OR(w, SolicitudFields.PROCEDIMENTNOM.like(likeStr), SolicitudFields.PROCEDIMENTCODI.like(likeStr));
-      
-      // Comentari dels Events
-      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.COMENTARI.like(likeStr)));      
-      w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery1));
-      
-      // identificador de consulta o numero seguiment dels events
-      if (isNumber) {
-        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));      
-        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID, Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
-        w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a), SolicitudFields.SOLICITUDID.in(subquery2b) );
+        w = Where.OR(w, SolicitudFields.TICKETASSOCIAT.like(likeStr),
+            SolicitudFields.TICKETNUMEROSEGUIMENT.like(likeStr));
       }
 
-      
+      // Procediment: codi i nom
+      w = Where.OR(w, SolicitudFields.PROCEDIMENTNOM.like(likeStr),
+          SolicitudFields.PROCEDIMENTCODI.like(likeStr));
+
+      // Comentari dels Events
+      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
+          Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
+      w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery1));
+
+      // identificador de consulta o numero seguiment dels events
+      if (isNumber) {
+        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
+            Where.AND(EventFields.SOLICITUDID.isNotNull(),
+                EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));
+        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
+            Where.AND(EventFields.SOLICITUDID.isNotNull(),
+                EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
+        w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a),
+            SolicitudFields.SOLICITUDID.in(subquery2b));
+      }
+
       log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
-      
+
       return w;
     }
-    
-    
+
   }
-  
-  
+
   @Override
   protected List<Solicitud> processarLlistat(ITableManager<Solicitud, Long> ejb,
-      BaseFilterForm filterForm, int pagina,
-      Where whereAdditionalCondition, ModelAndView mav) throws I18NException {
+      BaseFilterForm filterForm, int pagina, Where whereAdditionalCondition, ModelAndView mav)
+      throws I18NException {
     if (filterForm == null) {
       throw new NullPointerException("FilterForm mai pot ser NULL !!!!");
     }
-   
-    // Eliminam temporalment el filtre especial, per a que no doni problemes internament.
-    
-    AdditionalField<?,?> filtreAvanzatField = null;
+
+    // Eliminam temporalment el filtre especial, per a que no doni problemes
+    // internament.
+
+    AdditionalField<?, ?> filtreAvanzatField = null;
     if (showAdvancedFilter()) {
       filtreAvanzatField = filterForm.getAdditionalFields().remove(FILTRE_AVANZAT_COLUMN);
     }
-    
-    
-    List<Solicitud> list = super.processarLlistat(ejb, filterForm, pagina, whereAdditionalCondition, mav);
-    
-    
+
+    List<Solicitud> list = super.processarLlistat(ejb, filterForm, pagina,
+        whereAdditionalCondition, mav);
+
     if (filtreAvanzatField != null) {
-      
+
       filterForm.getAdditionalFields().put(FILTRE_AVANZAT_COLUMN, filtreAvanzatField);
-      
-      
+
       String valorFA = filtreAvanzatField.getSearchByValue();
-      
-      
+
       if (valorFA != null && valorFA.trim().length() != 0) {
         filterForm.setVisibleFilterBy(true);
       }
-      
-      
+
     }
-    
-    
+
     return list;
-    
-    
+
   }
-  
 
   @Override
   public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
@@ -1232,37 +1193,56 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     return super.getReferenceListForEstatID(request, mav, solicitudForm, where);
 
   }
-  
-  
-  
-  
+
   @Override
   public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
-      ModelAndView mav, Where where)  throws I18NException {
-   List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-   __tmp.add(new StringKeyValue("Aduanero", "Aduanero"));
-   __tmp.add(new StringKeyValue("Afiliación y cotización a la Seguridad Social", "Afiliación y cotización a la Seguridad Social"));
-   __tmp.add(new StringKeyValue("Autorizaciones, licencias y homologaciones", "Autorizaciones, licencias y homologaciones"));
-   __tmp.add(new StringKeyValue("Ayudas, Becas y Subvenciones", "Ayudas, Becas y Subvenciones"));
-   __tmp.add(new StringKeyValue("Certificados", "Certificados"));
-   __tmp.add(new StringKeyValue("Contratación pública", "Contratación pública"));
-   __tmp.add(new StringKeyValue("Convenios de colaboración y comunicaciones administrativas", "Convenios de colaboración y comunicaciones administrativas"));
-   __tmp.add(new StringKeyValue("Gestión Económica y Patrimonial", "Gestión Económica y Patrimonial"));
-   __tmp.add(new StringKeyValue("Declaraciones y comunicaciones de los interesados", "Declaraciones y comunicaciones de los interesados"));
-   __tmp.add(new StringKeyValue("Inspector", "Inspector"));
-   __tmp.add(new StringKeyValue("Premios", "Premios"));
-   __tmp.add(new StringKeyValue("Prestaciones", "Prestaciones"));
-   __tmp.add(new StringKeyValue("Recursos Humanos", "Recursos Humanos"));
-   __tmp.add(new StringKeyValue("Registros y Censos", "Registros y Censos"));
-   __tmp.add(new StringKeyValue("Responsabilidad patrimonial y otras solicitudes de indemnización", "Responsabilidad patrimonial y otras solicitudes de indemnización"));
-   __tmp.add(new StringKeyValue("Revisión de Actos administrativos y Recursos", "Revisión de Actos administrativos y Recursos"));
-   __tmp.add(new StringKeyValue("Sancionador", "Sancionador"));
-   __tmp.add(new StringKeyValue("Sugerencias, Quejasy Denuncias", "Sugerencias, Quejasy Denuncias"));
-   __tmp.add(new StringKeyValue("Tributario", "Tributario"));
-   return __tmp;
- }
-  
-  
+      ModelAndView mav, Where where) throws I18NException {
+    /*
+     * List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+     * __tmp.add(new StringKeyValue("Aduanero", "Aduanero")); __tmp.add(new
+     * StringKeyValue("Afiliación y cotización a la Seguridad Social",
+     * "Afiliación y cotización a la Seguridad Social")); __tmp.add(new
+     * StringKeyValue("Autorizaciones, licencias y homologaciones",
+     * "Autorizaciones, licencias y homologaciones")); __tmp.add(new
+     * StringKeyValue("Ayudas, Becas y Subvenciones",
+     * "Ayudas, Becas y Subvenciones")); __tmp.add(new
+     * StringKeyValue("Certificados", "Certificados")); __tmp.add(new
+     * StringKeyValue("Contratación pública", "Contratación pública"));
+     * __tmp.add(new
+     * StringKeyValue("Convenios de colaboración y comunicaciones administrativas"
+     * , "Convenios de colaboración y comunicaciones administrativas"));
+     * __tmp.add(new StringKeyValue("Gestión Económica y Patrimonial",
+     * "Gestión Económica y Patrimonial")); __tmp.add(new
+     * StringKeyValue("Declaraciones y comunicaciones de los interesados",
+     * "Declaraciones y comunicaciones de los interesados")); __tmp.add(new
+     * StringKeyValue("Inspector", "Inspector")); __tmp.add(new
+     * StringKeyValue("Premios", "Premios")); __tmp.add(new
+     * StringKeyValue("Prestaciones", "Prestaciones")); __tmp.add(new
+     * StringKeyValue("Recursos Humanos", "Recursos Humanos")); __tmp.add(new
+     * StringKeyValue("Registros y Censos", "Registros y Censos"));
+     * __tmp.add(new
+     * StringKeyValue("Responsabilidad patrimonial y otras solicitudes de indemnización"
+     * , "Responsabilidad patrimonial y otras solicitudes de indemnización"));
+     * __tmp.add(new
+     * StringKeyValue("Revisión de Actos administrativos y Recursos",
+     * "Revisión de Actos administrativos y Recursos")); __tmp.add(new
+     * StringKeyValue("Sancionador", "Sancionador")); __tmp.add(new
+     * StringKeyValue("Sugerencias, Quejasy Denuncias",
+     * "Sugerencias, Quejasy Denuncias")); __tmp.add(new
+     * StringKeyValue("Tributario", "Tributario"));
+     */
+
+    Set<String> tp = TipusProcediments.getAllTipusDeProcediment();
+
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+    for (String s : tp) {
+
+      __tmp.add(new StringKeyValue(s, s));
+    }
+
+    return __tmp;
+  }
 
   /*
    * 

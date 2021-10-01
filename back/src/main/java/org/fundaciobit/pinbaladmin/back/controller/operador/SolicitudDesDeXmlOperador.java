@@ -21,6 +21,7 @@ import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
+import org.fundaciobit.pinbaladmin.utils.TipusProcediments;
 import org.fundaciobit.plugins.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -129,15 +130,13 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         } else {
           xmlData =FileSystemManager.getFileContent(solicitudForm.getSolicitud().getSolicitudXmlID());
         }
-        
-       
-        
+
         String xml = new String(xmlData, "UTF-8");
 
         Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
 
-        // prop.store(new FileOutputStream("formulario.properties"),
-        // "PINBAL_TRAMIT");
+        // XYZ ZZZ
+        //prop.store(new java.io.FileOutputStream("d://tmp//formulario.properties"), "PINBAL_TRAMIT");
 
         SolicitudJPA solicitud = solicitudForm.getSolicitud();
 
@@ -184,8 +183,19 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         solicitud.setDenominacio(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
         solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
         solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
-        solicitud.setProcedimentTipus(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO"));
-
+        
+        // XYZ ZZZ
+        String tp =  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
+        
+        //log.info("\n\n XXXXXXXXXXXXXXXXX\n ORIGINAL => " +tp  + "\nZZZZZZZZZZZZZZZZZZ\n\n" );
+        
+        tp = TipusProcediments.getTipusProcedimentByLabel(tp);
+        
+        if (tp == null) {
+          HtmlUtils.saveMessageError(request, "No he trobat el Tipus de Procediment per l'etiqueta ]" + tp + "[");
+        } else {
+          solicitud.setProcedimentTipus(tp);
+        }
 
         {
 //        StringWriter writer = new StringWriter();
