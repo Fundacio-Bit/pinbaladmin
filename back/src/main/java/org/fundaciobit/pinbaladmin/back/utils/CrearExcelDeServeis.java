@@ -169,7 +169,9 @@ public class CrearExcelDeServeis {
           { soli.getDenominacio(), "'Entitat Nom'", primeraFila, "0" },
           { soli.getNif(), "'Entitat NIF'", primeraFila, "1" },
           { soli.getDir3(), "'Entitat DIR3'", primeraFila, "2" },          
-          { "52e7bcd3aaf2d7d8ff0ece2c50a601ed", "'Numero Serie'", primeraFila, "3" }
+          { "52e7bcd3aaf2d7d8ff0ece2c50a601ed", "'Numero Serie'", primeraFila, "3" },
+          { "SCSP", "Tecnologia", primeraFila, "4" },
+          { "3.5.0", "Versio", primeraFila, "5" }
           };
 
       for (String[] valors : capzalera) {
