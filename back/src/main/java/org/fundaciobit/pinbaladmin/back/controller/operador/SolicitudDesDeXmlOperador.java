@@ -149,7 +149,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         {
           java.lang.String nomProcediment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
           if (nomProcediment != null && nomProcediment.length() > 250) {
-            nomProcediment = nomProcediment.substring(0,250);
+            nomProcediment = nomProcediment.substring(0,249);
           }
           solicitud.setProcedimentNom(nomProcediment);
         }
@@ -184,10 +184,11 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
         solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
         
-        // XYZ ZZZ
+        
         String tp =  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
         
-        //log.info("\n\n XXXXXXXXXXXXXXXXX\n ORIGINAL => " +tp  + "\nZZZZZZZZZZZZZZZZZZ\n\n" );
+        // XYZ ZZZ
+        log.info("\n\n XXXXXXXXXXXXXXXXX\n ORIGINAL => ]" + tp  + "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
         
         tp = TipusProcediments.getTipusProcedimentByLabel(tp);
         

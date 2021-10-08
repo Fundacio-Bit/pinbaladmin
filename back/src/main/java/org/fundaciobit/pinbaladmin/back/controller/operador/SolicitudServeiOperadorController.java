@@ -271,7 +271,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
     if (soli == null) {
       throw new I18NException("error",
-          "getAdditionalCondition() :: El valor per soli val null");
+          "getAdditionalCondition() :: El valor de solicitudID es null");
     }
 
     log.info("getAdditionalCondition(); => SOLI = " + soli);

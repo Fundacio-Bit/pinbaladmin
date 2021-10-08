@@ -13,65 +13,84 @@ import java.util.Set;
 public class TipusProcediments {
 
   public static class TipusProcediment {
-    final String castella;
-    final String catala;
+    
+    
+    public final long id;
+    public final String castella;
+    public final String catala;
 
     /**
      * @param castella
      * @param catala
      */
-    public TipusProcediment(String castella, String catala) {
+    public TipusProcediment(long id, String castella, String catala) {
       super();
+      this.id = id;
       this.castella = castella;
       this.catala = catala;
     }
 
   }
+  
+  private static final List<TipusProcediment> tipusProcediments = new java.util.ArrayList<TipusProcediment>();
 
-  public static Map<String, TipusProcediment> castellaMap = new HashMap<String, TipusProcediment>();
+  private static final Map<String, TipusProcediment> castellaMap = new HashMap<String, TipusProcediment>();
 
-  public static Map<String, TipusProcediment> catalaMap = new HashMap<String, TipusProcediment>();
+  private static final Map<String, TipusProcediment> catalaMap = new HashMap<String, TipusProcediment>();
 
   static {
 
-    List<TipusProcediment> __tmp = new java.util.ArrayList<TipusProcediment>();
-    __tmp.add(new TipusProcediment("Aduanero", "Duaner"));
-    __tmp.add(new TipusProcediment("Afiliación y cotización a la Seguridad Social",
+    
+    tipusProcediments.add(new TipusProcediment(1, "Aduanero", "Duaner"));
+    tipusProcediments.add(new TipusProcediment(2, "Afiliación y cotización a la Seguridad Social",
         " Afiliació i cotització a la Seguretat Social"));
-    __tmp.add(new TipusProcediment("Autorizaciones, licencias y homologaciones",
+    tipusProcediments.add(new TipusProcediment(3, "Autorizaciones, licencias y homologaciones",
         "Autoritzacions, llicències i homologacions"));
-    __tmp.add(
-        new TipusProcediment("Ayudas, Becas y Subvenciones", "Ajudes, Beques i Subvencions"));
-    __tmp.add(new TipusProcediment("Certificados", "Certificats"));
-    __tmp.add(new TipusProcediment("Contratación pública", "Contractació pública"));
-    __tmp
-        .add(new TipusProcediment("Convenios de colaboración y comunicaciones administrativas",
+    tipusProcediments.add(
+        new TipusProcediment(4, "Ayudas, Becas y Subvenciones", "Ajudes, Beques i Subvencions"));
+    tipusProcediments.add(new TipusProcediment(5, "Certificados", "Certificats"));
+    tipusProcediments.add(new TipusProcediment(6, "Contratación pública", "Contractació pública"));
+    tipusProcediments
+        .add(new TipusProcediment(7, "Convenios de colaboración y comunicaciones administrativas",
             "Convenis de col·laboració i comunicacions administratives"));
-    __tmp.add(new TipusProcediment("Gestión Económica y Patrimonial",
+    tipusProcediments.add(new TipusProcediment(8, "Gestión Económica y Patrimonial",
         "Gestió Econòmica i Patrimonial"));
-    __tmp.add(new TipusProcediment("Declaraciones y comunicaciones de los interesados",
+    tipusProcediments.add(new TipusProcediment(9, "Declaraciones y comunicaciones de los interesados",
         "Declaracions i comunicacions dels interessats"));
-    __tmp.add(new TipusProcediment("Inspector", "Inspector"));
-    __tmp.add(new TipusProcediment("Premios", "Premis"));
-    __tmp.add(new TipusProcediment("Prestaciones", "Prestacions"));
-    __tmp.add(new TipusProcediment("Recursos Humanos", "Recursos Humans"));
-    __tmp.add(new TipusProcediment("Registros y Censos", "Registres i Censos"));
-    __tmp.add(new TipusProcediment(
+    tipusProcediments.add(new TipusProcediment(10, "Inspector", "Inspector"));
+    tipusProcediments.add(new TipusProcediment(11, "Premios", "Premis"));
+    tipusProcediments.add(new TipusProcediment(12, "Prestaciones", "Prestacions"));
+    tipusProcediments.add(new TipusProcediment(13, "Recursos Humanos", "Recursos Humans"));
+    tipusProcediments.add(new TipusProcediment(14, "Registros y Censos", "Registres i Censos"));
+    tipusProcediments.add(new TipusProcediment(15, 
         "Responsabilidad patrimonial y otras solicitudes de indemnización",
         "Responsabilitat patrimonial i altres sol·licituds d'indemnització"));
-    __tmp.add(new TipusProcediment("Revisión de Actos administrativos y Recursos",
+    tipusProcediments.add(new TipusProcediment(16, "Revisión de Actos administrativos y Recursos",
         "Revisió d'Actes administratius i Recursos"));
-    __tmp.add(new TipusProcediment("Sancionador", "Sancionador"));
-    __tmp.add(new TipusProcediment("Sugerencias, Quejasy Denuncias",
-        "Suggeriments, Queixes i Denúncies"));
-    __tmp.add(new TipusProcediment("Tributario", "Tributari"));
+    tipusProcediments.add(new TipusProcediment(17, "Sancionador", "Sancionador"));
+    
+    TipusProcediment queixes = new TipusProcediment(18, "Sugerencias, Quejas y Denuncias",
+        "Suggeriments, Queixes i Denúncies");
+    
+    tipusProcediments.add(queixes);
+    
+    tipusProcediments.add(new TipusProcediment(19, "Tributario", "Tributari"));
 
-    for (TipusProcediment tipusProcediment : __tmp) {
+    for (TipusProcediment tipusProcediment : tipusProcediments) {
       castellaMap.put(tipusProcediment.castella, tipusProcediment);
       catalaMap.put(tipusProcediment.catala, tipusProcediment);
     }
+    
+    castellaMap.put("Sugerencias, Quejas  y Denuncias", queixes);
+    castellaMap.put("Sugerencias, Quejasy Denuncias", queixes);
 
   }
+  
+  
+  public static List<TipusProcediment> getAllTipusProcediments() {
+    return tipusProcediments;
+  }
+  
 
   /**
    * 
