@@ -19,12 +19,13 @@ import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
+import org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaEJB;
 import org.fundaciobit.pinbaladmin.jpa.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
 import org.springframework.stereotype.Controller;
@@ -252,7 +253,10 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       break;
     case NOLLEGITSMEUS:
     {
-        // incidencies meves
+      
+      // incidencies meves
+      
+      
         SubQuery<Event,Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
             Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
             EventFields.INCIDENCIATECNICAID.isNotNull()
@@ -315,20 +319,20 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       }
 
       // Comentari dels Events
-      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
-          Where.AND(EventFields.SOLICITUDID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
-      w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery1));
+      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+          Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
+      w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery1));
 
       // identificador de consulta o numero seguiment dels events
       if (isNumber) {
-        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
-            Where.AND(EventFields.SOLICITUDID.isNotNull(),
+        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+            Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
                 EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));
-        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
-            Where.AND(EventFields.SOLICITUDID.isNotNull(),
+        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+            Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
                 EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
-        w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a),
-            SolicitudFields.SOLICITUDID.in(subquery2b));
+        w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2a),
+            IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2b));
       }
 
       log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
@@ -403,19 +407,22 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       filtreAvanzatField = filterForm.getAdditionalFields().remove(FILTRE_AVANZAT_COLUMN);
     }
 
-    List<IncidenciaTecnica> list = super.processarLlistat(ejb, filterForm, pagina,
+    List<IncidenciaTecnica> list;
+    try {
+      list = super.processarLlistat(ejb, filterForm, pagina,
         whereAdditionalCondition, mav);
-
-    if (filtreAvanzatField != null) {
-
-      filterForm.getAdditionalFields().put(FILTRE_AVANZAT_COLUMN, filtreAvanzatField);
-
-      String valorFA = filtreAvanzatField.getSearchByValue();
-
-      if (valorFA != null && valorFA.trim().length() != 0) {
-        filterForm.setVisibleFilterBy(true);
+    } finally {
+      if (filtreAvanzatField != null) {
+  
+        filterForm.getAdditionalFields().put(FILTRE_AVANZAT_COLUMN, filtreAvanzatField);
+  
+        String valorFA = filtreAvanzatField.getSearchByValue();
+  
+        if (valorFA != null && valorFA.trim().length() != 0) {
+          filterForm.setVisibleFilterBy(true);
+        }
+  
       }
-
     }
 
     return list;
