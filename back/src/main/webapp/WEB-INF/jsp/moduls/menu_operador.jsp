@@ -39,6 +39,12 @@
             </c:if>
         </li>
 
+        <ul class="tree" style="margin: 3px; padding: 0px;">
+
+        <li style="list-style-type: disc; list-style-position: inside;"><a
+            href="<c:url value="/operador/solicitudestataldesdefitxer/nou"/>"> <span
+                style="${(fn:contains(url, '/solicitudestataldesdefitxer/'))? "font-weight:bold;" : ""}">Sol·licitud Estatal des de Fitxer XLSX</span>
+
 
         <li style="list-style-type: disc; list-style-position: inside;"><a
             href="<c:url value="/operador/solicitudestatal/list"/>"> <span

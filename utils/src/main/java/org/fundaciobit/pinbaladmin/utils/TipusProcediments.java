@@ -98,6 +98,13 @@ public class TipusProcediments {
    * @return
    */
   public static String getTipusProcedimentByLabel(String tprocCastCatala) {
+    
+    if (tprocCastCatala == null) {
+      return null;
+    }
+    
+    tprocCastCatala = tprocCastCatala.trim();
+    
     TipusProcediment tipusProcediment;
     tipusProcediment = castellaMap.get(tprocCastCatala);
 

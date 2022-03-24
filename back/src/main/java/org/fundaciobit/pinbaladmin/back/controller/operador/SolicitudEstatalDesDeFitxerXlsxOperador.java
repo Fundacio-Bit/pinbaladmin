@@ -1,10 +1,11 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -17,12 +18,13 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.back.utils.ParserSolicitudXLSX;
+import org.fundaciobit.pinbaladmin.back.utils.ProcedimentInfo;
+import org.fundaciobit.pinbaladmin.back.utils.SolicitudInfo;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.TipusProcediments;
-import org.fundaciobit.plugins.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,14 +39,12 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/solicituddesdefitxer")
+@RequestMapping(value = "/operador/solicitudestataldesdefitxer")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
-public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController {
+public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOperadorController {
 
-  public static final String NOMES_FITXERS = "NOMES_FITXERS";
-  
-  public static final String DEPARTAMENT = "DEPARTAMENT";
-  
+  public static final String NOMES_FITXERS = "NOMES_FITXERS_ESTATAL";
+   
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.EventLocal eventEjb;
 
@@ -61,7 +61,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
   public SolicitudForm getSolicitudForm(SolicitudJPA _jpa, boolean __isView,
       HttpServletRequest request, ModelAndView mav) throws I18NException {
 
-    log.info(" ==========  ENTRA SOLICI FORM ========");
+    log.info(" ==========  ENTRA SOLICI ESTATAL FORM ========");
 
     SolicitudForm form = super.getSolicitudForm(_jpa, __isView, request, mav);
 
@@ -83,8 +83,11 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
         all.remove(SOLICITUDXMLID);
         all.remove(DOCUMENTSOLICITUDID);
         all.remove(ESTATID);
+        all.remove(TICKETASSOCIAT);
         //all.remove(PROCEDIMENTTIPUS);
-        all.remove(DEPARTAMENTID);
+        //all.remove(DEPARTAMENTID);
+        
+        form.addLabel(SOLICITUDXMLID, "fitxer.xlsx");
 
         form.setHiddenFields(all);
 
@@ -103,7 +106,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
 
     }
 
-    log.info(" ==========  SURT SOLICI FORM ========");
+    log.info(" ==========  SURT SOLICI ESTATALFORM ========");
 
     return form;
 
@@ -113,82 +116,46 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
   public void preValidate(HttpServletRequest request, SolicitudForm solicitudForm,
       BindingResult result) throws I18NException {
 
-    log.info(" =========== ENTRA A PRE VALIDATE "
+    log.info(" =========== ENTRA A PRE VALIDATE  ESTATAL "
         + request.getSession().getAttribute(NOMES_FITXERS) + "===============");
+    
+    
+    
+    log.info(" =========== XXXXXXXXXXXX PV => " + solicitudForm.getSolicitud().getTicketNumeroSeguiment());
 
     if (Boolean.TRUE.equals(request.getSession().getAttribute(NOMES_FITXERS))
         && !solicitudForm.getSolicitudXmlID().isEmpty()) {
 
       try {
-        byte[] xmlData;
+        InputStream is;
         if (solicitudForm.getSolicitud().getSolicitudXmlID() == null) {
-          InputStream  is = solicitudForm.getSolicitudXmlID().getInputStream();
-          
-          xmlData =  FileUtils.toByteArray(is);
-          
-          is.close();
+          is = new ByteArrayInputStream(solicitudForm.getSolicitudXmlID().getBytes());
         } else {
-          xmlData =FileSystemManager.getFileContent(solicitudForm.getSolicitud().getSolicitudXmlID());
+          is =new FileInputStream(FileSystemManager.getFile(solicitudForm.getSolicitud().getSolicitudXmlID()));
         }
 
-        String xml = new String(xmlData, "UTF-8");
+        final boolean debug = false;
+        SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(is, debug);
 
-        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
-
-        // XYZ ZZZ
-        //prop.store(new java.io.FileOutputStream("d://tmp//formulario.properties"), "PINBAL_TRAMIT");
+        // El primer de la llista ...
+        ProcedimentInfo proc = info.getProcediments().values().iterator().next();
 
         SolicitudJPA solicitud = solicitudForm.getSolicitud();
-
+        
         // String procedimentCodi = null;
-        solicitud.setProcedimentCodi(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIPROC"));
+        solicitud.setProcedimentCodi(proc.getCodi());
         
-        solicitud.setCodiDescriptiu(null);
+        //solicitud.setCodiDescriptiu(null);
+
+        solicitud.setProcedimentNom(proc.getNom());
         
-        
-        {
-          java.lang.String nomProcediment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
-          if (nomProcediment != null && nomProcediment.length() > 250) {
-            nomProcediment = nomProcediment.substring(0,249);
-          }
-          solicitud.setProcedimentNom(nomProcediment);
-        }
-        {
-          String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
-          if (codiDescriptiu != null && codiDescriptiu.length() > 250) {
-            codiDescriptiu = codiDescriptiu.substring(0,250);
-          }
-          solicitud.setCodiDescriptiu(codiDescriptiu);
-        }
-        
-        // java.lang.Long estatID = null;
         solicitud.setEstatID(10L);
-        // java.lang.String ticketAssociat = null;
-        // java.lang.String ticketNumeroSeguiment = null;
-        // java.lang.Long departamentID = null;
-        // java.lang.String entitatEstatal = null;
-        // java.lang.String pinfo = null;
-        // solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));
-        // java.sql.Timestamp dataFi = null;
-        // java.lang.String personaContacte =
-        solicitud
-            .setResponsableProcNom(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE"));
-        // java.lang.String personaContacteEmail =
-        solicitud
-            .setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
-
-        solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
-        solicitud.setPersonaContacteEmail(prop.getProperty("FORMULARIO.DATOS_REGISTRO.EMAIL"));
-
-        solicitud.setDenominacio(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
-        solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));
-        solicitud.setNif(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CIF"));
+        solicitud.setEntitatEstatal(info.getEntitat());
         
-        
-        String tp =  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
+        String tp =  proc.getTipusProcediment();
         
         // XYZ ZZZ
-        log.info("\n\n XXXXXXXXXXXXXXXXX\n ORIGINAL => ]" + tp  + "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
+        log.info("\n\n XXXXXXXXXXXXXXXXX\n ESTATAL TP ORIGINAL => ]" + tp  + "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
         
         tp = TipusProcediments.getTipusProcedimentByLabel(tp);
         
@@ -198,41 +165,25 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
           solicitud.setProcedimentTipus(tp);
         }
 
-        {
-//        StringWriter writer = new StringWriter();
-//        prop.store(writer, "NO NODIFICAR");
-//        java.lang.String notes = writer.getBuffer().toString();
-//        solicitud.setNotes(notes.substring(0, 2300));
-          solicitud.setNotes("");
-        }
+        //solicitud.setNotes("");
 
-        // java.lang.Long documentSolicitudID = null;
-        // java.lang.Long documentSolicitudXmlID = null;
-        // boolean firmatDocSolicitud = false;
-        // boolean produccio = false;
 
         request.getSession().setAttribute(NOMES_FITXERS, false);
-        
-       // request.getSession().setAttribute(DEPARTAMENT,  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD"));
-        
-        
 
         solicitudForm.setHiddenFields(new HashSet<Field<?>>());
 
         
 
       } catch (Exception e) {
-        e.printStackTrace();
+        String msg = "Error desconegut processant fitxer: " + e.getMessage();
+        log.error(msg, e);
+        result.reject("", msg);
       }
 
     }
-//    String dep = (String)request.getSession().getAttribute(DEPARTAMENT);
-//    if (dep != null) {
-//      log.info(" =========== DEPARTAMENT !!!!!!!  ===============");
-//      HtmlUtils.saveMessageInfo(request, "Departament: " + dep);
-//    }
 
-    log.info(" =========== SURT DE PRE VALIDATE ===============");
+
+    log.info(" =========== SURT DE PRE VALIDATE ESTATAL===============");
     
   }
 
@@ -252,13 +203,18 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request,
       SolicitudForm solicitudForm) {
-
-    return "redirect:/operador/solicitudfullview/generarserveis/" + solicitudForm.getSolicitud().getSolicitudID();
+    return "redirect:/operador/solicitudestatal/" + solicitudForm.getSolicitud().getSolicitudID() + "/edit";
+    //return "redirect:/operador/solicitudfullview/generarserveis/" + solicitudForm.getSolicitud().getSolicitudID();
   }
 
   @Override
   public SolicitudJPA create(HttpServletRequest request, SolicitudJPA solicitud)
       throws Exception,I18NException, I18NValidationException {
+    
+    
+    log.info(" =========== XXXXXXXXXXXX CREA => " + solicitud.getTicketNumeroSeguiment());
+    
+    
     SolicitudJPA soli = (SolicitudJPA) solicitudEjb.create(solicitud);
 
     try {
@@ -267,7 +223,7 @@ public class SolicitudDesDeXmlOperador extends SolicitudLocalOperadorController 
       java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
       int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
       java.lang.String _persona_ = request.getUserPrincipal().getName();
-      java.lang.String _comentari_="S'ha creat la sol·licitud a partir de fitxer XML";
+      java.lang.String _comentari_="S'ha creat la sol·licitud a partir de fitxer XLSX";
       java.lang.Long _fitxerID_ = null;
       boolean _noLlegit_ = false;
       eventEjb.create(_solicitudID_,  _incidenciaTecnicaID_, _dataEvent_, _tipus_,  _persona_,  _comentari_,  _fitxerID_,  _noLlegit_, null,null);

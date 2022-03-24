@@ -151,15 +151,17 @@ public class CrearExcelDeServeis {
   public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli)
       throws I18NException {
 
+    XSSFWorkbook my_xlsx_workbook = null;
+    FileInputStream input_document = null;
     try {
       Long soliID = soli.getSolicitudID();
 
       Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli);
 
       // Read Excel document first
-      FileInputStream input_document = new FileInputStream(plantillaXLSX);
+      input_document = new FileInputStream(plantillaXLSX);
       // convert it into a POI object
-      XSSFWorkbook my_xlsx_workbook = new XSSFWorkbook(input_document);
+      my_xlsx_workbook = new XSSFWorkbook(input_document);
       // Read excel sheet that needs to be updated
       XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
 
@@ -218,10 +220,9 @@ public class CrearExcelDeServeis {
       // close the stream
       outputBA.close();
 
-      my_xlsx_workbook.close();
+      
 
-      // important to close InputStream
-      input_document.close();
+
 
       return outputBA.toByteArray();
 
@@ -232,7 +233,28 @@ public class CrearExcelDeServeis {
       log.error(msg, e);
 
       throw new I18NException("genapp.comodi", msg);
-
+ 
+    } finally {
+      
+         if (my_xlsx_workbook != null) {
+           try {
+            my_xlsx_workbook.close();
+          } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+         }
+         
+         if (input_document != null) {
+           // important to close InputStream
+           try {
+            input_document.close();
+          } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+         }
+      
     }
 
   }

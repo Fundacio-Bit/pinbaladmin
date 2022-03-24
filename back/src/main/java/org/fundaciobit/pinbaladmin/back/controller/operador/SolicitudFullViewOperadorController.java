@@ -324,29 +324,31 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
 
-      try {
-
-        String xml;
-        {
-          byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
-
-          xml = new String(xmlData, "UTF-8");
+      if (!isEstatal()) {
+        try {
+  
+          String xml;
+          {
+            byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
+  
+            xml = new String(xmlData, "UTF-8");
+          }
+  
+          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+  
+          generarServeis(request, soliID, prop);
+  
+          generarFormulari(request, soliID, prop, "");
+  
+        } catch (I18NException ie) {
+          String msg = I18NUtils.getMessage(ie);
+          log.error(msg, ie);
+          HtmlUtils.saveMessageError(request, msg);
+  
+        } catch (Exception e) {
+          log.error(e.getMessage(), e);
+          HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
         }
-
-        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
-
-        generarServeis(request, soliID, prop);
-
-        generarFormulari(request, soliID, prop, "");
-
-      } catch (I18NException ie) {
-        String msg = I18NUtils.getMessage(ie);
-        log.error(msg, ie);
-        HtmlUtils.saveMessageError(request, msg);
-
-      } catch (Exception e) {
-        log.error(e.getMessage(), e);
-        HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
       }
     }
 
@@ -370,34 +372,36 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
 
-      try {
-
-        String xml;
-        {
-          byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
-
-          xml = new String(xmlData, "UTF-8");
+      if (!isEstatal()) {
+        try {
+  
+          String xml;
+          {
+            byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
+  
+            xml = new String(xmlData, "UTF-8");
+          }
+  
+          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+  
+          String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
+  
+          if (cp == null) {
+            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CP", "");
+          }
+  
+          generarFormulari(request, soliID, prop,
+              SolicitudServeiOperadorController.SDF.format(new Date()));
+  
+        } catch (I18NException ie) {
+          String msg = I18NUtils.getMessage(ie);
+          log.error(msg, ie);
+          HtmlUtils.saveMessageError(request, msg);
+  
+        } catch (Exception e) {
+          log.error(e.getMessage(), e);
+          HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
         }
-
-        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
-
-        String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
-
-        if (cp == null) {
-          prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CP", "");
-        }
-
-        generarFormulari(request, soliID, prop,
-            SolicitudServeiOperadorController.SDF.format(new Date()));
-
-      } catch (I18NException ie) {
-        String msg = I18NUtils.getMessage(ie);
-        log.error(msg, ie);
-        HtmlUtils.saveMessageError(request, msg);
-
-      } catch (Exception e) {
-        log.error(e.getMessage(), e);
-        HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
       }
     }
 
