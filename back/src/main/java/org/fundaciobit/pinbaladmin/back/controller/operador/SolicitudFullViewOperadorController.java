@@ -324,7 +324,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
 
-      if (!isEstatal()) {
+      if (isEstatal() != null && isEstatal() == false) {
         try {
   
           String xml;
@@ -372,7 +372,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
 
-      if (!isEstatal()) {
+      if (isEstatal() != null && isEstatal() == false) {
         try {
   
           String xml;
