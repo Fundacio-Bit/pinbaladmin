@@ -19,7 +19,6 @@ import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
-import org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaEJB;
 import org.fundaciobit.pinbaladmin.jpa.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Event;

@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,11 +15,19 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.ejb.DocumentLocal;
+import org.fundaciobit.pinbaladmin.ejb.FitxerLocal;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
+import org.fundaciobit.pinbaladmin.jpa.DocumentJPA;
+import org.fundaciobit.pinbaladmin.jpa.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.model.dao.IDocumentManager;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.hibernate.Hibernate;
@@ -44,6 +53,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
   
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
+  
+  
+  @EJB(mappedName = DocumentLocal.JNDI_NAME)
+  protected DocumentLocal documentEjb;
 
   @Override
   public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
@@ -162,17 +175,80 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaL
   @Override
   @PermitAll
   public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException {
-    
-    
+
        SolicitudJPA soli = this.findByPrimaryKey(soliID);
        
        soli.setTicketAssociat(incidencia);
        soli.setTicketNumeroSeguiment(seguiment);
-       
+
        this.update(soli);
-    
   }
   
+  
+  
+  protected Fitxer createFile(FitxerLocal fitxerEJB, String fileName, String mime, String descripcio, byte[] data) throws I18NException {
+    
+    Fitxer f = fitxerEJB.create(fileName, data.length, mime, descripcio);
+    
+    FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
+    
+    return f;
+  }
+  
+  
+  
+  @Override
+  public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
+      List<EmailAttachmentInfo> attachs) throws I18NException {
+
+    for (SolicitudJPA soli : solicituds) {
+
+      // Desvincular Serveis
+
+      Set<SolicitudServeiJPA> ssSet = soli.getSolicitudServeis();
+
+      soli.setSolicitudServeis(null);
+
+      // Crear Fitxer XLSX i afegir-ho a solicitud
+      Fitxer xlsxFile = createFile(fitxerEjb, xlsx.getFileName(), xlsx.getContentType(), null,
+          xlsx.getData());
+      soli.setSolicitudXmlID(xlsxFile.getFitxerID());
+
+      // Crear Solicitud
+      this.create(soli);
+
+      Long soliID = soli.getSolicitudID();
+
+      // Afegir Serveis a la Solicitud
+      for (SolicitudServeiJPA ss : ssSet) {
+        ss.setSolicitudID(soliID);
+        solicitudServeiLogicaEJB.create(ss);
+      }
+
+      // Afegir Documents per cada Solicitud
+      for (EmailAttachmentInfo attach : attachs) {
+
+        if (attach != xlsx) {
+
+          Fitxer attachFile = createFile(fitxerEjb, attach.getFileName(),
+              attach.getContentType(), null, attach.getData());
+          
+          
+          DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null);
+          
+          documentEjb.create(doc);
+
+          DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+
+          documentSolicitudLogicaLocal.create(ds);
+
+        }
+
+      }
+
+    }
+
+  }
   
 
 }

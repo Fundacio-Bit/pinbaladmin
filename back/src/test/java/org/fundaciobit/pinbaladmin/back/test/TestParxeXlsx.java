@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.fundaciobit.pinbaladmin.back.utils.ParserSolicitudXLSX;
 import org.fundaciobit.pinbaladmin.back.utils.ProcedimentInfo;
+import org.fundaciobit.pinbaladmin.back.utils.ServeiInfo;
 import org.fundaciobit.pinbaladmin.back.utils.SolicitudInfo;
 
 /**
@@ -40,7 +41,11 @@ public class TestParxeXlsx {
         System.out.println(" Nom: " + (proc.getNom().length() < 50 ? proc.getNom()
             : (proc.getNom().substring(0, 50) + "...")));
         System.out.println(" Tipus: " + proc.getTipusProcediment());
-        System.out.println(" Serveis: " + proc.getServicios());
+        System.out.println("   ** Serveis ** ");
+        for (ServeiInfo si : proc.getServeis()) {
+          System.out.println("\t - " + si.toString());
+        }
+        
 
       }
 

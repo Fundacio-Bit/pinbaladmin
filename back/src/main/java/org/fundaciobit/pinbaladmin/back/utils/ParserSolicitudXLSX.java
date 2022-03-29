@@ -44,10 +44,20 @@ public class ParserSolicitudXLSX {
       {
         int row = 5;
         int blank = 0;
+        ServeiInfo lastServei = null;
         do {
           row++;
 
           XSSFRow therow = my_worksheet.getRow(row);
+          
+          if (therow == null) {
+            blank++;
+            if (blank > 6) {
+              break;
+            }
+            continue;
+          }
+          
           cell = therow.getCell(0);
 
           if (cell.getCellTypeEnum() == CellType.BLANK) {
@@ -55,6 +65,13 @@ public class ParserSolicitudXLSX {
             if (blank > 6) {
               break;
             }
+            
+            String norma = therow.getCell(7).getStringCellValue();
+            String articles = therow.getCell(8).getStringCellValue();
+            String enllaz = therow.getCell(9).getStringCellValue();
+
+            lastServei.addNormativa(new NormativaInfo(norma, articles, enllaz));
+
             continue;
           }
           blank = 0;
@@ -74,12 +91,18 @@ public class ParserSolicitudXLSX {
             iproc = new ProcedimentInfo(codi, nom, tipusProcediment);
 
             info.addProcediment(iproc);
-
           }
 
           // System.err.println("Afegint Servei: " +
           // therow.getCell(3).getStringCellValue());
-          iproc.addServicio(therow.getCell(3).getStringCellValue());
+          lastServei = new ServeiInfo(therow.getCell(3).getStringCellValue());
+          iproc.addServei(lastServei);
+          
+          String norma = therow.getCell(7).getStringCellValue();
+          String articles = therow.getCell(8).getStringCellValue();
+          String enllaz = therow.getCell(9).getStringCellValue();
+
+          lastServei.addNormativa(new NormativaInfo(norma, articles, enllaz));
 
         } while (true);
       }

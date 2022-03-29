@@ -39,7 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/solicitudestataldesdefitxer")
+@RequestMapping(value = "/operador/solicitudestataldesdefitxerxlsx")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOperadorController {
 
@@ -134,36 +134,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
           is =new FileInputStream(FileSystemManager.getFile(solicitudForm.getSolicitud().getSolicitudXmlID()));
         }
 
-        final boolean debug = false;
-        SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(is, debug);
-
-        // El primer de la llista ...
-        ProcedimentInfo proc = info.getProcediments().values().iterator().next();
-
-        SolicitudJPA solicitud = solicitudForm.getSolicitud();
-        
-        // String procedimentCodi = null;
-        solicitud.setProcedimentCodi(proc.getCodi());
-        
-        //solicitud.setCodiDescriptiu(null);
-
-        solicitud.setProcedimentNom(proc.getNom());
-        
-        solicitud.setEstatID(10L);
-        solicitud.setEntitatEstatal(info.getEntitat());
-        
-        String tp =  proc.getTipusProcediment();
-        
-        // XYZ ZZZ
-        log.info("\n\n XXXXXXXXXXXXXXXXX\n ESTATAL TP ORIGINAL => ]" + tp  + "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
-        
-        tp = TipusProcediments.getTipusProcedimentByLabel(tp);
-        
-        if (tp == null) {
-          HtmlUtils.saveMessageError(request, "No he trobat el Tipus de Procediment per l'etiqueta ]" + tp + "[");
-        } else {
-          solicitud.setProcedimentTipus(tp);
-        }
+        processSolicitud(request,  solicitudForm.getSolicitud(), is);
 
         //solicitud.setNotes("");
 
@@ -185,6 +156,43 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
 
     log.info(" =========== SURT DE PRE VALIDATE ESTATAL===============");
     
+  }
+
+
+
+
+  public void processSolicitud(HttpServletRequest request, SolicitudJPA solicitud,
+      InputStream xlsx) throws Exception {
+    final boolean debug = false;
+    SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsx, debug);
+
+    // El primer de la llista ...
+    ProcedimentInfo proc = info.getProcediments().values().iterator().next();
+
+    
+    
+    // String procedimentCodi = null;
+    solicitud.setProcedimentCodi(proc.getCodi());
+    
+    //solicitud.setCodiDescriptiu(null);
+
+    solicitud.setProcedimentNom(proc.getNom());
+    
+    solicitud.setEstatID(10L);
+    solicitud.setEntitatEstatal(info.getEntitat());
+    
+    String tp =  proc.getTipusProcediment();
+    
+    // XYZ ZZZ
+    log.info("\n\n XXXXXXXXXXXXXXXXX\n ESTATAL TP ORIGINAL => ]" + tp  + "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
+    
+    tp = TipusProcediments.getTipusProcedimentByLabel(tp);
+    
+    if (tp == null) {
+      HtmlUtils.saveMessageError(request, "No he trobat el Tipus de Procediment per l'etiqueta ]" + tp + "[");
+    } else {
+      solicitud.setProcedimentTipus(tp);
+    }
   }
 
   @Override

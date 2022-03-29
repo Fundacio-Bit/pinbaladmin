@@ -14,7 +14,7 @@ public class ProcedimentInfo {
   final String nom;
   final String tipusProcediment;
 
-  List<String> servicios = new ArrayList<String>();
+  List<ServeiInfo> serveis = new ArrayList<ServeiInfo>();
 
   /**
    * @param codi
@@ -40,16 +40,16 @@ public class ProcedimentInfo {
     return tipusProcediment;
   }
 
-  public List<String> getServicios() {
-    return servicios;
+  public List<ServeiInfo> getServeis() {
+    return serveis;
   }
 
-  public void setServicios(List<String> servicios) {
-    this.servicios = servicios;
+  public void setServeis(List<ServeiInfo> serveis) {
+    this.serveis = serveis;
   }
 
-  public void addServicio(String servicio) {
-    this.servicios.add(servicio);
+  public void addServei(ServeiInfo servei) {
+    this.serveis.add(servei);
   }
 
 }

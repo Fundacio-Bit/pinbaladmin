@@ -12,6 +12,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudLocal;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
 
 /**
  * 
@@ -37,5 +38,14 @@ public interface SolicitudLogicaLocal extends SolicitudLocal {
 
   @PermitAll
   public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
+  
+  /**
+   * 
+   * @param solicituds
+   * @param xlsx
+   * @param attachs
+   * @throws I18NException
+   */
+  public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx, List<EmailAttachmentInfo> attachs) throws I18NException;
   
 }

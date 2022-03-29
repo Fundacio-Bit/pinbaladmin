@@ -323,8 +323,11 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           "NO ES PODEN GENERAR ELS SERVEIS JA QUE NO HI HA EL FITXER DE XML !!!!!!");
 
     } else {
+      
+//      log.info("\n\n XML ==> " + soli.getSolicitudXml().getMime() + " \n\n");
 
-      if (isEstatal() != null && isEstatal() == false) {
+      // Si és local
+      if ("application/xml".equals(soli.getSolicitudXml().getMime())) {
         try {
   
           String xml;
@@ -372,7 +375,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
 
-      if (isEstatal() != null && isEstatal() == false) {
+      // Si és local
+      if ("application/xml".equals(soli.getSolicitudXml().getMime())) {
+
         try {
   
           String xml;

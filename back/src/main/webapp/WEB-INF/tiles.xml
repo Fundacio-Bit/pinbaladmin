@@ -224,7 +224,14 @@
     <definition name="incidenciaTecnicaListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
+
+    <definition name="solicitudestataldesdefitxersOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/solicitudestataldesdefitxers.jsp" />
+    </definition>
     
+    <definition name="fileUploadViewOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/fileUploadView.jsp" />
+    </definition>
 
     <!--  ===========  DESENVOLUPAMENT ================== -->
     
