@@ -954,9 +954,21 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      */
     DepartamentQueryPath dqp = new DepartamentQueryPath();
     SelectMultipleStringKeyValue smkv = new SelectMultipleStringKeyValue(
-        dqp.AREA().ENTITATID().select, dqp.AREA().ENTITAT().NOM().select);
+        dqp.AREA().ENTITATID().select, dqp.AREA().ENTITAT().NOM().select, dqp.AREA().ENTITAT().CONVENIPMSBAE().select);
 
     List<StringKeyValue> listSKV = departamentEjb.executeQuery(smkv, null);
+    
+    
+    for (StringKeyValue skv : listSKV) {
+      String v = skv.value; 
+      if (v.endsWith(" true")) {
+        skv.setValue("<span style=\"color:red\"><b>"+ v.replace(" true", " - PMSBAE</b></span>"));
+      } else {
+        skv.setValue(v.replace(" false", ""));
+      }
+    }
+    
+    
 
     // for (StringKeyValue skv : listSKV) {
     // log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());

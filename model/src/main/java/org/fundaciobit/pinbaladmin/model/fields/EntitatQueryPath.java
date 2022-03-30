@@ -31,6 +31,10 @@ public class EntitatQueryPath extends org.fundaciobit.genapp.common.query.QueryP
     return new LongField(getQueryPath(), EntitatFields.GRUPENTITATID);
   }
 
+  public BooleanField CONVENIPMSBAE() {
+    return new BooleanField(getQueryPath(), EntitatFields.CONVENIPMSBAE);
+  }
+
 
 
   @Override

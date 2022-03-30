@@ -150,5 +150,6 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
     return solicitudFilterForm;
     
   }
+  
 
 }

@@ -42,6 +42,10 @@ public class EntitatValidator<T> implements EntitatFields {
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(GRUPENTITATID)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,CONVENIPMSBAE, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONVENIPMSBAE)));
+
     // Check size
     if (__vr.getFieldErrorCount(NOM) == 0) {
       java.lang.String __nom = (java.lang.String)__vr.getFieldValue(__target__,NOM);

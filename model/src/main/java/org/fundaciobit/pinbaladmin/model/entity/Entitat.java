@@ -17,6 +17,9 @@ public interface Entitat extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public long getGrupEntitatID();
 	public void setGrupEntitatID(long _grupEntitatID_);
 
+	public boolean isConvenipmsbae();
+	public void setConvenipmsbae(boolean _convenipmsbae_);
+
 
 
   // ======================================

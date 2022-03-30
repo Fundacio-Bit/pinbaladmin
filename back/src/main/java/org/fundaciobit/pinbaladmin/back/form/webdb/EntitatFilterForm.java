@@ -122,7 +122,7 @@ public class EntitatFilterForm extends PinbalAdminBaseFilterForm implements Enti
 
   @Override
   public List<Field<?>> getDefaultGroupByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { GRUPENTITATID }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { GRUPENTITATID ,CONVENIPMSBAE }));
   }
 
 

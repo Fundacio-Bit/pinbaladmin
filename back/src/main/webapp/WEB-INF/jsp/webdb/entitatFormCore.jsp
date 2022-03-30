@@ -83,3 +83,25 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EntitatFields.CONVENIPMSBAE)}">
+        <tr id="entitat_convenipmsbae_rowid">
+          <td>
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EntitatFields.CONVENIPMSBAE])?'entitat.convenipmsbae':__theForm.labels[EntitatFields.CONVENIPMSBAE]}" />
+              <c:if test="${not empty __theForm.help[EntitatFields.CONVENIPMSBAE]}">
+              <i class="icon-info-sign" title="${__theForm.help[EntitatFields.CONVENIPMSBAE]}" ></i>
+              </c:if>
+             </label>
+            </td>
+            <td>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,EntitatFields.CONVENIPMSBAE)}" >
+              <form:errors path="entitat.convenipmsbae" cssClass="errorField alert alert-error" />
+              <form:checkbox onclick="javascript:return ${ gen:contains(__theForm.readOnlyFields ,EntitatFields.CONVENIPMSBAE)? 'false' : 'true'}" path="entitat.convenipmsbae" />
+          </c:if>
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,EntitatFields.CONVENIPMSBAE)}" >
+                <fmt:message key="genapp.checkbox.${__theForm.entitat.convenipmsbae}" />
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

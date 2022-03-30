@@ -47,6 +47,9 @@ private static final long serialVersionUID = 489209138L;
 	@Column(name="grupentitatid",nullable = false,length = 19)
 	long grupEntitatID;
 
+	@Column(name="convenipmsbae",nullable = false,length = 1)
+	boolean convenipmsbae;
+
 
 
   /** Constructor Buit */
@@ -54,19 +57,21 @@ private static final long serialVersionUID = 489209138L;
   }
 
   /** Constructor amb tots els camps  */
-  public EntitatJPA(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID) {
+  public EntitatJPA(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
     this.entitatID=entitatID;
     this.nom=nom;
     this.personaContacte=personaContacte;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
+    this.convenipmsbae=convenipmsbae;
 }
   /** Constructor sense valors autoincrementals */
-  public EntitatJPA(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID) {
+  public EntitatJPA(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
     this.nom=nom;
     this.personaContacte=personaContacte;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
+    this.convenipmsbae=convenipmsbae;
 }
   public EntitatJPA(Entitat __bean) {
     this.setEntitatID(__bean.getEntitatID());
@@ -74,6 +79,7 @@ private static final long serialVersionUID = 489209138L;
     this.setPersonaContacte(__bean.getPersonaContacte());
     this.setCIF(__bean.getCIF());
     this.setGrupEntitatID(__bean.getGrupEntitatID());
+    this.setConvenipmsbae(__bean.isConvenipmsbae());
 	}
 
 	public long getEntitatID() {
@@ -109,6 +115,13 @@ private static final long serialVersionUID = 489209138L;
 	};
 	public void setGrupEntitatID(long _grupEntitatID_) {
 		this.grupEntitatID = _grupEntitatID_;
+	};
+
+	public boolean isConvenipmsbae() {
+		return(convenipmsbae);
+	};
+	public void setConvenipmsbae(boolean _convenipmsbae_) {
+		this.convenipmsbae = _convenipmsbae_;
 	};
 
 
@@ -177,6 +190,7 @@ private static final long serialVersionUID = 489209138L;
     __tmp.setPersonaContacte(__bean.getPersonaContacte());
     __tmp.setCIF(__bean.getCIF());
     __tmp.setGrupEntitatID(__bean.getGrupEntitatID());
+    __tmp.setConvenipmsbae(__bean.isConvenipmsbae());
 		return __tmp;
 	}
 
