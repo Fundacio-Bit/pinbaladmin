@@ -205,6 +205,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
 
     List<SolicitudJPA> solicituds = new ArrayList<SolicitudJPA>();
 
+    List<String> serveisNoTrobats = new ArrayList<String>();
+
     // El primer de la llista ...
     for (ProcedimentInfo proc : info.getProcediments().values()) {
 
@@ -242,18 +244,20 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
       Set<SolicitudServeiJPA> ssList = new HashSet<SolicitudServeiJPA>();
 
       List<ServeiInfo> serveis = proc.getServeis();
-      
-      List<String> serveisNoTrobats = new ArrayList<String>();
 
       for (ServeiInfo servei : serveis) {
 
+        if (!"CCAA".equalsIgnoreCase(servei.getCedent())) {
+          continue;
+        }
+
         Long id = serveiEjb.executeQueryOne(ServeiFields.SERVEIID,
-            Where.OR(ServeiFields.NOM.equal(servei.getNom()), ServeiFields.DESCRIPCIO.like("%" + servei.getNom().trim() + "%") ));
+            Where.OR(ServeiFields.NOM.equal(servei.getNom()),
+                ServeiFields.DESCRIPCIO.like("%" + servei.getNom().trim() + "%")));
 
         if (id == null) {
           serveisNoTrobats.add("|" + servei.getNom() + "|");
           continue;
-          
         }
 
         // ja s'assignarà quan solicitud es crei
@@ -273,10 +277,10 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
           enllazNormaLegal = enllazNormaLegal + norma.getEnllaz() + SEP;
           articles = articles + norma.getArticles() + SEP;
         }
-        
+
         normaLegal = crop(normaLegal);
         enllazNormaLegal = crop(enllazNormaLegal);
-        articles = crop(articles); 
+        articles = crop(articles);
 
         java.lang.String tipusConsentiment = null;
         java.lang.String consentiment = null;
@@ -291,25 +295,23 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
 
         ssList.add(ss);
       }
-      
-      
-      if (serveisNoTrobats.size() != 0) {
-        
-        throw new Exception("No s'han trobat els serveis següents " + serveisNoTrobats.toString() + ". Les ha d'afegir a la descripció dels serveis corresponents.");
+
+      if (ssList.size() != 0) {
+        solicitud.setSolicitudServeis(ssList);
+        solicituds.add(solicitud);
       }
-      
+    }
 
-      solicitud.setSolicitudServeis(ssList);
-
-      solicituds.add(solicitud);
+    if (serveisNoTrobats.size() != 0) {
+      throw new Exception("No s'han trobat els serveis següents " + serveisNoTrobats.toString()
+          + ". Les ha d'afegir a la descripció dels serveis corresponents.");
     }
 
     return solicituds;
   }
-  
-  
+
   private String crop(String str) {
-     return str = str.length() > 250 ? str.substring(0,250) + "..." : str;
+    return str = str.length() > 250 ? str.substring(0, 250) + "..." : str;
   }
 
   private String getExtension(String fileName) {

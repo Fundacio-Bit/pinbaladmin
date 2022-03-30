@@ -26,7 +26,6 @@ import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
-import org.fundaciobit.pinbaladmin.model.dao.IDocumentManager;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;

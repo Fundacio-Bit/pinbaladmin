@@ -11,19 +11,30 @@ import java.util.List;
 public class ServeiInfo {
 
   protected String nom;
+  
+  protected String cedent;
 
   protected List<NormativaInfo> normatives = new ArrayList<NormativaInfo>();
 
   /**
    * @param nom
    */
-  public ServeiInfo(String nom) {
+  public ServeiInfo(String nom, String cedent) {
     super();
     this.nom = nom;
+    this.cedent = cedent;
   }
 
   public String getNom() {
     return nom;
+  }
+
+  public String getCedent() {
+    return cedent;
+  }
+
+  public void setCedent(String cedent) {
+    this.cedent = cedent;
   }
 
   public List<NormativaInfo> getNormatives() {
@@ -47,7 +58,7 @@ public class ServeiInfo {
   @Override
   public String toString() {
     StringBuffer str = new StringBuffer();
-    str.append(this.nom).append("\n");
+    str.append(this.nom).append("(Cedent: " + this.cedent  + ")\n");
     for (NormativaInfo n : normatives) {
       str.append("\t\t" + n.getNormaLegal()).append("\n");
       str.append("\t\t" + n.getArticles()).append("\n");

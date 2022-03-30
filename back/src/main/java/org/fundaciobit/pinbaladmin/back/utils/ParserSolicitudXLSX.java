@@ -95,7 +95,11 @@ public class ParserSolicitudXLSX {
 
           // System.err.println("Afegint Servei: " +
           // therow.getCell(3).getStringCellValue());
-          lastServei = new ServeiInfo(therow.getCell(3).getStringCellValue());
+          {
+            String nom = therow.getCell(3).getStringCellValue();
+            String cedent = therow.getCell(2).getStringCellValue();
+            lastServei = new ServeiInfo(nom, cedent);
+          }
           iproc.addServei(lastServei);
           
           String norma = therow.getCell(7).getStringCellValue();
