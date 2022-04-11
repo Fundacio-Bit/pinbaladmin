@@ -17,7 +17,9 @@ public class ParseEmailMsgTest {
   public static void main(String[] args) {
 
     try {
-      File file = new File(".//PID_1173329_Alta_Ayuntamiento_Norena.msg");
+      //File file = new File(".//PID_1173329_Alta_Ayuntamiento_Norena.msg");
+      File file = new File(".//PID_1182046_AYUNTAMIENTO_CORVERA_ASTURIAS.msg");
+      
 
       FileInputStream fis = new FileInputStream(file);
       try {

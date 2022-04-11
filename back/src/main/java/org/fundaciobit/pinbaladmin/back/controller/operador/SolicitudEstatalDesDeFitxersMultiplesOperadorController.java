@@ -218,6 +218,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
       solicitud.setProcedimentCodi(proc.getCodi());
 
       // solicitud.setCodiDescriptiu(null);
+      solicitud.setCreador(request.getRemoteUser());
 
       solicitud.setProcedimentNom(proc.getNom());
       solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));

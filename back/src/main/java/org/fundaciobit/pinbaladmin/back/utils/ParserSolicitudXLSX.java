@@ -40,11 +40,12 @@ public class ParserSolicitudXLSX {
       SolicitudInfo info = new SolicitudInfo(
           my_worksheet.getRow(1).getCell(0).getStringCellValue());
 
-      Cell cell;
+      Cell cellNorma;
       {
         int row = 5;
         int blank = 0;
         ServeiInfo lastServei = null;
+        String lastCodiProcediment = null;
         do {
           row++;
 
@@ -58,37 +59,41 @@ public class ParserSolicitudXLSX {
             continue;
           }
           
-          cell = therow.getCell(0);
+          cellNorma = therow.getCell(7); // Norma legal
 
-          if (cell.getCellTypeEnum() == CellType.BLANK) {
+          if (cellNorma == null || cellNorma.getCellTypeEnum() == CellType.BLANK) {
             blank++;
-            if (blank > 6) {
+            if (blank > 3) {
               break;
             }
             
+            /**
             String norma = therow.getCell(7).getStringCellValue();
             String articles = therow.getCell(8).getStringCellValue();
             String enllaz = therow.getCell(9).getStringCellValue();
 
             lastServei.addNormativa(new NormativaInfo(norma, articles, enllaz));
+            */
 
             continue;
           }
           blank = 0;
 
-          String codi;
-          if (cell.getCellTypeEnum() == CellType.NUMERIC) {
-            codi = String.valueOf((long) cell.getNumericCellValue());
+          String codiProc;
+          Cell cell = therow.getCell(0); 
+          if (cell.getCellTypeEnum() == CellType.BLANK) {
+            codiProc = lastCodiProcediment;
           } else {
-            codi = cell.getStringCellValue();
+            codiProc = toString(cell);
+            lastCodiProcediment = codiProc;
           }
 
-          ProcedimentInfo iproc = info.getProcediment(codi);
+          ProcedimentInfo iproc = info.getProcediment(codiProc);
           if (iproc == null) {
             String nom = therow.getCell(1).getStringCellValue();
             String tipusProcediment = therow.getCell(5).getStringCellValue();
 
-            iproc = new ProcedimentInfo(codi, nom, tipusProcediment);
+            iproc = new ProcedimentInfo(codiProc, nom, tipusProcediment);
 
             info.addProcediment(iproc);
           }
@@ -102,9 +107,9 @@ public class ParserSolicitudXLSX {
           }
           iproc.addServei(lastServei);
           
-          String norma = therow.getCell(7).getStringCellValue();
-          String articles = therow.getCell(8).getStringCellValue();
-          String enllaz = therow.getCell(9).getStringCellValue();
+          String norma = toString(therow.getCell(7));
+          String articles = toString(therow.getCell(8));
+          String enllaz = toString(therow.getCell(9));
 
           lastServei.addNormativa(new NormativaInfo(norma, articles, enllaz));
 
@@ -113,6 +118,7 @@ public class ParserSolicitudXLSX {
 
       if (debug) {
 
+        Cell cell;
         for (int row = 0; row < 20; row++) {
 
           XSSFRow therow = my_worksheet.getRow(row);
@@ -165,6 +171,22 @@ public class ParserSolicitudXLSX {
 
       
     }
+  }
+
+  private static String toString(Cell cell) {
+    if (cell == null) {
+      return null;
+    }
+    if (cell.getCellTypeEnum() == CellType.BLANK) {
+      return "";
+    }
+    String str;
+    if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+      str = String.valueOf((long) cell.getNumericCellValue());
+    } else {
+      str = cell.getStringCellValue();
+    }
+    return str;
   }
 
 }

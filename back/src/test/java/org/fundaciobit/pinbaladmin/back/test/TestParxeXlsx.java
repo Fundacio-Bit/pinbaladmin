@@ -18,7 +18,14 @@ public class TestParxeXlsx {
 
   public static void main(String[] args) {
 
-    File plantillaXLSX = new File("plantilla.xlsx");
+    //File plantillaXLSX = new File("plantilla.xlsx");
+    //File plantillaXLSX = new File("CeldesCombinades.xlsx");
+    
+    //File plantillaXLSX = new File("TresProcediments.xlsx");
+    
+    File plantillaXLSX = new File("PID_1182046_AYUNTAMIENTO_CORVERA_ASTURIAS.xlsx");
+    
+    
 
     java.io.InputStream input_document = null;
     try {
