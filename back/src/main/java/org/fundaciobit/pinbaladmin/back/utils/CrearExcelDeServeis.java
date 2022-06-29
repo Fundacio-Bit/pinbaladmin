@@ -67,7 +67,7 @@ public class CrearExcelDeServeis {
 
       System.out.println(" LLEGING SERVEI => " + ss.getId());
 
-      String[] dades = new String[14];
+      String[] dades = new String[16];
 
       // A 0 FORMULARIO.DATOS_SOLICITUD.CODIPROC
       dades[0] = codiProc;
@@ -140,6 +140,12 @@ public class CrearExcelDeServeis {
       dades[12] = "NO";
       // N 13 ???????????? (NO)
       dades[13] = "NO";
+      
+      // N 14 Peticiones estimadas (día)
+      dades[14] = "40";
+      
+      // N 15 Peticiones estimadas (mes)
+      dades[15] = "300";
 
       dadesByServeiSolicitudID.put(ss.getId(), dades);
 
