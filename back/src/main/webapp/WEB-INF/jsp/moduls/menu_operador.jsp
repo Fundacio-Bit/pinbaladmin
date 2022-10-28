@@ -6,6 +6,14 @@
         <fmt:message key="menuoperador" />
     </h5>
     <ul class="tree" style="margin: 3px; padding: 0px;">
+    
+            <li style="list-style-type: disc; list-style-position: inside;"><a
+            href="<c:url value="/operador/llistacorreus/list"/>"> <span
+                style="${(fn:contains(url, '/llistacorreus'))? "font-weight:bold;" : ""}"><fmt:message
+                        key="llistatdecorreus" /></span>
+        </a></li>
+
+        <li><hr style="margin-top: 6px; margin-bottom: 6px;" /></li>
 
         <li style="list-style-type: disc; list-style-position: inside;"><a
             href="<c:url value="/operador/solicitudactiva/list"/>"> <span

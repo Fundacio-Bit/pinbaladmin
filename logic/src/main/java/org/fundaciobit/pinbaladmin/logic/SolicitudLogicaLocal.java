@@ -12,7 +12,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudLocal;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 
 /**
  * 

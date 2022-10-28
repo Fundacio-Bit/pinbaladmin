@@ -9,23 +9,28 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.back.utils.EmailEmlFormatParser;
-import org.fundaciobit.pinbaladmin.back.utils.EmailMessageInfo;
-import org.fundaciobit.pinbaladmin.back.utils.EmailMsgFormatParser;
 import org.fundaciobit.pinbaladmin.back.utils.NormativaInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserSolicitudXLSX;
 import org.fundaciobit.pinbaladmin.back.utils.ProcedimentInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ServeiInfo;
 import org.fundaciobit.pinbaladmin.back.utils.SolicitudInfo;
+import org.fundaciobit.pinbaladmin.back.utils.Utils;
+import org.fundaciobit.pinbaladmin.back.utils.email.EmailEmlFormatParser;
+import org.fundaciobit.pinbaladmin.back.utils.email.EmailMsgFormatParser;
+import org.fundaciobit.pinbaladmin.ejb.ServeiLocal;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudServeiJPA;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.utils.TipusProcediments;
 import org.springframework.http.HttpStatus;
@@ -95,7 +100,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
         log.info("FILE NAME => " + fileName);
         log.info("FILE MIME => " + mime);
         log.info("FILE SIZE => " + multipartFile.getSize() + " bytes");
-        String extension = getExtension(fileName);
+        String extension = Utils.getExtension(fileName);
         // Parsejar
         EmailMessageInfo emi;
 
@@ -119,68 +124,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
 
         }
 
-        // Cercar XLSX dins dels attachments
-
-        log.info(" Cercar XLSX dins dels attachments");
-
-        List<EmailAttachmentInfo> attachs = emi.getAttachments();
-
-        EmailAttachmentInfo xlsx = null;
-
-        for (EmailAttachmentInfo eai : attachs) {
-
-          if (XLSX_MIME.equalsIgnoreCase(eai.getContentType())) {
-            log.info("trobat: " + eai.getFileName());
-            xlsx = eai;
-            break;
-          }
-
-          String ext = getExtension(eai.getFileName());
-
-          log.info("Cercant Extensio: " + ext);
-
-          if (".xlsx".equalsIgnoreCase(ext)) {
-            xlsx = eai;
-            break;
-          }
-
-        }
-
-        if (xlsx == null) {
-          String msg = "El document enviat " + fileName + " no conté cap fitxer .xlsx";
-          log.error(msg);
-          return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        // Convertir xlsx a Sol·licitud (inclou serveis i fitxers)
-        String pid = EmailMessageInfo.getPidFromSubject(emi.getSubject());
-
-        log.info("PID => " + pid);
-        if (pid == null) {
-          HtmlUtils.saveMessageWarning(request,
-              "Les següents sol.licituds no tenen el PID assignat. ");
-        }
-
-        List<SolicitudJPA> solicituds;
-        try {
-          log.info("processSolicitud  start ");
-          solicituds = processSolicitud(request, xlsx, pid);
-          log.info("processSolicitud  end " + solicituds.size());
-        } catch (Throwable e) {
-          String msg = "Error processant solicitud o serveis del fitxer " + fileName + ": "
-              + e.getMessage();
-          log.error(msg, e);
-          return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        try {
-          solicitudLogicaEjb.crearSolicituds(solicituds, xlsx, attachs);
-        } catch (I18NException e) {
-          String msg = "Error creant Sol·lictuds: " + I18NUtils.getMessage(e);
-          log.error(msg, e);
-          return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+         crearSolicitudsDesDeEmail(request, emi, fileName, log, serveiEjb, solicitudLogicaEjb);
       }
 
       long end = System.currentTimeMillis();
@@ -188,20 +132,102 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
       return new ResponseEntity<String>(start + "/" + end, HttpStatus.OK);
 
     } catch (Exception e) {
-      String msg = "Error rebent fitxers: " + e.getMessage();
+      String msg = "Error processant fitxers: " + e.getMessage();
       log.error(msg, e);
+      HtmlUtils.saveMessageError(request, msg);
       return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
   }
+  
+  
+  
+  public static List<SolicitudJPA> crearSolicitudsDesDeEmail(HttpServletRequest request,
+      EmailMessageInfo emi, String fileName, Logger log, 
+     ServeiLocal serveiEjb, SolicitudLogicaLocal solicitudLogicaEjb) throws Exception {
+    // Cercar XLSX dins dels attachments
 
-  public List<SolicitudJPA> processSolicitud(HttpServletRequest request,
-      EmailAttachmentInfo xlsx, String pid) throws Exception, I18NException {
+    log.info(" Cercar XLSX dins dels attachments");
+
+    List<EmailAttachmentInfo> attachs = emi.getAttachments();
+
+    EmailAttachmentInfo xlsx = null;
+
+    for (EmailAttachmentInfo eai : attachs) {
+
+      if (XLSX_MIME.equalsIgnoreCase(eai.getContentType())) {
+        log.info("trobat: " + eai.getFileName());
+        xlsx = eai;
+        break;
+      }
+
+      String ext = Utils.getExtension(eai.getFileName());
+
+      log.info("Cercant Extensio: " + ext);
+
+      if (".xlsx".equalsIgnoreCase(ext)) {
+        xlsx = eai;
+        break;
+      }
+
+    }
+
+    if (xlsx == null) {
+      String msg = "El document enviat " + fileName + " no conté cap fitxer .xlsx";
+      log.error(msg);
+      throw new Exception(msg);
+    }
+
+    // Convertir xlsx a Sol·licitud (inclou serveis i fitxers)
+    String pid = Utils.getPidFromSubject(emi.getSubject());
+
+    log.info("PID => " + pid);
+    if (pid == null) {
+      HtmlUtils.saveMessageWarning(request,
+          "Les següents sol.licituds no tenen el PID assignat. ");
+    }
+
+    List<SolicitudJPA> solicituds;
+    try {
+      log.info("processSolicitud  start ");
+      solicituds = processSolicitud(request, emi, xlsx, pid, log, serveiEjb);
+
+      log.info("processSolicitud  end " + solicituds.size());
+    } catch (Throwable e) {
+      String msg = "Error processant solicitud o serveis del fitxer " + fileName + ": "
+          + e.getMessage();
+      log.error(msg, e);
+      throw new Exception(msg);
+    }
+
+    if (solicituds.size() == 0) {
+      HtmlUtils.saveMessageError(request,
+          "No s'ha pogut processar cap petició del fitxer enviat. Revisar classe TipusProcediments per inclore-ho");
+    }
+
+    try {
+      solicitudLogicaEjb.crearSolicituds(solicituds, xlsx, attachs);
+    } catch (I18NException e) {
+      String msg = "Error creant Sol·lictuds: " + I18NUtils.getMessage(e);
+      log.error(msg, e);
+      throw new Exception(msg);
+    }
+    
+    return solicituds;
+
+  }
+  
+  
+
+  protected static List<SolicitudJPA> processSolicitud(HttpServletRequest request, EmailMessageInfo emi,
+      EmailAttachmentInfo xlsx, String pid, Logger log, ServeiLocal serveiEjb) throws Exception, I18NException {
 
     InputStream xlsxIS = new ByteArrayInputStream(xlsx.getData());
 
     final boolean debug = false;
     SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
+
+    log.info(" Procediments de Solicitud = #" + info.getProcediments().size());
 
     List<SolicitudJPA> solicituds = new ArrayList<SolicitudJPA>();
 
@@ -216,6 +242,9 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
 
       // String procedimentCodi = null;
       solicitud.setProcedimentCodi(proc.getCodi());
+      
+      solicitud.setPersonaContacte(emi.getNameFrom());
+      solicitud.setPersonaContacteEmail(emi.getDisplayFrom());
 
       // solicitud.setCodiDescriptiu(null);
       solicitud.setCreador(request.getRemoteUser());
@@ -226,17 +255,18 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
       solicitud.setEstatID(10L);
       solicitud.setEntitatEstatal(info.getEntitat());
 
-      String tp = proc.getTipusProcediment();
+      String tpOrig = proc.getTipusProcediment();
 
       // XYZ ZZZ
       // log.info("\n\n XXXXXXXXXXXXXXXXX\n ESTATAL TP ORIGINAL => ]" + tp +
       // "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
 
-      tp = TipusProcediments.getTipusProcedimentByLabel(tp);
+      String tp = TipusProcediments.getTipusProcedimentByLabel(tpOrig== null? tpOrig: tpOrig.trim().replace("  ", " "));
 
       if (tp == null) {
         HtmlUtils.saveMessageError(request,
-            "No he trobat el Tipus de Procediment per l'etiqueta ]" + tp + "[");
+            "No he trobat el Tipus de Procediment per l'etiqueta ]" 
+        + tpOrig + "[, Revisi si l'ha de posar en la descripció com un àlies.");
       } else {
         solicitud.setProcedimentTipus(tp);
       }
@@ -249,6 +279,10 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
       for (ServeiInfo servei : serveis) {
 
         if (!"CCAA".equalsIgnoreCase(servei.getCedent())) {
+          String msg = "El servei \"" + servei.getNom() + "\" amb cedent '"
+              + servei.getCedent() + "' el descartam per no ser de CCAA.";
+          log.warn(msg);
+          HtmlUtils.saveMessageWarning(request, msg);
           continue;
         }
 
@@ -279,9 +313,9 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
           articles = articles + norma.getArticles() + SEP;
         }
 
-        normaLegal = crop(normaLegal);
-        enllazNormaLegal = crop(enllazNormaLegal);
-        articles = crop(articles);
+        normaLegal = Utils.crop(normaLegal);
+        enllazNormaLegal = Utils.crop(enllazNormaLegal);
+        articles = Utils.crop(articles);
 
         java.lang.String tipusConsentiment = null;
         java.lang.String consentiment = null;
@@ -311,22 +345,5 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
     return solicituds;
   }
 
-  private String crop(String str) {
-    return str = str.length() > 250 ? str.substring(0, 250) + "..." : str;
-  }
-
-  private String getExtension(String fileName) {
-    String extension;
-
-    int pos = fileName.lastIndexOf('.');
-
-    if (pos == -1) {
-      extension = null;
-    } else {
-      extension = fileName.substring(pos).toLowerCase();
-    }
-
-    return extension;
-  }
 
 }

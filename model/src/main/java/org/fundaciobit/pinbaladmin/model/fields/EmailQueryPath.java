@@ -15,6 +15,14 @@ public class EmailQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new LongField(getQueryPath(), EmailFields.EMAILID);
   }
 
+  public TimestampField DATAENVIAMENT() {
+    return new TimestampField(getQueryPath(), EmailFields.DATAENVIAMENT);
+  }
+
+  public StringField ENVIADOR() {
+    return new StringField(getQueryPath(), EmailFields.ENVIADOR);
+  }
+
   public StringField DESTINATARIS() {
     return new StringField(getQueryPath(), EmailFields.DESTINATARIS);
   }
@@ -25,14 +33,6 @@ public class EmailQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
 
   public StringField MESSAGE() {
     return new StringField(getQueryPath(), EmailFields.MESSAGE);
-  }
-
-  public TimestampField DATAENVIAMENT() {
-    return new TimestampField(getQueryPath(), EmailFields.DATAENVIAMENT);
-  }
-
-  public StringField ENVIADOR() {
-    return new StringField(getQueryPath(), EmailFields.ENVIADOR);
   }
 
 

@@ -24,8 +24,6 @@ public class ParserSolicitudXLSX {
    */
   public static SolicitudInfo extreureInfo(InputStream input_document, boolean debug)
       throws Exception {
-
-
     
         // convert it into a POI object
     XSSFWorkbook my_xlsx_workbook = null;

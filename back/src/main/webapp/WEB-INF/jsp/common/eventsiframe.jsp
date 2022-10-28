@@ -1113,10 +1113,8 @@
                 <h4 class="windowSubtitle">${titol}</h4>
 
             </td>
-        </tr>
-        <tr>
-            <td>&nbsp;&nbsp;</td>
-            <td>
+        
+            <td width="45%" align="right">
                 <div>
                     <c:url var="theurl" value="${contextweb}/new"/>
                     <c:set var="urlnou" value="javascript:document.location.href='${theurl}'"/>
@@ -1128,28 +1126,32 @@
                         </c:if>
 
                     </c:if>
-
-                    <button class="btn btn-small" role="button" data-toggle="modal"  onclick="${urlnou}">
+                    
+                    <button class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
                          <i class="icon-plus-sign"></i> Nova Entrada
                     </button>
+                    <br>
 
                     <c:if test="${!isPublic}">
-                        &nbsp;  
                         <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
                             href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
                             <i class="icon-envelope"></i> Enviar aquesta p&agrave;gina al
                             Contacte
                         </a>
+                        <br/>
+                        <button class="btn btn-info btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="javascript:document.location.href='<c:url value="${urlToEditItem}"/>'">
+                             <i class="icon-open-eye"></i> Veure ${tipus}
+                        </button>
                     </c:if>
                 </div>
             </td>
         </tr>
         <tr>
-        <td colspan="2">
+        <td colspan="3">
             <div class="full-width" style="background-color:#EEEEEE;margin:10px 10px 10px 10px; padding:5px 5px 5px 5px;">
-                <h5>Número: ${ID}</h5>
-                <br> Estat: <strong class="label-custom">${estat}</strong>
-                <hr>
+                Número: ${ID}<br> 
+                Estat: <strong class="label-custom">${estat}</strong>
+                <hr style="margin:5px"/>
                 Nom Contacte: ${personaContacte}<br/>
                 Email Contacte: ${personaContacteEmail}<br/>
             </div>
@@ -1157,7 +1159,7 @@
         </tr>
 
         <tr>
-            <td colspan="2">
+            <td colspan="3">
 
                 <div class="fondodiv">
                     <table style="padding: 0px;" border="0" cellpadding="0"

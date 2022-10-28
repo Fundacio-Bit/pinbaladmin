@@ -73,7 +73,7 @@
 		<plugins.version>1.0.0</plugins.version>
 
        <!-- Per defecte no compilar els tests -->
-        <maven.test.skip>true</maven.test.skip>
+        <maven.test.skip>false</maven.test.skip>
     </properties>
     
     <build>

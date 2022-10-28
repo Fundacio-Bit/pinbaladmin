@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.utils;
 
-
 /**
  *
  * @author anadal
@@ -56,6 +55,9 @@ public interface Constants {
   public static final int ESTAT_INCIDENCIA_TANCADA = 2;
 
   
-  
+  public static final int INCIDENCIA_TIPUS_TECNICA = 1; //  "Tècnica"));
+  public static final int INCIDENCIA_TIPUS_CONSULTA = 2;
+  public static final int INCIDENCIA_TIPUS_INTEGRACIONS = 3;
+  public static final int INCIDENCIA_TIPUS_ROLEPERMISOS = 4;
   
 }

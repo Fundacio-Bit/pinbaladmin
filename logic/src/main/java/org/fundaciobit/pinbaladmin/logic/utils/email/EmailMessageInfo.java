@@ -1,9 +1,8 @@
-package org.fundaciobit.pinbaladmin.back.utils;
+package org.fundaciobit.pinbaladmin.logic.utils.email;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
 
 /**
  * 
@@ -12,13 +11,22 @@ import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
  */
 public class EmailMessageInfo {
 
+  protected int number;
+
   protected String displayFrom;
   protected String displayTo;
   protected String displayCC;
-
   protected String displayBCC;
+
+  protected String nameFrom;
+  protected String nameTo;
+  protected String nameCC;
+  protected String nameBCC;
+
   protected String subject;
   protected String body;
+
+  protected Date sentDate;
 
   protected List<EmailAttachmentInfo> attachments = new ArrayList<EmailAttachmentInfo>();
 
@@ -66,6 +74,38 @@ public class EmailMessageInfo {
     this.displayBCC = displayBCC;
   }
 
+  public String getNameFrom() {
+    return nameFrom;
+  }
+
+  public String getNameTo() {
+    return nameTo;
+  }
+
+  public String getNameCC() {
+    return nameCC;
+  }
+
+  public String getNameBCC() {
+    return nameBCC;
+  }
+
+  public void setNameFrom(String nameFrom) {
+    this.nameFrom = nameFrom;
+  }
+
+  public void setNameTo(String nameTo) {
+    this.nameTo = nameTo;
+  }
+
+  public void setNameCC(String nameCC) {
+    this.nameCC = nameCC;
+  }
+
+  public void setNameBCC(String nameBCC) {
+    this.nameBCC = nameBCC;
+  }
+
   public void setSubject(String subject) {
     this.subject = subject;
   }
@@ -78,10 +118,28 @@ public class EmailMessageInfo {
     this.attachments = attachments;
   }
 
+  public Date getSentDate() {
+    return sentDate;
+  }
+
+  public void setSentDate(Date sentDate) {
+    this.sentDate = sentDate;
+  }
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
+
   @Override
   public String toString() {
 
     StringBuilder str = new StringBuilder();
+
+    str.append("================ " + this.number + " ================").append('\n');
 
     str.append("From: " + displayFrom).append('\n');
 
@@ -105,22 +163,6 @@ public class EmailMessageInfo {
     }
 
     return str.toString();
-  }
-
-  public static String getPidFromSubject(String subject) {
-    
-    if (subject == null || subject.length() == 0) {
-      return null;
-    }
-    
-    String pid;
-
-    final String match = "[PID][";
-    int pos = subject.indexOf(match);
-    int pos2 = subject.indexOf("]", pos + match.length() + 1);
-    pid = subject.substring(pos + match.length(), pos2);
-
-    return pid;
   }
 
 }

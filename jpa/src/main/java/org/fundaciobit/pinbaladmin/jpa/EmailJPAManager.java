@@ -66,8 +66,8 @@ public class EmailJPAManager
 		return list.toArray(new Email[list.size()]);
 	};
 
-	public Email create( java.lang.String _destinataris_, java.lang.String _subject_, java.lang.String _message_, java.sql.Timestamp _dataEnviament_, java.lang.String _enviador_) throws I18NException {
-		EmailJPA __bean =  new EmailJPA(_destinataris_,_subject_,_message_,_dataEnviament_,_enviador_);
+	public Email create( java.sql.Timestamp _dataEnviament_, java.lang.String _enviador_, java.lang.String _destinataris_, java.lang.String _subject_, java.lang.String _message_) throws I18NException {
+		EmailJPA __bean =  new EmailJPA(_dataEnviament_,_enviador_,_destinataris_,_subject_,_message_);
 		return create(__bean);
 	}
 

@@ -230,6 +230,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getPersonaContacteEmail(T item);
 
   public abstract String getPersonaContacteNom(T item);
+  
+  public abstract String getUrlToEditItem(T item);
 
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
   public String veureEvents(HttpServletRequest request, HttpServletResponse response,
@@ -339,7 +341,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     String email = getPersonaContacteEmailByItemID(itemID);
 
-    String itemNom = isSolicitud() ? "solicitud" : "incidència";
+    String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
     if (email == null) {
 
       HtmlUtils.saveMessageError(request,
@@ -366,8 +368,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
               "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
 
         } catch (Exception e) {
-          HtmlUtils.saveMessageError(request,
-              "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage());
+          String msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
+          log.error(msg, e);
+          HtmlUtils.saveMessageError(request, msg);
         }
       }
     }
@@ -408,6 +411,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
+    
+    mav.addObject("urlToEditItem", getUrlToEditItem(item));
 
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");

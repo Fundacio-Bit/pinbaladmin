@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<server>
+  <mbean code="org.jboss.varia.property.SystemPropertiesService" name="jboss:type=Service,name=servidorcorreuSystemProperties">
+    <attribute name="Properties">
+
+mail.imap.socketFactory.class=javax.net.ssl.SSLSocketFactory
+mail.imap.socketFactory.fallback=false
+
+mail.imap.host=caragol.fundaciobit.org
+mail.imap.port=993
+mail.imap.socketFactory.port=993
+
+mail.imap.username=theemail@fundaciobit.org
+mail.imap.password=thepassword
+
+mail.store.protocol=imap
+      
+    </attribute>
+  </mbean>
+</server>

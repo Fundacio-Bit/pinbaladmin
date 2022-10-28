@@ -1,4 +1,4 @@
-package org.fundaciobit.pinbaladmin.logic.utils;
+package org.fundaciobit.pinbaladmin.logic.utils.email;
 
 /**
  * 

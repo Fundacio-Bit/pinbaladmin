@@ -77,12 +77,12 @@ public class TipusProcediments {
     tipusProcediments.add(new TipusProcediment(19, "Tributario", "Tributari"));
 
     for (TipusProcediment tipusProcediment : tipusProcediments) {
-      castellaMap.put(tipusProcediment.castella, tipusProcediment);
-      catalaMap.put(tipusProcediment.catala, tipusProcediment);
+      castellaMap.put(tipusProcediment.castella.toLowerCase(), tipusProcediment);
+      catalaMap.put(tipusProcediment.catala.toLowerCase(), tipusProcediment);
     }
     
-    castellaMap.put("Sugerencias, Quejas  y Denuncias", queixes);
-    castellaMap.put("Sugerencias, Quejasy Denuncias", queixes);
+    castellaMap.put("Sugerencias, Quejas  y Denuncias".toLowerCase(), queixes);
+    castellaMap.put("Sugerencias, Quejasy Denuncias".toLowerCase(), queixes);
 
   }
   
@@ -103,7 +103,7 @@ public class TipusProcediments {
       return null;
     }
     
-    tprocCastCatala = tprocCastCatala.trim();
+    tprocCastCatala = tprocCastCatala.trim().toLowerCase();
     
     TipusProcediment tipusProcediment;
     tipusProcediment = castellaMap.get(tprocCastCatala);

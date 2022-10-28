@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.fundaciobit.pinbaladmin.back.utils.EmailEmlFormatParser;
-import org.fundaciobit.pinbaladmin.back.utils.EmailMessageInfo;
+import org.fundaciobit.pinbaladmin.back.utils.Utils;
+import org.fundaciobit.pinbaladmin.back.utils.email.EmailEmlFormatParser;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 
 /**
  * 
@@ -27,7 +28,7 @@ public class ParseEmailEmlTest {
     System.out.println(emi.toString());
     
     String pid;
-    pid = EmailMessageInfo.getPidFromSubject(emi.getSubject());
+    pid = Utils.getPidFromSubject(emi.getSubject());
     System.out.println(" PID => |" + pid + "|");
 
   }

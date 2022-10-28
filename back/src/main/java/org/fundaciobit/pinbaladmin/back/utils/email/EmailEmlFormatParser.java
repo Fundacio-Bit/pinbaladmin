@@ -1,4 +1,4 @@
-package org.fundaciobit.pinbaladmin.back.utils;
+package org.fundaciobit.pinbaladmin.back.utils.email;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -17,8 +17,10 @@ import javax.mail.internet.MimeUtility;
 import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
+
 
 /**
  * 
@@ -36,18 +38,30 @@ public class EmailEmlFormatParser {
     return parseEml(msg);
   }
 
-  private static EmailMessageInfo parseEml(Message msg) throws Exception {
+  public static EmailMessageInfo parseEml(Message msg) throws Exception {
+
+    if (msg == null) {
+      return null;
+    }
 
     EmailMessageInfo emi = new EmailMessageInfo();
 
+    emi.setNumber(msg.getMessageNumber());
+
     // información del remitente
     emi.setDisplayFrom(getRecipients(msg.getFrom()));
-
     emi.setDisplayTo(getRecipients(msg.getRecipients(RecipientType.TO)));
     emi.setDisplayCC(getRecipients(msg.getRecipients(RecipientType.CC)));
     emi.setDisplayBCC(getRecipients(msg.getRecipients(RecipientType.BCC)));
+    
+    emi.setNameFrom(getNames(msg.getFrom()));
+    emi.setNameTo(getNames(msg.getRecipients(RecipientType.TO)));
+    emi.setNameCC(getNames(msg.getRecipients(RecipientType.CC)));
+    emi.setNameBCC(getNames(msg.getRecipients(RecipientType.BCC)));
+    
 
     emi.setSubject(msg.getSubject());
+    emi.setSentDate(msg.getSentDate());
 
     List<EmailAttachmentInfo> attachments = new ArrayList<EmailAttachmentInfo>();
     emi.setAttachments(attachments);
@@ -61,9 +75,15 @@ public class EmailEmlFormatParser {
     } else if (o instanceof Part) {
       Part part = (Part) o;
       rePart(part, emi);
+    } else if (o instanceof String && msg.getContentType().indexOf("text/plain") != -1) {
+      emi.setBody((String)msg.getContent());
+    } else if (o instanceof String && msg.getContentType().indexOf("text/html") != -1) {
+      emi.setBody((String)msg.getContent());
     } else {
-      System.out.println("Tipo" + msg.getContentType());
-      System.out.println("Contenido" + msg.getContent());
+      System.err.println("---- Attachemnt Desconegut ----");
+      System.err.println("Class: " + o.getClass());
+      System.err.println("mime: " + msg.getContentType());
+      System.err.println("Contingut: " + msg.getContent());
     }
 
     return emi;
@@ -88,6 +108,25 @@ public class EmailEmlFormatParser {
     }
     return fromsStr;
   }
+  
+  private static String getNames(Address[] froms) {
+    String fromsStr = "";
+    if (froms != null) {
+      // System.out.println ("Información del remitente:" + froms [0]);
+      InternetAddress addr = (InternetAddress) froms[0];
+
+      if (fromsStr.length() != 0) {
+        fromsStr = fromsStr + ",";
+      }
+
+      fromsStr = fromsStr + addr.getPersonal();
+
+      // System.out.println ("Dirección del remitente:" + addr.getAddress());
+      // System.out.println ("Nombre para mostrar del remitente:" +
+      // addr.getPersonal());
+    }
+    return fromsStr;
+  }
 
   /**
    * @param part
@@ -98,17 +137,17 @@ public class EmailEmlFormatParser {
 
     if (part.getDisposition() != null) {
 
-      String strFileNmae = part.getFileName();
-      if (!StringUtils.isEmpty(strFileNmae)) {// MimeUtility.decodeText resuelve
+      String strFileName = part.getFileName();
+      if (!StringUtils.isEmpty(strFileName)) {// MimeUtility.decodeText resuelve
                                               // el problema de los nombres de
                                               // archivos adjuntos confusos
-        strFileNmae = MimeUtility.decodeText(strFileNmae);
+        strFileName = MimeUtility.decodeText(strFileName);
         // System.out.println ("Adjunto encontrado:" + strFileNmae);
 
         InputStream in = part.getInputStream(); // Abrir el flujo de entrada del
                                                 // adjunto
         // Leer los bytes adjuntos y almacenarlos en el archivo
-        java.io.FileOutputStream out = new FileOutputStream(strFileNmae);
+        java.io.FileOutputStream out = new FileOutputStream(strFileName);
         int data;
         while ((data = in.read()) != -1) {
           out.write(data);
@@ -123,19 +162,17 @@ public class EmailEmlFormatParser {
       // System.out.println ("Contenido del adjunto:" + part.getContent ());
 
       List<EmailAttachmentInfo> attachments = emi.getAttachments();
-     
+
       String mime = MimeUtility.decodeText(part.getContentType());
-      int pos =  mime.indexOf(';');
+      int pos = mime.indexOf(';');
       if (pos != -1) {
         mime = mime.substring(0, pos);
       }
-      
-      attachments.add(
-          new EmailAttachmentInfo(strFileNmae, mime,
-              IOUtils.toByteArray(part.getInputStream())));
+
+      attachments.add(new EmailAttachmentInfo(strFileName, mime,
+          IOUtils.toByteArray(part.getInputStream())));
 
     } else {
-
       if (part.getContentType().startsWith("text/plain")) {
         // Contenido de texto
         emi.setBody(part.getContent().toString());
@@ -145,13 +182,12 @@ public class EmailEmlFormatParser {
           emi.setBody(part.getContent().toString());
         }
       }
-
     }
   }
 
   /**
    * @param multipart
-   *          // Recibir y descargar paquetes (incluido todo el contenido del
+   *          Recibir y descargar paquetes (incluido todo el contenido del
    *          correo (paquete + cuerpo + archivo adjunto))
    * @throws Exception
    */
@@ -161,16 +197,16 @@ public class EmailEmlFormatParser {
     // Procesar cada parte por turno
     for (int j = 0, n = multipart.getCount(); j < n; j++) {
       // System.out.println ("Sección de procesamiento" + j + "parte");
-      Part part = multipart.getBodyPart(j); // Desempaquetar, sacar las partes
-                                            // de MultiPart,
+      Part part = multipart.getBodyPart(j);
+      // Desempaquetar, sacar las partes de MultiPart,
       // Cada parte puede ser el contenido del correo electrónico,
       // También puede ser otro paquete pequeño (MultipPart)
       // Determine si el contenido de este paquete es un paquete pequeño,
       // generalmente esta parte es el cuerpo Content-Type: multipart /
       // Alternative
       if (part.getContent() instanceof Multipart) {
-        Multipart p = (Multipart) part.getContent(); // Convertir a paquete
-                                                     // pequeño
+        // Convertir a paquete pequeño
+        Multipart p = (Multipart) part.getContent();
         // iteración recursiva
         reMultipart(p, emi);
       } else {

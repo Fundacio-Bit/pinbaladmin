@@ -27,6 +27,12 @@ private static final long serialVersionUID = 825770687L;
 	@Column(name="emailid",nullable = false,length = 19)
 	long emailID;
 
+	@Column(name="dataenviament",nullable = false,length = 29,precision = 6)
+	java.sql.Timestamp dataEnviament;
+
+	@Column(name="enviador",nullable = false,length = 255)
+	java.lang.String enviador;
+
 	@Column(name="destinataris",nullable = false,length = 6000)
 	java.lang.String destinataris;
 
@@ -36,12 +42,6 @@ private static final long serialVersionUID = 825770687L;
 	@Column(name="message",nullable = false,length = 6000)
 	java.lang.String message;
 
-	@Column(name="dataenviament",nullable = false,length = 29,precision = 6)
-	java.sql.Timestamp dataEnviament;
-
-	@Column(name="enviador",nullable = false,length = 255)
-	java.lang.String enviador;
-
 
 
   /** Constructor Buit */
@@ -49,29 +49,29 @@ private static final long serialVersionUID = 825770687L;
   }
 
   /** Constructor amb tots els camps  */
-  public EmailJPA(long emailID , java.lang.String destinataris , java.lang.String subject , java.lang.String message , java.sql.Timestamp dataEnviament , java.lang.String enviador) {
+  public EmailJPA(long emailID , java.sql.Timestamp dataEnviament , java.lang.String enviador , java.lang.String destinataris , java.lang.String subject , java.lang.String message) {
     this.emailID=emailID;
+    this.dataEnviament=dataEnviament;
+    this.enviador=enviador;
     this.destinataris=destinataris;
     this.subject=subject;
     this.message=message;
-    this.dataEnviament=dataEnviament;
-    this.enviador=enviador;
 }
   /** Constructor sense valors autoincrementals */
-  public EmailJPA(java.lang.String destinataris , java.lang.String subject , java.lang.String message , java.sql.Timestamp dataEnviament , java.lang.String enviador) {
+  public EmailJPA(java.sql.Timestamp dataEnviament , java.lang.String enviador , java.lang.String destinataris , java.lang.String subject , java.lang.String message) {
+    this.dataEnviament=dataEnviament;
+    this.enviador=enviador;
     this.destinataris=destinataris;
     this.subject=subject;
     this.message=message;
-    this.dataEnviament=dataEnviament;
-    this.enviador=enviador;
 }
   public EmailJPA(Email __bean) {
     this.setEmailID(__bean.getEmailID());
+    this.setDataEnviament(__bean.getDataEnviament());
+    this.setEnviador(__bean.getEnviador());
     this.setDestinataris(__bean.getDestinataris());
     this.setSubject(__bean.getSubject());
     this.setMessage(__bean.getMessage());
-    this.setDataEnviament(__bean.getDataEnviament());
-    this.setEnviador(__bean.getEnviador());
 	}
 
 	public long getEmailID() {
@@ -79,6 +79,20 @@ private static final long serialVersionUID = 825770687L;
 	};
 	public void setEmailID(long _emailID_) {
 		this.emailID = _emailID_;
+	};
+
+	public java.sql.Timestamp getDataEnviament() {
+		return(dataEnviament);
+	};
+	public void setDataEnviament(java.sql.Timestamp _dataEnviament_) {
+		this.dataEnviament = _dataEnviament_;
+	};
+
+	public java.lang.String getEnviador() {
+		return(enviador);
+	};
+	public void setEnviador(java.lang.String _enviador_) {
+		this.enviador = _enviador_;
 	};
 
 	public java.lang.String getDestinataris() {
@@ -102,20 +116,6 @@ private static final long serialVersionUID = 825770687L;
 		this.message = _message_;
 	};
 
-	public java.sql.Timestamp getDataEnviament() {
-		return(dataEnviament);
-	};
-	public void setDataEnviament(java.sql.Timestamp _dataEnviament_) {
-		this.dataEnviament = _dataEnviament_;
-	};
-
-	public java.lang.String getEnviador() {
-		return(enviador);
-	};
-	public void setEnviador(java.lang.String _enviador_) {
-		this.enviador = _enviador_;
-	};
-
 
 
   @Override
@@ -137,11 +137,11 @@ private static final long serialVersionUID = 825770687L;
     if (__bean == null) { return null;}
     EmailJPA __tmp = new EmailJPA();
     __tmp.setEmailID(__bean.getEmailID());
+    __tmp.setDataEnviament(__bean.getDataEnviament());
+    __tmp.setEnviador(__bean.getEnviador());
     __tmp.setDestinataris(__bean.getDestinataris());
     __tmp.setSubject(__bean.getSubject());
     __tmp.setMessage(__bean.getMessage());
-    __tmp.setDataEnviament(__bean.getDataEnviament());
-    __tmp.setEnviador(__bean.getEnviador());
 		return __tmp;
 	}
 

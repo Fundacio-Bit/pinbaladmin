@@ -68,45 +68,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.DESTINATARIS)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="email.destinataris" var="destinataris" />
-              <fmt:message key="genapp.form.searchby" var="cercaperdestinataris" >                
-                 <fmt:param value="${destinataris}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${destinataris}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinataris}" path="destinataris" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.SUBJECT)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="email.subject" var="subject" />
-              <fmt:message key="genapp.form.searchby" var="cercapersubject" >                
-                 <fmt:param value="${subject}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${subject}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapersubject}" path="subject" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.MESSAGE)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="email.message" var="message" />
-              <fmt:message key="genapp.form.searchby" var="cercapermessage" >                
-                 <fmt:param value="${message}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${message}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapermessage}" path="message" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.DATAENVIAMENT)}">
             <%-- FILTRE DATE --%>
             <div class="input-prepend input-append" style="padding-right: 4px;padding-bottom: 4px;">
@@ -162,6 +123,45 @@
               </fmt:message>
               <span class="add-on"><c:out value="${enviador}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperenviador}" path="enviador" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.DESTINATARIS)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="email.destinataris" var="destinataris" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdestinataris" >                
+                 <fmt:param value="${destinataris}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${destinataris}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinataris}" path="destinataris" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.SUBJECT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="email.subject" var="subject" />
+              <fmt:message key="genapp.form.searchby" var="cercapersubject" >                
+                 <fmt:param value="${subject}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${subject}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapersubject}" path="subject" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EmailFields.MESSAGE)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="email.message" var="message" />
+              <fmt:message key="genapp.form.searchby" var="cercapermessage" >                
+                 <fmt:param value="${message}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${message}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapermessage}" path="message" />
             </div>
 
 

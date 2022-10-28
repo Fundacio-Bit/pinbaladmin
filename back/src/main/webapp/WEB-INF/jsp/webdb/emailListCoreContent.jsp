@@ -29,6 +29,14 @@
           <c:out value="${email.emailID}" />
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DATAENVIAMENT)}">
+          <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${email.dataEnviament}" /></td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.ENVIADOR)}">
+          <td>
+          <c:out value="${email.enviador}" />
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DESTINATARIS)}">
           <td>
           <c:out value="${email.destinataris}" />
@@ -42,14 +50,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.MESSAGE)}">
           <td>
           <c:out value="${email.message}" />
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DATAENVIAMENT)}">
-          <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${email.dataEnviament}" /></td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.ENVIADOR)}">
-          <td>
-          <c:out value="${email.enviador}" />
           </td>
         </c:if>
 

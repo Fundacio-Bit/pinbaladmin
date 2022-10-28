@@ -38,10 +38,12 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/incidencia")
+@RequestMapping(value = IncidenciaTecnicaOperadorController.WEBCONTEXT)
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })
 public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaController
     implements Constants {
+  
+  public static final String WEBCONTEXT = "/operador/incidencia";
 
   public static final int FILTRE_AVANZAT_COLUMN = -1;
 
@@ -356,10 +358,11 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
   public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request,
       ModelAndView mav, Where where) throws I18NException {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue("1", "Tècnica"));
-    __tmp.add(new StringKeyValue("2", "Consulta"));
-    __tmp.add(new StringKeyValue("3", "Integracions"));
-    __tmp.add(new StringKeyValue("4", "Roles de permisos"));
+
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
     return __tmp;
   }
 

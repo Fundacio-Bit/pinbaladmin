@@ -156,6 +156,7 @@ public class SistraFacadeImpl implements SistraFacade {
       if (cedentsAExcloure == null || cedentsAExcloure.size() == 0) {
         log.info("NO hi ha CEDENTS a Excloure");
         w = Where.AND(
+                // 20 == Estat Producció
                 ServeiFields.ESTATSERVEIID.equal(20L),
                 ServeiFields.OCULT.equal(false)
         );
@@ -170,7 +171,7 @@ public class SistraFacadeImpl implements SistraFacade {
         );
       }
       
-      // 20 == Estat Producció
+      
       List<Servei> list = serveiEjb.select(w, new OrderBy(ServeiFields.NOM));
 
       Filas filas = new Filas();
@@ -201,10 +202,10 @@ public class SistraFacadeImpl implements SistraFacade {
       return _return;
 
     } catch (I18NException ex) {
-      
-      log.error(ex.getMessage(), ex);
-      
+
       String msg = I18NLogicUtils.getMessage(ex, new Locale("ca"));
+      
+      log.error(msg, ex);
       
       es.caib.sistra.ws.v2.model.valoresdominio.ValoresDominio _return;
       _return = new es.caib.sistra.ws.v2.model.valoresdominio.ValoresDominio();

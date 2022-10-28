@@ -42,39 +42,6 @@ public class EmailFilterForm extends PinbalAdminBaseFilterForm implements EmailF
   }
 
 
-  private java.lang.String destinataris;
-
-  public java.lang.String getDestinataris() {
-    return this.destinataris;
-  }
-
-  public void setDestinataris(java.lang.String destinataris) {
-    this.destinataris = destinataris;
-  }
-
-
-  private java.lang.String subject;
-
-  public java.lang.String getSubject() {
-    return this.subject;
-  }
-
-  public void setSubject(java.lang.String subject) {
-    this.subject = subject;
-  }
-
-
-  private java.lang.String message;
-
-  public java.lang.String getMessage() {
-    return this.message;
-  }
-
-  public void setMessage(java.lang.String message) {
-    this.message = message;
-  }
-
-
   private java.sql.Timestamp dataEnviamentDesde;
 
   public java.sql.Timestamp getDataEnviamentDesde() {
@@ -108,6 +75,39 @@ public class EmailFilterForm extends PinbalAdminBaseFilterForm implements EmailF
   }
 
 
+  private java.lang.String destinataris;
+
+  public java.lang.String getDestinataris() {
+    return this.destinataris;
+  }
+
+  public void setDestinataris(java.lang.String destinataris) {
+    this.destinataris = destinataris;
+  }
+
+
+  private java.lang.String subject;
+
+  public java.lang.String getSubject() {
+    return this.subject;
+  }
+
+  public void setSubject(java.lang.String subject) {
+    this.subject = subject;
+  }
+
+
+  private java.lang.String message;
+
+  public java.lang.String getMessage() {
+    return this.message;
+  }
+
+  public void setMessage(java.lang.String message) {
+    this.message = message;
+  }
+
+
   public EmailFilterForm() {
   }
   
@@ -115,12 +115,12 @@ public class EmailFilterForm extends PinbalAdminBaseFilterForm implements EmailF
     super(__toClone);
     this.emailIDDesde = __toClone.emailIDDesde;
     this.emailIDFins = __toClone.emailIDFins;
-    this.destinataris = __toClone.destinataris;
-    this.subject = __toClone.subject;
-    this.message = __toClone.message;
     this.dataEnviamentDesde = __toClone.dataEnviamentDesde;
     this.dataEnviamentFins = __toClone.dataEnviamentFins;
     this.enviador = __toClone.enviador;
+    this.destinataris = __toClone.destinataris;
+    this.subject = __toClone.subject;
+    this.message = __toClone.message;
   }
   
   /* ========= UTILS ========== */

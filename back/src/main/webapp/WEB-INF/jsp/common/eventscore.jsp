@@ -26,7 +26,7 @@
 </c:if>
 
 
-<c:out value="${event.comentari}" />
+${event.comentari}
 
 
 <c:if test="${event.tipus == -2 }">

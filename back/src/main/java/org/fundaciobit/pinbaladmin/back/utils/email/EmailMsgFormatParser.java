@@ -1,4 +1,4 @@
-package org.fundaciobit.pinbaladmin.back.utils;
+package org.fundaciobit.pinbaladmin.back.utils.email;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,8 @@ import java.util.List;
 import org.apache.poi.hsmf.MAPIMessage;
 import org.apache.poi.hsmf.datatypes.AttachmentChunks;
 import org.apache.poi.hsmf.exceptions.ChunkNotFoundException;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 
 /**
  * 

@@ -7,6 +7,7 @@ import javax.persistence.SequenceGenerator;
 import java.util.HashSet;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Lob;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import java.util.Set;
@@ -34,7 +35,8 @@ private static final long serialVersionUID = 979554313L;
 	@Column(name="titol",nullable = false,length = 255)
 	java.lang.String titol;
 
-	@Column(name="descripcio",nullable = false,length = 4000)
+	@Column(name="descripcio",nullable = false,length = 2147483647)
+  @Lob
 	java.lang.String descripcio;
 
 	@Column(name="datainici",nullable = false,length = 29,precision = 6)

@@ -47,6 +47,11 @@ public abstract class AbstractEventSolicitudController
   public Solicitud findItemByPrimaryKey(Long itemID) {
     return solicitudLogicaEjb.findByPrimaryKey(itemID);
   }
+  
+  @Override
+  public String getUrlToEditItem(Solicitud item) {
+    return "/operador/solicitudlocal/" + item.getSolicitudID() + "/edit";
+  }
 
   @Override
   public String getTitol(Solicitud item) {

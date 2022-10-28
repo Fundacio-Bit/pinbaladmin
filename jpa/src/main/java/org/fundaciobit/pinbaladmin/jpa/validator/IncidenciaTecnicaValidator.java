@@ -71,9 +71,9 @@ public class IncidenciaTecnicaValidator<T> implements IncidenciaTecnicaFields {
     
     if (__vr.getFieldErrorCount(DESCRIPCIO) == 0) {
       java.lang.String __descripcio = (java.lang.String)__vr.getFieldValue(__target__,DESCRIPCIO);
-      if (__descripcio!= null && __descripcio.length() > 4000) {
+      if (__descripcio!= null && __descripcio.length() > 2147483647) {
         __vr.rejectValue(DESCRIPCIO, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(4000)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
       }
     }
     

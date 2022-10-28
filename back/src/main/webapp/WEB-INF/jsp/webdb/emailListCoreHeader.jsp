@@ -15,6 +15,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.EMAILID)}">
         <th>${pad:getSortIcons(__theFilterForm,EmailFields.EMAILID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DATAENVIAMENT)}">
+        <th>${pad:getSortIcons(__theFilterForm,EmailFields.DATAENVIAMENT)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.ENVIADOR)}">
+        <th>${pad:getSortIcons(__theFilterForm,EmailFields.ENVIADOR)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DESTINATARIS)}">
         <th>${pad:getSortIcons(__theFilterForm,EmailFields.DESTINATARIS)}</th>
         </c:if>
@@ -23,12 +29,6 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.MESSAGE)}">
         <th>${pad:getSortIcons(__theFilterForm,EmailFields.MESSAGE)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.DATAENVIAMENT)}">
-        <th>${pad:getSortIcons(__theFilterForm,EmailFields.DATAENVIAMENT)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EmailFields.ENVIADOR)}">
-        <th>${pad:getSortIcons(__theFilterForm,EmailFields.ENVIADOR)}</th>
         </c:if>
 
 

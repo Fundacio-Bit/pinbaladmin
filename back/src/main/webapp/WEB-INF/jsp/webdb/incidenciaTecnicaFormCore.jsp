@@ -32,15 +32,7 @@
             </td>
             <td>
               <form:errors path="incidenciaTecnica.descripcio" cssClass="errorField alert alert-error" />
-              <form:textarea rows="3" wrap="soft" style="overflow:auto;" cssClass="input-xxlarge" readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DESCRIPCIO)? 'true' : 'false'}" path="incidenciaTecnica.descripcio"  />
-              <div class="btn-group" style="vertical-align: top;">
-              <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">&nbsp;<span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='off';" >No Wrap</a></li>
-                <li><a href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='soft';">Soft Wrap</a></li>
-                <li><a href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='hard';">Hard Wrap</a></li>
-              </ul>
-              </div>
+              <form:textarea cssClass="input-xxlarge ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DESCRIPCIO)? 'mceEditorReadOnly':'mceEditor'}" path="incidenciaTecnica.descripcio"  />
            </td>
         </tr>
         </c:if>

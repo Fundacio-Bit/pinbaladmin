@@ -94,10 +94,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     BALEARS = new CustomField("entitatServei.balears");
   }
 
+  // EJB's
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.ServeiLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.ServeiLocal serveiEjb;
 
-  // EJB's
+  @EJB(mappedName = SolicitudLogicaLocal.JNDI_NAME)
+  protected SolicitudLogicaLocal solicitudLogicaEjb;
+
   @javax.ejb.EJB(mappedName = "pinbaladmin/EstatSolicitudServeiEJB/local")
   protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiLocal estatSolicitudServeiEjb;
 
@@ -106,9 +109,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudLocal estatSolicitudEjb;
-
-  @EJB(mappedName = SolicitudLogicaLocal.JNDI_NAME)
-  protected SolicitudLogicaLocal solicitudLogicaEjb;
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.AreaLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.AreaLocal areaEjb;
@@ -954,21 +954,20 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      */
     DepartamentQueryPath dqp = new DepartamentQueryPath();
     SelectMultipleStringKeyValue smkv = new SelectMultipleStringKeyValue(
-        dqp.AREA().ENTITATID().select, dqp.AREA().ENTITAT().NOM().select, dqp.AREA().ENTITAT().CONVENIPMSBAE().select);
+        dqp.AREA().ENTITATID().select, dqp.AREA().ENTITAT().NOM().select,
+        dqp.AREA().ENTITAT().CONVENIPMSBAE().select);
 
     List<StringKeyValue> listSKV = departamentEjb.executeQuery(smkv, null);
-    
-    
+
     for (StringKeyValue skv : listSKV) {
-      String v = skv.value; 
+      String v = skv.value;
       if (v.endsWith(" true")) {
-        skv.setValue("<span style=\"color:red\"><b>"+ v.replace(" true", " - PMSBAE</b></span>"));
+        skv.setValue(
+            "<span style=\"color:red\"><b>" + v.replace(" true", " - PMSBAE</b></span>"));
       } else {
         skv.setValue(v.replace(" false", ""));
       }
     }
-    
-    
 
     // for (StringKeyValue skv : listSKV) {
     // log.info("XYZ ZZZ " + skv.getKey() + " => " + skv.getValue());

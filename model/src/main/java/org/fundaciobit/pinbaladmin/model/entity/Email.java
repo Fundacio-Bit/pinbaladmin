@@ -5,6 +5,12 @@ public interface Email extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public long getEmailID();
 	public void setEmailID(long _emailID_);
 
+	public java.sql.Timestamp getDataEnviament();
+	public void setDataEnviament(java.sql.Timestamp _dataEnviament_);
+
+	public java.lang.String getEnviador();
+	public void setEnviador(java.lang.String _enviador_);
+
 	public java.lang.String getDestinataris();
 	public void setDestinataris(java.lang.String _destinataris_);
 
@@ -13,12 +19,6 @@ public interface Email extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.String getMessage();
 	public void setMessage(java.lang.String _message_);
-
-	public java.sql.Timestamp getDataEnviament();
-	public void setDataEnviament(java.sql.Timestamp _dataEnviament_);
-
-	public java.lang.String getEnviador();
-	public void setEnviador(java.lang.String _enviador_);
 
 
 
