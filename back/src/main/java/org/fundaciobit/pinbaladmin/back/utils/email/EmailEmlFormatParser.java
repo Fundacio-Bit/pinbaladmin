@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 
-
 /**
  * 
  * @author anadal
@@ -53,12 +52,11 @@ public class EmailEmlFormatParser {
     emi.setDisplayTo(getRecipients(msg.getRecipients(RecipientType.TO)));
     emi.setDisplayCC(getRecipients(msg.getRecipients(RecipientType.CC)));
     emi.setDisplayBCC(getRecipients(msg.getRecipients(RecipientType.BCC)));
-    
+
     emi.setNameFrom(getNames(msg.getFrom()));
     emi.setNameTo(getNames(msg.getRecipients(RecipientType.TO)));
     emi.setNameCC(getNames(msg.getRecipients(RecipientType.CC)));
     emi.setNameBCC(getNames(msg.getRecipients(RecipientType.BCC)));
-    
 
     emi.setSubject(msg.getSubject());
     emi.setSentDate(msg.getSentDate());
@@ -76,9 +74,9 @@ public class EmailEmlFormatParser {
       Part part = (Part) o;
       rePart(part, emi);
     } else if (o instanceof String && msg.getContentType().indexOf("text/plain") != -1) {
-      emi.setBody((String)msg.getContent());
+      emi.setBody((String) msg.getContent());
     } else if (o instanceof String && msg.getContentType().indexOf("text/html") != -1) {
-      emi.setBody((String)msg.getContent());
+      emi.setBody((String) msg.getContent());
     } else {
       System.err.println("---- Attachemnt Desconegut ----");
       System.err.println("Class: " + o.getClass());
@@ -108,7 +106,7 @@ public class EmailEmlFormatParser {
     }
     return fromsStr;
   }
-  
+
   private static String getNames(Address[] froms) {
     String fromsStr = "";
     if (froms != null) {
@@ -169,17 +167,26 @@ public class EmailEmlFormatParser {
         mime = mime.substring(0, pos);
       }
 
-      attachments.add(new EmailAttachmentInfo(strFileName, mime,
-          IOUtils.toByteArray(part.getInputStream())));
+      if (part.getContentType().startsWith("text/html")
+          && (emi.getBody() == null || emi.getBody().equals(""))) {
+        emi.setBody(
+            new String(IOUtils.toByteArray(part.getInputStream())));
+      } else {
+        attachments.add(new EmailAttachmentInfo(strFileName, mime,
+            IOUtils.toByteArray(part.getInputStream())));
+      }
 
     } else {
       if (part.getContentType().startsWith("text/plain")) {
         // Contenido de texto
         emi.setBody(part.getContent().toString());
-      } else {
+      } else if (part.getContentType().startsWith("text/html")) {
         // Contenido HTML
-        if (emi.getBody() == null) {
-          emi.setBody(part.getContent().toString());
+        emi.setBody(part.getContent().toString());
+        {
+          if (emi.getBody() == null || emi.getBody().equals("")) {
+            emi.setBody(part.getContent().toString());
+          }
         }
       }
     }

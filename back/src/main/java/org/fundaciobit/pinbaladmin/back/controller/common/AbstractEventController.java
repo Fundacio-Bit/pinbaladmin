@@ -22,6 +22,8 @@ import org.fundaciobit.pinbaladmin.jpa.EventJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.utils.Constants;
@@ -230,7 +232,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getPersonaContacteEmail(T item);
 
   public abstract String getPersonaContacteNom(T item);
-  
+
   public abstract String getUrlToEditItem(T item);
 
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
@@ -267,10 +269,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request, EventForm eventForm) {
 
-    log.info("Entra a getRedirectWhenCreated ... Princial => " + request.getUserPrincipal() );
-    
-    
-    
+    log.info("Entra a getRedirectWhenCreated ... Princial => " + request.getUserPrincipal());
+
     if (request.getUserPrincipal() != null) {
       // Accés loguejat
       Event ev = eventForm.getEvent();
@@ -337,8 +337,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
   public String enviarCorreu(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable Long itemID) throws I18NException {
+      @PathVariable Long itemID)  {
 
+    try {
     String email = getPersonaContacteEmailByItemID(itemID);
 
     String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
@@ -348,19 +349,37 @@ public abstract class AbstractEventController<T> extends EventController impleme
           "El contacte de la " + itemNom + "  " + itemID + " és buit.");
     } else {
 
-      final boolean isHtml = false;
-
       String[] emails = { email };
       log.error("Dest: " + Arrays.toString(emails));
 
+      String titol;
+      {
+        T item = findItemByPrimaryKey(itemID);
+        
+        log.info("item getClass" + item.getClass());
+        
+        if (item instanceof Solicitud) {
+          Solicitud soli = ((Solicitud) item);
+          titol = soli.getProcedimentCodi() + " " + soli.getProcedimentNom();
+        } else if (item instanceof IncidenciaTecnica) {
+          IncidenciaTecnica inci = ((IncidenciaTecnica) item);
+          titol = inci.getTitol();
+        } else {
+          throw new I18NException("genapp.comodi",
+              "No puc processar tipus " + item.getClass());
+        }
+      }
+
+      final boolean isHtml = false;
       for (String address : emails) {
         try {
 
           String url = getLinkPublic(itemID);
 
-          EmailUtil.postMail("Enllaç la gestió de la seva petició de permisos", "Bones:\n"
-              + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició, així com afegir informació addicional a la seva "
-              + itemNom + ": " + url, isHtml,
+          EmailUtil.postMail("Enllaç la gestió de la seva " + itemNom, "Bones:\n"
+              + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+              + titol + "'." + "\n També podrà afegir informació addicional a la seva "
+              + itemNom + " a través d'aquest enllaç: " + url, isHtml,
 
               Configuracio.getAppEmail(), address);
 
@@ -373,6 +392,13 @@ public abstract class AbstractEventController<T> extends EventController impleme
           HtmlUtils.saveMessageError(request, msg);
         }
       }
+    }
+    } catch(I18NException i18ne) {
+      
+      String msg = "No s'ha pogut enviar el correu: " + I18NUtils.getMessage(i18ne);
+      log.error(msg, i18ne);
+      HtmlUtils.saveMessageError(request, msg);
+      
     }
 
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
@@ -411,7 +437,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
-    
+
     mav.addObject("urlToEditItem", getUrlToEditItem(item));
 
     mav.addObject("ID", itemID);

@@ -99,6 +99,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       emailFilterForm.addHiddenField(DESTINATARIS);
       emailFilterForm.addHiddenField(MESSAGE);
+      emailFilterForm.addHiddenField(EMAILID);
 
       emailFilterForm.setItemsPerPage(-1);
       emailFilterForm.setAllItemsPerPage(new int[] { -1 });
@@ -161,9 +162,9 @@ public class LlistaCorreusOperadorController extends EmailController {
         String msg = email.getMessage().trim();
 
         if (msg.startsWith("<") && msg.endsWith(">")) {
-          map.put(email.getEmailID(), "<div>" + msg + "</div>");
+          map.put(email.getEmailID(), "<div style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg + "</div>");
         } else {
-          map.put(email.getEmailID(), "<textarea readonly  style=\"width:auto;\""
+          map.put(email.getEmailID(), "<textarea readonly  style=\"width:auto;max-width:500px;max-height:400px;\""
               + computeRowsCols(msg) + ">" + msg + "</textarea>");
         }
       }
@@ -172,13 +173,19 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       if (emi.getAttachments() != null) {
         StringBuffer str = new StringBuffer();
+        
+        
 
         for (EmailAttachmentInfo ads : emi.getAttachments()) {
 
-          str.append(" * " + ads.getFileName() + " (" + ads.getData().length + " bytes" + ")")
-              .append("<br/>");
-
+          str.append("<div style=\"border-style: solid;border-width:1px;\">");
+          str.append("<small>-Nom: " + ads.getFileName()  + "<br/>"
+              + "-Mida: " + ads.getData().length + " bytes<br/>"
+              + "-Tipus: " + ads.getContentType());
+          str.append("</small></div><br/>");
         }
+        
+        
 
         mapAttach.put(email.getEmailID(), str.toString());
 
@@ -208,7 +215,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       }
     }
 
-    return " rows=\"" + rows + "\" cols=\"" + cols + "\" ";
+    return " rows=\"" + Math.min(rows, 70) + "\" cols=\"" + cols + "\" ";
 
   }
 

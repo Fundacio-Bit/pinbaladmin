@@ -5,7 +5,6 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventIncidenciaTecnicaPublicController;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 
 /**
