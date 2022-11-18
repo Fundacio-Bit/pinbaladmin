@@ -46,6 +46,10 @@ public class EmailOperatorController extends EmailController {
   public String getTileList() {
     return "emailListOperator";
   }
+  
+  public boolean isStoredInDDBB() {
+    return true;
+  }
 
   @Override
   public EmailJPA create(HttpServletRequest request, EmailJPA email) throws Exception,
@@ -66,7 +70,11 @@ public class EmailOperatorController extends EmailController {
       }
     }
 
-    return (EmailJPA) emailEjb.create(email);
+    if (isStoredInDDBB()) {
+      email = (EmailJPA) emailEjb.create(email);
+    }
+    
+    return email;
   }
 
   @Override
@@ -99,8 +107,7 @@ public class EmailOperatorController extends EmailController {
       emailFilterForm.addHiddenField(DESTINATARIS);
       emailFilterForm.addHiddenField(EMAILID);
       emailFilterForm.addHiddenField(MESSAGE);
-      ;
-      // emailFilterForm.addHiddenField(field);;
+
 
       emailFilterForm.setVisibleMultipleSelection(false);
       emailFilterForm.setDeleteSelectedButtonVisible(false);
@@ -108,6 +115,7 @@ public class EmailOperatorController extends EmailController {
       emailFilterForm.setEditButtonVisible(false);
 
       emailFilterForm.setVisibleExportList(false);
+
 
       emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-eye-open",
           "genapp.viewtitle", getContextWeb() + "/view/{0}", "btn-info"));
@@ -127,16 +135,10 @@ public class EmailOperatorController extends EmailController {
 
       // TODO XYZ ZZZ separador ;
 
-      // Seleccionam els correus de les solicituds Local
-      Where where = Where.AND(SolicitudFields.DEPARTAMENTID.isNotNull(),
-          SolicitudFields.PERSONACONTACTEEMAIL.isNotNull());
+      emailForm.setTitleCode("=Enviar Correu");
 
-      List<String> emailsList = solicitudEjb.executeQuery(
-          SolicitudFields.PERSONACONTACTEEMAIL, where);
 
-      Set<String> emails = new HashSet<String>(emailsList);
-
-      String emailsStr = emails.toString().replaceAll("\\[|\\]", "").replaceAll(", ", ";");
+      String emailsStr = getEmailDestinatari(request);
 
       emailForm.getEmail().setDestinataris(emailsStr);
       emailForm.getEmail().setDataEnviament(new Timestamp(System.currentTimeMillis()));
@@ -145,11 +147,32 @@ public class EmailOperatorController extends EmailController {
       emailForm.addReadOnlyField(DESTINATARIS);
       emailForm.addReadOnlyField(DATAENVIAMENT);
       emailForm.addReadOnlyField(ENVIADOR);
+      
+      
+      
+      emailForm.setSaveButtonVisible(false);
+      
+      emailForm.addAdditionalButton(new AdditionalButton("icon-envelope icon-white", "enviar",
+          "javascript: document.getElementById('emailForm').submit();", "btn-primary"));
 
     } else {
       // only view
     }
 
     return emailForm;
+  }
+
+  protected String getEmailDestinatari(HttpServletRequest request) throws I18NException {
+    
+    // Seleccionam els correus de les solicituds Local
+    final Where where = Where.AND(SolicitudFields.DEPARTAMENTID.isNotNull(),
+        SolicitudFields.PERSONACONTACTEEMAIL.isNotNull());
+    List<String> emailsList = solicitudEjb.executeQuery(
+        SolicitudFields.PERSONACONTACTEEMAIL, where);
+
+    Set<String> emails = new HashSet<String>(emailsList);
+
+    String emailsStr = emails.toString().replaceAll("\\[|\\]", "").replaceAll(", ", ";");
+    return emailsStr;
   }
 }

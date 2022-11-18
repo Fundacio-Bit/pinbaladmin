@@ -14,7 +14,7 @@
         </c:if>
     </c:if>
 
-    <button class="btn btn-mini btn-danger" onclick="${urlnou}"
+    <button class="btn btn-mini btn-danger" onclick="${urlnou}" style="color:white"
         onclick="" title="Modificar">
             <i class="icon-pencil iconpencil"></i>Editar
     </button>

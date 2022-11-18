@@ -1105,16 +1105,19 @@
 
 
 
-    <table>
+    <table width="100%">
         <tr valign="top">
-            <td><br/><img src="<c:url value="/img/caibbg.png"/>" /></td>
-            <td>
-                <h3 class="windowTitle">${tipus}</h3>
-                <h4 class="windowSubtitle">${titol}</h4>
-
-            </td>
+            <td rowspan="2" ><img src="<c:url value="/img/caibbg.png"/>" /></td>
+            <td colspan="2">
+               <table width="100%" style="right:0;position: relative;">
+               <tr>
+               <td>
+                <h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
+                </td>
+                
+                        
         
-            <td width="45%" align="right">
+                  <td width="100%" align="right">
                 <div>
                     <c:url var="theurl" value="${contextweb}/new"/>
                     <c:set var="urlnou" value="javascript:document.location.href='${theurl}'"/>
@@ -1127,35 +1130,64 @@
 
                     </c:if>
                     
-                    <button class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
-                         <i class="icon-plus-sign"></i> Nova Entrada
-                    </button>
-                    <br>
 
+                    
                     <c:if test="${!isPublic}">
                         <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
-                            href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
+                            href="<c:url value="${contextweb}/enviarenllaz/${ID}"/>">
                             <i class="icon-envelope"></i> Enviar aquesta p&agrave;gina al
                             Contacte
                         </a>
-                        <br/>
-                        <button class="btn btn-info btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="javascript:document.location.href='<c:url value="${urlToEditItem}"/>'">
-                             <i class="icon-open-eye"></i> Veure ${tipus}
-                        </button>
+
+                        <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
+                            href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
+                            <i class="icon-envelope"></i> Enviar email
+                        </a>
+                     </c:if>
+
+                     <c:if test="${!isPublic}">
+                        <a class="btn btn-info btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToEditItem}"/>">
+                             <i class="icon-eye-open"></i> Veure ${tipus}
+                        </a>
                     </c:if>
+
+                    <a class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
+                         <i class="icon-plus-sign"></i> Nova Entrada
+                    </a>
+                    
+                    
+                    
                 </div>
+                </td></tr>
+                </table>
             </td>
+            </tr>
+            <tr>
+            <td colspan="2">
+            <h3 class="windowTitle">${titol}</h3>
+            </td>
+            
+            </tr>
+            </table>
         </tr>
         <tr>
         <td colspan="3">
-            <div class="full-width" style="background-color:#EEEEEE;margin:10px 10px 10px 10px; padding:5px 5px 5px 5px;">
-                Número: ${ID}<br> 
-                Estat: <strong class="label-custom">${estat}</strong>
-                <hr style="margin:5px"/>
-                Nom Contacte: ${personaContacte}<br/>
-                Email Contacte: ${personaContacteEmail}<br/>
-            </div>
-        </td>
+                <div class="full-width"
+                    style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
+                    <table style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td width="50%">Número: <strong> ${ID}</strong><br> Estat: <strong
+                                    class="label-custom">${estat}</strong>
+                                </td>
+                                <td>Nom Contacte: <strong>${personaContacte}</strong><br /> Email
+                                    Contacte: <strong>${personaContacteEmail}</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
         </tr>
 
         <tr>
@@ -1164,10 +1196,6 @@
                 <div class="fondodiv">
                     <table style="padding: 0px;" border="0" cellpadding="0"
                         cellspacing="0">
-
-                        
-
-
 
                     <c:forEach var="event" items="${eventItems}">
                     
@@ -1181,10 +1209,6 @@
                             <c:set var="show" value="false" />
                         </c:if>
 
-
-                       
-                        
-                        
                         <c:set var="background" value="#cce6ff" />
                         <c:set var="border" value="#F0E68C" />
         
@@ -1222,7 +1246,7 @@
                             </td>
                             <td>
                                 <!--  =============  INICI ===============   -->
-                                <table style="padding: 0px; min-height:170px" border="0">
+                                <table style="padding: 0px; min-height:100px" border="0">
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td style="width: 3px; background-color: #CCCCCC"

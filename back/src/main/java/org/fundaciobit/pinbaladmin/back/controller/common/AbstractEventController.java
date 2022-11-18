@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
@@ -335,73 +336,127 @@ public abstract class AbstractEventController<T> extends EventController impleme
     return "redirect:" + getContextWeb() + "/list";
   }
 
-  @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
-  public String enviarCorreu(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable Long itemID)  {
+  @RequestMapping(value = "/enviarenllaz/{itemID}", method = RequestMethod.GET)
+  public String enviarEnllaz(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable Long itemID) {
 
     try {
-    String email = getPersonaContacteEmailByItemID(itemID);
+      String email = getPersonaContacteEmailByItemID(itemID);
 
-    String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
-    if (email == null) {
+      String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
+      if (email == null) {
 
-      HtmlUtils.saveMessageError(request,
-          "El contacte de la " + itemNom + "  " + itemID + " és buit.");
-    } else {
+        HtmlUtils.saveMessageError(request,
+            "El contacte de la " + itemNom + "  " + itemID + " és buit.");
+      } else {
 
-      String[] emails = { email };
-      log.error("Dest: " + Arrays.toString(emails));
+        String[] emails = { email };
+        log.error("Dest: " + Arrays.toString(emails));
 
-      String titol;
-      {
-        T item = findItemByPrimaryKey(itemID);
-        
-        log.info("item getClass" + item.getClass());
-        
-        if (item instanceof Solicitud) {
-          Solicitud soli = ((Solicitud) item);
-          titol = soli.getProcedimentCodi() + " " + soli.getProcedimentNom();
-        } else if (item instanceof IncidenciaTecnica) {
-          IncidenciaTecnica inci = ((IncidenciaTecnica) item);
-          titol = inci.getTitol();
-        } else {
-          throw new I18NException("genapp.comodi",
-              "No puc processar tipus " + item.getClass());
+        String titol = getTitolIteml(itemID);
+
+        final boolean isHtml = false;
+        for (String address : emails) {
+          try {
+
+            String url = getLinkPublic(itemID);
+
+            EmailUtil.postMail("Enllaç la gestió de la seva " + itemNom, "Bones:\n"
+                + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+                + titol + "'." + "\n També podrà afegir informació addicional a la seva "
+                + itemNom + " a través d'aquest enllaç: " + url, isHtml,
+
+                Configuracio.getAppEmail(), address);
+
+            HtmlUtils.saveMessageSuccess(request,
+                "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
+
+          } catch (Exception e) {
+            String msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+          }
         }
       }
+    } catch (I18NException i18ne) {
 
-      final boolean isHtml = false;
-      for (String address : emails) {
-        try {
-
-          String url = getLinkPublic(itemID);
-
-          EmailUtil.postMail("Enllaç la gestió de la seva " + itemNom, "Bones:\n"
-              + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-              + titol + "'." + "\n També podrà afegir informació addicional a la seva "
-              + itemNom + " a través d'aquest enllaç: " + url, isHtml,
-
-              Configuracio.getAppEmail(), address);
-
-          HtmlUtils.saveMessageSuccess(request,
-              "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
-
-        } catch (Exception e) {
-          String msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
-          log.error(msg, e);
-          HtmlUtils.saveMessageError(request, msg);
-        }
-      }
-    }
-    } catch(I18NException i18ne) {
-      
       String msg = "No s'ha pogut enviar el correu: " + I18NUtils.getMessage(i18ne);
       log.error(msg, i18ne);
       HtmlUtils.saveMessageError(request, msg);
-      
+
     }
 
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
+
+  private String getTitolIteml(Long itemID) throws I18NException {
+    T item = findItemByPrimaryKey(itemID);
+    String titol;
+    log.info("item getClass" + item.getClass());
+    if (item instanceof Solicitud) {
+      Solicitud soli = ((Solicitud) item);
+      titol = soli.getProcedimentCodi() + " " + soli.getProcedimentNom();
+    } else if (item instanceof IncidenciaTecnica) {
+      IncidenciaTecnica inci = ((IncidenciaTecnica) item);
+      titol = inci.getTitol();
+    } else {
+      throw new I18NException("genapp.comodi",
+          "No puc processar tipus " + item.getClass());
+    }
+    return titol;
+  }
+  
+  
+  public static final String SESSION_ENVIARCORREU_DEST="__SESSION_ENVIARCORREU_DEST__";
+
+  public static final String SESSION_ENVIARCORREU_MISSATGE="__SESSION_ENVIARCORREU_MISSATGE__";
+  
+  public static final String SESSION_ENVIARCORREU_CALLBACK="__SESSION_ENVIARCORREU_CALLBACK__";
+
+  @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
+  public String enviarCorreu(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable Long itemID) {
+
+    try {
+      {
+
+        String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
+
+        String titol = getTitolIteml(itemID);
+
+        String url = getLinkPublic(itemID);
+
+        String msg = "Bones:\n"
+            + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+            + titol + "'." + "\n També podrà afegir informació addicional a la seva " + itemNom
+            + " a través d'aquest enllaç: " + url;
+
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_MISSATGE, msg);
+
+      }
+
+      {
+        String email = getPersonaContacteEmailByItemID(itemID);
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_DEST, email);
+      }
+      
+      {
+        
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_CALLBACK, "redirect:" + getContextWeb() + "/veureevents/" + itemID);
+      }
+
+      return "redirect:" + EnviarCorreuContacteOperadorController.CONTEXT_WEB + "/new";
+
+    } catch (I18NException i18ne) {
+
+      String msg = "No s'ha pogut enviar el correu: " + I18NUtils.getMessage(i18ne);
+      log.error(msg, i18ne);
+      HtmlUtils.saveMessageError(request, msg);
+
+      return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+
+    }
+
   }
 
   private String getLinkPublic(Long itemID) {

@@ -111,7 +111,15 @@
             </td>
             <td>
               <form:errors path="email.message" cssClass="errorField alert alert-error" />
-              <form:textarea cssClass="input-xxlarge ${gen:contains(__theForm.readOnlyFields ,EmailFields.MESSAGE)? 'mceEditorReadOnly':'mceEditor'}" path="email.message"  />
+              <form:textarea rows="3" wrap="soft" style="overflow:auto;" cssClass="input-xxlarge" readonly="${ gen:contains(__theForm.readOnlyFields ,EmailFields.MESSAGE)? 'true' : 'false'}" path="email.message"  />
+              <div class="btn-group" style="vertical-align: top;">
+              <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">&nbsp;<span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#" onclick="javascript:var ta=document.getElementById('email.message'); ta.wrap='off';" >No Wrap</a></li>
+                <li><a href="#" onclick="javascript:var ta=document.getElementById('email.message'); ta.wrap='soft';">Soft Wrap</a></li>
+                <li><a href="#" onclick="javascript:var ta=document.getElementById('email.message'); ta.wrap='hard';">Hard Wrap</a></li>
+              </ul>
+              </div>
            </td>
         </tr>
         </c:if>
