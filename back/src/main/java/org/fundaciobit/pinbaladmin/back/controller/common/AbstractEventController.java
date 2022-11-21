@@ -295,19 +295,24 @@ public abstract class AbstractEventController<T> extends EventController impleme
           itemID = ev.getIncidenciaTecnicaID();
           tipus = "incidència";
         }
-        String from = "pinbal@fundaciobit.org";
-        String message = "Bones:<br/><br/>" + "    Pot revisar els canvis de la " + tipus
-            + " o contestar accedint al següent enllaç: " + "<a href=\""
-            + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>"
-            + "Detall dels canvis:" + "<div style=\"border: 1px solid #000;\">"
-            + eventForm.getEvent().getComentari()
+        try {
+          final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - " + getTitolItem(itemID); 
+          final String from = Configuracio.getAppEmail();
+          final String message = "Bon dia:<br/><br/>"
+            + "Número " + tipus + ": " + itemID + "<br/>"
+            + "<div style=\"border: 1px solid #000;\">"
+            + eventForm.getEvent().getComentari().replace("\n", "<br/>")
             + (eventForm.getEvent().getFitxerID() == null ? ""
                 : "<br/><br/><b>S'han adjuntat fitxers.</b>")
-            + "</div>";
+            + "</div><br/>"
+            + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
+                + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>"
+            + "        Salutacions<br/>"
+            + "        <i>Àrea de Govern Digital - Fundació BIT</i>";
+
         final boolean isHtml = true;
-        try {
-          EmailUtil.postMail(
-              "Modificada " + tipus + " titulada '" + getTitolItem(itemID) + "'", message,
+        
+          EmailUtil.postMail(subject, message,
               isHtml, from, getPersonaContacteEmailByItemID(itemID));
         } catch (Throwable th) {
 
@@ -370,22 +375,39 @@ public abstract class AbstractEventController<T> extends EventController impleme
         String[] emails = { email };
         log.error("Dest: " + Arrays.toString(emails));
 
-        String titol = getTitolItem(itemID);
+        final String titol = getTitolItem(itemID);
 
-        final boolean isHtml = false;
+        final String tipus = isSolicitud()?"Sol·licitud":"Incidència";
+        
+        final boolean isHtml = true;
         for (String address : emails) {
           try {
 
             String url = getLinkPublic(itemID);
-
-            EmailUtil.postMail("Enllaç a la " + itemNom + " titulada '" + titol + "'",
+            
+            final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+            
+            String msg = "Bon dia:<br/><br/>"             
+            + "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada '" + titol 
+            + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+            + "    Per fer el seguiment de la " + tipus + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\""
+            + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" 
+            + "<br/><br/>" 
+            + "        Salutacions<br/>"
+                + "        <i>Àrea de Govern Digital - Fundació BIT</i>";
+            /*
+             
+             "Enllaç a la " + itemNom + " titulada '" + titol + "'",
                 "Bones:\n\n"
                     + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
                     + titol + "'." + "\n\nTambé podrà afegir informació addicional a la seva "
-                    + itemNom + " a través d'aquest enllaç: " + url + "\n\n      Atentament,",
-                isHtml,
+                    + itemNom + " a través d'aquest enllaç: " + url + "\n\n      Atentament,"
+             
+             */
+            
+ 
 
-                Configuracio.getAppEmail(), address);
+            EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
 
             HtmlUtils.saveMessageSuccess(request,
                 "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
@@ -458,7 +480,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
       }
 
       {
-
         request.getSession().setAttribute(SESSION_ENVIARCORREU_CALLBACK,
             "redirect:" + getContextWeb() + "/veureevents/" + itemID);
       }
