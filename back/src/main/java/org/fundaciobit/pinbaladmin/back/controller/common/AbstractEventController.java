@@ -300,7 +300,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
           final String from = Configuracio.getAppEmail();
           final String message = "Bon dia:<br/><br/>"
             + "Número " + tipus + ": " + itemID + "<br/>"
-            + "<div style=\"border: 1px solid #000;\">"
+            + "<div style=\"background-color:#f6f6f6;\">"
             + eventForm.getEvent().getComentari().replace("\n", "<br/>")
             + (eventForm.getEvent().getFitxerID() == null ? ""
                 : "<br/><br/><b>S'han adjuntat fitxers.</b>")
@@ -308,7 +308,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
             + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
                 + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>"
             + "        Salutacions<br/>"
-            + "        <i>Àrea de Govern Digital - Fundació BIT</i>";
+            + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/><br/>"
+          + "================================================================<br/>"
+          + "<b>Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+          + "sobre la incidència accediu a l'enllaç aportat en aquest correu.</b><br/>"
+          + "================================================================";
 
         final boolean isHtml = true;
         
@@ -394,7 +398,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
             + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" 
             + "<br/><br/>" 
             + "        Salutacions<br/>"
-                + "        <i>Àrea de Govern Digital - Fundació BIT</i>";
+            + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
+            + "=================================================================<br/>"
+            + "<b>Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+            + "sobre la incidència accediu a l'enllaç aportat en aquest correu.</b><br/>"
+            + "=================================================================";
             /*
              
              "Enllaç a la " + itemNom + " titulada '" + titol + "'",
