@@ -4,10 +4,12 @@ import javax.ejb.EJB;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.utils.Constants;
 
 /**
  * 
@@ -30,7 +32,7 @@ public abstract class AbstractEventSolicitudController
 
   @Override
   public String redirectWhenSessionItemIDNotDefined() {
-    return "/operador/solicitudlocal/list";
+    return SolicitudLocalOperadorController.CONTEXTWEB + "/list";
   }
 
   @Override
@@ -50,7 +52,17 @@ public abstract class AbstractEventSolicitudController
   
   @Override
   public String getUrlToEditItem(Solicitud item) {
-    return "/operador/solicitudlocal/" + item.getSolicitudID() + "/edit";
+    return SolicitudLocalOperadorController.CONTEXTWEB + "/" + item.getSolicitudID() + "/edit";
+  }
+  
+  @Override
+  public String getUrlToCloseItem(Solicitud item) {
+    return SolicitudLocalOperadorController.CONTEXTWEB + "/close/" + item.getSolicitudID();
+  }
+
+  @Override
+  public  boolean isClosed(Solicitud item) {
+    return item.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT;
   }
 
   @Override

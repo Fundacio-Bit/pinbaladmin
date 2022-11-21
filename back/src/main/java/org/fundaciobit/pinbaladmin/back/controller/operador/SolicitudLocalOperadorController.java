@@ -20,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/solicitudlocal")
+@RequestMapping(value = SolicitudLocalOperadorController.CONTEXTWEB)
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudLocalOperadorController extends SolicitudOperadorController {
+
+  public static final String CONTEXTWEB = "/operador/solicitudlocal";
 
   @Override
   public Boolean isEstatal() {
@@ -46,8 +48,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
       return "solicitud.local.nollegitsnomeus";
     }
   }
-  
-  
+
   @Override
   public String getSessionAttributeFilterForm() {
 
@@ -60,7 +61,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
     case NOLLEGITSNOMEUS:
       return "solicitud.local.nollegitsnomeus" + super.getSessionAttributeFilterForm();
     }
-    
+
   }
 
   public enum VistaIncidencia {
@@ -96,16 +97,14 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
               EventFields.SOLICITUDID.isNotNull()));
       w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()), SOLICITUDID.in(subQuery));
     }
-    break;
+      break;
 
     }
-    
-    
-    log.info("\n\n SQL W1 = " + ((w1==null)?"NULL" : w1.toSQL()));
-    
+
+    log.info("\n\n SQL W1 = " + ((w1 == null) ? "NULL" : w1.toSQL()));
 
     Where w2 = super.getAdditionalCondition(request);
-    log.info("\n\n SQL W2 = " + ((w2==null)?"NULL" : w2.toSQL()));
+    log.info("\n\n SQL W2 = " + ((w2 == null) ? "NULL" : w2.toSQL()));
 
     if (w1 == null) {
       if (w2 == null) {
@@ -122,8 +121,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
     }
 
   }
-  
-  
+
   @Override
   public SolicitudFilterForm getSolicitudFilterForm(Integer pagina, ModelAndView mav,
       HttpServletRequest request) throws I18NException {
@@ -150,6 +148,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
     return solicitudFilterForm;
     
   }
-  
+
+
 
 }

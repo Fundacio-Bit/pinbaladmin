@@ -3,9 +3,11 @@ package org.fundaciobit.pinbaladmin.back.controller.common;
 import javax.ejb.EJB;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventIncidenciaTecnicaPublicController;
+import org.fundaciobit.pinbaladmin.back.controller.operador.IncidenciaTecnicaOperadorController;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.utils.Constants;
 
 /**
  * 
@@ -42,8 +44,20 @@ public abstract class AbstractEventIncidenciaTecnicaController
   
   @Override
   public String getUrlToEditItem(IncidenciaTecnica item) {
-    return "/operador/incidencia/" + item.getIncidenciaTecnicaID() + "/edit";
+    return IncidenciaTecnicaOperadorController.WEBCONTEXT + "/" + item.getIncidenciaTecnicaID() + "/edit";
   }
+  
+  @Override
+  public String getUrlToCloseItem(IncidenciaTecnica item) {
+    return IncidenciaTecnicaOperadorController.WEBCONTEXT + "/close/" + item.getIncidenciaTecnicaID();
+  }
+  
+  @Override
+  public boolean isClosed(IncidenciaTecnica item) {
+    return item.getEstat() == Constants.ESTAT_INCIDENCIA_TANCADA;
+  }
+  
+  
 
   @Override
   public IncidenciaTecnica findItemByPrimaryKey(Long itemID) {

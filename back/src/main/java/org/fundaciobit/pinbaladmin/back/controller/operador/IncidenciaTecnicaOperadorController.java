@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -13,6 +14,7 @@ import org.fundaciobit.genapp.common.query.ITableManager;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
@@ -29,7 +31,9 @@ import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,7 +47,7 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })
 public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaController
     implements Constants {
-  
+
   public static final String WEBCONTEXT = "/operador/incidencia";
 
   public static final int FILTRE_AVANZAT_COLUMN = -1;
@@ -51,7 +55,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
   public static final StringField FILTRE_AVANZAT_FIELD = DESCRIPCIO;
 
   public static final String SESSION_SUBFILTRE_NO_LLEGIT = "SESSION_SUBFILTRE_NO_LLEGIT";
-  
+
   @EJB(mappedName = IncidenciaTecnicaLogicaLocal.JNDI_NAME)
   protected IncidenciaTecnicaLogicaLocal incidenciaTecnicaLogicaEjb;
 
@@ -206,14 +210,13 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         incidenciaTecnicaFilterForm.getFilterByFields().remove(CREADOR);
         incidenciaTecnicaFilterForm.getFilterByFields().remove(NOMENTITAT);
         incidenciaTecnicaFilterForm.getFilterByFields().remove(CONTACTEEMAIL);
-        
+
       }
       incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
-      
+
       if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
         incidenciaTecnicaFilterForm.setAddButtonVisible(false);
       }
-      
 
     }
 
@@ -252,50 +255,48 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
     switch (getVistaIncidencia()) {
     default:
-    case NORMAL:{
+    case NORMAL: {
       w1 = null;
     }
       break;
-    case NOLLEGITSMEUS:
-    {
-      
+    case NOLLEGITSMEUS: {
+
       // incidencies meves
-      
-      
-        SubQuery<Event,Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-            Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-            EventFields.INCIDENCIATECNICAID.isNotNull()
-            ));
-        w1 = Where.AND(CREADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
+
+      SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(
+          EventFields.INCIDENCIATECNICAID, Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
+              EventFields.INCIDENCIATECNICAID.isNotNull()));
+      w1 = Where.AND(CREADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
     }
       break;
-    case NOLLEGITSNOMEUS: 
-      {
-        // incidencies No Meves
-        SubQuery<Event,Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-            Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-            EventFields.INCIDENCIATECNICAID.isNotNull()));
-        w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
-      }
+    case NOLLEGITSNOMEUS: {
+      // incidencies No Meves
+      SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(
+          EventFields.INCIDENCIATECNICAID, Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
+              EventFields.INCIDENCIATECNICAID.isNotNull()));
+      w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()),
+          INCIDENCIATECNICAID.in(subQuery));
+    }
 
-    };
-    
+    }
+    ;
+
     Where w2 = getAdditionaConditionAdvancedFilter(request);
-    
+
     if (w1 == null) {
-      if (w2 == null) {     
+      if (w2 == null) {
         return null;
       } else {
         return w2;
       }
     } else {
-      if (w2 == null) {     
+      if (w2 == null) {
         return w1;
       } else {
-        return Where.AND(w1,w2);
+        return Where.AND(w1, w2);
       }
     }
-    
+
   }
 
   protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request)
@@ -324,16 +325,20 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       }
 
       // Comentari dels Events
-      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-          Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
+      SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(
+          EventFields.INCIDENCIATECNICAID,
+          Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
+              EventFields.COMENTARI.like(likeStr)));
       w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery1));
 
       // identificador de consulta o numero seguiment dels events
       if (isNumber) {
-        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+        SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(
+            EventFields.INCIDENCIATECNICAID,
             Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
                 EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));
-        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+        SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(
+            EventFields.INCIDENCIATECNICAID,
             Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
                 EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
         w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2a),
@@ -363,10 +368,14 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       ModelAndView mav, Where where) throws I18NException {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
-    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+    __tmp.add(
+        new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+    __tmp.add(
+        new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS),
+        "Integracions"));
+    __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS),
+        "Roles de permisos"));
     return __tmp;
   }
 
@@ -415,29 +424,51 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
     List<IncidenciaTecnica> list;
     try {
-      list = super.processarLlistat(ejb, filterForm, pagina,
-        whereAdditionalCondition, mav);
+      list = super.processarLlistat(ejb, filterForm, pagina, whereAdditionalCondition, mav);
     } finally {
       if (filtreAvanzatField != null) {
-  
+
         filterForm.getAdditionalFields().put(FILTRE_AVANZAT_COLUMN, filtreAvanzatField);
-  
+
         String valorFA = filtreAvanzatField.getSearchByValue();
-  
+
         if (valorFA != null && valorFA.trim().length() != 0) {
           filterForm.setVisibleFilterBy(true);
         }
-  
+
       }
     }
 
     return list;
 
   }
-  
+
   @Override
-  public void delete(HttpServletRequest request, IncidenciaTecnica incidenciaTecnica) throws Exception,I18NException {
+  public void delete(HttpServletRequest request, IncidenciaTecnica incidenciaTecnica)
+      throws Exception, I18NException {
     incidenciaTecnicaLogicaEjb.deleteFull(incidenciaTecnica.getIncidenciaTecnicaID());
+  }
+
+  @RequestMapping(value = "/close/{incidenciaTecnicaID}", method = RequestMethod.GET)
+  public String closeIncidenciaTecnicaGet(
+      @PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
+      HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+    IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
+
+    i.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
+
+    try {
+      this.update(request, i);
+
+      HtmlUtils.saveMessageSuccess(request, "Tancada Incidència correctament.");
+    } catch (Throwable e) {
+      String msg = "Error tancant incidència " + e.getMessage();
+      log.error(msg, e);
+      HtmlUtils.saveMessageError(request, msg);
+    }
+
+    return "redirect:" + WEBCONTEXT + "/" + incidenciaTecnicaID + "/edit";
   }
 
 }

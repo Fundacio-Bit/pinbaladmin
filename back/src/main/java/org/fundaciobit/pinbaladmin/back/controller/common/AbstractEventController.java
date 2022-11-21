@@ -236,6 +236,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   public abstract String getUrlToEditItem(T item);
 
+  public abstract String getUrlToCloseItem(T item);
+  
+  public abstract String getTitol(T item);
+  
+  public abstract boolean isClosed(T item);
+
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
   public String veureEvents(HttpServletRequest request, HttpServletResponse response,
       @PathVariable String itemStrID) throws I18NException {
@@ -265,7 +271,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   }
 
-  public abstract String getTitol(T item);
+
 
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request, EventForm eventForm) {
@@ -506,6 +512,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
 
     mav.addObject("urlToEditItem", getUrlToEditItem(item));
+    
+    if (!isClosed(item)) {
+      mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
+    }
 
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");

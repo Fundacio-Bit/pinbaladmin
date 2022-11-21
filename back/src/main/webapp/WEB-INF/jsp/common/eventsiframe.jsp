@@ -1143,12 +1143,16 @@
                             href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
                             <i class="icon-envelope"></i> Enviar email
                         </a>
-                     </c:if>
 
-                     <c:if test="${!isPublic}">
                         <a class="btn btn-info btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToEditItem}"/>">
                              <i class="icon-eye-open"></i> Veure ${tipus}
                         </a>
+                        
+                       <c:if test="${not empty urlToCloseItem}">
+                       <a class="btn btn-warn btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
+                             <i class="icon-eye-open"></i> Tancar ${tipus}
+                        </a>
+                        </c:if>
                     </c:if>
 
                     <a class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">

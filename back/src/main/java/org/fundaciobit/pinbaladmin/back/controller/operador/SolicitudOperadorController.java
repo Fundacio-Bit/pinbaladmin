@@ -56,11 +56,13 @@ import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
 import org.fundaciobit.pinbaladmin.utils.TipusProcediments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -532,8 +534,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
           "conversa", /*
                        * "javascript:window.open('" + request.getContextPath() +
                        */
-          EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}/"
-              + isEstatal() /* ','_blank');" */,
+          EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}"
+              + (isestatal==null?"": ("/" + isestatal)) /* ','_blank');" */,
           "btn-success"));
 
       solicitudFilterForm.setVisibleMultipleSelection(true);
@@ -1252,6 +1254,31 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     return __tmp;
+  }
+  
+  
+  
+  
+  @RequestMapping(value = "/close/{solicitudID}", method = RequestMethod.GET)
+  public String closeSolicitudGet(@PathVariable("solicitudID") java.lang.Long solicitudID,
+      HttpServletRequest request,
+      HttpServletResponse response) throws I18NException {
+    
+      SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
+      
+      soli.setEstatID(Constants.SOLICITUD_ESTAT_TANCAT);
+      
+      try {
+        this.update(request, soli);
+        
+        HtmlUtils.saveMessageSuccess(request, "Tancada Sol·licitud correctament.");
+      } catch (Throwable e) {
+        String msg = "Error tancant Sol·licitud: " + e.getMessage();
+        log.error(msg, e);
+        HtmlUtils.saveMessageError(request, msg);
+      }
+    
+      return "redirect:/operador/solicitudfullview/view/" + solicitudID;
   }
 
   /*
