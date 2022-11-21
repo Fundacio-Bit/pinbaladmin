@@ -1149,7 +1149,7 @@
                         </a>
                         
                        <c:if test="${not empty urlToCloseItem}">
-                       <a class="btn btn-warn btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
+                       <a class="btn btn-danger btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
                              <i class="icon-eye-open"></i> Tancar ${tipus}
                         </a>
                         </c:if>
