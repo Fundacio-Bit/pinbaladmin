@@ -21,6 +21,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.jpa.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaLocal;
+import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
@@ -50,6 +51,9 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
   public static final StringField FILTRE_AVANZAT_FIELD = DESCRIPCIO;
 
   public static final String SESSION_SUBFILTRE_NO_LLEGIT = "SESSION_SUBFILTRE_NO_LLEGIT";
+  
+  @EJB(mappedName = IncidenciaTecnicaLogicaLocal.JNDI_NAME)
+  protected IncidenciaTecnicaLogicaLocal incidenciaTecnicaLogicaEjb;
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
@@ -429,6 +433,11 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
     return list;
 
+  }
+  
+  @Override
+  public void delete(HttpServletRequest request, IncidenciaTecnica incidenciaTecnica) throws Exception,I18NException {
+    incidenciaTecnicaLogicaEjb.deleteFull(incidenciaTecnica.getIncidenciaTecnicaID());
   }
 
 }

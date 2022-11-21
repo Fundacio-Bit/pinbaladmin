@@ -19,6 +19,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.common.AbstractEventController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
@@ -240,8 +241,12 @@ public class LlistaCorreusOperadorController extends EmailController {
 
         er.deleteMessage((int) (long) emailID);
 
-        return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT + "/"
-            + it.getIncidenciaTecnicaID() + "/edit";
+        // Redireccionam a Enviar Correu al Contacte        
+        return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH 
+             + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
+
+        //return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT + "/"
+        //    + it.getIncidenciaTecnicaID() + "/edit";
 
       } else {
         HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
@@ -290,6 +295,9 @@ public class LlistaCorreusOperadorController extends EmailController {
         er.deleteMessage((int) (long) emailID);
         
         long end = System.currentTimeMillis();
+        
+        // XYZ ZZZ
+        // S'ha de reenviar a ENVIAR CORREU A CONTACTE. Revisar mètode incidencia ????
 
         return "redirect:/operador/solicitudestatal/list/" + start + "/" + end;
 

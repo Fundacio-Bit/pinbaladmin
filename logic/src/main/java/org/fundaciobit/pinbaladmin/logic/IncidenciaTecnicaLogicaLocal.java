@@ -1,7 +1,5 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-
-
 import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 
@@ -21,12 +19,13 @@ public interface IncidenciaTecnicaLogicaLocal extends IncidenciaTecnicaLocal {
 
   String JNDI_NAME = "pinbaladmin/IncidenciaTecnicaLogicaEJB/local";
 
-  
   @Override
   @PermitAll
   public IncidenciaTecnicaJPA findByPrimaryKey(Long _ID_);
-  
-  
-  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador) throws I18NException;
-  
+
+  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador)
+      throws I18NException;
+
+  public void deleteFull(Long _ID) throws I18NException;
+
 }

@@ -98,7 +98,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
       HtmlUtils.saveMessageError(request,
           "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
-              + " a través de la sessié " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+              + " a través de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
       return new ModelAndView(new RedirectView(
           redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
@@ -144,7 +144,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
       HtmlUtils.saveMessageError(request,
           "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
-              + " a traves de la sessio " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+              + " a traves de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
       mav.setView(new RedirectView(
           redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
@@ -278,22 +278,31 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
       if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
 
-        String subject;
         Long itemID;
+        String tipus;
         if (isSolicitud()) {
-          subject = "Sol·licitud Modificada";
+
           itemID = ev.getSolicitudID();
+          tipus = "sol·licitud";
         } else {
-          subject = "Incidència Modificada";
+
           itemID = ev.getIncidenciaTecnicaID();
+          tipus = "incidència";
         }
         String from = "pinbal@fundaciobit.org";
-        String message = "Bones: <br/>" + "Pot revisar els canvis accedint al següent enllaç: "
-            + "<a href=\"" + getLinkPublic(itemID) + "\" >" + subject + "</a>";
+        String message = "Bones:<br/><br/>" + "    Pot revisar els canvis de la " + tipus
+            + " o contestar accedint al següent enllaç: " + "<a href=\""
+            + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>"
+            + "Detall dels canvis:" + "<div style=\"border: 1px solid #000;\">"
+            + eventForm.getEvent().getComentari()
+            + (eventForm.getEvent().getFitxerID() == null ? ""
+                : "<br/><br/><b>S'han adjuntat fitxers.</b>")
+            + "</div>";
         final boolean isHtml = true;
         try {
-          EmailUtil.postMail(subject, message, isHtml, from,
-              getPersonaContacteEmailByItemID(itemID));
+          EmailUtil.postMail(
+              "Modificada " + tipus + " titulada '" + getTitolItem(itemID) + "'", message,
+              isHtml, from, getPersonaContacteEmailByItemID(itemID));
         } catch (Throwable th) {
 
           String msg;
@@ -336,7 +345,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
     return "redirect:" + getContextWeb() + "/list";
   }
 
-  @RequestMapping(value = "/enviarenllaz/{itemID}", method = RequestMethod.GET)
+  public static final String ENVIAR_ENLLAZ = "/enviarenllaz/";
+
+  @RequestMapping(value = ENVIAR_ENLLAZ + "{itemID}", method = RequestMethod.GET)
   public String enviarEnllaz(HttpServletRequest request, HttpServletResponse response,
       @PathVariable Long itemID) {
 
@@ -353,7 +364,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
         String[] emails = { email };
         log.error("Dest: " + Arrays.toString(emails));
 
-        String titol = getTitolIteml(itemID);
+        String titol = getTitolItem(itemID);
 
         final boolean isHtml = false;
         for (String address : emails) {
@@ -361,10 +372,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
             String url = getLinkPublic(itemID);
 
-            EmailUtil.postMail("Enllaç la gestió de la seva " + itemNom, "Bones:\n"
-                + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-                + titol + "'." + "\n També podrà afegir informació addicional a la seva "
-                + itemNom + " a través d'aquest enllaç: " + url, isHtml,
+            EmailUtil.postMail("Enllaç a la " + itemNom + " titulada '" + titol + "'",
+                "Bones:\n\n"
+                    + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+                    + titol + "'." + "\n\nTambé podrà afegir informació addicional a la seva "
+                    + itemNom + " a través d'aquest enllaç: " + url + "\n\n      Atentament,",
+                isHtml,
 
                 Configuracio.getAppEmail(), address);
 
@@ -389,7 +402,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
   }
 
-  private String getTitolIteml(Long itemID) throws I18NException {
+  private String getTitolItem(Long itemID) throws I18NException {
     T item = findItemByPrimaryKey(itemID);
     String titol;
     log.info("item getClass" + item.getClass());
@@ -400,18 +413,16 @@ public abstract class AbstractEventController<T> extends EventController impleme
       IncidenciaTecnica inci = ((IncidenciaTecnica) item);
       titol = inci.getTitol();
     } else {
-      throw new I18NException("genapp.comodi",
-          "No puc processar tipus " + item.getClass());
+      throw new I18NException("genapp.comodi", "No puc processar tipus " + item.getClass());
     }
     return titol;
   }
-  
-  
-  public static final String SESSION_ENVIARCORREU_DEST="__SESSION_ENVIARCORREU_DEST__";
 
-  public static final String SESSION_ENVIARCORREU_MISSATGE="__SESSION_ENVIARCORREU_MISSATGE__";
-  
-  public static final String SESSION_ENVIARCORREU_CALLBACK="__SESSION_ENVIARCORREU_CALLBACK__";
+  public static final String SESSION_ENVIARCORREU_DEST = "__SESSION_ENVIARCORREU_DEST__";
+
+  public static final String SESSION_ENVIARCORREU_MISSATGE = "__SESSION_ENVIARCORREU_MISSATGE__";
+
+  public static final String SESSION_ENVIARCORREU_CALLBACK = "__SESSION_ENVIARCORREU_CALLBACK__";
 
   @RequestMapping(value = "/enviarcorreu/{itemID}", method = RequestMethod.GET)
   public String enviarCorreu(HttpServletRequest request, HttpServletResponse response,
@@ -422,7 +433,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         String itemNom = isSolicitud() ? "sol·licitud" : "incidència";
 
-        String titol = getTitolIteml(itemID);
+        String titol = getTitolItem(itemID);
 
         String url = getLinkPublic(itemID);
 
@@ -439,10 +450,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
         String email = getPersonaContacteEmailByItemID(itemID);
         request.getSession().setAttribute(SESSION_ENVIARCORREU_DEST, email);
       }
-      
+
       {
-        
-        request.getSession().setAttribute(SESSION_ENVIARCORREU_CALLBACK, "redirect:" + getContextWeb() + "/veureevents/" + itemID);
+
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_CALLBACK,
+            "redirect:" + getContextWeb() + "/veureevents/" + itemID);
       }
 
       return "redirect:" + EnviarCorreuContacteOperadorController.CONTEXT_WEB + "/new";
