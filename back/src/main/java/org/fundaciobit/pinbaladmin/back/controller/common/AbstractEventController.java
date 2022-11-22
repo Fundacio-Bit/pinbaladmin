@@ -237,9 +237,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getUrlToEditItem(T item);
 
   public abstract String getUrlToCloseItem(T item);
-  
+
   public abstract String getTitol(T item);
-  
+
   public abstract boolean isClosed(T item);
 
   @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
@@ -271,8 +271,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   }
 
-
-
   @Override
   public String getRedirectWhenCreated(HttpServletRequest request, EventForm eventForm) {
 
@@ -296,28 +294,30 @@ public abstract class AbstractEventController<T> extends EventController impleme
           tipus = "incidència";
         }
         try {
-          final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - " + getTitolItem(itemID); 
+          final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ "
+              + tipus.toUpperCase() + " - " + getTitolItem(itemID);
           final String from = Configuracio.getAppEmail();
-          final String message = "Bon dia:<br/><br/>"
-            + "Número " + tipus + ": " + itemID + "<br/>"
-            + "<div style=\"background-color:#f6f6f6;\">"
-            + eventForm.getEvent().getComentari().replace("\n", "<br/>")
-            + (eventForm.getEvent().getFitxerID() == null ? ""
-                : "<br/><br/><b>S'han adjuntat fitxers.</b>")
-            + "</div><br/>"
-            + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
-                + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>"
-            + "        Salutacions<br/>"
-            + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/><br/>"
-          + "================================================================<br/>"
-          + "<b>Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
-          + "sobre la incidència accediu a l'enllaç aportat en aquest correu.</b><br/>"
-          + "================================================================";
+          final String message = "Bon dia:<br/><br/>" + "Número " + tipus + ": " + itemID
+              + "<br/><br/>" + "<div style=\"background-color:#f6f6f6;\">"
+              + eventForm.getEvent().getComentari().replace("\n", "<br/>")
+              + (eventForm.getEvent().getFitxerID() == null ? ""
+                  : "<br/><br/><b>S'han adjuntat fitxers.</b>")
+              + "</div><br/>"
+              + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
+              + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>"
+              + "        Salutacions<br/>"
+              + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/><br/>"
+              + "<div style=\"color:#868686\">"
+              + "=================================================================<br/>"
+              + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+              + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
+              + "================================================================="
+              + "</div>";
 
-        final boolean isHtml = true;
-        
-          EmailUtil.postMail(subject, message,
-              isHtml, from, getPersonaContacteEmailByItemID(itemID));
+          final boolean isHtml = true;
+
+          EmailUtil.postMail(subject, message, isHtml, from,
+              getPersonaContacteEmailByItemID(itemID));
         } catch (Throwable th) {
 
           String msg;
@@ -381,39 +381,43 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         final String titol = getTitolItem(itemID);
 
-        final String tipus = isSolicitud()?"Sol·licitud":"Incidència";
-        
+        final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
+
         final boolean isHtml = true;
         for (String address : emails) {
           try {
 
             String url = getLinkPublic(itemID);
-            
-            final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
-            
-            String msg = "Bon dia:<br/><br/>"             
-            + "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada '" + titol 
-            + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-            + "    Per fer el seguiment de la " + tipus + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\""
-            + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" 
-            + "<br/><br/>" 
-            + "        Salutacions<br/>"
-            + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
-            + "=================================================================<br/>"
-            + "<b>Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
-            + "sobre la incidència accediu a l'enllaç aportat en aquest correu.</b><br/>"
-            + "=================================================================";
+
+            final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase()
+                + " - " + titol;
+
+            String msg = "Bon dia:<br/><br/>" + "Número " + tipus + ": " + itemID
+                + "<br/><br/>" + "    Des de la Fundació Bit l'informam que la seva " + tipus
+                + " titulada '" + titol
+                + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+                + "    Per fer el seguiment de la " + tipus
+                + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\""
+                + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>"
+                + "        Salutacions<br/>"
+                + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
+                + "<div style=\"color:#868686\">"
+                + "=================================================================<br/>"
+                + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+                + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
+                + "================================================================="
+                + "</div>";
             /*
-             
-             "Enllaç a la " + itemNom + " titulada '" + titol + "'",
-                "Bones:\n\n"
-                    + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-                    + titol + "'." + "\n\nTambé podrà afegir informació addicional a la seva "
-                    + itemNom + " a través d'aquest enllaç: " + url + "\n\n      Atentament,"
-             
+             * 
+             * "Enllaç a la " + itemNom + " titulada '" + titol + "'",
+             * "Bones:\n\n" +
+             * "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+             * + titol + "'." +
+             * "\n\nTambé podrà afegir informació addicional a la seva " +
+             * itemNom + " a través d'aquest enllaç: " + url +
+             * "\n\n      Atentament,"
+             * 
              */
-            
- 
 
             EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
 
@@ -541,7 +545,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
 
     mav.addObject("urlToEditItem", getUrlToEditItem(item));
-    
+
     if (!isClosed(item)) {
       mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
     }
