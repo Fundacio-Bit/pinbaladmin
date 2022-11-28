@@ -99,6 +99,7 @@ border-block-end-color: rgb(133, 192, 200);
  background-position-y: 0%;
  background-repeat: repeat;
  background-size: auto;
+ overflow:auto;
 }
 
 .fondodiv {
