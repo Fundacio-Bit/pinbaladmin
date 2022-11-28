@@ -2,6 +2,8 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.ITableManager;
 import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
@@ -94,6 +97,9 @@ public class LlistaCorreusOperadorController extends EmailController {
       emailFilterForm.setEditButtonVisible(false);
       emailFilterForm.setDeleteSelectedButtonVisible(false);
       emailFilterForm.setVisibleMultipleSelection(false);
+      
+      emailFilterForm.setOrderBy(DATAENVIAMENT.javaName);
+      emailFilterForm.setOrderAsc(false);
 
       emailFilterForm.setGroupByFields(new ArrayList<Field<?>>());
       emailFilterForm.setFilterByFields(new ArrayList<Field<?>>());
@@ -192,12 +198,12 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       }
 
-      // if (emi.getSubject().indexOf("[PID]") != -1)
-      {
 
-      }
 
     }
+    
+    
+    filterForm.setSubTitleCode("=Tens " + list.size() + " correus sense processar ...");
 
   }
 
@@ -324,6 +330,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       final OrderBy[] orderBy, final Integer itemsPerPage, final int inici)
       throws I18NException {
 
+
     List<Email> list = new ArrayList<Email>();
 
     Map<Long, EmailMessageInfo> cache = new HashMap<Long, EmailMessageInfo>();
@@ -356,11 +363,51 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       HtmlUtils.saveMessageError(request, msg);
     }
+    
+    if (orderBy == null || orderBy.length == 0) {
+      log.info("OrderBy NULL o buit");
+    } else {
+      for (OrderBy o : orderBy) {
+        log.info("   - OrderBy[" + o.javaName + "]: " + o.orderType);
+        
+        if (o.javaName.equals(DATAENVIAMENT.javaName)) {
+          Collections.sort(list, new EmailDateComparator(orderBy[0].orderType));
+          break;
+        }
+        
+      }
+      
+      
+     
+    }
 
     request.getSession().setAttribute(CACHE_DE_EMAILS_LLEGITS, cache);
     return list;
 
   }
+  
+  /**
+   * 
+   * @author anadal
+   *
+   */
+  private class EmailDateComparator implements Comparator<Email> {
+    
+    private final int orderType;
+    
+    public EmailDateComparator(OrderType asc) {
+      this.orderType = asc.equals(OrderType.ASC)? 1: -1;
+    }
+    
+
+    @Override
+    public int compare(Email o1, Email o2) {
+      return orderType * o1.getDataEnviament().compareTo(o2.getDataEnviament());
+    }
+    
+  }
+  
+  
 
   private EmailJPA message2email(EmailMessageInfo emi) {
     EmailJPA e;
