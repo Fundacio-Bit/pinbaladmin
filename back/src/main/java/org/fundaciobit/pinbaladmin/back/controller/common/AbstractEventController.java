@@ -189,10 +189,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
         eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
         eventForm.addHiddenField(TIPUS);
         eventForm.addHiddenField(NOLLEGIT);
-        
+
         eventForm.addReadOnlyField(DATAEVENT);
         eventForm.addReadOnlyField(PERSONA);
-        
+
         eventForm.getEvent().setNoLlegit(true);
       } else {
         eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
@@ -301,22 +301,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
           final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ "
               + tipus.toUpperCase() + " - " + getTitolItem(itemID);
           final String from = Configuracio.getAppEmail();
-          final String message = "Bon dia:<br/><br/>" + "Número " + tipus + ": " + itemID
-              + "<br/><br/>" + "<div style=\"background-color:#f6f6f6;\">"
+          final String message = getCapCorreu(tipus, itemID)
+              + "<div style=\"background-color:#f6f6f6;\">"
               + eventForm.getEvent().getComentari().replace("\n", "<br/>")
               + (eventForm.getEvent().getFitxerID() == null ? ""
                   : "<br/><br/><b>S'han adjuntat fitxers.</b>")
               + "</div><br/>"
               + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
               + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>"
-              + "        Salutacions<br/>"
-              + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/><br/>"
-              + "<div style=\"color:#868686\">"
-              + "=================================================================<br/>"
-              + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
-              + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
-              + "================================================================="
-              + "</div>";
+              + getPeuCorreu();
 
           final boolean isHtml = true;
 
@@ -360,7 +353,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   @Override
   public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long eventID) {
-
     return "redirect:" + getContextWeb() + "/list";
   }
 
@@ -396,21 +388,13 @@ public abstract class AbstractEventController<T> extends EventController impleme
             final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase()
                 + " - " + titol;
 
-            String msg = "Bon dia:<br/><br/>" + "Número " + tipus + ": " + itemID
-                + "<br/><br/>" + "    Des de la Fundació Bit l'informam que la seva " + tipus
-                + " titulada '" + titol
-                + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+            String msg = getCapCorreu(tipus, itemID)
+                + "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada '"
+                + titol + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
                 + "    Per fer el seguiment de la " + tipus
                 + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\""
                 + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>"
-                + "        Salutacions<br/>"
-                + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
-                + "<div style=\"color:#868686\">"
-                + "=================================================================<br/>"
-                + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
-                + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
-                + "================================================================="
-                + "</div>";
+                + getPeuCorreu();
             /*
              * 
              * "Enllaç a la " + itemNom + " titulada '" + titol + "'",
@@ -444,6 +428,20 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
+
+  protected String getCapCorreu(String tipus, Long itemID) {
+    return "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>";
+  }
+
+  protected String getPeuCorreu() {
+    return "        Salutacions<br/><br/>"
+        + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
+        + "<div style=\"color:#868686\">"
+        + "=================================================================<br/>"
+        + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+        + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
+        + "=================================================================" + "</div>";
   }
 
   private String getTitolItem(Long itemID) throws I18NException {
