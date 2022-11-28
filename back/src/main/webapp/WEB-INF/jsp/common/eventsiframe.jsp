@@ -40,6 +40,67 @@
  height: inherit;
 }
 
+.fondodiv2 {
+border-block-end-color: rgb(133, 192, 200);
+ border-block-end-style: solid;
+ border-block-end-width: 1px;
+ border-block-start-color: rgb(133, 192, 200);
+ border-block-start-style: solid;
+ border-block-start-width: 1px;
+ border-bottom-color: rgb(133, 192, 200);
+ border-bottom-left-radius: 3px;
+ border-bottom-right-radius: 3px;
+ border-bottom-style: solid;
+ border-bottom-width: 1px;
+ border-collapse: separate;
+ border-end-end-radius: 3px;
+ border-end-start-radius: 3px;
+ border-image-outset: 0;
+ border-image-repeat: stretch;
+ border-image-slice: 100%;
+ border-image-source: none;
+ border-image-width: 1;
+ border-inline-end-color: rgb(133, 192, 200);
+ border-inline-end-style: solid;
+ border-inline-end-width: 1px;
+ border-inline-start-color: rgb(133, 192, 200);
+ border-inline-start-style: solid;
+ border-inline-start-width: 1px;
+ border-left-color: rgb(133, 192, 200);
+ border-left-style: solid;
+ border-left-width: 1px;
+ border-right-color: rgb(133, 192, 200);
+ border-right-style: solid;
+ border-right-width: 1px;
+ border-spacing: 0px 0px;
+ border-start-end-radius: 3px;
+ border-start-start-radius: 3px;
+ border-top-color: rgb(133, 192, 200);
+ border-top-left-radius: 3px;
+ border-top-right-radius: 3px;
+ border-top-style: solid;
+ border-top-width: 1px;
+ margin-block-end: 20px;
+ margin-block-start: 10px;
+ margin-bottom: 20px;
+ margin-inline-end: 20px;
+ margin-inline-start: 20px;
+ margin-left: 20px;
+ margin-right: 20px;
+ margin-top: 10px;
+ background-attachment: scroll;
+ background-blend-mode: normal;
+ background-clip: border-box;
+ background-color: rgb(237, 246, 255);
+ background-image: none;
+ background-origin: padding-box;
+ background-position: 0% 0%;
+ background-position-x: 0%;
+ background-position-y: 0%;
+ background-repeat: repeat;
+ background-size: auto;
+}
+
 .fondodiv {
  align-content: normal;
  align-items: normal;
@@ -1168,7 +1229,7 @@
             </tr>
             <tr>
             <td colspan="2">
-            <h3 class="windowTitle">${titol}</h3>
+            <h3 class="windowTitle" style="line-height: 20px;margin:0">${titol}</h3>
             </td>
             
             </tr>
@@ -1197,7 +1258,7 @@
         <tr>
             <td colspan="3">
 
-                <div class="fondodiv">
+                <div class="fondodiv2">
                     <table style="padding: 0px;" border="0" cellpadding="0"
                         cellspacing="0">
 

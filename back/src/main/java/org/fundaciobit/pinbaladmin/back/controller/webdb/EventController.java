@@ -352,6 +352,7 @@ public class EventController
         return getRedirectWhenCreated(request, eventForm);
       }
     } catch (Throwable __e) {
+      log.error("XXXXXXXXXXXXXXXXXXXXXXXXX: " + __e.getMessage(), __e);
       afm.processErrorFilesWithoutThrowException(); // FILE
       if (__e instanceof I18NValidationException) {
         ValidationWebUtils.addFieldErrorsToBindingResult(result, (I18NValidationException)__e);

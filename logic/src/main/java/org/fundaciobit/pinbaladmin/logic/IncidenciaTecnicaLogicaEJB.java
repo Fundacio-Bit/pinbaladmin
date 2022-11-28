@@ -39,6 +39,13 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB
   public IncidenciaTecnicaJPA findByPrimaryKey(Long _ID_) {
     return super.findByPrimaryKey(_ID_);
   }
+  
+  
+  @Override
+  @PermitAll
+  public IncidenciaTecnica create(IncidenciaTecnica instance) throws I18NException {
+    return super.create(instance);
+  }
 
   @Override
   public void deleteFull(Long _ID) throws I18NException {
@@ -47,6 +54,9 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB
 
     this.delete(_ID);
   }
+  
+  
+  
 
   @Override
   public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador)

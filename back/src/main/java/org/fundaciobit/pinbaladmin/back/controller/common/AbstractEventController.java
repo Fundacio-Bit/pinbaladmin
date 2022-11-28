@@ -185,10 +185,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
       }
 
       if (isPublic()) {
-        eventForm.getEvent().setPersona(getPersonaContacteEmail(item));
+        eventForm.getEvent().setPersona(getPersonaContacteNom(item));
         eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
         eventForm.addHiddenField(TIPUS);
         eventForm.addHiddenField(NOLLEGIT);
+        
+        eventForm.addReadOnlyField(DATAEVENT);
+        eventForm.addReadOnlyField(PERSONA);
+        
         eventForm.getEvent().setNoLlegit(true);
       } else {
         eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
