@@ -7,14 +7,14 @@
     <c:set var="tipusevent" value="${isSolicitud?'solicitud':'incidenciatecnica' }" />
     
     <c:url var="theurl" value="/operador/event${tipusevent}/${event.eventID}/edit"/>
-    <c:set var="urlnou" value="javascript:document.location.href='${theurl}'"/>
+    <c:set var="urlEdit" value="javascript:document.location.href='${theurl}'"/>
     <c:if test="${not isEstatal}"> 
         <c:if test="${empty personaContacteEmail}">                       
-           <c:set var="urlnou" value="javascript:alert('La sol·licitud no te definit el correu del contacte EC');" />
+           <c:set var="urlEdit" value="javascript:alert('La sol·licitud no te definit el correu del contacte EC');" />
         </c:if>
     </c:if>
 
-    <button class="btn btn-mini btn-danger" onclick="${urlnou}" style="color:white"
+    <button class="btn btn-mini btn-danger" onclick="${urlEdit}" style="color:white"
         onclick="" title="Modificar">
             <i class="icon-pencil iconpencil"></i>Editar
     </button>

@@ -1181,8 +1181,8 @@ border-block-end-color: rgb(133, 192, 200);
         
                   <td width="100%" align="right">
                 <div>
-                    <c:url var="theurl" value="${contextweb}/new"/>
-                    <c:set var="urlnou" value="javascript:document.location.href='${theurl}'"/>
+                    <c:url var="theurlnew" value="${contextweb}/new"/>
+                    <c:set var="urlnou" value="javascript:document.location.href='${theurlnew}'"/>
                     
                     <c:if test="${not isEstatal}">
 
@@ -1217,10 +1217,11 @@ border-block-end-color: rgb(133, 192, 200);
                         </c:if>
                     </c:if>
 
+<%--
                     <a class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
                          <i class="icon-plus-sign"></i> Nova Entrada
                     </a>
-                    
+ --%>
                     
                     
                 </div>
@@ -1361,10 +1362,31 @@ border-block-end-color: rgb(133, 192, 200);
 
         </tr>
     </table>
-
+    <center>
+    <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%" height="${isPublic?425:525}px" onload="carregatIframe(this)" src="${theurlnew}"></iframe>
+    </center>
+    <br/>
 </div>
-
 <br/>
+
+<script>
+
+   var count = 0;
+
+   function carregatIframe() {
+       if (count != 0) {
+         console.log('loaded iframe ');
+         //alert("Carregat iframe ");
+         window.top.location.href='<%=request.getContextPath()%>${contextweb}/list';
+       } 
+       count++;
+   }
+
+
+
+</script>
+
+
 <br/>
 
 <center><b>©Fundaci&oacute; Bit - &Agrave;rea de Govern Digital - PinbalAdmin</b></center>

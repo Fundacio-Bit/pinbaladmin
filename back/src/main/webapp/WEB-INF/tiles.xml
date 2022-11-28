@@ -194,7 +194,7 @@
     </definition>
 
 
-    <definition name="eventFormOperador" extends="operador_base">
+    <definition name="eventFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
         <put-attribute name="titol" value="event.event" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
     </definition>

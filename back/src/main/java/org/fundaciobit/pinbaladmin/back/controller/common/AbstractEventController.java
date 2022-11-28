@@ -173,6 +173,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     if (eventForm.isNou()) {
+      
+      
+      eventForm.setCancelButtonVisible(false);
+      
+      eventForm.setTitleCode("=Nova Entrada");
+      
       /*
        * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
        * mav.setViewName("eventFormOperador"); }
@@ -479,10 +485,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         String url = getLinkPublic(itemID);
 
-        String msg = "Bones:\n"
+        String msg = "Bon dia:\n"
             + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
             + titol + "'." + "\n També podrà afegir informació addicional a la seva " + itemNom
-            + " a través d'aquest enllaç: " + url;
+            + " a través d'aquest enllaç: " + url + "\n\n" 
+            + getPeuCorreu().replace("<br/>", "\n").replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
 
         request.getSession().setAttribute(SESSION_ENVIARCORREU_MISSATGE, msg);
 

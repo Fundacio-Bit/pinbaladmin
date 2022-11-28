@@ -50,7 +50,7 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
     EmailForm emailForm = super.getEmailForm(_jpa, __isView, request, mav);
 
     final String msg = (String) request.getSession().getAttribute(AbstractEventController.SESSION_ENVIARCORREU_MISSATGE);
-    emailForm.getEmail().setMessage(msg.replaceAll("\n", "<br/>"));
+    emailForm.getEmail().setMessage(msg);
     
     emailForm.addHiddenField(DATAENVIAMENT);
     emailForm.addHiddenField(ENVIADOR);
