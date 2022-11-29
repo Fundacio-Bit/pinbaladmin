@@ -1195,15 +1195,16 @@ border-block-end-color: rgb(133, 192, 200);
 
                     
                     <c:if test="${!isPublic}">
+                    <%-- 
                         <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
                             href="<c:url value="${contextweb}/enviarenllaz/${ID}"/>">
                             <i class="icon-envelope"></i> Enviar aquesta p&agrave;gina al
                             Contacte
                         </a>
-
+                     --%>
                         <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
                             href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
-                            <i class="icon-envelope"></i> Enviar email
+                            <i class="icon-envelope"></i> Enviar Correu al Contacte
                         </a>
 
                         <a class="btn btn-info btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToEditItem}"/>">
@@ -1217,7 +1218,7 @@ border-block-end-color: rgb(133, 192, 200);
                         </c:if>
                         
                         <c:if test="${not empty urlMarcarComLlegides}">
-                        <a class="btn btn-small" role="button" style="margin:5px"   href="${urlMarcarComLlegides}">
+                        <a class="btn btn-success btn-small" role="button" style="margin:5px"   href="${urlMarcarComLlegides}">
                              <i class="icon-ok"></i> Marcar Entrades com a Llegides
                         </a>
                         </c:if>
