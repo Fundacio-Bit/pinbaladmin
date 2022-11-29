@@ -1210,9 +1210,15 @@ border-block-end-color: rgb(133, 192, 200);
                              <i class="icon-eye-open"></i> Veure ${tipus}
                         </a>
                         
-                       <c:if test="${not empty urlToCloseItem}">
-                       <a class="btn btn-danger btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
+                        <c:if test="${not empty urlToCloseItem}">
+                        <a class="btn btn-danger btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
                              <i class="icon-eye-open"></i> Tancar ${tipus}
+                        </a>
+                        </c:if>
+                        
+                        <c:if test="${not empty urlMarcarComLlegides}">
+                        <a class="btn btn-small" role="button" style="margin:5px"   href="${urlMarcarComLlegides}">
+                             <i class="icon-ok"></i> Marcar Entrades com a Llegides
                         </a>
                         </c:if>
                     </c:if>
@@ -1221,9 +1227,8 @@ border-block-end-color: rgb(133, 192, 200);
                     <a class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
                          <i class="icon-plus-sign"></i> Nova Entrada
                     </a>
- --%>
-                    
-                    
+--%>
+
                 </div>
                 </td></tr>
                 </table>

@@ -558,6 +558,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
     if (!isClosed(item)) {
       mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
     }
+    
+    
+    mav.addObject("urlMarcarComLlegides", request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
 
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
@@ -675,5 +678,48 @@ public abstract class AbstractEventController<T> extends EventController impleme
       throws Exception, I18NException, I18NValidationException {
     return (EventJPA) eventLogicaEjb.create(event);
   }
+  
+  
+  
+  @RequestMapping(value = "/marcarcomllegida/{itemID}", method = RequestMethod.GET)
+  public String marcarEntradesComLlegides(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable Long itemID) {
+
+    Where wComu;
+    //StringField creador;
+    if (isSolicitud()) {
+       //creador = new EventQueryPath().SOLICITUD().CREADOR();
+       wComu = EventFields.SOLICITUDID.equal(itemID);
+    } else {
+       //creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+       wComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
+    }
+    
+    
+    List<Event> eventsNoLlegits;
+    try {
+      eventsNoLlegits = eventLogicaEjb.select(Where.AND(wComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
+    
+    
+    for (Event event : eventsNoLlegits) {
+      event.setNoLlegit(false);
+      eventLogicaEjb.update(event);
+    }
+    
+    } catch (I18NException e) {
+      // TODO Auto-generated catch block
+     String msg = "Error marcant com a llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
+     
+     log.error(msg, e);
+     
+     HtmlUtils.saveMessageError(request, msg);
+     
+    }
+    
+    
+    return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  
+  }
+  
 
 }
