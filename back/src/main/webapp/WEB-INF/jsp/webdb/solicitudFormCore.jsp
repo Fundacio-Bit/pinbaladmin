@@ -538,9 +538,20 @@
              </label>
             </td>
             <td>
-            <form:errors path="solicitud.creador" cssClass="errorField alert alert-error" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="100" path="solicitud.creador"   />
-
+          <form:errors path="solicitud.creador" cssClass="errorField alert alert-error" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
+          <form:hidden path="solicitud.creador"/>
+          <input type="text" readonly="true" class="input-xxlarge uneditable-input" value="${gen:findValue(__theForm.solicitud.creador,__theForm.listOfValuesForCreador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
+          <form:select id="solicitud_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="input-xxlarge" path="solicitud.creador">
+          <%-- El camp pot ser null, per la qual cosa afegim una entrada buida --%>
+          <form:option value="" ></form:option>
+            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
+            <form:option value="${tmp.key}" >${tmp.value}</form:option>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

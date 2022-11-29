@@ -13,6 +13,7 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.ITableManager;
+import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
@@ -31,6 +32,7 @@ import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
 import org.springframework.stereotype.Controller;
@@ -66,6 +68,9 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
+  
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorLocal.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.OperadorLocal operadorEjb;
 
   @Override
   public String getTileForm() {
@@ -534,6 +539,25 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
     }
 
+  }
+  
+  
+  @Override
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+      ModelAndView mav, Where where) throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+    SelectMultipleStringKeyValue smskv;
+    smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select,
+        OperadorFields.NOM.select);
+
+    List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, null);
+
+    for (StringKeyValue skv : operadors) {
+      __tmp.add(new StringKeyValue(skv.getKey(), skv.getValue()));
+    }
+
+    return __tmp;
   }
 
 }

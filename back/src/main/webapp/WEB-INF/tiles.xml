@@ -498,6 +498,16 @@
     </definition>
 
 
+    <definition name="operadorFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="operador.operador" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/operadorForm.jsp" />
+    </definition>
+    
+    <definition name="operadorListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/operadorList.jsp" />
+    </definition>
+
+
     <definition name="serveiFormWebDB" extends="webdb">
         <put-attribute name="titol" value="servei.servei" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiForm.jsp" />

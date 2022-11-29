@@ -231,6 +231,7 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
     this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
+    this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
   }
   
@@ -238,12 +239,12 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { TITOL ,DESCRIPCIO ,CREADOR ,TIPUS ,NOMENTITAT ,CONTACTEEMAIL }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { TITOL ,DESCRIPCIO ,TIPUS ,NOMENTITAT ,CONTACTEEMAIL }));
   }
 
   @Override
   public List<Field<?>> getDefaultGroupByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT ,TIPUS }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT ,CREADOR ,TIPUS }));
   }
 
 
@@ -274,6 +275,18 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   public void setMapOfValuesForEstat(Map<String, String> mapOfValuesForEstat) {
     this.mapOfValuesForEstat = mapOfValuesForEstat;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForCreador;
+
+  public Map<String, String> getMapOfValuesForCreador() {
+    return this.mapOfValuesForCreador;
+  }
+
+  public void setMapOfValuesForCreador(Map<String, String> mapOfValuesForCreador) {
+    this.mapOfValuesForCreador = mapOfValuesForCreador;
   }
 
 

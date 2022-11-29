@@ -226,6 +226,16 @@ public class SolicitudController
 
       fillValuesToGroupByItemsBoolean("solicitud.produccio", groupByItemsMap, PRODUCCIO);
 
+    // Field creador
+    {
+      _listSKV = getReferenceListForCreador(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForCreador(_tmp);
+      if (filterForm.getGroupByFields().contains(CREADOR)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CREADOR, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -244,6 +254,7 @@ public class SolicitudController
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ESTATID, filterForm.getMapOfEstatSolicitudForEstatID());
     __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
+    __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -317,6 +328,15 @@ public class SolicitudController
       java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
     }
       solicitudForm.setListOfDepartamentForDepartamentID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForCreador() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForCreador(request, mav, solicitudForm, null);
+
+ if (!_listSKV.isEmpty())    {
+      java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+    }
+      solicitudForm.setListOfValuesForCreador(_listSKV);
     }
     
   }
@@ -774,6 +794,42 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForDepartamentID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return departamentRefList.getReferenceList(DepartamentFields.DEPARTAMENTID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CREADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    return getReferenceListForCreador(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CREADOR)
+      && !solicitudFilterForm.isGroupByField(CREADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    Where _w = null;
+    return getReferenceListForCreador(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("anadal" , "anadal"));
+    __tmp.add(new StringKeyValue("pvico" , "pvico"));
+    __tmp.add(new StringKeyValue("atrobat" , "atrobat"));
+    __tmp.add(new StringKeyValue("gdeignacio" , "gdeignacio"));
+    __tmp.add(new StringKeyValue("mgonzalez" , "mgonzalez"));
+    __tmp.add(new StringKeyValue("mcapo" , "mcapo"));
+    __tmp.add(new StringKeyValue("fsalas" , "fsalas"));
+    __tmp.add(new StringKeyValue("ptrias" , "ptrias"));
+    return __tmp;
   }
 
 

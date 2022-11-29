@@ -189,6 +189,16 @@ public class IncidenciaTecnicaController
       };
     }
 
+    // Field creador
+    {
+      _listSKV = getReferenceListForCreador(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForCreador(_tmp);
+      if (filterForm.getGroupByFields().contains(CREADOR)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CREADOR, false);
+      };
+    }
+
     // Field tipus
     {
       _listSKV = getReferenceListForTipus(request, mav, filterForm, list, groupByItemsMap, null);
@@ -215,6 +225,7 @@ public class IncidenciaTecnicaController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
+    __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(TIPUS, filterForm.getMapOfValuesForTipus());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
@@ -271,6 +282,15 @@ public class IncidenciaTecnicaController
       java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
     }
       incidenciaTecnicaForm.setListOfValuesForEstat(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (incidenciaTecnicaForm.getListOfValuesForCreador() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForCreador(request, mav, incidenciaTecnicaForm, null);
+
+ if (!_listSKV.isEmpty())    {
+      java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+    }
+      incidenciaTecnicaForm.setListOfValuesForCreador(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (incidenciaTecnicaForm.getListOfValuesForTipus() == null) {
@@ -611,6 +631,42 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("2" , "2"));
     __tmp.add(new StringKeyValue("3" , "3"));
     __tmp.add(new StringKeyValue("4" , "4"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, IncidenciaTecnicaForm incidenciaTecnicaForm, Where where)  throws I18NException {
+    if (incidenciaTecnicaForm.isHiddenField(CREADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    return getReferenceListForCreador(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
+       List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (incidenciaTecnicaFilterForm.isHiddenField(CREADOR)
+      && !incidenciaTecnicaFilterForm.isGroupByField(CREADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST_UNMODIFIABLE;
+    }
+    Where _w = null;
+    return getReferenceListForCreador(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("anadal" , "anadal"));
+    __tmp.add(new StringKeyValue("pvico" , "pvico"));
+    __tmp.add(new StringKeyValue("atrobat" , "atrobat"));
+    __tmp.add(new StringKeyValue("gdeignacio" , "gdeignacio"));
+    __tmp.add(new StringKeyValue("mgonzalez" , "mgonzalez"));
+    __tmp.add(new StringKeyValue("mcapo" , "mcapo"));
+    __tmp.add(new StringKeyValue("fsalas" , "fsalas"));
+    __tmp.add(new StringKeyValue("ptrias" , "ptrias"));
     return __tmp;
   }
 

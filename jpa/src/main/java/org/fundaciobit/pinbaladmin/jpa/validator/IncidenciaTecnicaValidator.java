@@ -85,6 +85,7 @@ public class IncidenciaTecnicaValidator<T> implements IncidenciaTecnicaFields {
       }
     }
     
+
     if (__vr.getFieldErrorCount(NOMENTITAT) == 0) {
       java.lang.String __nomentitat = (java.lang.String)__vr.getFieldValue(__target__,NOMENTITAT);
       if (__nomentitat!= null && __nomentitat.length() > 255) {

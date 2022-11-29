@@ -120,3 +120,23 @@ hs_err_pid*
 /utils/target/maven-archiver/pom.properties
 /utils/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 /utils/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+/back.bat
+/back/secret.properties
+/back/servidordecorreu.properties
+/back/src/main/webapp/WEB-INF/jsp/moduls/menu_admin.jsp
+/back/src/main/webapp/WEB-INF/jsp/moduls/menu_user.jsp
+/config.bat
+/deps.txt
+/doc/PinbalAdmin.odb
+/formulario.xml
+/formulario_nou.xml
+/formulario_nou2.xml
+/logic/deps.txt
+/scripts/genapp/genapp.log.1
+/scripts/templates/Plantilla-Procedimientos - copia.xlsx
+/scripts/templates/plantilla_formulari - copia.odt
+/scripts/templates/plantilla_formulari_NO_FUNCIONA.odt
+/scripts/templates/plantilla_formulari_OK.odt
+/starthttpserver.bat
+/tràmit_sistra.txt
+/utils/

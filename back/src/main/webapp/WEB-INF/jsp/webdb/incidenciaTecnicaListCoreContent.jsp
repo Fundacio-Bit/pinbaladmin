@@ -52,7 +52,10 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
           <td>
-          <c:out value="${incidenciaTecnica.creador}" />
+          <c:set var="tmp">${incidenciaTecnica.creador}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForCreador[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">

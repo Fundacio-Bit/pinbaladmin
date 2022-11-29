@@ -59,9 +59,9 @@ public class EventValidator<T> implements EventFields {
     
     if (__vr.getFieldErrorCount(COMENTARI) == 0) {
       java.lang.String __comentari = (java.lang.String)__vr.getFieldValue(__target__,COMENTARI);
-      if (__comentari!= null && __comentari.length() > 4000) {
+      if (__comentari!= null && __comentari.length() > 2147483647) {
         __vr.rejectValue(COMENTARI, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(COMENTARI)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(4000)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(COMENTARI)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
       }
     }
     

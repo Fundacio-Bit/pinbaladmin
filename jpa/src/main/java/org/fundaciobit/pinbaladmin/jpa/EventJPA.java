@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import org.hibernate.annotations.Index;
@@ -48,7 +49,8 @@ private static final long serialVersionUID = 342741761L;
 	@Column(name="persona",nullable = false,length = 255)
 	java.lang.String persona;
 
-	@Column(name="comentari",length = 4000)
+	@Column(name="comentari",length = 2147483647)
+  @Lob
 	java.lang.String comentari;
 
 	@Index(name="pad_event_fitxerid_fk_i")

@@ -170,6 +170,7 @@ public class SolicitudValidator<T> implements SolicitudFields {
       }
     }
     
+
     if (__vr.getFieldErrorCount(DENOMINACIO) == 0) {
       java.lang.String __denominacio = (java.lang.String)__vr.getFieldValue(__target__,DENOMINACIO);
       if (__denominacio!= null && __denominacio.length() > 255) {

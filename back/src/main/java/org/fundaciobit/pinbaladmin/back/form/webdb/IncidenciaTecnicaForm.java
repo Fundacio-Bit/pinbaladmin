@@ -20,6 +20,7 @@ public class IncidenciaTecnicaForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.incidenciaTecnica = __toClone.incidenciaTecnica;
     this.listOfValuesForEstat = __toClone.listOfValuesForEstat;
+    this.listOfValuesForCreador = __toClone.listOfValuesForCreador;
     this.listOfValuesForTipus = __toClone.listOfValuesForTipus;
   }
   
@@ -44,6 +45,18 @@ public class IncidenciaTecnicaForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForEstat(List<StringKeyValue> listOfValuesForEstat) {
     this.listOfValuesForEstat = listOfValuesForEstat;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForCreador;
+
+  public List<StringKeyValue> getListOfValuesForCreador() {
+    return this.listOfValuesForCreador;
+  }
+
+  public void setListOfValuesForCreador(List<StringKeyValue> listOfValuesForCreador) {
+    this.listOfValuesForCreador = listOfValuesForCreador;
   }
 
 

@@ -25,6 +25,7 @@ public interface IPinbalAdminDaoManagers {
 	public IGrupEntitatCedentManager getGrupEntitatCedentManager();
 	public IIdiomaManager getIdiomaManager();
 	public IIncidenciaTecnicaManager getIncidenciaTecnicaManager();
+	public IOperadorManager getOperadorManager();
 	public IServeiManager getServeiManager();
 	public ISolicitudManager getSolicitudManager();
 	public ISolicitudServeiManager getSolicitudServeiManager();

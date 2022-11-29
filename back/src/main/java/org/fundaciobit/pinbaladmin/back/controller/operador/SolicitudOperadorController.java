@@ -52,6 +52,7 @@ import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
+import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -123,6 +124,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
+  
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorLocal.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.OperadorLocal operadorEjb;
 
   @Autowired
   protected AreaRefList areaNovaRefList;
@@ -1331,6 +1335,26 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     
       return "redirect:/operador/solicitudfullview/view/" + solicitudID;
   }
+  
+  
+  @Override
+  public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+      ModelAndView mav, Where where) throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+    SelectMultipleStringKeyValue smskv;
+    smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select,
+        OperadorFields.NOM.select);
+
+    List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, null);
+
+    for (StringKeyValue skv : operadors) {
+      __tmp.add(new StringKeyValue(skv.getKey(), skv.getValue()));
+    }
+
+    return __tmp;
+  }
+  
 
   /*
    * 

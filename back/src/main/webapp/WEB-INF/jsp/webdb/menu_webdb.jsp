@@ -425,6 +425,25 @@
       </ul>
     </li>
 
+    <%-- Operador --%>
+    <li>
+      <a href="#" role="branch" class="tree-toggle ${fn:contains(url, 'operador/')? "" : "closed"}" data-toggle="branch" data-value="suportada"><span style="${fn:contains(url, 'operador/')? "font-weight: bold;" : ""}"><fmt:message key="operador.operador"/></span></a>
+      <ul class="${fn:contains(url, 'operador/')? "branch in" : "branch"}">
+        <li style="list-style-type: disc; list-style-position: inside;" ><a href="<c:url value="/webdb/operador/new"/>" ><span style="${(fn:contains(url, 'operador/') && fn:contains(url, '/new'))? "font-weight: bold;" : ""}" >
+       <fmt:message var="entityname" key="operador.operador"/>
+       <fmt:message key="genapp.createtitle" >
+         <fmt:param value="${entityname}"/>
+       </fmt:message>
+       </span></a></li>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/operador/list/1"/>" ><span style="${(fn:contains(url, 'operador/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+        <fmt:message key="genapp.listtitle" >
+         <fmt:param value="${entityname}"/>
+       </fmt:message>
+        </span></a>
+        </li>
+      </ul>
+    </li>
+
     <%-- Servei --%>
     <li>
       <a href="#" role="branch" class="tree-toggle ${fn:contains(url, 'servei/')? "" : "closed"}" data-toggle="branch" data-value="suportada"><span style="${fn:contains(url, 'servei/')? "font-weight: bold;" : ""}"><fmt:message key="servei.servei"/></span></a>

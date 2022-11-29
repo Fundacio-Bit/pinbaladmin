@@ -353,6 +353,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfEstatSolicitudForEstatID = __toClone.mapOfEstatSolicitudForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
+    this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
   }
   
   /* ========= UTILS ========== */
@@ -419,6 +420,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfDepartamentForDepartamentID(Map<String, String> mapOfDepartamentForDepartamentID) {
     this.mapOfDepartamentForDepartamentID = mapOfDepartamentForDepartamentID;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForCreador;
+
+  public Map<String, String> getMapOfValuesForCreador() {
+    return this.mapOfValuesForCreador;
+  }
+
+  public void setMapOfValuesForCreador(Map<String, String> mapOfValuesForCreador) {
+    this.mapOfValuesForCreador = mapOfValuesForCreador;
   }
 
 

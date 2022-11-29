@@ -111,9 +111,18 @@
              </label>
             </td>
             <td>
-            <form:errors path="incidenciaTecnica.creador" cssClass="errorField alert alert-error" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)? 'true' : 'false'}" cssClass="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)? 'input-xxlarge uneditable-input' : 'input-xxlarge'}"  maxlength="255" path="incidenciaTecnica.creador"   />
-
+          <form:errors path="incidenciaTecnica.creador" cssClass="errorField alert alert-error" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
+          <form:hidden path="incidenciaTecnica.creador"/>
+          <input type="text" readonly="true" class="input-xxlarge uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.creador,__theForm.listOfValuesForCreador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
+          <form:select id="incidenciaTecnica_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="input-xxlarge" path="incidenciaTecnica.creador">
+            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
+            <form:option value="${tmp.key}" >${tmp.value}</form:option>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>
