@@ -36,6 +36,7 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
+import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.jpa.SolicitudJPA;
@@ -44,6 +45,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaLocal;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.EstatSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
@@ -51,6 +53,7 @@ import org.fundaciobit.pinbaladmin.model.fields.DepartamentQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -79,6 +82,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
       .AREAID();
 
   public static final int ENTITAT_COLUMN = 1;
+  
+  public static final int MISSATGES_SENSE_LLEGIR_COLUMN = 2;
 
   public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA()
       .ENTITAT().ENTITATID();
@@ -413,6 +418,22 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         request);
 
     if (solicitudFilterForm.isNou()) {
+      
+      
+      {
+
+        AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+        adfield4.setCodeName("=Sense Llegir");
+        adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
+
+        adfield4.setEscapeXml(false);
+        adfield4.setValueMap(new HashMap<Long, String>());
+
+        solicitudFilterForm.addAdditionalField(adfield4);
+
+      }
+      
+      
 
       Boolean isestatal = isEstatal();
 
@@ -492,21 +513,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
       solicitudFilterForm.setHiddenFields(hiddenFields);
 
-      /*
-       * solicitudFilterForm.addHiddenField( NOTES);
-       * solicitudFilterForm.addHiddenField(PERSONACONTACTE);
-       * solicitudFilterForm.addHiddenField(TICKETASSOCIAT); if
-       * (!Configuracio.isDesenvolupament()) {
-       * solicitudFilterForm.addHiddenField(SOLICITUDID); }
-       * solicitudFilterForm.addHiddenField(CODIDESCRIPTIU);
-       * solicitudFilterForm.addHiddenField(DATAFI);
-       * solicitudFilterForm.addHiddenField(DOCUMENTSOLICITUDID);
-       * solicitudFilterForm.addHiddenField(PRODUCCIO);
-       * solicitudFilterForm.addHiddenField(FIRMATDOCSOLICITUD);
-       * solicitudFilterForm.addHiddenField(PINFO);
-       * solicitudFilterForm.addHiddenField(CREADOR);
-       * solicitudFilterForm.addHiddenField(PERSONACONTACTEEMAIL);
-       */
       {
         List<Field<?>> list = solicitudFilterForm.getGroupByFields();
         if (list == null) {
@@ -531,7 +537,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
           "exportacio.soli_servei", getContextWeb() + "/fullexport", "btn-info"));
 
       solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn",
-          "conversa", /*
+          "Events", /*
                        * "javascript:window.open('" + request.getContextPath() +
                        */
           EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}"
@@ -620,6 +626,51 @@ public abstract class SolicitudOperadorController extends SolicitudController {
   @Override
   public void postList(HttpServletRequest request, ModelAndView mav,
       SolicitudFilterForm filterForm, List<Solicitud> list) throws I18NException {
+
+    {
+
+
+      Map<Long, String> map;
+      map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN)
+          .getValueMap();
+      map.clear();
+
+      final StringField creador = new EventQueryPath().SOLICITUD().CREADOR();
+
+      final String loginUserName = request.getRemoteUser();
+
+      for (Solicitud inc : list) {
+
+        final String user = inc.getCreador();
+
+        // incidencies
+
+        Long incidencies = eventLogicaEjb
+            .count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
+                EventFields.SOLICITUDID.equal(inc.getSolicitudID()),
+                creador.equal(user)));
+
+        if (incidencies != 0) {
+
+          final String color;
+          if (loginUserName.equals(user)) {
+            color = "important";
+          } else {
+            color = "warning";
+          }
+
+          final String text = "<span title=\"Events no llegits\" class=\"badge badge-" + color + " \">" + incidencies
+              + "</span>" + "<span title=\"Events no llegits\" class=\"label label-" + color + "\"><b>&#9888;</b></span>";
+
+          map.put(inc.getSolicitudID(), text);
+
+        }
+
+      }
+
+    }
+    
+    
 
     filterForm.getAdditionalButtonsByPK().clear();
     boolean error = false;
@@ -801,6 +852,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      * getContextWeb() + "/enviarcorreu/" + soli.getSolicitudID(),
      * "btn-danger")); } } }
      */
+    
+    
 
   }
 

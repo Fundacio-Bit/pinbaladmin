@@ -1,7 +1,9 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaLocal;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.utils.Constants;
 import org.fundaciobit.pinbaladmin.utils.PinbalAdminUtils;
@@ -51,6 +54,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
   public static final String WEBCONTEXT = "/operador/incidencia";
 
   public static final int FILTRE_AVANZAT_COLUMN = -1;
+
+  public static final int MISSATGES_SENSE_LLEGIR_COLUMN = 1;
 
   public static final StringField FILTRE_AVANZAT_FIELD = DESCRIPCIO;
 
@@ -188,7 +193,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
 
       incidenciaTecnicaFilterForm
-          .addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn", "Comentaris",
+          .addAdditionalButtonForEachItem(new AdditionalButton("icon-bullhorn", "Events",
               EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}",
               "btn-success"));
 
@@ -212,6 +217,20 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         incidenciaTecnicaFilterForm.getFilterByFields().remove(CONTACTEEMAIL);
 
       }
+
+      {
+
+        AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+        adfield4.setCodeName("=Sense Llegir");
+        adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
+
+        adfield4.setEscapeXml(false);
+        adfield4.setValueMap(new HashMap<Long, String>());
+
+        incidenciaTecnicaFilterForm.addAdditionalField(adfield4);
+
+      }
+
       incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
 
       if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
@@ -279,7 +298,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     }
 
     }
-    ;
 
     Where w2 = getAdditionaConditionAdvancedFilter(request);
 
@@ -469,6 +487,53 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     }
 
     return "redirect:" + WEBCONTEXT + "/" + incidenciaTecnicaID + "/edit";
+  }
+
+  @Override
+  public void postList(HttpServletRequest request, ModelAndView mav,
+      IncidenciaTecnicaFilterForm filterForm, List<IncidenciaTecnica> list)
+      throws I18NException {
+
+    super.postList(request, mav, filterForm, list);
+
+    Map<Long, String> map;
+    map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN)
+        .getValueMap();
+    map.clear();
+
+    final StringField creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+
+    final String loginUserName = request.getRemoteUser();
+
+    for (IncidenciaTecnica inc : list) {
+
+      final String user = inc.getCreador();
+
+      // incidencies
+
+      Long incidencies = eventLogicaEjb
+          .count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
+              EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()),
+              creador.equal(user)));
+
+      if (incidencies != 0) {
+
+        final String color;
+        if (loginUserName.equals(user)) {
+          color = "important";
+        } else {
+          color = "warning";
+        }
+
+        final String text = "<span title=\"Events no llegits\" class=\"badge badge-" + color + " \">" + incidencies
+            + "</span>" + "<span title=\"Events no llegits\" class=\"label label-" + color + "\"><b>&#9888;</b></span>";
+
+        map.put(inc.getIncidenciaTecnicaID(), text);
+
+      }
+
+    }
+
   }
 
 }
