@@ -1247,7 +1247,7 @@ border-block-end-color: rgb(133, 192, 200);
         <td colspan="3">
                 <div class="full-width"
                     style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
-                    <table style="width: 100%;">
+                    <table style="width: 100%;font-size: 1.4em">
                         <tbody>
                             <tr>
                                 <td width="50%">Número: <strong> ${ID}</strong><br> Estat: <strong
@@ -1369,7 +1369,7 @@ border-block-end-color: rgb(133, 192, 200);
         </tr>
     </table>
     <center>
-    <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%" height="${isPublic?425:525}px" onload="carregatIframe(this)" src="${theurlnew}"></iframe>
+    <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%" height="${isPublic?400:425}px" onload="carregatIframe(this)" src="${theurlnew}"></iframe>
     </center>
     <br/>
 </div>

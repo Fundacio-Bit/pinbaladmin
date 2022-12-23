@@ -168,8 +168,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
       eventForm.addHiddenField(INCIDENCIATECNICAID);
       eventForm.addReadOnlyField(SOLICITUDID);
     } else {
+      // Incidència
       eventForm.addHiddenField(SOLICITUDID);
-      eventForm.addReadOnlyField(INCIDENCIATECNICAID);
+      eventForm.addHiddenField(INCIDENCIATECNICAID);
     }
 
     if (eventForm.isNou()) {
@@ -203,6 +204,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
       } else {
         eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
         eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
+        eventForm.getEvent().setNoLlegit(false);
+        eventForm.addHiddenField(NOLLEGIT);
       }
     }
 
@@ -442,7 +445,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   protected String getPeuCorreu() {
     return "        Salutacions<br/><br/>"
-        + "        <i>Àrea de Govern Digital - Fundació BIT</i>"
+        + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
         + "<div style=\"color:#868686\">"
         + "=================================================================<br/>"
         + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
@@ -467,6 +470,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   }
 
   public static final String SESSION_ENVIARCORREU_DEST = "__SESSION_ENVIARCORREU_DEST__";
+  
+  public static final String SESSION_ENVIARCORREU_ASSUMPTE = "__SESSION_ENVIARCORREU_ASSUMPTE__";
 
   public static final String SESSION_ENVIARCORREU_MISSATGE = "__SESSION_ENVIARCORREU_MISSATGE__";
 
@@ -486,12 +491,13 @@ public abstract class AbstractEventController<T> extends EventController impleme
         String url = getLinkPublic(itemID);
 
         String msg = "Bon dia:\n"
-            + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-            + titol + "'." + "\n També podrà afegir informació addicional a la seva " + itemNom
-            + " a través d'aquest enllaç: " + url + "\n\n" 
+            + " En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+            + titol + "' i també podrà afegir informació addicional a la seva " + itemNom
+            + ": " + url + "\n\n" 
             + getPeuCorreu().replace("<br/>", "\n").replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
 
         request.getSession().setAttribute(SESSION_ENVIARCORREU_MISSATGE, msg);
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_ASSUMPTE, "PINBAL [#" + itemNom + ": " + itemID +"] - NOVETATS - " + titol);
 
       }
 

@@ -40,7 +40,7 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
   }
 
   @Override
-  public boolean isStoredInDDBB() {
+  public boolean mustBeStoredInDDBB() {
     return false;
   }
 
@@ -51,6 +51,10 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
 
     final String msg = (String) request.getSession().getAttribute(AbstractEventController.SESSION_ENVIARCORREU_MISSATGE);
     emailForm.getEmail().setMessage(msg);
+    
+    
+    final String subject = (String) request.getSession().getAttribute(AbstractEventController.SESSION_ENVIARCORREU_ASSUMPTE);
+    emailForm.getEmail().setSubject(subject);
     
     emailForm.addHiddenField(DATAENVIAMENT);
     emailForm.addHiddenField(ENVIADOR);

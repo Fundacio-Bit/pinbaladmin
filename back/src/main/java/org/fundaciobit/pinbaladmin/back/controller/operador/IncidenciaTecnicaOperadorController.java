@@ -170,8 +170,9 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       }
 
       incidenciaTecnicaFilterForm.setSubTitleCode("=Valors Estat => " + str.toString());
+      
+      incidenciaTecnicaFilterForm.addLabel(INCIDENCIATECNICAID, "=#Incidència");
 
-      incidenciaTecnicaFilterForm.addHiddenField(INCIDENCIATECNICAID);
       incidenciaTecnicaFilterForm.addHiddenField(NOMENTITAT);
       incidenciaTecnicaFilterForm.addHiddenField(DESCRIPCIO);
       incidenciaTecnicaFilterForm.addHiddenField(CONTACTEEMAIL);
@@ -184,6 +185,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
       incidenciaTecnicaFilterForm
           .setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
+      
+      incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
 
       // Valors Inicials Filtre
       if (getVistaIncidencia() != VistaIncidencia.NOLLEGITSNOMEUS) {
@@ -241,6 +244,16 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
         incidenciaTecnicaFilterForm.setAddButtonVisible(false);
       }
+      
+      incidenciaTecnicaFilterForm.setGroupBy(CREADOR.javaName);
+      incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
+      
+      
+      incidenciaTecnicaFilterForm.setGroupByFields(incidenciaTecnicaFilterForm.getDefaultGroupByFields());
+      incidenciaTecnicaFilterForm.getGroupByFields().add(DATAINICI);
+      
+      incidenciaTecnicaFilterForm.setOrderBy(DATAINICI.javaName);
+      incidenciaTecnicaFilterForm.setOrderAsc(false);
 
     }
 
@@ -265,7 +278,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
       incidenciaTecnicaForm.addReadOnlyField(DATAINICI);
       incidenciaTecnicaForm.addReadOnlyField(ESTAT);
-      incidenciaTecnicaForm.addReadOnlyField(CREADOR);
+      //incidenciaTecnicaForm.addReadOnlyField(CREADOR);
 
       incidenciaTecnicaForm.getIncidenciaTecnica().setCreador(request.getRemoteUser());
     }

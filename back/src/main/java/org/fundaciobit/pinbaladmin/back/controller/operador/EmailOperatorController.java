@@ -47,7 +47,7 @@ public class EmailOperatorController extends EmailController {
     return "emailListOperator";
   }
   
-  public boolean isStoredInDDBB() {
+  public boolean mustBeStoredInDDBB() {
     return true;
   }
 
@@ -55,7 +55,7 @@ public class EmailOperatorController extends EmailController {
   public EmailJPA create(HttpServletRequest request, EmailJPA email) throws Exception,
       I18NException, I18NValidationException {
 
-    final boolean isHtml = true;
+    final boolean isHtml = false;
 
     String[] emails = email.getDestinataris().split(";");
     log.error("Dest: " + Arrays.toString(emails));
@@ -65,12 +65,14 @@ public class EmailOperatorController extends EmailController {
         EmailUtil.postMail(email.getSubject(), email.getMessage(), isHtml,
             Configuracio.getAppEmail(), address);
       } catch (Exception e) {
-        HtmlUtils.saveMessageError(request, "No s'ha pogut enviar el correu a " + address
-            + ": " + e.getMessage());
+        final String msg = "No s'ha pogut enviar el correu a " + address
+            + ": " + e.getMessage();
+        log.error(msg, e);
+        HtmlUtils.saveMessageError(request, msg);
       }
     }
 
-    if (isStoredInDDBB()) {
+    if (mustBeStoredInDDBB()) {
       email = (EmailJPA) emailEjb.create(email);
     }
     
