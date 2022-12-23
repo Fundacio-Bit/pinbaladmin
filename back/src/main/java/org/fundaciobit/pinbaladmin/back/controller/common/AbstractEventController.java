@@ -166,7 +166,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     if (isSolicitud()) {
       eventForm.addHiddenField(INCIDENCIATECNICAID);
-      eventForm.addReadOnlyField(SOLICITUDID);
+      eventForm.addHiddenField(SOLICITUDID);
     } else {
       // Incidència
       eventForm.addHiddenField(SOLICITUDID);
