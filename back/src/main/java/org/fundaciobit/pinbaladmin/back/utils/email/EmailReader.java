@@ -98,7 +98,7 @@ public class EmailReader {
     }
   }
 
-  public List<EmailMessageInfo> list() throws Exception {
+  public List<EmailMessageInfo> list(int start, int end) throws Exception {
 
     EmailSession session = null;
     final boolean readOnly = true;
@@ -106,7 +106,7 @@ public class EmailReader {
 
       session = EmailSession.connectToServer(this.properties, readOnly);
 
-      Message[] messages = session.getFolder().getMessages();
+      Message[] messages = session.getFolder().getMessages(start,end);
 
       List<EmailMessageInfo> list = new ArrayList<EmailMessageInfo>();
       for (int i = 0; i < messages.length; i++) {

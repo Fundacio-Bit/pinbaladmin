@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,16 +57,17 @@ public class LlistaCorreusOperadorController extends EmailController {
 
   public static final String CACHE_DE_EMAILS_LLEGITS = "__CACHE_DE_EMAILS_LLEGITS__";
 
-  public static final int MISSATGE2 = 1;
+  public static final String CACHE_SIZE_DE_EMAILS_LLEGITS = "__CACHE_SIZE_DE_EMAILS_LLEGITS__";
+
+  public static final int MISSATGE22 = 1;
 
   public static final int ATTACHMENTS = 2;
 
   @EJB(mappedName = IncidenciaTecnicaLogicaLocal.JNDI_NAME)
   protected IncidenciaTecnicaLogicaLocal incidenciaTecnicaLogicaEjb;
-  
+
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.ServeiLocal.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.ServeiLocal serveiEjb;
-
 
   @EJB(mappedName = SolicitudLogicaLocal.JNDI_NAME)
   protected SolicitudLogicaLocal solicitudLogicaEjb;
@@ -97,7 +99,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       emailFilterForm.setEditButtonVisible(false);
       emailFilterForm.setDeleteSelectedButtonVisible(false);
       emailFilterForm.setVisibleMultipleSelection(false);
-      
+
       emailFilterForm.setOrderBy(DATAENVIAMENT.javaName);
       emailFilterForm.setOrderAsc(false);
 
@@ -108,9 +110,9 @@ public class LlistaCorreusOperadorController extends EmailController {
       emailFilterForm.addHiddenField(MESSAGE);
       emailFilterForm.addHiddenField(EMAILID);
 
-      emailFilterForm.setItemsPerPage(-1);
-      emailFilterForm.setAllItemsPerPage(new int[] { -1 });
-      
+      emailFilterForm.setItemsPerPage(5);
+      emailFilterForm.setAllItemsPerPage(new int[] { 5 });
+
       emailFilterForm.setActionsRenderer(EmailFilterForm.ACTIONS_RENDERER_DROPDOWN_BUTTON);
 
       emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-warning-sign",
@@ -123,7 +125,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       {
         AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
         adfield4.setCodeName(EmailFields.MESSAGE.fullName);
-        adfield4.setPosition(MISSATGE2);
+        adfield4.setPosition(MISSATGE22);
         // Els valors s'ompliran al mètode postList()
         adfield4.setValueMap(new HashMap<Long, String>());
         adfield4.setEscapeXml(false);
@@ -153,7 +155,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       EmailFilterForm filterForm, List<Email> list) throws I18NException {
 
     Map<Long, String> map;
-    map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGE2).getValueMap();
+    map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGE22).getValueMap();
     map.clear();
 
     Map<Long, String> mapAttach;
@@ -169,10 +171,15 @@ public class LlistaCorreusOperadorController extends EmailController {
         String msg = email.getMessage().trim();
 
         if (msg.startsWith("<") && msg.endsWith(">")) {
-          map.put(email.getEmailID(), "<div style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg + "</div>");
+          // map.put(email.getEmailID(), "<div
+          // style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
+          // + "</div>");
+          map.put(email.getEmailID(), "<iframe border=\"2\" width=\"450px\"  src=\"" + request.getContextPath()
+              + getContextWeb() + "/message/" + email.getEmailID() + "\"></iframe>");
         } else {
-          map.put(email.getEmailID(), "<textarea readonly  style=\"width:auto;max-width:500px;max-height:400px;\""
-              + computeRowsCols(msg) + ">" + msg + "</textarea>");
+          map.put(email.getEmailID(),
+              "<textarea readonly  style=\"width:auto;max-width:500px;max-height:400px;\""
+                  + computeRowsCols(msg) + ">" + msg + "</textarea>");
         }
       }
 
@@ -180,30 +187,23 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       if (emi.getAttachments() != null) {
         StringBuffer str = new StringBuffer();
-        
-        
 
         for (EmailAttachmentInfo ads : emi.getAttachments()) {
 
           str.append("<div style=\"border-style: solid;border-width:1px;\">");
-          str.append("<small>-Nom: " + ads.getFileName()  + "<br/>"
-              + "-Mida: " + ads.getData().length + " bytes<br/>"
-              + "-Tipus: " + ads.getContentType());
+          str.append("<small>-Nom: " + ads.getFileName() + "<br/>" + "-Mida: "
+              + ads.getData().length + " bytes<br/>" + "-Tipus: " + ads.getContentType());
           str.append("</small></div><br/>");
         }
-        
-        
 
         mapAttach.put(email.getEmailID(), str.toString());
 
       }
 
-
-
     }
-    
-    
-    filterForm.setSubTitleCode("=Tens " + list.size() + " correus sense processar ...");
+
+    filterForm.setSubTitleCode("=Tens " + cachesize(request)
+        + " correus sense processar ..."  );
 
   }
 
@@ -238,7 +238,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       final boolean enableCertificationCheck = false;
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
-      if (er.getCountMessages() == cache.size()) {
+      if (er.getCountMessages() == cachesize(request)) {
 
         EmailMessageInfo emi = cache.get(emailID);
 
@@ -247,12 +247,13 @@ public class LlistaCorreusOperadorController extends EmailController {
 
         er.deleteMessage((int) (long) emailID);
 
-        // Redireccionam a Enviar Correu al Contacte        
-        return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH 
-             + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
+        // Redireccionam a Enviar Correu al Contacte
+        return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH
+            + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
 
-        //return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT + "/"
-        //    + it.getIncidenciaTecnicaID() + "/edit";
+        // return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT +
+        // "/"
+        // + it.getIncidenciaTecnicaID() + "/edit";
 
       } else {
         HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
@@ -272,6 +273,17 @@ public class LlistaCorreusOperadorController extends EmailController {
 
   }
 
+  public int cachesize(HttpServletRequest request) {
+    Integer i = (Integer) request.getSession().getAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS);
+
+    if (i == null) {
+      return 0;
+    } else {
+      return i;
+    }
+
+  }
+
   @RequestMapping(value = "/solicitud/{emailID}", method = RequestMethod.GET)
   public String solicitud(HttpServletRequest request, HttpServletResponse response,
       @PathVariable Long emailID) {
@@ -285,7 +297,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       final boolean enableCertificationCheck = false;
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
-      if (er.getCountMessages() == cache.size()) {
+      if (er.getCountMessages() == cachesize(request)) {
 
         EmailMessageInfo emi = cache.get(emailID);
 
@@ -299,22 +311,22 @@ public class LlistaCorreusOperadorController extends EmailController {
             request, emi, fileName, log, serveiEjb, solicitudLogicaEjb);
 
         er.deleteMessage((int) (long) emailID);
-        
+
         long end = System.currentTimeMillis();
-        
+
         // XYZ ZZZ
-        // S'ha de reenviar a ENVIAR CORREU A CONTACTE. Revisar mètode incidencia ????
+        // S'ha de reenviar a ENVIAR CORREU A CONTACTE. Revisar mètode
+        // incidencia ????
 
         return "redirect:/operador/solicitudestatal/list/" + start + "/" + end;
 
       } else {
         HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
       }
-/*    } catch (I18NException e) {
-      String msg = I18NUtils.getMessage(e);
-      log.error(msg, e);
-      HtmlUtils.saveMessageError(request, msg);
-*/
+      /*
+       * } catch (I18NException e) { String msg = I18NUtils.getMessage(e);
+       * log.error(msg, e); HtmlUtils.saveMessageError(request, msg);
+       */
     } catch (Exception e) {
       String msg = "Error convertint a solicitud: " + e.getMessage();
       log.error(msg, e);
@@ -330,7 +342,6 @@ public class LlistaCorreusOperadorController extends EmailController {
       final OrderBy[] orderBy, final Integer itemsPerPage, final int inici)
       throws I18NException {
 
-
     List<Email> list = new ArrayList<Email>();
 
     Map<Long, EmailMessageInfo> cache = new HashMap<Long, EmailMessageInfo>();
@@ -338,12 +349,19 @@ public class LlistaCorreusOperadorController extends EmailController {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
         .getRequestAttributes()).getRequest();
 
+    int size = 0;
+
     try {
 
       final boolean enableCertificationCheck = false;
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
-      List<EmailMessageInfo> emails = er.list();
+      size = er.getCountMessages();
+
+      final int start = 1;
+      final int end = Math.min(size, 5);
+
+      List<EmailMessageInfo> emails = er.list(start, end);
 
       for (EmailMessageInfo emi : emails) {
 
@@ -363,51 +381,47 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       HtmlUtils.saveMessageError(request, msg);
     }
-    
+
+    /*
     if (orderBy == null || orderBy.length == 0) {
       log.info("OrderBy NULL o buit");
     } else {
       for (OrderBy o : orderBy) {
         log.info("   - OrderBy[" + o.javaName + "]: " + o.orderType);
-        
+
         if (o.javaName.equals(DATAENVIAMENT.javaName)) {
           Collections.sort(list, new EmailDateComparator(orderBy[0].orderType));
           break;
         }
-        
       }
-      
-      
-     
     }
+    */
 
     request.getSession().setAttribute(CACHE_DE_EMAILS_LLEGITS, cache);
+    request.getSession().setAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS, size);
     return list;
 
   }
-  
+
   /**
    * 
    * @author anadal
    *
    */
   private class EmailDateComparator implements Comparator<Email> {
-    
+
     private final int orderType;
-    
+
     public EmailDateComparator(OrderType asc) {
-      this.orderType = asc.equals(OrderType.ASC)? 1: -1;
+      this.orderType = asc.equals(OrderType.ASC) ? 1 : -1;
     }
-    
 
     @Override
     public int compare(Email o1, Email o2) {
       return orderType * o1.getDataEnviament().compareTo(o2.getDataEnviament());
     }
-    
+
   }
-  
-  
 
   private EmailJPA message2email(EmailMessageInfo emi) {
     EmailJPA e;
@@ -419,6 +433,32 @@ public class LlistaCorreusOperadorController extends EmailController {
     java.lang.String message = emi.getBody();
     e = new EmailJPA(emailID, dataEnviament, enviador, destinataris, subject, message);
     return e;
+  }
+
+  @RequestMapping(value = "/message/{emailID}")
+  public void getMessageEmail(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable("emailID") java.lang.Long emailID) {
+
+    EmailJPA email;
+    try {
+      email = this.findByPrimaryKey(request, emailID);
+      
+      response.setContentType("text/html"); 
+      response.setCharacterEncoding("UTF-8");
+
+      PrintWriter os = response.getWriter();
+
+      os.print("<html><body>");
+      os.print(email.getMessage());
+      os.print("</body></html>");
+      os.flush();
+      os.close();
+
+    } catch (Throwable e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
   }
 
   @Override
