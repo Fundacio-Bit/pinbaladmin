@@ -174,7 +174,7 @@ public class LlistaCorreusOperadorController extends EmailController {
           // map.put(email.getEmailID(), "<div
           // style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
           // + "</div>");
-          map.put(email.getEmailID(), "<iframe border=\"2\" width=\"450px\"  src=\"" + request.getContextPath()
+          map.put(email.getEmailID(), "<iframe border=\"2\" width=\"500px\" height=\"350px\" src=\"" + request.getContextPath()
               + getContextWeb() + "/message/" + email.getEmailID() + "\"></iframe>");
         } else {
           map.put(email.getEmailID(),
