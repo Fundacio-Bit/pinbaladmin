@@ -357,7 +357,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
       // identificador de consulta o numero seguiment de la incidència
       if (isNumber) {
         w = Where.OR(w, CAIDIDENTIFICADORCONSULTA.like(likeStr),
-            CAIDNUMEROSEGUIMENT.like(likeStr));
+            CAIDNUMEROSEGUIMENT.like(likeStr), INCIDENCIATECNICAID.equal(Long.parseLong(af)));
       }
 
       // Comentari dels Events
