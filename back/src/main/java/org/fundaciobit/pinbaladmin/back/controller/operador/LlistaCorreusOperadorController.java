@@ -111,7 +111,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       emailFilterForm.addHiddenField(EMAILID);
 
       emailFilterForm.setItemsPerPage(5);
-      emailFilterForm.setAllItemsPerPage(new int[] { 5 });
+      //emailFilterForm.setAllItemsPerPage(new int[] { 5 });
 
       emailFilterForm.setActionsRenderer(EmailFilterForm.ACTIONS_RENDERER_DROPDOWN_BUTTON);
 
@@ -170,7 +170,7 @@ public class LlistaCorreusOperadorController extends EmailController {
       if (email.getMessage() != null) {
         String msg = email.getMessage().trim();
 
-        if (msg.startsWith("<") && msg.endsWith(">")) {
+        if ((msg.startsWith("<") && msg.endsWith(">")) || msg.endsWith("</html>")) {
           // map.put(email.getEmailID(), "<div
           // style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
           // + "</div>");
@@ -178,7 +178,7 @@ public class LlistaCorreusOperadorController extends EmailController {
               + getContextWeb() + "/message/" + email.getEmailID() + "\"></iframe>");
         } else {
           map.put(email.getEmailID(),
-              "<textarea readonly  style=\"width:auto;max-width:500px;max-height:400px;\""
+              "<textarea readonly  style=\"width:auto;max-width:500px;max-height:350px;\""
                   + computeRowsCols(msg) + ">" + msg + "</textarea>");
         }
       }
@@ -339,7 +339,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 
   @Override
   public List<Email> executeSelect(ITableManager<Email, Long> ejb, Where where,
-      final OrderBy[] orderBy, final Integer itemsPerPage, final int inici)
+      final OrderBy[] orderBy, Integer itemsPerPage, final int inici)
       throws I18NException {
 
     List<Email> list = new ArrayList<Email>();
@@ -357,9 +357,14 @@ public class LlistaCorreusOperadorController extends EmailController {
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
       size = er.getCountMessages();
+      
+      if (itemsPerPage == null || itemsPerPage == -1) {
+        itemsPerPage = size;
+      }
+      
 
       final int start = 1;
-      final int end = Math.min(size, 5);
+      final int end = Math.min(size, itemsPerPage);
 
       List<EmailMessageInfo> emails = er.list(start, end);
 
