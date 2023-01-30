@@ -242,6 +242,10 @@
     <definition name="emailListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/emailList.jsp" />
     </definition>
+    
+        <definition name="queesticfent" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/queesticfent.jsp" />
+    </definition>
 
     <!--  ===========  DESENVOLUPAMENT ================== -->
     

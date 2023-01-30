@@ -151,6 +151,15 @@
                 style="${(fn:contains(url, '/operador/borrarcedentdegrup'))? "font-weight:bold;" : ""}">Descartar
                     Cedent de Grup</span>
         </a></li>
+        
+        <li>
+            <hr style="margin-top: 6px; margin-bottom: 6px;" />
+        </li>
+
+        <li style="list-style-type: disc; list-style-position: inside;"><a
+            href="<c:url value="/operador/queesticfent/list"/>"> <span
+                style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
+        </a></li>
 
 
 
