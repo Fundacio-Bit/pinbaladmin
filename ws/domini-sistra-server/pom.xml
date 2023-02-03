@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.fundaciobit.pinbaladmin</groupId>
     <artifactId>pinbaladmin-ws</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <properties>
@@ -93,14 +93,14 @@
     <dependency>
       <groupId>org.fundaciobit.pinbaladmin</groupId>
       <artifactId>pinbaladmin-ejb</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.fundaciobit.pinbaladmin</groupId>
       <artifactId>pinbaladmin-logic</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
       <scope>provided</scope>
     </dependency>
 

@@ -6,13 +6,13 @@
 
   <groupId>org.fundaciobit.pinbaladmin</groupId>
   <artifactId>pinbaladmin-ear</artifactId>  
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>ear</packaging>
 
   <parent>
     <groupId>org.fundaciobit.pinbaladmin</groupId>
     <artifactId>pinbaladmin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <name>PinbalAdmin Ear</name>
