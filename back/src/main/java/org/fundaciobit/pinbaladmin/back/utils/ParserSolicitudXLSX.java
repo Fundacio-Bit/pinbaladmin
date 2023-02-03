@@ -2,8 +2,11 @@ package org.fundaciobit.pinbaladmin.back.utils;
 
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,6 +17,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  */
 public class ParserSolicitudXLSX {
+  
+  
+  protected static final Logger log = Logger.getLogger(ParserSolicitudXLSX.class);
 
   /**
    * 
@@ -27,13 +33,96 @@ public class ParserSolicitudXLSX {
     
         // convert it into a POI object
     XSSFWorkbook my_xlsx_workbook = null;
+    
+    
 
     try {
       
       // convert it into a POI object
       my_xlsx_workbook = new XSSFWorkbook(input_document);
+      
+      
+      
+      
       // Read excel sheet that needs to be updated
       XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
+      
+      final FormulaEvaluator evaluator = my_xlsx_workbook.getCreationHelper().createFormulaEvaluator();
+      
+      
+      // ==========================================================
+      // =============== DEPURACIO VOLCAT DE XLSX ===========================
+      // ==========================================================
+      
+      if (debug) {
+
+        Cell cell;
+        for (int row = 0; row < 20; row++) {
+
+          XSSFRow therow = my_worksheet.getRow(row);
+
+          if (therow == null) {
+            System.out.println("--EMPTY_ROW_" + row + "--");
+            continue;
+          }
+
+          String v;
+
+          for (int col = 0; col < 10; col++) {
+
+            cell = therow.getCell(col);
+
+            System.out.print("{r: " + row + " | c:" + col + "} ");
+
+            if (cell == null) {
+              v = " => --NULL--";
+            } else {
+
+              CellType type = cell.getCellTypeEnum();
+
+              System.out.print("(" + type + ")} => ]");
+
+              if (type == CellType.STRING) {
+                v = cell.getStringCellValue(); // toString();
+              } else if (type == CellType.FORMULA) {
+                v = cell.getCellFormula();
+                log.info("FORMULA ORIG {r: " + row + " | c:" + col + "} => ]" + v + "[");
+                
+                final CellValue cellValue = evaluator.evaluate(cell);
+                
+                v = cellValue.getStringValue();
+                
+                log.info("FORMULA STR {r: " + row + " | c:" + col + "} => ]" + v + "[");
+                
+              } else {
+                v = String.valueOf((int) cell.getNumericCellValue()); // toString();
+              }
+            }
+            System.out.println(v + "[");
+
+          }
+
+        }
+        
+        
+        System.out.println();
+        System.out.println();
+        System.out.println("FINAL DE DEBUG");
+        System.out.println();
+        System.out.println();
+        
+      }
+      
+      // ==========================================================
+      // =============== FINAL DEPURACIO VOLCAT DE XLSX ===========================
+      // ==========================================================
+      
+      
+      
+      
+      
+      
+      
 
       SolicitudInfo info = new SolicitudInfo(
           my_worksheet.getRow(1).getCell(0).getStringCellValue());
@@ -57,9 +146,13 @@ public class ParserSolicitudXLSX {
             continue;
           }
           
-          cellNorma = therow.getCell(7); // Norma legal
-
+          int col = 7;
+          cellNorma = therow.getCell(col); // Norma legal
+          
           if (cellNorma == null || cellNorma.getCellTypeEnum() == CellType.BLANK) {
+            
+            log.info("(r:" + row + "c:" + col + ") BLANK");
+            
             blank++;
             if (blank > 3) {
               break;
@@ -114,46 +207,7 @@ public class ParserSolicitudXLSX {
         } while (true);
       }
 
-      if (debug) {
-
-        Cell cell;
-        for (int row = 0; row < 20; row++) {
-
-          XSSFRow therow = my_worksheet.getRow(row);
-
-          if (therow == null) {
-            System.out.println("--EMPTY_ROW_" + row + "--");
-            continue;
-          }
-
-          String v;
-
-          for (int col = 0; col < 10; col++) {
-
-            cell = therow.getCell(col);
-
-            System.out.print("{r: " + row + " | c:" + col + "} ");
-
-            if (cell == null) {
-              v = " => --NULL--";
-            } else {
-
-              CellType type = cell.getCellTypeEnum();
-
-              System.out.print("(" + type + ")} => ]");
-
-              if (type == CellType.STRING) {
-                v = cell.getStringCellValue(); // toString();
-              } else {
-                v = String.valueOf((int) cell.getNumericCellValue()); // toString();
-              }
-            }
-            System.out.println(v + "[");
-
-          }
-
-        }
-      }
+      
 
       return info;
 

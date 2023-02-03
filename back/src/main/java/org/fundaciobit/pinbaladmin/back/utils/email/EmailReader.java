@@ -63,7 +63,7 @@ public class EmailReader {
       Message msg;
       try {
         msg = session.getFolder().getMessage(numberMessage);
-        EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg);
+        EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg, true);
         return e;
       } catch (java.lang.IndexOutOfBoundsException e) {
         return null;
@@ -98,7 +98,7 @@ public class EmailReader {
     }
   }
 
-  public List<EmailMessageInfo> list(int start, int end) throws Exception {
+  public List<EmailMessageInfo> list(int start, int end, boolean includeAttachements) throws Exception {
 
     EmailSession session = null;
     final boolean readOnly = true;
@@ -111,7 +111,7 @@ public class EmailReader {
       List<EmailMessageInfo> list = new ArrayList<EmailMessageInfo>();
       for (int i = 0; i < messages.length; i++) {
         Message msg = messages[i];
-        EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg);
+        EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg, includeAttachements);
         list.add(e);
       }
 

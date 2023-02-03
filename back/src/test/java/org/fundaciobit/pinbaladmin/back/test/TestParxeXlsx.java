@@ -23,8 +23,9 @@ public class TestParxeXlsx {
     
     //File plantillaXLSX = new File("TresProcediments.xlsx");
     
-    File plantillaXLSX = new File("PID_1182046_AYUNTAMIENTO_CORVERA_ASTURIAS.xlsx");
+    //File plantillaXLSX = new File("PID_1182046_AYUNTAMIENTO_CORVERA_ASTURIAS.xlsx");
     
+    File plantillaXLSX = new File("PRE IGSS Plantilla-Procedimientos-Administrativos (3).xlsx");
     
 
     java.io.InputStream input_document = null;
@@ -36,6 +37,8 @@ public class TestParxeXlsx {
       SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(input_document, debug);
 
       System.out.println("---- ENTITAT: " + info.getEntitat());
+      
+      System.out.println("---- #PROCEDIMENTS: " + info.getProcediments().size());
 
       Map<String, ProcedimentInfo> procediments = info.getProcediments();
 

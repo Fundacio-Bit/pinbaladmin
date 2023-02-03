@@ -29,7 +29,7 @@ public class RebreCorreuTest {
       EmailReader er = new EmailReader(prop, enableCertificationCheck);
 
       long start = System.currentTimeMillis();
-      List<EmailMessageInfo> emails = er.list(1,10);
+      List<EmailMessageInfo> emails = er.list(1,10, true);
       
       System.out.println("Time: " + ((System.currentTimeMillis() - start) /1000) );
       

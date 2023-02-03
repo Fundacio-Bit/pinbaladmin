@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 
@@ -27,6 +28,8 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
  *
  */
 public class EmailEmlFormatParser {
+  
+  public static final Logger log = Logger.getLogger(EmailEmlFormatParser.class);
 
   public static EmailMessageInfo parserEml(InputStream inEmlData) throws Exception {
 
@@ -34,10 +37,10 @@ public class EmailEmlFormatParser {
     Session session = Session.getDefaultInstance(props, null);
 
     Message msg = new MimeMessage(session, inEmlData);
-    return parseEml(msg);
+    return parseEml(msg, true);
   }
 
-  public static EmailMessageInfo parseEml(Message msg) throws Exception {
+  public static EmailMessageInfo parseEml(Message msg, boolean includeAttachments) throws Exception {
 
     if (msg == null) {
       return null;
@@ -60,28 +63,39 @@ public class EmailEmlFormatParser {
 
     emi.setSubject(msg.getSubject());
     emi.setSentDate(msg.getSentDate());
-
+    
     List<EmailAttachmentInfo> attachments = new ArrayList<EmailAttachmentInfo>();
     emi.setAttachments(attachments);
 
-    // getContent () es obtener el contenido del paquete, Part es equivalente al
-    // paquete externo
-    Object o = msg.getContent();
-    if (o instanceof Multipart) {
-      Multipart multipart = (Multipart) o;
-      reMultipart(multipart, emi);
-    } else if (o instanceof Part) {
-      Part part = (Part) o;
-      rePart(part, emi);
-    } else if (o instanceof String && msg.getContentType().indexOf("text/plain") != -1) {
-      emi.setBody((String) msg.getContent());
-    } else if (o instanceof String && msg.getContentType().indexOf("text/html") != -1) {
-      emi.setBody((String) msg.getContent());
+    if (includeAttachments) {
+
+      // getContent () es obtener el contenido del paquete, Part es equivalente al
+      // paquete externo
+      Object o = msg.getContent();
+      if (o instanceof Multipart) {
+          Multipart multipart = (Multipart) o;
+          reMultipart(multipart, emi);
+      } else if (o instanceof Part) {
+        Part part = (Part) o;
+        rePart(part, emi);
+      } else if (o instanceof String && msg.getContentType().indexOf("text/plain") != -1) {
+        emi.setBody((String)o);
+      } else if (o instanceof String && msg.getContentType().indexOf("text/html") != -1) {
+        emi.setBody((String) o);
+      } else {
+        System.err.println("---- Attachemnt Desconegut ----");
+        System.err.println("Class: " + o.getClass());
+        System.err.println("mime: " + msg.getContentType());
+        System.err.println("Contingut: " + msg.getContent());
+      }
     } else {
-      System.err.println("---- Attachemnt Desconegut ----");
-      System.err.println("Class: " + o.getClass());
-      System.err.println("mime: " + msg.getContentType());
-      System.err.println("Contingut: " + msg.getContent());
+      
+      log.info("msg.getContentType() => ]" + msg.getContentType() + "[");
+      if ( msg.getContentType().indexOf("text/plain") != -1 ||  msg.getContentType().indexOf("text/html") != -1) {
+        Object o = msg.getContent();
+        emi.setBody(o.toString());
+      }
+      
     }
 
     return emi;

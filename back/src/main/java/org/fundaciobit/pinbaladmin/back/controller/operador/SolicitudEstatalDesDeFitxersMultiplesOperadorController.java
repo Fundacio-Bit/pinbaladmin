@@ -227,7 +227,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController
     final boolean debug = false;
     SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
 
-    log.info(" Procediments de Solicitud = #" + info.getProcediments().size());
+    log.info(" #Procediments de Solicitud = " + info.getProcediments().size());
 
     List<SolicitudJPA> solicituds = new ArrayList<SolicitudJPA>();
 

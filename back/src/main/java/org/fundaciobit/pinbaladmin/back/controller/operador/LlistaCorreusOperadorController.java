@@ -3,7 +3,6 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +57,9 @@ public class LlistaCorreusOperadorController extends EmailController {
   public static final String CACHE_DE_EMAILS_LLEGITS = "__CACHE_DE_EMAILS_LLEGITS__";
 
   public static final String CACHE_SIZE_DE_EMAILS_LLEGITS = "__CACHE_SIZE_DE_EMAILS_LLEGITS__";
+  
+  
+  public static final String  MOSTRAR_MISSATGE_ARXIU = "__mostrarMissatgeArxiu__";
 
   public static final int MISSATGE22 = 1;
 
@@ -145,10 +147,52 @@ public class LlistaCorreusOperadorController extends EmailController {
       }
 
     }
+    
+    
+    Boolean mostrarMissatgeArxiu = (Boolean)request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
+    
+    if (mostrarMissatgeArxiu == null) {
+      mostrarMissatgeArxiu = false;
+      request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, false);
+    }
+    
+    
+    emailFilterForm.getAdditionalButtons().clear();
+    if (mostrarMissatgeArxiu) {
+      emailFilterForm.addAdditionalButton(new AdditionalButton(" icon-eye-close", "amagarmissatgearxiu",
+         getContextWeb() + "/amagarmissatgearxiu", "btn-info"));
+    } else {
+      emailFilterForm.addAdditionalButton(new AdditionalButton("icon-eye-open", "mostrarmissatgearxiu",
+          getContextWeb() + "/mostrarmissatgearxiu", "btn-info"));
+    }
+    
 
     return emailFilterForm;
 
   }
+  
+  
+  
+  @RequestMapping(value = "/amagarmissatgearxiu", method = RequestMethod.GET)
+  public String amagarmissatgearxiu(HttpServletRequest request, HttpServletResponse response) {
+
+    request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, false);
+
+    return "redirect:" + getContextWeb() + "/list";
+
+  }
+
+  @RequestMapping(value = "/mostrarmissatgearxiu", method = RequestMethod.GET)
+  public String mostrarmissatgearxiu(HttpServletRequest request,
+      HttpServletResponse response) {
+
+    request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, true);
+
+    return "redirect:" + getContextWeb() + "/list";
+
+  }
+  
+  
 
   @Override
   public void postList(HttpServletRequest request, ModelAndView mav,
@@ -232,15 +276,16 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     try {
 
-      Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
-          .getAttribute(CACHE_DE_EMAILS_LLEGITS);
+      //Map<Long, EmailMessageInfo> cache
+      // cache= (Map<Long, EmailMessageInfo>) request.getSession().getAttribute(CACHE_DE_EMAILS_LLEGITS);
 
       final boolean enableCertificationCheck = false;
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
       if (er.getCountMessages() == cachesize(request)) {
 
-        EmailMessageInfo emi = cache.get(emailID);
+        //EmailMessageInfo emi = cache.get(emailID);
+        EmailMessageInfo emi = er.getMessage((int)(long)emailID);
 
         IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi,
             request.getRemoteUser());
@@ -291,15 +336,17 @@ public class LlistaCorreusOperadorController extends EmailController {
     try {
 
       long start = System.currentTimeMillis();
-      Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
-          .getAttribute(CACHE_DE_EMAILS_LLEGITS);
+      //Map<Long, EmailMessageInfo> cache;
+      //cache = (Map<Long, EmailMessageInfo>) request.getSession().getAttribute(CACHE_DE_EMAILS_LLEGITS);
 
       final boolean enableCertificationCheck = false;
       EmailReader er = new EmailReader(System.getProperties(), enableCertificationCheck);
 
       if (er.getCountMessages() == cachesize(request)) {
 
-        EmailMessageInfo emi = cache.get(emailID);
+        //EmailMessageInfo emi = cache.get(emailID);
+        
+        EmailMessageInfo emi =  er.getMessage((int) (long) emailID);
 
         // IncidenciaTecnica it =
         // incidenciaTecnicaLogicaEjb.createFromEmail(emi,
@@ -365,8 +412,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       final int start = 1;
       final int end = Math.min(size, itemsPerPage);
+      Boolean includeAttachments = (Boolean)request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
-      List<EmailMessageInfo> emails = er.list(start, end);
+      List<EmailMessageInfo> emails = er.list(start, end, includeAttachments);
 
       for (EmailMessageInfo emi : emails) {
 
@@ -413,7 +461,7 @@ public class LlistaCorreusOperadorController extends EmailController {
    * @author anadal
    *
    */
-  private class EmailDateComparator implements Comparator<Email> {
+  public class EmailDateComparator implements Comparator<Email> {
 
     private final int orderType;
 
