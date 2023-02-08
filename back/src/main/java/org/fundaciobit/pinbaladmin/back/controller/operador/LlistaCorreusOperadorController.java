@@ -114,6 +114,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
       emailFilterForm.setItemsPerPage(5);
       //emailFilterForm.setAllItemsPerPage(new int[] { 5 });
+      
+      emailFilterForm.setVisibleExportList(false);
+      
 
       emailFilterForm.setActionsRenderer(EmailFilterForm.ACTIONS_RENDERER_DROPDOWN_BUTTON);
 
