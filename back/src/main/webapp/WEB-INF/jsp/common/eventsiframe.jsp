@@ -1262,8 +1262,11 @@
                 <table style="width: 100%; font-size: 1.4em">
                     <tbody>
                         <tr>
-                            <td width="50%">Número: <strong> ${ID}</strong><br>
-                                Estat: <strong class="label-custom">${estat}</strong>
+                            <td width="50%">
+                               Número: <strong> ${ID}</strong><br/>
+                               Estat: <strong class="label-custom">${estat}</strong><br/>
+                               Data Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br/>
+                                
                             </td>
                             <td>Nom Contacte: <strong>${personaContacte}</strong><br />
                                 Email Contacte: <strong>${personaContacteEmail}</strong>

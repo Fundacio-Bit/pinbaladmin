@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.common;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public static final String SESSION_EVENT_IS_ESTATAL = "SESSION_EVENT_IS_ESTATAL";
 
   public static final String SESSION_EVENT_CEDENT = "SESSION_EVENT_CEDENT";
+  
+  public static final  SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
@@ -278,6 +281,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getPersonaContacteEmail(T item);
 
   public abstract String getPersonaContacteNom(T item);
+  
+  public abstract Timestamp getDataCreacio(T item);
   
   public abstract String getTramitador(T item);
 
@@ -613,6 +618,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
     
     mav.addObject("tramitador", getTramitador(item));    
+    mav.addObject("datacreacio", SDF.format(getDataCreacio(item)));
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));

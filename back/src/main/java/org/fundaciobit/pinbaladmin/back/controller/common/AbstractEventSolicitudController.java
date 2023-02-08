@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.common;
 
+import java.sql.Timestamp;
+
 import javax.ejb.EJB;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -39,6 +41,11 @@ public abstract class AbstractEventSolicitudController
   @Override
   public String getTramitador(Solicitud item) {
     return item.getCreador();
+  }
+  
+  @Override
+  public Timestamp getDataCreacio(Solicitud item) {
+    return item.getDataInici();
   }
   
   @Override
