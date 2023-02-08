@@ -35,6 +35,12 @@ public abstract class AbstractEventSolicitudController
     return SolicitudLocalOperadorController.CONTEXTWEB + "/list";
   }
 
+  
+  @Override
+  public String getTramitador(Solicitud item) {
+    return item.getCreador();
+  }
+  
   @Override
   public String getPersonaContacteNom(Solicitud item) {
     return item.getPersonaContacte();
@@ -43,6 +49,11 @@ public abstract class AbstractEventSolicitudController
   @Override
   public String getPersonaContacteEmail(Solicitud item) {
     return item.getPersonaContacteEmail();
+  }
+  
+  @Override
+  public Long getItemID(Solicitud item) {
+    return item.getSolicitudID();
   }
 
   @Override

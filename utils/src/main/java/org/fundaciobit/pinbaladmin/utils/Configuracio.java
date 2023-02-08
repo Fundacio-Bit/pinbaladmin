@@ -67,7 +67,12 @@ public class Configuracio implements Constants {
       return false;
     case EVENT_TIPUS_TIQUET_MINHAP: // PRIVAT - TRAMITADOR
       return true;
+    case EVENT_TIPUS_CEDENT_RESPOSTA:
+      return false;
+    case EVENT_TIPUS_CONSULTA_A_CEDENT:
+      return true;
     }
+      
 
   }
 

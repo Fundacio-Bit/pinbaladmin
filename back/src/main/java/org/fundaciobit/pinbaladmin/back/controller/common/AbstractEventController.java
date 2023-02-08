@@ -47,6 +47,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
   public static final String SESSION_EVENT_IS_ESTATAL = "SESSION_EVENT_IS_ESTATAL";
 
+  public static final String SESSION_EVENT_CEDENT = "SESSION_EVENT_CEDENT";
+
   @EJB(mappedName = EventLogicaLocal.JNDI_NAME)
   protected EventLogicaLocal eventLogicaEjb;
 
@@ -105,24 +107,40 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     }
 
-    T item = findItemByPrimaryKey(itemID);
+    try {
+      T item = findItemByPrimaryKey(itemID);
 
-    String email = getPersonaContacteEmail(item);
-    if (email == null || email.trim().length() == 0) {
-      String itemNom = isSolicitud() ? "solicitud" : "incidència";
+      String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
 
-      Boolean isEstatal = (Boolean) request.getSession()
-          .getAttribute(SESSION_EVENT_IS_ESTATAL);
-      if (!Boolean.TRUE.equals(isEstatal)) {
+      String email;
 
-        log.info("\n\n Passa per NEW AMB ERROR");
+      if (cedent != null) {
+        
+        email = cedent;
+      } else {
 
-        HtmlUtils.saveMessageError(request,
-            "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la "
-                + itemNom);
-        return new ModelAndView(new RedirectView(
-            getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+        email = getPersonaContacteEmail(item);
+        if (email == null || email.trim().length() == 0) {
+          String itemNom = isSolicitud() ? "solicitud" : "incidència";
+
+          Boolean isEstatal = (Boolean) request.getSession()
+              .getAttribute(SESSION_EVENT_IS_ESTATAL);
+          if (!Boolean.TRUE.equals(isEstatal)) {
+
+            log.info("\n\n Passa per NEW AMB ERROR");
+
+            HtmlUtils.saveMessageError(request,
+                "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la "
+                    + itemNom);
+            return new ModelAndView(new RedirectView(
+                getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+          }
+        }
       }
+    } finally {
+//      request.getSession().removeAttribute(SESSION_EVENT_IS_ESTATAL);
+//      request.getSession().removeAttribute(SESSION_EVENT_CEDENT);
+//      request.getSession().removeAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
     }
 
     ModelAndView mav = super.crearEventGet(request, response);
@@ -174,12 +192,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     if (eventForm.isNou()) {
-      
-      
+
       eventForm.setCancelButtonVisible(false);
-      
+
       eventForm.setTitleCode("=Nova Entrada");
-      
+
       /*
        * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
        * mav.setViewName("eventFormOperador"); }
@@ -192,14 +209,29 @@ public abstract class AbstractEventController<T> extends EventController impleme
       }
 
       if (isPublic()) {
-        eventForm.getEvent().setPersona(getPersonaContacteNom(item));
-        eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
+
+        String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
+        String email;
+        if (cedent != null) {
+          try {
+            email = cedent;
+          } catch (Exception e) {
+            email = getPersonaContacteEmail(item);
+            e.printStackTrace();
+          }
+          eventForm.getEvent().setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
+        } else {
+          email = getPersonaContacteEmail(item);
+          eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
+
+        }
+
+        eventForm.getEvent().setPersona(email);        
+        
         eventForm.addHiddenField(TIPUS);
         eventForm.addHiddenField(NOLLEGIT);
-
         eventForm.addReadOnlyField(DATAEVENT);
         eventForm.addReadOnlyField(PERSONA);
-
         eventForm.getEvent().setNoLlegit(true);
       } else {
         eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
@@ -246,6 +278,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract String getPersonaContacteEmail(T item);
 
   public abstract String getPersonaContacteNom(T item);
+  
+  public abstract String getTramitador(T item);
 
   public abstract String getUrlToEditItem(T item);
 
@@ -275,6 +309,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
       itemID = HibernateFileUtil.decryptFileID(itemStrID);
     } else {
       itemID = Long.parseLong(itemStrID);
+    }
+
+    String cedent = request.getParameter("cedent");
+    if (cedent == null) {
+      request.getSession().removeAttribute(SESSION_EVENT_CEDENT);
+    } else {
+      try {
+        request.getSession().setAttribute(SESSION_EVENT_CEDENT, HibernateFileUtil.getEncrypter().decrypt(cedent));
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
     request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
@@ -448,7 +494,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
         + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
         + "<div style=\"color:#868686\">"
         + "=================================================================<br/>"
-        + "Per favor, no contesteu directament aquest correu, per fer qualsevol consulta<br/>"
+        + "Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta<br/>"
         + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
         + "=================================================================" + "</div>";
   }
@@ -470,7 +516,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
   }
 
   public static final String SESSION_ENVIARCORREU_DEST = "__SESSION_ENVIARCORREU_DEST__";
-  
+
   public static final String SESSION_ENVIARCORREU_ASSUMPTE = "__SESSION_ENVIARCORREU_ASSUMPTE__";
 
   public static final String SESSION_ENVIARCORREU_MISSATGE = "__SESSION_ENVIARCORREU_MISSATGE__";
@@ -493,11 +539,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
         String msg = "Bon dia:\n"
             + " En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
             + titol + "' i també podrà afegir informació addicional a la seva " + itemNom
-            + ": " + url + "\n\n" 
-            + getPeuCorreu().replace("<br/>", "\n").replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+            + ": " + url + "\n\n" + getPeuCorreu().replace("<br/>", "\n")
+                .replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
 
         request.getSession().setAttribute(SESSION_ENVIARCORREU_MISSATGE, msg);
-        request.getSession().setAttribute(SESSION_ENVIARCORREU_ASSUMPTE, "PINBAL [#" + itemNom + ": " + itemID +"] - NOVETATS - " + titol);
+        request.getSession().setAttribute(SESSION_ENVIARCORREU_ASSUMPTE,
+            "PINBAL [#" + itemNom + ": " + itemID + "] - NOVETATS - " + titol);
 
       }
 
@@ -554,7 +601,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     T item = findItemByPrimaryKey(itemID);
+    
+    
+    
+    
+    String cedent = (String)request.getSession().getAttribute(SESSION_EVENT_CEDENT);
 
+    if (cedent != null) {
+      log.info(" CEDENT => " + cedent);
+      mav.addObject("cedent",cedent);
+    }
+    
+    mav.addObject("tramitador", getTramitador(item));    
     mav.addObject("personaContacte", getPersonaContacteNom(item));
     mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
     mav.addObject("isEstatal", request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL));
@@ -564,9 +622,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
     if (!isClosed(item)) {
       mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
     }
-    
-    
-    mav.addObject("urlMarcarComLlegides", request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
+
+    mav.addObject("urlMarcarComLlegides",
+        request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
 
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
@@ -644,7 +702,17 @@ public abstract class AbstractEventController<T> extends EventController impleme
     // Privat - Tramitador
     __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_TIQUET_MINHAP),
         "Tiquet MinHAP (Privat)"));
+
+    // PRIVAT_TRAMITADOR CAP A CEDENT
+    __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_CONSULTA_A_CEDENT),
+        "Consulta a Cedent (Privat)"));
+
+    // PRIVAT_RESPOSTA DE CEDENT
+    __tmp.add(
+        new StringKeyValue(String.valueOf(EVENT_TIPUS_CEDENT_RESPOSTA), "Resposta de Cedent"));
+
     return __tmp;
+
   }
 
   @Override
@@ -682,50 +750,97 @@ public abstract class AbstractEventController<T> extends EventController impleme
   @Override
   public EventJPA create(HttpServletRequest request, EventJPA event)
       throws Exception, I18NException, I18NValidationException {
-    return (EventJPA) eventLogicaEjb.create(event);
+
+    EventJPA ev = (EventJPA) eventLogicaEjb.create(event);
+    
+    
+    log.info("create: tipus => " + ev.getTipus() + "(tipus cedent == " + EVENT_TIPUS_CONSULTA_A_CEDENT + ")");
+
+    if (ev.getTipus() == EVENT_TIPUS_CONSULTA_A_CEDENT) {
+
+      Long itemID = ev.getSolicitudID();
+      if (itemID == null) {
+        itemID = ev.getIncidenciaTecnicaID();
+      }
+
+      String address = ev.getPersona();
+      String url = getLinkPublic(itemID) + "?cedent="
+          + HibernateFileUtil.getEncrypter().encrypt(address);
+
+      final String titol = getTitolItem(itemID);
+
+      final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
+
+      final boolean isHtml = true;
+
+      try {
+
+        final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO "
+            + tipus.toUpperCase() + " - " + titol;
+
+        String msg = getCapCorreu(tipus, itemID)
+            + "    Des del departament de Govern Digital de la Fundació Bit li volem fer la següent consulta/petició:<br/>"
+            + "<hr/>" + ev.getComentari().replace("\n", "<br/>") + "<hr/>"
+            + "Podrà contestar la consulta/petició utilitzant el següent enllaç: "
+            + "<a href=\"" + url + "\">CONTESTAR</a>" + "<br/><br/>"
+            + getPeuCorreu();
+
+        EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
+
+        HtmlUtils.saveMessageSuccess(request,
+            "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
+
+      } catch (Exception e) {
+
+        String msg = "Error enviant correu: " + e.getMessage();
+
+        log.error(e);
+        HtmlUtils.saveMessageError(request, msg);
+      }
+    }
+
+    return ev;
   }
-  
-  
-  
+
+  public abstract Long getItemID(T item);
+
   @RequestMapping(value = "/marcarcomllegida/{itemID}", method = RequestMethod.GET)
-  public String marcarEntradesComLlegides(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable Long itemID) {
+  public String marcarEntradesComLlegides(HttpServletRequest request,
+      HttpServletResponse response, @PathVariable Long itemID) {
 
     Where wComu;
-    //StringField creador;
+    // StringField creador;
     if (isSolicitud()) {
-       //creador = new EventQueryPath().SOLICITUD().CREADOR();
-       wComu = EventFields.SOLICITUDID.equal(itemID);
+      // creador = new EventQueryPath().SOLICITUD().CREADOR();
+      wComu = EventFields.SOLICITUDID.equal(itemID);
     } else {
-       //creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
-       wComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
+      // creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+      wComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
     }
-    
-    
+
     List<Event> eventsNoLlegits;
     try {
-      eventsNoLlegits = eventLogicaEjb.select(Where.AND(wComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
-    
-    
-    for (Event event : eventsNoLlegits) {
-      event.setNoLlegit(false);
-      eventLogicaEjb.update(event);
-    }
-    
+      eventsNoLlegits = eventLogicaEjb
+          .select(Where.AND(wComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
+
+      for (Event event : eventsNoLlegits) {
+        event.setNoLlegit(false);
+        eventLogicaEjb.update(event);
+      }
+
     } catch (I18NException e) {
       // TODO Auto-generated catch block
-     String msg = "Error marcant com a llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
-     
-     log.error(msg, e);
-     
-     HtmlUtils.saveMessageError(request, msg);
-     
+      String msg = "Error marcant com a llegits les entrades de " + itemID + ": "
+          + I18NUtils.getMessage(e);
+
+      log.error(msg, e);
+
+      HtmlUtils.saveMessageError(request, msg);
+
     }
-    
-    
+
     return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
-  
+
   }
-  
 
 }

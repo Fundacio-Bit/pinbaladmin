@@ -30,7 +30,11 @@ public abstract class AbstractEventIncidenciaTecnicaController
     return "/operador/incidencia/list";
   }
   
-  
+
+  @Override
+  public String getTramitador(IncidenciaTecnica item) {
+    return item.getCreador();
+  }
   
   @Override
   public String getPersonaContacteNom(IncidenciaTecnica item) {
@@ -40,6 +44,11 @@ public abstract class AbstractEventIncidenciaTecnicaController
   @Override
   public String getPersonaContacteEmail(IncidenciaTecnica item) {
     return item.getContacteEmail();
+  }
+  
+  @Override
+  public Long getItemID(IncidenciaTecnica item) {
+    return item.getIncidenciaTecnicaID();
   }
   
   @Override

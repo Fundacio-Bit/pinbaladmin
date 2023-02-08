@@ -41,7 +41,7 @@
 }
 
 .fondodiv2 {
-border-block-end-color: rgb(133, 192, 200);
+ border-block-end-color: rgb(133, 192, 200);
  border-block-end-style: solid;
  border-block-end-width: 1px;
  border-block-start-color: rgb(133, 192, 200);
@@ -99,7 +99,7 @@ border-block-end-color: rgb(133, 192, 200);
  background-position-y: 0%;
  background-repeat: repeat;
  background-size: auto;
- overflow:auto;
+ overflow: auto;
 }
 
 .fondodiv {
@@ -598,7 +598,7 @@ border-block-end-color: rgb(133, 192, 200);
  grid-template-areas: none;
  grid-template-columns: none;
  grid-template-rows: none;
-/* height: 76px; */
+ /* height: 76px; */
  hyphens: manual;
  image-orientation: from-image;
  image-rendering: auto;
@@ -1169,211 +1169,272 @@ border-block-end-color: rgb(133, 192, 200);
 
     <table width="100%">
         <tr valign="top">
-            <td rowspan="2" ><img src="<c:url value="/img/caibbg.png"/>" /></td>
+            <td rowspan="2"><img src="<c:url value="/img/caibbg.png"/>" /></td>
             <td colspan="2">
-               <table width="100%" style="right:0;position: relative;">
-               <tr>
-               <td>
-                <h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
-                </td>
-                
-                        
-        
-                  <td width="100%" align="right">
-                <div>
-                    <c:url var="theurlnew" value="${contextweb}/new"/>
-                    <c:set var="urlnou" value="javascript:document.location.href='${theurlnew}'"/>
-                    
-                    <c:if test="${not isEstatal}">
+                <table width="100%" style="right: 0; position: relative;">
+                    <tr>
+                        <td>
+                            <h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
+                        </td>
 
-                        <c:if test="${empty personaContacteEmail}">                       
-                           <c:set var="urlnou" value="javascript:alert('La sol·licitud no te definit el correu del contacte EF');" />
-                        </c:if>
 
-                    </c:if>
-                    
 
-                    
-                    <c:if test="${!isPublic}">
-                    <%-- 
+                        <td width="100%" align="right">
+                            <div>
+                                <c:url var="theurlnew" value="${contextweb}/new" />
+                                <c:set var="urlnou"
+                                    value="javascript:document.location.href='${theurlnew}'" />
+
+                                <c:if test="${not isEstatal}">
+
+                                    <c:if test="${empty personaContacteEmail}">
+                                        <c:set var="urlnou"
+                                            value="javascript:alert('La sol·licitud no te definit el correu del contacte EF');" />
+                                    </c:if>
+
+                                </c:if>
+
+
+
+                                <c:if test="${!isPublic}">
+                                    <%-- 
                         <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
                             href="<c:url value="${contextweb}/enviarenllaz/${ID}"/>">
                             <i class="icon-envelope"></i> Enviar aquesta p&agrave;gina al
                             Contacte
                         </a>
                      --%>
-                        <a class="btn btn-small btn-warning" role="button" data-toggle="modal"
-                            href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
-                            <i class="icon-envelope"></i> Enviar Correu al Contacte
-                        </a>
+                                    <a class="btn btn-small btn-warning" role="button"
+                                        data-toggle="modal"
+                                        href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
+                                        <i class="icon-envelope"></i> Enviar Correu al
+                                        Contacte
+                                    </a>
 
-                        <a class="btn btn-info btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToEditItem}"/>">
-                             <i class="icon-eye-open"></i> Veure ${tipus}
-                        </a>
-                        
-                        <c:if test="${not empty urlToCloseItem}">
-                        <a class="btn btn-danger btn-small" role="button" data-toggle="modal"  href="<c:url value="${urlToCloseItem}"/>">
-                             <i class="icon-eye-open"></i> Tancar ${tipus}
-                        </a>
-                        </c:if>
-                        
-                        <c:if test="${not empty urlMarcarComLlegides}">
-                        <a class="btn btn-success btn-small" role="button" style="margin:5px"   href="${urlMarcarComLlegides}">
-                             <i class="icon-ok"></i> Marcar Entrades com a Llegides
-                        </a>
-                        </c:if>
-                    </c:if>
+                                    <a class="btn btn-info btn-small" role="button"
+                                        data-toggle="modal"
+                                        href="<c:url value="${urlToEditItem}"/>"> <i
+                                        class="icon-eye-open"></i> Veure ${tipus}
+                                    </a>
 
-<%--
+                                    <c:if test="${not empty urlToCloseItem}">
+                                        <a class="btn btn-danger btn-small" role="button"
+                                            data-toggle="modal"
+                                            href="<c:url value="${urlToCloseItem}"/>">
+                                            <i class="icon-eye-open"></i> Tancar ${tipus}
+                                        </a>
+                                    </c:if>
+
+                                    <c:if test="${not empty urlMarcarComLlegides}">
+                                        <a class="btn btn-success btn-small" role="button"
+                                            style="margin: 5px"
+                                            href="${urlMarcarComLlegides}"> <i
+                                            class="icon-ok"></i> Marcar Entrades com a
+                                            Llegides
+                                        </a>
+                                    </c:if>
+                                </c:if>
+
+                                <%--
                     <a class="btn btn-small" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
                          <i class="icon-plus-sign"></i> Nova Entrada
                     </a>
 --%>
 
-                </div>
-                </td></tr>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </td>
-            </tr>
-            <tr>
+        </tr>
+        <tr>
             <td colspan="2">
-            <h3 class="windowTitle" style="line-height: 20px;margin:0">${titol}</h3>
-            </td>
-            
-            </tr>
-            </table>
-        </tr>
-        <tr>
-        <td colspan="3">
-                <div class="full-width"
-                    style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
-                    <table style="width: 100%;font-size: 1.4em">
-                        <tbody>
-                            <tr>
-                                <td width="50%">Número: <strong> ${ID}</strong><br> Estat: <strong
-                                    class="label-custom">${estat}</strong>
-                                </td>
-                                <td>Nom Contacte: <strong>${personaContacte}</strong><br /> Email
-                                    Contacte: <strong>${personaContacteEmail}</strong>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <td colspan="3">
-
-                <div class="fondodiv2">
-                    <table style="padding: 0px;" border="0" cellpadding="0"
-                        cellspacing="0">
-
-                    <c:forEach var="event" items="${eventItems}">
-                    
-
-                        <c:set var="isPublicEvent" value="${event.tipus > 0}" />
-                        <c:set var="isContacte" value="${event.tipus == 2}" />
-
-                        <c:set var="show" value="true" />
-
-                        <c:if test="${showOnlyPublic==true && isPublicEvent == false }">
-                            <c:set var="show" value="false" />
-                        </c:if>
-
-                        <c:set var="background" value="#cce6ff" />
-                        <c:set var="border" value="#F0E68C" />
-        
-                        <c:if test="${!isPublic}">
-        
-                            <c:set var="background" value="#ffb3b3" />
-                            <c:set var="border" value="#ff0000" />
-        
-                        </c:if>
-                        
-                        <c:if test="${isContacte}">
-                            <c:set var="background" value="#ccffcc" />
-                            <c:set var="border" value="#9ACD32" />
-        
-                        </c:if>
-                        
-                        <c:if test="${show}">
-                        <tr>
-                        
-                            <td align="right" width="45%" >
-                            
-                            <c:if test="${isContacte}">
-                               <div style="margin-right: 20px">
-                                ${event.dataEvent}<br> 
-                                <span  style="font-weight: bold; font-size: 10pt">De ${event.persona}</span>
-                                </div>
-                             </c:if>  
-                             <c:if test="${!isContacte}">
-                                 <div style="margin: 10px 10px 24px 10px">
-                                   <div class="entrada">
-                                        <%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
-                                   </div>
-                                 </div>                              
-                             </c:if> 
-                            </td>
-                            <td>
-                                <!--  =============  INICI ===============   -->
-                                <table style="padding: 0px; min-height:100px" border="0">
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td style="width: 3px; background-color: #CCCCCC"
-                                            width="3px"></td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" height="32px" style="height: 32px;">
-                                            <div class="cercle"
-                                                style="border: 4px solid ${border};"></div>
-                                        </td>                                        
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td style="width: 3px; background-color: #CCCCCC"
-                                            width="3px"></td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                </table> <!--  ============================   -->
-
-                            </td>
-                            <td width="45%">
-                              <div style="margin-left: 20px">
-                                    
-                                 <c:if test="${!isContacte}">
-                                     ${event.dataEvent}<br/> 
-                                     <span style="font-weight: bold; font-size: 10pt">De ${event.persona}</span>                                    
-                                 </c:if>  
-                                 <c:if test="${isContacte}">
-                                 <div style="margin:10px 10px 24px 10px">
-                                   <div class="entrada">
-                                     <%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
-                                   </div> 
-                                 </div>
-                                 </c:if> 
-                              </div>
-                            </td>
-
-                         </tr>
-                         </c:if>
-                        
-                        </c:forEach>
-                    </table>
-                </div>
+                <h3 class="windowTitle" style="line-height: 20px; margin: 0">${titol}</h3>
             </td>
 
         </tr>
     </table>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <div class="full-width"
+                style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
+                <table style="width: 100%; font-size: 1.4em">
+                    <tbody>
+                        <tr>
+                            <td width="50%">Número: <strong> ${ID}</strong><br>
+                                Estat: <strong class="label-custom">${estat}</strong>
+                            </td>
+                            <td>Nom Contacte: <strong>${personaContacte}</strong><br />
+                                Email Contacte: <strong>${personaContacteEmail}</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="3">
+
+            <div class="fondodiv2">
+                <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
+
+                    <c:forEach var="event" items="${eventItems}">
+
+                        <c:set var="isPublicEvent"
+                            value="${(event.tipus > 0) && (event.tipus != 3)}" />
+                        <c:set var="isContacte" value="${event.tipus == 2}" />
+                        <c:set var="isCedent"
+                            value="${(event.tipus==3) || (event.tipus==-3)}" />
+
+                        <c:set var="show" value="${true}" />
+
+
+                        <c:if test="${showOnlyPublic==true}">
+
+                            <c:if test="${showOnlyPublic==true && isPublicEvent==false}">
+                                <c:set var="show" value="${false}" />
+                            </c:if>
+
+                            <c:if test="${(not empty cedent)}">
+                                <c:if test="${ isCedent && (event.persona eq cedent)}">
+                                    <c:set var="show" value="${true}" />
+                                </c:if>
+                                <c:if test="${ not isCedent || (event.persona ne cedent)}">
+                                    <c:set var="show" value="${false}" />
+                                </c:if>
+                            </c:if>
+                        </c:if>
+
+
+                        <c:if test="${show}">
+
+                            <c:set var="mostrarMissatgeDreta"
+                                value="${event.tipus == 2 || event.tipus==3}" />
+
+                            <c:set var="background" value="#cce6ff" />
+                            <c:set var="border" value="#F0E68C" />
+
+                            <c:if test="${!isPublic}">
+
+                                <c:set var="background" value="#ffb3b3" />
+                                <c:set var="border" value="#ff0000" />
+                                <c:set var="title" value="Privat" />
+
+                            </c:if>
+
+                            <c:if test="${isContacte}">
+                                <c:set var="background" value="#ccffcc" />
+                                <c:set var="border" value="#9ACD32" />
+                                <c:set var="title" value="Public" />
+                            </c:if>
+
+                            <c:if test="${event.tipus == 1}">
+                                <c:set var="background" value="#0000FF" />
+                                <c:set var="border" value="#0000FF" />
+                                <c:set var="title" value="Compartit" />
+                            </c:if>
+
+                            <c:if test="${isCedent}">
+                                <c:set var="border" value="#FF8C00" />
+                                <c:set var="background" value="#FF8C00" />
+                                <c:set var="title" value="Cedent" />
+                            </c:if>
+                            <tr>
+
+                                <td align="right" width="45%"><c:if
+                                        test="${mostrarMissatgeDreta}">
+                                        <div style="margin-right: 20px">
+                                            ${event.dataEvent}<br> <span
+                                                style="font-weight: bold; font-size: 10pt">De
+                                                ${event.persona}</span>
+                                        </div>
+                                    </c:if> <c:if test="${!mostrarMissatgeDreta}">
+                                        <div style="margin: 10px 10px 24px 10px">
+                                            <div class="entrada">
+                                                <%@ include
+                                                    file="/WEB-INF/jsp/common/eventscore.jsp"%>
+                                            </div>
+                                        </div>
+                                    </c:if></td>
+                                <td>
+                                    <!--  =============  CERCLE ===============   -->
+                                    <table style="padding: 0px; min-height: 100px"
+                                        border="0">
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td
+                                                style="width: 3px; background-color: #CCCCCC"
+                                                width="3px"></td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" height="32px"
+                                                style="height: 32px;">
+                                                <div class="cercle"
+                                                    style="border: 4px solid ${border};"
+                                                    title="${title}"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td
+                                                style="width: 3px; background-color: #CCCCCC"
+                                                width="3px"></td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </table> <!--  ============================   -->
+
+                                </td>
+                                <td width="45%">
+                                    <div style="margin-left: 20px">
+
+                                        <c:if test="${!mostrarMissatgeDreta}">
+                                     ${event.dataEvent}<br />
+                                            <span
+                                                style="font-weight: bold; font-size: 10pt">De
+                                                <c:if test="${(event.tipus==-3)}">
+                                        ${tramitador}  enviat a ${event.persona}
+                                     </c:if> <c:if test="${(event.tipus!=-3)}">
+                                        ${event.persona}
+                                     </c:if>
+
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${mostrarMissatgeDreta}">
+
+
+
+                                            <div style="margin: 10px 10px 24px 10px">
+                                                <div class="entrada">
+                                                    <%@ include
+                                                        file="/WEB-INF/jsp/common/eventscore.jsp"%>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </c:if>
+
+                    </c:forEach>
+                </table>
+            </div>
+        </td>
+
+    </tr>
+    </table>
     <center>
-    <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%" height="${isPublic?400:425}px" onload="carregatIframe(this)" src="${theurlnew}"></iframe>
+        <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
+            height="${isPublic?400:425}px" onload="carregatIframe(this)"
+            src="${theurlnew}"></iframe>
     </center>
-    <br/>
+    <br />
 </div>
-<br/>
+<br />
 
 <script>
 
@@ -1383,17 +1444,17 @@ border-block-end-color: rgb(133, 192, 200);
        if (count != 0) {
          console.log('loaded iframe ');
          //alert("Carregat iframe ");
-         window.top.location.href='<%=request.getContextPath()%>${contextweb}/list';
-       } 
-       count++;
-   }
-
-
-
+         window.top.location.href='<%=request.getContextPath()%>
+    ${contextweb}/list';
+        }
+        count++;
+    }
 </script>
 
 
-<br/>
+<br />
 
-<center><b>©Fundaci&oacute; Bit - &Agrave;rea de Govern Digital - PinbalAdmin</b></center>
+<center>
+    <b>©Fundaci&oacute; Bit - &Agrave;rea de Govern Digital - PinbalAdmin</b>
+</center>
 

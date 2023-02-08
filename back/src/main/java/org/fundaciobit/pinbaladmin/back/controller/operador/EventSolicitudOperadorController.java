@@ -23,4 +23,6 @@ public class EventSolicitudOperadorController extends AbstractEventSolicitudCont
   public boolean isPublic() {
     return false;
   }
+
+  
 }
