@@ -12,11 +12,13 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.ITableManager;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
+import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
@@ -35,6 +37,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
+import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,6 +76,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
   @EJB(mappedName = SolicitudLogicaLocal.JNDI_NAME)
   protected SolicitudLogicaLocal solicitudLogicaEjb;
+  
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorLocal.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.OperadorLocal operadorEjb;
 
   @Override
   public String getTileForm() {
@@ -117,15 +123,16 @@ public class LlistaCorreusOperadorController extends EmailController {
       
       emailFilterForm.setVisibleExportList(false);
       
+      emailFilterForm.setAttachedAdditionalJspCode(true);
 
       emailFilterForm.setActionsRenderer(EmailFilterForm.ACTIONS_RENDERER_DROPDOWN_BUTTON);
 
       emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-warning-sign",
-          "incidencia.convertir", getContextWeb() + "/incidencia/{0}", "btn-warning"));
+          "incidencia.convertir", "javascript:crearIncidencia({0})", "btn-warning")); // getContextWeb() + "/incidencia/{0}"
 
       // Afegir boto per Solicitud
       emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("icon-list-alt",
-          "solicitud.convertir", getContextWeb() + "/solicitud/{0}", "btn-success"));
+          "solicitud.convertir", "javascript:crearSolicitud({0})" , "btn-success")); // getContextWeb() + \"/solicitud/{0}\"
 
       {
         AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
@@ -150,6 +157,23 @@ public class LlistaCorreusOperadorController extends EmailController {
       }
 
     }
+    
+    // Tramitadors
+    {
+      
+
+      SelectMultipleStringKeyValue smskv;
+      smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select,
+          OperadorFields.NOM.select);
+
+      List<StringKeyValue> tramitadors = operadorEjb.executeQuery(smskv, null);
+      
+     
+
+      mav.addObject("tramitadors", tramitadors);
+    }
+    
+    
     
     
     Boolean mostrarMissatgeArxiu = (Boolean)request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
@@ -273,9 +297,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
   }
 
-  @RequestMapping(value = "/incidencia/{emailID}", method = RequestMethod.GET)
+  @RequestMapping(value = "/incidencia/{emailID}/{tramitador}", method = RequestMethod.GET)
   public String incidencia(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable Long emailID) {
+      @PathVariable("emailID") Long emailID, @PathVariable("tramitador")String tramitador ) {
 
     try {
 
@@ -291,7 +315,7 @@ public class LlistaCorreusOperadorController extends EmailController {
         EmailMessageInfo emi = er.getMessage((int)(long)emailID);
 
         IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi,
-            request.getRemoteUser());
+            tramitador);
 
         er.deleteMessage((int) (long) emailID);
 
