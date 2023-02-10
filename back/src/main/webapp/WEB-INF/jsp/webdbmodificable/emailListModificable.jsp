@@ -15,19 +15,19 @@
     function crearIncidencia(itemID) {
         itemIDCache = itemID;
         tipus = 1;
-        $("#myModal").modal();
+        $("#modelSeleccioTramitador").modal();
     }
 
     function crearSolicitud(itemID) {
         itemIDCache = itemID;
         tipus = 2;
-        $("#myModal").modal();
+        $("#modelSeleccioTramitador").modal();
     }
 </script>
 
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="modelSeleccioTramitador" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->

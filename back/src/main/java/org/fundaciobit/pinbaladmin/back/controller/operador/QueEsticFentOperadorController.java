@@ -124,26 +124,33 @@ public class QueEsticFentOperadorController {
 
         boolean esSoli = (event.getSolicitudID() != null);
 
-        StringBuffer str = new StringBuffer("PINBAL: ");
+        StringBuffer str = new StringBuffer("INTEROP: ");
 
         String tipus;
         String tipusTitle;
         long id;
-        String text;
+        //String text;
         if (esSoli) {
           tipus = "Soli";
           id = event.getSolicitudID();
           Solicitud soli = solicitudEjb.findByPrimaryKey(id);
           tipusTitle = soli.getProcedimentNom();
+          
+          final String cai = soli.getTicketAssociat();
+          if (cai == null) {
+            tipus = "Solicitud["+ id + "]";
+          } else {
+            tipus = "CAI-" + cai;
+          }
         } else {
-          tipus = "Inc.Tec.";
+          
           id = event.getIncidenciaTecnicaID();
-
+          tipus = "Inc.Tec.[" + id + "]";
           IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
           tipusTitle = it.getTitol();
         }
 
-        text = event.getComentari();
+        //text = event.getComentari();
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -152,7 +159,7 @@ public class QueEsticFentOperadorController {
         String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
         int any = cal.get(Calendar.YEAR);
 
-        String msg = "PINBAL: (" + tipus + "[" + id + "] => " + tipusTitle + " ) " + text;
+        String msg =  tipus + ": " + tipusTitle;
 
         if (msg.length() > 230) {
           msg = msg.substring(0, 230);
