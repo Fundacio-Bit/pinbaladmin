@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- FITXER AUTOGENERAT -->
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+    <persistence-unit name="pinbaladminPU" transaction-type="JTA">
+        <provider>org.fundaciobit.pinbaladmin.hibernate.CustomHibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/pinbaladminDS</jta-data-source>
+        
+		<class>org.fundaciobit.pinbaladmin.persistence.AreaJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.CampFormulariJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.CampSolicitudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.DepartamentJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.DocumentJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.DocumentCedentJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.DocumentEntitatJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EmailJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EntitatJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EntitatServeiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EstatServeiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EstatSolicitudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EstatSolicitudServeiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EstatTiquetJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.EventJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.FitxerJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.FormulariJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.GrupEntitatJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.GrupEntitatCedentJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.IdiomaJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.OperadorJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.ServeiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TipusTiquetJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TiquetJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TraduccioJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TraduccioMapJPA</class>
+
+        <!-- Activar cache només per aquelles entitats on volguem expressament -->
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <!-- Sempre activar la validació de les propietats -->
+        <validation-mode>CALLBACK</validation-mode>
+
+    </persistence-unit>
+</persistence>

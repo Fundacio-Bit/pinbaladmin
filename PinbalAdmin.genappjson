@@ -1,0 +1,5970 @@
+{
+  "packageName": "org.fundaciobit.pinbaladmin",
+  "projectName": "PinbalAdmin",
+  "dataBaseInfo": {
+    "url": "jdbc:postgresql://localhost:5432/pinbaladmin2",
+    "driver": "org.postgresql.Driver",
+    "usr": "pinbaladmin2",
+    "pwd": "pinbaladmin2"
+  },
+  "modulSeguretat": "keycloak",
+  "prefix": "pad",
+  "prefixDirectori": "pinbaladmin-",
+  "schema": "public",
+  "tables": [
+    {
+      "name": "pad_area",
+      "nameJava": "Area",
+      "shortName": "area",
+      "labels": {
+        "ca": "Àrea",
+        "es": "Area"
+      },
+      "labelsPlural": {
+        "ca": "Àrees",
+        "es": "Areas"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_area_pk",
+          "index": "pad_area_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "areaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "areaID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_area_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_depart_area_fk",
+              "table": "pad_departament",
+              "field": "areaid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_area_entitatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "entitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Entidad",
+            "ca": "Entitat"
+          },
+          "javaName": "entitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_area_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_area_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_campformulari",
+      "nameJava": "CampFormulari",
+      "shortName": "campform",
+      "labels": {
+        "ca": "Camp de Formulari",
+        "es": "Campo de Formulario"
+      },
+      "labelsPlural": {
+        "ca": "Camps de Formulari",
+        "es": "Campos de Formulario"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_campformulari_pk",
+          "index": "pad_campformulari_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "campformulariid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "campFormulariID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_campformulari_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campsoli_campform_fk",
+              "table": "pad_campsolicitud",
+              "field": "campformulariid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "camppdf",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Campo PDF",
+            "ca": "Camp PDF"
+          },
+          "javaName": "campPDF",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_campform_formulariid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "formulariid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Formulario",
+            "ca": "Formulari"
+          },
+          "javaName": "formulariID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_campformulari_formulariid_fkey",
+              "table": "pad_formulari",
+              "field": "formulariid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campform_formulari_fk",
+              "table": "pad_formulari",
+              "field": "formulariid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_campsolicitud",
+      "nameJava": "CampSolicitud",
+      "shortName": "campsoli",
+      "labels": {
+        "ca": "Camp de Sol·licitud",
+        "es": "Campo de Sol·licitud"
+      },
+      "labelsPlural": {
+        "ca": "Camps de Sol·licitud",
+        "es": "Campos de Sol·licitud"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_campsolicitud_pk",
+          "index": "pad_campsolicitud_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "campsolicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "campSolicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_campsolicitud_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_campsoli_campformid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "campformulariid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Campo de formulario",
+            "ca": "Camp de formulari"
+          },
+          "javaName": "campFormulariID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_campsolicitud_campformulariid_fkey",
+              "table": "pad_campformulari",
+              "field": "campformulariid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campsoli_campform_fk",
+              "table": "pad_campformulari",
+              "field": "campformulariid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_campsoli_soliservid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "solicitudServicioID",
+            "ca": "SolicitudServeiID"
+          },
+          "javaName": "solicitudServeiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_campsolicitud_solicitudserveiid_fkey",
+              "table": "pad_solicitudservei",
+              "field": "id",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campsoli_soliservei_fk",
+              "table": "pad_solicitudservei",
+              "field": "id",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "valor",
+          "sqlType": 12,
+          "size": 2000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Valor",
+            "ca": "Valor"
+          },
+          "javaName": "valor",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_departament",
+      "nameJava": "Departament",
+      "shortName": "depart",
+      "labels": {
+        "ca": "Departament",
+        "es": "Departamento"
+      },
+      "labelsPlural": {
+        "ca": "Departaments",
+        "es": "Departamentos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_departament_pk",
+          "index": "pad_depart_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "departamentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "departamentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_departament_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_depart_fk",
+              "table": "pad_solicitud",
+              "field": "departamentid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre departamento",
+            "ca": "Nom departament"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_departament_areaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "areaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Area",
+            "ca": "Area"
+          },
+          "javaName": "areaID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_depart_area_fk",
+              "table": "pad_area",
+              "field": "areaid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_depart_area_fk",
+              "table": "pad_area",
+              "field": "areaid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_document",
+      "nameJava": "Document",
+      "shortName": "document",
+      "labels": {
+        "ca": "Document",
+        "es": "Documento"
+      },
+      "labelsPlural": {
+        "ca": "Documents",
+        "es": "Documentos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_document_pk",
+          "index": "pad_document_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "documentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "documentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_document_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docsoli_document_fk",
+              "table": "pad_documentsolicitud",
+              "field": "documentid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_document_fitxer_orig_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxeroriginalid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fichero Original",
+            "ca": "Fitxer Original"
+          },
+          "javaName": "fitxerOriginalID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_document_fitxeroriginalid_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_document_fitxer_orig_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_document_fitxer_firm_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerfirmatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fichero Firmado",
+            "ca": "Fitxer Firmat"
+          },
+          "javaName": "fitxerFirmatID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_document_fitxerfirmatid_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_document_fitxer_firm_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "notes",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Notas",
+            "ca": "Notes"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_documentcedent",
+      "nameJava": "DocumentCedent",
+      "shortName": "doccedent",
+      "labels": {
+        "ca": "Document de Cedent",
+        "es": "Documento de Cediente"
+      },
+      "labelsPlural": {
+        "ca": "Documents de Cedent",
+        "es": "Documentos de Cediente"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_documentcedent_pk",
+          "index": "pad_documentcedent_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "documentcedentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "documentCedentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_documentcedent_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titol",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Título",
+            "ca": "Títol"
+          },
+          "javaName": "titol",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 8
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_doccedent_entservei_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "entitatserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Cedente",
+            "ca": "Cedent"
+          },
+          "javaName": "entitatServeiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_doccedent_entiservei_fk",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_doccedent_entiservei_fk",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataalta",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha Creación",
+            "ca": "Data Creació"
+          },
+          "javaName": "dataCreacio",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": -1,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_doccedent_fitxerid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fichero",
+            "ca": "Fitxer"
+          },
+          "javaName": "fitxerID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_doccedent_fitxer_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_doccedent_fitxer_fitxe_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_documententitat",
+      "nameJava": "DocumentEntitat",
+      "shortName": "docent",
+      "labels": {
+        "ca": "Document Entitat Local",
+        "es": "Documento Entidad Local"
+      },
+      "labelsPlural": {
+        "ca": "Documents Entitat Local",
+        "es": "Documentos Entidad Local"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_documententitat_pk",
+          "index": "pad_documententitat_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "documententitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "documentEntitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_documententitat_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titol",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Título",
+            "ca": "Títol"
+          },
+          "javaName": "titol",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_docent_entitat_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "entitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Entidad Local",
+            "ca": "Entitat Local"
+          },
+          "javaName": "entitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_docent_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docent_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_docent_fitxerid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fichero",
+            "ca": "Fitxer"
+          },
+          "javaName": "fitxerID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_docent_fitxer_fitxe_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docent_fitxer_fitxe_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataalta",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha de Alta",
+            "ca": "Data d\u0027alta"
+          },
+          "javaName": "dataAlta",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_documentsolicitud",
+      "nameJava": "DocumentSolicitud",
+      "shortName": "docsoli",
+      "labels": {
+        "ca": "Document-Sol·licitud",
+        "es": "Document-Sol·licitud"
+      },
+      "labelsPlural": {
+        "ca": "Documents-Sol·licitud",
+        "es": "Documents-Sol·licitud"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_documentsolicitud_pk",
+          "index": "pad_documentsolicitud_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "documentsolicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "documentSolicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_documentsolicitud_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": -1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_docsoli_documentid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "documentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Documento",
+            "ca": "Document"
+          },
+          "javaName": "documentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_documentsolicitud_documentid_fkey",
+              "table": "pad_document",
+              "field": "documentid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docsoli_document_fk",
+              "table": "pad_document",
+              "field": "documentid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_docsoli_solicitudid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "SolicitudID",
+            "ca": "Sol·licitudID"
+          },
+          "javaName": "solicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_documentsolicitud_solicitudid_fkey",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docsoli_solicitud_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_email",
+      "nameJava": "Email",
+      "shortName": "email",
+      "labels": {
+        "ca": "Correu",
+        "es": "Correo"
+      },
+      "labelsPlural": {
+        "ca": "Correus",
+        "es": "Correos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_email_pk",
+          "index": "pad_email_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "emailid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "id",
+            "ca": "ID"
+          },
+          "javaName": "emailID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_email_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataenviament",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha",
+            "ca": "Data"
+          },
+          "javaName": "dataEnviament",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": -1,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "enviador",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Origen",
+            "ca": "Origen"
+          },
+          "javaName": "enviador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "destinataris",
+          "sqlType": 12,
+          "size": 6000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Destinatarios",
+            "ca": "Destinataris"
+          },
+          "javaName": "destinataris",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "subject",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Asunto",
+            "ca": "Assumpte"
+          },
+          "javaName": "subject",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "message",
+          "sqlType": 12,
+          "size": 6000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Mensaje",
+            "ca": "Missatge"
+          },
+          "javaName": "message",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_entitat",
+      "nameJava": "Entitat",
+      "shortName": "entitat",
+      "labels": {
+        "ca": "Entitat Local",
+        "es": "Entitat Local"
+      },
+      "labelsPlural": {
+        "ca": "Entitats Locals",
+        "es": "Entidades Locales"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_entitat_pk",
+          "index": "pad_entitat_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "entitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "entitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_entitat_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_area_entitat_fk",
+              "table": "pad_area",
+              "field": "entitatid",
+              "type": 0
+            },
+            {
+              "name": "pad_docent_entitat_fk",
+              "table": "pad_documententitat",
+              "field": "entitatid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 500,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "personacontacte",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Persona de contacto",
+            "ca": "Persona de contacte"
+          },
+          "javaName": "personaContacte",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "cif",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "CIF",
+            "ca": "CIF"
+          },
+          "javaName": "CIF",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_entitat_grupentitatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "grupentitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Grupo",
+            "ca": "Grup"
+          },
+          "javaName": "grupEntitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "0",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_entitat_grupent_fk",
+              "table": "pad_grupentitat",
+              "field": "grupentitatid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_entitat_grupent_fk",
+              "table": "pad_grupentitat",
+              "field": "grupentitatid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "convenipmsbae",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Convenio PMSBAE",
+            "ca": "Conveni PMSBAE"
+          },
+          "javaName": "convenipmsbae",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_entitatservei",
+      "nameJava": "EntitatServei",
+      "shortName": "entiservei",
+      "labels": {
+        "ca": "Entitat Cedent",
+        "es": "Entidad Cedente"
+      },
+      "labelsPlural": {
+        "ca": "Entitats Cedents",
+        "es": "Entidades Cedentes"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_entitatservei_pk",
+          "index": "pad_entitatservei_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "entitatserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "entitatServeiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_entitatservei_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_doccedent_entiservei_fk",
+              "table": "pad_documentcedent",
+              "field": "entitatserveiid",
+              "type": 0
+            },
+            {
+              "name": "pad_grupentced_entiservei_fk",
+              "table": "pad_grupentitatcedent",
+              "field": "cedentid",
+              "type": 0
+            },
+            {
+              "name": "pad_servei_entiservei_fk",
+              "table": "pad_servei",
+              "field": "entitatserveiid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "balears",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Baleares",
+            "ca": "Balears"
+          },
+          "javaName": "balears",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_estatservei",
+      "nameJava": "EstatServei",
+      "shortName": "estatserv",
+      "labels": {
+        "ca": "Estat de Servei",
+        "es": "Estado del Servicio"
+      },
+      "labelsPlural": {
+        "ca": "Estats de Servei",
+        "es": "Estados de Servicio"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_estatservei_pk",
+          "index": "pad_estatservei_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "estatServeiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_servei_estatserv_fk",
+              "table": "pad_servei",
+              "field": "estatserveiid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_estatsolicitud",
+      "nameJava": "EstatSolicitud",
+      "shortName": "estatsoli",
+      "labels": {
+        "ca": "Estat de Sol·licitud",
+        "es": "Estado de Solicitud"
+      },
+      "labelsPlural": {
+        "ca": "Estats de Sol·licitud",
+        "es": "Estados de Solicitud"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_estatsolicitud_pk",
+          "index": "pad_estatsolicitud_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatsolicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "estatSolicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_estatsoli_fk",
+              "table": "pad_solicitud",
+              "field": "estatid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_estatsolicitudservei",
+      "nameJava": "EstatSolicitudServei",
+      "shortName": "estsolserv",
+      "labels": {
+        "ca": "Estat de Sol·licitud-Servei",
+        "es": "Estat de Sol·licitud-Servei"
+      },
+      "labelsPlural": {
+        "ca": "Estats de Sol·licitud-Servei",
+        "es": "Estats de Sol·licitud-Servei"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_estatsolicitudservei_pk",
+          "index": "pad_estatsolicitudservei_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatsolicitudserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "estatSolicitudServeiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_soliservei_estsolserv_fk",
+              "table": "pad_solicitudservei",
+              "field": "estatsolicitudserveiid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 2,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_estattiquet",
+      "nameJava": "EstatTiquet",
+      "shortName": "estattique",
+      "labels": {
+        "ca": "Estat Tiquet",
+        "es": "Estado Ticket"
+      },
+      "labelsPlural": {
+        "ca": "Estat Tiquet",
+        "es": "Estatdos Ticket"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_estattiquet_pk",
+          "index": "pad_estattiquet_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estattiquetid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "estatTiquetID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_estattique_estat_fk",
+              "table": "pad_tiquet",
+              "field": "estattiquetid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_event",
+      "nameJava": "Event",
+      "shortName": "event",
+      "labels": {
+        "ca": "Event",
+        "es": "Evento"
+      },
+      "labelsPlural": {
+        "ca": "Events",
+        "es": "Eventos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_event_pk",
+          "index": "pad_event_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "eventid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "eventID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_event_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_event_solicitudid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Solicitud",
+            "ca": "Sol·licitut"
+          },
+          "javaName": "solicitudID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_event_solicitud_soli_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_event_solicitud_soli_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_event_inctecnicaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "incidenciatecnicaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Incidència Tècnica",
+            "ca": "Incidència Tècnica"
+          },
+          "javaName": "incidenciaTecnicaID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_event_inctecnica_it_fk",
+              "table": "pad_incidenciatecnica",
+              "field": "incidenciatecnicaid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_event_inctecnica_it_fk",
+              "table": "pad_incidenciatecnica",
+              "field": "incidenciatecnicaid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataevent",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha",
+            "ca": "Data"
+          },
+          "javaName": "dataEvent",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipus",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Tipo",
+            "ca": "Tipus"
+          },
+          "javaName": "tipus",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "persona",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Persona",
+            "ca": "Persona"
+          },
+          "javaName": "persona",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "comentari",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Comentario",
+            "ca": "Comentari"
+          },
+          "javaName": "comentari",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_event_fitxerid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fichero",
+            "ca": "Fitxer"
+          },
+          "javaName": "fitxerID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_event_fitxer_fitxer_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_event_fitxer_fitxer_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nollegit",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "No Leido",
+            "ca": "No Llegit"
+          },
+          "javaName": "noLlegit",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caididentificadorconsulta",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID: Identificador de Consulta",
+            "ca": "CAID: Identificador de Consulta"
+          },
+          "javaName": "caidIdentificadorConsulta",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caidnumeroseguiment",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID: Número de seguiment",
+            "ca": "CAID: Número de seguiment"
+          },
+          "javaName": "caidNumeroSeguiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_fitxer",
+      "nameJava": "Fitxer",
+      "shortName": "fitxer",
+      "labels": {
+        "ca": "Fitxer",
+        "es": "Fichero"
+      },
+      "labelsPlural": {
+        "ca": "Fitxers",
+        "es": "Ficheros"
+      },
+      "generate": true,
+      "fileMappingEntity": true,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_fitxer_pk",
+          "index": "pad_fitxer_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "fitxerID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_fitxer_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_document_fitxer_firm_fk",
+              "table": "pad_document",
+              "field": "fitxerfirmatid",
+              "type": 0
+            },
+            {
+              "name": "pad_document_fitxer_orig_fk",
+              "table": "pad_document",
+              "field": "fitxeroriginalid",
+              "type": 0
+            },
+            {
+              "name": "pad_doccedent_fitxer_fitxe_fk",
+              "table": "pad_documentcedent",
+              "field": "fitxerid",
+              "type": 0
+            },
+            {
+              "name": "pad_docent_fitxer_fitxe_fk",
+              "table": "pad_documententitat",
+              "field": "fitxerid",
+              "type": 0
+            },
+            {
+              "name": "pad_event_fitxer_fitxer_fk",
+              "table": "pad_event",
+              "field": "fitxerid",
+              "type": 0
+            },
+            {
+              "name": "pad_formulari_fitxer_fk",
+              "table": "pad_formulari",
+              "field": "fitxerid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_fitxer_fk",
+              "table": "pad_solicitud",
+              "field": "documentsolicitudid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_fitxer_xml_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudxmlid",
+              "type": 0
+            },
+            {
+              "name": "pad_tiquet_fitxer_adj1_fk",
+              "table": "pad_tiquet",
+              "field": "adjunt1id",
+              "type": 0
+            },
+            {
+              "name": "pad_tiquet_fitxer_adj2_fk",
+              "table": "pad_tiquet",
+              "field": "adjunt2id",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tamany",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Tamaño",
+            "ca": "Tamany"
+          },
+          "javaName": "tamany",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mime",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Mime",
+            "ca": "Mime"
+          },
+          "javaName": "mime",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 1000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "NULL::character varying",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_formulari",
+      "nameJava": "Formulari",
+      "shortName": "formulari",
+      "labels": {
+        "ca": "Formulari",
+        "es": "Formulario"
+      },
+      "labelsPlural": {
+        "ca": "Formularis",
+        "es": "Formularios"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_formulari_pk",
+          "index": "pad_formulari_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "formulariid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "formulariid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_formulari_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": -1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campform_formulari_fk",
+              "table": "pad_campformulari",
+              "field": "formulariid",
+              "type": 0
+            },
+            {
+              "name": "pad_servei_formulari_fk",
+              "table": "pad_servei",
+              "field": "formulariid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_formulari_fitxerid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "fichero PDF",
+            "ca": "Fitxer PDF"
+          },
+          "javaName": "fitxerID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_formulari_fitxerid_fkey",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_formulari_fitxer_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_grupentitat",
+      "nameJava": "GrupEntitat",
+      "shortName": "grupent",
+      "labels": {
+        "ca": "Agrupació d´Entitats",
+        "es": "Agrupación de Entidades"
+      },
+      "labelsPlural": {
+        "ca": "Agrupacións d´Entitats",
+        "es": "Agrupaciones de Entidades"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_grupentitat_pk",
+          "index": "pad_grupentitat_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "grupentitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "grupEntitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_grupentitat_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_entitat_grupent_fk",
+              "table": "pad_entitat",
+              "field": "grupentitatid",
+              "type": 0
+            },
+            {
+              "name": "pad_grupentced_grupent_fk",
+              "table": "pad_grupentitatcedent",
+              "field": "grupentitatid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 256,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 256,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_grupentitatcedent",
+      "nameJava": "GrupEntitatCedent",
+      "shortName": "grupentced",
+      "labels": {
+        "ca": "Cedent No Inclòs en Grup-Entitat",
+        "es": "Cedent No Inclòs en Grup-Entitat"
+      },
+      "labelsPlural": {
+        "ca": "Cedents No Inclosos en Grup-Entitat",
+        "es": "Cedents No Inclosos en Grup-Entitat"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_grupentitatcedent_pk",
+          "index": "pad_grupentitatcedent_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "grupentitatcedentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "grupEntitatCedentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_grupentitatcedent_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_grupentced_grpentid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "grupentitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Grup-Entitat",
+            "ca": "Grup-Entitat"
+          },
+          "javaName": "grupEntitatID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_grupentced_grupent_fk",
+              "table": "pad_grupentitat",
+              "field": "grupentitatid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_grupentced_grupent_fk",
+              "table": "pad_grupentitat",
+              "field": "grupentitatid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_grupentced_cedentid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "cedentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Cedent no inclòs",
+            "ca": "Cedent no inclòs"
+          },
+          "javaName": "cedentID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_grupentced_cedent_fk",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_grupentced_entiservei_fk",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          ]
+        }
+      ],
+      "multipleUniques": [
+        {
+          "name": "pad_grupentced_grp_ced_uk",
+          "sqlColumns": [
+            "grupentitatid",
+            "cedentid"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_idioma",
+      "nameJava": "Idioma",
+      "shortName": "idioma",
+      "labels": {
+        "ca": "Idioma",
+        "es": "Idioma"
+      },
+      "labelsPlural": {
+        "ca": "Idiomes",
+        "es": "Idiomes"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": true,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_idioma_pk",
+          "index": "pad_idioma_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "idiomaid",
+          "sqlType": 12,
+          "size": 5,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "idiomaID",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 50,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "nom",
+            "ca": "nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "suportat",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "suportat",
+            "ca": "suportat"
+          },
+          "javaName": "suportat",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "true",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "ordre",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ordre",
+            "ca": "ordre"
+          },
+          "javaName": "ordre",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "0",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_incidenciatecnica",
+      "nameJava": "IncidenciaTecnica",
+      "shortName": "inctecnica",
+      "labels": {
+        "ca": "Incidència",
+        "es": "Incidència"
+      },
+      "labelsPlural": {
+        "ca": "Incidències",
+        "es": "Incidències"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_incidenciatecnica_pk",
+          "index": "pad_incidenciatecnica_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "incidenciatecnicaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "incidenciaTecnicaID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_incidenciatecnica_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_event_inctecnica_it_fk",
+              "table": "pad_event",
+              "field": "incidenciatecnicaid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titol",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Títol",
+            "ca": "Títol"
+          },
+          "javaName": "titol",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Descripció",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 8
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datainici",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Data Inici",
+            "ca": "Data Inici"
+          },
+          "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estat",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estat",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3,4",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "creador",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Operador",
+            "ca": "Operador"
+          },
+          "javaName": "creador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "\u0027mcapo\u0027::character varying",
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipus",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Tipo",
+            "ca": "Tipus"
+          },
+          "javaName": "tipus",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3,4",
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nomentitat",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Nom Entitat",
+            "ca": "Nom Entitat"
+          },
+          "javaName": "nomEntitat",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "contactenom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nom del contacte",
+            "ca": "Nom del contacte"
+          },
+          "javaName": "contacteNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "contacteemail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Correu del contacte",
+            "ca": "Correu del contacte"
+          },
+          "javaName": "contacteEmail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "contactetelefon",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Telèfon del contacte",
+            "ca": "Telèfon del contacte"
+          },
+          "javaName": "contacteTelefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caididentificadorconsulta",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID::Ididentificador de Consulta",
+            "ca": "CAID::Ididentificador de Consulta"
+          },
+          "javaName": "caidIdentificadorConsulta",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caidnumeroseguiment",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID::Número de Seguiment",
+            "ca": "CAID::Número de Seguiment"
+          },
+          "javaName": "caidNumeroSeguiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_operador",
+      "nameJava": "Operador",
+      "shortName": "operador",
+      "labels": {
+        "ca": "Operador",
+        "es": "Operador"
+      },
+      "labelsPlural": {
+        "ca": "Operadors",
+        "es": "Operadores"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_operador_pk",
+          "index": "pad_operador_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "operadorid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "operadorID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_operador_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "username",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Username",
+            "ca": "Username"
+          },
+          "javaName": "username",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "email",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Email",
+            "ca": "Email"
+          },
+          "javaName": "email",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_servei",
+      "nameJava": "Servei",
+      "shortName": "servei",
+      "labels": {
+        "ca": "Servei",
+        "es": "Servicio"
+      },
+      "labelsPlural": {
+        "ca": "Serveis",
+        "es": "Servicios"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_servei_pk",
+          "index": "pad_servei_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "serveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "serveiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_servei_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_soliservei_servei_fk",
+              "table": "pad_solicitudservei",
+              "field": "serveiid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "unique": "pad_servei_codi_uk",
+          "isAutoIncrement": false,
+          "sqlName": "codi",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Codigo",
+            "ca": "Codi"
+          },
+          "javaName": "codi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 2,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 1000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 3,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 1000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_servei_formulariid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "formulariid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Formulario",
+            "ca": "Formulari"
+          },
+          "javaName": "formulariID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_servei_formulariid_fkey",
+              "table": "pad_formulari",
+              "field": "formulariid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_servei_formulari_fk",
+              "table": "pad_formulari",
+              "field": "formulariid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_servei_entservid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "entitatserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Cedente",
+            "ca": "Cedent"
+          },
+          "javaName": "entitatServeiID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 2,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_servei_entitatserveiid_fkey",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_servei_entiservei_fk",
+              "table": "pad_entitatservei",
+              "field": "entitatserveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_servei_estatserveiid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estatServeiID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_servei_estatserveiid_fkey",
+              "table": "pad_estatservei",
+              "field": "estatserveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_servei_estatserv_fk",
+              "table": "pad_estatservei",
+              "field": "estatserveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipusconsentiment",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Tipo de consentimiento",
+            "ca": "Tipus de consentiment"
+          },
+          "javaName": "tipusConsentiment",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "0",
+          "minAllowedValue": "0,1",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "ocult",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Ocultar en sistemas externos",
+            "ca": "Ocultar a sistemes externs"
+          },
+          "javaName": "ocult",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_solicitud",
+      "nameJava": "Solicitud",
+      "shortName": "solicitud",
+      "labels": {
+        "ca": "Sol·licitud",
+        "es": "Solicitud"
+      },
+      "labelsPlural": {
+        "ca": "Sol·licituds",
+        "es": "Solicitudes"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_solicitud_pk",
+          "index": "pad_solicitud_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "solicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "solicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_solicitud_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_docsoli_solicitud_fk",
+              "table": "pad_documentsolicitud",
+              "field": "solicitudid",
+              "type": 0
+            },
+            {
+              "name": "pad_event_solicitud_soli_fk",
+              "table": "pad_event",
+              "field": "solicitudid",
+              "type": 0
+            },
+            {
+              "name": "pad_soliservei_solicitud_fk",
+              "table": "pad_solicitudservei",
+              "field": "solicitudid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimentcodi",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Codigo Proc.",
+            "ca": "Codi Proc."
+          },
+          "javaName": "procedimentCodi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codidescriptiu",
+          "sqlType": 12,
+          "size": 256,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Código Desc.",
+            "ca": "Codi Desc."
+          },
+          "javaName": "codiDescriptiu",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimentnom",
+          "sqlType": 12,
+          "size": 2000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre de Procedimiento",
+            "ca": "Nom de Procediment"
+          },
+          "javaName": "procedimentNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimenttipus",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Tipus de Procediment",
+            "ca": "Tipus de Procediment"
+          },
+          "javaName": "procedimentTipus",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3,4,5",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_estatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estatID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 2,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_estatid_fkey",
+              "table": "pad_estatsolicitud",
+              "field": "estatsolicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_estatsoli_fk",
+              "table": "pad_estatsolicitud",
+              "field": "estatsolicitudid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "ticketassociat",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID: Identificador de Consulta",
+            "ca": "CAID: Identificador de Consulta"
+          },
+          "javaName": "ticketAssociat",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "ticketnumeroseguiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "CAID: Número de Seguimiento",
+            "ca": "CAID: Número de Seguimiento"
+          },
+          "javaName": "ticketNumeroSeguiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_departid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "departamentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Departamento",
+            "ca": "Departament"
+          },
+          "javaName": "departamentID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_depart_fk",
+              "table": "pad_departament",
+              "field": "departamentid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_depart_fk",
+              "table": "pad_departament",
+              "field": "departamentid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "entitatestatal",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Entidad Estatal",
+            "ca": "Entitat Estatal"
+          },
+          "javaName": "entitatEstatal",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "pinfo",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "PINFO",
+            "ca": "PINFO"
+          },
+          "javaName": "pinfo",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datainici",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha Inicio",
+            "ca": "Data Inici"
+          },
+          "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": -1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datafi",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Data Fin",
+            "ca": "Data Fi"
+          },
+          "javaName": "dataFi",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "personacontacte",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Persona de contacte: Nom",
+            "ca": "Persona de contacte: Nom"
+          },
+          "javaName": "personaContacte",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "personacontacteemail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Persona de contacte: Email",
+            "ca": "Persona de contacte: Email"
+          },
+          "javaName": "personaContacteEmail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocnom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Responsable Proc.: Nom",
+            "ca": "Responsable Proc.: Nom"
+          },
+          "javaName": "responsableProcNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocemail",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Responsable Proc.: Email",
+            "ca": "Responsable Proc.: Email"
+          },
+          "javaName": "responsableProcEmail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estat",
+          "sqlType": 12,
+          "size": 2550,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Notas",
+            "ca": "Notes"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_docsoli_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "documentsolicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Documento Solicitud",
+            "ca": "Document Sol·licitud"
+          },
+          "javaName": "documentSolicitudID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_documentsolicitudid_fkey",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_fitxer_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_solixml_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudxmlid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Solicitud XML",
+            "ca": "Sol·licitud XML"
+          },
+          "javaName": "solicitudXmlID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_fitxer_xml_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_fitxer_xml_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "firmatdocsolicitud",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Firmado Documento de Solicitud",
+            "ca": "Firmat Document de Sol·licitud"
+          },
+          "javaName": "firmatDocSolicitud",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "minAllowedValue": "solicitud.firmatdocsolicitud",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "produccio",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Entorno",
+            "ca": "Entorn"
+          },
+          "javaName": "produccio",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "true",
+          "minAllowedValue": "solicitud.produccio",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "creador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Operador",
+            "ca": "Operador"
+          },
+          "javaName": "creador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "denominacio",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Entidad Nombre",
+            "ca": "Entitat Nom"
+          },
+          "javaName": "denominacio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "descripcio": "És l\u0027entitat",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dir3",
+          "sqlType": 12,
+          "size": 50,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Entitat DIR3",
+            "ca": "Entitat DIR3"
+          },
+          "javaName": "dir3",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Entitat NIF",
+            "ca": "Entitat NIF"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_solicitudservei",
+      "nameJava": "SolicitudServei",
+      "shortName": "soliservei",
+      "labels": {
+        "ca": "Sol·licitud-Servei",
+        "es": "Solicitud-Servicio"
+      },
+      "labelsPlural": {
+        "ca": "Sol·licitud-Serveis",
+        "es": "Solicitud-Servicios"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_solicitudservei_pk",
+          "index": "pad_solicitudservei_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "id",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_solicitudservei_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_campsoli_soliservei_fk",
+              "table": "pad_campsolicitud",
+              "field": "solicitudserveiid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "index": "pad_soliservei_soliid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Solicitud",
+            "ca": "Sol.licitud"
+          },
+          "javaName": "solicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitudservei_solicitudid_fkey",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_soliservei_solicitud_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_soliservei_serveiid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "serveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Servicio",
+            "ca": "Servei"
+          },
+          "javaName": "serveiID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitudservei_serveiid_fkey",
+              "table": "pad_servei",
+              "field": "serveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_soliservei_servei_fk",
+              "table": "pad_servei",
+              "field": "serveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_soliservei_estsolserv_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatsolicitudserveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estatSolicitudServeiID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitudservei_estatsolicitudserveiid_fkey",
+              "table": "pad_estatsolicitudservei",
+              "field": "estatsolicitudserveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_soliservei_estsolserv_fk",
+              "table": "pad_estatsolicitudservei",
+              "field": "estatsolicitudserveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "normalegal",
+          "sqlType": 12,
+          "size": 3000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Normativa Legal",
+            "ca": "Normativa Legal"
+          },
+          "javaName": "normaLegal",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "enllaznormalegal",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Enllaç Norma Legal",
+            "ca": "Enllaç Norma Legal"
+          },
+          "javaName": "enllazNormaLegal",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 13
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Articulos",
+            "ca": "Articles"
+          },
+          "javaName": "articles",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipusconsentiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Consentiment Publicat o Adjunt",
+            "ca": "Consentiment Publicat o Adjunt"
+          },
+          "javaName": "tipusConsentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Consentiment",
+            "ca": "Consentiment"
+          },
+          "javaName": "consentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "enllazconsentiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Enllaç Consentiment",
+            "ca": "Enllaç Consentiment"
+          },
+          "javaName": "enllazConsentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 13
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "notes",
+          "sqlType": 12,
+          "size": 2000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Notas",
+            "ca": "Notes"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caduca",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Caduca",
+            "ca": "Caduca"
+          },
+          "javaName": "caduca",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "fechacaduca",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fecha Caduca",
+            "ca": "Fecha Caduca"
+          },
+          "javaName": "fechaCaduca",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ],
+      "multipleUniques": [
+        {
+          "name": "pad_soliservei_multiple_uk",
+          "sqlColumns": [
+            "serveiid",
+            "solicitudid"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_tipustiquet",
+      "nameJava": "TipusTiquet",
+      "shortName": "tiptiquet",
+      "labels": {
+        "ca": "Tipus Tiquet",
+        "es": "Tipo Ticket"
+      },
+      "labelsPlural": {
+        "ca": "Tipus Tiquet",
+        "es": "Tipos Ticket"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tipustiquet_pk",
+          "index": "pad_tipustiquet_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tipustiquetid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "tipusTiquetID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_tiptiquet_fk",
+              "table": "pad_tiquet",
+              "field": "tipustiquetid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nombre",
+            "ca": "Nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tiquet",
+      "nameJava": "Tiquet",
+      "shortName": "tiquet",
+      "labels": {
+        "ca": "Tiquet",
+        "es": "Ticket"
+      },
+      "labelsPlural": {
+        "ca": "Tiquets",
+        "es": "Tickets"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tiquet_pk",
+          "index": "pad_tiquet_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "tiquetid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "tiquetID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tiquet_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titol",
+          "sqlType": 12,
+          "size": 256,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Título",
+            "ca": "Títol"
+          },
+          "javaName": "titol",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 3,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 3000,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Descripción",
+            "ca": "Descripció"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 8
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "informador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Informador",
+            "ca": "Informador"
+          },
+          "javaName": "informador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataalta",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Fecha Alta",
+            "ca": "Data Alta"
+          },
+          "javaName": "dataAlta",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": -2,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tiquet_estattiquetid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estattiquetid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estatTiquetID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 1,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tiquet_estattiquetid_fkey",
+              "table": "pad_estattiquet",
+              "field": "estattiquetid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_estattique_estat_fk",
+              "table": "pad_estattiquet",
+              "field": "estattiquetid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_tiquet_tipustiquetid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tipustiquetid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Tipo",
+            "ca": "Tipus"
+          },
+          "javaName": "tipusTiquetID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tiquet_tipustiquetid_fkey",
+              "table": "pad_tipustiquet",
+              "field": "tipustiquetid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_tiptiquet_fk",
+              "table": "pad_tipustiquet",
+              "field": "tipustiquetid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "versiopinbal",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Versión",
+            "ca": "Versió"
+          },
+          "javaName": "versioPinbal",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datainici",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fecha Inici",
+            "ca": "Data Inici"
+          },
+          "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataincidencia",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fecha incidencia",
+            "ca": "Data incidència"
+          },
+          "javaName": "dataIncidencia",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solucionatper",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Solucionado por",
+            "ca": "Solucionat per"
+          },
+          "javaName": "solucionatPer",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datafi",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Fecha Fin",
+            "ca": "Data Fí"
+          },
+          "javaName": "datafi",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "notes",
+          "sqlType": 12,
+          "size": 1000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Notas",
+            "ca": "Notes"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 8
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "entorn",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Entorno",
+            "ca": "Entorn"
+          },
+          "javaName": "entorn",
+          "javaType": "int",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "1",
+          "minAllowedValue": "1,2,3,4",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tiquet_adjunt1id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "adjunt1id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Adjunto 1",
+            "ca": "Adjunt 1 "
+          },
+          "javaName": "adjunt1ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tiquet_fitxer_adj1_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_fitxer_adj1_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_tiquet_adjunt2id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "adjunt2id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "Adjunto 2",
+            "ca": "Adjunt 2"
+          },
+          "javaName": "adjunt2ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tiquet_fitxer_adj2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tiquet_fitxer_adj2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_traduccio",
+      "nameJava": "Traduccio",
+      "shortName": "traduccio",
+      "labels": {
+        "ca": "Traducció",
+        "es": "Traducción"
+      },
+      "labelsPlural": {
+        "ca": "Traduccions",
+        "es": "Traduccions"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": true,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_traduccio_pk",
+          "index": "pad_traduccio_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "traduccioid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "ID",
+            "ca": "ID"
+          },
+          "javaName": "traduccioID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "descripcio": "",
+          "defaultValue": "nextval(\u0027pad_traduccio_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_traducmap_traduccio_fk",
+              "table": "pad_traducciomap",
+              "field": "traducciomapid",
+              "type": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pad_traducciomap",
+      "nameJava": "TraduccioMap",
+      "shortName": "traduccmap",
+      "labels": {
+        "ca": "traducciomap",
+        "es": "traducciomap"
+      },
+      "labelsPlural": {
+        "ca": "traducciomap",
+        "es": "traducciomap"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": true,
+      "fields": [
+        {
+          "PK": "pad_traducmap_pk",
+          "index": "pad_traducciomap_pk_i",
+          "isAutoIncrement": false,
+          "sqlName": "traducciomapid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "traducciomapid_XX_es",
+            "ca": "traducciomapid_XX_ca"
+          },
+          "javaName": "traduccioMapID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "descripcio": "",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_traducmap_traduccio_fk",
+              "table": "pad_traduccio",
+              "field": "traduccioid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_traducmap_traduccio_fk",
+              "table": "pad_traduccio",
+              "field": "traduccioid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "PK": "pad_traducmap_pk",
+          "index": "pad_traducciomap_idiomaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "idiomaid",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "idiomaid",
+            "ca": "idiomaid"
+          },
+          "javaName": "idiomaID",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "descripcio": "",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "valor",
+          "sqlType": 12,
+          "size": 4000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "es": "valor",
+            "ca": "valor"
+          },
+          "javaName": "valor",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "descripcio": "",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    }
+  ],
+  "languages": [
+    "ca",
+    "es"
+  ],
+  "generateBack": true,
+  "generateWS": false
+}

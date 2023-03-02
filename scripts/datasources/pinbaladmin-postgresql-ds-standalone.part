@@ -1,0 +1,13 @@
+﻿<datasources>
+    ...
+    <datasource jndi-name="java:jboss/datasources/pinbaladminDS" pool-name="pinbaladminDS" enabled="true"
+                use-java-context="true">
+        <connection-url>jdbc:postgresql://localhost:5432/pinbaladmin</connection-url>
+        <driver>postgresql</driver>
+        <security>
+            <user-name>pinbaladmin</user-name>
+            <password>pinbaladmin</password>
+        </security>
+    </datasource>
+    ...
+</datasources>
