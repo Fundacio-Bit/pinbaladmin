@@ -61,3 +61,7 @@ hs_err_pid*
 /pinbaladmin-selenium/resultat.html
 /update_database_to_jboss7.sql
 /version-ruleset.xml
+/pinbaladmin-ws/domini-sistra-api/.project
+/pinbaladmin-ws/domini-sistra-api/.settings
+/pinbaladmin-ws/domini-sistra-api/target
+/pinbaladmin-ws/domini-sistra-api/.classpath

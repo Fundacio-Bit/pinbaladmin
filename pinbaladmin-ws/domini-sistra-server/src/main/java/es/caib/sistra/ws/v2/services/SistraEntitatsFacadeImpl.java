@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.WebServiceContext;
 import javax.annotation.Resource;
@@ -94,6 +95,7 @@ public class SistraEntitatsFacadeImpl implements SistraEntitatsFacade {
    * id ,)es.caib.sistra.ws.v2.model.sistrafacade.ParametrosDominio parametros
    * )*
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.valoresdominio.ValoresDominio obtenerDominio(
       java.lang.String id, es.caib.sistra.ws.v2.model.sistrafacade.ParametrosDominio parametros)
       throws es.caib.sistra.ws.v2.services.SistraFacadeException {
@@ -171,6 +173,7 @@ public class SistraEntitatsFacadeImpl implements SistraEntitatsFacade {
    * ,)es.caib.sistra.ws.v2.model.formularioconsulta.FormulariosConsulta forms
    * )*
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.documentoconsulta.DocumentosConsulta realizarConsulta(
       java.lang.String identificadorTramite,
       es.caib.sistra.ws.v2.model.formularioconsulta.FormulariosConsulta forms)

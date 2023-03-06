@@ -13,6 +13,7 @@ import org.jboss.ws.api.annotation.TransportGuarantee;
 import org.jboss.ws.api.annotation.WebContext;
 
 import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -154,6 +155,7 @@ public class SistraConsentimentFacadeImpl implements SistraConsentimentFacade {
   /*
    *
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.documentoconsulta.DocumentosConsulta realizarConsulta(
       String identificadorTramite,
       es.caib.sistra.ws.v2.model.formularioconsulta.FormulariosConsulta forms)

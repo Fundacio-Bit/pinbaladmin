@@ -11,6 +11,7 @@ import org.jboss.ws.api.annotation.TransportGuarantee;
 import org.jboss.ws.api.annotation.WebContext;
 
 import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.jws.soap.SOAPBinding;
@@ -38,6 +39,7 @@ public class SistraTipusProcedimentFacadeImpl implements SistraTipusProcedimentF
    * Retorna les les opcions possibles de consentiment pel servei, amb un codi
    * (noop, si o llei), i el valor conté el nom de l'opció traduit.
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.valoresdominio.ValoresDominio obtenerDominio(String id,
       es.caib.sistra.ws.v2.model.sistrafacade.ParametrosDominio parametros)
       throws SistraFacadeException {
@@ -105,6 +107,7 @@ public class SistraTipusProcedimentFacadeImpl implements SistraTipusProcedimentF
   /*
    *
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.documentoconsulta.DocumentosConsulta realizarConsulta(
       String identificadorTramite,
       es.caib.sistra.ws.v2.model.formularioconsulta.FormulariosConsulta forms)
