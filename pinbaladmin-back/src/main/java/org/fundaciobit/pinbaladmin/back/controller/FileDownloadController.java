@@ -44,26 +44,34 @@ public class FileDownloadController {
      * @author anadal
      */
     @RequestMapping("{arxiuId}")
-    public void arxiu(@PathVariable("arxiuId") String encryptedArxiuId, 
-        HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void arxiu(@PathVariable("arxiuId") String encryptedArxiuId, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
-      final String filename = request.getParameter("nom");
-      final String contentType = request.getParameter("mime");
+        long arxiuId = -1;
+        try {
 
-      long arxiuId = HibernateFileUtil.decryptFileID(encryptedArxiuId);
-      
-      if (arxiuId == 0) {
-        FileIDEncrypter enc = HibernateFileUtil.getEncrypter();
-        log.error("+ Key = ]"+ new String(enc.getKey().getEncoded()) + "[");
-        log.error("+ Algorithm = " + enc.getAlgorithm());
-        log.error("+ EncryptedArxiuId = ]"+ encryptedArxiuId + "[");
-        // TODO TRADUIR Identificador no trobar
-        String msg = "Identificador no s'ha pogut desencriptar";
-        response.setHeader("MsgPinbalAdmin", msg);
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      } else {
-        fullDownload(arxiuId, filename, contentType, response);
-      }
+            final String filename = request.getParameter("nom");
+            final String contentType = request.getParameter("mime");
+
+            arxiuId = HibernateFileUtil.decryptFileID(encryptedArxiuId);
+
+            if (arxiuId == 0) {
+                FileIDEncrypter enc = HibernateFileUtil.getEncrypter();
+                log.error("+ Key = ]" + new String(enc.getKey().getEncoded()) + "[");
+                log.error("+ Algorithm = " + enc.getAlgorithm());
+                log.error("+ EncryptedArxiuId = ]" + encryptedArxiuId + "[");
+                // TODO TRADUIR Identificador no trobar
+                String msg = "Identificador no s'ha pogut desencriptar";
+                response.setHeader("MsgPinbalAdmin", msg);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                fullDownload(arxiuId, filename, contentType, response);
+            }
+        } catch (Exception e) {
+            log.error(" Error no controlat descarregant fitxer amb ID:" + arxiuId + "(encripted: " + encryptedArxiuId
+                    + "[): " + e.getMessage(), e);
+            throw e;
+        }
     }
 
     /**
@@ -86,6 +94,7 @@ public class FileDownloadController {
         if (!file.exists()) {
           // TODO TRADUIR Fitxer no trobat
           String msg = "Fitxer amb ID=" + arxiuId + " no existeix.";
+          log.error(msg + " => " + file.getAbsolutePath(), new Exception());
           response.setHeader("MsgPinbalAdmin", msg);
           response.sendError(HttpServletResponse.SC_NOT_FOUND);
           return;

@@ -1200,21 +1200,21 @@
                                 <c:if test="${!isPublic}">
                       
                                     <a class="btn btn-sm btn-warning" role="button"
-                                        data-toggle="modal"
+                                        
                                         href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
                                         <i class="<%=IconUtils.ICON_ENVELOPE%>"></i> Enviar Correu al
                                         Contacte
                                     </a>
 
                                     <a class="btn btn-info btn-sm" role="button"
-                                        data-toggle="modal"
+                                        
                                         href="<c:url value="${urlToEditItem}"/>"> <i
                                         class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
                                     </a>
 
                                     <c:if test="${not empty urlToCloseItem}">
                                         <a class="btn btn-danger btn-sm" role="button"
-                                            data-toggle="modal"
+                                            
                                             href="<c:url value="${urlToCloseItem}"/>">
                                             <i class="fas fa-window-close"></i> Tancar ${tipus}
                                         </a>
@@ -1231,7 +1231,7 @@
                                 </c:if>
 
                                 <%--
-                    <a class="btn btn-sm" role="button" style="margin:5px" data-toggle="modal"  onclick="${urlnou}">
+                    <a class="btn btn-sm" role="button" style="margin:5px"   onclick="${urlnou}">
                          <i class="<%=IconUtils.ICON_PLUS_SIGN%>"></i> Nova Entrada
                     </a>
 --%>

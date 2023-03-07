@@ -4,7 +4,10 @@ package org.fundaciobit.pinbaladmin.ws.test;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+
+import javax.xml.ws.BindingProvider;
 
 import org.apache.log4j.Logger;
 
@@ -52,18 +55,20 @@ public class Exemple {
         // Adreça servidor
         String endpoint = getEndPoint();
         SistraTipusProcedimentFacadeService service;
-        log.info("endpoint " + endpoint);
+        System.out.println("endpoint " + endpoint);
 
         URL wsdl = new URL(endpoint + "?wsdl");
         service = new SistraTipusProcedimentFacadeService(wsdl);
         api = service.getSistraTipusProcedimentFacade();
-/*
+
         Map<String, Object> reqContext;
         reqContext = ((BindingProvider) api).getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+        /*
         reqContext.put(BindingProvider.USERNAME_PROPERTY, usr_app);
         reqContext.put(BindingProvider.PASSWORD_PROPERTY, pwd_app);
         */
+        
       }
       
       String id = "12341234124312";
