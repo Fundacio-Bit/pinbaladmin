@@ -74,7 +74,7 @@ import es.caib.sistra.ws.v2.model.valoresdominio.Filas;
 @Stateless(name = "SistraDominiEntitatsEJB")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 @WebContext(contextRoot = "/pinbaladmin/ws", urlPattern = "/dominisistra/entitats", transportGuarantee = TransportGuarantee.NONE, secureWSDLAccess = false)
-@javax.jws.WebService(serviceName = "SistraEntitatsFacadeService", portName = "SistraConsentimentFacade", targetNamespace = "urn:es:caib:sistra:ws:v2:services",
+@javax.jws.WebService(serviceName = "SistraEntitatsFacadeService", portName = "SistraEntitatsFacade", targetNamespace = "urn:es:caib:sistra:ws:v2:services",
 // wsdlLocation = "SistraFacade.wsdl",
 endpointInterface = "es.caib.sistra.ws.v2.services.SistraEntitatsFacade")
 public class SistraEntitatsFacadeImpl implements SistraEntitatsFacade {

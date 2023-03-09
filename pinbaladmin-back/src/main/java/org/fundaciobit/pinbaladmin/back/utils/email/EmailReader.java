@@ -10,6 +10,7 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Store;
 
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 
 /**
@@ -24,6 +25,11 @@ public class EmailReader {
   /**
    * @param properties
    */
+  public EmailReader(boolean enableCertificationCheck) {
+      this(Configuracio.getFilesProperties(),  enableCertificationCheck);
+  }
+  
+  
   public EmailReader(Properties properties, boolean enableCertificationCheck) {
     super();
     this.properties = properties;
@@ -66,7 +72,8 @@ public class EmailReader {
         EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg, true);
         return e;
       } catch (java.lang.IndexOutOfBoundsException e) {
-        return null;
+         e.printStackTrace(System.err);
+         return null;
       }
     } finally {
       // disconnect

@@ -35,8 +35,8 @@ import java.util.ResourceBundle;
 endpointInterface = "es.caib.sistra.ws.v2.services.SistraConsentimentFacade")
 public class SistraConsentimentFacadeImpl implements SistraConsentimentFacade {
 
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.ServeiService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.ServeiService serveiEjb;
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.WebServicesLogicaService.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.logic.WebServicesLogicaService webServicesEjb;
 
   private final Logger log = Logger.getLogger(getClass());
 
@@ -47,6 +47,7 @@ public class SistraConsentimentFacadeImpl implements SistraConsentimentFacade {
    * Retorna les les opcions possibles de consentiment pel servei, amb un codi (noop, si o llei), i
    * el valor conté el nom de l'opció traduit.
    */
+  @PermitAll
   public es.caib.sistra.ws.v2.model.valoresdominio.ValoresDominio obtenerDominio(
       String id, es.caib.sistra.ws.v2.model.sistrafacade.ParametrosDominio parametros)
       throws SistraFacadeException {
@@ -80,7 +81,7 @@ public class SistraConsentimentFacadeImpl implements SistraConsentimentFacade {
         }
       }
 
-      List<Servei> serveis = serveiEjb.select(ServeiFields.CODI.equal(codi));
+      List<Servei> serveis = webServicesEjb.serveiEjbSelect(ServeiFields.CODI.equal(codi));
       if (serveis.isEmpty()) {
         _return.setError(true);
         _return.setDescripcionError("No s'ha trobat cap servei amb el codi " + codi);

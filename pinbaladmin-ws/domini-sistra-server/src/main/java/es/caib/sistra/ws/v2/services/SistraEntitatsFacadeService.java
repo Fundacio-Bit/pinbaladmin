@@ -21,7 +21,7 @@ public class SistraEntitatsFacadeService extends Service {
     public final static URL WSDL_LOCATION;
 
     public final static QName SERVICE = new QName("urn:es:caib:sistra:ws:v2:services", "SistraEntitatsFacadeService");
-    public final static QName SistraEntitatsFacade = new QName("urn:es:caib:sistra:ws:v2:services", "SistraConsentimentFacade");
+    public final static QName SistraEntitatsFacade = new QName("urn:es:caib:sistra:ws:v2:services", "SistraEntitatsFacade");
     static {
         URL url = SistraEntitatsFacadeService.class.getResource("SistraFacade.wsdl");
         if (url == null) {
@@ -51,9 +51,9 @@ public class SistraEntitatsFacadeService extends Service {
     /**
      *
      * @return
-     *     returns SistraConsentimentFacade
+     *     returns SistraEntitatsFacade
      */
-    @WebEndpoint(name = "SistraConsentimentFacade")
+    @WebEndpoint(name = "SistraEntitatsFacade")
     public SistraEntitatsFacade getSistraEntitatsFacade() {
         return super.getPort(SistraEntitatsFacade, SistraEntitatsFacade.class);
     }
@@ -63,9 +63,9 @@ public class SistraEntitatsFacadeService extends Service {
      * @param features
      *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
-     *     returns SistraConsentimentFacade
+     *     returns SistraEntitatsFacade
      */
-    @WebEndpoint(name = "SistraConsentimentFacade")
+    @WebEndpoint(name = "SistraEntitatsFacade")
     public SistraEntitatsFacade getSistraEntitatsFacade(WebServiceFeature... features) {
         return super.getPort(SistraEntitatsFacade, SistraEntitatsFacade.class, features);
     }

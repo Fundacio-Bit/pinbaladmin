@@ -387,7 +387,7 @@ public class EmailController
       return null;
     }
     try {
-      Email email = emailEjb.findByPrimaryKey(emailID);
+      Email email = this.findByPrimaryKey(request, emailID);
       if (email == null) {
         String __msg =createMessageError(request, "error.notfound", emailID);
         return getRedirectWhenDelete(request, emailID, new Exception(__msg));

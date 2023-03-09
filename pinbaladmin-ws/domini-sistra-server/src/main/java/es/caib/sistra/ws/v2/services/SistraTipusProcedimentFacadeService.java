@@ -10,15 +10,15 @@ import java.net.URL;
 /**
  * @author anadal
  */
-@WebServiceClient(name = "SistraConsentimentFacadeService",
+@WebServiceClient(name = "SistraTipusProcedimentFacadeService",
                   wsdlLocation = "SistraFacade.wsdl",
                   targetNamespace = "urn:es:caib:sistra:ws:v2:services") 
 public class SistraTipusProcedimentFacadeService extends Service {
 
     public final static URL WSDL_LOCATION;
 
-    public final static QName SERVICE = new QName("urn:es:caib:sistra:ws:v2:services", "SistraConsentimentFacadeService");
-    public final static QName SistraConsentimentFacade = new QName("urn:es:caib:sistra:ws:v2:services", "SistraConsentimentFacade");
+    public final static QName SERVICE = new QName("urn:es:caib:sistra:ws:v2:services", "SistraTipusProcedimentFacadeService");
+    public final static QName SistraTipusProcedimentFacade = new QName("urn:es:caib:sistra:ws:v2:services", "SistraTipusProcedimentFacade");
     static {
         URL url = SistraTipusProcedimentFacadeService.class.getResource("SistraFacade.wsdl");
         if (url == null) {
@@ -48,11 +48,11 @@ public class SistraTipusProcedimentFacadeService extends Service {
     /**
      *
      * @return
-     *     returns SistraConsentimentFacade
+     *     returns SistraTipusProcedimentFacade
      */
-    @WebEndpoint(name = "SistraConsentimentFacade")
-    public SistraConsentimentFacade getSistraConsentimentFacade() {
-        return super.getPort(SistraConsentimentFacade, SistraConsentimentFacade.class);
+    @WebEndpoint(name = "SistraTipusProcedimentFacade")
+    public SistraTipusProcedimentFacade getSistraTipusProcedimentFacade() {
+        return super.getPort(SistraTipusProcedimentFacade, SistraTipusProcedimentFacade.class);
     }
 
     /**
@@ -60,11 +60,11 @@ public class SistraTipusProcedimentFacadeService extends Service {
      * @param features
      *     A list of {@link WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
-     *     returns SistraConsentimentFacade
+     *     returns SistraTipusProcedimentFacade
      */
-    @WebEndpoint(name = "SistraConsentimentFacade")
-    public SistraConsentimentFacade getSistraConsentimentFacade(WebServiceFeature... features) {
-        return super.getPort(SistraConsentimentFacade, SistraConsentimentFacade.class, features);
+    @WebEndpoint(name = "SistraTipusProcedimentFacade")
+    public SistraTipusProcedimentFacade getSistraTipusProcedimentFacade(WebServiceFeature... features) {
+        return super.getPort(SistraTipusProcedimentFacade, SistraTipusProcedimentFacade.class, features);
     }
 
 }

@@ -35,14 +35,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ValoresDominio }
-     * 
-     */
-    public ValoresDominio createValoresDominio() {
-        return new ValoresDominio();
-    }
-
-    /**
      * Create an instance of {@link Fila }
      * 
      */
@@ -56,6 +48,14 @@ public class ObjectFactory {
      */
     public Filas createFilas() {
         return new Filas();
+    }
+
+    /**
+     * Create an instance of {@link ValoresDominio }
+     * 
+     */
+    public ValoresDominio createValoresDominio() {
+        return new ValoresDominio();
     }
 
     /**
