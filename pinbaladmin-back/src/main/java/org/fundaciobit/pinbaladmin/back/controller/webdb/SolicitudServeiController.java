@@ -464,9 +464,9 @@ public class SolicitudServeiController
       return null;
     }
     try {
-      SolicitudServei solicitudServei = solicitudServeiEjb.findByPrimaryKey(id);
+      SolicitudServei solicitudServei = this.findByPrimaryKey(request, id);
       if (solicitudServei == null) {
-        String __msg =createMessageError(request, "error.notfound", id);
+        String __msg = createMessageError(request, "error.notfound", id);
         return getRedirectWhenDelete(request, id, new Exception(__msg));
       } else {
         delete(request, solicitudServei);

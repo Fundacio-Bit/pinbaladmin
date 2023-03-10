@@ -430,9 +430,9 @@ public class DocumentEntitatController
       return null;
     }
     try {
-      DocumentEntitat documentEntitat = documentEntitatEjb.findByPrimaryKey(documentEntitatID);
+      DocumentEntitat documentEntitat = this.findByPrimaryKey(request, documentEntitatID);
       if (documentEntitat == null) {
-        String __msg =createMessageError(request, "error.notfound", documentEntitatID);
+        String __msg = createMessageError(request, "error.notfound", documentEntitatID);
         return getRedirectWhenDelete(request, documentEntitatID, new Exception(__msg));
       } else {
         delete(request, documentEntitat);

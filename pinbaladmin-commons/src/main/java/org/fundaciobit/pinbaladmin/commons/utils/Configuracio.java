@@ -107,7 +107,7 @@ public class Configuracio implements Constants {
     }
 
     public static String getAppUrl() {
-        return System.getProperty(PINBALADMIN_PROPERTY_BASE + "url");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "url");
     }
 
     public static String getDefaultLanguage() {
@@ -130,18 +130,18 @@ public class Configuracio implements Constants {
         String path = getProperty(PINBALADMIN_PROPERTY_BASE + "filesdirectory");
         if (path == null) {
             throw new RuntimeException("No existeix la propietat '" + PINBALADMIN_PROPERTY_BASE + "filesdirectory'"
-                    + " al fitxer " + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + " al fitxer " + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + ". S'hauria d'anar al fitxer "
-                    + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties") + " i incloure la propietat '"
+                    + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties") + " i incloure la propietat '"
                     + PINBALADMIN_PROPERTY_BASE + "filesdirectory'"
                     + " amb una ruta al directori on l'aplició gestionara els fitxers.");
         }
 
         if (path.isEmpty()) {
             throw new RuntimeException("No s'ha definit la propietat '" + PINBALADMIN_PROPERTY_BASE + "filesdirectory'"
-                    + " al fitxer " + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + " al fitxer " + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + ". S'hauria d'anar al fitxer "
-                    + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + " i donar valor a la propietat '" + PINBALADMIN_PROPERTY_BASE + "filesdirectory'"
                     + " amb una ruta al directori on l'aplició gestionara els fitxers.");
         }
@@ -151,7 +151,7 @@ public class Configuracio implements Constants {
         if (!filesFolder.exists()) {
             throw new RuntimeException("El directori indicat a la propietat '" + PINBALADMIN_PROPERTY_BASE
                     + ".filesdirectory'" + " del fitxer "
-                    + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + " no existeix. S'hauria de modificar la ruta indicada per la d'un directori existent, o crear un directori amb la ruta: "
                     + path);
         }
@@ -159,14 +159,14 @@ public class Configuracio implements Constants {
         if (!filesFolder.isDirectory()) {
             throw new RuntimeException("El directori indicat a la propietat '" + PINBALADMIN_PROPERTY_BASE
                     + ".filesdirectory'" + " del fitxer "
-                    + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + " no es un directori, probablement es tracti d'un fitxer. S'hauria de modificar la ruta indicada per la d'un directori existent.");
         }
 
         if (!filesFolder.canWrite()) {
             throw new RuntimeException("El directori indicat a la propietat '" + PINBALADMIN_PROPERTY_BASE
                     + ".filesdirectory'" + " del fitxer "
-                    + System.getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
+                    + getProperty(PINBALADMIN_PROPERTY_BASE + "system.properties")
                     + " es un directori sense permisos d'escriptura. S'haurien de donar permisos d'escriptura al directori, o canviar la ruta a un directori amb permisos.");
         }
         return new File(path);
@@ -202,19 +202,19 @@ public class Configuracio implements Constants {
     }
 
     public static String getTemplateFormulari() {
-        return System.getProperty(PINBALADMIN_PROPERTY_BASE + "template_formulari");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "template_formulari");
     }
 
     public static String getTemplateServeisExcel() {
-        return System.getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
     }
 
     public static String getCAIDSeleniumUrl() {
-        return System.getProperty(PINBALADMIN_PROPERTY_BASE + "caidseleniumurl");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "caidseleniumurl");
     }
 
     public static String getVersioPinbal() {
-        return System.getProperty(PINBALADMIN_PROPERTY_BASE + "versiopinbal");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "versiopinbal");
     }
 
 }

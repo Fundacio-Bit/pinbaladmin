@@ -401,9 +401,9 @@ public class DocumentController
       return null;
     }
     try {
-      Document document = documentEjb.findByPrimaryKey(documentID);
+      Document document = this.findByPrimaryKey(request, documentID);
       if (document == null) {
-        String __msg =createMessageError(request, "error.notfound", documentID);
+        String __msg = createMessageError(request, "error.notfound", documentID);
         return getRedirectWhenDelete(request, documentID, new Exception(__msg));
       } else {
         delete(request, document);

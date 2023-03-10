@@ -440,9 +440,9 @@ public class GrupEntitatCedentController
       return null;
     }
     try {
-      GrupEntitatCedent grupEntitatCedent = grupEntitatCedentEjb.findByPrimaryKey(grupEntitatCedentID);
+      GrupEntitatCedent grupEntitatCedent = this.findByPrimaryKey(request, grupEntitatCedentID);
       if (grupEntitatCedent == null) {
-        String __msg =createMessageError(request, "error.notfound", grupEntitatCedentID);
+        String __msg = createMessageError(request, "error.notfound", grupEntitatCedentID);
         return getRedirectWhenDelete(request, grupEntitatCedentID, new Exception(__msg));
       } else {
         delete(request, grupEntitatCedent);

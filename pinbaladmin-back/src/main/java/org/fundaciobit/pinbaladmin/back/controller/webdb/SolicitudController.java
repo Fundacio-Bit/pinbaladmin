@@ -500,9 +500,9 @@ public class SolicitudController
       return null;
     }
     try {
-      Solicitud solicitud = solicitudEjb.findByPrimaryKey(solicitudID);
+      Solicitud solicitud = this.findByPrimaryKey(request, solicitudID);
       if (solicitud == null) {
-        String __msg =createMessageError(request, "error.notfound", solicitudID);
+        String __msg = createMessageError(request, "error.notfound", solicitudID);
         return getRedirectWhenDelete(request, solicitudID, new Exception(__msg));
       } else {
         delete(request, solicitud);

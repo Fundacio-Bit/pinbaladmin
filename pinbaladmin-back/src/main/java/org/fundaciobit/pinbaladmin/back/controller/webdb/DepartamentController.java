@@ -416,9 +416,9 @@ public class DepartamentController
       return null;
     }
     try {
-      Departament departament = departamentEjb.findByPrimaryKey(departamentID);
+      Departament departament = this.findByPrimaryKey(request, departamentID);
       if (departament == null) {
-        String __msg =createMessageError(request, "error.notfound", departamentID);
+        String __msg = createMessageError(request, "error.notfound", departamentID);
         return getRedirectWhenDelete(request, departamentID, new Exception(__msg));
       } else {
         delete(request, departament);

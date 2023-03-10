@@ -155,7 +155,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
   public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException {
 
     SolicitudJPA s = this.findByPrimaryKey(_ID_);
-
+    
     Hibernate.initialize(s.getSolicitudServeis());
 
     Set<SolicitudServeiJPA> ssList = s.getSolicitudServeis();

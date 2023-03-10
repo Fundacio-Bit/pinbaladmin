@@ -17,7 +17,7 @@
 	<name>PinbalAdmin - Back</name>
 	
 	<properties>
-        <xdocreport.version>2.0.2</xdocreport.version>
+        <xdocreport.version>2.0.4</xdocreport.version>
     </properties>
 
 	<repositories>
@@ -364,6 +364,13 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.23</version>
         </dependency>
+        
+        
+       <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.12.0.SP02-redhat-00001</version>
+       </dependency>
 
 
 

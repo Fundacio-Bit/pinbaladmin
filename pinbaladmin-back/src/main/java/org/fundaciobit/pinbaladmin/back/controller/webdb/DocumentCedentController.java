@@ -430,9 +430,9 @@ public class DocumentCedentController
       return null;
     }
     try {
-      DocumentCedent documentCedent = documentCedentEjb.findByPrimaryKey(documentCedentID);
+      DocumentCedent documentCedent = this.findByPrimaryKey(request, documentCedentID);
       if (documentCedent == null) {
-        String __msg =createMessageError(request, "error.notfound", documentCedentID);
+        String __msg = createMessageError(request, "error.notfound", documentCedentID);
         return getRedirectWhenDelete(request, documentCedentID, new Exception(__msg));
       } else {
         delete(request, documentCedent);

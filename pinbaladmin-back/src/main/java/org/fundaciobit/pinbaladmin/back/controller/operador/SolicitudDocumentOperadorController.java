@@ -107,7 +107,7 @@ public class SolicitudDocumentOperadorController
 
         documentFilterForm.setAddButtonVisible(false);
         documentFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
-            "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", ""));
+            "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", "btn-warning"));
         
 
         documentFilterForm.setVisibleMultipleSelection(false);

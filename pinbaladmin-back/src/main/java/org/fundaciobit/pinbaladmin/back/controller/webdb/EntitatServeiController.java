@@ -390,9 +390,9 @@ public class EntitatServeiController
       return null;
     }
     try {
-      EntitatServei entitatServei = entitatServeiEjb.findByPrimaryKey(entitatServeiID);
+      EntitatServei entitatServei = this.findByPrimaryKey(request, entitatServeiID);
       if (entitatServei == null) {
-        String __msg =createMessageError(request, "error.notfound", entitatServeiID);
+        String __msg = createMessageError(request, "error.notfound", entitatServeiID);
         return getRedirectWhenDelete(request, entitatServeiID, new Exception(__msg));
       } else {
         delete(request, entitatServei);

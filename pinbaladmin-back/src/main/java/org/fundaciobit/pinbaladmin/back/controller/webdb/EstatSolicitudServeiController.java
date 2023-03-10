@@ -387,9 +387,9 @@ public class EstatSolicitudServeiController
       return null;
     }
     try {
-      EstatSolicitudServei estatSolicitudServei = estatSolicitudServeiEjb.findByPrimaryKey(estatSolicitudServeiID);
+      EstatSolicitudServei estatSolicitudServei = this.findByPrimaryKey(request, estatSolicitudServeiID);
       if (estatSolicitudServei == null) {
-        String __msg =createMessageError(request, "error.notfound", estatSolicitudServeiID);
+        String __msg = createMessageError(request, "error.notfound", estatSolicitudServeiID);
         return getRedirectWhenDelete(request, estatSolicitudServeiID, new Exception(__msg));
       } else {
         delete(request, estatSolicitudServei);

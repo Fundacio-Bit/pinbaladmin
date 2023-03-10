@@ -416,9 +416,9 @@ public class CampFormulariController
       return null;
     }
     try {
-      CampFormulari campFormulari = campFormulariEjb.findByPrimaryKey(campFormulariID);
+      CampFormulari campFormulari = this.findByPrimaryKey(request, campFormulariID);
       if (campFormulari == null) {
-        String __msg =createMessageError(request, "error.notfound", campFormulariID);
+        String __msg = createMessageError(request, "error.notfound", campFormulariID);
         return getRedirectWhenDelete(request, campFormulariID, new Exception(__msg));
       } else {
         delete(request, campFormulari);

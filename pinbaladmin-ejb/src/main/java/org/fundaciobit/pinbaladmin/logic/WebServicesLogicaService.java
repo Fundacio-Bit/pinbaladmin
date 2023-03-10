@@ -1,7 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Local;
 

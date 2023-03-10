@@ -387,9 +387,9 @@ public class EstatTiquetController
       return null;
     }
     try {
-      EstatTiquet estatTiquet = estatTiquetEjb.findByPrimaryKey(estatTiquetID);
+      EstatTiquet estatTiquet = this.findByPrimaryKey(request, estatTiquetID);
       if (estatTiquet == null) {
-        String __msg =createMessageError(request, "error.notfound", estatTiquetID);
+        String __msg = createMessageError(request, "error.notfound", estatTiquetID);
         return getRedirectWhenDelete(request, estatTiquetID, new Exception(__msg));
       } else {
         delete(request, estatTiquet);

@@ -401,9 +401,9 @@ public class FormulariController
       return null;
     }
     try {
-      Formulari formulari = formulariEjb.findByPrimaryKey(formulariid);
+      Formulari formulari = this.findByPrimaryKey(request, formulariid);
       if (formulari == null) {
-        String __msg =createMessageError(request, "error.notfound", formulariid);
+        String __msg = createMessageError(request, "error.notfound", formulariid);
         return getRedirectWhenDelete(request, formulariid, new Exception(__msg));
       } else {
         delete(request, formulari);

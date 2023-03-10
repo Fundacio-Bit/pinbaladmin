@@ -440,9 +440,9 @@ public class DocumentSolicitudController
       return null;
     }
     try {
-      DocumentSolicitud documentSolicitud = documentSolicitudEjb.findByPrimaryKey(documentSolicitudID);
+      DocumentSolicitud documentSolicitud = this.findByPrimaryKey(request, documentSolicitudID);
       if (documentSolicitud == null) {
-        String __msg =createMessageError(request, "error.notfound", documentSolicitudID);
+        String __msg = createMessageError(request, "error.notfound", documentSolicitudID);
         return getRedirectWhenDelete(request, documentSolicitudID, new Exception(__msg));
       } else {
         delete(request, documentSolicitud);

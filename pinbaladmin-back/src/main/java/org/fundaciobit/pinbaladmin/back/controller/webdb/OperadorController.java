@@ -387,9 +387,9 @@ public class OperadorController
       return null;
     }
     try {
-      Operador operador = operadorEjb.findByPrimaryKey(operadorID);
+      Operador operador = this.findByPrimaryKey(request, operadorID);
       if (operador == null) {
-        String __msg =createMessageError(request, "error.notfound", operadorID);
+        String __msg = createMessageError(request, "error.notfound", operadorID);
         return getRedirectWhenDelete(request, operadorID, new Exception(__msg));
       } else {
         delete(request, operador);

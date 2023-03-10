@@ -487,9 +487,9 @@ public class ServeiController
       return null;
     }
     try {
-      Servei servei = serveiEjb.findByPrimaryKey(serveiID);
+      Servei servei = this.findByPrimaryKey(request, serveiID);
       if (servei == null) {
-        String __msg =createMessageError(request, "error.notfound", serveiID);
+        String __msg = createMessageError(request, "error.notfound", serveiID);
         return getRedirectWhenDelete(request, serveiID, new Exception(__msg));
       } else {
         delete(request, servei);

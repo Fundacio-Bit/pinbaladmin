@@ -452,9 +452,9 @@ public class IncidenciaTecnicaController
       return null;
     }
     try {
-      IncidenciaTecnica incidenciaTecnica = incidenciaTecnicaEjb.findByPrimaryKey(incidenciaTecnicaID);
+      IncidenciaTecnica incidenciaTecnica = this.findByPrimaryKey(request, incidenciaTecnicaID);
       if (incidenciaTecnica == null) {
-        String __msg =createMessageError(request, "error.notfound", incidenciaTecnicaID);
+        String __msg = createMessageError(request, "error.notfound", incidenciaTecnicaID);
         return getRedirectWhenDelete(request, incidenciaTecnicaID, new Exception(__msg));
       } else {
         delete(request, incidenciaTecnica);

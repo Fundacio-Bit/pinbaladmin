@@ -440,9 +440,9 @@ public class CampSolicitudController
       return null;
     }
     try {
-      CampSolicitud campSolicitud = campSolicitudEjb.findByPrimaryKey(campSolicitudID);
+      CampSolicitud campSolicitud = this.findByPrimaryKey(request, campSolicitudID);
       if (campSolicitud == null) {
-        String __msg =createMessageError(request, "error.notfound", campSolicitudID);
+        String __msg = createMessageError(request, "error.notfound", campSolicitudID);
         return getRedirectWhenDelete(request, campSolicitudID, new Exception(__msg));
       } else {
         delete(request, campSolicitud);

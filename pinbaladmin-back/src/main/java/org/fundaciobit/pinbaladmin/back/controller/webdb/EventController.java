@@ -477,9 +477,9 @@ public class EventController
       return null;
     }
     try {
-      Event event = eventEjb.findByPrimaryKey(eventID);
+      Event event = this.findByPrimaryKey(request, eventID);
       if (event == null) {
-        String __msg =createMessageError(request, "error.notfound", eventID);
+        String __msg = createMessageError(request, "error.notfound", eventID);
         return getRedirectWhenDelete(request, eventID, new Exception(__msg));
       } else {
         delete(request, event);

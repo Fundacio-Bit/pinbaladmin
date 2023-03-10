@@ -474,9 +474,9 @@ public class TiquetController
       return null;
     }
     try {
-      Tiquet tiquet = tiquetEjb.findByPrimaryKey(tiquetID);
+      Tiquet tiquet = this.findByPrimaryKey(request, tiquetID);
       if (tiquet == null) {
-        String __msg =createMessageError(request, "error.notfound", tiquetID);
+        String __msg = createMessageError(request, "error.notfound", tiquetID);
         return getRedirectWhenDelete(request, tiquetID, new Exception(__msg));
       } else {
         delete(request, tiquet);
