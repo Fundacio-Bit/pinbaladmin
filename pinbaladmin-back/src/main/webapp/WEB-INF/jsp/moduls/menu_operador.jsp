@@ -40,7 +40,7 @@
                 </a>
             </c:if> <c:if test="${solicitudsLocalsMeves ne 0}">
                 <a href="<c:url value="/operador/solicitudlocalnollegitmeu/list"/>"> <span
-                    class="badge badge-important">${solicitudsLocalsMeves}</span>
+                    class="badge badge-danger">${solicitudsLocalsMeves}</span>
                 </a>
             </c:if></li>
 
@@ -121,7 +121,7 @@
                 </a>
             </c:if> <c:if test="${incidenciesMeves ne 0}">
                 <a href="<c:url value="/operador/incidencianollegitmeu/list"/>"> <span
-                    class="badge badge-important">${incidenciesMeves}</span>
+                    class="badge badge-danger">${incidenciesMeves}</span>
                 </a>
             </c:if></li>
 

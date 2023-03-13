@@ -23,10 +23,13 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.model.bean.EventBean;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -104,23 +107,49 @@ public class QueEsticFentOperadorController {
 
         log.info("remote user: " + username);
 
-        Where w = Where.AND(EventFields.PERSONA.equal(username),
-
-                EventFields.DATAEVENT.between(from, to)
-
-        );
-
         mav.addObject("data", dateStr);
 
         try {
-            
-            List<Event> events = eventEjb.select(w);
 
+            List<Event> fullevents = new ArrayList<Event>();
+
+            // (1) Consultam sol·licituds
+            {
+                final Where w1 = SolicitudFields.CREADOR.equal(username);
+                final Where w2 = SolicitudFields.DATAINICI.between(from, to);
+                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, w2));
+                // Convertin a Event
+                for (Solicitud solicitud : solis) {
+                    Event ev = new EventBean();
+                    ev.setSolicitudID(solicitud.getSolicitudID());
+                    fullevents.add(ev);
+                }
+            }
+
+            // (2) Consultam incidencies
+            {
+                final Where w1 = IncidenciaTecnicaFields.CREADOR.equal(username);
+                final Where w2 = IncidenciaTecnicaFields.DATAINICI.between(from, to);
+                List<IncidenciaTecnica> its = incidenciaTecnicaLogicaEjb.select(Where.AND(w1, w2));
+                // Convertin a Event
+                for (IncidenciaTecnica ic : its) {
+                    Event ev = new EventBean();
+                    ev.setIncidenciaTecnicaID(ic.getIncidenciaTecnicaID());
+                    fullevents.add(ev);
+                }
+            }
+
+            // (3) Consultam events
+            {
+                final Where w = Where.AND(EventFields.PERSONA.equal(username), EventFields.DATAEVENT.between(from, to));
+                List<Event> events = eventEjb.select(w);
+                fullevents.addAll(events);
+            }
             log.info("Queesticfent: #events");
 
             List<String> items = new ArrayList<String>();
 
-            for (Event event : events) {
+            for (Event event : fullevents) {
 
                 boolean esSoli = (event.getSolicitudID() != null);
 

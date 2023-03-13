@@ -538,7 +538,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
         final String color;
         if (loginUserName.equals(user)) {
-          color = "important";
+          color = "danger";
         } else {
           color = "warning";
         }
