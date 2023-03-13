@@ -43,167 +43,166 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
 public class QueEsticFentOperadorController {
 
-  protected static final Logger log = Logger.getLogger(QueEsticFentOperadorController.class);
+    protected static final Logger log = Logger.getLogger(QueEsticFentOperadorController.class);
 
-  public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.EventService eventEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.EventService eventEjb;
 
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.SolicitudService solicitudEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.SolicitudService solicitudEjb;
 
-  @EJB(mappedName = IncidenciaTecnicaLogicaService.JNDI_NAME)
-  protected IncidenciaTecnicaLogicaService incidenciaTecnicaLogicaEjb;
+    @EJB(mappedName = IncidenciaTecnicaLogicaService.JNDI_NAME)
+    protected IncidenciaTecnicaLogicaService incidenciaTecnicaLogicaEjb;
 
-  @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public ModelAndView crearEventGet(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ModelAndView listGet(HttpServletRequest request, HttpServletResponse response) {
 
-    return crearEventPost(request, response);
-  }
+        return listPost(request, response);
+    }
 
-  /**
-   * Guardar un nou Event
-   */
-  @RequestMapping(value = "/list", method = RequestMethod.POST)
-  public ModelAndView crearEventPost(HttpServletRequest request,
-      HttpServletResponse response) {
+    /**
+     * Guardar un nou Event
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public ModelAndView listPost(HttpServletRequest request, HttpServletResponse response) {
 
-    log.info("Entra a queesticfent");
+        log.info("Entra a queesticfent");
 
-    ModelAndView mav = new ModelAndView("queesticfent");
+        ModelAndView mav = new ModelAndView("queesticfent");
 
-    String dateStr = request.getParameter("data");
+        String dateStr = request.getParameter("data");
 
-    Date date;
-    if (dateStr == null || dateStr.trim().length() == 0) {
+        Date date;
+        if (dateStr == null || dateStr.trim().length() == 0) {
 
-      date = new Date();
+            date = new Date();
 
-      dateStr = SDF.format(date);
+            dateStr = SDF.format(date);
 
-    } else {
+        } else {
 
-      try {
-        date = SDF.parse(dateStr);
-      } catch (Throwable e) {
-        HtmlUtils.saveMessageError(request, "Error en el format de la data: " + dateStr);
+            try {
+                date = SDF.parse(dateStr);
+            } catch (Throwable e) {
+                HtmlUtils.saveMessageError(request, "Error en el format de la data: " + dateStr);
 
-        mav.addObject("data", SDF.format(new Date()));
+                mav.addObject("data", SDF.format(new Date()));
+
+                return mav;
+            }
+        }
+
+        Timestamp from = new Timestamp(atStartOfDay(date).getTime());
+        Timestamp to = new Timestamp(atEndOfDay(date).getTime());
+
+        log.info("from: " + from);
+        log.info("to: " + to);
+
+        final String username = request.getRemoteUser();
+
+        log.info("remote user: " + username);
+
+        Where w = Where.AND(EventFields.PERSONA.equal(username),
+
+                EventFields.DATAEVENT.between(from, to)
+
+        );
+
+        mav.addObject("data", dateStr);
+
+        try {
+            
+            List<Event> events = eventEjb.select(w);
+
+            log.info("Queesticfent: #events");
+
+            List<String> items = new ArrayList<String>();
+
+            for (Event event : events) {
+
+                boolean esSoli = (event.getSolicitudID() != null);
+
+                StringBuffer str = new StringBuffer("INTEROP: ");
+
+                String tipus;
+                String tipusTitle;
+                long id;
+                //String text;
+                if (esSoli) {
+                    tipus = "Soli";
+                    id = event.getSolicitudID();
+                    Solicitud soli = solicitudEjb.findByPrimaryKey(id);
+                    tipusTitle = soli.getProcedimentNom();
+
+                    final String cai = soli.getTicketAssociat();
+                    if (cai == null) {
+                        tipus = "Solicitud[" + id + "]";
+                    } else {
+                        tipus = "CAI-" + cai;
+                    }
+                } else {
+
+                    id = event.getIncidenciaTecnicaID();
+                    tipus = "Inc.Tec.[" + id + "]";
+                    IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
+                    tipusTitle = it.getTitol();
+                }
+
+                //text = event.getComentari();
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+
+                String dia = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+                String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
+                int any = cal.get(Calendar.YEAR);
+
+                String msg = tipus + ": " + tipusTitle;
+
+                if (msg.length() > 230) {
+                    msg = msg.substring(0, 230);
+                }
+
+                String msgEnc;
+                try {
+                    msgEnc = URLEncoder.encode(msg, StandardCharsets.ISO_8859_1.toString());
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    msgEnc = msg;
+                }
+
+                String url = "https://queesticfent.fundaciobit.org/queesticfent/NovaModificacio.jsp?usuariID="
+                        + username + "&data=" + dia + "%2F" + mes + "%2F" + any
+                        + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
+                        + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1=" + msgEnc;
+
+                str.append(msg + "  <a target=\"_blank\" href=\"" + url
+                        + "\" ><span class=\"label label-success\"><b>+</b></span> </a>");
+
+                items.add(str.toString());
+            }
+
+            mav.addObject("items", items);
+
+        } catch (I18NException e) {
+
+            HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
+
+        }
 
         return mav;
-      }
-    }
-
-    Timestamp from = new Timestamp(atStartOfDay(date).getTime());
-    Timestamp to = new Timestamp(atEndOfDay(date).getTime());
-
-    log.info("from: " + from);
-    log.info("to: " + to);
-
-    final String username = request.getRemoteUser();
-
-    log.info("remote user: " + username);
-
-    Where w = Where.AND(EventFields.PERSONA.equal(username),
-
-        EventFields.DATAEVENT.between(from, to)
-
-    );
-
-    mav.addObject("data", dateStr);
-
-    try {
-      List<Event> events = eventEjb.select(w);
-
-      log.info("Queesticfent: #events");
-
-      List<String> items = new ArrayList<String>();
-
-      for (Event event : events) {
-
-        boolean esSoli = (event.getSolicitudID() != null);
-
-        StringBuffer str = new StringBuffer("INTEROP: ");
-
-        String tipus;
-        String tipusTitle;
-        long id;
-        //String text;
-        if (esSoli) {
-          tipus = "Soli";
-          id = event.getSolicitudID();
-          Solicitud soli = solicitudEjb.findByPrimaryKey(id);
-          tipusTitle = soli.getProcedimentNom();
-          
-          final String cai = soli.getTicketAssociat();
-          if (cai == null) {
-            tipus = "Solicitud["+ id + "]";
-          } else {
-            tipus = "CAI-" + cai;
-          }
-        } else {
-          
-          id = event.getIncidenciaTecnicaID();
-          tipus = "Inc.Tec.[" + id + "]";
-          IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
-          tipusTitle = it.getTitol();
-        }
-
-        //text = event.getComentari();
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        String dia = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
-        String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
-        int any = cal.get(Calendar.YEAR);
-
-        String msg =  tipus + ": " + tipusTitle;
-
-        if (msg.length() > 230) {
-          msg = msg.substring(0, 230);
-        }
-        
-        String msgEnc;
-        try {
-          msgEnc = URLEncoder.encode(msg, StandardCharsets.ISO_8859_1.toString());
-        } catch (UnsupportedEncodingException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-          msgEnc = msg;
-        }
-
-        String url = "https://queesticfent.fundaciobit.org/queesticfent/NovaModificacio.jsp?usuariID="
-            + username + "&data=" + dia + "%2F" + mes + "%2F" + any
-            + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
-            + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1="
-            + msgEnc;
-
-        str.append(msg + "  <a target=\"_blank\" href=\"" + url
-            + "\" ><span class=\"label label-success\"><b>+</b></span> </a>");
-
-        items.add(str.toString());
-      }
-
-      mav.addObject("items", items);
-
-    } catch (I18NException e) {
-
-      HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
 
     }
 
-    return mav;
+    public static Date atEndOfDay(Date date) {
+        return DateUtils.addMilliseconds(DateUtils.ceiling(date, Calendar.DATE), -1);
+    }
 
-  }
-
-  public static Date atEndOfDay(Date date) {
-    return DateUtils.addMilliseconds(DateUtils.ceiling(date, Calendar.DATE), -1);
-  }
-
-  public static Date atStartOfDay(Date date) {
-    return DateUtils.truncate(date, Calendar.DATE);
-  }
+    public static Date atStartOfDay(Date date) {
+        return DateUtils.truncate(date, Calendar.DATE);
+    }
 
 }

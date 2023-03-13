@@ -149,6 +149,7 @@
             <url-pattern>/js/*</url-pattern>
             <url-pattern>/doc/*</url-pattern>
             <url-pattern>/error.jsp</url-pattern>
+            <url-pattern>/public/*</url-pattern>
         </web-resource-collection>
         
     </security-constraint>
