@@ -59,7 +59,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB
   
 
   @Override
-  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador)
+  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, int tipus)
       throws I18NException {
 
     java.lang.String titol = emi.getSubject();
@@ -72,8 +72,6 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB
     java.lang.String contacteTelefon = null;
     java.lang.String caidIdentificadorConsulta = null;
     java.lang.String caidNumeroSeguiment = null;
-
-    int tipus = Constants.INCIDENCIA_TIPUS_TECNICA;
 
     IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, estat,
         creador, tipus, nomEntitat, contacteNom, contacteEmail, contacteTelefon,

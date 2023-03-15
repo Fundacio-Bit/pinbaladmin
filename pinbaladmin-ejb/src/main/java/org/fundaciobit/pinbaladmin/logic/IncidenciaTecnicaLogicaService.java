@@ -22,7 +22,7 @@ public interface IncidenciaTecnicaLogicaService extends IncidenciaTecnicaService
   @PermitAll
   public org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA findByPrimaryKey(Long _ID_);
 
-  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador)
+  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, int tipus)
       throws I18NException;
 
   public void deleteFull(Long _ID) throws I18NException;
