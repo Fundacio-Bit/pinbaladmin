@@ -35,7 +35,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Crear nova incidencia</h4>
-                <button type="button" style="cursor: pointer;" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <%  request.setAttribute("currentuser", request.getRemoteUser()); %>

@@ -1176,8 +1176,6 @@
                             <h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
                         </td>
 
-
-
                         <td width="100%" align="right">
                             <div>
                                 <c:url var="theurlnew" value="${contextweb}/new" />
