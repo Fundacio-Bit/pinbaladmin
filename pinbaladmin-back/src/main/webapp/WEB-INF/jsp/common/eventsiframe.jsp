@@ -1166,8 +1166,6 @@
 
 <div class="mainwindow">
 
-
-
     <table width="100%">
         <tr valign="top">
             <td rowspan="2"><img src="<c:url value="/img/caibbg.png"/>" /></td>
@@ -1249,9 +1247,6 @@
 
         </tr>
     </table>
-    </tr>
-    <tr>
-        <td colspan="3">
             <div class="full-width"
                 style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
                 <table style="width: 100%; font-size: 1.4em">
@@ -1270,11 +1265,6 @@
                     </tbody>
                 </table>
             </div>
-        </td>
-    </tr>
-
-    <tr>
-        <td colspan="3">
 
             <div class="fondodiv2">
                 <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
@@ -1421,10 +1411,6 @@
                     </c:forEach>
                 </table>
             </div>
-        </td>
-
-    </tr>
-    </table>
     <center>
         <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
             height="${isPublic?450:475}px" onload="carregatIframe(this)"
