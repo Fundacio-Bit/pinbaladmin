@@ -1158,6 +1158,15 @@
  -webkit-text-stroke-color: rgb(89, 89, 89);
  -webkit-text-stroke-width: 0px;
 }
+
+
+
+textarea.event{
+    background-color: rgb(238, 238, 238) !important;
+    border: none;
+    resize: none;
+}
+
 </style>
 
 <!--  Missatges  -->
@@ -1431,6 +1440,16 @@
         }
         count++;
     }
+   
+   
+   window.onload = function() {
+	    var textareas =  document.getElementsByTagName("textarea");
+	      for ( let i = 0; i < textareas.length; i++ ) {
+	        var textarea = textareas[i];
+	            textarea.style.height = textarea.scrollHeight + "px";
+	      }
+	}
+
 </script>
 
 
