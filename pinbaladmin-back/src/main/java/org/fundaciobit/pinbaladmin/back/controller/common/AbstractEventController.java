@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
@@ -622,9 +623,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
       mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
     }
 
-    mav.addObject("urlMarcarComLlegides",
-        request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
-
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
     mav.addObject("titol", getTitol(item));
@@ -810,42 +808,95 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract Long getItemID(T item);
 
   @RequestMapping(value = "/marcarcomllegida/{itemID}", method = RequestMethod.GET)
-  public String marcarEntradesComLlegides(HttpServletRequest request,
-      HttpServletResponse response, @PathVariable Long itemID) {
+  public String marcarEntradesComLlegides(HttpServletRequest request, HttpServletResponse response,
+          @PathVariable Long itemID) {
 
-    Where wComu;
-    // StringField creador;
-    if (isSolicitud()) {
-      // creador = new EventQueryPath().SOLICITUD().CREADOR();
-      wComu = EventFields.SOLICITUDID.equal(itemID);
-    } else {
-      // creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
-      wComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
-    }
-
-    List<Event> eventsNoLlegits;
-    try {
-      eventsNoLlegits = eventLogicaEjb
-          .select(Where.AND(wComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
-
-      for (Event event : eventsNoLlegits) {
-        event.setNoLlegit(false);
-        eventLogicaEjb.update(event);
+      //Where per obtenir els events de la incidencia/solicitud especifica
+      Where whereComu;
+      
+      if (isSolicitud()) {
+          whereComu = EventFields.SOLICITUDID.equal(itemID);
+      } else {
+          whereComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
       }
 
-    } catch (I18NException e) {
-      // TODO Auto-generated catch block
-      String msg = "Error marcant com a llegits les entrades de " + itemID + ": "
-          + I18NUtils.getMessage(e);
+      List<Event> eventsNoLlegits;
+      try {
+          eventsNoLlegits = eventLogicaEjb.select(Where.AND(whereComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
 
-      log.error(msg, e);
+          for (Event event : eventsNoLlegits) {
+              event.setNoLlegit(false);
+              eventLogicaEjb.update(event);
+          }
 
-      HtmlUtils.saveMessageError(request, msg);
+      } catch (I18NException e) {
+          // TODO Auto-generated catch block
+          String msg = "Error marcant com a llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
+          log.error(msg, e);
+          HtmlUtils.saveMessageError(request, msg);
+      }
+      return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
 
-    }
+  @RequestMapping(value = "/marcarcomnollegida/{itemID}", method = RequestMethod.GET)
+  public String marcarEntradesComNoLlegides(HttpServletRequest request, HttpServletResponse response,
+          @PathVariable Long itemID) {
 
-    return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+      //Where per obtenir els events de la incidencia/solicitud especifica
+      Where whereComu;
+      
+      if (isSolicitud()) {
+          whereComu = EventFields.SOLICITUDID.equal(itemID);
+      } else {
+          whereComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
+      }
 
+      List<Event> eventsNoLlegits;
+      try {
+          eventsNoLlegits = eventLogicaEjb.select(whereComu);
+
+          for (Event event : eventsNoLlegits) {
+              event.setNoLlegit(true);
+              eventLogicaEjb.update(event);
+          }
+
+      } catch (I18NException e) {
+          // TODO Auto-generated catch block
+          String msg = "Error marcant com a no llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
+          log.error(msg, e);
+          HtmlUtils.saveMessageError(request, msg);
+      }
+      return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
+
+  @Override
+  public void postList(HttpServletRequest request, ModelAndView mav, EventFilterForm filterForm, List<Event> list)
+          throws I18NException {
+
+      if (list.size() > 0) {
+          int noLlegits = 0;
+          for (Event event : list) {
+              if (event.isNoLlegit()) {
+                  noLlegits++;
+              }
+          }
+          
+          long itemID;
+          
+          if (isSolicitud()) {
+              itemID = list.get(0).getSolicitudID();
+          } else {
+              itemID = list.get(0).getIncidenciaTecnicaID();
+          }
+          
+          if (noLlegits == 0) {
+              mav.addObject("urlMarcarComNoLlegides",
+                      request.getContextPath() + getContextWeb() + "/marcarcomnollegida/" + itemID);
+          } else {
+              mav.addObject("urlMarcarComLlegides",
+                      request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
+          }
+      }
   }
 
 }

@@ -1225,6 +1225,14 @@ textarea.event{
                                         </a>
                                     </c:if>
 
+                                    <c:if test="${not empty urlMarcarComNoLlegides}">
+                                        <a class="btn btn-warning btn-sm" role="button"
+                                            style="margin: 5px"
+                                            href="${urlMarcarComNoLlegides}"> 
+                                            <i class="fas fa-eye-slash"></i> Marcar Entrades com NO a
+                                            Llegides
+                                        </a>
+                                    </c:if>
                                     <c:if test="${not empty urlMarcarComLlegides}">
                                         <a class="btn btn-success btn-sm" role="button"
                                             style="margin: 5px"
