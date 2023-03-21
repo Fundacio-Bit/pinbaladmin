@@ -63,6 +63,4 @@
 </c:forEach>
 
 
-</script>
-
 

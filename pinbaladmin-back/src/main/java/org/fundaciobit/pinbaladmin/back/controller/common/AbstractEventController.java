@@ -433,7 +433,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
       } else {
 
         String[] emails = { email };
-        log.error("Dest: " + Arrays.toString(emails));
+        log.info("Dest: " + Arrays.toString(emails));
 
         final String titol = getTitolItem(itemID);
 
