@@ -20,38 +20,35 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @RequestMapping(value = "/operador/solicitudactiva")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudActivaOperadorController extends SolicitudOperadorController {
-  
-  @Override
-  public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
-    return SolicitudFields.ESTATID.lessThan(60L); // 60 == ESTAT TANCAT
-  }
-  
-  
-  @Override
-  public String getSessionAttributeFilterForm() {
-    return "SolicitudWebDB_Activa_FilterForm_Operador";
-  }
-  
-  @Override
-  public String getEntityNameCode() {
-    return "solicitud.solicitudactiva";
-  }
 
-  @Override
-  public String getEntityNameCodePlural() {
-    return "solicitud.solicitudactiva.plural";
-  }
+    @Override
+    public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
+        return SolicitudFields.ESTATID.lessThan(60L); // 60 == ESTAT TANCAT
+    }
 
+    @Override
+    public String getSessionAttributeFilterForm() {
+        return "SolicitudWebDB_Activa_FilterForm_Operador";
+    }
 
-  @Override
-  public Boolean isEstatal() {
-    return null; // Significa que gestiona els dos tipus
-  }
+    @Override
+    public String getEntityNameCode() {
+        return "solicitud.solicitudactiva";
+    }
 
+    @Override
+    public String getEntityNameCodePlural() {
+        return "solicitud.solicitudactiva.plural";
+    }
 
-  @Override
-  public boolean showAdvancedFilter() {    
-    return false;
-  }
+    @Override
+    public Boolean isEstatal() {
+        return null; // Significa que gestiona els dos tipus
+    }
+
+    @Override
+    public boolean showAdvancedFilter() {
+        return false;
+    }
 
 }

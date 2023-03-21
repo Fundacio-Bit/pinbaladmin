@@ -18,28 +18,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  */
 @Controller
-@RequestMapping (value = "/common/icon/")
+@RequestMapping(value = "/common/icon/")
 public class DataExporterIconController {
 
-  @RequestMapping("{dataExporterID}")
-  public void icon(@PathVariable("dataExporterID") String dataExporterID, 
-      HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("{dataExporterID}")
+    public void icon(@PathVariable("dataExporterID") String dataExporterID, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
-    IDataExporter dataExporter = DataExporterManager.getByID(dataExporterID);
+        IDataExporter dataExporter = DataExporterManager.getByID(dataExporterID);
 
-    DataExported ef = dataExporter.getIcon();
+        DataExported ef = dataExporter.getIcon();
 
-    byte[] image = ef.getData();
-    
-    response.setContentType(ef.getContentType());
-    response.setHeader("Content-Disposition", "inline; filename=\"" + ef.getFilename()+ "\"");
-    response.setContentLength(image.length);
-    
-    
-    OutputStream output = response.getOutputStream();
-    output.write(image);
-    output.flush();
-    output.close();
-  }
-  
+        byte[] image = ef.getData();
+
+        response.setContentType(ef.getContentType());
+        response.setHeader("Content-Disposition", "inline; filename=\"" + ef.getFilename() + "\"");
+        response.setContentLength(image.length);
+
+        OutputStream output = response.getOutputStream();
+        output.write(image);
+        output.flush();
+        output.close();
+    }
+
 }

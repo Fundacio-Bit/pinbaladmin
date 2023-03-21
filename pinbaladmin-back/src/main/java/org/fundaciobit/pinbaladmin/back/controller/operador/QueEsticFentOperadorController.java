@@ -118,7 +118,7 @@ public class QueEsticFentOperadorController {
                 final Where w1 = SolicitudFields.CREADOR.equal(username);
                 final Where w2 = SolicitudFields.DATAINICI.between(from, to);
                 final Where w3 = SolicitudFields.DATAFI.between(from, to);
-                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1,  Where.OR(w2, w3)));
+                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, Where.OR(w2, w3)));
                 // Convertin a Event
                 for (Solicitud solicitud : solis) {
                     Event ev = new EventBean();

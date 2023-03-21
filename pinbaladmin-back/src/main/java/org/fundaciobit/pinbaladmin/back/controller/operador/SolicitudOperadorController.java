@@ -810,8 +810,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     valuediv = valuediv + "</tr>\n";
                 }
 
-         
-
             }
             valuediv = valuediv + "</table>\n";
 

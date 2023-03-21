@@ -22,35 +22,33 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { AreaForm.class, AreaFilterForm.class })
 public class AreaOperadorController extends AreaController {
 
-  
-  @Override
-  public String getTileForm() {
-    return "areaFormOperador";
-  }
+    @Override
+    public String getTileForm() {
+        return "areaFormOperador";
+    }
 
-  @Override
-  public String getTileList() {
-    return "areaListOperador";
-  }
+    @Override
+    public String getTileList() {
+        return "areaListOperador";
+    }
 
-  @Override
-  public String getSessionAttributeFilterForm() {
-    return "AreaOperador_FilterForm";
-  }
-  
-  @Override
-  public AreaForm getAreaForm(AreaJPA _jpa,
-      boolean __isView, HttpServletRequest request, ModelAndView mav) throws I18NException {
-   AreaForm areaForm = super.getAreaForm(_jpa, __isView, request, mav);
-   
-   if (areaForm.isNou()) {
-     // Nou
-   } else {
-     areaForm.addReadOnlyField(ENTITATID);
-   }
-   
-   return areaForm;
-  }
-  
-  
+    @Override
+    public String getSessionAttributeFilterForm() {
+        return "AreaOperador_FilterForm";
+    }
+
+    @Override
+    public AreaForm getAreaForm(AreaJPA _jpa, boolean __isView, HttpServletRequest request, ModelAndView mav)
+            throws I18NException {
+        AreaForm areaForm = super.getAreaForm(_jpa, __isView, request, mav);
+
+        if (areaForm.isNou()) {
+            // Nou
+        } else {
+            areaForm.addReadOnlyField(ENTITATID);
+        }
+
+        return areaForm;
+    }
+
 }

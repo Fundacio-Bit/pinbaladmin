@@ -23,46 +23,37 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { DepartamentForm.class, DepartamentFilterForm.class })
 public class DepartamentOperadorController extends DepartamentController {
 
-  @Override
-  public String getTileForm() {
-    return "departamentFormOperador";
-  }
-
-  @Override
-  public String getTileList() {
-    return "departamentListOperador";
-  }
-
-  @Override
-  public String getSessionAttributeFilterForm() {
-    return "DepartamentOperador_FilterForm";
-  }
-
-  @Override
-  public DepartamentFilterForm getDepartamentFilterForm(Integer pagina, ModelAndView mav,
-      HttpServletRequest request) throws I18NException {
-    DepartamentFilterForm departamentFilterForm;
-    departamentFilterForm = super.getDepartamentFilterForm(pagina, mav, request);
-    if (departamentFilterForm.isNou()) {
-      departamentFilterForm.addHiddenField(DEPARTAMENTID);
-      
-      
-      departamentFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(
-              IconUtils.ICON_EYE,
-          "genapp.viewtitle", 
-          "/operador/solicitudlocal/list/1?departamentIDDesde={0}&departamentIDFins={0}", "btn-info"));
-      
-      
-      
-     // /pinbaladmin
-      
+    @Override
+    public String getTileForm() {
+        return "departamentFormOperador";
     }
-    return departamentFilterForm;
-  }
-  
-  
-  
-  
-  
+
+    @Override
+    public String getTileList() {
+        return "departamentListOperador";
+    }
+
+    @Override
+    public String getSessionAttributeFilterForm() {
+        return "DepartamentOperador_FilterForm";
+    }
+
+    @Override
+    public DepartamentFilterForm getDepartamentFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
+            throws I18NException {
+        DepartamentFilterForm departamentFilterForm;
+        departamentFilterForm = super.getDepartamentFilterForm(pagina, mav, request);
+        if (departamentFilterForm.isNou()) {
+            departamentFilterForm.addHiddenField(DEPARTAMENTID);
+
+            departamentFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE,
+                    "genapp.viewtitle", "/operador/solicitudlocal/list/1?departamentIDDesde={0}&departamentIDFins={0}",
+                    "btn-info"));
+
+            // /pinbaladmin
+
+        }
+        return departamentFilterForm;
+    }
 
 }

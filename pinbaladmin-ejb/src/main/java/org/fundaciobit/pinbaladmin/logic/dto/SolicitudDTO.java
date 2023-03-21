@@ -32,8 +32,10 @@ public class SolicitudDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SolicitudDTO)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof SolicitudDTO))
+            return false;
         SolicitudDTO that = (SolicitudDTO) o;
         return solicitudID.equals(that.solicitudID);
     }
@@ -45,11 +47,7 @@ public class SolicitudDTO {
 
     @Override
     public String toString() {
-        return "SolicitudDTO{" +
-                "solicitudID=" + solicitudID +
-                ", procedimentCodi='" + procedimentCodi + '\'' +
-                ", procedimentNom='" + procedimentNom + '\'' +
-                ", departamentID=" + departamentID +
-                '}';
+        return "SolicitudDTO{" + "solicitudID=" + solicitudID + ", procedimentCodi='" + procedimentCodi + '\''
+                + ", procedimentNom='" + procedimentNom + '\'' + ", departamentID=" + departamentID + '}';
     }
 }

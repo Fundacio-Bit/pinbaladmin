@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,45 +17,41 @@ import org.fundaciobit.pinbaladmin.model.entity.Event;
  */
 @Stateless(name = "EventLogicaEJB")
 public class EventLogicaEJB extends EventEJB implements EventLogicaService {
-  
-  
-  @Override
-  @PermitAll
-  public Event create(Event bean) throws I18NException {
-    return super.create(bean);
-  }
-  
-  
-  @Override
-  public Set<Long> deleteFull(Long eventID) throws I18NException {
-    
-    Set<Long> files = new HashSet<Long>();
-    Long fileID = executeQueryOne(FITXERID, EVENTID.equal(eventID));
-    if (fileID != null) {
-      files.add(fileID);
+
+    @Override
+    @PermitAll
+    public Event create(Event bean) throws I18NException {
+        return super.create(bean);
     }
-    
-    this.delete(eventID);
-    
-    return files;
-    
-  }
-  
-  
-  @Override
-  public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException {
 
-       Set<Long> files = new HashSet<Long>();
-    
-       List<Event> events = select(SOLICITUDID.equal(soliID));
-       
-       for (Event event : events) {
-         files.addAll(deleteFull(event.getEventID()));
-      }
+    @Override
+    public Set<Long> deleteFull(Long eventID) throws I18NException {
 
-      return files;
-    
-  }
-  
+        Set<Long> files = new HashSet<Long>();
+        Long fileID = executeQueryOne(FITXERID, EVENTID.equal(eventID));
+        if (fileID != null) {
+            files.add(fileID);
+        }
+
+        this.delete(eventID);
+
+        return files;
+
+    }
+
+    @Override
+    public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException {
+
+        Set<Long> files = new HashSet<Long>();
+
+        List<Event> events = select(SOLICITUDID.equal(soliID));
+
+        for (Event event : events) {
+            files.addAll(deleteFull(event.getEventID()));
+        }
+
+        return files;
+
+    }
 
 }

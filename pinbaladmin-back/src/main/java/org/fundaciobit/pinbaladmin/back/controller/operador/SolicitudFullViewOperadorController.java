@@ -546,7 +546,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     String refererAttribute = getSessioSolicitudRefererWithId(solicitudID);
     String referer = (String) request.getSession().getAttribute(refererAttribute);
     if (referer != null) {
-      request.getSession().removeAttribute(refererAttribute);
+        request.getSession().removeAttribute(refererAttribute);
       return "redirect:" + referer;
     } else {
       return super.getRedirectWhenCancel(request, solicitudID);

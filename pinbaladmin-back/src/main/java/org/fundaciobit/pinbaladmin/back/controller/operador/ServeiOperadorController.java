@@ -34,15 +34,15 @@ import java.util.Set;
  */
 @Controller
 @RequestMapping(value = "/operador/servei")
-@SessionAttributes(types = {ServeiForm.class, ServeiFilterForm.class})
+@SessionAttributes(types = { ServeiForm.class, ServeiFilterForm.class })
 public class ServeiOperadorController extends ServeiController {
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
     @Override
-    public ServeiForm getServeiForm(ServeiJPA _jpa,
-                                    boolean __isView, HttpServletRequest request, ModelAndView mav) throws I18NException {
+    public ServeiForm getServeiForm(ServeiJPA _jpa, boolean __isView, HttpServletRequest request, ModelAndView mav)
+            throws I18NException {
         ServeiForm serveiForm = super.getServeiForm(_jpa, __isView, request, mav);
 
         if (serveiForm.isNou()) {
@@ -52,8 +52,8 @@ public class ServeiOperadorController extends ServeiController {
     }
 
     @Override
-    public ServeiFilterForm getServeiFilterForm(Integer pagina, ModelAndView mav,
-                                                HttpServletRequest request) throws I18NException {
+    public ServeiFilterForm getServeiFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
+            throws I18NException {
         ServeiFilterForm serveiFilterForm = super.getServeiFilterForm(pagina, mav, request);
 
         if (serveiFilterForm.isNou()) {
@@ -67,10 +67,8 @@ public class ServeiOperadorController extends ServeiController {
 
             serveiFilterForm.setAttachedAdditionalJspCode(true);
 
-            serveiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(
-                    IconUtils.ICON_LIST, "solicitud.llistat",
-                    "javascript:$('#modal_infosoli_{0}').modal('show');",
-                    "btn-info"));
+            serveiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
+                    "solicitud.llistat", "javascript:$('#modal_infosoli_{0}').modal('show');", "btn-info"));
 
             serveiFilterForm.setVisibleMultipleSelection(false);
         }
@@ -93,9 +91,9 @@ public class ServeiOperadorController extends ServeiController {
         return "ServeiWebDB_FilterForm_operador";
     }
 
-
     @Override
-    public void postList(HttpServletRequest request, ModelAndView mav, ServeiFilterForm filterForm, List<Servei> serveiList) throws I18NException {
+    public void postList(HttpServletRequest request, ModelAndView mav, ServeiFilterForm filterForm,
+            List<Servei> serveiList) throws I18NException {
 
         Map<Long, String> divSolicituds = new HashMap<Long, String>();
         boolean error = false;
@@ -104,20 +102,17 @@ public class ServeiOperadorController extends ServeiController {
 
         // Agafam tots els ids de servei que anam a mostrar
         Set<Long> idsServei = new HashSet<Long>();
-        for (Servei servei: serveiList) {
+        for (Servei servei : serveiList) {
             idsServei.add(servei.getServeiID());
         }
 
-        Map<Long, List<SolicitudDTO>> solicitudsByServei =
-                solicitudLogicaEjb.getSolicitudsByServei(idsServei);
+        Map<Long, List<SolicitudDTO>> solicitudsByServei = solicitudLogicaEjb.getSolicitudsByServei(idsServei);
 
         for (Servei servei : serveiList) {
 
             if (servei.getEntitatServeiID() == -1 || servei.getEstatServeiID() == -1) {
                 filterForm.addAdditionalButtonByPK(servei.getServeiID(),
-                        new AdditionalButton(
-                                IconUtils.getWhite(IconUtils.ICON_WARNING) ,
-                                "servei.senseestat.plural",
+                        new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "servei.senseestat.plural",
                                 "javascript:alert('revisi estat o cedent')", "btn-danger"));
                 error = true;
             }
@@ -129,22 +124,19 @@ public class ServeiOperadorController extends ServeiController {
             if (solicituds.size() > 0) {
 
                 valuedivBuffer.append("<ul>");
-                for (SolicitudDTO solicitud: solicituds) {
+                for (SolicitudDTO solicitud : solicituds) {
 
                     String tipus = (solicitud.getDepartamentID() == null ? "es" : "ca");
 
                     String imgUrl = request.getContextPath() + "/img/" + tipus + "_petit_on.gif";
-                    String img = "<img src=\"" + imgUrl + "\" alt=\"" + tipus + "\" width=\"17\" height=\"14\" border=\"0\" />";
+                    String img = "<img src=\"" + imgUrl + "\" alt=\"" + tipus
+                            + "\" width=\"17\" height=\"14\" border=\"0\" />";
 
-                    String urlSolicitud =
-                            request.getContextPath() + "/operador/solicitudfullview/view/" + solicitud.getSolicitudID();
+                    String urlSolicitud = request.getContextPath() + "/operador/solicitudfullview/view/"
+                            + solicitud.getSolicitudID();
 
-                    valuedivBuffer.append("<li><a href=\"").append(urlSolicitud).append("\" >")
-                            .append(img)
-                            .append(" ")
-                            .append(solicitud.getProcedimentCodi())
-                            .append(": ")
-                            .append(solicitud.getProcedimentNom())
+                    valuedivBuffer.append("<li><a href=\"").append(urlSolicitud).append("\" >").append(img).append(" ")
+                            .append(solicitud.getProcedimentCodi()).append(": ").append(solicitud.getProcedimentNom())
                             .append("</a></li>");
                 }
                 valuedivBuffer.append("</ul>");
@@ -161,8 +153,8 @@ public class ServeiOperadorController extends ServeiController {
     }
 
     @Override
-    public List<StringKeyValue> getReferenceListForTipusConsentiment(HttpServletRequest request, ModelAndView mav, Where where)
-            throws I18NException {
+    public List<StringKeyValue> getReferenceListForTipusConsentiment(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
         __tmp.add(new StringKeyValue("0", I18NUtils.tradueix("servei.tipusconsentiment.0")));
         __tmp.add(new StringKeyValue("1", I18NUtils.tradueix("servei.tipusconsentiment.1")));

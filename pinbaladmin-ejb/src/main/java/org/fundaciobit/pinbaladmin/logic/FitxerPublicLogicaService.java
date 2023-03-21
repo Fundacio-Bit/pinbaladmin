@@ -15,11 +15,10 @@ import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 @Local
 public interface FitxerPublicLogicaService extends FitxerService {
 
+    public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/FitxerPublicLogicaEJB!org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService";
 
-  public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/FitxerPublicLogicaEJB!org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService";
-
-  @Override
-  @PermitAll
-  public Fitxer create(Fitxer bean) throws I18NException;
+    @Override
+    @PermitAll
+    public Fitxer create(Fitxer bean) throws I18NException;
 
 }

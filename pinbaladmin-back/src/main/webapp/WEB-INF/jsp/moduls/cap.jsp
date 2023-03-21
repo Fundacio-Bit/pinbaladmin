@@ -36,8 +36,8 @@
 			<div>
 				<div>
 					<strong class="subtitol llevarMobil"><fmt:message
-							key="usuari" />: </strong> <span class="subtitolMay"> <%=request.getUserPrincipal()== null? "ANONIM": request.getUserPrincipal().getName()%>
-						| <%= request.getRemoteUser() %>
+							key="usuari" />: </strong> <span class="subtitolMay"> <%=request.getUserPrincipal() == null ? "ANONIM" : request.getUserPrincipal().getName()%>
+						| <%=request.getRemoteUser()%>
 					</span>
 				</div>
 			</div>
@@ -64,7 +64,7 @@
                             </li>
                              --%>
 
-				
+
 				<%--  MENU D'IDIOMES, ELS AGAFA DE LA BASE DE DADES--%>
 				<li class="dropdown colorVerd">
 
@@ -75,15 +75,12 @@
 						<fmt:message key="idiomes" />
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-						<c:forEach var="idioma" items="${idiomes}"
-							varStatus="status">
+						<c:forEach var="idioma" items="${idiomes}" varStatus="status">
 							<c:set var="idiomaID" value="${idioma.idiomaID}" />
-							<a class="dropdown-item"
-								href="?lang=${idiomaID}">
-
-								<img
+							<a class="dropdown-item" href="?lang=${idiomaID}"> <img
 								src="<c:url value="/img/${idiomaID}_petit_${lang eq idiomaID? 'on' : 'off'}.gif"/>"
-								alt="${idiomaID}" style="margin-right: 0.5rem;" width="17" height="14" border="0" />${idioma.nom}
+								alt="${idiomaID}" style="margin-right: 0.5rem;" width="17"
+								height="14" border="0" />${idioma.nom}
 							</a>
 						</c:forEach>
 

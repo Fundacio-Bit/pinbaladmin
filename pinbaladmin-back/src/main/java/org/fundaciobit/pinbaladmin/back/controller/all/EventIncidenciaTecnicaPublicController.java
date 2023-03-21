@@ -22,25 +22,25 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Controller
 @RequestMapping(value = EventIncidenciaTecnicaPublicController.CONTEXT_PATH)
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
-public class EventIncidenciaTecnicaPublicController extends AbstractEventIncidenciaTecnicaController implements Constants {
+public class EventIncidenciaTecnicaPublicController extends AbstractEventIncidenciaTecnicaController
+        implements Constants {
 
-  public static final String CONTEXT_PATH = "/public/eventincidenciatecnica";
-  
-  @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
-  protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
-  
-  @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
-  protected FitxerPublicLogicaService fitxerEjb;
+    public static final String CONTEXT_PATH = "/public/eventincidenciatecnica";
 
-  @Override
-  public boolean isPublic() {
-    return true;
-  }
-  
-  @Override
-  protected FilesFormManager<Fitxer> getFilesFormManager() {
-    return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
-  }
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
 
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerEjb;
+
+    @Override
+    public boolean isPublic() {
+        return true;
+    }
+
+    @Override
+    protected FilesFormManager<Fitxer> getFilesFormManager() {
+        return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
+    }
 
 }

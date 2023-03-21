@@ -6,7 +6,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.genapp.common.filesystem.IFileManager;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 
-
 /**
  * Gestiona Multiples Fitxers d'un Form
  * 
@@ -15,13 +14,13 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
  */
 public class PinbalAdminFilesFormManager extends FilesFormManager<Fitxer> {
 
-  public PinbalAdminFilesFormManager(IFileManager<Fitxer> fitxerEjb) {
-    super(fitxerEjb);
-  }
+    public PinbalAdminFilesFormManager(IFileManager<Fitxer> fitxerEjb) {
+        super(fitxerEjb);
+    }
 
-  @Override
-  public FitxerJPA createEmptyFile() {    
-    return new FitxerJPA();
-  }
+    @Override
+    public FitxerJPA createEmptyFile() {
+        return new FitxerJPA();
+    }
 
 }

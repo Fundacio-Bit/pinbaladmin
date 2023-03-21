@@ -18,14 +18,14 @@ import org.fundaciobit.pinbaladmin.model.entity.Event;
 @Local
 public interface EventLogicaService extends EventService {
 
-  public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/EventLogicaEJB!org.fundaciobit.pinbaladmin.logic.EventLogicaService";
-  
-  @Override
-  @PermitAll
-  public Event create(Event bean) throws I18NException;
+    public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/EventLogicaEJB!org.fundaciobit.pinbaladmin.logic.EventLogicaService";
 
-  public Set<Long> deleteFull(Long eventID) throws I18NException;
-  
-  public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException;
-  
+    @Override
+    @PermitAll
+    public Event create(Event bean) throws I18NException;
+
+    public Set<Long> deleteFull(Long eventID) throws I18NException;
+
+    public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException;
+
 }

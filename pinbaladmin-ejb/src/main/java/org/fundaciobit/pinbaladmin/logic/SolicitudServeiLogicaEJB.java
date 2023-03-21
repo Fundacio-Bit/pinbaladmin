@@ -15,7 +15,6 @@ import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.CampSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 
-
 /**
  * 
  * @author anadal
@@ -23,48 +22,37 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
  */
 @Stateless(name = "SolicitudServeiLogicaEJB")
 public class SolicitudServeiLogicaEJB extends SolicitudServeiEJB implements SolicitudServeiLogicaService {
-  
-  
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.CampSolicitudService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.CampSolicitudService campSolicitudEjb;
 
- 
-  
-  @Override
-  public Set<Long> deleteFull(Long serveiId, Long solicitudId, boolean deleteFiles)
-      throws I18NException {
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.CampSolicitudService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.CampSolicitudService campSolicitudEjb;
 
-    Set<Long> files = new HashSet<Long>();
-    
-    SolicitudServei ss;
+    @Override
+    public Set<Long> deleteFull(Long serveiId, Long solicitudId, boolean deleteFiles) throws I18NException {
 
-    {
-      List<SolicitudServei> list = this.select( Where.AND(
-          SolicitudServeiFields.SOLICITUDID.equal(solicitudId),
-          SolicitudServeiFields.SERVEIID.equal(serveiId)
-          ));
-      if (list == null || list.isEmpty()) {
+        Set<Long> files = new HashSet<Long>();
+
+        SolicitudServei ss;
+
+        {
+            List<SolicitudServei> list = this.select(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(solicitudId),
+                    SolicitudServeiFields.SERVEIID.equal(serveiId)));
+            if (list == null || list.isEmpty()) {
+                return files;
+            }
+            ss = list.get(0);
+        }
+
+        campSolicitudEjb.delete(Where.AND(CampSolicitudFields.SOLICITUDSERVEIID.equal(ss.getId())));
+
+        delete(ss);
+
+        if (deleteFiles) {
+            for (Long fitxerid : files) {
+                FileSystemManager.eliminarArxiu(fitxerid);
+            }
+        }
+
         return files;
-      }
-      ss = list.get(0);
     }
-    
-   
-    campSolicitudEjb.delete(
-        Where.AND(
-            CampSolicitudFields.SOLICITUDSERVEIID.equal(ss.getId())
-            ));
-    
-    delete(ss);
-    
-    
-    if (deleteFiles) {
-      for (Long fitxerid : files) {
-        FileSystemManager.eliminarArxiu(fitxerid);
-      }
-    }
-
-    return files;
-  }
 
 }

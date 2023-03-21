@@ -20,51 +20,47 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { DocumentForm.class, DocumentFilterForm.class })
 public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDocumentOperadorController {
 
-  @Override
-  public boolean isActiveFormNew() {
-    return false;
-  }
-
-  @Override
-  public boolean isActiveFormEdit() {
-    return true;
-  }
-
-  @Override
-  public boolean isActiveDelete() {
-    return true;
-  }
-
-  @Override
-  public boolean isActiveFormView() {
-    return false;
-  }
-
-  @Override
-  public String getTileList() {
-    return "solicitudDocumentListWebDB_onlycontent_operador";
-  }
-
-  @Override
-  public String getSessionAttributeFilterForm() {
-    return "SolicitudDocumentWebDB_FilterForm_OnlyContent_Operador";
-  }
-  
-  
-  @Override
-  public DocumentFilterForm getDocumentFilterForm(Integer pagina, ModelAndView mav,
-      HttpServletRequest request) throws I18NException { 
-    
-    DocumentFilterForm solicitudDocumentFilterForm = super.getDocumentFilterForm(
-        pagina, mav, request);
-    
-    if (solicitudDocumentFilterForm.isNou()) {
-      solicitudDocumentFilterForm.setItemsPerPage(-1);
+    @Override
+    public boolean isActiveFormNew() {
+        return false;
     }
-    
-    
-    return solicitudDocumentFilterForm;
-  }
-  
-  
+
+    @Override
+    public boolean isActiveFormEdit() {
+        return true;
+    }
+
+    @Override
+    public boolean isActiveDelete() {
+        return true;
+    }
+
+    @Override
+    public boolean isActiveFormView() {
+        return false;
+    }
+
+    @Override
+    public String getTileList() {
+        return "solicitudDocumentListWebDB_onlycontent_operador";
+    }
+
+    @Override
+    public String getSessionAttributeFilterForm() {
+        return "SolicitudDocumentWebDB_FilterForm_OnlyContent_Operador";
+    }
+
+    @Override
+    public DocumentFilterForm getDocumentFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
+            throws I18NException {
+
+        DocumentFilterForm solicitudDocumentFilterForm = super.getDocumentFilterForm(pagina, mav, request);
+
+        if (solicitudDocumentFilterForm.isNou()) {
+            solicitudDocumentFilterForm.setItemsPerPage(-1);
+        }
+
+        return solicitudDocumentFilterForm;
+    }
+
 }

@@ -23,76 +23,66 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class PrincipalController {
 
-  protected final Logger log = Logger.getLogger(getClass());
-  
-  
-  @RequestMapping(value = "/common/index.html")
-  public ModelAndView commonIndex(HttpSession session,
-      HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-  
-      return principal(session, request, response);
-  }
-  
-  
+    protected final Logger log = Logger.getLogger(getClass());
 
-  @RequestMapping(value = "/common/principal.html")
-  public ModelAndView principal(HttpSession session,
-      HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
+    @RequestMapping(value = "/common/index.html")
+    public ModelAndView commonIndex(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-    Boolean initialized = (Boolean)session.getAttribute("inicialitzat");
-    
-    if (initialized == null) {
-      HtmlUtils.saveMessageInfo(request, "MessageInfo : Benvingut a PinbalAdmin");      
-      session.setAttribute("inicialitzat", true);
+        return principal(session, request, response);
     }
 
-    return new ModelAndView("principal");
+    @RequestMapping(value = "/common/principal.html")
+    public ModelAndView principal(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-  }
+        Boolean initialized = (Boolean) session.getAttribute("inicialitzat");
 
-  @RequestMapping(value = "/canviarPipella", method = RequestMethod.GET)
-  public ModelAndView canviarPipella(HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-    return canviarPipella(request, response, null);
-  }
+        if (initialized == null) {
+            HtmlUtils.saveMessageInfo(request, "MessageInfo : Benvingut a PinbalAdmin");
+            session.setAttribute("inicialitzat", true);
+        }
 
-  @RequestMapping(value = "/canviarPipella/{pipella}", method = RequestMethod.GET)
-  public ModelAndView canviarPipella(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable String pipella) throws Exception {
+        return new ModelAndView("principal");
 
-    if (pipella != null && pipella.trim().length() != 0) {
-
-      // TODO GENAPP Afegir altres pipelles !!!!!
-      /*
-      if ("ROLE_ADEN".equals(pipella)) {
-        //return new ModelAndView("role_aden");
-        return new ModelAndView(new RedirectView("/aden/peticionscaducades/list/1", true));
-      }
-      */
-      if ("operador".equals(pipella)) {
-        //return new ModelAndView("solicitudListWebDB_operador");
-        return new ModelAndView(new RedirectView("/operador/solicitudactiva/list", true));
-        //return new ModelAndView(new RedirectView("/operador/llistacorreus/list", true));
-      }
-      
-      
-      
-      if ("webdb".equals(pipella)) {
-        return new ModelAndView("webdb");
-      }
-      
-      if (Configuracio.isDesenvolupament() && "desenvolupament".equals(pipella)) {
-        return new ModelAndView("desenvolupament");
-      }
-
-      log.error("S'ha accedit a canviarPipella amb un paràmetre desconegut: " + pipella);
     }
 
-    return new ModelAndView("principal");
-  }
-  
-  
+    @RequestMapping(value = "/canviarPipella", method = RequestMethod.GET)
+    public ModelAndView canviarPipella(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return canviarPipella(request, response, null);
+    }
+
+    @RequestMapping(value = "/canviarPipella/{pipella}", method = RequestMethod.GET)
+    public ModelAndView canviarPipella(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable String pipella) throws Exception {
+
+        if (pipella != null && pipella.trim().length() != 0) {
+
+            // TODO GENAPP Afegir altres pipelles !!!!!
+            /*
+            if ("ROLE_ADEN".equals(pipella)) {
+              //return new ModelAndView("role_aden");
+              return new ModelAndView(new RedirectView("/aden/peticionscaducades/list/1", true));
+            }
+            */
+            if ("operador".equals(pipella)) {
+                //return new ModelAndView("solicitudListWebDB_operador");
+                return new ModelAndView(new RedirectView("/operador/solicitudactiva/list", true));
+                //return new ModelAndView(new RedirectView("/operador/llistacorreus/list", true));
+            }
+
+            if ("webdb".equals(pipella)) {
+                return new ModelAndView("webdb");
+            }
+
+            if (Configuracio.isDesenvolupament() && "desenvolupament".equals(pipella)) {
+                return new ModelAndView("desenvolupament");
+            }
+
+            log.error("S'ha accedit a canviarPipella amb un paràmetre desconegut: " + pipella);
+        }
+
+        return new ModelAndView("principal");
+    }
 
 }

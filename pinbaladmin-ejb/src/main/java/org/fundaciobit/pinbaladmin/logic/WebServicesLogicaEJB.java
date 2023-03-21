@@ -12,7 +12,6 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 
-
 /**
  * 
  * @author anadal

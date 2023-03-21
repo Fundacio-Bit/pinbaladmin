@@ -22,47 +22,48 @@ import javax.ejb.EJB;
  * 
  */
 @Controller
-public abstract class PinbalAdminFilesBaseController<I extends IGenAppEntity,PK extends Object,F extends BaseForm> extends CommonFilesBaseController<I,PK,F,Fitxer>{
+public abstract class PinbalAdminFilesBaseController<I extends IGenAppEntity, PK extends Object, F extends BaseForm>
+        extends CommonFilesBaseController<I, PK, F, Fitxer> {
 
+    @EJB(mappedName = FitxerService.JNDI_NAME)
+    protected FitxerService fitxerEjb;
 
-	@EJB(mappedName=FitxerService.JNDI_NAME)
-	protected FitxerService fitxerEjb;
+    /**
+     * 
+     * @return
+     */
+    protected FilesFormManager<Fitxer>
 
-
-	/**
-	 * 
-	 * @return
-	 */
-	protected FilesFormManager<Fitxer>
-
-	getFilesFormManager() {
-    return new PinbalAdminFilesFormManager(fitxerEjb);
-  }
-
-	/**
-   * 
-   * @param arxiu
-   * @return
-   */
-  public boolean deleteFile(Long fileID) {
-    if (fileID != null) {
-      Fitxer file = null;
-      try {
-        file = fitxerEjb.findByPrimaryKey(fileID);
-        if (file != null) {
-          fitxerEjb.delete(file);
-        }
-      } catch (I18NException e) {
-            log.error("Error esborrant arxiu fisic amb id=" + fileID +
-                ((file == null)? "" : ("("+ file.getNom() + ")")) + ": " + I18NUtils.getMessage(e),e);
-      } catch (Exception e) {
-            log.error("Error esborrant arxiu fisic amb id=" + fileID +
-              ((file == null)? "" : ("("+ file.getNom() + ")")) + ": " + e.getMessage(),e);
-      }
-
-      return FileSystemManager.eliminarArxiu(fileID);
+            getFilesFormManager() {
+        return new PinbalAdminFilesFormManager(fitxerEjb);
     }
-    return true;
-  }
+
+    /**
+    * 
+    * @param arxiu
+    * @return
+    */
+    public boolean deleteFile(Long fileID) {
+        if (fileID != null) {
+            Fitxer file = null;
+            try {
+                file = fitxerEjb.findByPrimaryKey(fileID);
+                if (file != null) {
+                    fitxerEjb.delete(file);
+                }
+            } catch (I18NException e) {
+                log.error(
+                        "Error esborrant arxiu fisic amb id=" + fileID
+                                + ((file == null) ? "" : ("(" + file.getNom() + ")")) + ": " + I18NUtils.getMessage(e),
+                        e);
+            } catch (Exception e) {
+                log.error("Error esborrant arxiu fisic amb id=" + fileID
+                        + ((file == null) ? "" : ("(" + file.getNom() + ")")) + ": " + e.getMessage(), e);
+            }
+
+            return FileSystemManager.eliminarArxiu(fileID);
+        }
+        return true;
+    }
 
 }
