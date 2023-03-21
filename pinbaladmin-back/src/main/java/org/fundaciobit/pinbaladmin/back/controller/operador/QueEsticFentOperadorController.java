@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +113,8 @@ public class QueEsticFentOperadorController {
 
         try {
 
-            List<Event> fullevents = new ArrayList<Event>();
+            
+            Map<Long, Event> fullevents = new HashMap<Long, Event>();
 
             // (1) Consultam sol·licituds
             {
@@ -123,7 +126,7 @@ public class QueEsticFentOperadorController {
                 for (Solicitud solicitud : solis) {
                     Event ev = new EventBean();
                     ev.setSolicitudID(solicitud.getSolicitudID());
-                    fullevents.add(ev);
+                    fullevents.put(solicitud.getSolicitudID(), ev);
                 }
             }
 
@@ -136,7 +139,7 @@ public class QueEsticFentOperadorController {
                 for (IncidenciaTecnica ic : its) {
                     Event ev = new EventBean();
                     ev.setIncidenciaTecnicaID(ic.getIncidenciaTecnicaID());
-                    fullevents.add(ev);
+                    fullevents.put(ic.getIncidenciaTecnicaID(), ev);
                 }
             }
 
@@ -144,13 +147,19 @@ public class QueEsticFentOperadorController {
             {
                 final Where w = Where.AND(EventFields.PERSONA.equal(username), EventFields.DATAEVENT.between(from, to));
                 List<Event> events = eventEjb.select(w);
-                fullevents.addAll(events);
+                for (Event event : events) {
+                    if (event.getSolicitudID() == null) {
+                        fullevents.put(event.getIncidenciaTecnicaID(), event);
+                    }else {
+                        fullevents.put(event.getSolicitudID(), event);
+                    }
+                }
             }
             log.info("Queesticfent: #events");
 
             List<String> items = new ArrayList<String>();
 
-            for (Event event : fullevents) {
+            for (Event event : fullevents.values()) {
 
                 boolean esSoli = (event.getSolicitudID() != null);
 
@@ -189,7 +198,7 @@ public class QueEsticFentOperadorController {
                 String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
                 int any = cal.get(Calendar.YEAR);
 
-                String msg = tipus + ": " + tipusTitle;
+                String msg = "INTEROP: " + tipus + ": " + tipusTitle;
 
                 if (msg.length() > 230) {
                     msg = msg.substring(0, 230);
