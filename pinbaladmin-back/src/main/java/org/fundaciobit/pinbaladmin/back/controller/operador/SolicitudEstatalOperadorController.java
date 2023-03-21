@@ -21,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/solicitudestatal")
+@RequestMapping(value = SolicitudEstatalOperadorController.CONTEXTWEB)
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudEstatalOperadorController extends SolicitudOperadorController {
+
+    public static final String CONTEXTWEB = "/operador/solicitudestatal";
 
     @Override
     public Boolean isEstatal() {

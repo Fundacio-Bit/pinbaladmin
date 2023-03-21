@@ -56,10 +56,13 @@ import org.springframework.web.servlet.view.RedirectView;
  * @author areus
  */
 @Controller
-@RequestMapping(value = "/operador/solicitudfullview")
+@RequestMapping(value = SolicitudFullViewOperadorController.CONTEXTWEB)
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudFullViewOperadorController extends SolicitudOperadorController {
 
+    public static final String CONTEXTWEB = "/operador/solicitudfullview";
+
+    
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService documentSolicitudEjb;
 

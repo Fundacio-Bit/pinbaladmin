@@ -41,14 +41,17 @@
 			<div class="modal-body">
 				<%  request.setAttribute("currentuser", request.getRemoteUser()); %>
 
-				<label id="label_tramitador" for="tramitador"> Selecciona
-					tramitador: </label> <select id="tramitador" class="my_select">
+				<label id="label_tramitador" for="tramitador"> Selecciona tramitador: </label> 
+				<select id="tramitador" class="my_select">
 					<c:forEach items="${tramitadors}" var="tramitador">
 						<option value="${tramitador.key}"
 							${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
 					</c:forEach>
-				</select> <br> <label id="label_tipusIncidencia" for="tipusIncidencia">Tipus
-					d'incidencia:</label> <select id="tipusIncidencia" class="my_select">
+				</select> 
+
+				<br> 
+				<label id="label_tipusIncidencia" for="tipusIncidencia">Tipus d'incidencia:</label> 
+				<select id="tipusIncidencia" class="my_select">
 					<c:forEach items="${tipusIncidencies}" var="tipusIncidencia">
 						<option value="${tipusIncidencia.key}">${tipusIncidencia.value}</option>
 					</c:forEach>

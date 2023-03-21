@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  */
 @Controller
-@RequestMapping(value = "/operador/solicitudactiva")
+@RequestMapping(value = SolicitudActivaOperadorController.CONTEXTWEB )
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudActivaOperadorController extends SolicitudOperadorController {
+
+    public static final String CONTEXTWEB = "/operador/solicitudactiva";
 
     @Override
     public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
