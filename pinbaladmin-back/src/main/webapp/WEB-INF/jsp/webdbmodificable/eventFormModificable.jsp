@@ -20,6 +20,7 @@ function onChangeTipus(select) {
        return;
    } 
 
+   
 
    if(select.value == 2) {
        <c:if test="${empty persona_contacte}">
@@ -29,6 +30,8 @@ function onChangeTipus(select) {
        <c:if test="${not empty persona_contacte}">
            document.getElementById("event.persona").value='${persona_contacte}';
        </c:if>
+   } else if (select.value == 1) {
+       document.getElementById("event.persona").value='De ${persona_tramitador} a ${persona_contacte}';
    } else {
        document.getElementById("event.persona").value='${persona_tramitador}';
    }

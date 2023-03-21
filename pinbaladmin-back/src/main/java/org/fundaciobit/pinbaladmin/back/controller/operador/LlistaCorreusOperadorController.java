@@ -31,6 +31,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
@@ -170,6 +171,22 @@ public class LlistaCorreusOperadorController extends EmailController {
             mav.addObject("tramitadors", tramitadors);
         }
 
+        // Tipus d'Incidencies
+        {
+
+            
+            List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
+
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+            tipusIncidencies
+                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+            tipusIncidencies.add(
+                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+
+            mav.addObject("tipusIncidencies", tipusIncidencies);
+        }
+
         Boolean mostrarMissatgeArxiu = (Boolean) request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
         if (mostrarMissatgeArxiu == null) {
@@ -284,9 +301,10 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     }
 
-    @RequestMapping(value = "/incidencia/{emailID}/{tramitador}", method = RequestMethod.GET)
+    @RequestMapping(value = "/incidencia/{emailID}/{tramitador}/{tipusIncidencia}", method = RequestMethod.GET)
     public String incidencia(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("emailID") Long emailID, @PathVariable("tramitador") String tramitador) {
+            @PathVariable("emailID") Long emailID, @PathVariable("tramitador") String tramitador, 
+            @PathVariable("tipusIncidencia") int tipusIncidencia) {
 
         try {
 
@@ -301,8 +319,7 @@ public class LlistaCorreusOperadorController extends EmailController {
                 //EmailMessageInfo emi = cache.get(emailID);
                 EmailMessageInfo emi = er.getMessage((int) (long) emailID);
 
-                IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi, tramitador);
-
+                IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi, tramitador, tipusIncidencia);
                 er.deleteMessage((int) (long) emailID);
 
                 // Redireccionam a Enviar Correu al Contacte

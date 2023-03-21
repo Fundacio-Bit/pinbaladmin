@@ -1158,6 +1158,15 @@
  -webkit-text-stroke-color: rgb(89, 89, 89);
  -webkit-text-stroke-width: 0px;
 }
+
+
+
+textarea.event{
+    background-color: rgb(238, 238, 238) !important;
+    border: none;
+    resize: none;
+}
+
 </style>
 
 <!--  Missatges  -->
@@ -1165,8 +1174,6 @@
 
 
 <div class="mainwindow">
-
-
 
     <table width="100%">
         <tr valign="top">
@@ -1177,8 +1184,6 @@
                         <td>
                             <h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
                         </td>
-
-
 
                         <td width="100%" align="right">
                             <div>
@@ -1220,6 +1225,14 @@
                                         </a>
                                     </c:if>
 
+                                    <c:if test="${not empty urlMarcarComNoLlegides}">
+                                        <a class="btn btn-warning btn-sm" role="button"
+                                            style="margin: 5px"
+                                            href="${urlMarcarComNoLlegides}"> 
+                                            <i class="fas fa-eye-slash"></i> Marcar Entrades com NO a
+                                            Llegides
+                                        </a>
+                                    </c:if>
                                     <c:if test="${not empty urlMarcarComLlegides}">
                                         <a class="btn btn-success btn-sm" role="button"
                                             style="margin: 5px"
@@ -1249,9 +1262,6 @@
 
         </tr>
     </table>
-    </tr>
-    <tr>
-        <td colspan="3">
             <div class="full-width"
                 style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
                 <table style="width: 100%; font-size: 1.4em">
@@ -1270,11 +1280,6 @@
                     </tbody>
                 </table>
             </div>
-        </td>
-    </tr>
-
-    <tr>
-        <td colspan="3">
 
             <div class="fondodiv2">
                 <table style="padding: 0px;" border="0" cellpadding="0" cellspacing="0">
@@ -1421,10 +1426,6 @@
                     </c:forEach>
                 </table>
             </div>
-        </td>
-
-    </tr>
-    </table>
     <center>
         <iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
             height="${isPublic?450:475}px" onload="carregatIframe(this)"
@@ -1447,6 +1448,16 @@
         }
         count++;
     }
+   
+   
+   window.onload = function() {
+	    var textareas =  document.getElementsByTagName("textarea");
+	      for ( let i = 0; i < textareas.length; i++ ) {
+	        var textarea = textareas[i];
+	            textarea.style.height = textarea.scrollHeight + "px";
+	      }
+	}
+
 </script>
 
 

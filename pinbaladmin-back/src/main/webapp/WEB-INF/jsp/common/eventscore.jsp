@@ -27,8 +27,14 @@
 </c:if>
 
 
-${event.comentari}
-
+<c:choose>
+	<c:when test="${fn:startsWith(event.comentari, '<')}">
+	   <div>${event.comentari}</div>
+	</c:when>
+	<c:otherwise>
+		<textarea readonly class="form-control event">${event.comentari}</textarea>
+	 </c:otherwise>
+</c:choose>
 
 <c:if test="${event.tipus == -2 }">
 

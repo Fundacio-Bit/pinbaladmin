@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
@@ -90,188 +91,179 @@ public abstract class AbstractEventController<T> extends EventController impleme
   }
 
   @RequestMapping(value = "/new", method = RequestMethod.GET)
-  public ModelAndView crearEventGet(HttpServletRequest request, HttpServletResponse response)
-      throws I18NException {
+  public ModelAndView crearEventGet(HttpServletRequest request, HttpServletResponse response) throws I18NException {
 
-    log.info("\n\n ENTRA A NEW");
+      log.info("\n\n ENTRA A NEW");
 
-    Long itemID = (Long) request.getSession()
-        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-    if (itemID == null) {
+      Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+      if (itemID == null) {
 
-      String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
+          String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
 
-      HtmlUtils.saveMessageError(request,
-          "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
-              + " a través de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+          HtmlUtils.saveMessageError(request,
+                  "XXXXXXXXXX S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
+                          + " a través de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
-      return new ModelAndView(new RedirectView(
-          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
-
-    }
-
-    try {
-      T item = findItemByPrimaryKey(itemID);
-
-      String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
-
-      String email;
-
-      if (cedent != null) {
-        
-        email = cedent;
-      } else {
-
-        email = getPersonaContacteEmail(item);
-        if (email == null || email.trim().length() == 0) {
-          String itemNom = isSolicitud() ? "solicitud" : "incidència";
-
-          Boolean isEstatal = (Boolean) request.getSession()
-              .getAttribute(SESSION_EVENT_IS_ESTATAL);
-          if (!Boolean.TRUE.equals(isEstatal)) {
-
-            log.info("\n\n Passa per NEW AMB ERROR");
-
-            HtmlUtils.saveMessageError(request,
-                "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la "
-                    + itemNom);
-            return new ModelAndView(new RedirectView(
-                getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
-          }
-        }
+          return new ModelAndView(
+                  new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
       }
-    } finally {
-//      request.getSession().removeAttribute(SESSION_EVENT_IS_ESTATAL);
-//      request.getSession().removeAttribute(SESSION_EVENT_CEDENT);
-//      request.getSession().removeAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-    }
 
-    ModelAndView mav = super.crearEventGet(request, response);
+      try {
+          T item = findItemByPrimaryKey(itemID);
 
-    return mav;
+          String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
+
+          String email;
+          String nom;
+          if (cedent != null) {
+
+              email = cedent;
+          } else {
+
+              email = getPersonaContacteEmail(item);
+              nom = getPersonaContacteNom(item);
+              
+              
+              if (email == null || email.trim().length() == 0) {
+                  String itemNom = isSolicitud() ? "solicitud" : "incidència";
+
+                  Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+                  if (!Boolean.TRUE.equals(isEstatal)) {
+
+                      log.info("\n\n Passa per NEW AMB ERROR");
+
+                      HtmlUtils.saveMessageError(request,
+                              "XXXXXXXX No s'ha definit el email de la persona de contacte dins de la " + itemNom);
+                      return new ModelAndView(
+                              new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+                  }
+              }
+          }
+      } finally {
+          //      request.getSession().removeAttribute(SESSION_EVENT_IS_ESTATAL);
+          //      request.getSession().removeAttribute(SESSION_EVENT_CEDENT);
+          //      request.getSession().removeAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+      }
+
+      ModelAndView mav = super.crearEventGet(request, response);
+
+      return mav;
   }
 
   @Override
-  public EventForm getEventForm(EventJPA _jpa, boolean __isView, HttpServletRequest request,
-      ModelAndView mav) throws I18NException {
+  public EventForm getEventForm(EventJPA _jpa, boolean __isView, HttpServletRequest request, ModelAndView mav)
+          throws I18NException {
 
-    EventForm eventForm = super.getEventForm(_jpa, __isView, request, mav);
+      EventForm eventForm = super.getEventForm(_jpa, __isView, request, mav);
 
-    Long itemID = (Long) request.getSession()
-        .getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
-    if (itemID == null) {
+      Long itemID = (Long) request.getSession().getAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+      if (itemID == null) {
 
-      String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
+          String itemNom = isSolicitud() ? "solicituID" : "incidenciaTecnicaID";
 
-      HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
-              + " a traves de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
+          HtmlUtils.saveMessageError(request, "S'ha intentat editar o crear un Event però no s'ha definit el " + itemNom
+                  + " a traves de la sessió " + SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID);
 
-      mav.setView(new RedirectView(
-          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
-      return eventForm;
-    }
+          mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+          return eventForm;
+      }
 
-    T item = findItemByPrimaryKey(itemID);
+      T item = findItemByPrimaryKey(itemID);
 
-    if (item == null) {
-      String itemNom = isSolicitud() ? "solicitud" : "incidenciaTecnica";
-      HtmlUtils.saveMessageError(request,
-          "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( " + itemID
-              + ") retorna un element null.");
+      if (item == null) {
+          String itemNom = isSolicitud() ? "solicitud" : "incidenciaTecnica";
+          HtmlUtils.saveMessageError(request, "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( "
+                  + itemID + ") retorna un element null.");
 
-      mav.setView(new RedirectView(
-          redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
-      return eventForm;
-    }
+          mav.setView(new RedirectView(redirectWhenSessionItemIDNotDefined().replace("redirect:", ""), true));
+          return eventForm;
+      }
 
-    if (isSolicitud()) {
-      eventForm.addHiddenField(INCIDENCIATECNICAID);
-      eventForm.addHiddenField(SOLICITUDID);
-    } else {
-      // Incidència
-      eventForm.addHiddenField(SOLICITUDID);
-      eventForm.addHiddenField(INCIDENCIATECNICAID);
-    }
-
-    if (eventForm.isNou()) {
-
-      eventForm.setCancelButtonVisible(false);
-
-      eventForm.setTitleCode("=Nova Entrada");
-
-      /*
-       * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
-       * mav.setViewName("eventFormOperador"); }
-       */
-      eventForm.getEvent().setDataEvent(new Timestamp(System.currentTimeMillis()));
       if (isSolicitud()) {
-        eventForm.getEvent().setSolicitudID(itemID);
+          eventForm.addHiddenField(INCIDENCIATECNICAID);
+          eventForm.addHiddenField(SOLICITUDID);
       } else {
-        eventForm.getEvent().setIncidenciaTecnicaID(itemID);
+          // Incidència
+          eventForm.addHiddenField(SOLICITUDID);
+          eventForm.addHiddenField(INCIDENCIATECNICAID);
       }
 
-      if (isPublic()) {
+      if (eventForm.isNou()) {
 
-        String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
-        String email;
-        if (cedent != null) {
-          try {
-            email = cedent;
-          } catch (Exception e) {
-            email = getPersonaContacteEmail(item);
-            e.printStackTrace();
+          eventForm.setCancelButtonVisible(false);
+
+          eventForm.setTitleCode("=Nova Entrada");
+
+          /*
+           * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
+           * mav.setViewName("eventFormOperador"); }
+           */
+          eventForm.getEvent().setDataEvent(new Timestamp(System.currentTimeMillis()));
+          if (isSolicitud()) {
+              eventForm.getEvent().setSolicitudID(itemID);
+          } else {
+              eventForm.getEvent().setIncidenciaTecnicaID(itemID);
           }
-          eventForm.getEvent().setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
-        } else {
-          email = getPersonaContacteEmail(item);
-          eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
 
-        }
+          if (isPublic()) {
 
-        eventForm.getEvent().setPersona(email);        
-        
-        eventForm.addHiddenField(TIPUS);
-        eventForm.addHiddenField(NOLLEGIT);
-        eventForm.addReadOnlyField(DATAEVENT);
-        eventForm.addReadOnlyField(PERSONA);
-        eventForm.getEvent().setNoLlegit(true);
-      } else {
-        eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
-        eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
-        eventForm.getEvent().setNoLlegit(false);
-        eventForm.addHiddenField(NOLLEGIT);
+              String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
+              String email;
+              if (cedent != null) {
+                  try {
+                      email = cedent;
+                  } catch (Exception e) {
+                      email = getPersonaContacteEmail(item);
+                      e.printStackTrace();
+                  }
+                  eventForm.getEvent().setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
+              } else {
+                  email = getPersonaContacteEmail(item);
+                  eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
+              }
+
+              eventForm.getEvent().setPersona(email);
+
+              eventForm.addHiddenField(TIPUS);
+              eventForm.addHiddenField(NOLLEGIT);
+              eventForm.addReadOnlyField(DATAEVENT);
+              eventForm.addReadOnlyField(PERSONA);
+              eventForm.getEvent().setNoLlegit(true);
+          } else {
+              eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
+              eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
+              eventForm.getEvent().setNoLlegit(false);
+              eventForm.addHiddenField(NOLLEGIT);
+          }
       }
-    }
 
-    if (!isPublic()) {
-      mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
-      request.getSession().setAttribute("persona_tramitador",
-          request.getUserPrincipal().getName());
-    }
-
-    String email = getPersonaContacteEmail(item);
-    if (email == null || email.trim().length() == 0) {
-
-      Boolean isEstatal = (Boolean) request.getSession()
-          .getAttribute(SESSION_EVENT_IS_ESTATAL);
-      if (!Boolean.TRUE.equals(isEstatal)) {
-
-        String itemNom = isSolicitud() ? "solicitud" : "incidència";
-        HtmlUtils.saveMessageError(request,
-            "No s'ha definit el email de la persona de contacte dins de la " + itemNom);
-        mav.setView(new RedirectView(
-            getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
-        return eventForm;
+      if (!isPublic()) {
+          mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
+          request.getSession().setAttribute("persona_tramitador", request.getUserPrincipal().getName());
       }
-    }
 
-    mav.addObject("persona_contacte", email);
-    request.getSession().setAttribute("persona_contacte", email);
+      String email = getPersonaContacteEmail(item);
+      String nom = getPersonaContacteNom(item);
+      if (email == null || email.trim().length() == 0) {
 
-    eventForm.setAttachedAdditionalJspCode(true);
+          Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+          if (!Boolean.TRUE.equals(isEstatal)) {
 
-    return eventForm;
+              String itemNom = isSolicitud() ? "solicitud" : "incidència";
+              String errorMsg = "No s'ha definit el email de la persona de contacte dins de la " + itemNom;
+              HtmlUtils.saveMessageError(request,errorMsg);
+              mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+              return eventForm;
+          }
+      }
+
+      String persona_contacte_str = nom + " (" + email + ")";
+      mav.addObject("persona_contacte", persona_contacte_str);
+      request.getSession().setAttribute("persona_contacte", persona_contacte_str);
+
+      eventForm.setAttachedAdditionalJspCode(true);
+
+      return eventForm;
   }
 
   public abstract T findItemByPrimaryKey(Long itemID);
@@ -372,9 +364,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
               + getPeuCorreu();
 
           final boolean isHtml = true;
+          
+          String email = getPersonaContacteEmailByItemID(itemID);
+//          ev.setDestinatariEmail(email);
 
-          EmailUtil.postMail(subject, message, isHtml, from,
-              getPersonaContacteEmailByItemID(itemID));
+          EmailUtil.postMail(subject, message, isHtml, from, email);
         } catch (Throwable th) {
 
           String msg;
@@ -629,9 +623,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
       mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
     }
 
-    mav.addObject("urlMarcarComLlegides",
-        request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
-
     mav.addObject("ID", itemID);
     mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
     mav.addObject("titol", getTitol(item));
@@ -768,7 +759,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
         itemID = ev.getIncidenciaTecnicaID();
       }
 
-      String address = ev.getPersona();
+      String address = getPersonaContacteEmailByItemID(itemID);;
       String url;
     try {
         url = getLinkPublic(itemID) + "?cedent="
@@ -817,42 +808,95 @@ public abstract class AbstractEventController<T> extends EventController impleme
   public abstract Long getItemID(T item);
 
   @RequestMapping(value = "/marcarcomllegida/{itemID}", method = RequestMethod.GET)
-  public String marcarEntradesComLlegides(HttpServletRequest request,
-      HttpServletResponse response, @PathVariable Long itemID) {
+  public String marcarEntradesComLlegides(HttpServletRequest request, HttpServletResponse response,
+          @PathVariable Long itemID) {
 
-    Where wComu;
-    // StringField creador;
-    if (isSolicitud()) {
-      // creador = new EventQueryPath().SOLICITUD().CREADOR();
-      wComu = EventFields.SOLICITUDID.equal(itemID);
-    } else {
-      // creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
-      wComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
-    }
-
-    List<Event> eventsNoLlegits;
-    try {
-      eventsNoLlegits = eventLogicaEjb
-          .select(Where.AND(wComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
-
-      for (Event event : eventsNoLlegits) {
-        event.setNoLlegit(false);
-        eventLogicaEjb.update(event);
+      //Where per obtenir els events de la incidencia/solicitud especifica
+      Where whereComu;
+      
+      if (isSolicitud()) {
+          whereComu = EventFields.SOLICITUDID.equal(itemID);
+      } else {
+          whereComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
       }
 
-    } catch (I18NException e) {
-      // TODO Auto-generated catch block
-      String msg = "Error marcant com a llegits les entrades de " + itemID + ": "
-          + I18NUtils.getMessage(e);
+      List<Event> eventsNoLlegits;
+      try {
+          eventsNoLlegits = eventLogicaEjb.select(Where.AND(whereComu, EventFields.NOLLEGIT.equal(Boolean.TRUE)));
 
-      log.error(msg, e);
+          for (Event event : eventsNoLlegits) {
+              event.setNoLlegit(false);
+              eventLogicaEjb.update(event);
+          }
 
-      HtmlUtils.saveMessageError(request, msg);
+      } catch (I18NException e) {
+          // TODO Auto-generated catch block
+          String msg = "Error marcant com a llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
+          log.error(msg, e);
+          HtmlUtils.saveMessageError(request, msg);
+      }
+      return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
 
-    }
+  @RequestMapping(value = "/marcarcomnollegida/{itemID}", method = RequestMethod.GET)
+  public String marcarEntradesComNoLlegides(HttpServletRequest request, HttpServletResponse response,
+          @PathVariable Long itemID) {
 
-    return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+      //Where per obtenir els events de la incidencia/solicitud especifica
+      Where whereComu;
+      
+      if (isSolicitud()) {
+          whereComu = EventFields.SOLICITUDID.equal(itemID);
+      } else {
+          whereComu = EventFields.INCIDENCIATECNICAID.equal(itemID);
+      }
 
+      List<Event> eventsNoLlegits;
+      try {
+          eventsNoLlegits = eventLogicaEjb.select(whereComu);
+
+          for (Event event : eventsNoLlegits) {
+              event.setNoLlegit(true);
+              eventLogicaEjb.update(event);
+          }
+
+      } catch (I18NException e) {
+          // TODO Auto-generated catch block
+          String msg = "Error marcant com a no llegits les entrades de " + itemID + ": " + I18NUtils.getMessage(e);
+          log.error(msg, e);
+          HtmlUtils.saveMessageError(request, msg);
+      }
+      return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
+  }
+
+  @Override
+  public void postList(HttpServletRequest request, ModelAndView mav, EventFilterForm filterForm, List<Event> list)
+          throws I18NException {
+
+      if (list.size() > 0) {
+          int noLlegits = 0;
+          for (Event event : list) {
+              if (event.isNoLlegit()) {
+                  noLlegits++;
+              }
+          }
+          
+          long itemID;
+          
+          if (isSolicitud()) {
+              itemID = list.get(0).getSolicitudID();
+          } else {
+              itemID = list.get(0).getIncidenciaTecnicaID();
+          }
+          
+          if (noLlegits == 0) {
+              mav.addObject("urlMarcarComNoLlegides",
+                      request.getContextPath() + getContextWeb() + "/marcarcomnollegida/" + itemID);
+          } else {
+              mav.addObject("urlMarcarComLlegides",
+                      request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
+          }
+      }
   }
 
 }
