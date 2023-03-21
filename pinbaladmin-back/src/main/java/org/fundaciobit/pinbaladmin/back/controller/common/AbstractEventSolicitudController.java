@@ -7,11 +7,11 @@ import javax.ejb.EJB;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 
 /**
  * 
@@ -76,6 +76,10 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
         return SolicitudLocalOperadorController.CONTEXTWEB + "/close/" + item.getSolicitudID();
     }
 
+    @Override
+    public String getUrlToChangeOperadorItem(Solicitud item) {
+        return SolicitudLocalOperadorController.CONTEXTWEB + "/changeOperador/" + item.getSolicitudID();
+    }
     @Override
     public boolean isClosed(Solicitud item) {
         return item.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT;

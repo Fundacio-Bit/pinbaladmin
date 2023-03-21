@@ -1198,7 +1198,6 @@ textarea.event {
 								</c:if>
 
 
-
 								<c:if test="${!isPublic}">
 
 									<a class="btn btn-sm btn-warning" role="button"
@@ -1206,7 +1205,12 @@ textarea.event {
 										<i class="<%=IconUtils.ICON_ENVELOPE%>"></i> Enviar Correu al
 										Contacte
 									</a>
-
+									
+                                    <a class="btn btn-sm btn-success" role="button"
+                                        href="<c:url value="javascript:changeOperador()"/>">
+                                        <i class="<%=IconUtils.ICON_RELOAD%>"></i> Canviar l'operador
+                                    </a>
+                                    
 									<a class="btn btn-info btn-sm" role="button"
 										href="<c:url value="${urlToEditItem}"/>"> <i
 										class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
@@ -1218,6 +1222,7 @@ textarea.event {
 											class="fas fa-window-close"></i> Tancar ${tipus}
 										</a>
 									</c:if>
+
 
 									<c:if test="${not empty urlMarcarComNoLlegides}">
 										<a class="btn btn-warning btn-sm" role="button"
@@ -1233,14 +1238,8 @@ textarea.event {
 											Llegides
 										</a>
 									</c:if>
+									
 								</c:if>
-
-								<%--
-                    <a class="btn btn-sm" role="button" style="margin:5px"   onclick="${urlnou}">
-                         <i class="<%=IconUtils.ICON_PLUS_SIGN%>"></i> Nova Entrada
-                    </a>
---%>
-
 							</div>
 						</td>
 					</tr>
@@ -1313,11 +1312,9 @@ textarea.event {
 					<c:set var="border" value="#F0E68C" />
 
 					<c:if test="${!isPublic}">
-
 						<c:set var="background" value="#ffb3b3" />
 						<c:set var="border" value="#ff0000" />
 						<c:set var="title" value="Privat" />
-
 					</c:if>
 
 					<c:if test="${isContacte}">
@@ -1450,3 +1447,55 @@ textarea.event {
 		PinbalAdmin</b>
 </center>
 
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modelSeleccioTramitador" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Crear nova incidencia</h4>
+                <button type="button" class="close"
+                    style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <%  request.setAttribute("currentuser", request.getRemoteUser()); %>
+
+                <label id="label_tramitador" for="tramitador"> Selecciona tramitador: </label> 
+                <select id="tramitador" class="my_select">
+                    <c:forEach items="${tramitadors}" var="tramitador">
+                        <option value="${tramitador.key}"
+                            ${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
+                    </c:forEach>
+                </select> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onClick="myFunction()"
+                    data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function myFunction() {
+	
+    var tramitador = document.getElementById("tramitador").value;
+        
+    var root = "<%=request.getContextPath()%>${urlToChangeOperator}";
+    
+    window.location.href = root
+            + "/" + tramitador;
+}
+
+function changeOperador() {
+    $("#modelSeleccioTramitador").modal();
+}
+
+
+
+</script>

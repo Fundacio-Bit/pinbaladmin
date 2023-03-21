@@ -12,24 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
+import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
-import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
-import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
 
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
+
+    
     public abstract boolean isPublic();
 
     public abstract boolean isSolicitud();
@@ -280,6 +285,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
     public abstract String getUrlToEditItem(T item);
 
     public abstract String getUrlToCloseItem(T item);
+
+    public abstract String getUrlToChangeOperadorItem(T item);
 
     public abstract String getTitol(T item);
 
@@ -602,9 +609,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         mav.addObject("urlToEditItem", getUrlToEditItem(item));
 
+        
         if (!isClosed(item)) {
             mav.addObject("urlToCloseItem", getUrlToCloseItem(item));
         }
+        
+        
+        mav.addObject("urlToChangeOperator", getUrlToChangeOperadorItem(item));
+
 
         mav.addObject("ID", itemID);
         mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");
@@ -632,6 +644,34 @@ public abstract class AbstractEventController<T> extends EventController impleme
             eventFilterForm.addHiddenField(NOLLEGIT);
 
             eventFilterForm.setItemsPerPage(null);
+        }
+
+        
+        
+        // Tramitadors
+        {
+
+            SelectMultipleStringKeyValue smskv;
+            smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
+
+            List<StringKeyValue> tramitadors = operadorEjb.executeQuery(smskv);
+
+            mav.addObject("tramitadors", tramitadors);
+        }
+
+        // Tipus d'Incidencies
+        {
+
+            List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
+
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+            tipusIncidencies
+                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+            tipusIncidencies.add(
+                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+
+            mav.addObject("tipusIncidencies", tipusIncidencies);
         }
 
         return eventFilterForm;
@@ -869,5 +909,4 @@ public abstract class AbstractEventController<T> extends EventController impleme
             }
         }
     }
-
 }

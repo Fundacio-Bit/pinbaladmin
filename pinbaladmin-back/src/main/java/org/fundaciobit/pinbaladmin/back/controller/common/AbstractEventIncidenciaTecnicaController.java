@@ -67,6 +67,11 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     }
 
     @Override
+    public String getUrlToChangeOperadorItem(IncidenciaTecnica item) {
+        return IncidenciaTecnicaOperadorController.WEBCONTEXT + "/changeOperador/" + item.getIncidenciaTecnicaID();
+    }
+
+    @Override
     public boolean isClosed(IncidenciaTecnica item) {
         return item.getEstat() == Constants.ESTAT_INCIDENCIA_TANCADA;
     }

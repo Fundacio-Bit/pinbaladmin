@@ -483,6 +483,32 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         return "redirect:" + WEBCONTEXT + "/" + incidenciaTecnicaID + "/edit";
     }
 
+
+    @RequestMapping(value = "/changeOperador/{incidenciaTecnicaID}/{operador}", method = RequestMethod.GET)
+    public String changeOperadorIncidenciaTecnicaGet(
+            @PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
+            @PathVariable("operador") java.lang.String operador,
+            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+        IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
+
+        String operador_old = i.getCreador();
+        i.setCreador(operador);
+
+        try {
+            this.update(request, i);
+
+            HtmlUtils.saveMessageSuccess(request, "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
+        } catch (Throwable e) {
+            String msg = "Error canviant operador: " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+
+        return "redirect:" + WEBCONTEXT + "/list";
+    }
+
+    
     @Override
     public void postList(HttpServletRequest request, ModelAndView mav, IncidenciaTecnicaFilterForm filterForm,
             List<IncidenciaTecnica> list) throws I18NException {

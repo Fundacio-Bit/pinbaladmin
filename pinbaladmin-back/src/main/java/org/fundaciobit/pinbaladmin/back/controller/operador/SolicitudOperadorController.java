@@ -39,6 +39,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
@@ -530,7 +531,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "Events", /*
                                                                                                                     * "javascript:window.open('" + request.getContextPath() +
                                                                                                                     */
-                    EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}"
+                    EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
                             + (isestatal == null ? "" : ("/" + isestatal)) /* ','_blank');" */,
                     "btn-success"));
 
@@ -1280,6 +1281,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return "redirect:/operador/solicitudfullview/view/" + solicitudID;
     }
 
+    @RequestMapping(value = "/changeOperador/{solicitudID}/{operador}", method = RequestMethod.GET)
+    public String changeOperadorIncidenciaTecnicaGet(
+            @PathVariable("solicitudID") java.lang.Long solicitudID,
+            @PathVariable("operador") java.lang.String operador,
+            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+        SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
+
+        String operador_old = soli.getCreador();
+        soli.setCreador(operador);
+
+        try {
+            this.update(request, soli);
+
+            HtmlUtils.saveMessageSuccess(request, "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
+        } catch (Throwable e) {
+            String msg = "Error canviant operador: " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+
+        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
+    }
+    
     @Override
     public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
