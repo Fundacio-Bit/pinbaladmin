@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -100,28 +100,27 @@ public class QueEsticFentOperadorController {
         }
 
         Timestamp from = new Timestamp(atStartOfDay(date).getTime());
-        Timestamp to = new Timestamp(atEndOfDay(date).getTime());
-
         log.info("from: " + from);
+
+        Timestamp to = new Timestamp(atEndOfDay(date).getTime());
         log.info("to: " + to);
 
         final String username = request.getRemoteUser();
-
         log.info("remote user: " + username);
 
         mav.addObject("data", dateStr);
 
         try {
-
             
-            Map<Long, Event> fullevents = new HashMap<Long, Event>();
-
+            Map<Long, Event> fullevents = new TreeMap<Long, Event>();
+            
             // (1) Consultam sol·licituds
             {
                 final Where w1 = SolicitudFields.CREADOR.equal(username);
                 final Where w2 = SolicitudFields.DATAINICI.between(from, to);
-                final Where w3 = SolicitudFields.DATAFI.between(from, to);
-                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, Where.OR(w2, w3)));
+//                final Where w3 = SolicitudFields.DATAFI.between(from, to);
+//                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, Where.OR(w2, w3)));
+                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, w2));
                 // Convertin a Event
                 for (Solicitud solicitud : solis) {
                     Event ev = new EventBean();
@@ -161,17 +160,16 @@ public class QueEsticFentOperadorController {
 
             for (Event event : fullevents.values()) {
 
-                boolean esSoli = (event.getSolicitudID() != null);
-
-                StringBuffer str = new StringBuffer("INTEROP: ");
-
                 String tipus;
                 String tipusTitle;
                 long id;
+                
+                boolean esSoli = (event.getSolicitudID() != null);
+
                 //String text;
                 if (esSoli) {
-                    tipus = "Soli";
                     id = event.getSolicitudID();
+
                     Solicitud soli = solicitudEjb.findByPrimaryKey(id);
                     tipusTitle = soli.getProcedimentNom();
 
@@ -185,8 +183,8 @@ public class QueEsticFentOperadorController {
 
                     id = event.getIncidenciaTecnicaID();
                     tipus = "Inc.Tec.[" + id + "]";
-                    IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
-                    tipusTitle = it.getTitol();
+                    tipusTitle = incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.TITOL,
+                            IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(id));
                 }
 
                 //text = event.getComentari();
@@ -200,8 +198,9 @@ public class QueEsticFentOperadorController {
 
                 String msg = "INTEROP: " + tipus + ": " + tipusTitle;
 
-                if (msg.length() > 230) {
-                    msg = msg.substring(0, 230);
+                int MAX_LENGTH = 230;
+                if (msg.length() > MAX_LENGTH) {
+                    msg = msg.substring(0, MAX_LENGTH);
                 }
 
                 String msgEnc;
@@ -217,19 +216,18 @@ public class QueEsticFentOperadorController {
                         + username + "&data=" + dia + "%2F" + mes + "%2F" + any
                         + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
                         + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1=" + msgEnc;
+                
+                StringBuffer str = new StringBuffer();
 
                 str.append(msg + "  <a target=\"_blank\" href=\"" + url
                         + "\" ><span class=\"label label-success\"><b>+</b></span> </a>");
 
                 items.add(str.toString());
             }
-
             mav.addObject("items", items);
-
+            
         } catch (I18NException e) {
-
             HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
-
         }
 
         return mav;

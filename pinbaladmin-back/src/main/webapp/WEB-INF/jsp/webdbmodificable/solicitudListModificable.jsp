@@ -34,8 +34,8 @@
 
 	<div id="modal_infoservei_${entry.key}" class="modal" tabindex="-1"
 		role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
+		<div class="modal-dialog" role="document" style="max-width: 45%;">
+			<div class="modal-content" style="width: fit-content;">
 				<div class="modal-header">
 					<h4 id="myModalLabel">
 						<fmt:message key="servei.llistat" />
