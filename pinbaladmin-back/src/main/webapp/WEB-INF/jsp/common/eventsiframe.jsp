@@ -1164,6 +1164,10 @@ textarea.event {
 	border: none;
 	resize: none;
 }
+
+.windowSubtitle {
+	margin: 0;
+}
 </style>
 
 <!--  Missatges  -->
@@ -1172,104 +1176,96 @@ textarea.event {
 
 <div class="mainwindow">
 
-	<table width="100%">
-		<tr valign="top">
-			<td rowspan="2"><img src="<c:url value="/img/caibbg.png"/>" /></td>
-			<td colspan="2">
-				<table width="100%" style="right: 0; position: relative;">
-					<tr>
-						<td>
-							<h4 class="windowSubtitle" style="line-height: 14px;">${tipus}</h4>
-						</td>
+	<div id="fondodiv1" style="display: flex; margin-top: 1rem;">
+		<img src="/pinbaladmin/img/caibbg.png"
+			style="align-self: center; margin: 1rem 0.5rem;">
+		<table width="100%">
+			<tr>
+				<td>
+					<h4 class="windowSubtitle">${tipus}</h4>
+				</td>
 
-						<td width="100%" align="right">
-							<div id="botonera_div">
-								<c:url var="theurlnew" value="${contextweb}/new" />
+				<td align="right">
+					<div id="botonera_div" style="margin-right: 1rem;">
+						<c:url var="theurlnew" value="${contextweb}/new" />
+						<c:set var="urlnou"
+							value="javascript:document.location.href='${theurlnew}'" />
+
+						<c:if test="${not isEstatal}">
+							<c:if test="${empty personaContacteEmail}">
 								<c:set var="urlnou"
-									value="javascript:document.location.href='${theurlnew}'" />
+									value="javascript:alert('La sol·licitud no te definit el correu del contacte EF');" />
+							</c:if>
+						</c:if>
 
-								<c:if test="${not isEstatal}">
+						<c:if test="${!isPublic}">
 
-									<c:if test="${empty personaContacteEmail}">
-										<c:set var="urlnou"
-											value="javascript:alert('La sol·licitud no te definit el correu del contacte EF');" />
-									</c:if>
+							<a class="btn btn-sm btn-warning" role="button"
+								href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>"> <i
+								class="<%=IconUtils.ICON_ENVELOPE%>"></i> Enviar Correu al
+								Contacte
+							</a>
 
-								</c:if>
+							<a class="btn btn-sm btn-success" role="button"
+								href="<c:url value="javascript:changeOperador()"/>"> <i
+								class="<%=IconUtils.ICON_RELOAD%>"></i> Canviar l'operador
+							</a>
 
+							<c:if test="${isSolicitud}">
+								<a class="btn btn-info btn-sm" role="button"
+									href="<c:url value="/operador/solicitudfullview/view/${ID}"/>">
+									<i class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus} (FULL)
+								</a>
+							</c:if>
+							<c:if test="${!isSolicitud}">
+								<a class="btn btn-info btn-sm" role="button"
+									href="<c:url value="${urlToEditItem}"/>"> <i
+									class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
+								</a>
+							</c:if>
 
-								<c:if test="${!isPublic}">
-
-									<a class="btn btn-sm btn-warning" role="button"
-										href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>">
-										<i class="<%=IconUtils.ICON_ENVELOPE%>"></i> Enviar Correu al
-										Contacte
-									</a>
-									
-                                    <a class="btn btn-sm btn-success" role="button"
-                                        href="<c:url value="javascript:changeOperador()"/>">
-                                        <i class="<%=IconUtils.ICON_RELOAD%>"></i> Canviar l'operador
-                                    </a>
-
-
-                                <c:if test="${isSolicitud}">
-                                    <a class="btn btn-info btn-sm" role="button"
-                                        href="<c:url value="/operador/solicitudfullview/view/${ID}"/>"> <i
-                                        class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus} (FULL)
-                                    </a>
-                                </c:if>
-                                <c:if test="${!isSolicitud}">
-                                    <a class="btn btn-info btn-sm" role="button"
-                                        href="<c:url value="${urlToEditItem}"/>"> <i
-                                        class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
-                                    </a>
-                                </c:if>
-
-									<c:if test="${not empty urlToCloseItem}">
-										<a class="btn btn-danger btn-sm" role="button"
-											href="<c:url value="${urlToCloseItem}"/>"> <i
-											class="fas fa-window-close"></i> Tancar ${tipus}
-										</a>
-									</c:if>
+							<c:if test="${not empty urlToCloseItem}">
+								<a class="btn btn-danger btn-sm" role="button"
+									href="<c:url value="${urlToCloseItem}"/>"> <i
+									class="fas fa-window-close"></i> Tancar ${tipus}
+								</a>
+							</c:if>
 
 
-									<c:if test="${not empty urlMarcarComNoLlegides}">
-										<a class="btn btn-warning btn-sm" role="button"
-											href="${urlMarcarComNoLlegides}"> <i
-											class="fas fa-eye-slash"></i> Marcar Entrades com NO a
-											Llegides
-										</a>
-									</c:if>
-									<c:if test="${not empty urlMarcarComLlegides}">
-										<a class="btn btn-success btn-sm" role="button"
-											href="${urlMarcarComLlegides}"> <i
-											class="<%=IconUtils.ICON_CHECK%>"></i> Marcar Entrades com a
-											Llegides
-										</a>
-									</c:if>
-									
-								</c:if>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<h3 class="windowTitle" style="line-height: 20px; margin: 0;padding: 0.5rem 0px;">${titol}</h3>
-			</td>
+							<c:if test="${not empty urlMarcarComNoLlegides}">
+								<a class="btn btn-warning btn-sm" role="button"
+									href="${urlMarcarComNoLlegides}"> <i
+									class="fas fa-eye-slash"></i> Marcar Entrades com NO a Llegides
+								</a>
+							</c:if>
+							<c:if test="${not empty urlMarcarComLlegides}">
+								<a class="btn btn-success btn-sm" role="button"
+									href="${urlMarcarComLlegides}"> <i
+									class="<%=IconUtils.ICON_CHECK%>"></i> Marcar Entrades com a
+									Llegides
+								</a>
+							</c:if>
 
-		</tr>
-	</table>
+						</c:if>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<h4 class="windowTitle" style="margin: 0; padding-top: 0.5rem;">${titol}</h4>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 	<div class="full-width"
-		style="background-color: #EEEEEE; margin: 10px 10px 10px 10px; padding: 5px 5px 5px 5px;">
+		style="background-color: #EEEEEE; margin: 10px; padding: 5px;">
 		<table style="width: 100%; font-size: 1.4em">
 			<tbody>
 				<tr>
-					<td width="50%">Número: <strong> ${ID}</strong><br /> Estat: <strong
-						class="label-custom">${estat}</strong><br /> Data Creaci&oacute;:
-						<strong class="label-custom">${datacreacio}</strong><br />
+					<td width="50%">Número: <strong> ${ID}</strong><br /> Estat:
+						<strong class="label-custom">${estat}</strong><br /> Data
+						Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br />
 
 					</td>
 					<td>Nom Contacte: <strong>${personaContacte}</strong><br />
@@ -1461,33 +1457,35 @@ textarea.event {
 
 <!-- Modal -->
 <div class="modal fade" id="modelSeleccioTramitador" role="dialog">
-    <div class="modal-dialog">
+	<div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Crear nova incidencia</h4>
-                <button type="button" class="close"
-                    style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <%  request.setAttribute("currentuser", request.getRemoteUser()); %>
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Crear nova incidencia</h4>
+				<button type="button" class="close"
+					style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<%
+				request.setAttribute("currentuser", request.getRemoteUser());
+				%>
 
-                <label id="label_tramitador" for="tramitador"> Selecciona tramitador: </label> 
-                <select id="tramitador" class="my_select">
-                    <c:forEach items="${tramitadors}" var="tramitador">
-                        <option value="${tramitador.key}"
-                            ${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
-                    </c:forEach>
-                </select> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onClick="myFunction()"
-                    data-dismiss="modal">Ok</button>
-            </div>
-        </div>
+				<label id="label_tramitador" for="tramitador"> Selecciona
+					tramitador: </label> <select id="tramitador" class="my_select">
+					<c:forEach items="${tramitadors}" var="tramitador">
+						<option value="${tramitador.key}"
+							${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" onClick="myFunction()"
+					data-dismiss="modal">Ok</button>
+			</div>
+		</div>
 
-    </div>
+	</div>
 </div>
 
 <script>
