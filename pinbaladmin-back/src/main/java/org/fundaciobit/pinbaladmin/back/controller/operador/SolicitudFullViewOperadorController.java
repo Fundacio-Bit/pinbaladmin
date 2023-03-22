@@ -104,11 +104,18 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       HttpServletRequest request, ModelAndView mav) throws I18NException {
     SolicitudForm solicitudForm = super.getSolicitudForm(_jpa, __isView, request, mav);
 
+    
+    SolicitudJPA solicitud = solicitudForm.getSolicitud();
+    
+
+    
+    
     if (__isView) {
       // Canviam el cancel·lar per un tornar.....
       solicitudForm.setCancelButtonVisible(false);
-      Long soliID = +solicitudForm.getSolicitud().getSolicitudID();
+      Long soliID = + solicitud.getSolicitudID();
       String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
+      
       solicitudForm.addAdditionalButton(
           new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, "btn-info"));
 
@@ -117,22 +124,30 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
               + soliID + "/edit",
           "btn-warning"));
 
-      if (solicitudForm.getSolicitud().getEntitatEstatal() == null) {
+      String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/"
+              + solicitud.getSolicitudID() + (isEstatal() == null ? "" : ("/" + isEstatal()));
+
+      solicitudForm
+              .addAdditionalButton(new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));      
+      
+      solicitudForm.setAttachedAdditionalJspCode(true);
+      
+      if (solicitud.getEntitatEstatal() == null) {
         solicitudForm.addAdditionalButton(
             new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
                 getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
 
-        if (solicitudForm.getSolicitud().getTicketNumeroSeguiment() == null) {
+        if (solicitud.getTicketNumeroSeguiment() == null) {
           solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
               "solicitud.caid", getContextWeb() + "/formularicaidfitxers/"
-                  + solicitudForm.getSolicitud().getSolicitudID(),
+                  + solicitud.getSolicitudID(),
               "btn-info"));
         } else {
 
           String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
               + "email=gd.pinbal@fundaciobit.org" + "&incidencia="
-              + solicitudForm.getSolicitud().getTicketAssociat() + "&seguimiento="
-              + solicitudForm.getSolicitud().getTicketNumeroSeguiment();
+              + solicitud.getTicketAssociat() + "&seguimiento="
+              + solicitud.getTicketNumeroSeguiment();
 
           solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
               "consulta.caid", "javascript:window.open('" + url + "', '_blank')", "btn-info"));

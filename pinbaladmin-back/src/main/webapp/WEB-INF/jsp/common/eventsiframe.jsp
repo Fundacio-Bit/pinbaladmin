@@ -1183,7 +1183,7 @@ textarea.event {
 						</td>
 
 						<td width="100%" align="right">
-							<div>
+							<div id="botonera_div">
 								<c:url var="theurlnew" value="${contextweb}/new" />
 								<c:set var="urlnou"
 									value="javascript:document.location.href='${theurlnew}'" />
@@ -1210,11 +1210,20 @@ textarea.event {
                                         href="<c:url value="javascript:changeOperador()"/>">
                                         <i class="<%=IconUtils.ICON_RELOAD%>"></i> Canviar l'operador
                                     </a>
-                                    
-									<a class="btn btn-info btn-sm" role="button"
-										href="<c:url value="${urlToEditItem}"/>"> <i
-										class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
-									</a>
+
+
+                                <c:if test="${isSolicitud}">
+                                    <a class="btn btn-info btn-sm" role="button"
+                                        href="<c:url value="/operador/solicitudfullview/view/${ID}"/>"> <i
+                                        class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus} (FULL)
+                                    </a>
+                                </c:if>
+                                <c:if test="${!isSolicitud}">
+                                    <a class="btn btn-info btn-sm" role="button"
+                                        href="<c:url value="${urlToEditItem}"/>"> <i
+                                        class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
+                                    </a>
+                                </c:if>
 
 									<c:if test="${not empty urlToCloseItem}">
 										<a class="btn btn-danger btn-sm" role="button"
@@ -1226,14 +1235,14 @@ textarea.event {
 
 									<c:if test="${not empty urlMarcarComNoLlegides}">
 										<a class="btn btn-warning btn-sm" role="button"
-											style="margin: 5px" href="${urlMarcarComNoLlegides}"> <i
+											href="${urlMarcarComNoLlegides}"> <i
 											class="fas fa-eye-slash"></i> Marcar Entrades com NO a
 											Llegides
 										</a>
 									</c:if>
 									<c:if test="${not empty urlMarcarComLlegides}">
 										<a class="btn btn-success btn-sm" role="button"
-											style="margin: 5px" href="${urlMarcarComLlegides}"> <i
+											href="${urlMarcarComLlegides}"> <i
 											class="<%=IconUtils.ICON_CHECK%>"></i> Marcar Entrades com a
 											Llegides
 										</a>
@@ -1248,7 +1257,7 @@ textarea.event {
 		</tr>
 		<tr>
 			<td colspan="2">
-				<h3 class="windowTitle" style="line-height: 20px; margin: 0">${titol}</h3>
+				<h3 class="windowTitle" style="line-height: 20px; margin: 0;padding: 0.5rem 0px;">${titol}</h3>
 			</td>
 
 		</tr>

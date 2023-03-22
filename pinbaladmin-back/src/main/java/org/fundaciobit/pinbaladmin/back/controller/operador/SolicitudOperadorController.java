@@ -528,7 +528,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
                     getContextWeb() + "/fullexport", "btn-info"));
 
-            solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "Events", /*
+            solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol", /*
                                                                                                                     * "javascript:window.open('" + request.getContextPath() +
                                                                                                                     */
                     EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
@@ -1282,10 +1282,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     @RequestMapping(value = "/changeOperador/{solicitudID}/{operador}", method = RequestMethod.GET)
-    public String changeOperadorIncidenciaTecnicaGet(
-            @PathVariable("solicitudID") java.lang.Long solicitudID,
-            @PathVariable("operador") java.lang.String operador,
-            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+    public String changeOperadorIncidenciaTecnicaGet(@PathVariable("solicitudID") java.lang.Long solicitudID,
+            @PathVariable("operador") java.lang.String operador, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
 
         SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
 
@@ -1295,7 +1294,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         try {
             this.update(request, soli);
 
-            HtmlUtils.saveMessageSuccess(request, "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
+            HtmlUtils.saveMessageSuccess(request,
+                    "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
@@ -1304,7 +1304,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         return "redirect:/operador/solicitudfullview/view/" + solicitudID;
     }
-    
+
     @Override
     public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {

@@ -198,7 +198,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             }
             incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
 
-            incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "Events",
+            incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol",
                     EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}", "btn-success"));
 
             if (showAdvancedFilter()) {
