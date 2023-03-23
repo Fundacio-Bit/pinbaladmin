@@ -144,8 +144,12 @@ public class QueEsticFentOperadorController {
 
             // (3) Consultam events
             {
-                final Where w = Where.AND(EventFields.PERSONA.equal(username), EventFields.DATAEVENT.between(from, to));
-                List<Event> events = eventEjb.select(w);
+                final Where wOp1 = EventFields.PERSONA.equal(username);
+                final Where wOp2 = EventFields.PERSONA.like("% " + username + " %");
+                final Where w1 = Where.OR(wOp1, wOp2);
+                
+                final Where w2 = EventFields.DATAEVENT.between(from, to);
+                List<Event> events = eventEjb.select(Where.AND(w1, w2));
                 for (Event event : events) {
                     if (event.getSolicitudID() == null) {
                         fullevents.put(event.getIncidenciaTecnicaID(), event);
