@@ -2,10 +2,10 @@
   "packageName": "org.fundaciobit.pinbaladmin",
   "projectName": "PinbalAdmin",
   "dataBaseInfo": {
-    "url": "jdbc:postgresql://localhost:5432/pinbaladmin2",
+    "url": "jdbc:postgresql://localhost:5432/pinbaladmin",
     "driver": "org.postgresql.Driver",
-    "usr": "pinbaladmin2",
-    "pwd": "pinbaladmin2"
+    "usr": "pinbaladmin",
+    "pwd": "pinbaladmin"
   },
   "modulSeguretat": "keycloak",
   "prefix": "pad",
@@ -3474,6 +3474,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "defaultValue": "1",
           "minAllowedValue": "1,2,3,4",
           "filter": true,
           "orderBy": 0,
