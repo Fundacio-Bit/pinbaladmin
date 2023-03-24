@@ -70,6 +70,4 @@
 </c:forEach>
 
 
-</script>
-
 

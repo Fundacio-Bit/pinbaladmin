@@ -601,6 +601,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
             mav.addObject("cedent", cedent);
         }
 
+
         mav.addObject("tramitador", getTramitador(item));
         mav.addObject("datacreacio", SDF.format(getDataCreacio(item)));
         mav.addObject("personaContacte", getPersonaContacteNom(item));
