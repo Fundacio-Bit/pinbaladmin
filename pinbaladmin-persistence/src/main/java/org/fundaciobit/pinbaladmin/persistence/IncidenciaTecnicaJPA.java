@@ -47,8 +47,9 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @Column(name="creador",nullable = false,length = 255)
     java.lang.String creador = "mcapo";
 
+    @org.hibernate.annotations.ColumnDefault("1")
     @Column(name="tipus",nullable = false,length = 10)
-    int tipus;
+    int tipus = 1;
 
     @Column(name="nomentitat",length = 255)
     java.lang.String nomEntitat;

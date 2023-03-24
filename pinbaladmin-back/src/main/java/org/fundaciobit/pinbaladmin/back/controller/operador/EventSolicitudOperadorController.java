@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  */
 @Controller
-@RequestMapping(value = EventSolicitudOperadorController.CONTEXT_PATH)
+@RequestMapping(value = EventSolicitudOperadorController.CONTEXTWEB)
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
-public class EventSolicitudOperadorController extends AbstractEventSolicitudController  {
+public class EventSolicitudOperadorController extends AbstractEventSolicitudController {
 
-  public static final String CONTEXT_PATH = "/operador/eventsolicitud";
+    public static final String CONTEXTWEB = "/operador/eventsolicitud";
 
-  @Override
-  public boolean isPublic() {
-    return false;
-  }
+    @Override
+    public boolean isPublic() {
+        return false;
+    }
 
-  
 }

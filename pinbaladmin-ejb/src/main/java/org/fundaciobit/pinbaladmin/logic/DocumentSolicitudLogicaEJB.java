@@ -56,5 +56,4 @@ public class DocumentSolicitudLogicaEJB extends DocumentSolicitudEJB implements 
 
         return files;
     }
-
 }

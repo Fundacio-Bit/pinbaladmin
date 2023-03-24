@@ -30,35 +30,35 @@ import javax.ejb.Stateless;
 @Stateless(name = "SampleLogicaEJB")
 public class SampleLogicaEJB implements SampleLogicaService {
 
-//    @EJB(mappedName=org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)protected org.fundaciobit.pinbaladmin.
-//    ejb.FitxerService fitxerEjb;
-//
-//    @Resource(mappedName = "java:comp/TransactionSynchronizationRegistry")
-//    protected TransactionSynchronizationRegistry transactionSynchronizationRegistry;
-//
-//    @Override
-//    public void deleteFull(AnnexJPA annex) throws I18NException {
-//        log.info("Comença deleteFull");
-//
-//        // Borram Annex a BD
-//        delete(annex);
-//
-//        Long[] fitxers = new Long[] { annex.getFitxer1ID(), annex.getFitxer2ID() };
-//
-//        Set<Long> filesToDelete = new HashSet<Long>();
-//
-//        // Borram fitxers a BD
-//        for (Long f : fitxers) {
-//            if (f != null) {
-//                fitxerEjb.delete(f);
-//                filesToDelete.add(f);
-//            }
-//        }
-//
-//        tsRegistry.registerInterposedSynchronization(new PreCommitFiles(filesToDelete));
-//
-//        log.info("Final deleteFull");
-//    }
+    //    @EJB(mappedName=org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)protected org.fundaciobit.pinbaladmin.
+    //    ejb.FitxerService fitxerEjb;
+    //
+    //    @Resource(mappedName = "java:comp/TransactionSynchronizationRegistry")
+    //    protected TransactionSynchronizationRegistry transactionSynchronizationRegistry;
+    //
+    //    @Override
+    //    public void deleteFull(AnnexJPA annex) throws I18NException {
+    //        log.info("Comença deleteFull");
+    //
+    //        // Borram Annex a BD
+    //        delete(annex);
+    //
+    //        Long[] fitxers = new Long[] { annex.getFitxer1ID(), annex.getFitxer2ID() };
+    //
+    //        Set<Long> filesToDelete = new HashSet<Long>();
+    //
+    //        // Borram fitxers a BD
+    //        for (Long f : fitxers) {
+    //            if (f != null) {
+    //                fitxerEjb.delete(f);
+    //                filesToDelete.add(f);
+    //            }
+    //        }
+    //
+    //        tsRegistry.registerInterposedSynchronization(new PreCommitFiles(filesToDelete));
+    //
+    //        log.info("Final deleteFull");
+    //    }
 
 };
 

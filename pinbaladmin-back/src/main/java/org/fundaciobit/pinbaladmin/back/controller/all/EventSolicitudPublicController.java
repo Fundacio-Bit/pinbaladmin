@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
 public class EventSolicitudPublicController extends AbstractEventSolicitudController implements Constants {
 
-  public static final String CONTEXT_PATH = "/public/eventsolicitud";
-  
-  @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
-  protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+    public static final String CONTEXT_PATH = "/public/eventsolicitud";
 
-  @Override
-  public boolean isPublic() {
-    return true;
-  }
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
 
-  @Override
-  protected FilesFormManager<Fitxer> getFilesFormManager() {
-    return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
-  }
+    @Override
+    public boolean isPublic() {
+        return true;
+    }
+
+    @Override
+    protected FilesFormManager<Fitxer> getFilesFormManager() {
+        return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
+    }
 
 }

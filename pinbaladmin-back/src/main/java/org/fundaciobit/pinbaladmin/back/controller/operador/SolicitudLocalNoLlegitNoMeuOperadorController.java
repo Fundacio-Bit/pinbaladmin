@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.springframework.stereotype.Controller;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
 public class SolicitudLocalNoLlegitNoMeuOperadorController extends SolicitudLocalOperadorController {
 
-  @Override
-  public VistaIncidencia getVistaIncidencia() {
-    return VistaIncidencia.NOLLEGITSNOMEUS;
-  }
+    @Override
+    public VistaIncidencia getVistaIncidencia() {
+        return VistaIncidencia.NOLLEGITSNOMEUS;
+    }
 }

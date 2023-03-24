@@ -39,6 +39,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
@@ -527,10 +528,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
                     getContextWeb() + "/fullexport", "btn-info"));
 
-            solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "Events", /*
+            solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol", /*
                                                                                                                     * "javascript:window.open('" + request.getContextPath() +
                                                                                                                     */
-                    EventSolicitudOperadorController.CONTEXT_PATH + "/veureevents/{0}"
+                    EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
                             + (isestatal == null ? "" : ("/" + isestatal)) /* ','_blank');" */,
                     "btn-success"));
 
@@ -809,8 +810,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
                     valuediv = valuediv + "</tr>\n";
                 }
-
-         
 
             }
             valuediv = valuediv + "</table>\n";
@@ -1275,6 +1274,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             HtmlUtils.saveMessageSuccess(request, "Tancada Sol·licitud correctament.");
         } catch (Throwable e) {
             String msg = "Error tancant Sol·licitud: " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+
+        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
+    }
+
+    @RequestMapping(value = "/changeOperador/{solicitudID}/{operador}", method = RequestMethod.GET)
+    public String changeOperadorIncidenciaTecnicaGet(@PathVariable("solicitudID") java.lang.Long solicitudID,
+            @PathVariable("operador") java.lang.String operador, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+
+        SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
+
+        String operador_old = soli.getCreador();
+        soli.setCreador(operador);
+
+        try {
+            this.update(request, soli);
+
+            HtmlUtils.saveMessageSuccess(request,
+                    "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
+        } catch (Throwable e) {
+            String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
             HtmlUtils.saveMessageError(request, msg);
         }

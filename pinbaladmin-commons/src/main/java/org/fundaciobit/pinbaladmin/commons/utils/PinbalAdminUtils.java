@@ -7,15 +7,15 @@ package org.fundaciobit.pinbaladmin.commons.utils;
  */
 public class PinbalAdminUtils {
 
-  public static boolean isNumber(String af) {
+    public static boolean isNumber(String af) {
 
-    try {
-      Integer.parseInt(af);
-      return true;
-    } catch (NumberFormatException e) {
-      return false;
+        try {
+            Integer.parseInt(af);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
     }
-
-  }
 
 }

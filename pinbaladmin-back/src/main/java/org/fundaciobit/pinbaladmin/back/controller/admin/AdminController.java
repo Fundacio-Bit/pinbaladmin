@@ -17,28 +17,23 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/admin/")
 public class AdminController {
 
-  
-  @RequestMapping(value = "/option1")
-  public ModelAndView option1(HttpSession session,
-      HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-    
-    ModelAndView mav = new ModelAndView("option1Admin");
-    mav.addObject("optionNumber", "OPCIÓ ADMIN -1-");
-    return mav;
-    
-  }
-  
-  
-  @RequestMapping(value = "/option2")
-  public ModelAndView option2(HttpSession session,
-      HttpServletRequest request, HttpServletResponse response)
-      throws Exception {
-    
-    ModelAndView mav = new ModelAndView("option2Admin");
-    mav.addObject("optionNumber", "OPCIÓ ADMIN -2-");
-    return mav;
-  }
-  
-  
+    @RequestMapping(value = "/option1")
+    public ModelAndView option1(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+
+        ModelAndView mav = new ModelAndView("option1Admin");
+        mav.addObject("optionNumber", "OPCIÓ ADMIN -1-");
+        return mav;
+
+    }
+
+    @RequestMapping(value = "/option2")
+    public ModelAndView option2(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+
+        ModelAndView mav = new ModelAndView("option2Admin");
+        mav.addObject("optionNumber", "OPCIÓ ADMIN -2-");
+        return mav;
+    }
+
 }

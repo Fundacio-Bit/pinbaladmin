@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentCedentFields;
 
-
 /**
  * 
  * @author anadal
@@ -36,99 +35,93 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentCedentFields;
 @RequestMapping(value = "/operador/cedent")
 @SessionAttributes(types = { EntitatServeiForm.class, EntitatServeiFilterForm.class })
 public class CedentOperadorController extends EntitatServeiController {
-  
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentCedentService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.DocumentCedentService documentCedentEjb;
-  
-  
-  public static final int DOCS = 1;
 
-  @Override
-  public String getSessionAttributeFilterForm() {
-    return "EntitatServeiWebDB_FilterForm_operador";
-  }
-  
-  @Override
-  public String getTileForm() {
-    return "entitatServeiFormWebDB_operador";
-  }
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentCedentService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.DocumentCedentService documentCedentEjb;
 
-  @Override
-  public String getTileList() {
-    return "entitatServeiListWebDB_operador";
-  }
- 
-  @Override
-  public EntitatServeiFilterForm getEntitatServeiFilterForm(Integer pagina, ModelAndView mav,
-      HttpServletRequest request) throws I18NException {
-      EntitatServeiFilterForm entitatServeiFilterForm = super.getEntitatServeiFilterForm(pagina, mav, request);
-      if (entitatServeiFilterForm.isNou()) {
-        entitatServeiFilterForm.setVisibleMultipleSelection(false);
-        
-        entitatServeiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_FILE, "documentscedent",
-            "/operador/cedent/documents/{0}", "btn-info"));
-        
-        entitatServeiFilterForm.setItemsPerPage(20);
-        
-        entitatServeiFilterForm.addLabel(BALEARS, "=Illes");
-        
-        
-        AdditionalField<Long,String> adfield4 = new AdditionalField<Long,String>(); 
-        adfield4.setCodeName("=Docs.");
-        adfield4.setPosition(DOCS);
-        // Els valors s'ompliran al mètode postList()
-        adfield4.setValueMap(new HashMap<Long, String>());
-        adfield4.setEscapeXml(false);
+    public static final int DOCS = 1;
 
-        entitatServeiFilterForm.addAdditionalField(adfield4);
-        
-      }
-      return entitatServeiFilterForm;
-  }
- 
-  @Override
-  public void postList(HttpServletRequest request, ModelAndView mav, EntitatServeiFilterForm filterForm,  List<EntitatServei> list) throws I18NException {
+    @Override
+    public String getSessionAttributeFilterForm() {
+        return "EntitatServeiWebDB_FilterForm_operador";
+    }
 
-      Map<Long, String> map;
-      map = (Map<Long, String>)filterForm.getAdditionalField(DOCS).getValueMap(); 
-      map.clear();
-      
-      for (EntitatServei entitatServei : list) {
-        
-        long count = documentCedentEjb.count(
-            DocumentCedentFields.ENTITATSERVEIID.equal(entitatServei.getEntitatServeiID()));
-        
-        if (count == 0) {
-          map.put(entitatServei.getEntitatServeiID(), "");
-        } else {
-          map.put(entitatServei.getEntitatServeiID(), String.valueOf(count));
+    @Override
+    public String getTileForm() {
+        return "entitatServeiFormWebDB_operador";
+    }
+
+    @Override
+    public String getTileList() {
+        return "entitatServeiListWebDB_operador";
+    }
+
+    @Override
+    public EntitatServeiFilterForm getEntitatServeiFilterForm(Integer pagina, ModelAndView mav,
+            HttpServletRequest request) throws I18NException {
+        EntitatServeiFilterForm entitatServeiFilterForm = super.getEntitatServeiFilterForm(pagina, mav, request);
+        if (entitatServeiFilterForm.isNou()) {
+            entitatServeiFilterForm.setVisibleMultipleSelection(false);
+
+            entitatServeiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_FILE,
+                    "documentscedent", "/operador/cedent/documents/{0}", "btn-info"));
+
+            entitatServeiFilterForm.setItemsPerPage(20);
+
+            entitatServeiFilterForm.addLabel(BALEARS, "=Illes");
+
+            AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+            adfield4.setCodeName("=Docs.");
+            adfield4.setPosition(DOCS);
+            // Els valors s'ompliran al mètode postList()
+            adfield4.setValueMap(new HashMap<Long, String>());
+            adfield4.setEscapeXml(false);
+
+            entitatServeiFilterForm.addAdditionalField(adfield4);
+
         }
-        
-      }
-      
-  }
-  
-  
-  @RequestMapping(value = "/documents/{entitatSerceiID}", method = RequestMethod.GET)
-  public ModelAndView veureDocumentCedentGet(@PathVariable("entitatSerceiID") java.lang.Long entitatSerceiID,
-      HttpServletRequest request,
-      HttpServletResponse response) throws I18NException {
-    
-    request.getSession().setAttribute(DocumentCedentOperatorController.CEDENTID_SESSION_PROPERTY, entitatSerceiID);
-    
-    return new ModelAndView(new RedirectView("/operador/documentcedent/list", true));
-    
-  }
-  
-  
-  
-  @Override
-  public void delete(HttpServletRequest request, EntitatServei entitatServei) throws I18NException {
-    
-    documentCedentEjb.delete(DocumentCedentFields.ENTITATSERVEIID.equal(entitatServei.getEntitatServeiID()));
-    
-    entitatServeiEjb.delete(entitatServei);
-  }
-  
-  
+        return entitatServeiFilterForm;
+    }
+
+    @Override
+    public void postList(HttpServletRequest request, ModelAndView mav, EntitatServeiFilterForm filterForm,
+            List<EntitatServei> list) throws I18NException {
+
+        Map<Long, String> map;
+        map = (Map<Long, String>) filterForm.getAdditionalField(DOCS).getValueMap();
+        map.clear();
+
+        for (EntitatServei entitatServei : list) {
+
+            long count = documentCedentEjb
+                    .count(DocumentCedentFields.ENTITATSERVEIID.equal(entitatServei.getEntitatServeiID()));
+
+            if (count == 0) {
+                map.put(entitatServei.getEntitatServeiID(), "");
+            } else {
+                map.put(entitatServei.getEntitatServeiID(), String.valueOf(count));
+            }
+
+        }
+
+    }
+
+    @RequestMapping(value = "/documents/{entitatSerceiID}", method = RequestMethod.GET)
+    public ModelAndView veureDocumentCedentGet(@PathVariable("entitatSerceiID") java.lang.Long entitatSerceiID,
+            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+        request.getSession().setAttribute(DocumentCedentOperatorController.CEDENTID_SESSION_PROPERTY, entitatSerceiID);
+
+        return new ModelAndView(new RedirectView("/operador/documentcedent/list", true));
+
+    }
+
+    @Override
+    public void delete(HttpServletRequest request, EntitatServei entitatServei) throws I18NException {
+
+        documentCedentEjb.delete(DocumentCedentFields.ENTITATSERVEIID.equal(entitatServei.getEntitatServeiID()));
+
+        entitatServeiEjb.delete(entitatServei);
+    }
+
 }

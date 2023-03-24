@@ -22,30 +22,29 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 @Local
 public interface SolicitudLogicaService extends SolicitudService {
 
-  public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/SolicitudLogicaEJB!org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService";
+    public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/SolicitudLogicaEJB!org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService";
 
-  Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds);
+    Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds);
 
-  Set<Long> deleteFull(Long solicitudId, boolean deleteFiles) throws I18NException;
-  
-  @Override
-  @PermitAll
-  public SolicitudJPA findByPrimaryKey(Long _ID_);
-  
+    Set<Long> deleteFull(Long solicitudId, boolean deleteFiles) throws I18NException;
 
-  public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException;
-  
+    @Override
+    @PermitAll
+    public SolicitudJPA findByPrimaryKey(Long _ID_);
 
-  @PermitAll
-  public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
-  
-  /**
-   * 
-   * @param solicituds
-   * @param xlsx
-   * @param attachs
-   * @throws I18NException
-   */
-  public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx, List<EmailAttachmentInfo> attachs) throws I18NException;
-  
+    public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException;
+
+    @PermitAll
+    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
+
+    /**
+     * 
+     * @param solicituds
+     * @param xlsx
+     * @param attachs
+     * @throws I18NException
+     */
+    public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
+            List<EmailAttachmentInfo> attachs) throws I18NException;
+
 }

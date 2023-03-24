@@ -29,68 +29,66 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
  */
 public class EmailUtil {
 
- /**
-   * Envia un email a un {@link List} de emails
-   * 
-   * @param subject
-   *          Asunto del Mensaje
-   * @param message
-   *          Contenido a enviar
-   * @param from
-   *          Indica la procedencia del mensaje
-   * @param type
-   *          Indica el con que de que tipo es el destinatario, Copia, Copia
-   *          Oculta, etc
-   * @param isHtml
-   *          Decide si el contenido del mensaje a de ser visualizado en html o
-   *          no
-   * @param recipients
-   *          Conjunto de emails para los que va dirigido el mensaje
-   * @throws Exception
-   */
-  public static void postMail(String subject, String message, boolean isHtml,
-      String from, String ... recipients) throws Exception {
-    
-    
-
-    Context ctx = new InitialContext();
-    Session session = (javax.mail.Session) ctx.lookup(Constants.MAIL_SERVICE);
-
-    // Creamos el mensaje
-    MimeMessage msg = new MimeMessage(session);
-
-    InternetAddress addressFrom = new InternetAddress(from);
-    msg.setFrom(addressFrom);
-
-    // Indicamos los destinatarios
-    InternetAddress[] addressTo = new InternetAddress[recipients.length];
-    for (int i = 0; i < recipients.length; i++) {
-      addressTo[i] = new InternetAddress(recipients[i]);
-    }
-    
-    final RecipientType type = RecipientType.TO;
-
-    msg.setRecipients(type, addressTo);
-
-    // Configuramos el asunto
-    msg.setSubject(subject, "UTF-8");
-    msg.setSentDate(new Date());
-
-    // Configuramos el contenido
-    if (isHtml) {
-      msg.setHeader("Content-Type", "text/html;charset=utf-8");
-      /*
-      URL urlToAdd = new URL(url);
-      msg.setDataHandler(new DataHandler(urlToAdd));
+    /**
+      * Envia un email a un {@link List} de emails
+      * 
+      * @param subject
+      *          Asunto del Mensaje
+      * @param message
+      *          Contenido a enviar
+      * @param from
+      *          Indica la procedencia del mensaje
+      * @param type
+      *          Indica el con que de que tipo es el destinatario, Copia, Copia
+      *          Oculta, etc
+      * @param isHtml
+      *          Decide si el contenido del mensaje a de ser visualizado en html o
+      *          no
+      * @param recipients
+      *          Conjunto de emails para los que va dirigido el mensaje
+      * @throws Exception
       */
-      msg.setContent(message, "text/html;charset=utf-8");
-    } else {
-      msg.setContent(message, "text/plain" /*; charset=UTF-8"*/);
+    public static void postMail(String subject, String message, boolean isHtml, String from, String... recipients)
+            throws Exception {
+
+        Context ctx = new InitialContext();
+        Session session = (javax.mail.Session) ctx.lookup(Constants.MAIL_SERVICE);
+
+        // Creamos el mensaje
+        MimeMessage msg = new MimeMessage(session);
+
+        InternetAddress addressFrom = new InternetAddress(from);
+        msg.setFrom(addressFrom);
+
+        // Indicamos los destinatarios
+        InternetAddress[] addressTo = new InternetAddress[recipients.length];
+        for (int i = 0; i < recipients.length; i++) {
+            addressTo[i] = new InternetAddress(recipients[i]);
+        }
+
+        final RecipientType type = RecipientType.TO;
+
+        msg.setRecipients(type, addressTo);
+
+        // Configuramos el asunto
+        msg.setSubject(subject, "UTF-8");
+        msg.setSentDate(new Date());
+
+        // Configuramos el contenido
+        if (isHtml) {
+            msg.setHeader("Content-Type", "text/html;charset=utf-8");
+            /*
+            URL urlToAdd = new URL(url);
+            msg.setDataHandler(new DataHandler(urlToAdd));
+            */
+            msg.setContent(message, "text/html;charset=utf-8");
+        } else {
+            msg.setContent(message, "text/plain" /*; charset=UTF-8"*/);
+        }
+
+        // Mandamos el mail
+        Transport.send(msg);
+
     }
-
-    // Mandamos el mail
-    Transport.send(msg);
-
-  }
 
 }

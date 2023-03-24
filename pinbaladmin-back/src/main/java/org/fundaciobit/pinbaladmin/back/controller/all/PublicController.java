@@ -18,21 +18,21 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class PublicController {
 
-	protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = Logger.getLogger(getClass());
 
-	@RequestMapping(value = "/public/index.html")
-	public ModelAndView principal(HttpSession session, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+    @RequestMapping(value = "/public/index.html")
+    public ModelAndView principal(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-		Boolean initialized = (Boolean) session.getAttribute("inicialitzat");
+        Boolean initialized = (Boolean) session.getAttribute("inicialitzat");
 
-		if (initialized == null) {
-			HtmlUtils.saveMessageInfo(request, "MessageInfo : Benvingut a PinbalAdmin");
-			session.setAttribute("inicialitzat", true);
-		}
+        if (initialized == null) {
+            HtmlUtils.saveMessageInfo(request, "MessageInfo : Benvingut a PinbalAdmin");
+            session.setAttribute("inicialitzat", true);
+        }
 
-		return new ModelAndView("homepublic");
+        return new ModelAndView("homepublic");
 
-	}
+    }
 
 }

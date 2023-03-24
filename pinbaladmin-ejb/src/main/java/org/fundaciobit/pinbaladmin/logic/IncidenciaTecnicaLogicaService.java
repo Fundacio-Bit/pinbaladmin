@@ -16,15 +16,14 @@ import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 @Local
 public interface IncidenciaTecnicaLogicaService extends IncidenciaTecnicaService {
 
-  public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/IncidenciaTecnicaLogicaEJB!org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService";
+    public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/IncidenciaTecnicaLogicaEJB!org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService";
 
-  @Override
-  @PermitAll
-  public org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA findByPrimaryKey(Long _ID_);
+    @Override
+    @PermitAll
+    public org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA findByPrimaryKey(Long _ID_);
 
-  public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, int tipus)
-      throws I18NException;
+    public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, int tipus) throws I18NException;
 
-  public void deleteFull(Long _ID) throws I18NException;
+    public void deleteFull(Long _ID) throws I18NException;
 
 }

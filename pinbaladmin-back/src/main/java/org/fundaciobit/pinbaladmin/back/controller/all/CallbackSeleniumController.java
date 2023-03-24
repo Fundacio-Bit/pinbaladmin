@@ -23,30 +23,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class CallbackSeleniumController implements Constants {
 
-  protected final Logger log = Logger.getLogger(this.getClass());
+    protected final Logger log = Logger.getLogger(this.getClass());
 
-  public static final String CALLBACK_SELENIUM_CONTEXT = "/public/callbackselenium";
+    public static final String CALLBACK_SELENIUM_CONTEXT = "/public/callbackselenium";
 
-  @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
-  protected SolicitudLogicaService solicitudLogicaEjb;
+    @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+    protected SolicitudLogicaService solicitudLogicaEjb;
 
-  @RequestMapping(value = CALLBACK_SELENIUM_CONTEXT
-      + "/{soliID}/{incidencia}/{seguiment}", method = RequestMethod.GET)
-  public void generarFormulariCaidGet(HttpServletRequest request, HttpServletResponse response,
-      @PathVariable("soliID") Long soliID, @PathVariable("incidencia") String incidencia,
-      @PathVariable("seguiment") String seguiment) throws I18NException {
+    @RequestMapping(value = CALLBACK_SELENIUM_CONTEXT
+            + "/{soliID}/{incidencia}/{seguiment}", method = RequestMethod.GET)
+    public void generarFormulariCaidGet(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("soliID") Long soliID, @PathVariable("incidencia") String incidencia,
+            @PathVariable("seguiment") String seguiment) throws I18NException {
 
-    try {
+        try {
 
-      log.info("\n\n  REBUT CALLBACK: soliID => " + soliID + " | incidencia => " + incidencia
-          + " | seguiment => " + seguiment + "\n\n");
+            log.info("\n\n  REBUT CALLBACK: soliID => " + soliID + " | incidencia => " + incidencia + " | seguiment => "
+                    + seguiment + "\n\n");
 
-      solicitudLogicaEjb.updateCAID(soliID, incidencia, seguiment);
+            solicitudLogicaEjb.updateCAID(soliID, incidencia, seguiment);
 
-      response.getWriter().append("OK");
-    } catch (IOException e) {
-      log.error("Error processant el callbak de Selenium: " + e.getMessage(), e);
+            response.getWriter().append("OK");
+        } catch (IOException e) {
+            log.error("Error processant el callbak de Selenium: " + e.getMessage(), e);
+        }
+
     }
-
-  }
 }

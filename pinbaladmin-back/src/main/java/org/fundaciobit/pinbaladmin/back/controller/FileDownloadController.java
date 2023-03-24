@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller;
 
-
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 
@@ -22,18 +21,16 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-
 /**
  * @autor anadal
  * 
  */
 @Controller
-@RequestMapping (value = FileDownloadController.CONTEXTWEB)
+@RequestMapping(value = FileDownloadController.CONTEXTWEB)
 public class FileDownloadController {
 
     protected static final Logger log = Logger.getLogger(FileDownloadController.class);
-    
-    
+
     protected static final String CONTEXTWEB = "/common/arxiu/";
 
     /**
@@ -81,88 +78,85 @@ public class FileDownloadController {
      * @param contentType
      * @param response
      */
-    public static void fullDownload(long arxiuId, String filename, String contentType, 
-      HttpServletResponse response) {
+    public static void fullDownload(long arxiuId, String filename, String contentType, HttpServletResponse response) {
 
-      FileInputStream input = null;
-      OutputStream output = null;
-      
+        FileInputStream input = null;
+        OutputStream output = null;
 
-      try {
-        File file = FileSystemManager.getFile(arxiuId);
-
-        if (!file.exists()) {
-          // TODO TRADUIR Fitxer no trobat
-          String msg = "Fitxer amb ID=" + arxiuId + " no existeix.";
-          log.error(msg + " => " + file.getAbsolutePath(), new Exception());
-          response.setHeader("MsgPinbalAdmin", msg);
-          response.sendError(HttpServletResponse.SC_NOT_FOUND);
-          return;
-        }
-        
-        if (filename == null) {
-          filename = "file"; // arxiu.getNombre()
-        }
-        if (contentType == null) {
-          MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-          contentType = mimeTypesMap.getContentType(file);
-        }
-        response.setContentType(contentType);
-        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-        response.setContentLength((int) file.length());
-
-        output = response.getOutputStream();
-        input = new FileInputStream(file);
-        
-        FileSystemManager.copy(input, output);
-       
-        input.close();
-        output.close();
-
-      }  catch (Exception e) {
-        String msg = "Error descarregant fitxer amb ID = " + arxiuId + "(" + e.getMessage() + ")"; 
-        log.error(msg, e);
-        response.setHeader("MsgPinbalAdmin", msg);
         try {
-          response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } catch (IOException e1) {
-          response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            File file = FileSystemManager.getFile(arxiuId);
+
+            if (!file.exists()) {
+                // TODO TRADUIR Fitxer no trobat
+                String msg = "Fitxer amb ID=" + arxiuId + " no existeix.";
+                log.error(msg + " => " + file.getAbsolutePath(), new Exception());
+                response.setHeader("MsgPinbalAdmin", msg);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            if (filename == null) {
+                filename = "file"; // arxiu.getNombre()
+            }
+            if (contentType == null) {
+                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+                contentType = mimeTypesMap.getContentType(file);
+            }
+            response.setContentType(contentType);
+            response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+            response.setContentLength((int) file.length());
+
+            output = response.getOutputStream();
+            input = new FileInputStream(file);
+
+            FileSystemManager.copy(input, output);
+
+            input.close();
+            output.close();
+
+        } catch (Exception e) {
+            String msg = "Error descarregant fitxer amb ID = " + arxiuId + "(" + e.getMessage() + ")";
+            log.error(msg, e);
+            response.setHeader("MsgPinbalAdmin", msg);
+            try {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } catch (IOException e1) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
-      }
     }
-    
-    
-    public static String fileUrl(Fitxer arxiu) {
-      if (arxiu == null) {
-        // TODO Llançar error
-        return "/img/blank.gif";
-      } else {
-        // {arxiuId}/{filename}/{contentType}
-        String idfile = HibernateFileUtil.encryptFileID(arxiu.getFitxerID());
 
-        String base = CONTEXTWEB + idfile;
-        String nombre = arxiu.getNom(); 
-        if (nombre == null) {
-           return base;
-        }        
-        try {
-          base = base + "?nom=" + URLEncoder.encode(nombre,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          base = base + "?nom=" + nombre;
-        } //  
-        String mime = arxiu.getMime();
-        if (mime == null) {
-          return base;
+    public static String fileUrl(Fitxer arxiu) {
+        if (arxiu == null) {
+            // TODO Llançar error
+            return "/img/blank.gif";
+        } else {
+            // {arxiuId}/{filename}/{contentType}
+            String idfile = HibernateFileUtil.encryptFileID(arxiu.getFitxerID());
+
+            String base = CONTEXTWEB + idfile;
+            String nombre = arxiu.getNom();
+            if (nombre == null) {
+                return base;
+            }
+            try {
+                base = base + "?nom=" + URLEncoder.encode(nombre, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                base = base + "?nom=" + nombre;
+            } //  
+            String mime = arxiu.getMime();
+            if (mime == null) {
+                return base;
+            }
+            try {
+                base = base + "&mime=" + URLEncoder.encode(mime, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                base = base + "&mime=" + mime;
+            }
+            return base;
         }
-        try {
-          base = base + "&mime=" + URLEncoder.encode(mime,"UTF-8");
-        } catch (UnsupportedEncodingException e) {          
-          e.printStackTrace();
-          base = base + "&mime=" + mime;
-        }
-        return base;
-      }
     }
 
 }

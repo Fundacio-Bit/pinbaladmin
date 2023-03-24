@@ -5,20 +5,20 @@
 <h3>Entrades Que Estic Fent</h3>
 
 <form method="POST">
-    Data: <input type="text" name="data" value="${data}"> <input type="submit"
-        value="Submit" />
+	Data: <input type="text" name="data" value="${data}"> <input
+		type="submit" value="Submit" />
 </form>
 
 
 <c:if test="${empty items}">
-    <b>NO HI HA ENTRADES !!!!!<b>
+	<b>NO HI HA ENTRADES !!!!!<b>
 </c:if>
 
 <c:if test="${not empty items}">
 
-    <c:forEach var="item" items="${items}">
+	<c:forEach var="item" items="${items}">
      ${item} <br />
-    </c:forEach>
+	</c:forEach>
 
 </c:if>
 

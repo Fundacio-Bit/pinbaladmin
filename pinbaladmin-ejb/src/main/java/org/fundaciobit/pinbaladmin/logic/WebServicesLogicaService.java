@@ -14,11 +14,10 @@ import org.fundaciobit.pinbaladmin.model.entity.Servei;
  *
  */
 @Local
-public interface WebServicesLogicaService  {
+public interface WebServicesLogicaService {
 
-  public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/WebServicesLogicaEJB!org.fundaciobit.pinbaladmin.logic.WebServicesLogicaService";
+    public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/WebServicesLogicaEJB!org.fundaciobit.pinbaladmin.logic.WebServicesLogicaService";
 
-  public List<Servei> serveiEjbSelect(Where w) throws I18NException;
-  
+    public List<Servei> serveiEjbSelect(Where w) throws I18NException;
+
 }
-

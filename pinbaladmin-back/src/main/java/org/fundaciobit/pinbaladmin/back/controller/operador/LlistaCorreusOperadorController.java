@@ -174,7 +174,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         // Tipus d'Incidencies
         {
 
-            
             List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
 
             tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
@@ -303,7 +302,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     @RequestMapping(value = "/incidencia/{emailID}/{tramitador}/{tipusIncidencia}", method = RequestMethod.GET)
     public String incidencia(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("emailID") Long emailID, @PathVariable("tramitador") String tramitador, 
+            @PathVariable("emailID") Long emailID, @PathVariable("tramitador") String tramitador,
             @PathVariable("tipusIncidencia") int tipusIncidencia) {
 
         try {
@@ -548,7 +547,7 @@ public class LlistaCorreusOperadorController extends EmailController {
     @Override
     public void delete(HttpServletRequest request, Email email) throws I18NException {
         final boolean enableCertificationCheck = false;
-        EmailReader er = new EmailReader( enableCertificationCheck);
+        EmailReader er = new EmailReader(enableCertificationCheck);
         // TODO Check si el numero de emails ha canviat
         try {
             er.deleteMessage((int) email.getEmailID());
@@ -579,7 +578,7 @@ public class LlistaCorreusOperadorController extends EmailController {
             log.error(e.getMessage(), e);
             throw new I18NException("genapp.comodi", e.getMessage());
         }
-        
+
         log.info("XYZ ZZZ findByPrimaryKey(" + pos + ") => " + emi);
 
         return message2email(emi);

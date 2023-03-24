@@ -10,7 +10,7 @@
 <link href="<c:url value="/css/default.css"/>" rel="stylesheet">
 
 
-<link href="<c:url value="/css/genapp.css"/>" rel="stylesheet"> 
+<link href="<c:url value="/css/genapp.css"/>" rel="stylesheet">
 
 <!-- Bootstrap CSS-->
 <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
@@ -20,7 +20,9 @@
 <link href="<c:url value="/css/gijgo.min.css"/>" rel="stylesheet">
 
 <!-- Bootstrap DateTimepicker CSS   -->
-<link href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>" rel="stylesheet">
+<link
+	href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>"
+	rel="stylesheet">
 
 <link href="<c:url value="/css/stylesapp.css"/>" rel="stylesheet">
 
@@ -41,13 +43,15 @@
 
 <!-- Bootstrap DateTimePicker JS -->
 <script src="<c:url value="/js/datetimepicker/moment-with-locales.js"/>"></script>
-<script src="<c:url value="/js/datetimepicker/tempusdominus-bootstrap-4.js"/>"></script>
+<script
+	src="<c:url value="/js/datetimepicker/tempusdominus-bootstrap-4.js"/>"></script>
 
 <!-- TinyMCE -->
 <script type="text/javascript">
 	var lang = '<c:out value="${pageContext.response.locale.language}"/>';
 </script>
-<script src="<c:url value="/js/tiny_mce/tiny_mce.js"/>"	type="text/javascript"></script>
+<script src="<c:url value="/js/tiny_mce/tiny_mce.js"/>"
+	type="text/javascript"></script>
 <script src="<c:url value="/js/tinymce.js"/>" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -123,36 +127,37 @@
 
 	function createDivModal(tituloDialog, msgDialog, url, formName) {
 		$('body')
-				.append('<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
-						+ '<div class="modal-dialog" role="document">'
-						+ '<div class="modal-content">'
-						+ '<div class="modal-header">'
-						+ '<h4 id="myModalLabel"><i class="fas fa-trash"></i>'
-    					+ tituloDialog
-						+ '</h4>'
-                        + '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-						+ '</div>'
-						+ '<div class="modal-body">'
-						+ '<p>'
-						+ msgDialog
-						+ '</p>'
-						+ '</div>'
-						+ '<div class="modal-footer">'
-						+ '<button class="btn" data-dismiss="modal" aria-hidden="true">'
-						+ traduccions.type['boto.cancelar']
-						+ '</button>'
-						+ '<button class="btn btn-danger" type="button" onclick="'
-						+ (formName ? ('submitTo(\'' + formName + '\',')
-								: 'goTo(')
-						+ '\''
-						+ url
-						+ '\')">'
-						+ traduccions.type['boto.continuar']
-						+ '</button>'
-						+ '</div>' 
-						+ '</div>' 
-						+ '</div>'
-						+ '</div>');
+				.append(
+						'<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+								+ '<div class="modal-dialog" role="document">'
+								+ '<div class="modal-content">'
+								+ '<div class="modal-header">'
+								+ '<h4 id="myModalLabel"><i class="fas fa-trash"></i>'
+								+ tituloDialog
+								+ '</h4>'
+								+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+								+ '</div>'
+								+ '<div class="modal-body">'
+								+ '<p>'
+								+ msgDialog
+								+ '</p>'
+								+ '</div>'
+								+ '<div class="modal-footer">'
+								+ '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+								+ traduccions.type['boto.cancelar']
+								+ '</button>'
+								+ '<button class="btn btn-danger" type="button" onclick="'
+								+ (formName ? ('submitTo(\'' + formName + '\',')
+										: 'goTo(')
+								+ '\''
+								+ url
+								+ '\')">'
+								+ traduccions.type['boto.continuar']
+								+ '</button>'
+								+ '</div>'
+								+ '</div>'
+								+ '</div>'
+								+ '</div>');
 	}
 
 	var traduccions = {
@@ -180,5 +185,5 @@
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
- 
- 
+
+
