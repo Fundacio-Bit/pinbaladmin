@@ -3387,7 +3387,7 @@
           "digits": 6,
           "isNotNullable": true,
           "labels": {
-            "es": "Data Inici",
+            "es": "Fecha inicio",
             "ca": "Data Inici"
           },
           "javaName": "dataInici",
@@ -3415,7 +3415,7 @@
             "ca": "Data tancament",
             "es": "Fecha cierre"
           },
-          "javaName": "datafi",
+          "javaName": "dataFi",
           "javaType": "java.sql.Timestamp",
           "traduible": false,
           "showInWebList": true,

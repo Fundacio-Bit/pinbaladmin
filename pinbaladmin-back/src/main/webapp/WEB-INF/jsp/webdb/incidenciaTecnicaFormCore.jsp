@@ -74,22 +74,22 @@
         </c:if>
         
         <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.DATAFI)}">
-        <tr id="incidenciaTecnica_datafi_rowid">
-          <td id="incidenciaTecnica_datafi_columnlabelid">
+        <tr id="incidenciaTecnica_dataFi_rowid">
+          <td id="incidenciaTecnica_dataFi_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.DATAFI])?'incidenciaTecnica.datafi':__theForm.labels[IncidenciaTecnicaFields.DATAFI]}" />
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.DATAFI])?'incidenciaTecnica.dataFi':__theForm.labels[IncidenciaTecnicaFields.DATAFI]}" />
              </label>
               <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.DATAFI]}">
               <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.DATAFI]}" ></i>
               </c:if>
             </td>
-          <td id="incidenciaTecnica_datafi_columnvalueid">
-    <form:errors path="incidenciaTecnica.datafi" cssClass="errorField alert alert-danger" />
+          <td id="incidenciaTecnica_dataFi_columnvalueid">
+    <form:errors path="incidenciaTecnica.dataFi" cssClass="errorField alert alert-danger" />
             <div class="form-group">
-                <div class="input-group date" id="incidenciaTecnica_datafi" data-target-input="nearest">
-                      <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAFI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#incidenciaTecnica_datafi" path="incidenciaTecnica.datafi" />
+                <div class="input-group date" id="incidenciaTecnica_dataFi" data-target-input="nearest">
+                      <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAFI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#incidenciaTecnica_dataFi" path="incidenciaTecnica.dataFi" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAFI)}" >
-                    <div class="input-group-append"  data-target="#incidenciaTecnica_datafi"  data-toggle="datetimepicker">
+                    <div class="input-group-append"  data-target="#incidenciaTecnica_dataFi"  data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
                     </c:if>
@@ -97,7 +97,7 @@
             </div>
         <script type="text/javascript">
             $(function () {
-                $('#incidenciaTecnica_datafi').datetimepicker({
+                $('#incidenciaTecnica_dataFi').datetimepicker({
                     format: '${gen:getJSDateTimePattern()}',
                     locale: '${lang}',
                     icons: {

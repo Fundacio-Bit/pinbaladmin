@@ -55,8 +55,8 @@ public class IncidenciaTecnicaJPAManager
         return list.toArray(new IncidenciaTecnica[list.size()]);
     };
 
-    public IncidenciaTecnica create( java.lang.String _titol_, java.lang.String _descripcio_, java.sql.Timestamp _dataInici_, java.sql.Timestamp _datafi_, int _estat_, java.lang.String _creador_, int _tipus_, java.lang.String _nomEntitat_, java.lang.String _contacteNom_, java.lang.String _contacteEmail_, java.lang.String _contacteTelefon_, java.lang.String _caidIdentificadorConsulta_, java.lang.String _caidNumeroSeguiment_) throws I18NException {
-        IncidenciaTecnicaJPA __bean =  new IncidenciaTecnicaJPA(_titol_,_descripcio_,_dataInici_,_datafi_,_estat_,_creador_,_tipus_,_nomEntitat_,_contacteNom_,_contacteEmail_,_contacteTelefon_,_caidIdentificadorConsulta_,_caidNumeroSeguiment_);
+    public IncidenciaTecnica create( java.lang.String _titol_, java.lang.String _descripcio_, java.sql.Timestamp _dataInici_, java.sql.Timestamp _dataFi_, int _estat_, java.lang.String _creador_, int _tipus_, java.lang.String _nomEntitat_, java.lang.String _contacteNom_, java.lang.String _contacteEmail_, java.lang.String _contacteTelefon_, java.lang.String _caidIdentificadorConsulta_, java.lang.String _caidNumeroSeguiment_) throws I18NException {
+        IncidenciaTecnicaJPA __bean =  new IncidenciaTecnicaJPA(_titol_,_descripcio_,_dataInici_,_dataFi_,_estat_,_creador_,_tipus_,_nomEntitat_,_contacteNom_,_contacteEmail_,_contacteTelefon_,_caidIdentificadorConsulta_,_caidNumeroSeguiment_);
         return create(__bean);
     }
 

@@ -41,7 +41,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     java.sql.Timestamp dataInici;
 
     @Column(name="datafi",length = 29,precision = 6)
-    java.sql.Timestamp datafi;
+    java.sql.Timestamp dataFi;
 
     @Column(name="estat",nullable = false,length = 10)
     int estat;
@@ -79,12 +79,12 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp datafi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
-    this.datafi=datafi;
+    this.dataFi=dataFi;
     this.estat=estat;
     this.creador=creador;
     this.tipus=tipus;
@@ -96,11 +96,11 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp datafi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
-    this.datafi=datafi;
+    this.dataFi=dataFi;
     this.estat=estat;
     this.creador=creador;
     this.tipus=tipus;
@@ -128,7 +128,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.setTitol(__bean.getTitol());
     this.setDescripcio(__bean.getDescripcio());
     this.setDataInici(__bean.getDataInici());
-    this.setDatafi(__bean.getDatafi());
+    this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
     this.setCreador(__bean.getCreador());
     this.setTipus(__bean.getTipus());
@@ -168,11 +168,11 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
 		this.dataInici = _dataInici_;
 	};
 
-	public java.sql.Timestamp getDatafi() {
-		return(datafi);
+	public java.sql.Timestamp getDataFi() {
+		return(dataFi);
 	};
-	public void setDatafi(java.sql.Timestamp _datafi_) {
-		this.datafi = _datafi_;
+	public void setDataFi(java.sql.Timestamp _dataFi_) {
+		this.dataFi = _dataFi_;
 	};
 
 	public int getEstat() {
@@ -275,7 +275,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     __tmp.setTitol(__bean.getTitol());
     __tmp.setDescripcio(__bean.getDescripcio());
     __tmp.setDataInici(__bean.getDataInici());
-    __tmp.setDatafi(__bean.getDatafi());
+    __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setCreador(__bean.getCreador());
     __tmp.setTipus(__bean.getTipus());

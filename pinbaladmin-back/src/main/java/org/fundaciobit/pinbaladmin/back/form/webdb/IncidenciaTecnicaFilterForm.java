@@ -87,25 +87,25 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
-  private java.sql.Timestamp datafiDesde;
+  private java.sql.Timestamp dataFiDesde;
 
-  public java.sql.Timestamp getDatafiDesde() {
-    return this.datafiDesde;
+  public java.sql.Timestamp getDataFiDesde() {
+    return this.dataFiDesde;
   }
 
-  public void setDatafiDesde(java.sql.Timestamp datafiDesde) {
-    this.datafiDesde = datafiDesde;
+  public void setDataFiDesde(java.sql.Timestamp dataFiDesde) {
+    this.dataFiDesde = dataFiDesde;
   }
 
 
-  private java.sql.Timestamp datafiFins;
+  private java.sql.Timestamp dataFiFins;
 
-  public java.sql.Timestamp getDatafiFins() {
-    return this.datafiFins;
+  public java.sql.Timestamp getDataFiFins() {
+    return this.dataFiFins;
   }
 
-  public void setDatafiFins(java.sql.Timestamp datafiFins) {
-    this.datafiFins = datafiFins;
+  public void setDataFiFins(java.sql.Timestamp dataFiFins) {
+    this.dataFiFins = dataFiFins;
   }
 
 
@@ -241,8 +241,8 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.descripcio = __toClone.descripcio;
     this.dataIniciDesde = __toClone.dataIniciDesde;
     this.dataIniciFins = __toClone.dataIniciFins;
-    this.datafiDesde = __toClone.datafiDesde;
-    this.datafiFins = __toClone.datafiFins;
+    this.dataFiDesde = __toClone.dataFiDesde;
+    this.dataFiFins = __toClone.dataFiFins;
     this.estatDesde = __toClone.estatDesde;
     this.estatFins = __toClone.estatFins;
     this.creador = __toClone.creador;
