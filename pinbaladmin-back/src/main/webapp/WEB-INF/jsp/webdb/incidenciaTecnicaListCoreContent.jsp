@@ -42,6 +42,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DATAINICI)}">
           <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${incidenciaTecnica.dataInici}" /></td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DATAFI)}">
+          <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${incidenciaTecnica.datafi}" /></td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.ESTAT)}">
           <td>
           <c:set var="tmp">${incidenciaTecnica.estat}</c:set>

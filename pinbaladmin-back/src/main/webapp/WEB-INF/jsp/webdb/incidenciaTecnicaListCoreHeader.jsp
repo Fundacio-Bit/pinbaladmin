@@ -24,6 +24,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DATAINICI)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.DATAINICI)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.DATAFI)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.DATAFI)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.ESTAT)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.ESTAT)}</th>
         </c:if>

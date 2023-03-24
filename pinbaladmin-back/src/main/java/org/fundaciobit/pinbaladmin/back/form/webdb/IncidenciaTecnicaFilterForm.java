@@ -87,6 +87,28 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.sql.Timestamp datafiDesde;
+
+  public java.sql.Timestamp getDatafiDesde() {
+    return this.datafiDesde;
+  }
+
+  public void setDatafiDesde(java.sql.Timestamp datafiDesde) {
+    this.datafiDesde = datafiDesde;
+  }
+
+
+  private java.sql.Timestamp datafiFins;
+
+  public java.sql.Timestamp getDatafiFins() {
+    return this.datafiFins;
+  }
+
+  public void setDatafiFins(java.sql.Timestamp datafiFins) {
+    this.datafiFins = datafiFins;
+  }
+
+
   private java.lang.Integer estatDesde;
 
   public java.lang.Integer getEstatDesde() {
@@ -219,6 +241,8 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.descripcio = __toClone.descripcio;
     this.dataIniciDesde = __toClone.dataIniciDesde;
     this.dataIniciFins = __toClone.dataIniciFins;
+    this.datafiDesde = __toClone.datafiDesde;
+    this.datafiFins = __toClone.datafiFins;
     this.estatDesde = __toClone.estatDesde;
     this.estatFins = __toClone.estatFins;
     this.creador = __toClone.creador;

@@ -2,10 +2,10 @@
   "packageName": "org.fundaciobit.pinbaladmin",
   "projectName": "PinbalAdmin",
   "dataBaseInfo": {
-    "url": "jdbc:postgresql://localhost:5432/pinbaladmin",
+    "url": "jdbc:postgresql://localhost:5432/pinbaladmin2",
     "driver": "org.postgresql.Driver",
-    "usr": "pinbaladmin",
-    "pwd": "pinbaladmin"
+    "usr": "pinbaladmin2",
+    "pwd": "pinbaladmin2"
   },
   "modulSeguretat": "keycloak",
   "prefix": "pad",
@@ -3391,6 +3391,31 @@
             "ca": "Data Inici"
           },
           "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datafi",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data tancament",
+            "es": "Fecha cierre"
+          },
+          "javaName": "datafi",
           "javaType": "java.sql.Timestamp",
           "traduible": false,
           "showInWebList": true,
