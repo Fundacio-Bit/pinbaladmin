@@ -1267,6 +1267,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
 
         soli.setEstatID(Constants.SOLICITUD_ESTAT_TANCAT);
+        soli.setDataFi(new Timestamp(System.currentTimeMillis()));
 
         try {
             this.update(request, soli);

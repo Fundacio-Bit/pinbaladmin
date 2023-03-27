@@ -14,6 +14,9 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public java.sql.Timestamp getDataInici();
 	public void setDataInici(java.sql.Timestamp _dataInici_);
 
+	public java.sql.Timestamp getDataFi();
+	public void setDataFi(java.sql.Timestamp _dataFi_);
+
 	public int getEstat();
 	public void setEstat(int _estat_);
 

@@ -27,6 +27,10 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     return new TimestampField(getQueryPath(), IncidenciaTecnicaFields.DATAINICI);
   }
 
+  public TimestampField DATAFI() {
+    return new TimestampField(getQueryPath(), IncidenciaTecnicaFields.DATAFI);
+  }
+
   public IntegerField ESTAT() {
     return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.ESTAT);
   }

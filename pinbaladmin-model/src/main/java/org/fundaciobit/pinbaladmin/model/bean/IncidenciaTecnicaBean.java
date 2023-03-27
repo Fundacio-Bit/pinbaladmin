@@ -12,6 +12,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	java.lang.String titol;
 	java.lang.String descripcio;
 	java.sql.Timestamp dataInici;
+	java.sql.Timestamp dataFi;
 	int estat;
 	java.lang.String creador;
 	int tipus;
@@ -28,11 +29,12 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
+    this.dataFi=dataFi;
     this.estat=estat;
     this.creador=creador;
     this.tipus=tipus;
@@ -44,10 +46,11 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
+    this.dataFi=dataFi;
     this.estat=estat;
     this.creador=creador;
     this.tipus=tipus;
@@ -75,6 +78,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.setTitol(__bean.getTitol());
     this.setDescripcio(__bean.getDescripcio());
     this.setDataInici(__bean.getDataInici());
+    this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
     this.setCreador(__bean.getCreador());
     this.setTipus(__bean.getTipus());
@@ -112,6 +116,13 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	};
 	public void setDataInici(java.sql.Timestamp _dataInici_) {
 		this.dataInici = _dataInici_;
+	};
+
+	public java.sql.Timestamp getDataFi() {
+		return(dataFi);
+	};
+	public void setDataFi(java.sql.Timestamp _dataFi_) {
+		this.dataFi = _dataFi_;
 	};
 
 	public int getEstat() {
@@ -188,6 +199,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     __tmp.setTitol(__bean.getTitol());
     __tmp.setDescripcio(__bean.getDescripcio());
     __tmp.setDataInici(__bean.getDataInici());
+    __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setCreador(__bean.getCreador());
     __tmp.setTipus(__bean.getTipus());

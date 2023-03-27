@@ -469,7 +469,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
         i.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
-
+        i.setDataFi(new Timestamp(System.currentTimeMillis()));
+        
         try {
             this.update(request, i);
 

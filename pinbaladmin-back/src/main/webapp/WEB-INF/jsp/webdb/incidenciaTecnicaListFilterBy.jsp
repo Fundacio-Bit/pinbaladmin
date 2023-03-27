@@ -144,6 +144,56 @@
 
     
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.DATAFI)}">
+<%-- FILTRE DATE-TIME --%>
+            <div class="input-group" style="padding-right:4px;padding-bottom:4px;align-items:center;">
+              <span class="add-on"><fmt:message key="incidenciaTecnica.dataFi" />:</span>
+              <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
+            <div class="form-group">
+                <div class="input-group date" id="dataFiDesde" data-target-input="nearest">
+                      <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataFiDesde" path="dataFiDesde" />
+                    <c:if test="${!false}" >
+                    <div class="input-group-append"  data-target="#dataFiDesde"  data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </c:if>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#dataFiDesde').datetimepicker({
+                    format: '${gen:getJSDateTimePattern()}',
+                    locale: '${lang}',
+                    icons: {
+                       time: 'far fa-clock'
+                    }
+                });
+            });
+        </script>              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
+            <div class="form-group">
+                <div class="input-group date" id="dataFiFins" data-target-input="nearest">
+                      <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataFiFins" path="dataFiFins" />
+                    <c:if test="${!false}" >
+                    <div class="input-group-append"  data-target="#dataFiFins"  data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </c:if>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#dataFiFins').datetimepicker({
+                    format: '${gen:getJSDateTimePattern()}',
+                    locale: '${lang}',
+                    icons: {
+                       time: 'far fa-clock'
+                    }
+                });
+            });
+        </script>            </div>
+
+    
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.ESTAT)}">
             <%-- FILTRE NUMERO --%>      
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">

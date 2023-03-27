@@ -3387,10 +3387,35 @@
           "digits": 6,
           "isNotNullable": true,
           "labels": {
-            "es": "Data Inici",
+            "es": "Fecha inicio",
             "ca": "Data Inici"
           },
           "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datafi",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data tancament",
+            "es": "Fecha cierre"
+          },
+          "javaName": "dataFi",
           "javaType": "java.sql.Timestamp",
           "traduible": false,
           "showInWebList": true,

@@ -57,6 +57,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String titol = emi.getSubject();
         java.lang.String descripcio = emi.getBody(); // TODO limit tamany
         java.sql.Timestamp dataInici = new Timestamp(System.currentTimeMillis());
+        java.sql.Timestamp dataFi = null;
         int estat = Constants.ESTAT_INCIDENCIA_OBERTA;
         java.lang.String nomEntitat = "";
         java.lang.String contacteNom = emi.getNameFrom();
@@ -65,7 +66,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String caidIdentificadorConsulta = null;
         java.lang.String caidNumeroSeguiment = null;
 
-        IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, estat, creador, tipus, nomEntitat,
+        IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, creador, tipus, nomEntitat,
                 contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment);
 
         it = this.create(it);
