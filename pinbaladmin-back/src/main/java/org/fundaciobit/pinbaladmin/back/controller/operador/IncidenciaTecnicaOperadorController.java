@@ -165,7 +165,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
             for (StringKeyValue skv : getReferenceListForEstat(request, mav, null)) {
                 str.append(skv.value).append("=").append(skv.key).append(" | ");
-
             }
 
             incidenciaTecnicaFilterForm.setSubTitleCode("=Valors Estat => " + str.toString());
@@ -182,24 +181,20 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             // incidenciaTecnicaFilterForm.setGroupBy(ESTAT.fullName);
             // incidenciaTecnicaFilterForm.setGroupValue(String.valueOf(Constants.ESTAT_INCIDENCIA_TECNICA_OBERTA));
 
-            incidenciaTecnicaFilterForm.setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
-
-            incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
-
-            // Valors Inicials Filtre
-            if (getVistaIncidencia() != VistaIncidencia.NOLLEGITSNOMEUS) {
-                incidenciaTecnicaFilterForm.setCreador(request.getRemoteUser());
+            if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
+                incidenciaTecnicaFilterForm.setAddButtonVisible(false);
             }
-            incidenciaTecnicaFilterForm.getFilterByFields().add(CREADOR);
-
-            if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
-                incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_OBERTA);
-                incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_PENDENT_DE_TERCER);
-            }
-            incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
 
             incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol",
                     EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}", "btn-success"));
+
+
+            // Valors Inicials Filtre
+            incidenciaTecnicaFilterForm.setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
+            incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
+            incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
+            incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
+
 
             if (showAdvancedFilter()) {
 
@@ -216,14 +211,11 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(TITOL);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(DESCRIPCIO);
-                incidenciaTecnicaFilterForm.getFilterByFields().remove(CREADOR);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(NOMENTITAT);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(CONTACTEEMAIL);
-
             }
 
             {
-
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
                 adfield4.setCodeName("=Sense Llegir");
                 adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
@@ -232,24 +224,38 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
                 adfield4.setValueMap(new HashMap<Long, String>());
 
                 incidenciaTecnicaFilterForm.addAdditionalField(adfield4);
-
             }
-
-            incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
-
-            if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
-                incidenciaTecnicaFilterForm.setAddButtonVisible(false);
-            }
-
-            incidenciaTecnicaFilterForm.setGroupBy(CREADOR.javaName);
-            incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
-
+            
             incidenciaTecnicaFilterForm.setGroupByFields(incidenciaTecnicaFilterForm.getDefaultGroupByFields());
             incidenciaTecnicaFilterForm.getGroupByFields().add(DATAINICI);
 
             incidenciaTecnicaFilterForm.setOrderBy(DATAINICI.javaName);
             incidenciaTecnicaFilterForm.setOrderAsc(false);
 
+            
+            switch (getVistaIncidencia()) {
+
+                case NORMAL:
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.CREADOR);
+                    incidenciaTecnicaFilterForm.setGroupBy(ESTAT.javaName);
+                    Integer e = Constants.ESTAT_INCIDENCIA_OBERTA;
+                    incidenciaTecnicaFilterForm.setGroupValue(e.toString());
+                break;
+
+                case NOLLEGITSNOMEUS:
+//                    incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_OBERTA);
+//                    incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_PENDENT_DE_TERCER);
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.DATAFI);
+                    incidenciaTecnicaFilterForm.setGroupBy(OPERADOR.javaName);
+                    incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
+                break;
+
+                case NOLLEGITSMEUS:
+                    incidenciaTecnicaFilterForm.setOperador(request.getRemoteUser());
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.OPERADOR);
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.DATAFI);
+                    break;
+            }
         }
 
         return incidenciaTecnicaFilterForm;
@@ -273,7 +279,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             incidenciaTecnicaForm.addReadOnlyField(ESTAT);
             //incidenciaTecnicaForm.addReadOnlyField(CREADOR);
 
-            incidenciaTecnicaForm.getIncidenciaTecnica().setCreador(request.getRemoteUser());
+            incidenciaTecnicaForm.getIncidenciaTecnica().setOperador(request.getRemoteUser());
         }
 
         return incidenciaTecnicaForm;
@@ -295,14 +301,14 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID, Where
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
-                w1 = Where.AND(CREADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
+                w1 = Where.AND(OPERADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
             }
             break;
             case NOLLEGITSNOMEUS: {
                 // incidencies No Meves
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID, Where
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
-                w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
+                w1 = Where.AND(OPERADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
             }
 
         }
@@ -493,8 +499,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
         IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
-        String operador_old = i.getCreador();
-        i.setCreador(operador);
+        String operador_old = i.getOperador();
+        i.setOperador(operador);
 
         try {
             this.update(request, i);
@@ -520,18 +526,18 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
         map.clear();
 
-        final StringField creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+        final StringField operador = new EventQueryPath().INCIDENCIATECNICA().OPERADOR();
 
         final String loginUserName = request.getRemoteUser();
 
         for (IncidenciaTecnica inc : list) {
 
-            final String user = inc.getCreador();
+            final String user = inc.getOperador();
 
             // incidencies
 
             Long incidencies = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                    EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), creador.equal(user)));
+                    EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), operador.equal(user)));
 
             if (incidencies != 0) {
 
@@ -569,6 +575,12 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         }
 
         return __tmp;
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        return getReferenceListForCreador(request, mav, where);
     }
 
 }

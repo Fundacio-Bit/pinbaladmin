@@ -18,7 +18,6 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
 	 public static final IntegerField ESTAT = new IntegerField(_TABLE_MODEL, "estat", "estat");
-	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
 	 public static final IntegerField TIPUS = new IntegerField(_TABLE_MODEL, "tipus", "tipus");
 	 public static final StringField NOMENTITAT = new StringField(_TABLE_MODEL, "nomEntitat", "nomentitat");
 	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contacteNom", "contactenom");
@@ -26,6 +25,8 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
 	 public static final StringField CONTACTETELEFON = new StringField(_TABLE_MODEL, "contacteTelefon", "contactetelefon");
 	 public static final StringField CAIDIDENTIFICADORCONSULTA = new StringField(_TABLE_MODEL, "caidIdentificadorConsulta", "caididentificadorconsulta");
 	 public static final StringField CAIDNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "caidNumeroSeguiment", "caidnumeroseguiment");
+	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
+	 public static final StringField OPERADOR = new StringField(_TABLE_MODEL, "operador", "operador");
 
 
   public static final Field<?>[] ALL_INCIDENCIATECNICA_FIELDS = {
@@ -35,14 +36,15 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
     DATAINICI,
     DATAFI,
     ESTAT,
-    CREADOR,
     TIPUS,
     NOMENTITAT,
     CONTACTENOM,
     CONTACTEEMAIL,
     CONTACTETELEFON,
     CAIDIDENTIFICADORCONSULTA,
-    CAIDNUMEROSEGUIMENT
+    CAIDNUMEROSEGUIMENT,
+    CREADOR,
+    OPERADOR
   };
 
 

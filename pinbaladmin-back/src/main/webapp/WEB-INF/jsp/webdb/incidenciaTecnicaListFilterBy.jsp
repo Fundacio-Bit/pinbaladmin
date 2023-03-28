@@ -212,19 +212,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CREADOR)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="incidenciaTecnica.creador" var="creador" />
-              <fmt:message key="genapp.form.searchby" var="cercapercreador" >                
-                 <fmt:param value="${creador}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${creador}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapercreador}" path="creador" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.TIPUS)}">
             <%-- FILTRE NUMERO --%>      
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
@@ -317,6 +304,32 @@
               </fmt:message>
               <span class="add-on"><c:out value="${caidNumeroSeguiment}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercapercaidNumeroSeguiment}" path="caidNumeroSeguiment" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CREADOR)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.creador" var="creador" />
+              <fmt:message key="genapp.form.searchby" var="cercapercreador" >                
+                 <fmt:param value="${creador}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${creador}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercreador}" path="creador" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.OPERADOR)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.operador" var="operador" />
+              <fmt:message key="genapp.form.searchby" var="cercaperoperador" >                
+                 <fmt:param value="${operador}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${operador}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperoperador}" path="operador" />
             </div>
 
 

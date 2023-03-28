@@ -68,9 +68,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public boolean isProduccio();
 	public void setProduccio(boolean _produccio_);
 
-	public java.lang.String getCreador();
-	public void setCreador(java.lang.String _creador_);
-
 	public java.lang.String getDenominacio();
 	public void setDenominacio(java.lang.String _denominacio_);
 
@@ -79,6 +76,12 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.String getNif();
 	public void setNif(java.lang.String _nif_);
+
+	public java.lang.String getCreador();
+	public void setCreador(java.lang.String _creador_);
+
+	public java.lang.String getOperador();
+	public void setOperador(java.lang.String _operador_);
 
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();

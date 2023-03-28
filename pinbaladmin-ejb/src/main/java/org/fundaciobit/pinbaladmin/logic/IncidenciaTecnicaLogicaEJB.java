@@ -52,7 +52,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
     }
 
     @Override
-    public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, int tipus) throws I18NException {
+    public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, String operador, int tipus) throws I18NException {
 
         java.lang.String titol = emi.getSubject();
         java.lang.String descripcio = emi.getBody(); // TODO limit tamany
@@ -66,8 +66,9 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String caidIdentificadorConsulta = null;
         java.lang.String caidNumeroSeguiment = null;
 
-        IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, creador, tipus, nomEntitat,
-                contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment);
+        
+        IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, tipus, nomEntitat,
+                contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
 
         it = this.create(it);
 

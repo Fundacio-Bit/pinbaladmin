@@ -140,37 +140,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
-        <tr id="incidenciaTecnica_creador_rowid">
-          <td id="incidenciaTecnica_creador_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CREADOR])?'incidenciaTecnica.creador':__theForm.labels[IncidenciaTecnicaFields.CREADOR]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CREADOR]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.CREADOR]}" ></i>
-              </c:if>
-            </td>
-          <td id="incidenciaTecnica_creador_columnvalueid">
-          <form:errors path="incidenciaTecnica.creador" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
-          <form:hidden path="incidenciaTecnica.creador"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.creador,__theForm.listOfValuesForCreador)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="incidenciaTecnica_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="form-control col-md-9-optional" path="incidenciaTecnica.creador">
-            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
         <tr id="incidenciaTecnica_tipus_rowid">
           <td id="incidenciaTecnica_tipus_columnlabelid">
@@ -306,6 +275,68 @@
             <form:errors path="incidenciaTecnica.caidNumeroSeguiment" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)? ' uneditable-input' : ''}"  style="" maxlength="100" path="incidenciaTecnica.caidNumeroSeguiment"   />
 
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
+        <tr id="incidenciaTecnica_creador_rowid">
+          <td id="incidenciaTecnica_creador_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CREADOR])?'incidenciaTecnica.creador':__theForm.labels[IncidenciaTecnicaFields.CREADOR]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CREADOR]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.CREADOR]}" ></i>
+              </c:if>
+            </td>
+          <td id="incidenciaTecnica_creador_columnvalueid">
+          <form:errors path="incidenciaTecnica.creador" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
+          <form:hidden path="incidenciaTecnica.creador"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.creador,__theForm.listOfValuesForCreador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CREADOR)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="incidenciaTecnica_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="form-control col-md-9-optional" path="incidenciaTecnica.creador">
+            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.OPERADOR)}">
+        <tr id="incidenciaTecnica_operador_rowid">
+          <td id="incidenciaTecnica_operador_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.OPERADOR])?'incidenciaTecnica.operador':__theForm.labels[IncidenciaTecnicaFields.OPERADOR]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.OPERADOR]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.OPERADOR]}" ></i>
+              </c:if>
+            </td>
+          <td id="incidenciaTecnica_operador_columnvalueid">
+          <form:errors path="incidenciaTecnica.operador" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.OPERADOR)}" >
+          <form:hidden path="incidenciaTecnica.operador"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.operador,__theForm.listOfValuesForOperador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.OPERADOR)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="incidenciaTecnica_operador"  onchange="if(typeof onChangeOperador == 'function') {  onChangeOperador(this); };"  cssClass="form-control col-md-9-optional" path="incidenciaTecnica.operador">
+            <c:forEach items="${__theForm.listOfValuesForOperador}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

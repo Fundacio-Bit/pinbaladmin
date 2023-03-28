@@ -242,8 +242,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         }
 
         if (!isPublic()) {
-            mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
-            request.getSession().setAttribute("persona_tramitador", request.getUserPrincipal().getName());
+            mav.addObject("persona_operador", request.getUserPrincipal().getName());
+            request.getSession().setAttribute("persona_operador", request.getUserPrincipal().getName());
         }
 
         String email = getPersonaContacteEmail(item);
@@ -280,7 +280,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract Timestamp getDataCreacio(T item);
 
-    public abstract String getTramitador(T item);
+    public abstract String getOperador(T item);
+
+    public abstract String getCreador(T item);
 
     public abstract String getUrlToEditItem(T item);
 
@@ -602,7 +604,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         }
 
 
-        mav.addObject("tramitador", getTramitador(item));
+        mav.addObject("operador", getOperador(item));
+        mav.addObject("creador", getCreador(item));
         mav.addObject("datacreacio", SDF.format(getDataCreacio(item)));
         mav.addObject("personaContacte", getPersonaContacteNom(item));
         mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
@@ -655,9 +658,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
             SelectMultipleStringKeyValue smskv;
             smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
 
-            List<StringKeyValue> tramitadors = operadorEjb.executeQuery(smskv);
+            List<StringKeyValue> operadors= operadorEjb.executeQuery(smskv);
 
-            mav.addObject("tramitadors", tramitadors);
+            mav.addObject("operadors", operadors);
         }
 
         // Tipus d'Incidencies

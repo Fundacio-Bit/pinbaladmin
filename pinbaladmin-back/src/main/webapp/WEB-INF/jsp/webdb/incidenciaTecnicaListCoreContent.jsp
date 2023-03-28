@@ -53,14 +53,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
-          <td>
-          <c:set var="tmp">${incidenciaTecnica.creador}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForCreador[tmp]}
-          </c:if>
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
           <td>
           <c:set var="tmp">${incidenciaTecnica.tipus}</c:set>
@@ -97,6 +89,22 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT)}">
           <td>
           ${incidenciaTecnica.caidNumeroSeguiment}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CREADOR)}">
+          <td>
+          <c:set var="tmp">${incidenciaTecnica.creador}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForCreador[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.OPERADOR)}">
+          <td>
+          <c:set var="tmp">${incidenciaTecnica.operador}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForOperador[tmp]}
+          </c:if>
           </td>
         </c:if>
 

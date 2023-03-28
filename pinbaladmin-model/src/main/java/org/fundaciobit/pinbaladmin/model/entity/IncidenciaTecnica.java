@@ -20,9 +20,6 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public int getEstat();
 	public void setEstat(int _estat_);
 
-	public java.lang.String getCreador();
-	public void setCreador(java.lang.String _creador_);
-
 	public int getTipus();
 	public void setTipus(int _tipus_);
 
@@ -43,6 +40,12 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 
 	public java.lang.String getCaidNumeroSeguiment();
 	public void setCaidNumeroSeguiment(java.lang.String _caidNumeroSeguiment_);
+
+	public java.lang.String getCreador();
+	public void setCreador(java.lang.String _creador_);
+
+	public java.lang.String getOperador();
+	public void setOperador(java.lang.String _operador_);
 
 
 

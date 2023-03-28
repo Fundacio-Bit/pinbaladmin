@@ -9,6 +9,7 @@ import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicContr
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -37,9 +38,15 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
     }
 
     @Override
-    public String getTramitador(Solicitud item) {
+    public String getOperador(Solicitud item) {
+        return item.getOperador();
+    }
+
+    @Override
+    public String getCreador(Solicitud item) {
         return item.getCreador();
     }
+
 
     @Override
     public Timestamp getDataCreacio(Solicitud item) {

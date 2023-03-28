@@ -36,3 +36,26 @@ WHERE
     t1.solicitudid = t2.solicitudid;
 
 
+
+
+---
+--- 27/03/2023 -  Afegir un camp per saber qui ha estat el creador d'una incidencia o solicitud #86
+---
+--INCIDENCIA
+ALTER TABLE pad_incidenciatecnica
+   ADD COLUMN operador character varying(100);
+
+UPDATE pad_incidenciatecnica SET operador = creador;
+
+ALTER TABLE pad_incidenciatecnica
+   ALTER COLUMN operador SET NOT NULL;
+
+--SOLICITUD
+ALTER TABLE pad_solicitud
+   ADD COLUMN operador character varying(100);
+
+UPDATE pad_solicitud SET operador = creador;
+
+ALTER TABLE pad_solicitud
+   ALTER COLUMN operador SET NOT NULL;
+

@@ -87,6 +87,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 form.addHiddenField(ENTITATESTATAL);
                 form.addReadOnlyField(DATAINICI);
                 form.addReadOnlyField(CREADOR);
+                form.addReadOnlyField(OPERADOR);
             }
 
             log.info(" ES NOU !!!!!!!!!!!!!!!!!!!");

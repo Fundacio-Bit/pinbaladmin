@@ -91,6 +91,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
                 form.addHiddenField(ENTITATESTATAL);
                 form.addReadOnlyField(DATAINICI);
                 form.addReadOnlyField(CREADOR);
+                form.addReadOnlyField(OPERADOR);
             }
 
             log.info(" ES NOU !!!!!!!!!!!!!!!!!!!");

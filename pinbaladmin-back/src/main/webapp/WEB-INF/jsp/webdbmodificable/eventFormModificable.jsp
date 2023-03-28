@@ -29,9 +29,9 @@
 			document.getElementById("event.persona").value = '${persona_contacte}';
 			</c:if>
 		} else if (select.value == 1) {
-			document.getElementById("event.persona").value = 'De ${persona_tramitador} a ${persona_contacte}';
+			document.getElementById("event.persona").value = 'De ${persona_operador} a ${persona_contacte}';
 		} else {
-			document.getElementById("event.persona").value = '${persona_tramitador}';
+			document.getElementById("event.persona").value = '${persona_operador}';
 		}
 
 		if (select.value == -2) {

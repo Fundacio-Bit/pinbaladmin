@@ -216,7 +216,7 @@ public class BasePreparer implements ViewPreparer, Constants {
         if ("operador".equals(pipella)) {
             try {
                 // solicituds locals meves
-                StringField creador = new EventQueryPath().SOLICITUD().CREADOR();
+                StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
 
                 Where wComu = Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull());
 
@@ -229,26 +229,26 @@ public class BasePreparer implements ViewPreparer, Constants {
                 log.info("BasePreparer => eventLogicaEjb:  " + eventLogicaEjb);
 
                 Long solicitudsLocalsMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.equal(httpRequest.getRemoteUser())));
+                        .count(Where.AND(wComu, operador.equal(httpRequest.getRemoteUser())));
 
                 // solicituds locals No Meves
                 Long solicitudsLocalsNoMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.notEqual(httpRequest.getRemoteUser())));
+                        .count(Where.AND(wComu, operador.notEqual(httpRequest.getRemoteUser())));
 
                 // incidencies meves
 
-                creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+                operador = new EventQueryPath().INCIDENCIATECNICA().OPERADOR();
 
                 wComu = Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
                         EventFields.INCIDENCIATECNICAID.isNotNull());
 
                 Long incidenciesMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.equal(httpRequest.getRemoteUser())));
+                        .count(Where.AND(wComu, operador.equal(httpRequest.getRemoteUser())));
 
                 // incidencies No Meves
 
                 Long incidenciesNoMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.notEqual(httpRequest.getRemoteUser())));
+                        .count(Where.AND(wComu, operador.notEqual(httpRequest.getRemoteUser())));
 
                 request.put("solicitudsLocalsMeves", solicitudsLocalsMeves);
                 request.put("solicitudsLocalsNoMeves", solicitudsLocalsNoMeves);

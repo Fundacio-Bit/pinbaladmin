@@ -99,10 +99,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new BooleanField(getQueryPath(), SolicitudFields.PRODUCCIO);
   }
 
-  public StringField CREADOR() {
-    return new StringField(getQueryPath(), SolicitudFields.CREADOR);
-  }
-
   public StringField DENOMINACIO() {
     return new StringField(getQueryPath(), SolicitudFields.DENOMINACIO);
   }
@@ -113,6 +109,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
   public StringField NIF() {
     return new StringField(getQueryPath(), SolicitudFields.NIF);
+  }
+
+  public StringField CREADOR() {
+    return new StringField(getQueryPath(), SolicitudFields.CREADOR);
+  }
+
+  public StringField OPERADOR() {
+    return new StringField(getQueryPath(), SolicitudFields.OPERADOR);
   }
 
 

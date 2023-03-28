@@ -116,7 +116,11 @@ public class QueEsticFentOperadorController {
             
             // (1) Consultam sol·licituds
             {
-                final Where w1 = SolicitudFields.CREADOR.equal(username);
+                final Where w1Cre= SolicitudFields.CREADOR.equal(username);
+                final Where w1Ope= SolicitudFields.OPERADOR.equal(username);
+                
+                final Where w1 = Where.OR(w1Cre, w1Ope);
+
                 final Where w2 = SolicitudFields.DATAINICI.between(from, to);
                 final Where w3 = SolicitudFields.DATAFI.between(from, to);
                 List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, Where.OR(w2, w3)));
@@ -131,7 +135,11 @@ public class QueEsticFentOperadorController {
 
             // (2) Consultam incidencies
             {
-                final Where w1 = IncidenciaTecnicaFields.CREADOR.equal(username);
+                final Where w1Cre= IncidenciaTecnicaFields.CREADOR.equal(username);
+                final Where w1Ope= IncidenciaTecnicaFields.OPERADOR.equal(username);
+                
+                final Where w1 = Where.OR(w1Cre, w1Ope);
+
                 final Where w2 = IncidenciaTecnicaFields.DATAINICI.between(from, to);
                 final Where w3 = IncidenciaTecnicaFields.DATAFI.between(from, to);
                 List<IncidenciaTecnica> its = incidenciaTecnicaLogicaEjb.select(Where.AND(w1, Where.OR(w2, w3)));

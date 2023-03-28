@@ -1263,13 +1263,15 @@ textarea.event {
 		<table style="width: 100%; font-size: 1.4em">
 			<tbody>
 				<tr>
-					<td width="50%">Número: <strong> ${ID}</strong><br /> Estat:
-						<strong class="label-custom">${estat}</strong><br /> Data
-						Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br />
-
+					<td width="50%">
+					   Número: <strong> ${ID}</strong><br /> 
+                       Creador: <strong>${creador}</strong><br />
+					   Data Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br />
 					</td>
-					<td>Nom Contacte: <strong>${personaContacte}</strong><br />
-						Email Contacte: <strong>${personaContacteEmail}</strong>
+					<td>
+                       Estat: <strong class="label-custom">${estat}</strong><br /> 
+					   Nom Contacte: <strong>${personaContacte}</strong><br />
+					   Email Contacte: <strong>${personaContacteEmail}</strong>
 					</td>
 				</tr>
 			</tbody>
@@ -1384,7 +1386,7 @@ textarea.event {
                                      ${event.dataEvent}<br />
 									<span style="font-weight: bold; font-size: 10pt">De <c:if
 											test="${(event.tipus==-3)}">
-                                        ${tramitador}  enviat a ${event.persona}
+                                        ${operador}  enviat a ${event.persona}
                                      </c:if> <c:if test="${(event.tipus!=-3)}">
                                         ${event.persona}
                                      </c:if>
@@ -1471,11 +1473,11 @@ textarea.event {
 				request.setAttribute("currentuser", request.getRemoteUser());
 				%>
 
-				<label id="label_tramitador" for="tramitador"> Selecciona
-					tramitador: </label> <select id="tramitador" class="my_select">
-					<c:forEach items="${tramitadors}" var="tramitador">
-						<option value="${tramitador.key}"
-							${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
+				<label id="label_operador" for="operador"> Selecciona
+					operador: </label> <select id="operador" class="my_select">
+					<c:forEach items="${operadors}" var="operador">
+						<option value="${operador.key}"
+							${(currentuser eq operador.key)?'selected':''}>${operador.value}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -1491,12 +1493,12 @@ textarea.event {
 <script>
 function myFunction() {
 	
-    var tramitador = document.getElementById("tramitador").value;
+    var operador = document.getElementById("operador").value;
         
     var root = "<%=request.getContextPath()%>${urlToChangeOperator}";
     
     window.location.href = root
-            + "/" + tramitador;
+            + "/" + operador;
 }
 
 function changeOperador() {

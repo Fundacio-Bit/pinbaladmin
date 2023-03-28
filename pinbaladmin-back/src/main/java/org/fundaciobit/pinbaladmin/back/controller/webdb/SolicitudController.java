@@ -235,6 +235,16 @@ public class SolicitudController
       };
     }
 
+    // Field operador
+    {
+      _listSKV = getReferenceListForOperador(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForOperador(_tmp);
+      if (filterForm.getGroupByFields().contains(OPERADOR)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, OPERADOR, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -254,6 +264,7 @@ public class SolicitudController
     __mapping.put(ESTATID, filterForm.getMapOfEstatSolicitudForEstatID());
     __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
+    __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -336,6 +347,15 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForCreador(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForOperador() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForOperador(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfValuesForOperador(_listSKV);
     }
     
   }
@@ -819,6 +839,42 @@ public java.lang.Long stringToPK(String value) {
 
 
   public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("anadal" , "anadal"));
+    __tmp.add(new StringKeyValue("pvico" , "pvico"));
+    __tmp.add(new StringKeyValue("atrobat" , "atrobat"));
+    __tmp.add(new StringKeyValue("gdeignacio" , "gdeignacio"));
+    __tmp.add(new StringKeyValue("mgonzalez" , "mgonzalez"));
+    __tmp.add(new StringKeyValue("mcapo" , "mcapo"));
+    __tmp.add(new StringKeyValue("fsalas" , "fsalas"));
+    __tmp.add(new StringKeyValue("ptrias" , "ptrias"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(OPERADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForOperador(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(OPERADOR)
+      && !solicitudFilterForm.isGroupByField(OPERADOR)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForOperador(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
     __tmp.add(new StringKeyValue("anadal" , "anadal"));

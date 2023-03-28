@@ -46,10 +46,6 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @Column(name="estat",nullable = false,length = 10)
     int estat;
 
-    @org.hibernate.annotations.ColumnDefault("'mcapo'")
-    @Column(name="creador",nullable = false,length = 255)
-    java.lang.String creador = "mcapo";
-
     @org.hibernate.annotations.ColumnDefault("1")
     @Column(name="tipus",nullable = false,length = 10)
     int tipus = 1;
@@ -72,6 +68,13 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @Column(name="caidnumeroseguiment",length = 100)
     java.lang.String caidNumeroSeguiment;
 
+    @org.hibernate.annotations.ColumnDefault("'mcapo'")
+    @Column(name="creador",nullable = false,length = 100)
+    java.lang.String creador = "mcapo";
+
+    @Column(name="operador",nullable = false,length = 100)
+    java.lang.String operador;
+
 
 
   /** Constructor Buit */
@@ -79,14 +82,13 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
     this.estat=estat;
-    this.creador=creador;
     this.tipus=tipus;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
@@ -94,15 +96,16 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.contacteTelefon=contacteTelefon;
     this.caidIdentificadorConsulta=caidIdentificadorConsulta;
     this.caidNumeroSeguiment=caidNumeroSeguiment;
+    this.creador=creador;
+    this.operador=operador;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , java.lang.String creador , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
     this.estat=estat;
-    this.creador=creador;
     this.tipus=tipus;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
@@ -110,18 +113,21 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.contacteTelefon=contacteTelefon;
     this.caidIdentificadorConsulta=caidIdentificadorConsulta;
     this.caidNumeroSeguiment=caidNumeroSeguiment;
+    this.creador=creador;
+    this.operador=operador;
 }
   /** Constructor dels valors Not Null */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , java.lang.String creador , int tipus , java.lang.String contacteNom , java.lang.String contacteEmail) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , int estat , int tipus , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String creador , java.lang.String operador) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.estat=estat;
-    this.creador=creador;
     this.tipus=tipus;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
+    this.creador=creador;
+    this.operador=operador;
 }
   public IncidenciaTecnicaJPA(IncidenciaTecnica __bean) {
     this.setIncidenciaTecnicaID(__bean.getIncidenciaTecnicaID());
@@ -130,7 +136,6 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.setDataInici(__bean.getDataInici());
     this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
-    this.setCreador(__bean.getCreador());
     this.setTipus(__bean.getTipus());
     this.setNomEntitat(__bean.getNomEntitat());
     this.setContacteNom(__bean.getContacteNom());
@@ -138,6 +143,8 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.setContacteTelefon(__bean.getContacteTelefon());
     this.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
     this.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
+    this.setCreador(__bean.getCreador());
+    this.setOperador(__bean.getOperador());
 	}
 
 	public long getIncidenciaTecnicaID() {
@@ -180,13 +187,6 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
 	};
 	public void setEstat(int _estat_) {
 		this.estat = _estat_;
-	};
-
-	public java.lang.String getCreador() {
-		return(creador);
-	};
-	public void setCreador(java.lang.String _creador_) {
-		this.creador = _creador_;
 	};
 
 	public int getTipus() {
@@ -238,6 +238,20 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
 		this.caidNumeroSeguiment = _caidNumeroSeguiment_;
 	};
 
+	public java.lang.String getCreador() {
+		return(creador);
+	};
+	public void setCreador(java.lang.String _creador_) {
+		this.creador = _creador_;
+	};
+
+	public java.lang.String getOperador() {
+		return(operador);
+	};
+	public void setOperador(java.lang.String _operador_) {
+		this.operador = _operador_;
+	};
+
 
 
   @Override
@@ -277,7 +291,6 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     __tmp.setDataInici(__bean.getDataInici());
     __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
-    __tmp.setCreador(__bean.getCreador());
     __tmp.setTipus(__bean.getTipus());
     __tmp.setNomEntitat(__bean.getNomEntitat());
     __tmp.setContacteNom(__bean.getContacteNom());
@@ -285,6 +298,8 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     __tmp.setContacteTelefon(__bean.getContacteTelefon());
     __tmp.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
     __tmp.setCaidNumeroSeguiment(__bean.getCaidNumeroSeguiment());
+    __tmp.setCreador(__bean.getCreador());
+    __tmp.setOperador(__bean.getOperador());
 		return __tmp;
 	}
 

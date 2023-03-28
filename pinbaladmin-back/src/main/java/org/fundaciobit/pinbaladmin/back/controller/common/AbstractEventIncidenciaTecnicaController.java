@@ -37,7 +37,12 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     }
 
     @Override
-    public String getTramitador(IncidenciaTecnica item) {
+    public String getOperador(IncidenciaTecnica item) {
+        return item.getOperador();
+    }
+
+    @Override
+    public String getCreador(IncidenciaTecnica item) {
         return item.getCreador();
     }
 

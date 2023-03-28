@@ -131,17 +131,6 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
-  private java.lang.String creador;
-
-  public java.lang.String getCreador() {
-    return this.creador;
-  }
-
-  public void setCreador(java.lang.String creador) {
-    this.creador = creador;
-  }
-
-
   private java.lang.Integer tipusDesde;
 
   public java.lang.Integer getTipusDesde() {
@@ -230,6 +219,28 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.lang.String creador;
+
+  public java.lang.String getCreador() {
+    return this.creador;
+  }
+
+  public void setCreador(java.lang.String creador) {
+    this.creador = creador;
+  }
+
+
+  private java.lang.String operador;
+
+  public java.lang.String getOperador() {
+    return this.operador;
+  }
+
+  public void setOperador(java.lang.String operador) {
+    this.operador = operador;
+  }
+
+
   public IncidenciaTecnicaFilterForm() {
   }
   
@@ -245,7 +256,6 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.dataFiFins = __toClone.dataFiFins;
     this.estatDesde = __toClone.estatDesde;
     this.estatFins = __toClone.estatFins;
-    this.creador = __toClone.creador;
     this.tipusDesde = __toClone.tipusDesde;
     this.tipusFins = __toClone.tipusFins;
     this.nomEntitat = __toClone.nomEntitat;
@@ -254,9 +264,12 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.contacteTelefon = __toClone.contacteTelefon;
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
     this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
+    this.creador = __toClone.creador;
+    this.operador = __toClone.operador;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
-    this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
+    this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
+    this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
   }
   
   /* ========= UTILS ========== */
@@ -268,7 +281,7 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   @Override
   public List<Field<?>> getDefaultGroupByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT ,CREADOR ,TIPUS }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTAT ,TIPUS ,OPERADOR }));
   }
 
 
@@ -303,6 +316,18 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
 
 
+  private Map<String, String> mapOfValuesForTipus;
+
+  public Map<String, String> getMapOfValuesForTipus() {
+    return this.mapOfValuesForTipus;
+  }
+
+  public void setMapOfValuesForTipus(Map<String, String> mapOfValuesForTipus) {
+    this.mapOfValuesForTipus = mapOfValuesForTipus;
+  }
+
+
+
   private Map<String, String> mapOfValuesForCreador;
 
   public Map<String, String> getMapOfValuesForCreador() {
@@ -315,14 +340,14 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
 
 
-  private Map<String, String> mapOfValuesForTipus;
+  private Map<String, String> mapOfValuesForOperador;
 
-  public Map<String, String> getMapOfValuesForTipus() {
-    return this.mapOfValuesForTipus;
+  public Map<String, String> getMapOfValuesForOperador() {
+    return this.mapOfValuesForOperador;
   }
 
-  public void setMapOfValuesForTipus(Map<String, String> mapOfValuesForTipus) {
-    this.mapOfValuesForTipus = mapOfValuesForTipus;
+  public void setMapOfValuesForOperador(Map<String, String> mapOfValuesForOperador) {
+    this.mapOfValuesForOperador = mapOfValuesForOperador;
   }
 
 

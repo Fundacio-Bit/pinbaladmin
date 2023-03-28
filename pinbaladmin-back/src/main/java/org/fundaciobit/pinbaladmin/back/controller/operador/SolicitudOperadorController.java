@@ -240,6 +240,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
+            soli.setOperador(request.getRemoteUser());
         } else {
             // solicitudForm.addReadOnlyField(ENTITATID);
         }
@@ -623,18 +624,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
             map.clear();
 
-            final StringField creador = new EventQueryPath().SOLICITUD().CREADOR();
+            final StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
 
             final String loginUserName = request.getRemoteUser();
 
             for (Solicitud inc : list) {
 
-                final String user = inc.getCreador();
+                final String user = inc.getOperador();
 
                 // incidencies
 
                 Long incidencies = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                        EventFields.SOLICITUDID.equal(inc.getSolicitudID()), creador.equal(user)));
+                        EventFields.SOLICITUDID.equal(inc.getSolicitudID()), operador.equal(user)));
 
                 if (incidencies != 0) {
 
@@ -1289,8 +1290,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
 
-        String operador_old = soli.getCreador();
-        soli.setCreador(operador);
+        String operador_old = soli.getOperador();
+        soli.setOperador(operador);
 
         try {
             this.update(request, soli);
@@ -1321,6 +1322,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
 
         return __tmp;
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        return getReferenceListForCreador(request, mav, where);
     }
 
     /*

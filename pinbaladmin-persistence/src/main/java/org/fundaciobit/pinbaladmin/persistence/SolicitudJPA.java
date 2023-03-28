@@ -97,9 +97,6 @@ public class SolicitudJPA implements Solicitud {
     @Column(name="produccio",nullable = false,length = 1)
     boolean produccio = true;
 
-    @Column(name="creador",length = 100)
-    java.lang.String creador;
-
   /** És l'entitat */
     @Column(name="denominacio",length = 255)
     java.lang.String denominacio;
@@ -110,6 +107,12 @@ public class SolicitudJPA implements Solicitud {
     @Column(name="nif",length = 40)
     java.lang.String nif;
 
+    @Column(name="creador",nullable = false,length = 100)
+    java.lang.String creador;
+
+    @Column(name="operador",nullable = false,length = 100)
+    java.lang.String operador;
+
 
 
   /** Constructor Buit */
@@ -117,7 +120,7 @@ public class SolicitudJPA implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif) {
+  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -140,13 +143,14 @@ public class SolicitudJPA implements Solicitud {
     this.solicitudXmlID=solicitudXmlID;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
-    this.creador=creador;
     this.denominacio=denominacio;
     this.dir3=dir3;
     this.nif=nif;
+    this.creador=creador;
+    this.operador=operador;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif) {
+  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
@@ -168,13 +172,14 @@ public class SolicitudJPA implements Solicitud {
     this.solicitudXmlID=solicitudXmlID;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
-    this.creador=creador;
     this.denominacio=denominacio;
     this.dir3=dir3;
     this.nif=nif;
+    this.creador=creador;
+    this.operador=operador;
 }
   /** Constructor dels valors Not Null */
-  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio) {
+  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.procedimentNom=procedimentNom;
@@ -182,6 +187,8 @@ public class SolicitudJPA implements Solicitud {
     this.dataInici=dataInici;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
+    this.creador=creador;
+    this.operador=operador;
 }
   public SolicitudJPA(Solicitud __bean) {
     this.setSolicitudID(__bean.getSolicitudID());
@@ -206,10 +213,11 @@ public class SolicitudJPA implements Solicitud {
     this.setSolicitudXmlID(__bean.getSolicitudXmlID());
     this.setFirmatDocSolicitud(__bean.isFirmatDocSolicitud());
     this.setProduccio(__bean.isProduccio());
-    this.setCreador(__bean.getCreador());
     this.setDenominacio(__bean.getDenominacio());
     this.setDir3(__bean.getDir3());
     this.setNif(__bean.getNif());
+    this.setCreador(__bean.getCreador());
+    this.setOperador(__bean.getOperador());
     // Fitxer
     this.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer
@@ -370,13 +378,6 @@ public class SolicitudJPA implements Solicitud {
 		this.produccio = _produccio_;
 	};
 
-	public java.lang.String getCreador() {
-		return(creador);
-	};
-	public void setCreador(java.lang.String _creador_) {
-		this.creador = _creador_;
-	};
-
 	public java.lang.String getDenominacio() {
 		return(denominacio);
 	};
@@ -396,6 +397,20 @@ public class SolicitudJPA implements Solicitud {
 	};
 	public void setNif(java.lang.String _nif_) {
 		this.nif = _nif_;
+	};
+
+	public java.lang.String getCreador() {
+		return(creador);
+	};
+	public void setCreador(java.lang.String _creador_) {
+		this.creador = _creador_;
+	};
+
+	public java.lang.String getOperador() {
+		return(operador);
+	};
+	public void setOperador(java.lang.String _operador_) {
+		this.operador = _operador_;
 	};
 
 
@@ -535,10 +550,11 @@ public class SolicitudJPA implements Solicitud {
     __tmp.setSolicitudXmlID(__bean.getSolicitudXmlID());
     __tmp.setFirmatDocSolicitud(__bean.isFirmatDocSolicitud());
     __tmp.setProduccio(__bean.isProduccio());
-    __tmp.setCreador(__bean.getCreador());
     __tmp.setDenominacio(__bean.getDenominacio());
     __tmp.setDir3(__bean.getDir3());
     __tmp.setNif(__bean.getNif());
+    __tmp.setCreador(__bean.getCreador());
+    __tmp.setOperador(__bean.getOperador());
     // Fitxer
     __tmp.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer
