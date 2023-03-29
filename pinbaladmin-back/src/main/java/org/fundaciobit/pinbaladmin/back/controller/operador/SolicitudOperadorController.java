@@ -39,6 +39,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
@@ -1293,11 +1294,41 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         String operador_old = soli.getOperador();
         soli.setOperador(operador);
 
+        SelectMultipleStringKeyValue smskv;
+        smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
+        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
+
+        Map<String, String> operadors_map;
+        operadors_map = Utils.listToMap(operadors);
+        
+        String nom_operador = operadors_map.get(operador);
+        String nom_operador_old  = operadors_map.get(operador_old);
+                
         try {
             this.update(request, soli);
 
+            Long incidenciaTecnicaID = null;
+            Timestamp data = new Timestamp(System.currentTimeMillis());
+            int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            String persona = request.getUserPrincipal().getName();
+            
+            String comentari = I18NUtils.tradueix("missatge.canvi.operador", "solicitud", operador, nom_operador,
+                    operador_old, nom_operador_old);
+
+            Long fitxerID = null;
+            boolean noLlegit = true;
+
+            String caidNumeroSeg = null;
+            String caiIDConsulta = null;
+
+            EventJPA evt = new EventJPA(solicitudID, incidenciaTecnicaID, data, tipus, persona, comentari, fitxerID,
+                    noLlegit, caiIDConsulta, caidNumeroSeg);
+
+            eventLogicaEjb.create(evt);
+
             HtmlUtils.saveMessageSuccess(request,
                     "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
+
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);

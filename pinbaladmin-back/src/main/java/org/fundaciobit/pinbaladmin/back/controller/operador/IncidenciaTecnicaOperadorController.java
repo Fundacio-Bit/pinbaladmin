@@ -17,18 +17,22 @@ import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.utils.Utils;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Operador;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
@@ -237,9 +241,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
                 case NORMAL:
                     incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.CREADOR);
-                    incidenciaTecnicaFilterForm.setGroupBy(ESTAT.javaName);
-                    Integer e = Constants.ESTAT_INCIDENCIA_OBERTA;
-                    incidenciaTecnicaFilterForm.setGroupValue(e.toString());
+                    incidenciaTecnicaFilterForm.setGroupBy(OPERADOR.javaName);
+                    incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
                 break;
 
                 case NOLLEGITSNOMEUS:
@@ -494,18 +497,49 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     @RequestMapping(value = "/changeOperador/{incidenciaTecnicaID}/{operador}", method = RequestMethod.GET)
     public String changeOperadorIncidenciaTecnicaGet(
             @PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
-            @PathVariable("operador") java.lang.String operador,
-            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+            @PathVariable("operador") java.lang.String operador, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
 
         IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
         String operador_old = i.getOperador();
         i.setOperador(operador);
 
+        SelectMultipleStringKeyValue smskv;
+        smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
+        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
+
+        Map<String, String> operadors_map;
+        operadors_map = Utils.listToMap(operadors);
+        
+        String nom_operador = operadors_map.get(operador);
+        String nom_operador_old  = operadors_map.get(operador_old);
+                
         try {
             this.update(request, i);
 
-            HtmlUtils.saveMessageSuccess(request, "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
+            Long solicitudID = null;
+            Timestamp data = new Timestamp(System.currentTimeMillis());
+            int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            String persona = request.getUserPrincipal().getName();
+            
+            String comentari = I18NUtils.tradueix("missatge.canvi.operador", "incidencia", operador, nom_operador,
+                    operador_old, nom_operador_old);
+
+            Long fitxerID = null;
+            boolean noLlegit = true;
+
+            String caidNumeroSeg = null;
+            String caiIDConsulta = null;
+
+            EventJPA evt = new EventJPA(solicitudID, incidenciaTecnicaID, data, tipus, persona, comentari, fitxerID,
+                    noLlegit, caiIDConsulta, caidNumeroSeg);
+
+            eventLogicaEjb.create(evt);
+
+            HtmlUtils.saveMessageSuccess(request,
+                    "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
+            
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
