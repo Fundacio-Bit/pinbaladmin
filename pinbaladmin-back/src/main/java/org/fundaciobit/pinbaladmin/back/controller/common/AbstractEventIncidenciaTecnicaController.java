@@ -98,6 +98,12 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     }
 
     @Override
+    public String getPersonaContacteByItemID(Long itemID) throws I18NException {
+        return incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.CONTACTENOM,
+                IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(itemID));
+    }
+
+    @Override
     public String getPublicContextPath() {
         return EventIncidenciaTecnicaPublicController.CONTEXT_PATH;
     }

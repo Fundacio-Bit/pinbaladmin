@@ -30,6 +30,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.PERSONA)}">
         <th>${pad:getSortIcons(__theFilterForm,EventFields.PERSONA)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.DESTINATARI)}">
+        <th>${pad:getSortIcons(__theFilterForm,EventFields.DESTINATARI)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.DESTINATARIMAIL)}">
+        <th>${pad:getSortIcons(__theFilterForm,EventFields.DESTINATARIMAIL)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.COMENTARI)}">
         <th>${pad:getSortIcons(__theFilterForm,EventFields.COMENTARI)}</th>
         </c:if>

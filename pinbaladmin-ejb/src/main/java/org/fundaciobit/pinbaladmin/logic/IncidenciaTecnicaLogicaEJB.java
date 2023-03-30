@@ -65,6 +65,8 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String contacteTelefon = null;
         java.lang.String caidIdentificadorConsulta = null;
         java.lang.String caidNumeroSeguiment = null;
+        java.lang.String destinatari = null;
+        java.lang.String destinatariEmail = null;
 
         
         IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, tipus, nomEntitat,
@@ -82,12 +84,15 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String _caidIdentificadorConsulta_ = caidIdentificadorConsulta;
         java.lang.String _caidNumeroSeguiment_ = caidNumeroSeguiment;
 
+        java.lang.String _destinatari_ = destinatari;
+        java.lang.String _destinatariEmail_ = destinatariEmail;
+
         // Afegir peticio
         if (descripcio.startsWith("<") && descripcio.endsWith(">")) {
             descripcio = "<div>" + descripcio + "</div>";
         }
 
-        eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, descripcio, null,
+        eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatariEmail_ , _destinatari_, descripcio, null,
                 _noLlegit_, _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 
         // Afgegir fitxers
@@ -102,7 +107,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
 
             java.lang.Long _fitxerID_ = fitxer.getFitxerID();
 
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatariEmail_ , _destinatari_, _comentari_,
                     _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 
         }

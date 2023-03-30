@@ -1346,9 +1346,10 @@ textarea.event {
 						<td align="right" width="45%"><c:if
 								test="${mostrarMissatgeDreta}">
 								<div style="margin-right: 20px">
-									${event.dataEvent}<br> <span
-										style="font-weight: bold; font-size: 10pt">De
-										${event.persona}</span>
+									${event.dataEvent}<br> 
+									<span style="font-weight: bold; font-size: 10pt">
+                                    De ${event.persona}
+									</span>
 								</div>
 							</c:if> <c:if test="${!mostrarMissatgeDreta}">
 								<div style="margin: 10px 10px 24px 10px">
@@ -1384,19 +1385,29 @@ textarea.event {
 
 								<c:if test="${!mostrarMissatgeDreta}">
                                      ${event.dataEvent}<br />
-									<span style="font-weight: bold; font-size: 10pt">De <c:if
-											test="${(event.tipus==-3)}">
-                                        ${operador}  enviat a ${event.persona}
-                                     </c:if> <c:if test="${(event.tipus!=-3)}">
-                                        ${event.persona}
-                                     </c:if>
-
+									<span style="font-weight: bold; font-size: 10pt">
+										<c:if test="${(event.tipus==-3)}">
+	                                       De ${operador}  enviat a ${event.persona}
+	                                    </c:if> 
+	                                    <c:if test="${(event.tipus!=-3)}">
+	                                       De ${event.persona} 
+		                                   <c:if test="${(not empty event.destinatari)}">
+		                                      a ${event.destinatari} 
+		                                      <c:if test="${(not empty event.destinatarimail)}">
+                                                (${event.destinatarimail})
+                                              </c:if> 
+		                                   </c:if> 
+                                    </c:if>
 									</span>
 								</c:if>
+
+
+
+
+
+
+
 								<c:if test="${mostrarMissatgeDreta}">
-
-
-
 									<div style="margin: 10px 10px 24px 10px">
 										<div class="entrada">
 											<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
@@ -1414,7 +1425,7 @@ textarea.event {
 	</div>
 	<center>
 		<iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
-			height="${isPublic?450:475}px" onload="carregatIframe(this)"
+			height="${isPublic?450:560}px" onload="carregatIframe(this)"
 			src="${theurlnew}"></iframe>
 	</center>
 	<br />

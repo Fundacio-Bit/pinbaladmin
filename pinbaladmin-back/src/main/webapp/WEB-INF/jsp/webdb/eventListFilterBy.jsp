@@ -185,6 +185,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.DESTINATARI)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="event.destinatari" var="destinatari" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdestinatari" >                
+                 <fmt:param value="${destinatari}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${destinatari}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinatari}" path="destinatari" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.DESTINATARIMAIL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="event.destinatarimail" var="destinatarimail" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdestinatarimail" >                
+                 <fmt:param value="${destinatarimail}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${destinatarimail}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinatarimail}" path="destinatarimail" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.COMENTARI)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">

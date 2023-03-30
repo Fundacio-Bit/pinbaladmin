@@ -261,9 +261,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
             }
         }
 
-        String persona_contacte_str = nom + " (" + email + ")";
-        mav.addObject("persona_contacte", persona_contacte_str);
-        request.getSession().setAttribute("persona_contacte", persona_contacte_str);
+        mav.addObject("persona_contacte", nom);
+        request.getSession().setAttribute("persona_contacte", nom);
+
+        mav.addObject("persona_contacte_mail", email);
+        request.getSession().setAttribute("persona_contacte_mail", email);
 
         eventForm.setAttachedAdditionalJspCode(true);
 
@@ -373,9 +375,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     final boolean isHtml = true;
 
                     String email = getPersonaContacteEmailByItemID(itemID);
-                    //          ev.setDestinatariEmail(email);
+                    String persona = getPersonaContacteByItemID(itemID);
+                    
+                    ev.setDestinatari(persona);
+                    ev.setDestinatarimail(email);
 
                     EmailUtil.postMail(subject, message, isHtml, from, email);
+                    eventEjb.update(ev);
+                    
                 } catch (Throwable th) {
 
                     String msg;
@@ -579,6 +586,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract String getPersonaContacteEmailByItemID(Long itemID) throws I18NException;
 
+    public abstract String getPersonaContacteByItemID(Long itemID) throws I18NException;
+
     @Override
     public EventFilterForm getEventFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
             throws I18NException {
@@ -777,7 +786,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
             }
 
             String address = getPersonaContacteEmailByItemID(itemID);
-            ;
+
             String url;
             try {
                 url = getLinkPublic(itemID) + "?cedent=" + HibernateFileUtil.getEncrypter().encrypt(address);

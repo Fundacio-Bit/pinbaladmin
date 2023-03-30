@@ -104,6 +104,12 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
     }
 
     @Override
+    public String getPersonaContacteByItemID(Long itemID) throws I18NException {
+        return solicitudLogicaEjb.executeQueryOne(SolicitudFields.PERSONACONTACTE,
+                SolicitudFields.SOLICITUDID.equal(itemID));
+    }
+
+    @Override
     public String getPublicContextPath() {
         return EventSolicitudPublicController.CONTEXT_PATH;
     }

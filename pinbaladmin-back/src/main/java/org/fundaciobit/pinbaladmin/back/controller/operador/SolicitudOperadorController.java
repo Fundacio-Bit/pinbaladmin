@@ -1307,7 +1307,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         try {
             this.update(request, soli);
 
-            Long incidenciaTecnicaID = null;
             Timestamp data = new Timestamp(System.currentTimeMillis());
             int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
             String persona = request.getUserPrincipal().getName();
@@ -1315,15 +1314,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             String comentari = I18NUtils.tradueix("missatge.canvi.operador", "solicitud", operador, nom_operador,
                     operador_old, nom_operador_old);
 
-            Long fitxerID = null;
-            boolean noLlegit = true;
-
-            String caidNumeroSeg = null;
-            String caiIDConsulta = null;
-
-            EventJPA evt = new EventJPA(solicitudID, incidenciaTecnicaID, data, tipus, persona, comentari, fitxerID,
-                    noLlegit, caiIDConsulta, caidNumeroSeg);
-
+            EventJPA evt = new EventJPA();
+            evt.setSolicitudID(solicitudID);
+            evt.setDataEvent(data);
+            evt.setTipus(tipus);
+            evt.setPersona(persona);
+            evt.setComentari(comentari);
+            evt.setNoLlegit(true);
+            
             eventLogicaEjb.create(evt);
 
             HtmlUtils.saveMessageSuccess(request,

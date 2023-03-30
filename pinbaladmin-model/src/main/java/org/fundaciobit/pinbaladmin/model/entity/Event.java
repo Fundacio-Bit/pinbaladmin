@@ -20,6 +20,12 @@ public interface Event extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getPersona();
 	public void setPersona(java.lang.String _persona_);
 
+	public java.lang.String getDestinatari();
+	public void setDestinatari(java.lang.String _destinatari_);
+
+	public java.lang.String getDestinatarimail();
+	public void setDestinatarimail(java.lang.String _destinatarimail_);
+
 	public java.lang.String getComentari();
 	public void setComentari(java.lang.String _comentari_);
 

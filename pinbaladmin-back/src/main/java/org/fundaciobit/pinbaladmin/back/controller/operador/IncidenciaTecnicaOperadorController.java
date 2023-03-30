@@ -301,7 +301,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             case NOLLEGITSMEUS: {
 
                 // incidencies meves
-
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID, Where
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
                 w1 = Where.AND(OPERADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
@@ -313,7 +312,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
                 w1 = Where.AND(OPERADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
             }
-
         }
 
         Where w2 = getAdditionaConditionAdvancedFilter(request);
@@ -420,7 +418,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             java.lang.String _comentari_ = "S'ha creat la Incidència";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, null, null, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la incidència tecnica: " + th.getMessage(), th);
@@ -518,23 +516,21 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         try {
             this.update(request, i);
 
-            Long solicitudID = null;
             Timestamp data = new Timestamp(System.currentTimeMillis());
             int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
             String persona = request.getUserPrincipal().getName();
             
             String comentari = I18NUtils.tradueix("missatge.canvi.operador", "incidencia", operador, nom_operador,
                     operador_old, nom_operador_old);
-
-            Long fitxerID = null;
-            boolean noLlegit = true;
-
-            String caidNumeroSeg = null;
-            String caiIDConsulta = null;
-
-            EventJPA evt = new EventJPA(solicitudID, incidenciaTecnicaID, data, tipus, persona, comentari, fitxerID,
-                    noLlegit, caiIDConsulta, caidNumeroSeg);
-
+            
+            EventJPA evt = new EventJPA();
+            evt.setIncidenciaTecnicaID(incidenciaTecnicaID);
+            evt.setDataEvent(data);
+            evt.setTipus(tipus);
+            evt.setPersona(persona);
+            evt.setComentari(comentari);
+            evt.setNoLlegit(true);
+            
             eventLogicaEjb.create(evt);
 
             HtmlUtils.saveMessageSuccess(request,
