@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
@@ -35,8 +36,10 @@ import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -208,6 +211,14 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
                                 getContextWeb() + "/generaplantillaexcelserveis", "btn-warning"));
             }
 
+            Long serveisNoAutoritzats = solicitudServeiLogicaEjb
+                    .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soli),
+                            SolicitudServeiFields.ESTATSOLICITUDSERVEIID.notEqual(50L)));
+            
+            if (serveisNoAutoritzats > 0) {
+                solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
+                        "solicitudservei.autoritzartots", getContextWeb() + "/autoritzartots", "btn-primary"));
+            }
         }
 
         log.info("Passa per getDocumentFilterForm:" + soli);
@@ -261,6 +272,50 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(solicitudID);
     }
 
+    @RequestMapping(value = "/autoritzartots", method = RequestMethod.GET)
+    public String autoritzartots(HttpServletRequest request) throws Exception {
+
+        Long solicitudID = getSolicitudID(request);
+
+        try {
+
+            log.info("autoritzartots(); => AUTORITZARTOTS= " + solicitudID);
+
+            Long estatSolicitudServeiID = 50L;
+            solicitudServeiLogicaEjb.update(SolicitudServeiFields.ESTATSOLICITUDSERVEIID, estatSolicitudServeiID,
+                    SolicitudServeiFields.SOLICITUDID.equal(solicitudID));
+
+            HtmlUtils.saveMessageSuccess(request, "S'han autoritzat tots els serveis");
+
+        } catch (I18NException ie) {
+            HtmlUtils.saveMessageError(request, I18NUtils.getMessage(ie));
+        }
+        return getRedirectWhen(solicitudID);
+    }
+
+    
+    @RequestMapping(value = "/autoritzarservei/{solicitudserveiid}", method = RequestMethod.GET)
+    public String autoritzarServei(HttpServletRequest request,
+            @PathVariable("solicitudserveiid") Long solicitudserveiid) throws Exception {
+
+        SolicitudServeiJPA soliSer = solicitudServeiLogicaEjb.findByPrimaryKey(solicitudserveiid);
+        try {
+
+            log.info("autoritzarservei(); => SOLICITUDSERVEIID= " + solicitudserveiid);
+
+            Long estatSolicitudServeiID = 50L;
+            soliSer.setEstatSolicitudServeiID(estatSolicitudServeiID );
+            solicitudServeiLogicaEjb.update(soliSer);
+
+            HtmlUtils.saveMessageSuccess(request, "S'ha autoritzat el servei");
+
+        } catch (I18NException ie) {
+            HtmlUtils.saveMessageError(request, I18NUtils.getMessage(ie));
+        }
+        return getRedirectWhen(soliSer.getSolicitudID());
+    }
+
+    
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
@@ -288,6 +343,12 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
                 filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitudservei.senseestat",
                                 "javascript:alert('Revisi estat')", "btn-danger"));
+            } else {
+                if (solicitudServei.getEstatSolicitudServeiID() != 50) {
+                    filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
+                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK), "solicitudservei.autoritzarservei",
+                                    getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), "btn-primary"));
+                }
             }
         }
 
