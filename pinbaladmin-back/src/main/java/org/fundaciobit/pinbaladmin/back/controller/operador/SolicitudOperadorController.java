@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.CustomField;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
@@ -1353,6 +1354,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
     }
 
+    
+    @Override
+    public SolicitudJPA update(HttpServletRequest request, SolicitudJPA solicitud)
+            throws I18NException, I18NValidationException {
+
+        if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT) {
+            solicitud.setDataFi(new Timestamp(System.currentTimeMillis()));
+        }
+
+        return (SolicitudJPA) solicitudEjb.update(solicitud);
+    }
+    
     @Override
     public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
