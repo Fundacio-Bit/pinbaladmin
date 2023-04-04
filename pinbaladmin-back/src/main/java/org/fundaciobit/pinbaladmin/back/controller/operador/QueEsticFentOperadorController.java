@@ -92,9 +92,7 @@ public class QueEsticFentOperadorController {
                 date = SDF.parse(dateStr);
             } catch (Throwable e) {
                 HtmlUtils.saveMessageError(request, "Error en el format de la data: " + dateStr);
-
                 mav.addObject("data", SDF.format(new Date()));
-
                 return mav;
             }
         }
@@ -111,141 +109,76 @@ public class QueEsticFentOperadorController {
         mav.addObject("data", dateStr);
 
         try {
-            
-            Map<Long, Event> fullevents = new TreeMap<Long, Event>();
-            
+            Map<String, String> fullevents = new TreeMap<String, String>();
+
             // (1) Consultam sol·licituds
             {
-                final Where w1Cre= SolicitudFields.CREADOR.equal(username);
-                final Where w1Ope= SolicitudFields.OPERADOR.equal(username);
-                
+                final Where w1Cre = SolicitudFields.CREADOR.equal(username);
+                final Where w1Ope = SolicitudFields.OPERADOR.equal(username);
                 final Where w1 = Where.OR(w1Cre, w1Ope);
 
                 final Where w2 = SolicitudFields.DATAINICI.between(from, to);
                 final Where w3 = SolicitudFields.DATAFI.between(from, to);
-                List<Solicitud> solis = solicitudEjb.select(Where.AND(w1, Where.OR(w2, w3)));
+                
+                List<Long> solis = solicitudEjb.executeQuery(SolicitudFields.SOLICITUDID,
+                        Where.AND(w1, Where.OR(w2, w3)));
 
-                // Convertin a Event
-                for (Solicitud solicitud : solis) {
-                    Event ev = new EventBean();
-                    ev.setSolicitudID(solicitud.getSolicitudID());
-                    fullevents.put(solicitud.getSolicitudID(), ev);
+                for (Long solicitudID : solis) {
+                    afegirEventTipus(fullevents, "SOL", solicitudID);
                 }
             }
 
             // (2) Consultam incidencies
             {
-                final Where w1Cre= IncidenciaTecnicaFields.CREADOR.equal(username);
-                final Where w1Ope= IncidenciaTecnicaFields.OPERADOR.equal(username);
-                
+                final Where w1Cre = IncidenciaTecnicaFields.CREADOR.equal(username);
+                final Where w1Ope = IncidenciaTecnicaFields.OPERADOR.equal(username);
                 final Where w1 = Where.OR(w1Cre, w1Ope);
 
                 final Where w2 = IncidenciaTecnicaFields.DATAINICI.between(from, to);
                 final Where w3 = IncidenciaTecnicaFields.DATAFI.between(from, to);
-                List<IncidenciaTecnica> its = incidenciaTecnicaLogicaEjb.select(Where.AND(w1, Where.OR(w2, w3)));
+                
+                List<Long> its = incidenciaTecnicaLogicaEjb.executeQuery(IncidenciaTecnicaFields.INCIDENCIATECNICAID,
+                        Where.AND(w1, Where.OR(w2, w3)));
 
-                // Convertin a Event
-                for (IncidenciaTecnica ic : its) {
-                    Event ev = new EventBean();
-                    ev.setIncidenciaTecnicaID(ic.getIncidenciaTecnicaID());
-                    fullevents.put(ic.getIncidenciaTecnicaID(), ev);
+                for (Long incidenciaID : its) {
+                    afegirEventTipus(fullevents, "INC", incidenciaID);
                 }
             }
 
             // (3) Consultam events
             {
-                final Where wOp1 = EventFields.PERSONA.equal(username);
-                final Where wOp2 = EventFields.PERSONA.like("% " + username + " %");
-                final Where w1 = Where.OR(wOp1, wOp2);
-                
+                final Where w1 = EventFields.PERSONA.equal(username);
                 final Where w2 = EventFields.DATAEVENT.between(from, to);
                 List<Event> events = eventEjb.select(Where.AND(w1, w2));
+
                 for (Event event : events) {
-                    if (event.getSolicitudID() == null) {
-                        fullevents.put(event.getIncidenciaTecnicaID(), event);
-                    }else {
-                        fullevents.put(event.getSolicitudID(), event);
+                    if (event.getSolicitudID() != null) {
+                        afegirEventTipus(fullevents, "SOL", event.getSolicitudID());
+                    } else {
+                        afegirEventTipus(fullevents, "INC", event.getIncidenciaTecnicaID());
                     }
                 }
             }
+
             log.info("Queesticfent: #events");
 
             List<String> items = new ArrayList<String>();
+            for (String msg : fullevents.values()) {
 
-            for (Event event : fullevents.values()) {
+                String url = getUrl(date, username, msg);
 
-                String tipus;
-                String tipusTitle;
-                long id;
-                
-                boolean esSoli = (event.getSolicitudID() != null);
-
-                //String text;
-                if (esSoli) {
-                    id = event.getSolicitudID();
-
-                    Solicitud soli = solicitudEjb.findByPrimaryKey(id);
-                    tipusTitle = soli.getProcedimentNom();
-
-                    final String cai = soli.getTicketAssociat();
-                    if (cai == null) {
-                        tipus = "Solicitud[" + id + "]";
-                    } else {
-                        tipus = "CAI-" + cai;
-                    }
-                } else {
-
-                    id = event.getIncidenciaTecnicaID();
-                    tipus = "Inc.Tec.[" + id + "]";
-                    tipusTitle = incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.TITOL,
-                            IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(id));
-                }
-
-                //text = event.getComentari();
-
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-
-                String dia = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
-                String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
-                int any = cal.get(Calendar.YEAR);
-
-                String msg = "INTEROP: " + tipus + ": " + tipusTitle;
-
-                int MAX_LENGTH = 230;
-                if (msg.length() > MAX_LENGTH) {
-                    msg = msg.substring(0, MAX_LENGTH);
-                }
-
-                String msgEnc;
-                try {
-                    msgEnc = URLEncoder.encode(msg, StandardCharsets.ISO_8859_1.toString());
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    msgEnc = msg;
-                }
-
-                String url = "https://queesticfent.fundaciobit.org/queesticfent/NovaModificacio.jsp?usuariID="
-                        + username + "&data=" + dia + "%2F" + mes + "%2F" + any
-                        + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
-                        + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1=" + msgEnc;
-                
                 StringBuffer str = new StringBuffer();
-
                 str.append(msg + "  <a target=\"_blank\" href=\"" + url
                         + "\" ><span class=\"label label-success\"><b>+</b></span> </a>");
 
                 items.add(str.toString());
             }
             mav.addObject("items", items);
-            
+
         } catch (I18NException e) {
             HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
         }
-
         return mav;
-
     }
 
     public static Date atEndOfDay(Date date) {
@@ -256,4 +189,60 @@ public class QueEsticFentOperadorController {
         return DateUtils.truncate(date, Calendar.DATE);
     }
 
+    public static String getUrl (Date date, String username, String msg) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        String dia = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+        String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
+        int any = cal.get(Calendar.YEAR);
+
+        int MAX_LENGTH = 230;
+        if (msg.length() > MAX_LENGTH) {
+            msg = msg.substring(0, MAX_LENGTH);
+        }
+
+        String msgEnc;
+        try {
+            msgEnc = URLEncoder.encode(msg, StandardCharsets.ISO_8859_1.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            msgEnc = msg;
+        }
+        
+        String url = "https://queesticfent.fundaciobit.org/queesticfent/NovaModificacio.jsp?usuariID="
+                + username + "&data=" + dia + "%2F" + mes + "%2F" + any
+                + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
+                + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1=" + msgEnc;
+        
+        return url;
+    }
+    
+    public void afegirEventTipus(Map<String, String> fullevents, String event, Long id) {
+
+        String tipus = null;
+        String tipusTitle = null;
+
+        switch (event) {
+            case "SOL":
+                Solicitud soli = solicitudEjb.findByPrimaryKey(id);
+
+                final String cai = soli.getTicketAssociat();
+                if (cai == null) {
+                    tipus = "Solicitud[" + id + "]";
+                } else {
+                    tipus = "CAI-" + cai;
+                }
+                tipusTitle = soli.getProcedimentNom();
+            break;
+            case "INC":
+                IncidenciaTecnica ic = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
+
+                tipus = "Inc.Tec.[" + id + "]";
+                tipusTitle = ic.getTitol();
+            break;
+        }
+        String msg = "INTEROP: " + tipus + ": " + tipusTitle;
+        fullevents.put(event + id, msg);
+    }
 }
