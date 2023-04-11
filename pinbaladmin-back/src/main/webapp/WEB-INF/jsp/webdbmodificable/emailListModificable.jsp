@@ -5,12 +5,12 @@
     var tipus; // 1 incidencia     0 solucitud
 
     function myFunction() {
-        var tramitador = document.getElementById("tramitador").value;
+        var operador = document.getElementById("operador").value;
         var tipusIncidencia = document.getElementById("tipusIncidencia").value;
         var root = "<%=request.getContextPath()%>${contexte}/"
         window.location.href = root
                 + ((tipus == 1) ? "incidencia" : "solicitud") + "/"
-                + itemIDCache + "/" + tramitador + "/" + tipusIncidencia;
+                + itemIDCache + "/" + operador + "/" + tipusIncidencia;
     }
 
     function crearIncidencia(itemID) {
@@ -41,11 +41,11 @@
 			<div class="modal-body">
 				<%  request.setAttribute("currentuser", request.getRemoteUser()); %>
 
-				<label id="label_tramitador" for="tramitador"> Selecciona tramitador: </label> 
-				<select id="tramitador" class="my_select">
-					<c:forEach items="${tramitadors}" var="tramitador">
-						<option value="${tramitador.key}"
-							${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
+				<label id="label_operador" for="operador"> Selecciona operador: </label> 
+				<select id="operador" class="my_select">
+					<c:forEach items="${operadors}" var="operador">
+						<option value="${operador.key}"
+							${(currentuser eq operador.key)?'selected':''}>${operador.value}</option>
 					</c:forEach>
 				</select> 
 
@@ -122,7 +122,7 @@
 	grid-area: select;
 }
 
-#label_tipusIncidencia, #label_tramitador {
+#label_tipusIncidencia, #label_operador {
 	font-size: 1.15rem;
 }
 </style>

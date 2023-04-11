@@ -37,7 +37,12 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     }
 
     @Override
-    public String getTramitador(IncidenciaTecnica item) {
+    public String getOperador(IncidenciaTecnica item) {
+        return item.getOperador();
+    }
+
+    @Override
+    public String getCreador(IncidenciaTecnica item) {
         return item.getCreador();
     }
 
@@ -89,6 +94,12 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     @Override
     public String getPersonaContacteEmailByItemID(Long itemID) throws I18NException {
         return incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.CONTACTEEMAIL,
+                IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(itemID));
+    }
+
+    @Override
+    public String getPersonaContacteByItemID(Long itemID) throws I18NException {
+        return incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.CONTACTENOM,
                 IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(itemID));
     }
 

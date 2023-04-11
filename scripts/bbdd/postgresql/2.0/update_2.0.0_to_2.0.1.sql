@@ -36,3 +36,60 @@ WHERE
     t1.solicitudid = t2.solicitudid;
 
 
+
+
+---
+--- 27/03/2023 -  Afegir un camp per saber qui ha estat el creador d'una incidencia o solicitud #86
+---
+
+-- INCIDENCIA
+ALTER TABLE pad_incidenciatecnica
+   ADD COLUMN operador character varying(100);
+
+UPDATE pad_incidenciatecnica SET operador = creador;
+
+ALTER TABLE pad_incidenciatecnica
+   ALTER COLUMN operador SET NOT NULL;
+
+-- SOLICITUD
+ALTER TABLE pad_solicitud
+   ADD COLUMN operador character varying(100);
+
+UPDATE pad_solicitud SET operador = creador;
+
+ALTER TABLE pad_solicitud
+   ALTER COLUMN operador SET NOT NULL;
+
+
+
+
+---
+--- 29/03/2023 - Afegir camp a taula Event per guardar el destinatari en comentaris tramitadors publics #103
+---
+
+ALTER TABLE pad_event
+   ADD COLUMN destinatari character varying(255);
+
+ALTER TABLE pad_event
+   ADD COLUMN destinatarimail character varying(255);
+
+
+UPDATE 
+   pad_event t0
+SET 
+   persona = t1.de,
+   destinatari = t1.a,
+   destinatarimail = t1.mail
+FROM 
+   (SELECT eventid, persona,
+	split_part(split_part(persona, 'De ', 2), ' a ', 1) de, 
+	split_part(split_part(persona, ' a ', 2), ' (', 1) a, 
+	split_part(split_part(persona, '(', 2), ')', 1) mail,
+	destinatari, destinatarimail
+	FROM pad_event 
+	WHERE tipus=1 
+	AND persona like 'De %') AS t1
+WHERE
+   t0.eventid = t1.eventid;
+
+   

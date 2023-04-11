@@ -32,6 +32,7 @@ public class SolicitudForm extends PinbalAdminBaseForm {
     this.listOfEstatSolicitudForEstatID = __toClone.listOfEstatSolicitudForEstatID;
     this.listOfDepartamentForDepartamentID = __toClone.listOfDepartamentForDepartamentID;
     this.listOfValuesForCreador = __toClone.listOfValuesForCreador;
+    this.listOfValuesForOperador = __toClone.listOfValuesForOperador;
   }
   
   public SolicitudForm(SolicitudJPA solicitud, boolean nou) {
@@ -119,6 +120,18 @@ public class SolicitudForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForCreador(List<StringKeyValue> listOfValuesForCreador) {
     this.listOfValuesForCreador = listOfValuesForCreador;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForOperador;
+
+  public List<StringKeyValue> getListOfValuesForOperador() {
+    return this.listOfValuesForOperador;
+  }
+
+  public void setListOfValuesForOperador(List<StringKeyValue> listOfValuesForOperador) {
+    this.listOfValuesForOperador = listOfValuesForOperador;
   }
 
 

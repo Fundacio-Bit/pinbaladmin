@@ -29,6 +29,7 @@ import org.fundaciobit.pinbaladmin.back.controller.common.AbstractEventControlle
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
+import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -166,9 +167,9 @@ public class LlistaCorreusOperadorController extends EmailController {
             SelectMultipleStringKeyValue smskv;
             smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
 
-            List<StringKeyValue> tramitadors = operadorEjb.executeQuery(smskv);
+            List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv);
 
-            mav.addObject("tramitadors", tramitadors);
+            mav.addObject("operadors", operadors);
         }
 
         // Tipus d'Incidencies
@@ -300,9 +301,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     }
 
-    @RequestMapping(value = "/incidencia/{emailID}/{tramitador}/{tipusIncidencia}", method = RequestMethod.GET)
+    @RequestMapping(value = "/incidencia/{emailID}/{operador}/{tipusIncidencia}", method = RequestMethod.GET)
     public String incidencia(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("emailID") Long emailID, @PathVariable("tramitador") String tramitador,
+            @PathVariable("emailID") Long emailID, @PathVariable("operador") String operador,
             @PathVariable("tipusIncidencia") int tipusIncidencia) {
 
         try {
@@ -318,7 +319,8 @@ public class LlistaCorreusOperadorController extends EmailController {
                 //EmailMessageInfo emi = cache.get(emailID);
                 EmailMessageInfo emi = er.getMessage((int) (long) emailID);
 
-                IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi, tramitador, tipusIncidencia);
+                String creador = LoginInfo.getInstance().getUsername();
+                IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi, creador, operador, tipusIncidencia);
                 er.deleteMessage((int) (long) emailID);
 
                 // Redireccionam a Enviar Correu al Contacte

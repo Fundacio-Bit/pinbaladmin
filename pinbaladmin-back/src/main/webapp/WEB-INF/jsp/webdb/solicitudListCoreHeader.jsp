@@ -78,9 +78,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PRODUCCIO)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PRODUCCIO)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CREADOR)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CREADOR)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DENOMINACIO)}</th>
         </c:if>
@@ -89,6 +86,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NIF)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.NIF)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CREADOR)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CREADOR)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.OPERADOR)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.OPERADOR)}</th>
         </c:if>
 
 

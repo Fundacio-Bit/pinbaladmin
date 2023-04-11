@@ -86,14 +86,14 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
                 // incidencies meves
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
                         Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull()));
-                w1 = Where.AND(CREADOR.equal(request.getRemoteUser()), SOLICITUDID.in(subQuery));
+                w1 = Where.AND(OPERADOR.equal(request.getRemoteUser()), SOLICITUDID.in(subQuery));
             }
             break;
             case NOLLEGITSNOMEUS: {
                 // incidencies No Meves
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
                         Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull()));
-                w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()), SOLICITUDID.in(subQuery));
+                w1 = Where.AND(OPERADOR.notEqual(request.getRemoteUser()), SOLICITUDID.in(subQuery));
             }
             break;
 
@@ -136,6 +136,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
 
                 if (getVistaIncidencia() == VistaIncidencia.NOLLEGITSMEUS) {
                     solicitudFilterForm.getGroupByFields().remove(CREADOR);
+                    solicitudFilterForm.getGroupByFields().remove(OPERADOR);
                 }
                 solicitudFilterForm.setAddButtonVisible(false);
             }

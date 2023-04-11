@@ -59,6 +59,22 @@ public class EventValidator<I extends Event>
       }
     }
 
+    if (__vr.getFieldErrorCount(DESTINATARI) == 0) {
+      java.lang.String __destinatari = __target__.getDestinatari();
+      if (__destinatari!= null && __destinatari.length() > 255) {
+        __vr.rejectValue(DESTINATARI, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESTINATARI)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(DESTINATARIMAIL) == 0) {
+      java.lang.String __destinatarimail = __target__.getDestinatarimail();
+      if (__destinatarimail!= null && __destinatarimail.length() > 255) {
+        __vr.rejectValue(DESTINATARIMAIL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESTINATARIMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(COMENTARI) == 0) {
       java.lang.String __comentari = __target__.getComentari();
       if (__comentari!= null && __comentari.length() > 2147483647) {

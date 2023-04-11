@@ -2397,6 +2397,56 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "destinatari",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Destinatari",
+            "es": "Destinatario"
+          },
+          "javaName": "destinatari",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "destinatarimail",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Correu destinatari",
+            "es": "Correo destinatario"
+          },
+          "javaName": "destinatarimail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "comentari",
           "sqlType": 12,
           "size": 2147483647,
@@ -3457,33 +3507,6 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "creador",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "es": "Operador",
-            "ca": "Operador"
-          },
-          "javaName": "creador",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "defaultValue": "\u0027mcapo\u0027::character varying",
-          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": true,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "tipus",
           "sqlType": 4,
           "size": 10,
@@ -3656,6 +3679,59 @@
           "groupBy": false,
           "webFieldInfo": {
             "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "creador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Creador",
+            "es": "Creador"
+          },
+          "javaName": "creador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "\u0027mcapo\u0027::character varying",
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "operador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Operador",
+            "es": "Operador"
+          },
+          "javaName": "operador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
           },
           "foreignKeys": []
         }
@@ -4741,32 +4817,6 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "creador",
-          "sqlType": 12,
-          "size": 100,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Operador",
-            "ca": "Operador"
-          },
-          "javaName": "creador",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": true,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "denominacio",
           "sqlType": 12,
           "size": 255,
@@ -4838,6 +4888,58 @@
           "groupBy": false,
           "webFieldInfo": {
             "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "creador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Creador",
+            "es": "Creador"
+          },
+          "javaName": "creador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "operador",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Operador",
+            "es": "Operador"
+          },
+          "javaName": "operador",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "anadal,pvico,atrobat,gdeignacio,mgonzalez,mcapo,fsalas,ptrias",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
           },
           "foreignKeys": []
         }

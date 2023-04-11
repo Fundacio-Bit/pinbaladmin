@@ -603,46 +603,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CREADOR)}">
-        <tr id="solicitud_creador_rowid">
-          <td id="solicitud_creador_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CREADOR])?'solicitud.creador':__theForm.labels[SolicitudFields.CREADOR]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.CREADOR]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CREADOR]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_creador_columnvalueid">
-          <form:errors path="solicitud.creador" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
-          <form:hidden path="solicitud.creador"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.creador,__theForm.listOfValuesForCreador)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="solicitud_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.creador">
-            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
-            <c:if test="${not containEmptyValue}">
-              <c:if test="${empty __theForm.solicitud.creador }">
-                  <form:option value="" selected="true" ></form:option>
-              </c:if>
-              <c:if test="${not empty __theForm.solicitud.creador }">
-                  <form:option value="" ></form:option>
-              </c:if>
-            </c:if>
-          </form:select>
-          </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
         <tr id="solicitud_denominacio_rowid">
           <td id="solicitud_denominacio_columnlabelid">
@@ -693,6 +653,68 @@
             <form:errors path="solicitud.nif" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.NIF)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.NIF)? ' uneditable-input' : ''}"  style="" maxlength="40" path="solicitud.nif"   />
 
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CREADOR)}">
+        <tr id="solicitud_creador_rowid">
+          <td id="solicitud_creador_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CREADOR])?'solicitud.creador':__theForm.labels[SolicitudFields.CREADOR]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CREADOR]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CREADOR]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_creador_columnvalueid">
+          <form:errors path="solicitud.creador" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
+          <form:hidden path="solicitud.creador"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.creador,__theForm.listOfValuesForCreador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CREADOR)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_creador"  onchange="if(typeof onChangeCreador == 'function') {  onChangeCreador(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.creador">
+            <c:forEach items="${__theForm.listOfValuesForCreador}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.OPERADOR)}">
+        <tr id="solicitud_operador_rowid">
+          <td id="solicitud_operador_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.OPERADOR])?'solicitud.operador':__theForm.labels[SolicitudFields.OPERADOR]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.OPERADOR]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.OPERADOR]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_operador_columnvalueid">
+          <form:errors path="solicitud.operador" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.OPERADOR)}" >
+          <form:hidden path="solicitud.operador"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.operador,__theForm.listOfValuesForOperador)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.OPERADOR)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_operador"  onchange="if(typeof onChangeOperador == 'function') {  onChangeOperador(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.operador">
+            <c:forEach items="${__theForm.listOfValuesForOperador}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

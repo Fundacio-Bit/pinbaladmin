@@ -183,8 +183,9 @@ public class EmailEmlFormatParser {
 
       if (part.getContentType().startsWith("text/html")
           && (emi.getBody() == null || emi.getBody().equals(""))) {
-        emi.setBody(
-            new String(IOUtils.toByteArray(part.getInputStream())));
+
+          String body = new String(IOUtils.toByteArray(part.getInputStream()));
+          emi.setBody(body);
       } else {
         attachments.add(new EmailAttachmentInfo(strFileName, mime,
             IOUtils.toByteArray(part.getInputStream())));

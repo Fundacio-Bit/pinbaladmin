@@ -167,6 +167,42 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.DESTINATARI)}">
+        <tr id="event_destinatari_rowid">
+          <td id="event_destinatari_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EventFields.DESTINATARI])?'event.destinatari':__theForm.labels[EventFields.DESTINATARI]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[EventFields.DESTINATARI]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[EventFields.DESTINATARI]}" ></i>
+              </c:if>
+            </td>
+          <td id="event_destinatari_columnvalueid">
+            <form:errors path="event.destinatari" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.DESTINATARI)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,EventFields.DESTINATARI)? ' uneditable-input' : ''}"  style="" maxlength="255" path="event.destinatari"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.DESTINATARIMAIL)}">
+        <tr id="event_destinatarimail_rowid">
+          <td id="event_destinatarimail_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EventFields.DESTINATARIMAIL])?'event.destinatarimail':__theForm.labels[EventFields.DESTINATARIMAIL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[EventFields.DESTINATARIMAIL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[EventFields.DESTINATARIMAIL]}" ></i>
+              </c:if>
+            </td>
+          <td id="event_destinatarimail_columnvalueid">
+            <form:errors path="event.destinatarimail" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.DESTINATARIMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,EventFields.DESTINATARIMAIL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="event.destinatarimail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.COMENTARI)}">
         <tr id="event_comentari_rowid">
           <td id="event_comentari_columnlabelid">

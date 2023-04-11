@@ -1263,13 +1263,15 @@ textarea.event {
 		<table style="width: 100%; font-size: 1.4em">
 			<tbody>
 				<tr>
-					<td width="50%">Número: <strong> ${ID}</strong><br /> Estat:
-						<strong class="label-custom">${estat}</strong><br /> Data
-						Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br />
-
+					<td width="50%">
+					   Número: <strong> ${ID}</strong><br /> 
+                       Creador: <strong>${creador}</strong><br />
+					   Data Creaci&oacute;: <strong class="label-custom">${datacreacio}</strong><br />
 					</td>
-					<td>Nom Contacte: <strong>${personaContacte}</strong><br />
-						Email Contacte: <strong>${personaContacteEmail}</strong>
+					<td>
+                       Estat: <strong class="label-custom">${estat}</strong><br /> 
+					   Nom Contacte: <strong>${personaContacte}</strong><br />
+					   Email Contacte: <strong>${personaContacteEmail}</strong>
 					</td>
 				</tr>
 			</tbody>
@@ -1344,9 +1346,10 @@ textarea.event {
 						<td align="right" width="45%"><c:if
 								test="${mostrarMissatgeDreta}">
 								<div style="margin-right: 20px">
-									${event.dataEvent}<br> <span
-										style="font-weight: bold; font-size: 10pt">De
-										${event.persona}</span>
+									${event.dataEvent}<br> 
+									<span style="font-weight: bold; font-size: 10pt">
+                                    De ${event.persona}
+									</span>
 								</div>
 							</c:if> <c:if test="${!mostrarMissatgeDreta}">
 								<div style="margin: 10px 10px 24px 10px">
@@ -1382,19 +1385,29 @@ textarea.event {
 
 								<c:if test="${!mostrarMissatgeDreta}">
                                      ${event.dataEvent}<br />
-									<span style="font-weight: bold; font-size: 10pt">De <c:if
-											test="${(event.tipus==-3)}">
-                                        ${tramitador}  enviat a ${event.persona}
-                                     </c:if> <c:if test="${(event.tipus!=-3)}">
-                                        ${event.persona}
-                                     </c:if>
-
+									<span style="font-weight: bold; font-size: 10pt">
+										<c:if test="${(event.tipus==-3)}">
+	                                       De ${operador}  enviat a ${event.persona}
+	                                    </c:if> 
+	                                    <c:if test="${(event.tipus!=-3)}">
+	                                       De ${event.persona} 
+		                                   <c:if test="${(not empty event.destinatari)}">
+		                                      a ${event.destinatari} 
+		                                      <c:if test="${(not empty event.destinatarimail)}">
+                                                (${event.destinatarimail})
+                                              </c:if> 
+		                                   </c:if> 
+                                    </c:if>
 									</span>
 								</c:if>
+
+
+
+
+
+
+
 								<c:if test="${mostrarMissatgeDreta}">
-
-
-
 									<div style="margin: 10px 10px 24px 10px">
 										<div class="entrada">
 											<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
@@ -1412,7 +1425,7 @@ textarea.event {
 	</div>
 	<center>
 		<iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
-			height="${isPublic?450:475}px" onload="carregatIframe(this)"
+			height="${isPublic?450:560}px" onload="carregatIframe(this)"
 			src="${theurlnew}"></iframe>
 	</center>
 	<br />
@@ -1471,11 +1484,11 @@ textarea.event {
 				request.setAttribute("currentuser", request.getRemoteUser());
 				%>
 
-				<label id="label_tramitador" for="tramitador"> Selecciona
-					tramitador: </label> <select id="tramitador" class="my_select">
-					<c:forEach items="${tramitadors}" var="tramitador">
-						<option value="${tramitador.key}"
-							${(currentuser eq tramitador.key)?'selected':''}>${tramitador.value}</option>
+				<label id="label_operador" for="operador"> Selecciona
+					operador: </label> <select id="operador" class="my_select">
+					<c:forEach items="${operadors}" var="operador">
+						<option value="${operador.key}"
+							${(currentuser eq operador.key)?'selected':''}>${operador.value}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -1491,12 +1504,12 @@ textarea.event {
 <script>
 function myFunction() {
 	
-    var tramitador = document.getElementById("tramitador").value;
+    var operador = document.getElementById("operador").value;
         
     var root = "<%=request.getContextPath()%>${urlToChangeOperator}";
     
     window.location.href = root
-            + "/" + tramitador;
+            + "/" + operador;
 }
 
 function changeOperador() {

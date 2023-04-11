@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.CustomField;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
@@ -39,6 +40,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
@@ -240,6 +242,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
+            soli.setOperador(request.getRemoteUser());
         } else {
             // solicitudForm.addReadOnlyField(ENTITATID);
         }
@@ -623,18 +626,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
             map.clear();
 
-            final StringField creador = new EventQueryPath().SOLICITUD().CREADOR();
+            final StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
 
             final String loginUserName = request.getRemoteUser();
 
             for (Solicitud inc : list) {
 
-                final String user = inc.getCreador();
+                final String user = inc.getOperador();
 
                 // incidencies
 
                 Long incidencies = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                        EventFields.SOLICITUDID.equal(inc.getSolicitudID()), creador.equal(user)));
+                        EventFields.SOLICITUDID.equal(inc.getSolicitudID()), operador.equal(user)));
 
                 if (incidencies != 0) {
 
@@ -1289,14 +1292,42 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
 
-        String operador_old = soli.getCreador();
-        soli.setCreador(operador);
+        String operador_old = soli.getOperador();
+        soli.setOperador(operador);
 
+        SelectMultipleStringKeyValue smskv;
+        smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
+        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
+
+        Map<String, String> operadors_map;
+        operadors_map = Utils.listToMap(operadors);
+        
+        String nom_operador = operadors_map.get(operador);
+        String nom_operador_old  = operadors_map.get(operador_old);
+                
         try {
             this.update(request, soli);
 
+            Timestamp data = new Timestamp(System.currentTimeMillis());
+            int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            String persona = request.getUserPrincipal().getName();
+            
+            String comentari = I18NUtils.tradueix("missatge.canvi.operador", "solicitud", operador, nom_operador,
+                    operador_old, nom_operador_old);
+
+            EventJPA evt = new EventJPA();
+            evt.setSolicitudID(solicitudID);
+            evt.setDataEvent(data);
+            evt.setTipus(tipus);
+            evt.setPersona(persona);
+            evt.setComentari(comentari);
+            evt.setNoLlegit(true);
+            
+            eventLogicaEjb.create(evt);
+
             HtmlUtils.saveMessageSuccess(request,
                     "Operador canviat correctament.(" + operador_old + " -> " + operador + ")");
+
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
@@ -1321,6 +1352,24 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
 
         return __tmp;
+    }
+
+    
+    @Override
+    public SolicitudJPA update(HttpServletRequest request, SolicitudJPA solicitud)
+            throws I18NException, I18NValidationException {
+
+        if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT) {
+            solicitud.setDataFi(new Timestamp(System.currentTimeMillis()));
+        }
+
+        return (SolicitudJPA) solicitudEjb.update(solicitud);
+    }
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        return getReferenceListForCreador(request, mav, where);
     }
 
     /*

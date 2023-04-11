@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.SelectCount;
+import org.fundaciobit.genapp.common.query.SelectDistinct;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
@@ -215,45 +217,48 @@ public class BasePreparer implements ViewPreparer, Constants {
         // Cerca d'Events no llegits
         if ("operador".equals(pipella)) {
             try {
-                // solicituds locals meves
-                StringField creador = new EventQueryPath().SOLICITUD().CREADOR();
-
-                Where wComu = Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull());
-
                 if (eventLogicaEjb == null) {
                     eventLogicaEjb = (EventLogicaService) new InitialContext().lookup(EventLogicaService.JNDI_NAME);
                 }
 
+                String user = httpRequest.getRemoteUser();
+
                 log.info("BasePreparer => httpRequest:  " + httpRequest);
-                log.info("BasePreparer => httpRequest.getRemoteUser():  " + httpRequest.getRemoteUser());
+                log.info("BasePreparer => httpRequest.getRemoteUser():  " + user);
                 log.info("BasePreparer => eventLogicaEjb:  " + eventLogicaEjb);
 
-                Long solicitudsLocalsMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.equal(httpRequest.getRemoteUser())));
+                Where wNoLlegit = EventFields.NOLLEGIT.equal(Boolean.TRUE);
+                
+                //SOLICITUDS
+                {
+                    StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
+                    Where wComu = Where.AND(wNoLlegit, EventFields.SOLICITUDID.isNotNull());
+                    SelectDistinct<Long> sd = new SelectDistinct<Long>(EventFields.SOLICITUDID);
+                    SelectCount sc = new SelectCount(sd);
 
-                // solicituds locals No Meves
-                Long solicitudsLocalsNoMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.notEqual(httpRequest.getRemoteUser())));
+                    // solicituds locals meves i no meves
+                    Long solicitudsLocalsMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.equal(user)));
+                    Long solicitudsLocalsNoMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.notEqual(user)));
 
-                // incidencies meves
+                    request.put("solicitudsLocalsMeves", solicitudsLocalsMeves);
+                    request.put("solicitudsLocalsNoMeves", solicitudsLocalsNoMeves);
+                }
 
-                creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+                //INCIDENCIES
+                {
+                    StringField operador = new EventQueryPath().INCIDENCIATECNICA().OPERADOR();
 
-                wComu = Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                        EventFields.INCIDENCIATECNICAID.isNotNull());
+                    Where wComu = Where.AND(wNoLlegit, EventFields.INCIDENCIATECNICAID.isNotNull());
+                    SelectDistinct<Long> sd = new SelectDistinct<Long>(EventFields.INCIDENCIATECNICAID);
+                    SelectCount sc = new SelectCount(sd);
 
-                Long incidenciesMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.equal(httpRequest.getRemoteUser())));
+                    // incidencies meves i no meves
+                    Long incidenciesMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.equal(user)));
+                    Long incidenciesNoMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.notEqual(user)));
 
-                // incidencies No Meves
-
-                Long incidenciesNoMeves = eventLogicaEjb
-                        .count(Where.AND(wComu, creador.notEqual(httpRequest.getRemoteUser())));
-
-                request.put("solicitudsLocalsMeves", solicitudsLocalsMeves);
-                request.put("solicitudsLocalsNoMeves", solicitudsLocalsNoMeves);
-                request.put("incidenciesMeves", incidenciesMeves);
-                request.put("incidenciesNoMeves", incidenciesNoMeves);
+                    request.put("incidenciesMeves", incidenciesMeves);
+                    request.put("incidenciesNoMeves", incidenciesNoMeves);
+                }
 
             } catch (I18NException e) {
                 // TODO Auto-generated catch block

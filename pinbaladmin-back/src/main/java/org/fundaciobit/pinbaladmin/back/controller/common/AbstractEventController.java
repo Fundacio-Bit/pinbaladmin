@@ -242,8 +242,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         }
 
         if (!isPublic()) {
-            mav.addObject("persona_tramitador", request.getUserPrincipal().getName());
-            request.getSession().setAttribute("persona_tramitador", request.getUserPrincipal().getName());
+            mav.addObject("persona_operador", request.getUserPrincipal().getName());
+            request.getSession().setAttribute("persona_operador", request.getUserPrincipal().getName());
         }
 
         String email = getPersonaContacteEmail(item);
@@ -261,9 +261,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
             }
         }
 
-        String persona_contacte_str = nom + " (" + email + ")";
-        mav.addObject("persona_contacte", persona_contacte_str);
-        request.getSession().setAttribute("persona_contacte", persona_contacte_str);
+        mav.addObject("persona_contacte", nom);
+        request.getSession().setAttribute("persona_contacte", nom);
+
+        mav.addObject("persona_contacte_mail", email);
+        request.getSession().setAttribute("persona_contacte_mail", email);
 
         eventForm.setAttachedAdditionalJspCode(true);
 
@@ -280,7 +282,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract Timestamp getDataCreacio(T item);
 
-    public abstract String getTramitador(T item);
+    public abstract String getOperador(T item);
+
+    public abstract String getCreador(T item);
 
     public abstract String getUrlToEditItem(T item);
 
@@ -371,9 +375,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     final boolean isHtml = true;
 
                     String email = getPersonaContacteEmailByItemID(itemID);
-                    //          ev.setDestinatariEmail(email);
+                    String persona = getPersonaContacteByItemID(itemID);
+                    
+                    ev.setDestinatari(persona);
+                    ev.setDestinatarimail(email);
 
                     EmailUtil.postMail(subject, message, isHtml, from, email);
+                    eventEjb.update(ev);
+                    
                 } catch (Throwable th) {
 
                     String msg;
@@ -577,6 +586,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract String getPersonaContacteEmailByItemID(Long itemID) throws I18NException;
 
+    public abstract String getPersonaContacteByItemID(Long itemID) throws I18NException;
+
     @Override
     public EventFilterForm getEventFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
             throws I18NException {
@@ -602,7 +613,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         }
 
 
-        mav.addObject("tramitador", getTramitador(item));
+        mav.addObject("operador", getOperador(item));
+        mav.addObject("creador", getCreador(item));
         mav.addObject("datacreacio", SDF.format(getDataCreacio(item)));
         mav.addObject("personaContacte", getPersonaContacteNom(item));
         mav.addObject("personaContacteEmail", getPersonaContacteEmail(item));
@@ -655,9 +667,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
             SelectMultipleStringKeyValue smskv;
             smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
 
-            List<StringKeyValue> tramitadors = operadorEjb.executeQuery(smskv);
+            List<StringKeyValue> operadors= operadorEjb.executeQuery(smskv);
 
-            mav.addObject("tramitadors", tramitadors);
+            mav.addObject("operadors", operadors);
         }
 
         // Tipus d'Incidencies
@@ -774,7 +786,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
             }
 
             String address = getPersonaContacteEmailByItemID(itemID);
-            ;
+
             String url;
             try {
                 url = getLinkPublic(itemID) + "?cedent=" + HibernateFileUtil.getEncrypter().encrypt(address);

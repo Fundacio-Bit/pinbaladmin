@@ -17,18 +17,22 @@ import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.utils.Utils;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Operador;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
@@ -165,7 +169,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
             for (StringKeyValue skv : getReferenceListForEstat(request, mav, null)) {
                 str.append(skv.value).append("=").append(skv.key).append(" | ");
-
             }
 
             incidenciaTecnicaFilterForm.setSubTitleCode("=Valors Estat => " + str.toString());
@@ -182,24 +185,20 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             // incidenciaTecnicaFilterForm.setGroupBy(ESTAT.fullName);
             // incidenciaTecnicaFilterForm.setGroupValue(String.valueOf(Constants.ESTAT_INCIDENCIA_TECNICA_OBERTA));
 
-            incidenciaTecnicaFilterForm.setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
-
-            incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
-
-            // Valors Inicials Filtre
-            if (getVistaIncidencia() != VistaIncidencia.NOLLEGITSNOMEUS) {
-                incidenciaTecnicaFilterForm.setCreador(request.getRemoteUser());
+            if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
+                incidenciaTecnicaFilterForm.setAddButtonVisible(false);
             }
-            incidenciaTecnicaFilterForm.getFilterByFields().add(CREADOR);
-
-            if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
-                incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_OBERTA);
-                incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_PENDENT_DE_TERCER);
-            }
-            incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
 
             incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol",
                     EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}", "btn-success"));
+
+
+            // Valors Inicials Filtre
+            incidenciaTecnicaFilterForm.setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
+            incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
+            incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
+            incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
+
 
             if (showAdvancedFilter()) {
 
@@ -216,14 +215,11 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(TITOL);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(DESCRIPCIO);
-                incidenciaTecnicaFilterForm.getFilterByFields().remove(CREADOR);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(NOMENTITAT);
                 incidenciaTecnicaFilterForm.getFilterByFields().remove(CONTACTEEMAIL);
-
             }
 
             {
-
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
                 adfield4.setCodeName("=Sense Llegir");
                 adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
@@ -232,24 +228,37 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
                 adfield4.setValueMap(new HashMap<Long, String>());
 
                 incidenciaTecnicaFilterForm.addAdditionalField(adfield4);
-
             }
-
-            incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
-
-            if (getVistaIncidencia() != VistaIncidencia.NORMAL) {
-                incidenciaTecnicaFilterForm.setAddButtonVisible(false);
-            }
-
-            incidenciaTecnicaFilterForm.setGroupBy(CREADOR.javaName);
-            incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
-
+            
             incidenciaTecnicaFilterForm.setGroupByFields(incidenciaTecnicaFilterForm.getDefaultGroupByFields());
             incidenciaTecnicaFilterForm.getGroupByFields().add(DATAINICI);
 
             incidenciaTecnicaFilterForm.setOrderBy(DATAINICI.javaName);
             incidenciaTecnicaFilterForm.setOrderAsc(false);
 
+            
+            switch (getVistaIncidencia()) {
+
+                case NORMAL:
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.CREADOR);
+                    incidenciaTecnicaFilterForm.setGroupBy(OPERADOR.javaName);
+                    incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
+                break;
+
+                case NOLLEGITSNOMEUS:
+//                    incidenciaTecnicaFilterForm.setEstatDesde(Constants.ESTAT_INCIDENCIA_OBERTA);
+//                    incidenciaTecnicaFilterForm.setEstatFins(Constants.ESTAT_INCIDENCIA_PENDENT_DE_TERCER);
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.DATAFI);
+                    incidenciaTecnicaFilterForm.setGroupBy(OPERADOR.javaName);
+                    incidenciaTecnicaFilterForm.setGroupValue(request.getRemoteUser());
+                break;
+
+                case NOLLEGITSMEUS:
+                    incidenciaTecnicaFilterForm.setOperador(request.getRemoteUser());
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.OPERADOR);
+                    incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.DATAFI);
+                    break;
+            }
         }
 
         return incidenciaTecnicaFilterForm;
@@ -273,7 +282,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             incidenciaTecnicaForm.addReadOnlyField(ESTAT);
             //incidenciaTecnicaForm.addReadOnlyField(CREADOR);
 
-            incidenciaTecnicaForm.getIncidenciaTecnica().setCreador(request.getRemoteUser());
+            incidenciaTecnicaForm.getIncidenciaTecnica().setOperador(request.getRemoteUser());
         }
 
         return incidenciaTecnicaForm;
@@ -292,19 +301,17 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             case NOLLEGITSMEUS: {
 
                 // incidencies meves
-
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID, Where
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
-                w1 = Where.AND(CREADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
+                w1 = Where.AND(OPERADOR.equal(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
             }
             break;
             case NOLLEGITSNOMEUS: {
                 // incidencies No Meves
                 SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID, Where
                         .AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.INCIDENCIATECNICAID.isNotNull()));
-                w1 = Where.AND(CREADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
+                w1 = Where.AND(OPERADOR.notEqual(request.getRemoteUser()), INCIDENCIATECNICAID.in(subQuery));
             }
-
         }
 
         Where w2 = getAdditionaConditionAdvancedFilter(request);
@@ -411,7 +418,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             java.lang.String _comentari_ = "S'ha creat la Incidència";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, null, null, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la incidència tecnica: " + th.getMessage(), th);
@@ -488,18 +495,47 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     @RequestMapping(value = "/changeOperador/{incidenciaTecnicaID}/{operador}", method = RequestMethod.GET)
     public String changeOperadorIncidenciaTecnicaGet(
             @PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
-            @PathVariable("operador") java.lang.String operador,
-            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+            @PathVariable("operador") java.lang.String operador, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
 
         IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
-        String operador_old = i.getCreador();
-        i.setCreador(operador);
+        String operador_old = i.getOperador();
+        i.setOperador(operador);
 
+        SelectMultipleStringKeyValue smskv;
+        smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
+        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
+
+        Map<String, String> operadors_map;
+        operadors_map = Utils.listToMap(operadors);
+        
+        String nom_operador = operadors_map.get(operador);
+        String nom_operador_old  = operadors_map.get(operador_old);
+                
         try {
             this.update(request, i);
 
-            HtmlUtils.saveMessageSuccess(request, "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
+            Timestamp data = new Timestamp(System.currentTimeMillis());
+            int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            String persona = request.getUserPrincipal().getName();
+            
+            String comentari = I18NUtils.tradueix("missatge.canvi.operador", "incidencia", operador, nom_operador,
+                    operador_old, nom_operador_old);
+            
+            EventJPA evt = new EventJPA();
+            evt.setIncidenciaTecnicaID(incidenciaTecnicaID);
+            evt.setDataEvent(data);
+            evt.setTipus(tipus);
+            evt.setPersona(persona);
+            evt.setComentari(comentari);
+            evt.setNoLlegit(true);
+            
+            eventLogicaEjb.create(evt);
+
+            HtmlUtils.saveMessageSuccess(request,
+                    "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
+            
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
@@ -520,18 +556,18 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
         map.clear();
 
-        final StringField creador = new EventQueryPath().INCIDENCIATECNICA().CREADOR();
+        final StringField operador = new EventQueryPath().INCIDENCIATECNICA().OPERADOR();
 
         final String loginUserName = request.getRemoteUser();
 
         for (IncidenciaTecnica inc : list) {
 
-            final String user = inc.getCreador();
+            final String user = inc.getOperador();
 
             // incidencies
 
             Long incidencies = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                    EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), creador.equal(user)));
+                    EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), operador.equal(user)));
 
             if (incidencies != 0) {
 
@@ -569,6 +605,12 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         }
 
         return __tmp;
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        return getReferenceListForCreador(request, mav, where);
     }
 
 }

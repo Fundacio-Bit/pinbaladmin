@@ -87,6 +87,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 form.addHiddenField(ENTITATESTATAL);
                 form.addReadOnlyField(DATAINICI);
                 form.addReadOnlyField(CREADOR);
+                form.addReadOnlyField(OPERADOR);
             }
 
             log.info(" ES NOU !!!!!!!!!!!!!!!!!!!");
@@ -255,7 +256,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
             java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir de fitxer XML";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
-            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _comentari_,
+            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, null, null, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);

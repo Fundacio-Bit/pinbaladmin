@@ -35,10 +35,6 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.ESTAT);
   }
 
-  public StringField CREADOR() {
-    return new StringField(getQueryPath(), IncidenciaTecnicaFields.CREADOR);
-  }
-
   public IntegerField TIPUS() {
     return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.TIPUS);
   }
@@ -65,6 +61,14 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
 
   public StringField CAIDNUMEROSEGUIMENT() {
     return new StringField(getQueryPath(), IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT);
+  }
+
+  public StringField CREADOR() {
+    return new StringField(getQueryPath(), IncidenciaTecnicaFields.CREADOR);
+  }
+
+  public StringField OPERADOR() {
+    return new StringField(getQueryPath(), IncidenciaTecnicaFields.OPERADOR);
   }
 
 

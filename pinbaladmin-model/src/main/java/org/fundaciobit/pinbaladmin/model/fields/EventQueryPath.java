@@ -35,6 +35,14 @@ public class EventQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new StringField(getQueryPath(), EventFields.PERSONA);
   }
 
+  public StringField DESTINATARI() {
+    return new StringField(getQueryPath(), EventFields.DESTINATARI);
+  }
+
+  public StringField DESTINATARIMAIL() {
+    return new StringField(getQueryPath(), EventFields.DESTINATARIMAIL);
+  }
+
   public StringField COMENTARI() {
     return new StringField(getQueryPath(), EventFields.COMENTARI);
   }

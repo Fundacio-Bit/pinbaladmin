@@ -141,14 +141,6 @@
           <td>
             <fmt:message key="solicitud.produccio.${solicitud.produccio}" />          </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CREADOR)}">
-          <td>
-          <c:set var="tmp">${solicitud.creador}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForCreador[tmp]}
-          </c:if>
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DENOMINACIO)}">
           <td>
           ${solicitud.denominacio}
@@ -162,6 +154,22 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NIF)}">
           <td>
           ${solicitud.nif}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CREADOR)}">
+          <td>
+          <c:set var="tmp">${solicitud.creador}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForCreador[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.OPERADOR)}">
+          <td>
+          <c:set var="tmp">${solicitud.operador}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForOperador[tmp]}
+          </c:if>
           </td>
         </c:if>
 

@@ -409,19 +409,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.CREADOR)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitud.creador" var="creador" />
-              <fmt:message key="genapp.form.searchby" var="cercapercreador" >                
-                 <fmt:param value="${creador}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${creador}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapercreador}" path="creador" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.DENOMINACIO)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -457,6 +444,32 @@
               </fmt:message>
               <span class="add-on"><c:out value="${nif}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercapernif}" path="nif" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.CREADOR)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.creador" var="creador" />
+              <fmt:message key="genapp.form.searchby" var="cercapercreador" >                
+                 <fmt:param value="${creador}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${creador}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercreador}" path="creador" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.OPERADOR)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.operador" var="operador" />
+              <fmt:message key="genapp.form.searchby" var="cercaperoperador" >                
+                 <fmt:param value="${operador}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${operador}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperoperador}" path="operador" />
             </div>
 
 

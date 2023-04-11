@@ -46,10 +46,6 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTAT)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,CREADOR, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)));
-
     __vr.rejectIfEmptyOrWhitespace(__target__,TIPUS, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
@@ -61,6 +57,14 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
     __vr.rejectIfEmptyOrWhitespace(__target__,CONTACTEEMAIL, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONTACTEEMAIL)));
+
+    __vr.rejectIfEmptyOrWhitespace(__target__,CREADOR, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)));
+
+    __vr.rejectIfEmptyOrWhitespace(__target__,OPERADOR, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(OPERADOR)));
 
     // Check size
     if (__vr.getFieldErrorCount(TITOL) == 0) {
@@ -76,14 +80,6 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
       if (__descripcio!= null && __descripcio.length() > 2147483647) {
         __vr.rejectValue(DESCRIPCIO, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(CREADOR) == 0) {
-      java.lang.String __creador = __target__.getCreador();
-      if (__creador!= null && __creador.length() > 255) {
-        __vr.rejectValue(CREADOR, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
@@ -132,6 +128,22 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
       if (__caidnumeroseguiment!= null && __caidnumeroseguiment.length() > 100) {
         __vr.rejectValue(CAIDNUMEROSEGUIMENT, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CAIDNUMEROSEGUIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CREADOR) == 0) {
+      java.lang.String __creador = __target__.getCreador();
+      if (__creador!= null && __creador.length() > 100) {
+        __vr.rejectValue(CREADOR, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(OPERADOR) == 0) {
+      java.lang.String __operador = __target__.getOperador();
+      if (__operador!= null && __operador.length() > 100) {
+        __vr.rejectValue(OPERADOR, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(OPERADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
       }
     }
 

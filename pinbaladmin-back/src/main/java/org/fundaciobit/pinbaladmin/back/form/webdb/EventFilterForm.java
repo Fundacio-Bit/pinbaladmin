@@ -142,6 +142,28 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
   }
 
 
+  private java.lang.String destinatari;
+
+  public java.lang.String getDestinatari() {
+    return this.destinatari;
+  }
+
+  public void setDestinatari(java.lang.String destinatari) {
+    this.destinatari = destinatari;
+  }
+
+
+  private java.lang.String destinatarimail;
+
+  public java.lang.String getDestinatarimail() {
+    return this.destinatarimail;
+  }
+
+  public void setDestinatarimail(java.lang.String destinatarimail) {
+    this.destinatarimail = destinatarimail;
+  }
+
+
   private java.lang.String comentari;
 
   public java.lang.String getComentari() {
@@ -191,6 +213,8 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
     this.tipusDesde = __toClone.tipusDesde;
     this.tipusFins = __toClone.tipusFins;
     this.persona = __toClone.persona;
+    this.destinatari = __toClone.destinatari;
+    this.destinatarimail = __toClone.destinatarimail;
     this.comentari = __toClone.comentari;
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
     this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;
