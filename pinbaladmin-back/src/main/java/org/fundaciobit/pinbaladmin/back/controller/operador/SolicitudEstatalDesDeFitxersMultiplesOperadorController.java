@@ -132,7 +132,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         } catch (Exception e) {
             String msg = "Error processant fitxers: " + e.getMessage();
             log.error(msg, e);
-            HtmlUtils.saveMessageError(request, msg);
+            //HtmlUtils.saveMessageError(request, msg);
             return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
