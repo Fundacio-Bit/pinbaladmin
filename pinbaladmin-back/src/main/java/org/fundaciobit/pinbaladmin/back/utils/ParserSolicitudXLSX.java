@@ -125,9 +125,9 @@ public class ParserSolicitudXLSX {
             // CHECK QUE SIGUI DEL NOU MODEL !!!!!!
             // Miram que dins la cel·la E6 (row 5, col 4) hi hagi la paraula "Periodo" 
             String periodo = my_worksheet.getRow(5).getCell(PERIODO_COL_E).getStringCellValue();
-            if (!"Periodo".equals(periodo)) {
+            if (!"Periodo".equals(periodo.trim())) {
                 throw new Exception("El format de la fulla excel no està actualitzat."
-                        + " A la casella E6 hi hauria d'haver la paraula 'Periodo'");
+                        + " A la casella E6 hi hauria d'haver la paraula 'Periodo' i ha obtingut la paraula ]" + periodo + "[");
             }
 
             Cell cellNorma;
