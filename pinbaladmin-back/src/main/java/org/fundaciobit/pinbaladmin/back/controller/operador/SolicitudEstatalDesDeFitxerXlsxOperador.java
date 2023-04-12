@@ -216,7 +216,10 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
             java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir de fitxer XLSX";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
-            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, null, null, _comentari_,
+            java.lang.String _destinatari_ = null;
+            java.lang.String _destinatariMail_ = null;
+
+            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);

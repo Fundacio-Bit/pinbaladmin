@@ -267,10 +267,13 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/emailList.jsp" />
     </definition>
     
-        <definition name="queesticfent" extends="operador_base">
+    <definition name="queesticfent" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/queesticfent.jsp" />
     </definition>
     
+    
+    <definition name="postCreateIframeOperador" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
+    <definition name="postCreateIframePublic" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
     
 
     <!--  ===========  USER  ================== -->

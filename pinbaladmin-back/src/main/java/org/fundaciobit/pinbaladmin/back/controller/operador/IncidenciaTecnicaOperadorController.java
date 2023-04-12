@@ -418,7 +418,10 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             java.lang.String _comentari_ = "S'ha creat la Incidència";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, null, null, _comentari_,
+            java.lang.String _destinatari_ = null;
+            java.lang.String _destinatariMail_ = null;
+
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la incidència tecnica: " + th.getMessage(), th);

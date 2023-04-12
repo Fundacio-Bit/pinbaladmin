@@ -230,9 +230,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                 eventForm.addHiddenField(TIPUS);
                 eventForm.addHiddenField(NOLLEGIT);
+                eventForm.addHiddenField(DESTINATARI);
+                eventForm.addHiddenField(DESTINATARIMAIL);
                 eventForm.addReadOnlyField(DATAEVENT);
                 eventForm.addReadOnlyField(PERSONA);
                 eventForm.getEvent().setNoLlegit(true);
+                
             } else {
                 eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
                 eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
@@ -379,9 +382,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     
                     ev.setDestinatari(persona);
                     ev.setDestinatarimail(email);
-
+                    
+                    log.info("CORREU PER ENVIAR");
                     EmailUtil.postMail(subject, message, isHtml, from, email);
-                    eventEjb.update(ev);
+                    log.info("CORREU ENVIAT");
+                    
                     
                 } catch (Throwable th) {
 
@@ -391,16 +396,28 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     } else {
                         msg = th.getMessage();
                     }
-
                     HtmlUtils.saveMessageError(request, "Error enviant correu: " + msg);
-
                 }
-
             }
 
         }
 
-        return getRedirectWhenCancel(request, eventForm.getEvent().getEventID());
+//        return getRedirectWhenCancel(request, eventForm.getEvent().getEventID());
+        return "redirect:" + getContextWeb() + "/postcreateiframe";
+    }
+    
+
+    @RequestMapping(value = "/postcreateiframe", method = RequestMethod.GET)
+    public ModelAndView postCreateIFrame(HttpServletRequest request, HttpServletResponse response) {
+
+        ModelAndView mav = new ModelAndView("postCreateIframe" + (isPublic()? "Public":"Operador"));
+        if (isPublic()) {
+            //XYZ ZZZ Malament, no sabem quina URL es la que ha d'anar aquí
+            mav.addObject("redirect", this.getContextWeb() + "/list");
+        }else {
+            mav.addObject("redirect", this.getContextWeb() + "/list");
+        }
+        return mav;
     }
 
     @Override
@@ -445,37 +462,36 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                 final boolean isHtml = true;
                 for (String address : emails) {
+
+                    String url = getLinkPublic(itemID);
+                    final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+
+                    String msg = getCapCorreu(tipus, itemID) + "    Des de la Fundació Bit l'informam que la seva "
+                            + tipus + " titulada '" + titol
+                            + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+                            + "    Per fer el seguiment de la " + tipus
+                            + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\"" + getLinkPublic(itemID)
+                            + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>" + getPeuCorreu();
+
+                    
+                    /*
+                     * 
+                     * "Enllaç a la " + itemNom + " titulada '" + titol + "'",
+                     * "Bones:\n\n" +
+                     * "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+                     * + titol + "'." +
+                     * "\n\nTambé podrà afegir informació addicional a la seva " +
+                     * itemNom + " a través d'aquest enllaç: " + url +
+                     * "\n\n      Atentament,"
+                     * 
+                     */
                     try {
 
-                        String url = getLinkPublic(itemID);
-
-                        final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
-
-                        String msg = getCapCorreu(tipus, itemID) + "    Des de la Fundació Bit l'informam que la seva "
-                                + tipus + " titulada '" + titol
-                                + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-                                + "    Per fer el seguiment de la " + tipus
-                                + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\"" + getLinkPublic(itemID)
-                                + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>" + getPeuCorreu();
-                        /*
-                         * 
-                         * "Enllaç a la " + itemNom + " titulada '" + titol + "'",
-                         * "Bones:\n\n" +
-                         * "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-                         * + titol + "'." +
-                         * "\n\nTambé podrà afegir informació addicional a la seva " +
-                         * itemNom + " a través d'aquest enllaç: " + url +
-                         * "\n\n      Atentament,"
-                         * 
-                         */
-
                         EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
-
                         HtmlUtils.saveMessageSuccess(request,
                                 "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
-
                     } catch (Exception e) {
-                        String msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
+                        msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
                         log.error(msg, e);
                         HtmlUtils.saveMessageError(request, msg);
                     }
@@ -802,26 +818,21 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
             final boolean isHtml = true;
 
+            final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO " + tipus.toUpperCase() + " - "
+                    + titol;
+
+            String msg = getCapCorreu(tipus, itemID)
+                    + "    Des del departament de Govern Digital de la Fundació Bit li volem fer la següent consulta/petició:<br/>"
+                    + "<hr/>" + ev.getComentari().replace("\n", "<br/>") + "<hr/>"
+                    + "Podrà contestar la consulta/petició utilitzant el següent enllaç: " + "<a href=\"" + url
+                    + "\">CONTESTAR</a>" + "<br/><br/>" + getPeuCorreu();
             try {
 
-                final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO " + tipus.toUpperCase() + " - "
-                        + titol;
-
-                String msg = getCapCorreu(tipus, itemID)
-                        + "    Des del departament de Govern Digital de la Fundació Bit li volem fer la següent consulta/petició:<br/>"
-                        + "<hr/>" + ev.getComentari().replace("\n", "<br/>") + "<hr/>"
-                        + "Podrà contestar la consulta/petició utilitzant el següent enllaç: " + "<a href=\"" + url
-                        + "\">CONTESTAR</a>" + "<br/><br/>" + getPeuCorreu();
-
                 EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
-
                 HtmlUtils.saveMessageSuccess(request, "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
-
             } catch (Exception e) {
-
-                String msg = "Error enviant correu: " + e.getMessage();
-
-                log.error(e);
+                msg = "Error enviant correu: " + e.getMessage();
+                log.error(msg, e);
                 HtmlUtils.saveMessageError(request, msg);
             }
         }
