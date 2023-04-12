@@ -92,7 +92,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             descripcio = "<div>" + descripcio + "</div>";
         }
 
-        eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatariEmail_ , _destinatari_, descripcio, null,
+        eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariEmail_, descripcio, null,
                 _noLlegit_, _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 
         // Afgegir fitxers
@@ -107,7 +107,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
 
             java.lang.Long _fitxerID_ = fitxer.getFitxerID();
 
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatariEmail_ , _destinatari_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariEmail_ , _comentari_,
                     _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 
         }

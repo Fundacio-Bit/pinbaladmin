@@ -238,6 +238,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         Boolean isestatal = isEstatal();
         if (solicitudForm.isNou()) {
             solicitudForm.addHiddenField(DATAFI);
+
             soli.setEstatID(10L);
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));

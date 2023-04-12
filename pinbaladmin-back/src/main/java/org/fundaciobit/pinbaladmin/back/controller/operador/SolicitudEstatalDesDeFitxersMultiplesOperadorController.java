@@ -240,6 +240,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
             // solicitud.setCodiDescriptiu(null);
             solicitud.setCreador(request.getRemoteUser());
+            solicitud.setOperador(request.getRemoteUser());
 
             solicitud.setProcedimentNom(proc.getNom());
             solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));

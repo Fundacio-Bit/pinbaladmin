@@ -219,7 +219,8 @@ public class ParserFormulariXML {
 
     Properties prop = new Properties();
 
-    findAttrInChildren("", nodesForm.item(0), prop);
+    Node element = nodesForm.item(0);
+    findAttrInChildren("", element, prop);
     return prop;
   }
 
