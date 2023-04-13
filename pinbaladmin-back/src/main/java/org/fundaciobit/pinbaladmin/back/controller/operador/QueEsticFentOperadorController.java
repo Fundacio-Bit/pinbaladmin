@@ -113,15 +113,18 @@ public class QueEsticFentOperadorController {
 
             // (1) Consultam sol·licituds
             {
-                final Where w1Cre = SolicitudFields.CREADOR.equal(username);
-                final Where w1Ope = SolicitudFields.OPERADOR.equal(username);
-                final Where w1 = Where.OR(w1Cre, w1Ope);
-
-                final Where w2 = SolicitudFields.DATAINICI.between(from, to);
-                final Where w3 = SolicitudFields.DATAFI.between(from, to);
+                //Quien fue el creador
+                final Where wCreador = SolicitudFields.CREADOR.equal(username);
+                final Where wCreada = SolicitudFields.DATAINICI.between(from, to);
+                final Where w1 = Where.AND(wCreador, wCreada);
                 
-                List<Long> solis = solicitudEjb.executeQuery(SolicitudFields.SOLICITUDID,
-                        Where.AND(w1, Where.OR(w2, w3)));
+                //Quien fue el cerrador
+                final Where wOperador = SolicitudFields.OPERADOR.equal(username);
+                final Where wCerrada = SolicitudFields.DATAFI.between(from, to);
+                final Where w2 = Where.AND(wOperador, wCerrada);
+
+                final Where w3 = Where.OR(w1, w2);
+                List<Long> solis = solicitudEjb.executeQuery(SolicitudFields.SOLICITUDID, w3);
 
                 for (Long solicitudID : solis) {
                     afegirEventTipus(fullevents, "SOL", solicitudID);
@@ -130,15 +133,19 @@ public class QueEsticFentOperadorController {
 
             // (2) Consultam incidencies
             {
-                final Where w1Cre = IncidenciaTecnicaFields.CREADOR.equal(username);
-                final Where w1Ope = IncidenciaTecnicaFields.OPERADOR.equal(username);
-                final Where w1 = Where.OR(w1Cre, w1Ope);
-
-                final Where w2 = IncidenciaTecnicaFields.DATAINICI.between(from, to);
-                final Where w3 = IncidenciaTecnicaFields.DATAFI.between(from, to);
+                //Quien fue el creador
+                final Where wCreador = IncidenciaTecnicaFields.CREADOR.equal(username);
+                final Where wCreada = IncidenciaTecnicaFields.DATAINICI.between(from, to);
+                final Where w1 = Where.AND(wCreador, wCreada);
                 
+                //Quien fue el cerrador
+                final Where wOperador = IncidenciaTecnicaFields.OPERADOR.equal(username);
+                final Where wCerrada = IncidenciaTecnicaFields.DATAFI.between(from, to);
+                final Where w2 = Where.AND(wOperador, wCerrada);
+
+                final Where w3 = Where.OR(w1, w2);
                 List<Long> its = incidenciaTecnicaLogicaEjb.executeQuery(IncidenciaTecnicaFields.INCIDENCIATECNICAID,
-                        Where.AND(w1, Where.OR(w2, w3)));
+                        w3);
 
                 for (Long incidenciaID : its) {
                     afegirEventTipus(fullevents, "INC", incidenciaID);
@@ -229,7 +236,11 @@ public class QueEsticFentOperadorController {
 
                 final String cai = soli.getTicketAssociat();
                 if (cai == null) {
-                    tipus = "Solicitud[" + id + "]";
+                    if (soli.getEntitatEstatal() != null) {
+                        tipus = "Sol.Est.[" + id + "]";
+                    } else if (soli.getDepartamentID() != null) {
+                        tipus = "Sol.Loc.[" + id + "]";
+                    }
                 } else {
                     tipus = "CAI-" + cai;
                 }
