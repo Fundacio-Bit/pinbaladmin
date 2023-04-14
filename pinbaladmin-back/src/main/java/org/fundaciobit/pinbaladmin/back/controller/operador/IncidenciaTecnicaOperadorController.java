@@ -197,6 +197,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             incidenciaTecnicaFilterForm.setFilterByFields(incidenciaTecnicaFilterForm.getDefaultFilterByFields());
             incidenciaTecnicaFilterForm.getFilterByFields().add(INCIDENCIATECNICAID);
             incidenciaTecnicaFilterForm.getFilterByFields().add(ESTAT);
+            incidenciaTecnicaFilterForm.getFilterByFields().add(DATAINICI);
             incidenciaTecnicaFilterForm.getFilterByFields().remove(TIPUS);
 
 
