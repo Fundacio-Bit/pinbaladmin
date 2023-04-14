@@ -237,9 +237,9 @@ public class QueEsticFentOperadorController {
                 final String cai = soli.getTicketAssociat();
                 if (cai == null) {
                     if (soli.getEntitatEstatal() != null) {
-                        tipus = "Sol.Est.[" + id + "]";
+                        tipus = "Estatal [" + id + "]";
                     } else if (soli.getDepartamentID() != null) {
-                        tipus = "Sol.Loc.[" + id + "]";
+                        tipus = "Local [" + id + "]";
                     }
                 } else {
                     tipus = "CAI-" + cai;
@@ -249,7 +249,7 @@ public class QueEsticFentOperadorController {
             case "INC":
                 IncidenciaTecnica ic = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
 
-                tipus = "Inc.Tec.[" + id + "]";
+                tipus = "Incidencia [" + id + "]";
                 tipusTitle = ic.getTitol();
             break;
         }

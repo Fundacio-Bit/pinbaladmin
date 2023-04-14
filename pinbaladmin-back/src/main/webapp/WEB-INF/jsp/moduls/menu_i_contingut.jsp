@@ -105,3 +105,15 @@
 }
 </style>
 
+
+
+
+<script type="text/javascript">
+$("#GroupDiv").after($("#infoNumRegistres"));
+</script>
+
+<style>
+    #infoNumRegistres{
+        margin-bottom: 5px;
+    }
+</style>

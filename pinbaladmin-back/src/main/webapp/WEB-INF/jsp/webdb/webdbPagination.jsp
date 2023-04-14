@@ -45,6 +45,22 @@ function reassignAction() {
             }
             %>
         </c:if>
+        
+        
+        <div id="infoNumRegistres">
+            <c:set var="start" value="${(pagina-1) * itemsPerPagina + 1}" />
+
+            <c:set var="end"
+                value="${(start + itemsPerPagina > totalItems) ? totalItems : (start + itemsPerPagina - 1)}" />
+
+            <fmt:message key="show.results.from.to" var="showNResults">
+                <fmt:param> ${start} </fmt:param>
+                <fmt:param> ${end} </fmt:param>
+                <fmt:param> ${totalItems} </fmt:param>
+            </fmt:message>
+            <c:out value="${showNResults}" />
+        </div>
+        
     </div>
 
 
