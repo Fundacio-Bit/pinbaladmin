@@ -32,18 +32,4 @@ public class EstatServeiQueryPath extends org.fundaciobit.genapp.common.query.Qu
   }
 
 
-/* L'ús d'aquest camp (OneToMany) llança una exception:
- [Illegal attempt to dereference a collection]
-
- // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
-
-  public ServeiQueryPath SERVEIS() {
-    return new ServeiQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return EstatServeiQueryPath.this.getQueryPath() + "serveis" + ".";
-      }
-    });
-  }
-*/
-
 }

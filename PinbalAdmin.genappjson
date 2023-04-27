@@ -1838,14 +1838,7 @@
               "nom"
             ]
           },
-          "foreignKeys": [
-            {
-              "name": "pad_servei_estatserv_fk",
-              "table": "pad_servei",
-              "field": "estatserveiid",
-              "type": 0
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -1945,14 +1938,7 @@
               "nom"
             ]
           },
-          "foreignKeys": [
-            {
-              "name": "pad_solicitud_estatsoli_fk",
-              "table": "pad_solicitud",
-              "field": "estatid",
-              "type": 0
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -2052,14 +2038,7 @@
               "nom"
             ]
           },
-          "foreignKeys": [
-            {
-              "name": "pad_soliservei_estsolserv_fk",
-              "table": "pad_solicitudservei",
-              "field": "estatsolicitudserveiid",
-              "type": 0
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -3522,7 +3501,6 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "defaultValue": "1",
           "minAllowedValue": "1,2,3,4",
           "filter": true,
           "orderBy": 0,
@@ -3686,7 +3664,7 @@
           "isAutoIncrement": false,
           "sqlName": "creador",
           "sqlType": 12,
-          "size": 100,
+          "size": 255,
           "digits": 0,
           "isNotNullable": true,
           "labels": {
@@ -4088,26 +4066,14 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "minAllowedValue": "-1,10,20,30,40,151200,151201",
+          "filter": true,
           "orderBy": 1,
           "groupBy": true,
           "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_servei_estatserveiid_fkey",
-              "table": "pad_estatservei",
-              "field": "estatserveiid",
-              "type": 1
-            }
+            "webtype": 16
           },
-          "foreignKeys": [
-            {
-              "name": "pad_servei_estatserv_fk",
-              "table": "pad_estatservei",
-              "field": "estatserveiid",
-              "type": 1
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -4348,26 +4314,14 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "-1,10,15,20,30,40,50,60 ",
           "filter": true,
           "orderBy": 2,
           "groupBy": true,
           "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_solicitud_estatid_fkey",
-              "table": "pad_estatsolicitud",
-              "field": "estatsolicitudid",
-              "type": 1
-            }
+            "webtype": 16
           },
-          "foreignKeys": [
-            {
-              "name": "pad_solicitud_estatsoli_fk",
-              "table": "pad_estatsolicitud",
-              "field": "estatsolicitudid",
-              "type": 1
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -5094,26 +5048,14 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "minAllowedValue": "-1,1,10,20,30,40,50,60,80,90",
+          "filter": true,
           "orderBy": 0,
           "groupBy": true,
           "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_solicitudservei_estatsolicitudserveiid_fkey",
-              "table": "pad_estatsolicitudservei",
-              "field": "estatsolicitudserveiid",
-              "type": 1
-            }
+            "webtype": 16
           },
-          "foreignKeys": [
-            {
-              "name": "pad_soliservei_estsolserv_fk",
-              "table": "pad_estatsolicitudservei",
-              "field": "estatsolicitudserveiid",
-              "type": 1
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,

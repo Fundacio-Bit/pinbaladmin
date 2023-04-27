@@ -162,12 +162,12 @@
           <form:errors path="servei.estatServeiID" cssClass="errorField alert alert-danger" />
           <c:if test="${gen:contains(__theForm.readOnlyFields ,ServeiFields.ESTATSERVEIID)}" >
           <form:hidden path="servei.estatServeiID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.servei.estatServeiID,__theForm.listOfEstatServeiForEstatServeiID)}"  />
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.servei.estatServeiID,__theForm.listOfValuesForEstatServeiID)}"  />
           </c:if>
           <c:if test="${!gen:contains(__theForm.readOnlyFields ,ServeiFields.ESTATSERVEIID)}" >
           <c:set var="containEmptyValue"  value="false" />
           <form:select id="servei_estatServeiID"  onchange="if(typeof onChangeEstatServeiID == 'function') {  onChangeEstatServeiID(this); };"  cssClass="form-control col-md-9-optional" path="servei.estatServeiID">
-            <c:forEach items="${__theForm.listOfEstatServeiForEstatServeiID}" var="tmp">
+            <c:forEach items="${__theForm.listOfValuesForEstatServeiID}" var="tmp">
                 <form:option value="${tmp.key}">${tmp.value}</form:option>
                 <c:if test="${empty tmp.key}">
                   <c:set var="containEmptyValue"  value="true" />

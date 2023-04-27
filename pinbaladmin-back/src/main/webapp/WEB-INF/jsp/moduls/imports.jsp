@@ -20,9 +20,10 @@
 <link href="<c:url value="/css/gijgo.min.css"/>" rel="stylesheet">
 
 <!-- Bootstrap DateTimepicker CSS   -->
-<link
-	href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>"
-	rel="stylesheet">
+<link href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>" rel="stylesheet">
+
+<%--  Select Multiple --%> 
+<link href="<c:url value="/css/select2.min.css"/>" rel="stylesheet">
 
 <link href="<c:url value="/css/stylesapp.css"/>" rel="stylesheet">
 
@@ -53,6 +54,9 @@
 <script src="<c:url value="/js/tiny_mce/tiny_mce.js"/>"
 	type="text/javascript"></script>
 <script src="<c:url value="/js/tinymce.js"/>" type="text/javascript"></script>
+
+<%-- Select Multiple --%>
+<script src="<c:url value="/js/select2.min.js"/>"></script>
 
 <script type="text/javascript">
 	function clear_form_elements(ele) {

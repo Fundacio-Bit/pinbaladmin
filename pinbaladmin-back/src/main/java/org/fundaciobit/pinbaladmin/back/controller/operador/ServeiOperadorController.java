@@ -160,4 +160,19 @@ public class ServeiOperadorController extends ServeiController {
         __tmp.add(new StringKeyValue("1", I18NUtils.tradueix("servei.tipusconsentiment.1")));
         return __tmp;
     }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatServeiID(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        __tmp.add(new StringKeyValue("-1", "Sense Estat"));
+        __tmp.add(new StringKeyValue("10", "Pendent"));
+        __tmp.add(new StringKeyValue("20", "Producció"));
+        __tmp.add(new StringKeyValue("30", "A extingir"));
+        __tmp.add(new StringKeyValue("40", "Extingit"));
+        __tmp.add(new StringKeyValue("151200", "PRE-Producció"));
+        __tmp.add(new StringKeyValue("151201", "No intermediat"));
+
+        return __tmp;
+    }
 }

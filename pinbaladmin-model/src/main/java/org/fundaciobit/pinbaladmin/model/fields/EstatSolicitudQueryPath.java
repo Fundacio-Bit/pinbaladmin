@@ -32,18 +32,4 @@ public class EstatSolicitudQueryPath extends org.fundaciobit.genapp.common.query
   }
 
 
-/* L'ús d'aquest camp (OneToMany) llança una exception:
- [Illegal attempt to dereference a collection]
-
- // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
-
-  public SolicitudQueryPath SOLICITUDS() {
-    return new SolicitudQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return EstatSolicitudQueryPath.this.getQueryPath() + "solicituds" + ".";
-      }
-    });
-  }
-*/
-
 }

@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.OrderBy;
@@ -277,6 +278,13 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
 
         }
 
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatSolicitudServeiID(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+
+        return SolicitudServeiOperadorController.getReferenceListForEstatSolicitudServeiIDStatic(request, mav, where);
     }
 
 }

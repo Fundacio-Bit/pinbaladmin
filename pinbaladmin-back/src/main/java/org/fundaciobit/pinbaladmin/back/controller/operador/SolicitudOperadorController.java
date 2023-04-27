@@ -41,12 +41,10 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
-import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
-import org.fundaciobit.pinbaladmin.model.entity.EstatSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -115,9 +113,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService solicitudServeiEjb;
-
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService estatSolicitudEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.AreaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.AreaService areaEjb;
@@ -557,18 +552,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             }
 
         }
-
-        List<EstatSolicitud> estatsSolicitud = estatSolicitudEjb
-                .select(new OrderBy(EstatSolicitudFields.ESTATSOLICITUDID));
-        StringBuffer subTitle = new StringBuffer();
-        for (EstatSolicitud estatSolicitud : estatsSolicitud) {
-            if (subTitle.length() != 0) {
-                subTitle.append(" | ");
-            }
-            subTitle.append(estatSolicitud.getEstatSolicitudID() + "=" + estatSolicitud.getNom());
-        }
-
-        solicitudFilterForm.setSubTitleCode("=" + subTitle.toString());
 
         String departamentIDDesde = request.getParameter("departamentIDDesde");
         String departamentIDFins = request.getParameter("departamentIDFins");
@@ -1371,6 +1354,22 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
         return getReferenceListForCreador(request, mav, where);
+    }
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+            ModelAndView mav, Where where)  throws I18NException {
+         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+         __tmp.add(new StringKeyValue("-1" , "Sense Estat"));
+         __tmp.add(new StringKeyValue("10" , "Pendent"));
+         __tmp.add(new StringKeyValue("15" , "Pendent Firma Director"));
+         __tmp.add(new StringKeyValue("20" , "Pendent d'autoritzar"));
+         __tmp.add(new StringKeyValue("30" , "Esmenes"));
+         __tmp.add(new StringKeyValue("40" , "Autoritzat"));
+         __tmp.add(new StringKeyValue("50" , "Pendent pinfo"));
+         __tmp.add(new StringKeyValue("60 " , "Tancat"));
+         return __tmp;
+                  
     }
 
     /*

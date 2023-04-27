@@ -676,7 +676,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, TiquetFilterForm tiquetFilterForm,
        List<Tiquet> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (tiquetFilterForm.isHiddenField(ESTATTIQUETID)
-      && !tiquetFilterForm.isGroupByField(ESTATTIQUETID)) {
+       && !tiquetFilterForm.isGroupByField(ESTATTIQUETID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -715,7 +715,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, TiquetFilterForm tiquetFilterForm,
        List<Tiquet> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (tiquetFilterForm.isHiddenField(TIPUSTIQUETID)
-      && !tiquetFilterForm.isGroupByField(TIPUSTIQUETID)) {
+       && !tiquetFilterForm.isGroupByField(TIPUSTIQUETID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -750,7 +750,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, TiquetFilterForm tiquetFilterForm,
        List<Tiquet> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (tiquetFilterForm.isHiddenField(ENTORN)
-      && !tiquetFilterForm.isGroupByField(ENTORN)) {
+       && !tiquetFilterForm.isGroupByField(ENTORN)
+       && !tiquetFilterForm.isFilterByField(ENTORN)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

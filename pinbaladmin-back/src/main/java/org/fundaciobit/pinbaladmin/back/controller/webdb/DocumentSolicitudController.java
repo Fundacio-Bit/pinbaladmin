@@ -608,7 +608,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, DocumentSolicitudFilterForm documentSolicitudFilterForm,
        List<DocumentSolicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (documentSolicitudFilterForm.isHiddenField(DOCUMENTID)
-      && !documentSolicitudFilterForm.isGroupByField(DOCUMENTID)) {
+       && !documentSolicitudFilterForm.isGroupByField(DOCUMENTID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -647,7 +647,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, DocumentSolicitudFilterForm documentSolicitudFilterForm,
        List<DocumentSolicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (documentSolicitudFilterForm.isHiddenField(SOLICITUDID)
-      && !documentSolicitudFilterForm.isGroupByField(SOLICITUDID)) {
+       && !documentSolicitudFilterForm.isGroupByField(SOLICITUDID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

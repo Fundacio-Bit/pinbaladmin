@@ -110,12 +110,12 @@
           <form:errors path="solicitud.estatID" cssClass="errorField alert alert-danger" />
           <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
           <form:hidden path="solicitud.estatID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatID,__theForm.listOfEstatSolicitudForEstatID)}"  />
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatID,__theForm.listOfValuesForEstatID)}"  />
           </c:if>
           <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
           <c:set var="containEmptyValue"  value="false" />
           <form:select id="solicitud_estatID"  onchange="if(typeof onChangeEstatID == 'function') {  onChangeEstatID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatID">
-            <c:forEach items="${__theForm.listOfEstatSolicitudForEstatID}" var="tmp">
+            <c:forEach items="${__theForm.listOfValuesForEstatID}" var="tmp">
                 <form:option value="${tmp.key}">${tmp.value}</form:option>
                 <c:if test="${empty tmp.key}">
                   <c:set var="containEmptyValue"  value="true" />

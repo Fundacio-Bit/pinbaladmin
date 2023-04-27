@@ -35,9 +35,6 @@ public class ServeiWebValidator extends AbstractWebValidator<ServeiForm, Servei>
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EntitatServeiService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.EntitatServeiService entitatServeiEjb;
 
-  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatServeiService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.EstatServeiService estatServeiEjb;
-
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FormulariService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.FormulariService formulariEjb;
 
@@ -86,7 +83,7 @@ public class ServeiWebValidator extends AbstractWebValidator<ServeiForm, Servei>
 
     BeanValidatorResult<Servei> __vr = new BeanValidatorResult<Servei>();
     validator.validate(__vr, __bean,
-      isNou, entitatServeiEjb, estatServeiEjb, formulariEjb, serveiEjb);
+      isNou, entitatServeiEjb, formulariEjb, serveiEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();

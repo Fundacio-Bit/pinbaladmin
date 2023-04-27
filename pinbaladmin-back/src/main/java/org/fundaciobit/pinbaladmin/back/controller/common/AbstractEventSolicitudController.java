@@ -9,7 +9,6 @@ import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicContr
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;

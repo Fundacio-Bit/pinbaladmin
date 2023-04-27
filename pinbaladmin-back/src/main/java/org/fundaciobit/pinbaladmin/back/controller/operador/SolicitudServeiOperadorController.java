@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
@@ -214,7 +213,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             Long serveisNoAutoritzats = solicitudServeiLogicaEjb
                     .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soli),
                             SolicitudServeiFields.ESTATSOLICITUDSERVEIID.notEqual(50L)));
-            
+
             if (serveisNoAutoritzats > 0) {
                 solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
                         "solicitudservei.autoritzartots", getContextWeb() + "/autoritzartots", "btn-primary"));
@@ -293,7 +292,6 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(solicitudID);
     }
 
-    
     @RequestMapping(value = "/autoritzarservei/{solicitudserveiid}", method = RequestMethod.GET)
     public String autoritzarServei(HttpServletRequest request,
             @PathVariable("solicitudserveiid") Long solicitudserveiid) throws Exception {
@@ -304,7 +302,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             log.info("autoritzarservei(); => SOLICITUDSERVEIID= " + solicitudserveiid);
 
             Long estatSolicitudServeiID = 50L;
-            soliSer.setEstatSolicitudServeiID(estatSolicitudServeiID );
+            soliSer.setEstatSolicitudServeiID(estatSolicitudServeiID);
             solicitudServeiLogicaEjb.update(soliSer);
 
             HtmlUtils.saveMessageSuccess(request, "S'ha autoritzat el servei");
@@ -315,7 +313,6 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(soliSer.getSolicitudID());
     }
 
-    
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
@@ -346,7 +343,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             } else {
                 if (solicitudServei.getEstatSolicitudServeiID() != 50) {
                     filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
-                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK), "solicitudservei.autoritzarservei",
+                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
+                                    "solicitudservei.autoritzarservei",
                                     getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), "btn-primary"));
                 }
             }
@@ -418,6 +416,30 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         }
 
         return super.getReferenceListForServeiID(request, mav, solicitudServeiForm, Where.AND(where, w2, w3));
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatSolicitudServeiID(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+
+        return getReferenceListForEstatSolicitudServeiIDStatic(request, mav, where);
+    }
+
+    public static List<StringKeyValue> getReferenceListForEstatSolicitudServeiIDStatic(HttpServletRequest request,
+            ModelAndView mav, Where where) throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        __tmp.add(new StringKeyValue("-1", "Sense Estat"));
+        __tmp.add(new StringKeyValue("1", "Pendent esmenes"));
+        __tmp.add(new StringKeyValue("10", "Rebut"));
+        __tmp.add(new StringKeyValue("20", "Passat a firma"));
+        __tmp.add(new StringKeyValue("30", "Firmat"));
+        __tmp.add(new StringKeyValue("40", "Pendent d'autoritzar"));
+        __tmp.add(new StringKeyValue("50", "Autoritzat"));
+        __tmp.add(new StringKeyValue("60", "Desestimat"));
+        __tmp.add(new StringKeyValue("80", "Discontinuat"));
+        __tmp.add(new StringKeyValue("90", "No disponible"));
+
+        return __tmp;
     }
 
 }

@@ -3,13 +3,9 @@ package org.fundaciobit.pinbaladmin.persistence;
 import org.fundaciobit.pinbaladmin.model.entity.*;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import java.util.Set;
 import javax.persistence.Id;
 
 
@@ -89,19 +85,6 @@ public class EstatSolicitudJPA implements EstatSolicitud {
     return __result;
   }
 
-// EXP  Field:estatid | Table: pad_solicitud | Type: 0  
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "estatSolicitud")
-    private Set<SolicitudJPA> solicituds = new HashSet<SolicitudJPA>(0);
-    public  Set<SolicitudJPA> getSolicituds() {
-    return this.solicituds;
-  }
-
-    public void setSolicituds(Set<SolicitudJPA> solicituds) {
-      this.solicituds = solicituds;
-    }
-
-
 
  // ---------------  STATIC METHODS ------------------
   public static EstatSolicitudJPA toJPA(EstatSolicitud __bean) {
@@ -139,10 +122,6 @@ public class EstatSolicitudJPA implements EstatSolicitud {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
-    if(!"SolicitudJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
-      __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"EstatSolicitudJPA"));
-    }
     // Copia de beans complexes (IMP)
 
     return __tmp;

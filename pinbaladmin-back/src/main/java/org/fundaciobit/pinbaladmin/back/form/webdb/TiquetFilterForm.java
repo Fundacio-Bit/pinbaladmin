@@ -241,25 +241,14 @@ public class TiquetFilterForm extends PinbalAdminBaseFilterForm implements Tique
   }
 
 
-  private java.lang.Integer entornDesde;
+  private java.util.List<java.lang.Integer> entornSelect;
 
-  public java.lang.Integer getEntornDesde() {
-    return this.entornDesde;
+  public java.util.List<java.lang.Integer> getEntornSelect() {
+    return this.entornSelect;
   }
 
-  public void setEntornDesde(java.lang.Integer entornDesde) {
-    this.entornDesde = entornDesde;
-  }
-
-
-  private java.lang.Integer entornFins;
-
-  public java.lang.Integer getEntornFins() {
-    return this.entornFins;
-  }
-
-  public void setEntornFins(java.lang.Integer entornFins) {
-    this.entornFins = entornFins;
+  public void setEntornSelect(java.util.List<java.lang.Integer> entornSelect) {
+    this.entornSelect = entornSelect;
   }
 
 
@@ -288,8 +277,7 @@ public class TiquetFilterForm extends PinbalAdminBaseFilterForm implements Tique
     this.datafiDesde = __toClone.datafiDesde;
     this.datafiFins = __toClone.datafiFins;
     this.notes = __toClone.notes;
-    this.entornDesde = __toClone.entornDesde;
-    this.entornFins = __toClone.entornFins;
+    this.entornSelect = __toClone.entornSelect;
     this.mapOfEstatTiquetForEstatTiquetID = __toClone.mapOfEstatTiquetForEstatTiquetID;
     this.mapOfTipusTiquetForTipusTiquetID = __toClone.mapOfTipusTiquetForTipusTiquetID;
     this.mapOfValuesForEntorn = __toClone.mapOfValuesForEntorn;

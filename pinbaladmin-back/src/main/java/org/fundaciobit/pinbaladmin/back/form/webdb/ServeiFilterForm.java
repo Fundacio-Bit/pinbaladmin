@@ -120,47 +120,25 @@ public class ServeiFilterForm extends PinbalAdminBaseFilterForm implements Serve
   }
 
 
-  private java.lang.Long estatServeiIDDesde;
+  private java.util.List<java.lang.Long> estatServeiIDSelect;
 
-  public java.lang.Long getEstatServeiIDDesde() {
-    return this.estatServeiIDDesde;
+  public java.util.List<java.lang.Long> getEstatServeiIDSelect() {
+    return this.estatServeiIDSelect;
   }
 
-  public void setEstatServeiIDDesde(java.lang.Long estatServeiIDDesde) {
-    this.estatServeiIDDesde = estatServeiIDDesde;
-  }
-
-
-  private java.lang.Long estatServeiIDFins;
-
-  public java.lang.Long getEstatServeiIDFins() {
-    return this.estatServeiIDFins;
-  }
-
-  public void setEstatServeiIDFins(java.lang.Long estatServeiIDFins) {
-    this.estatServeiIDFins = estatServeiIDFins;
+  public void setEstatServeiIDSelect(java.util.List<java.lang.Long> estatServeiIDSelect) {
+    this.estatServeiIDSelect = estatServeiIDSelect;
   }
 
 
-  private java.lang.Integer tipusConsentimentDesde;
+  private java.util.List<java.lang.Integer> tipusConsentimentSelect;
 
-  public java.lang.Integer getTipusConsentimentDesde() {
-    return this.tipusConsentimentDesde;
+  public java.util.List<java.lang.Integer> getTipusConsentimentSelect() {
+    return this.tipusConsentimentSelect;
   }
 
-  public void setTipusConsentimentDesde(java.lang.Integer tipusConsentimentDesde) {
-    this.tipusConsentimentDesde = tipusConsentimentDesde;
-  }
-
-
-  private java.lang.Integer tipusConsentimentFins;
-
-  public java.lang.Integer getTipusConsentimentFins() {
-    return this.tipusConsentimentFins;
-  }
-
-  public void setTipusConsentimentFins(java.lang.Integer tipusConsentimentFins) {
-    this.tipusConsentimentFins = tipusConsentimentFins;
+  public void setTipusConsentimentSelect(java.util.List<java.lang.Integer> tipusConsentimentSelect) {
+    this.tipusConsentimentSelect = tipusConsentimentSelect;
   }
 
 
@@ -178,13 +156,11 @@ public class ServeiFilterForm extends PinbalAdminBaseFilterForm implements Serve
     this.formulariIDFins = __toClone.formulariIDFins;
     this.entitatServeiIDDesde = __toClone.entitatServeiIDDesde;
     this.entitatServeiIDFins = __toClone.entitatServeiIDFins;
-    this.estatServeiIDDesde = __toClone.estatServeiIDDesde;
-    this.estatServeiIDFins = __toClone.estatServeiIDFins;
-    this.tipusConsentimentDesde = __toClone.tipusConsentimentDesde;
-    this.tipusConsentimentFins = __toClone.tipusConsentimentFins;
+    this.estatServeiIDSelect = __toClone.estatServeiIDSelect;
+    this.tipusConsentimentSelect = __toClone.tipusConsentimentSelect;
     this.mapOfFormulariForFormulariID = __toClone.mapOfFormulariForFormulariID;
     this.mapOfEntitatServeiForEntitatServeiID = __toClone.mapOfEntitatServeiForEntitatServeiID;
-    this.mapOfEstatServeiForEstatServeiID = __toClone.mapOfEstatServeiForEstatServeiID;
+    this.mapOfValuesForEstatServeiID = __toClone.mapOfValuesForEstatServeiID;
     this.mapOfValuesForTipusConsentiment = __toClone.mapOfValuesForTipusConsentiment;
   }
   
@@ -192,7 +168,7 @@ public class ServeiFilterForm extends PinbalAdminBaseFilterForm implements Serve
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { CODI ,NOM }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { CODI ,NOM ,ESTATSERVEIID }));
   }
 
   @Override
@@ -244,14 +220,14 @@ public class ServeiFilterForm extends PinbalAdminBaseFilterForm implements Serve
 
 
 
-  private Map<String, String> mapOfEstatServeiForEstatServeiID;
+  private Map<String, String> mapOfValuesForEstatServeiID;
 
-  public Map<String, String> getMapOfEstatServeiForEstatServeiID() {
-    return this.mapOfEstatServeiForEstatServeiID;
+  public Map<String, String> getMapOfValuesForEstatServeiID() {
+    return this.mapOfValuesForEstatServeiID;
   }
 
-  public void setMapOfEstatServeiForEstatServeiID(Map<String, String> mapOfEstatServeiForEstatServeiID) {
-    this.mapOfEstatServeiForEstatServeiID = mapOfEstatServeiForEstatServeiID;
+  public void setMapOfValuesForEstatServeiID(Map<String, String> mapOfValuesForEstatServeiID) {
+    this.mapOfValuesForEstatServeiID = mapOfValuesForEstatServeiID;
   }
 
 

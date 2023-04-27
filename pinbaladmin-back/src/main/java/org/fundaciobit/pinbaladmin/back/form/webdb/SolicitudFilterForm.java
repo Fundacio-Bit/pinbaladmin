@@ -87,25 +87,14 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.Long estatIDDesde;
+  private java.util.List<java.lang.Long> estatIDSelect;
 
-  public java.lang.Long getEstatIDDesde() {
-    return this.estatIDDesde;
+  public java.util.List<java.lang.Long> getEstatIDSelect() {
+    return this.estatIDSelect;
   }
 
-  public void setEstatIDDesde(java.lang.Long estatIDDesde) {
-    this.estatIDDesde = estatIDDesde;
-  }
-
-
-  private java.lang.Long estatIDFins;
-
-  public java.lang.Long getEstatIDFins() {
-    return this.estatIDFins;
-  }
-
-  public void setEstatIDFins(java.lang.Long estatIDFins) {
-    this.estatIDFins = estatIDFins;
+  public void setEstatIDSelect(java.util.List<java.lang.Long> estatIDSelect) {
+    this.estatIDSelect = estatIDSelect;
   }
 
 
@@ -340,8 +329,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.codiDescriptiu = __toClone.codiDescriptiu;
     this.procedimentNom = __toClone.procedimentNom;
     this.procedimentTipus = __toClone.procedimentTipus;
-    this.estatIDDesde = __toClone.estatIDDesde;
-    this.estatIDFins = __toClone.estatIDFins;
+    this.estatIDSelect = __toClone.estatIDSelect;
     this.ticketAssociat = __toClone.ticketAssociat;
     this.ticketNumeroSeguiment = __toClone.ticketNumeroSeguiment;
     this.departamentIDDesde = __toClone.departamentIDDesde;
@@ -363,7 +351,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.creador = __toClone.creador;
     this.operador = __toClone.operador;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
-    this.mapOfEstatSolicitudForEstatID = __toClone.mapOfEstatSolicitudForEstatID;
+    this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
@@ -413,14 +401,14 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
 
 
-  private Map<String, String> mapOfEstatSolicitudForEstatID;
+  private Map<String, String> mapOfValuesForEstatID;
 
-  public Map<String, String> getMapOfEstatSolicitudForEstatID() {
-    return this.mapOfEstatSolicitudForEstatID;
+  public Map<String, String> getMapOfValuesForEstatID() {
+    return this.mapOfValuesForEstatID;
   }
 
-  public void setMapOfEstatSolicitudForEstatID(Map<String, String> mapOfEstatSolicitudForEstatID) {
-    this.mapOfEstatSolicitudForEstatID = mapOfEstatSolicitudForEstatID;
+  public void setMapOfValuesForEstatID(Map<String, String> mapOfValuesForEstatID) {
+    this.mapOfValuesForEstatID = mapOfValuesForEstatID;
   }
 
 

@@ -467,20 +467,6 @@ public class SolicitudJPA implements Solicitud {
     }
 
 
-// IMP Field:estatsolicitudid | Table: pad_estatsolicitud | Type: 1  
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estatid", referencedColumnName ="estatSolicitudID", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_solicitud_estatsoli_fk"))
-    private EstatSolicitudJPA estatSolicitud;
-
-    public EstatSolicitudJPA getEstatSolicitud() {
-    return this.estatSolicitud;
-  }
-
-    public  void setEstatSolicitud(EstatSolicitudJPA estatSolicitud) {
-    this.estatSolicitud = estatSolicitud;
-  }
-
 // IMP Field:departamentid | Table: pad_departament | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -604,10 +590,6 @@ public class SolicitudJPA implements Solicitud {
     if(!"DepartamentJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.departament) || org.hibernate.Hibernate.isInitialized(__jpa.getDepartament()) ) ) {
       __tmp.setDepartament(DepartamentJPA.copyJPA(__jpa.getDepartament(), __alreadyCopied,"SolicitudJPA"));
-    }
-    if(!"EstatSolicitudJPA".equals(origenJPA) && 
-       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.estatSolicitud) || org.hibernate.Hibernate.isInitialized(__jpa.getEstatSolicitud()) ) ) {
-      __tmp.setEstatSolicitud(EstatSolicitudJPA.copyJPA(__jpa.getEstatSolicitud(), __alreadyCopied,"SolicitudJPA"));
     }
 
     return __tmp;

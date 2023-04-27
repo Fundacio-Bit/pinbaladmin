@@ -170,14 +170,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
   }
 */
 
-  public EstatSolicitudQueryPath ESTATSOLICITUD() {
-    return new EstatSolicitudQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return SolicitudQueryPath.this.getQueryPath() + "estatSolicitud" + ".";
-      }
-    });
-  }
-
   public DepartamentQueryPath DEPARTAMENT() {
     return new DepartamentQueryPath(new QueryPath() {
       public String getQueryPath() {

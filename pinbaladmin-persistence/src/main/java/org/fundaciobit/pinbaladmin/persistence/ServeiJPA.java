@@ -228,20 +228,6 @@ public class ServeiJPA implements Servei {
     this.entitatServei = entitatServei;
   }
 
-// IMP Field:estatserveiid | Table: pad_estatservei | Type: 1  
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estatserveiid", referencedColumnName ="estatServeiID", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_servei_estatserv_fk"))
-    private EstatServeiJPA estatServei;
-
-    public EstatServeiJPA getEstatServei() {
-    return this.estatServei;
-  }
-
-    public  void setEstatServei(EstatServeiJPA estatServei) {
-    this.estatServei = estatServei;
-  }
-
 
  // ---------------  STATIC METHODS ------------------
   public static ServeiJPA toJPA(Servei __bean) {
@@ -290,10 +276,6 @@ public class ServeiJPA implements Servei {
       __tmp.setSolicitudServeis(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServeis(), __alreadyCopied,"ServeiJPA"));
     }
     // Copia de beans complexes (IMP)
-    if(!"EstatServeiJPA".equals(origenJPA) && 
-       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.estatServei) || org.hibernate.Hibernate.isInitialized(__jpa.getEstatServei()) ) ) {
-      __tmp.setEstatServei(EstatServeiJPA.copyJPA(__jpa.getEstatServei(), __alreadyCopied,"ServeiJPA"));
-    }
     if(!"EntitatServeiJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.entitatServei) || org.hibernate.Hibernate.isInitialized(__jpa.getEntitatServei()) ) ) {
       __tmp.setEntitatServei(EntitatServeiJPA.copyJPA(__jpa.getEntitatServei(), __alreadyCopied,"ServeiJPA"));

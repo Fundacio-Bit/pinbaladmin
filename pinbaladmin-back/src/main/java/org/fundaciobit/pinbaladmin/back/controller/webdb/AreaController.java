@@ -584,7 +584,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, AreaFilterForm areaFilterForm,
        List<Area> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (areaFilterForm.isHiddenField(ENTITATID)
-      && !areaFilterForm.isGroupByField(ENTITATID)) {
+       && !areaFilterForm.isGroupByField(ENTITATID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

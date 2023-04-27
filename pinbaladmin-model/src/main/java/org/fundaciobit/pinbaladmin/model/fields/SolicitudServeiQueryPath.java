@@ -102,12 +102,4 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
     });
   }
 
-  public EstatSolicitudServeiQueryPath ESTATSOLICITUDSERVEI() {
-    return new EstatSolicitudServeiQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return SolicitudServeiQueryPath.this.getQueryPath() + "estatSolicitudServei" + ".";
-      }
-    });
-  }
-
 }

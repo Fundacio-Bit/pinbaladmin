@@ -21,7 +21,7 @@ public class ServeiForm extends PinbalAdminBaseForm {
       this.servei = __toClone.servei;
     this.listOfFormulariForFormulariID = __toClone.listOfFormulariForFormulariID;
     this.listOfEntitatServeiForEntitatServeiID = __toClone.listOfEntitatServeiForEntitatServeiID;
-    this.listOfEstatServeiForEstatServeiID = __toClone.listOfEstatServeiForEstatServeiID;
+    this.listOfValuesForEstatServeiID = __toClone.listOfValuesForEstatServeiID;
     this.listOfValuesForTipusConsentiment = __toClone.listOfValuesForTipusConsentiment;
   }
   
@@ -62,14 +62,14 @@ public class ServeiForm extends PinbalAdminBaseForm {
 
 
 
-  private List<StringKeyValue> listOfEstatServeiForEstatServeiID;
+  private List<StringKeyValue> listOfValuesForEstatServeiID;
 
-  public List<StringKeyValue> getListOfEstatServeiForEstatServeiID() {
-    return this.listOfEstatServeiForEstatServeiID;
+  public List<StringKeyValue> getListOfValuesForEstatServeiID() {
+    return this.listOfValuesForEstatServeiID;
   }
 
-  public void setListOfEstatServeiForEstatServeiID(List<StringKeyValue> listOfEstatServeiForEstatServeiID) {
-    this.listOfEstatServeiForEstatServeiID = listOfEstatServeiForEstatServeiID;
+  public void setListOfValuesForEstatServeiID(List<StringKeyValue> listOfValuesForEstatServeiID) {
+    this.listOfValuesForEstatServeiID = listOfValuesForEstatServeiID;
   }
 
 
