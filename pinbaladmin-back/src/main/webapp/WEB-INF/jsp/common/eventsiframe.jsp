@@ -1391,7 +1391,7 @@ textarea.event {
 	                                    </c:if> 
 	                                    <c:if test="${(event.tipus!=-3)}">
 	                                       De ${event.persona} 
-		                                   <c:if test="${(not empty event.destinatari)}">
+		                                   <c:if test="${(not empty event.destinatari && event.tipus == 1)}">
 		                                      a ${event.destinatari} 
 		                                      <c:if test="${(not empty event.destinatarimail)}">
                                                 (${event.destinatarimail})

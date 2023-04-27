@@ -28,7 +28,7 @@ public abstract class PinbalAdminBaseController<I extends IGenAppEntity, PK exte
         mav.addObject("totalItems", total);
         mav.addObject("itemsPerPagina", itemsPerPagina);
         mav.addObject("pagina", pagina);
+
+        mav.addObject("infoNumReg", true);
     }
-
-
 }

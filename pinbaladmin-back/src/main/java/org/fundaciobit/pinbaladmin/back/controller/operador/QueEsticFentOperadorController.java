@@ -234,15 +234,10 @@ public class QueEsticFentOperadorController {
             case "SOL":
                 Solicitud soli = solicitudEjb.findByPrimaryKey(id);
 
-                final String cai = soli.getTicketAssociat();
-                if (cai == null) {
-                    if (soli.getEntitatEstatal() != null) {
-                        tipus = "Estatal [" + id + "]";
-                    } else if (soli.getDepartamentID() != null) {
-                        tipus = "Local [" + id + "]";
-                    }
-                } else {
-                    tipus = "CAI-" + cai;
+                if (soli.getEntitatEstatal() != null) {
+                    tipus = "Estatal [" + id + "]";
+                } else if (soli.getDepartamentID() != null) {
+                    tipus = "Local [" + id + "]";
                 }
                 tipusTitle = soli.getProcedimentNom();
             break;
@@ -253,7 +248,7 @@ public class QueEsticFentOperadorController {
                 tipusTitle = ic.getTitol();
             break;
         }
-        String msg = "INTEROP: " + tipus + ": " + tipusTitle;
+        String msg = "PINBAL: " + tipus + ": " + tipusTitle;
         fullevents.put(event + id, msg);
     }
 }
