@@ -185,4 +185,9 @@ ALTER TABLE pad_solicitud  DROP CONSTRAINT pad_solicitud_estatsoli_fk;
 ALTER TABLE pad_solicitudservei DROP CONSTRAINT pad_soliservei_estsolserv_fk;
 ALTER TABLE pad_servei DROP CONSTRAINT pad_servei_estatserv_fk;
 
+
+DROP TABLE pad_estatservei;
+DROP TABLE pad_estatsolicitud;
+DROP TABLE pad_estatsolicitudservei;
+
  

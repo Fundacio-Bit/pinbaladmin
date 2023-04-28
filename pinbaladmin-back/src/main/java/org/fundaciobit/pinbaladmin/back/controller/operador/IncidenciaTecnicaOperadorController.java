@@ -164,14 +164,6 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
         if (incidenciaTecnicaFilterForm.isNou()) {
 
-            StringBuilder str = new StringBuilder();
-
-            for (StringKeyValue skv : getReferenceListForEstat(request, mav, null)) {
-                str.append(skv.value).append("=").append(skv.key).append(" | ");
-            }
-
-            incidenciaTecnicaFilterForm.setSubTitleCode("=Valors Estat => " + str.toString());
-
             incidenciaTecnicaFilterForm.addLabel(INCIDENCIATECNICAID, "=#Incidència");
 
             incidenciaTecnicaFilterForm.addHiddenField(NOMENTITAT);

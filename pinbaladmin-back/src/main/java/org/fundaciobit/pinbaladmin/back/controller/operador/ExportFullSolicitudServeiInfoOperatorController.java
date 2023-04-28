@@ -25,9 +25,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatServeiFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
@@ -56,17 +53,8 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EntitatService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.EntitatService entitatEjb;
 
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService estatSolicitudEjb;
-
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.ServeiService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.ServeiService serveiEjb;
-
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatServeiService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatServeiService estatServeiEjb;
-
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService estatSolicitudServeiEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.SolicitudService solicitudEjb;
@@ -230,9 +218,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
 
             // SOLICITUD-SERVEI
             mapSoliServEstat.put(id,
-                    estatSolicitudServeiEjb.executeQueryOne(EstatSolicitudServeiFields.NOM,
-                            EstatSolicitudServeiFields.ESTATSOLICITUDSERVEIID
-                                    .equal(solicitudServei.getEstatSolicitudServeiID())));
+                    SolicitudServeiOperadorController.ESTATS_SOLICITUD_SERVEI.get(solicitudServei.getEstatSolicitudServeiID()));
 
             // SERVEI
             long serveiID = solicitudServei.getServeiID();
@@ -248,8 +234,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
             mapServNom.put(id, servei.getNom());
 
             // XYZ ZZZ TODO fer cache !!!!
-            mapServEstat.put(id, estatServeiEjb.executeQueryOne(EstatServeiFields.NOM,
-                    EstatServeiFields.ESTATSERVEIID.equal(servei.getEstatServeiID())));
+            mapServEstat.put(id, ServeiOperadorController.ESTATS_SERVEI.get(servei.getEstatServeiID()));
 
             // SOLICITUD
             Solicitud solicitud = mapSoli.get(solicitudServei.getSolicitudID());
@@ -273,8 +258,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
 
             // mapData.put(id, df.format(solicitud.getDataInici()));
 
-            mapEstatSoli.put(id, estatSolicitudEjb.executeQueryOne(EstatSolicitudFields.NOM,
-                    EstatSolicitudFields.ESTATSOLICITUDID.equal(solicitud.getEstatID())));
+            mapEstatSoli.put(id, SolicitudOperadorController.ESTATS_SOLICITUD.get(solicitud.getEstatID()));
 
         }
 
@@ -284,7 +268,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
     public List<StringKeyValue> getReferenceListForEstatSolicitudServeiID(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
 
-        return SolicitudServeiOperadorController.getReferenceListForEstatSolicitudServeiIDStatic(request, mav, where);
+        return SolicitudServeiOperadorController.getReferenceListForEstatSolicitudServeiIDStatic();
     }
 
 }

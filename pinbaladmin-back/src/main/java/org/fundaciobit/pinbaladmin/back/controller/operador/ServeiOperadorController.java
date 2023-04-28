@@ -165,14 +165,26 @@ public class ServeiOperadorController extends ServeiController {
     public List<StringKeyValue> getReferenceListForEstatServeiID(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        __tmp.add(new StringKeyValue("-1", "Sense Estat"));
-        __tmp.add(new StringKeyValue("10", "Pendent"));
-        __tmp.add(new StringKeyValue("20", "Producció"));
-        __tmp.add(new StringKeyValue("30", "A extingir"));
-        __tmp.add(new StringKeyValue("40", "Extingit"));
-        __tmp.add(new StringKeyValue("151200", "PRE-Producció"));
-        __tmp.add(new StringKeyValue("151201", "No intermediat"));
+
+        for (Map.Entry<Long, String> entry : ESTATS_SERVEI.entrySet()) {
+            Long key = entry.getKey();
+            String val = entry.getValue();
+            __tmp.add(new StringKeyValue(String.valueOf(key), val));
+        }
 
         return __tmp;
+    }
+    
+    
+    public static final Map<Long, String> ESTATS_SERVEI = new HashMap<Long, String>();
+
+    static {
+        ESTATS_SERVEI.put(-1L, "Sense Estat");
+        ESTATS_SERVEI.put(10L, "Pendent");
+        ESTATS_SERVEI.put(20L, "Producció");
+        ESTATS_SERVEI.put(30L, "A extingir");
+        ESTATS_SERVEI.put(40L, "Extingit");
+        ESTATS_SERVEI.put(151200L, "PRE-Producció");
+        ESTATS_SERVEI.put(151201L, "No intermediat");
     }
 }

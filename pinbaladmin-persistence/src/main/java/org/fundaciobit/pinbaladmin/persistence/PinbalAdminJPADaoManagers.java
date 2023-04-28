@@ -17,9 +17,6 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final EmailJPAManager pad_email;
    private final EntitatJPAManager pad_entitat;
    private final EntitatServeiJPAManager pad_entitatservei;
-   private final EstatServeiJPAManager pad_estatservei;
-   private final EstatSolicitudJPAManager pad_estatsolicitud;
-   private final EstatSolicitudServeiJPAManager pad_estatsolicitudservei;
    private final EstatTiquetJPAManager pad_estattiquet;
    private final EventJPAManager pad_event;
    private final FitxerJPAManager pad_fitxer;
@@ -48,9 +45,6 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_email = new EmailJPAManager(__em);
     this.pad_entitat = new EntitatJPAManager(__em);
     this.pad_entitatservei = new EntitatServeiJPAManager(__em);
-    this.pad_estatservei = new EstatServeiJPAManager(__em);
-    this.pad_estatsolicitud = new EstatSolicitudJPAManager(__em);
-    this.pad_estatsolicitudservei = new EstatSolicitudServeiJPAManager(__em);
     this.pad_estattiquet = new EstatTiquetJPAManager(__em);
     this.pad_event = new EventJPAManager(__em);
     this.pad_fitxer = new FitxerJPAManager(__em);
@@ -110,18 +104,6 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public IEntitatServeiManager getEntitatServeiManager() {
         return this.pad_entitatservei;
-    };
-
-    public IEstatServeiManager getEstatServeiManager() {
-        return this.pad_estatservei;
-    };
-
-    public IEstatSolicitudManager getEstatSolicitudManager() {
-        return this.pad_estatsolicitud;
-    };
-
-    public IEstatSolicitudServeiManager getEstatSolicitudServeiManager() {
-        return this.pad_estatsolicitudservei;
     };
 
     public IEstatTiquetManager getEstatTiquetManager() {

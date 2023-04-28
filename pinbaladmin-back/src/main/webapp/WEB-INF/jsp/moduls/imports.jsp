@@ -71,7 +71,7 @@
 			case 'checkbox':
 			case 'radio':
 				tags[i].checked = false;
-				break;
+				break;				
 			}
 		}
 
@@ -90,6 +90,8 @@
 		for (i = 0; i < tags.length; i++) {
 			tags[i].value = '';
 		}
+
+		$('.select2').val(null).trigger('change');
 	}
 
 	function goTo(url) {

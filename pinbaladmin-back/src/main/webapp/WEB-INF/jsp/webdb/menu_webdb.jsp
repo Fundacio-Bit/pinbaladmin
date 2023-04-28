@@ -84,27 +84,6 @@ ${entityname}
         </span></a>
         </li>
 
-    <%-- EstatServei --%>
-       <fmt:message var="entityname" key="estatServei.estatServei.plural"/>
-        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/estatServei/list/1"/>" ><span style="${(fn:contains(url, 'estatServei/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
-${entityname}
-        </span></a>
-        </li>
-
-    <%-- EstatSolicitud --%>
-       <fmt:message var="entityname" key="estatSolicitud.estatSolicitud.plural"/>
-        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/estatSolicitud/list/1"/>" ><span style="${(fn:contains(url, 'estatSolicitud/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
-${entityname}
-        </span></a>
-        </li>
-
-    <%-- EstatSolicitudServei --%>
-       <fmt:message var="entityname" key="estatSolicitudServei.estatSolicitudServei.plural"/>
-        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/estatSolicitudServei/list/1"/>" ><span style="${(fn:contains(url, 'estatSolicitudServei/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
-${entityname}
-        </span></a>
-        </li>
-
     <%-- EstatTiquet --%>
        <fmt:message var="entityname" key="estatTiquet.estatTiquet.plural"/>
         <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/estatTiquet/list/1"/>" ><span style="${(fn:contains(url, 'estatTiquet/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
