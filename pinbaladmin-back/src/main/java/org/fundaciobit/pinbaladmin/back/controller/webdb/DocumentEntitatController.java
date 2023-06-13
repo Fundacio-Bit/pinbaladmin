@@ -621,7 +621,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, DocumentEntitatFilterForm documentEntitatFilterForm,
        List<DocumentEntitat> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (documentEntitatFilterForm.isHiddenField(ENTITATID)
-      && !documentEntitatFilterForm.isGroupByField(ENTITATID)) {
+       && !documentEntitatFilterForm.isGroupByField(ENTITATID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

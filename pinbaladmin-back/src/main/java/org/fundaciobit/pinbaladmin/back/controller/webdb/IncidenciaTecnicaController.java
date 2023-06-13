@@ -636,7 +636,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
        List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (incidenciaTecnicaFilterForm.isHiddenField(ESTAT)
-      && !incidenciaTecnicaFilterForm.isGroupByField(ESTAT)) {
+       && !incidenciaTecnicaFilterForm.isGroupByField(ESTAT)
+       && !incidenciaTecnicaFilterForm.isFilterByField(ESTAT)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -668,7 +669,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
        List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (incidenciaTecnicaFilterForm.isHiddenField(TIPUS)
-      && !incidenciaTecnicaFilterForm.isGroupByField(TIPUS)) {
+       && !incidenciaTecnicaFilterForm.isGroupByField(TIPUS)
+       && !incidenciaTecnicaFilterForm.isFilterByField(TIPUS)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -700,7 +702,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
        List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (incidenciaTecnicaFilterForm.isHiddenField(CREADOR)
-      && !incidenciaTecnicaFilterForm.isGroupByField(CREADOR)) {
+       && !incidenciaTecnicaFilterForm.isGroupByField(CREADOR)
+       && !incidenciaTecnicaFilterForm.isFilterByField(CREADOR)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -736,7 +739,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
        List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (incidenciaTecnicaFilterForm.isHiddenField(OPERADOR)
-      && !incidenciaTecnicaFilterForm.isGroupByField(OPERADOR)) {
+       && !incidenciaTecnicaFilterForm.isGroupByField(OPERADOR)
+       && !incidenciaTecnicaFilterForm.isFilterByField(OPERADOR)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

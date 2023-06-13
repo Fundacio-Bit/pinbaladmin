@@ -78,12 +78,12 @@
           <form:errors path="solicitudServei.estatSolicitudServeiID" cssClass="errorField alert alert-danger" />
           <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ESTATSOLICITUDSERVEIID)}" >
           <form:hidden path="solicitudServei.estatSolicitudServeiID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitudServei.estatSolicitudServeiID,__theForm.listOfEstatSolicitudServeiForEstatSolicitudServeiID)}"  />
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitudServei.estatSolicitudServeiID,__theForm.listOfValuesForEstatSolicitudServeiID)}"  />
           </c:if>
           <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ESTATSOLICITUDSERVEIID)}" >
           <c:set var="containEmptyValue"  value="false" />
           <form:select id="solicitudServei_estatSolicitudServeiID"  onchange="if(typeof onChangeEstatSolicitudServeiID == 'function') {  onChangeEstatSolicitudServeiID(this); };"  cssClass="form-control col-md-9-optional" path="solicitudServei.estatSolicitudServeiID">
-            <c:forEach items="${__theForm.listOfEstatSolicitudServeiForEstatSolicitudServeiID}" var="tmp">
+            <c:forEach items="${__theForm.listOfValuesForEstatSolicitudServeiID}" var="tmp">
                 <form:option value="${tmp.key}">${tmp.value}</form:option>
                 <c:if test="${empty tmp.key}">
                   <c:set var="containEmptyValue"  value="true" />

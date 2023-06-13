@@ -608,7 +608,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, GrupEntitatCedentFilterForm grupEntitatCedentFilterForm,
        List<GrupEntitatCedent> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (grupEntitatCedentFilterForm.isHiddenField(GRUPENTITATID)
-      && !grupEntitatCedentFilterForm.isGroupByField(GRUPENTITATID)) {
+       && !grupEntitatCedentFilterForm.isGroupByField(GRUPENTITATID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -647,7 +647,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, GrupEntitatCedentFilterForm grupEntitatCedentFilterForm,
        List<GrupEntitatCedent> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (grupEntitatCedentFilterForm.isHiddenField(CEDENTID)
-      && !grupEntitatCedentFilterForm.isGroupByField(CEDENTID)) {
+       && !grupEntitatCedentFilterForm.isGroupByField(CEDENTID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

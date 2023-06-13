@@ -87,25 +87,14 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
   }
 
 
-  private java.lang.Long estatSolicitudServeiIDDesde;
+  private java.util.List<java.lang.Long> estatSolicitudServeiIDSelect;
 
-  public java.lang.Long getEstatSolicitudServeiIDDesde() {
-    return this.estatSolicitudServeiIDDesde;
+  public java.util.List<java.lang.Long> getEstatSolicitudServeiIDSelect() {
+    return this.estatSolicitudServeiIDSelect;
   }
 
-  public void setEstatSolicitudServeiIDDesde(java.lang.Long estatSolicitudServeiIDDesde) {
-    this.estatSolicitudServeiIDDesde = estatSolicitudServeiIDDesde;
-  }
-
-
-  private java.lang.Long estatSolicitudServeiIDFins;
-
-  public java.lang.Long getEstatSolicitudServeiIDFins() {
-    return this.estatSolicitudServeiIDFins;
-  }
-
-  public void setEstatSolicitudServeiIDFins(java.lang.Long estatSolicitudServeiIDFins) {
-    this.estatSolicitudServeiIDFins = estatSolicitudServeiIDFins;
+  public void setEstatSolicitudServeiIDSelect(java.util.List<java.lang.Long> estatSolicitudServeiIDSelect) {
+    this.estatSolicitudServeiIDSelect = estatSolicitudServeiIDSelect;
   }
 
 
@@ -219,8 +208,7 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
     this.solicitudIDFins = __toClone.solicitudIDFins;
     this.serveiIDDesde = __toClone.serveiIDDesde;
     this.serveiIDFins = __toClone.serveiIDFins;
-    this.estatSolicitudServeiIDDesde = __toClone.estatSolicitudServeiIDDesde;
-    this.estatSolicitudServeiIDFins = __toClone.estatSolicitudServeiIDFins;
+    this.estatSolicitudServeiIDSelect = __toClone.estatSolicitudServeiIDSelect;
     this.normaLegal = __toClone.normaLegal;
     this.enllazNormaLegal = __toClone.enllazNormaLegal;
     this.articles = __toClone.articles;
@@ -232,14 +220,14 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
     this.fechaCaduca = __toClone.fechaCaduca;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfServeiForServeiID = __toClone.mapOfServeiForServeiID;
-    this.mapOfEstatSolicitudServeiForEstatSolicitudServeiID = __toClone.mapOfEstatSolicitudServeiForEstatSolicitudServeiID;
+    this.mapOfValuesForEstatSolicitudServeiID = __toClone.mapOfValuesForEstatSolicitudServeiID;
   }
   
   /* ========= UTILS ========== */
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { NORMALEGAL ,NOTES }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTATSOLICITUDSERVEIID ,NORMALEGAL ,NOTES }));
   }
 
   @Override
@@ -291,14 +279,14 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
 
 
 
-  private Map<String, String> mapOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  private Map<String, String> mapOfValuesForEstatSolicitudServeiID;
 
-  public Map<String, String> getMapOfEstatSolicitudServeiForEstatSolicitudServeiID() {
-    return this.mapOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  public Map<String, String> getMapOfValuesForEstatSolicitudServeiID() {
+    return this.mapOfValuesForEstatSolicitudServeiID;
   }
 
-  public void setMapOfEstatSolicitudServeiForEstatSolicitudServeiID(Map<String, String> mapOfEstatSolicitudServeiForEstatSolicitudServeiID) {
-    this.mapOfEstatSolicitudServeiForEstatSolicitudServeiID = mapOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  public void setMapOfValuesForEstatSolicitudServeiID(Map<String, String> mapOfValuesForEstatSolicitudServeiID) {
+    this.mapOfValuesForEstatSolicitudServeiID = mapOfValuesForEstatSolicitudServeiID;
   }
 
 

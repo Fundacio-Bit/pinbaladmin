@@ -66,10 +66,6 @@ public class ServeiController
   @Autowired
   protected EntitatServeiRefList entitatServeiRefList;
 
-  // References 
-  @Autowired
-  protected EstatServeiRefList estatServeiRefList;
-
   /**
    * Llistat de totes Servei
    */
@@ -214,7 +210,7 @@ public class ServeiController
     {
       _listSKV = getReferenceListForEstatServeiID(request, mav, filterForm, list, groupByItemsMap, null);
       _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfEstatServeiForEstatServeiID(_tmp);
+      filterForm.setMapOfValuesForEstatServeiID(_tmp);
       if (filterForm.getGroupByFields().contains(ESTATSERVEIID)) {
         fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATSERVEIID, false);
       };
@@ -250,7 +246,7 @@ public class ServeiController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(FORMULARIID, filterForm.getMapOfFormulariForFormulariID());
     __mapping.put(ENTITATSERVEIID, filterForm.getMapOfEntitatServeiForEntitatServeiID());
-    __mapping.put(ESTATSERVEIID, filterForm.getMapOfEstatServeiForEstatServeiID());
+    __mapping.put(ESTATSERVEIID, filterForm.getMapOfValuesForEstatServeiID());
     __mapping.put(TIPUSCONSENTIMENT, filterForm.getMapOfValuesForTipusConsentiment());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
@@ -318,13 +314,13 @@ public class ServeiController
       serveiForm.setListOfEntitatServeiForEntitatServeiID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
-    if (serveiForm.getListOfEstatServeiForEstatServeiID() == null) {
+    if (serveiForm.getListOfValuesForEstatServeiID() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForEstatServeiID(request, mav, serveiForm, null);
 
       if(_listSKV != null && !_listSKV.isEmpty()) { 
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
-      serveiForm.setListOfEstatServeiForEstatServeiID(_listSKV);
+      serveiForm.setListOfValuesForEstatServeiID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (serveiForm.getListOfValuesForTipusConsentiment() == null) {
@@ -655,7 +651,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, ServeiFilterForm serveiFilterForm,
        List<Servei> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (serveiFilterForm.isHiddenField(FORMULARIID)
-      && !serveiFilterForm.isGroupByField(FORMULARIID)) {
+       && !serveiFilterForm.isGroupByField(FORMULARIID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -695,7 +691,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, ServeiFilterForm serveiFilterForm,
        List<Servei> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (serveiFilterForm.isHiddenField(ENTITATSERVEIID)
-      && !serveiFilterForm.isGroupByField(ENTITATSERVEIID)) {
+       && !serveiFilterForm.isGroupByField(ENTITATSERVEIID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -722,11 +718,7 @@ public java.lang.Long stringToPK(String value) {
     if (serveiForm.isHiddenField(ESTATSERVEIID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
-    Where _where = null;
-    if (serveiForm.isReadOnlyField(ESTATSERVEIID)) {
-      _where = EstatServeiFields.ESTATSERVEIID.equal(serveiForm.getServei().getEstatServeiID());
-    }
-    return getReferenceListForEstatServeiID(request, mav, Where.AND(where, _where));
+    return getReferenceListForEstatServeiID(request, mav, where);
   }
 
 
@@ -734,25 +726,26 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, ServeiFilterForm serveiFilterForm,
        List<Servei> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (serveiFilterForm.isHiddenField(ESTATSERVEIID)
-      && !serveiFilterForm.isGroupByField(ESTATSERVEIID)) {
+       && !serveiFilterForm.isGroupByField(ESTATSERVEIID)
+       && !serveiFilterForm.isFilterByField(ESTATSERVEIID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
-    if (!_groupByItemsMap.containsKey(ESTATSERVEIID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (Servei _item : list) {
-        _pkList.add(_item.getEstatServeiID());
-        }
-        _w = EstatServeiFields.ESTATSERVEIID.in(_pkList);
-      }
     return getReferenceListForEstatServeiID(request, mav, Where.AND(where,_w));
   }
 
 
   public List<StringKeyValue> getReferenceListForEstatServeiID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
-    return estatServeiRefList.getReferenceList(EstatServeiFields.ESTATSERVEIID, where );
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("-1" , "-1"));
+    __tmp.add(new StringKeyValue("10" , "10"));
+    __tmp.add(new StringKeyValue("20" , "20"));
+    __tmp.add(new StringKeyValue("30" , "30"));
+    __tmp.add(new StringKeyValue("40" , "40"));
+    __tmp.add(new StringKeyValue("151200" , "151200"));
+    __tmp.add(new StringKeyValue("151201" , "151201"));
+    return __tmp;
   }
 
 
@@ -769,7 +762,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, ServeiFilterForm serveiFilterForm,
        List<Servei> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (serveiFilterForm.isHiddenField(TIPUSCONSENTIMENT)
-      && !serveiFilterForm.isGroupByField(TIPUSCONSENTIMENT)) {
+       && !serveiFilterForm.isGroupByField(TIPUSCONSENTIMENT)
+       && !serveiFilterForm.isFilterByField(TIPUSCONSENTIMENT)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

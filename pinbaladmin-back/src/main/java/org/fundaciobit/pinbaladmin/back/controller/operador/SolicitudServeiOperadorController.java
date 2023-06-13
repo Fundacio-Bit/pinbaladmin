@@ -5,11 +5,12 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
@@ -214,7 +215,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             Long serveisNoAutoritzats = solicitudServeiLogicaEjb
                     .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soli),
                             SolicitudServeiFields.ESTATSOLICITUDSERVEIID.notEqual(50L)));
-            
+
             if (serveisNoAutoritzats > 0) {
                 solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
                         "solicitudservei.autoritzartots", getContextWeb() + "/autoritzartots", "btn-primary"));
@@ -293,7 +294,6 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(solicitudID);
     }
 
-    
     @RequestMapping(value = "/autoritzarservei/{solicitudserveiid}", method = RequestMethod.GET)
     public String autoritzarServei(HttpServletRequest request,
             @PathVariable("solicitudserveiid") Long solicitudserveiid) throws Exception {
@@ -304,7 +304,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             log.info("autoritzarservei(); => SOLICITUDSERVEIID= " + solicitudserveiid);
 
             Long estatSolicitudServeiID = 50L;
-            soliSer.setEstatSolicitudServeiID(estatSolicitudServeiID );
+            soliSer.setEstatSolicitudServeiID(estatSolicitudServeiID);
             solicitudServeiLogicaEjb.update(soliSer);
 
             HtmlUtils.saveMessageSuccess(request, "S'ha autoritzat el servei");
@@ -315,7 +315,6 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(soliSer.getSolicitudID());
     }
 
-    
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
@@ -346,7 +345,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             } else {
                 if (solicitudServei.getEstatSolicitudServeiID() != 50) {
                     filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
-                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK), "solicitudservei.autoritzarservei",
+                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
+                                    "solicitudservei.autoritzarservei",
                                     getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), "btn-primary"));
                 }
             }
@@ -418,6 +418,41 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         }
 
         return super.getReferenceListForServeiID(request, mav, solicitudServeiForm, Where.AND(where, w2, w3));
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatSolicitudServeiID(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+
+        return getReferenceListForEstatSolicitudServeiIDStatic();
+    }
+
+    public static List<StringKeyValue> getReferenceListForEstatSolicitudServeiIDStatic() throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+        for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD_SERVEI.entrySet()) {
+            Long key = entry.getKey();
+            String val = entry.getValue();
+            __tmp.add(new StringKeyValue(String.valueOf(key), val));
+        }
+
+
+        return __tmp;
+    }
+    
+    public static final Map<Long, String> ESTATS_SOLICITUD_SERVEI = new HashMap<Long, String>();
+
+    static {
+        ESTATS_SOLICITUD_SERVEI.put(-1L, "Sense Estat");
+        ESTATS_SOLICITUD_SERVEI.put(1L, "Pendent esmenes");
+        ESTATS_SOLICITUD_SERVEI.put(10L, "Rebut");
+        ESTATS_SOLICITUD_SERVEI.put(20L, "Passat a firma");
+        ESTATS_SOLICITUD_SERVEI.put(30L, "Firmat");
+        ESTATS_SOLICITUD_SERVEI.put(40L, "Pendent d'autoritzar");
+        ESTATS_SOLICITUD_SERVEI.put(50L, "Autoritzat");
+        ESTATS_SOLICITUD_SERVEI.put(60L, "Desestimat");
+        ESTATS_SOLICITUD_SERVEI.put(80L, "Discontinuat");
+        ESTATS_SOLICITUD_SERVEI.put(90L, "No disponible");
     }
 
 }

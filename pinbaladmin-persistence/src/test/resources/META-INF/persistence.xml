@@ -18,9 +18,6 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.EmailJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.EntitatJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.EntitatServeiJPA</class>
-		<class>org.fundaciobit.pinbaladmin.persistence.EstatServeiJPA</class>
-		<class>org.fundaciobit.pinbaladmin.persistence.EstatSolicitudJPA</class>
-		<class>org.fundaciobit.pinbaladmin.persistence.EstatSolicitudServeiJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.EstatTiquetJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.EventJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.FitxerJPA</class>

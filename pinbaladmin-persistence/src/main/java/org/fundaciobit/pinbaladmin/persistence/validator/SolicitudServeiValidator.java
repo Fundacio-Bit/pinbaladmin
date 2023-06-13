@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 
@@ -30,7 +29,6 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
-    ,org.fundaciobit.pinbaladmin.model.dao.IEstatSolicitudServeiManager __estatSolicitudServeiManager
     ,org.fundaciobit.pinbaladmin.model.dao.IServeiManager __serveiManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudServeiManager __solicitudServeiManager) {
@@ -191,18 +189,6 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("servei.servei"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("servei.serveiID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__serveiid)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(ESTATSOLICITUDSERVEIID) == 0) {
-      java.lang.Long __estatsolicitudserveiid = __target__.getEstatSolicitudServeiID();
-      Long __count_ = null;
-      try { __count_ = __estatSolicitudServeiManager.count(EstatSolicitudServeiFields.ESTATSOLICITUDSERVEIID.equal(__estatsolicitudserveiid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
-      if (__count_ == null || __count_ == 0) {        
-        __vr.rejectValue(ESTATSOLICITUDSERVEIID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatSolicitudServei.estatSolicitudServei"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatSolicitudServei.estatSolicitudServeiID"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__estatsolicitudserveiid)));
       }
     }
 

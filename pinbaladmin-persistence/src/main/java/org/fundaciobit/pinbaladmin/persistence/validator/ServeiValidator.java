@@ -6,7 +6,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.EntitatServeiFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.FormulariFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
@@ -31,7 +30,6 @@ public class ServeiValidator<I extends Servei>
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
     ,org.fundaciobit.pinbaladmin.model.dao.IEntitatServeiManager __entitatServeiManager
-    ,org.fundaciobit.pinbaladmin.model.dao.IEstatServeiManager __estatServeiManager
     ,org.fundaciobit.pinbaladmin.model.dao.IFormulariManager __formulariManager
     ,org.fundaciobit.pinbaladmin.model.dao.IServeiManager __serveiManager) {
 
@@ -147,18 +145,6 @@ public class ServeiValidator<I extends Servei>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("entitatServei.entitatServei"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("entitatServei.entitatServeiID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__entitatserveiid)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(ESTATSERVEIID) == 0) {
-      java.lang.Long __estatserveiid = __target__.getEstatServeiID();
-      Long __count_ = null;
-      try { __count_ = __estatServeiManager.count(EstatServeiFields.ESTATSERVEIID.equal(__estatserveiid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
-      if (__count_ == null || __count_ == 0) {        
-        __vr.rejectValue(ESTATSERVEIID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatServei.estatServei"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatServei.estatServeiID"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__estatserveiid)));
       }
     }
 

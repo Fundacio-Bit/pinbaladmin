@@ -32,9 +32,6 @@ public class SolicitudServeiWebValidator extends AbstractWebValidator<SolicitudS
   protected SolicitudServeiValidator<SolicitudServei> validator = new SolicitudServeiValidator<SolicitudServei>();
 
   // EJB's
-  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService estatSolicitudServeiEjb;
-
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.ServeiService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.ServeiService serveiEjb;
 
@@ -86,7 +83,7 @@ public class SolicitudServeiWebValidator extends AbstractWebValidator<SolicitudS
 
     BeanValidatorResult<SolicitudServei> __vr = new BeanValidatorResult<SolicitudServei>();
     validator.validate(__vr, __bean,
-      isNou, estatSolicitudServeiEjb, serveiEjb, solicitudEjb, solicitudServeiEjb);
+      isNou, serveiEjb, solicitudEjb, solicitudServeiEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();

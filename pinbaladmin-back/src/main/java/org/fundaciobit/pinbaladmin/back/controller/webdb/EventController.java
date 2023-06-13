@@ -668,7 +668,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, EventFilterForm eventFilterForm,
        List<Event> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (eventFilterForm.isHiddenField(SOLICITUDID)
-      && !eventFilterForm.isGroupByField(SOLICITUDID)) {
+       && !eventFilterForm.isGroupByField(SOLICITUDID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -708,7 +708,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, EventFilterForm eventFilterForm,
        List<Event> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (eventFilterForm.isHiddenField(INCIDENCIATECNICAID)
-      && !eventFilterForm.isGroupByField(INCIDENCIATECNICAID)) {
+       && !eventFilterForm.isGroupByField(INCIDENCIATECNICAID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -744,7 +744,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, EventFilterForm eventFilterForm,
        List<Event> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (eventFilterForm.isHiddenField(TIPUS)
-      && !eventFilterForm.isGroupByField(TIPUS)) {
+       && !eventFilterForm.isGroupByField(TIPUS)
+       && !eventFilterForm.isFilterByField(TIPUS)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

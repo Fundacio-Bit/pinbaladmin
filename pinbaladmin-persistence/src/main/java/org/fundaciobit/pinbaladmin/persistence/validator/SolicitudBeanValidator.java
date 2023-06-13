@@ -19,8 +19,6 @@ public class SolicitudBeanValidator
   // EJB's
   protected final org.fundaciobit.pinbaladmin.model.dao.IDepartamentManager __departamentManager;
 
-  protected final org.fundaciobit.pinbaladmin.model.dao.IEstatSolicitudManager __estatSolicitudManager;
-
   protected final org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager;
 
 
@@ -28,20 +26,16 @@ public class SolicitudBeanValidator
 
 
   public SolicitudBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IDepartamentManager __departamentManager,
-     org.fundaciobit.pinbaladmin.model.dao.IEstatSolicitudManager __estatSolicitudManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) { 
     this.__departamentManager = __departamentManager;
-    this.__estatSolicitudManager = __estatSolicitudManager;
     this.__solicitudManager = __solicitudManager;
     _validator = new SolicitudValidator<SolicitudJPA>();
   }
 
   public SolicitudBeanValidator(SolicitudValidator<SolicitudJPA> _validator,
      org.fundaciobit.pinbaladmin.model.dao.IDepartamentManager __departamentManager,
-     org.fundaciobit.pinbaladmin.model.dao.IEstatSolicitudManager __estatSolicitudManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
     this.__departamentManager = __departamentManager;
-    this.__estatSolicitudManager = __estatSolicitudManager;
     this.__solicitudManager = __solicitudManager;
     this._validator = _validator;
   }
@@ -49,7 +43,7 @@ public class SolicitudBeanValidator
   @Override
   public List<I18NFieldError> validate(SolicitudJPA target, boolean isNou) throws I18NException {
     BeanValidatorResult<SolicitudJPA> _bvr_ = new BeanValidatorResult<SolicitudJPA>();
-    _validator.validate(_bvr_, target, isNou, __departamentManager, __estatSolicitudManager, __solicitudManager);
+    _validator.validate(_bvr_, target, isNou, __departamentManager, __solicitudManager);
     return _bvr_.getErrors();
   }
 }

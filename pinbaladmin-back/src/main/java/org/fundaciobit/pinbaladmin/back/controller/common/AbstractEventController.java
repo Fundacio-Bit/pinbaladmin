@@ -119,14 +119,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
             String cedent = (String) request.getSession().getAttribute(SESSION_EVENT_CEDENT);
 
             String email;
-            String nom;
+           // String nom;
             if (cedent != null) {
 
                 email = cedent;
             } else {
 
                 email = getPersonaContacteEmail(item);
-                nom = getPersonaContacteNom(item);
+                //nom = getPersonaContacteNom(item);
 
                 if (email == null || email.trim().length() == 0) {
                     String itemNom = isSolicitud() ? "solicitud" : "incidència";

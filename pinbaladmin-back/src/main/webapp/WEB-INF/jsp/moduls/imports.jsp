@@ -20,9 +20,10 @@
 <link href="<c:url value="/css/gijgo.min.css"/>" rel="stylesheet">
 
 <!-- Bootstrap DateTimepicker CSS   -->
-<link
-	href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>"
-	rel="stylesheet">
+<link href="<c:url value="/css/datetimepicker/tempusdominus-bootstrap-4.css"/>" rel="stylesheet">
+
+<%--  Select Multiple --%> 
+<link href="<c:url value="/css/select2.min.css"/>" rel="stylesheet">
 
 <link href="<c:url value="/css/stylesapp.css"/>" rel="stylesheet">
 
@@ -54,6 +55,9 @@
 	type="text/javascript"></script>
 <script src="<c:url value="/js/tinymce.js"/>" type="text/javascript"></script>
 
+<%-- Select Multiple --%>
+<script src="<c:url value="/js/select2.min.js"/>"></script>
+
 <script type="text/javascript">
 	function clear_form_elements(ele) {
 
@@ -67,12 +71,15 @@
 			case 'checkbox':
 			case 'radio':
 				tags[i].checked = false;
-				break;
+				break;				
 			}
 		}
 
 		tags = ele.getElementsByTagName('select');
 		for (i = 0; i < tags.length; i++) {
+	        if (tags[i].id == "itemsPerPage") {
+	            continue;
+	        }
 			if (tags[i].type == 'select-one') {
 				tags[i].selectedIndex = 0;
 			} else {
@@ -86,6 +93,8 @@
 		for (i = 0; i < tags.length; i++) {
 			tags[i].value = '';
 		}
+
+		$('.select2').val(null).trigger('change');
 	}
 
 	function goTo(url) {

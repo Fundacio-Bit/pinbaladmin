@@ -21,7 +21,7 @@ public class SolicitudServeiForm extends PinbalAdminBaseForm {
       this.solicitudServei = __toClone.solicitudServei;
     this.listOfSolicitudForSolicitudID = __toClone.listOfSolicitudForSolicitudID;
     this.listOfServeiForServeiID = __toClone.listOfServeiForServeiID;
-    this.listOfEstatSolicitudServeiForEstatSolicitudServeiID = __toClone.listOfEstatSolicitudServeiForEstatSolicitudServeiID;
+    this.listOfValuesForEstatSolicitudServeiID = __toClone.listOfValuesForEstatSolicitudServeiID;
   }
   
   public SolicitudServeiForm(SolicitudServeiJPA solicitudServei, boolean nou) {
@@ -61,14 +61,14 @@ public class SolicitudServeiForm extends PinbalAdminBaseForm {
 
 
 
-  private List<StringKeyValue> listOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  private List<StringKeyValue> listOfValuesForEstatSolicitudServeiID;
 
-  public List<StringKeyValue> getListOfEstatSolicitudServeiForEstatSolicitudServeiID() {
-    return this.listOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  public List<StringKeyValue> getListOfValuesForEstatSolicitudServeiID() {
+    return this.listOfValuesForEstatSolicitudServeiID;
   }
 
-  public void setListOfEstatSolicitudServeiForEstatSolicitudServeiID(List<StringKeyValue> listOfEstatSolicitudServeiForEstatSolicitudServeiID) {
-    this.listOfEstatSolicitudServeiForEstatSolicitudServeiID = listOfEstatSolicitudServeiForEstatSolicitudServeiID;
+  public void setListOfValuesForEstatSolicitudServeiID(List<StringKeyValue> listOfValuesForEstatSolicitudServeiID) {
+    this.listOfValuesForEstatSolicitudServeiID = listOfValuesForEstatSolicitudServeiID;
   }
 
 

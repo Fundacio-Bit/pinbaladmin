@@ -56,7 +56,7 @@
           <td>
           <c:set var="tmp">${solicitud.estatID}</c:set>
           <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfEstatSolicitudForEstatID[tmp]}
+          ${__theFilterForm.mapOfValuesForEstatID[tmp]}
           </c:if>
           </td>
         </c:if>

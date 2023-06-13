@@ -86,12 +86,4 @@ public class ServeiQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
     });
   }
 
-  public EstatServeiQueryPath ESTATSERVEI() {
-    return new EstatServeiQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return ServeiQueryPath.this.getQueryPath() + "estatServei" + ".";
-      }
-    });
-  }
-
 }

@@ -7,11 +7,10 @@ import javax.ejb.EJB;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudOperadorController;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 
 /**
@@ -23,9 +22,6 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
-
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService estatSolicitudEjb;
 
     @Override
     public boolean isSolicitud() {
@@ -116,8 +112,7 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @Override
     public String getEstat(Solicitud item) throws I18NException {
-        return estatSolicitudEjb.executeQueryOne(EstatSolicitudFields.NOM,
-                EstatSolicitudFields.ESTATSOLICITUDID.equal(item.getEstatID()));
+        return SolicitudOperadorController.ESTATS_SOLICITUD.get(item.getEstatID());
     }
 
 }

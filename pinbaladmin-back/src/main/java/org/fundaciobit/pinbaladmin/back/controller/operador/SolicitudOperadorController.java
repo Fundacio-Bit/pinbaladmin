@@ -22,7 +22,6 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.GroupByValueItem;
 import org.fundaciobit.genapp.common.query.ITableManager;
-import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Select;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.StringField;
@@ -41,19 +40,15 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
-import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
-import org.fundaciobit.pinbaladmin.model.entity.EstatSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentQueryPath;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
@@ -65,7 +60,6 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
-import org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -110,14 +104,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
-    @javax.ejb.EJB(mappedName = EstatSolicitudServeiService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudServeiService estatSolicitudServeiEjb;
-
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService solicitudServeiEjb;
-
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EstatSolicitudService estatSolicitudEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.AreaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.AreaService areaEjb;
@@ -532,12 +520,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
                     getContextWeb() + "/fullexport", "btn-info"));
 
-            solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol", /*
-                                                                                                                    * "javascript:window.open('" + request.getContextPath() +
-                                                                                                                    */
-                    EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
-                            + (isestatal == null ? "" : ("/" + isestatal)) /* ','_blank');" */,
-                    "btn-success"));
+            solicitudFilterForm
+                    .addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol", /*
+                                                                                                            * "javascript:window.open('" + request.getContextPath() +
+                                                                                                            */
+                            EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
+                                    + (isestatal == null ? "" : ("/" + isestatal)) /* ','_blank');" */,
+                            "btn-success"));
 
             solicitudFilterForm.setVisibleMultipleSelection(true);
 
@@ -557,18 +546,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             }
 
         }
-
-        List<EstatSolicitud> estatsSolicitud = estatSolicitudEjb
-                .select(new OrderBy(EstatSolicitudFields.ESTATSOLICITUDID));
-        StringBuffer subTitle = new StringBuffer();
-        for (EstatSolicitud estatSolicitud : estatsSolicitud) {
-            if (subTitle.length() != 0) {
-                subTitle.append(" | ");
-            }
-            subTitle.append(estatSolicitud.getEstatSolicitudID() + "=" + estatSolicitud.getNom());
-        }
-
-        solicitudFilterForm.setSubTitleCode("=" + subTitle.toString());
 
         String departamentIDDesde = request.getParameter("departamentIDDesde");
         String departamentIDFins = request.getParameter("departamentIDFins");
@@ -732,16 +709,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         Map<String, String> estatsSoliServ;
         {
-
-            SelectMultipleStringKeyValue smskv;
-            smskv = new SelectMultipleStringKeyValue(EstatSolicitudServeiFields.ESTATSOLICITUDSERVEIID.select,
-                    EstatSolicitudServeiFields.NOM.select);
-
-            List<StringKeyValue> listEstats = estatSolicitudServeiEjb.executeQuery(smskv, (Where) null,
-                    new OrderBy(EstatSolicitudServeiFields.NOM));
-
-            estatsSoliServ = Utils.listToMap(listEstats);
-
+            estatsSoliServ = Utils
+                    .listToMap(SolicitudServeiOperadorController.getReferenceListForEstatSolicitudServeiIDStatic());
         }
 
         for (Solicitud solicitud : list) {
@@ -1197,24 +1166,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     @Override
-    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav,
-            SolicitudForm solicitudForm, Where where) throws I18NException {
-
-        Boolean estatal = isEstatal();
-
-        if (estatal == null) {
-            estatal = (solicitudForm.getSolicitud().getDepartamentID() == null);
-        }
-
-        if (estatal) {
-            where = Where.AND(where, EstatSolicitudFields.ESTATSOLICITUDID.in(new Long[] { 40L, 10L, 60L, 20L }));
-        }
-
-        return super.getReferenceListForEstatID(request, mav, solicitudForm, where);
-
-    }
-
-    @Override
     public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
         /*
@@ -1298,21 +1249,22 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         SelectMultipleStringKeyValue smskv;
         smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
-        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv, Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
+        List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv,
+                Where.OR(OperadorFields.USERNAME.equal(operador_old), OperadorFields.USERNAME.equal(operador)));
 
         Map<String, String> operadors_map;
         operadors_map = Utils.listToMap(operadors);
-        
+
         String nom_operador = operadors_map.get(operador);
-        String nom_operador_old  = operadors_map.get(operador_old);
-                
+        String nom_operador_old = operadors_map.get(operador_old);
+
         try {
             this.update(request, soli);
 
             Timestamp data = new Timestamp(System.currentTimeMillis());
             int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
             String persona = request.getUserPrincipal().getName();
-            
+
             String comentari = I18NUtils.tradueix("missatge.canvi.operador", "solicitud", operador, nom_operador,
                     operador_old, nom_operador_old);
 
@@ -1323,7 +1275,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             evt.setPersona(persona);
             evt.setComentari(comentari);
             evt.setNoLlegit(true);
-            
+
             eventLogicaEjb.create(evt);
 
             HtmlUtils.saveMessageSuccess(request,
@@ -1355,7 +1307,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
     }
 
-    
     @Override
     public SolicitudJPA update(HttpServletRequest request, SolicitudJPA solicitud)
             throws I18NException, I18NValidationException {
@@ -1366,11 +1317,65 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         return (SolicitudJPA) solicitudEjb.update(solicitud);
     }
-    
+
     @Override
     public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
         return getReferenceListForCreador(request, mav, where);
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav,
+            SolicitudForm solicitudForm, Where where) throws I18NException {
+
+        Boolean estatal = isEstatal();
+
+        if (estatal == null) {
+            estatal = (solicitudForm.getSolicitud().getDepartamentID() == null);
+        }
+
+        List<StringKeyValue> __tmp;
+        if (estatal) {
+            __tmp = new java.util.ArrayList<StringKeyValue>();
+            for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD.entrySet()) {
+                Long key = entry.getKey();
+                if (key == 40L || key == 10L || key == 60L || key == 20L) {
+                    String val = entry.getValue();
+                    __tmp.add(new StringKeyValue(String.valueOf(key), val));
+                }
+            }
+        } else {
+            __tmp = super.getReferenceListForEstatID(request, mav, solicitudForm, where);
+        }
+
+        return __tmp;
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+        for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD.entrySet()) {
+            Long key = entry.getKey();
+            String val = entry.getValue();
+            __tmp.add(new StringKeyValue(String.valueOf(key), val));
+        }
+
+        return __tmp;
+    }
+
+    public static final Map<Long, String> ESTATS_SOLICITUD = new HashMap<Long, String>();
+
+    static {
+        ESTATS_SOLICITUD.put(-1L, "Sense Estat");
+        ESTATS_SOLICITUD.put(10L, "Pendent");
+        ESTATS_SOLICITUD.put(15L, "Pendent Firma Director");
+        ESTATS_SOLICITUD.put(20L, "Pendent d'autoritzar");
+        ESTATS_SOLICITUD.put(30L, "Esmenes");
+        ESTATS_SOLICITUD.put(40L, "Autoritzat");
+        ESTATS_SOLICITUD.put(50L, "Pendent pinfo");
+        ESTATS_SOLICITUD.put(60L, "Tancat");
     }
 
     /*

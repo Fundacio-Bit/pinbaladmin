@@ -63,10 +63,6 @@ public class SolicitudController
 
   // References 
   @Autowired
-  protected EstatSolicitudRefList estatSolicitudRefList;
-
-  // References 
-  @Autowired
   protected DepartamentRefList departamentRefList;
 
   /**
@@ -203,7 +199,7 @@ public class SolicitudController
     {
       _listSKV = getReferenceListForEstatID(request, mav, filterForm, list, groupByItemsMap, null);
       _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfEstatSolicitudForEstatID(_tmp);
+      filterForm.setMapOfValuesForEstatID(_tmp);
       if (filterForm.getGroupByFields().contains(ESTATID)) {
         fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATID, false);
       };
@@ -261,7 +257,7 @@ public class SolicitudController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
-    __mapping.put(ESTATID, filterForm.getMapOfEstatSolicitudForEstatID());
+    __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
     __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
@@ -322,13 +318,13 @@ public class SolicitudController
       solicitudForm.setListOfValuesForProcedimentTipus(_listSKV);
     }
     // Comprovam si ja esta definida la llista
-    if (solicitudForm.getListOfEstatSolicitudForEstatID() == null) {
+    if (solicitudForm.getListOfValuesForEstatID() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForEstatID(request, mav, solicitudForm, null);
 
       if(_listSKV != null && !_listSKV.isEmpty()) { 
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
-      solicitudForm.setListOfEstatSolicitudForEstatID(_listSKV);
+      solicitudForm.setListOfValuesForEstatID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfDepartamentForDepartamentID() == null) {
@@ -718,7 +714,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (solicitudFilterForm.isHiddenField(PROCEDIMENTTIPUS)
-      && !solicitudFilterForm.isGroupByField(PROCEDIMENTTIPUS)) {
+       && !solicitudFilterForm.isGroupByField(PROCEDIMENTTIPUS)
+       && !solicitudFilterForm.isFilterByField(PROCEDIMENTTIPUS)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -743,11 +740,7 @@ public java.lang.Long stringToPK(String value) {
     if (solicitudForm.isHiddenField(ESTATID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
-    Where _where = null;
-    if (solicitudForm.isReadOnlyField(ESTATID)) {
-      _where = EstatSolicitudFields.ESTATSOLICITUDID.equal(solicitudForm.getSolicitud().getEstatID());
-    }
-    return getReferenceListForEstatID(request, mav, Where.AND(where, _where));
+    return getReferenceListForEstatID(request, mav, where);
   }
 
 
@@ -755,25 +748,27 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (solicitudFilterForm.isHiddenField(ESTATID)
-      && !solicitudFilterForm.isGroupByField(ESTATID)) {
+       && !solicitudFilterForm.isGroupByField(ESTATID)
+       && !solicitudFilterForm.isFilterByField(ESTATID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
-    if (!_groupByItemsMap.containsKey(ESTATID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (Solicitud _item : list) {
-        _pkList.add(_item.getEstatID());
-        }
-        _w = EstatSolicitudFields.ESTATSOLICITUDID.in(_pkList);
-      }
     return getReferenceListForEstatID(request, mav, Where.AND(where,_w));
   }
 
 
   public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
-    return estatSolicitudRefList.getReferenceList(EstatSolicitudFields.ESTATSOLICITUDID, where );
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("-1" , "-1"));
+    __tmp.add(new StringKeyValue("10" , "10"));
+    __tmp.add(new StringKeyValue("15" , "15"));
+    __tmp.add(new StringKeyValue("20" , "20"));
+    __tmp.add(new StringKeyValue("30" , "30"));
+    __tmp.add(new StringKeyValue("40" , "40"));
+    __tmp.add(new StringKeyValue("50" , "50"));
+    __tmp.add(new StringKeyValue("60 " , "60 "));
+    return __tmp;
   }
 
 
@@ -794,7 +789,7 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (solicitudFilterForm.isHiddenField(DEPARTAMENTID)
-      && !solicitudFilterForm.isGroupByField(DEPARTAMENTID)) {
+       && !solicitudFilterForm.isGroupByField(DEPARTAMENTID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -830,7 +825,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (solicitudFilterForm.isHiddenField(CREADOR)
-      && !solicitudFilterForm.isGroupByField(CREADOR)) {
+       && !solicitudFilterForm.isGroupByField(CREADOR)
+       && !solicitudFilterForm.isFilterByField(CREADOR)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
@@ -866,7 +862,8 @@ public java.lang.Long stringToPK(String value) {
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
     if (solicitudFilterForm.isHiddenField(OPERADOR)
-      && !solicitudFilterForm.isGroupByField(OPERADOR)) {
+       && !solicitudFilterForm.isGroupByField(OPERADOR)
+       && !solicitudFilterForm.isFilterByField(OPERADOR)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;

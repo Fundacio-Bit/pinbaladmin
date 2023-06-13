@@ -6,7 +6,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
-import org.fundaciobit.pinbaladmin.model.fields.EstatSolicitudFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
 
@@ -30,7 +29,6 @@ public class SolicitudValidator<I extends Solicitud>
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
     ,org.fundaciobit.pinbaladmin.model.dao.IDepartamentManager __departamentManager
-    ,org.fundaciobit.pinbaladmin.model.dao.IEstatSolicitudManager __estatSolicitudManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
 
     // Valors Not Null
@@ -227,18 +225,6 @@ public class SolicitudValidator<I extends Solicitud>
     }
 
     // Fields with References to Other tables 
-    if (__vr.getFieldErrorCount(ESTATID) == 0) {
-      java.lang.Long __estatid = __target__.getEstatID();
-      Long __count_ = null;
-      try { __count_ = __estatSolicitudManager.count(EstatSolicitudFields.ESTATSOLICITUDID.equal(__estatid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
-      if (__count_ == null || __count_ == 0) {        
-        __vr.rejectValue(ESTATID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatSolicitud.estatSolicitud"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("estatSolicitud.estatSolicitudID"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__estatid)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(DEPARTAMENTID) == 0) {
       java.lang.Long __departamentid = __target__.getDepartamentID();
       if (__departamentid != null ) {

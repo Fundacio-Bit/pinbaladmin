@@ -451,36 +451,6 @@
     </definition>
 
 
-    <definition name="estatServeiFormWebDB" extends="webdb">
-        <put-attribute name="titol" value="estatServei.estatServei" />
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatServeiForm.jsp" />
-    </definition>
-    
-    <definition name="estatServeiListWebDB" extends="webdb">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatServeiList.jsp" />
-    </definition>
-
-
-    <definition name="estatSolicitudFormWebDB" extends="webdb">
-        <put-attribute name="titol" value="estatSolicitud.estatSolicitud" />
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatSolicitudForm.jsp" />
-    </definition>
-    
-    <definition name="estatSolicitudListWebDB" extends="webdb">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatSolicitudList.jsp" />
-    </definition>
-
-
-    <definition name="estatSolicitudServeiFormWebDB" extends="webdb">
-        <put-attribute name="titol" value="estatSolicitudServei.estatSolicitudServei" />
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatSolicitudServeiForm.jsp" />
-    </definition>
-    
-    <definition name="estatSolicitudServeiListWebDB" extends="webdb">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatSolicitudServeiList.jsp" />
-    </definition>
-
-
     <definition name="estatTiquetFormWebDB" extends="webdb">
         <put-attribute name="titol" value="estatTiquet.estatTiquet" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/estatTiquetForm.jsp" />

@@ -133,9 +133,9 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
 
     if (__vr.getFieldErrorCount(CREADOR) == 0) {
       java.lang.String __creador = __target__.getCreador();
-      if (__creador!= null && __creador.length() > 100) {
+      if (__creador!= null && __creador.length() > 255) {
         __vr.rejectValue(CREADOR, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CREADOR)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
