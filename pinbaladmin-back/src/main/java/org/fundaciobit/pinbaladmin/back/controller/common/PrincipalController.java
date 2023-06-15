@@ -28,7 +28,6 @@ public class PrincipalController {
     @RequestMapping(value = "/common/index.html")
     public ModelAndView commonIndex(HttpSession session, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-
         return principal(session, request, response);
     }
 
