@@ -129,6 +129,8 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
     public void postList(HttpServletRequest request, ModelAndView mav, SolicitudServeiFilterForm filterForm,
             List<SolicitudServei> list) throws I18NException {
 
+        super.postList(request, mav, filterForm, list);
+        
         Map<Long, String> mapSolSerID;
         mapSolSerID = (Map<Long, String>) filterForm.getAdditionalField(SOLSERID).getValueMap();
         mapSolSerID.clear();
