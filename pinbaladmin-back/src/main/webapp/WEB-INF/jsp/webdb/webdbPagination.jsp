@@ -46,47 +46,27 @@ function reassignAction() {
             %>
         </c:if>
 
-
-
-<%--
 		<div id="infoNumRegistres">
- 			<c:if test="${infoNumReg}">
-				<c:set var="start" value="${(pagina-1) * itemsPerPagina + 1}" />
-
-				<c:set var="end"
-					value="${(start + itemsPerPagina > totalItems) ? totalItems : (start + itemsPerPagina - 1)}" />
-
-				<fmt:message key="show.results.from.to" var="showNResults">
-					<fmt:param> ${start} </fmt:param>
-					<fmt:param> ${end} </fmt:param>
+			<c:if test="${itemsPerPagina == -1}">
+				<fmt:message key="show.results.all" var="showNResults">
 					<fmt:param> ${totalItems} </fmt:param>
 				</fmt:message>
 				<c:out value="${showNResults}" />
-			</c:if> 
+			</c:if>
+
+			<c:if test="${itemsPerPagina != -1}">
+				<c:set var="__start" value="${(pagina-1) * itemsPerPagina + 1}" />
+				<c:set var="__end"
+					value="${(__start + itemsPerPagina > totalItems) ? totalItems : (__start + itemsPerPagina - 1)}" />
+
+				<fmt:message key="show.results.from.to" var="showNResults">
+					<fmt:param> ${__start} </fmt:param>
+					<fmt:param> ${__end} </fmt:param>
+					<fmt:param> ${totalItems} </fmt:param>
+				</fmt:message>
+				<c:out value="${showNResults}" />
+			</c:if>
 		</div>
---%>
-
-        <div id="infoNumRegistres">
-            <c:if test="${itemsPerPagina == -1}">
-                <fmt:message key="show.results.all" var="showNResults">
-                    <fmt:param> ${totalItems} </fmt:param>
-                </fmt:message>
-                <c:out value="${showNResults}" />
-            </c:if>
-            
-            <c:if test="${itemsPerPagina != -1}">
-                <c:set var="__start" value="${(pagina-1) * itemsPerPagina + 1}" />
-                <c:set var="__end"
-                    value="${(__start + itemsPerPagina > totalItems) ? totalItems : (__start + itemsPerPagina - 1)}" />
-
-                <fmt:message key="show.results.from.to" var="showNResults">
-                    <fmt:param> ${__start} </fmt:param>
-                    <fmt:param> ${__end} </fmt:param>
-                    <fmt:param> ${totalItems} </fmt:param>
-                </fmt:message>
-                <c:out value="${showNResults}" />
-            </c:if>
-        </div>
 
 	</div>
 

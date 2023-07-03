@@ -27,10 +27,10 @@
 			</c:if>
 			
 			<c:if test="${not empty persona_contacte}">
-		    	document.getElementById("event.persona").value = '${persona_contacte}';
+		    	document.getElementById("event.persona").value = "${persona_contacte}";
 			</c:if>
 		} else {
-			document.getElementById("event.persona").value = '${persona_operador}';
+			document.getElementById("event.persona").value = "${persona_operador}";
 		}
 
         if (select.value == -2) {
@@ -47,8 +47,8 @@
         }
 
 
-	    document.getElementById("event.destinatari").value = '${persona_contacte}';
-		document.getElementById("event.destinatarimail").value = '${persona_contacte_mail}';
+	    document.getElementById("event.destinatari").value = "${persona_contacte}";
+		document.getElementById("event.destinatarimail").value = "${persona_contacte_mail}";
 
 		if (select.value == 1) {
 			document.getElementById("event_destinatari_rowid").style.display = "";
