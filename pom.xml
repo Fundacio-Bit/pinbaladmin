@@ -13,7 +13,9 @@
         <module>pinbaladmin-back</module>
         <module>pinbaladmin-ws</module>
         <module>pinbaladmin-ear</module>
+        <module>apialtapeticions</module>
         <module>scripts</module>
+        
     </modules>
     <repositories>
         <repository>
