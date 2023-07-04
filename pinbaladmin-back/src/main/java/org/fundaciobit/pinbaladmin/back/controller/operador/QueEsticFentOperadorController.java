@@ -1,11 +1,12 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
@@ -31,11 +33,15 @@ import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.mysql.jdbc.PreparedStatement;
 
 /**
  * 
@@ -49,7 +55,7 @@ public class QueEsticFentOperadorController {
 
     protected static final Logger log = Logger.getLogger(QueEsticFentOperadorController.class);
 
-    public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.EventService eventEjb;
@@ -66,6 +72,11 @@ public class QueEsticFentOperadorController {
         return listPost(request, response);
     }
 
+    public String getContextWeb() {
+        RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);
+        return rm.value()[0];
+    }
+
     /**
      * Guardar un nou Event
      */
@@ -76,20 +87,15 @@ public class QueEsticFentOperadorController {
 
         ModelAndView mav = new ModelAndView("queesticfent");
 
-        String dateStr = request.getParameter("data");
-
         Date date;
+        String dateStr = request.getParameter("data");
         if (dateStr == null || dateStr.trim().length() == 0) {
-
             date = new Date();
-
             dateStr = SDF.format(date);
-
         } else {
-
             try {
                 date = SDF.parse(dateStr);
-            } catch (Throwable e) {
+            } catch (ParseException e) {
                 HtmlUtils.saveMessageError(request, "Error en el format de la data: " + dateStr);
                 mav.addObject("data", SDF.format(new Date()));
                 return mav;
@@ -106,9 +112,8 @@ public class QueEsticFentOperadorController {
         log.info("remote user: " + username);
 
         mav.addObject("data", dateStr);
-
         try {
-            Map<String, String> fullevents = new TreeMap<String, String>();
+            Map<String, String[]> fullevents = new TreeMap<String, String[]>();
 
             // (1) Consultam sol·licituds
             {
@@ -116,7 +121,7 @@ public class QueEsticFentOperadorController {
                 final Where wCreador = SolicitudFields.CREADOR.equal(username);
                 final Where wCreada = SolicitudFields.DATAINICI.between(from, to);
                 final Where w1 = Where.AND(wCreador, wCreada);
-                
+
                 //Quien fue el cerrador
                 final Where wOperador = SolicitudFields.OPERADOR.equal(username);
                 final Where wCerrada = SolicitudFields.DATAFI.between(from, to);
@@ -136,7 +141,7 @@ public class QueEsticFentOperadorController {
                 final Where wCreador = IncidenciaTecnicaFields.CREADOR.equal(username);
                 final Where wCreada = IncidenciaTecnicaFields.DATAINICI.between(from, to);
                 final Where w1 = Where.AND(wCreador, wCreada);
-                
+
                 //Quien fue el cerrador
                 final Where wOperador = IncidenciaTecnicaFields.OPERADOR.equal(username);
                 final Where wCerrada = IncidenciaTecnicaFields.DATAFI.between(from, to);
@@ -166,20 +171,9 @@ public class QueEsticFentOperadorController {
                 }
             }
 
-            log.info("Queesticfent: #events");
-
-            List<String> items = new ArrayList<String>();
-            for (String msg : fullevents.values()) {
-
-                String url = getUrl(date, username, msg);
-
-                StringBuffer str = new StringBuffer();
-                str.append(msg + "  <a target=\"_blank\" href=\"" + url
-                        + "\" ><span class=\"label label-success\"><b>+</b></span> </a>");
-
-                items.add(str.toString());
-            }
-            mav.addObject("items", items);
+            log.info("Queesticfent: #events=" + fullevents.size());
+            mav.addObject("items", fullevents.values());
+            mav.addObject("contexte", getContextWeb());
 
         } catch (I18NException e) {
             HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
@@ -195,39 +189,10 @@ public class QueEsticFentOperadorController {
         return DateUtils.truncate(date, Calendar.DATE);
     }
 
-    public static String getUrl (Date date, String username, String msg) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        String dia = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
-        String mes = String.format("%02d", cal.get(Calendar.MONTH) + 1);
-        int any = cal.get(Calendar.YEAR);
-
-        int MAX_LENGTH = 230;
-        if (msg.length() > MAX_LENGTH) {
-            msg = msg.substring(0, MAX_LENGTH);
-        }
-
-        String msgEnc;
-        try {
-            msgEnc = URLEncoder.encode(msg, StandardCharsets.ISO_8859_1.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            msgEnc = msg;
-        }
-        
-        String url = "https://queesticfent.fundaciobit.org/queesticfent/NovaModificacio.jsp?usuariID="
-                + username + "&data=" + dia + "%2F" + mes + "%2F" + any
-                + "+00%3A00&projecteID=28&redirectUrl=LlistatEntrades.jsp%3Fmes%3D0%26any%3D" + any
-                + "%26usuariID%3D" + username + "%26projecteID%3D28&accioID=-3&dada1=" + msgEnc;
-        
-        return url;
-    }
-    
-    public void afegirEventTipus(Map<String, String> fullevents, String event, Long id) {
+    public void afegirEventTipus(Map<String, String[]> fullevents, String event, Long id) {
 
         String tipus = null;
-        String tipusTitle = null;
+        String titol = null;
 
         switch (event) {
             case "SOL":
@@ -238,16 +203,80 @@ public class QueEsticFentOperadorController {
                 } else if (soli.getDepartamentID() != null) {
                     tipus = "Local [" + id + "]";
                 }
-                tipusTitle = soli.getProcedimentNom();
+                titol = soli.getProcedimentNom();
             break;
             case "INC":
                 IncidenciaTecnica ic = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
 
                 tipus = "Incidencia [" + id + "]";
-                tipusTitle = ic.getTitol();
+                titol = ic.getTitol();
             break;
         }
-        String msg = "PINBAL: " + tipus + ": " + tipusTitle;
-        fullevents.put(event + id, msg);
+
+        String hash = encode("PINBAL: " + tipus + ": " + titol);
+
+        String[] missatge = { tipus, titol, hash };
+        fullevents.put(event + id, missatge);
+    }
+
+    @RequestMapping(value = "/afegirEntrada/{usuari}/{dateStr}/{msgEnc}", method = RequestMethod.GET)
+    public void afegeixEntrada(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("usuari") String usuari, @PathVariable("dateStr") String dateStr,
+            @PathVariable("msgEnc") String msgEnc) {
+
+        try {
+            String login = Configuracio.getQueEsticFentUser();
+            String password = Configuracio.getQueEsticFentPassword();
+            String url = Configuracio.getQueEsticFentBDURL();
+            
+            Connection con = DriverManager.getConnection(url, login, password);
+            String SQL_INSERT = "INSERT INTO modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
+
+            PreparedStatement preparedStatement = (PreparedStatement) con.prepareStatement(SQL_INSERT);
+
+            preparedStatement.setInt(1, -3);
+            preparedStatement.setString(2, usuari);
+            preparedStatement.setInt(3, 28);
+
+            Date date;
+            try {
+                date = SDF.parse(dateStr);
+            } catch (Throwable e) {
+                date = new Date();
+                dateStr = SDF.format(date);
+            }
+            Timestamp data = new Timestamp(date.getTime());
+            preparedStatement.setTimestamp(4, data);
+
+            String missatge = decode(msgEnc);
+            preparedStatement.setString(5, missatge);
+
+            int row = preparedStatement.executeUpdate();
+            // rows affected
+            if (row == 1) {
+                log.info("Afegit missatge: " + missatge);
+            }
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String encode(String originalInput) {
+
+        int MAX_LENGTH = 230;
+        if (originalInput.length() > MAX_LENGTH) {
+            originalInput = originalInput.substring(0, MAX_LENGTH);
+        }
+        String encodedString;
+        encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+        return encodedString;
+    }
+
+    public String decode(String encodedString) {
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        String missatge = new String(decodedBytes);
+        return missatge;
     }
 }

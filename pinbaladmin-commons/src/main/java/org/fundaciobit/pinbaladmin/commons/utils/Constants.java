@@ -8,6 +8,7 @@ package org.fundaciobit.pinbaladmin.commons.utils;
 public interface Constants {
 
     public static final String PINBALADMIN_PROPERTY_BASE = "org.fundaciobit.pinbaladmin.";
+    public static final String PINBALADMIN_QUEESTICFENT_PROPERTY_BASE = PINBALADMIN_PROPERTY_BASE + "queesticfent.bd.";
 
     public static final String SECURITY_DOMAIN = "seycon";
 
