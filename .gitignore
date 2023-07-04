@@ -65,3 +65,11 @@ hs_err_pid*
 /pinbaladmin-ws/domini-sistra-api/.settings
 /pinbaladmin-ws/domini-sistra-api/target
 /pinbaladmin-ws/domini-sistra-api/.classpath
+/apialtapeticions/test.properties
+/apialtapeticions/.classpath
+/apialtapeticions/.project
+/apialtapeticions/hola.txt
+/apialtapeticions/regenerateapi.bat
+/apialtapeticions/target
+/apialtapeticions/.settings
+/tràmit_sistra.txt
