@@ -222,7 +222,7 @@
             <div class="input-group" style="padding-right:4px;padding-bottom:4px;align-items:center;">
               <span class="add-on"><fmt:message key="solicitud.dataInici" />:</span>
               <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="dataIniciDesde" data-target-input="nearest">
                       <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataIniciDesde" path="dataIniciDesde" />
                     <c:if test="${!false}" >
@@ -243,7 +243,7 @@
                 });
             });
         </script>              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="dataIniciFins" data-target-input="nearest">
                       <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataIniciFins" path="dataIniciFins" />
                     <c:if test="${!false}" >
@@ -272,7 +272,7 @@
             <div class="input-group" style="padding-right:4px;padding-bottom:4px;align-items:center;">
               <span class="add-on"><fmt:message key="solicitud.dataFi" />:</span>
               <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="dataFiDesde" data-target-input="nearest">
                       <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataFiDesde" path="dataFiDesde" />
                     <c:if test="${!false}" >
@@ -293,7 +293,7 @@
                 });
             });
         </script>              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="dataFiFins" data-target-input="nearest">
                       <form:input  cssClass="form-control datetimepicker-input"  data-target="#dataFiFins" path="dataFiFins" />
                     <c:if test="${!false}" >
@@ -479,6 +479,24 @@
               </fmt:message>
               <span class="add-on"><c:out value="${operador}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperoperador}" path="operador" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ORGANID)}">
+            <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
+            <%-- FILTRE NUMERO DESDE-FINS --%>
+              <span class="add-on"><fmt:message key="solicitud.organid" />:</span>
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
+              
+              <form:input cssClass="input-append input-small" path="organidDesde" />
+
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
+
+              <form:input cssClass="input-append input-small search-query" path="organidFins" />
+
             </div>
 
 
