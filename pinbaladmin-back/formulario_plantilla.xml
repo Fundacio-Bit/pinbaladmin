@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FORMULARIO modelo="IN0025PBAL" version="1" >
+    <DATOS_REGISTRO>
+        <NIF>${A.nif}</NIF>
+        <#list llista as x>
+          ${x}
+        </#list>
+        <EMAIL>jjllull@dgpice.caib.es</EMAIL>
+        <TELEFONO>971177782</TELEFONO>
+        <NOMBRE>Llull González</NOMBRE>
+        <APELLIDO1>Juan</APELLIDO1>
+        <APELLIDO2>José</APELLIDO2>
+        <NOMBRECOMPLETO>Llull González Juan José</NOMBRECOMPLETO>
+    </DATOS_REGISTRO>
+    <DATOS_SOLICITUD>
+        <LDATIPOSOL indice="1">Alta</LDATIPOSOL>
+        <LDAENTORNO indice="Pro">Producció</LDAENTORNO>
+        <DENOMINACION indice="S0711001H">Govern de les Illes Balears</DENOMINACION>
+        <CIF>S0711001H</CIF>
+        <UNIDAD>Dirección General de Primera Infancia, Innovación y Comunidad Educativa</UNIDAD>
+        <CODIUR>A04026925</CODIUR>
+        <CODIOA>A04026923</CODIOA>
+        <DIRECCION>C/ Ter, 16</DIRECCION>
+        <CP>07009</CP>
+        <MUNICIPIO indice="40">Palma</MUNICIPIO>
+        <NIFSECD>43115765B</NIFSECD>
+        <NOMBRESECD>Juan José</NOMBRESECD>
+        <APE1SECD>Llull</APE1SECD>
+        <APE2SECD>González</APE2SECD>
+        <CARGOSECD>Jefe de Sección de Servicios Complementarios</CARGOSECD>
+        <TELEFONOSECD>971177782</TELEFONOSECD>
+        <MAILSECD>jjllull@dgpice.caib.es</MAILSECD>
+        <NOMOCULSECD>Juan José Llull González</NOMOCULSECD>
+        <LDAENTORNOCULTO>- Producció</LDAENTORNOCULTO>
+        <LDAENTOCULTOEXCEL>'- Entornos: Producció</LDAENTOCULTOEXCEL>
+        <IDIOMA>ca</IDIOMA>
+        <COPIARDATOS>false</COPIARDATOS>
+        <NIFSECE>43115765B</NIFSECE>
+        <NOMBRESECE>Juan José</NOMBRESECE>
+        <APE1SECE>Llull</APE1SECE>
+        <APE2SECE>González</APE2SECE>
+        <CARGOSECE>Jefe de Sección de Servicios Complementarios</CARGOSECE>
+        <TELEFONOSECE>971177782</TELEFONOSECE>
+        <MAILSECE>jjllull@dgpice.caib.es</MAILSECE>
+        <NOMOCULSECE>Juan José Llull González</NOMOCULSECE>
+        <NIFSECF>43115765B</NIFSECF>
+        <NOMBRESECF>Juan José</NOMBRESECF>
+        <APE1SECF>Llull</APE1SECF>
+        <APE2SECF>González</APE2SECF>
+        <CARGOSECF>Jefe de Sección de Servicios Complementarios</CARGOSECF>
+        <TELEFONOSECF>971177782</TELEFONOSECF>
+        <MAILSECF>jjllull@dgpice.caib.es</MAILSECF>
+        <NOMOCULSECF>Juan José Llull González</NOMOCULSECF>
+        <NIFSECG>43115765B</NIFSECG>
+        <NOMBRESECG>Juan José</NOMBRESECG>
+        <APE1SECG>Llull</APE1SECG>
+        <APE2SECG>González</APE2SECG>
+        <CARGOSECG>Jefe de Sección de Servicios Complementarios</CARGOSECG>
+        <NOMOCULSECG>Juan José Llull González</NOMOCULSECG>
+        <TIPOPROCEDIMIENTO indice="4">Ajudes, Beques i Subvencions</TIPOPROCEDIMIENTO>
+        <NOMBREPROC>Ayudas Asocaciones Familias de Alumnos</NOMBREPROC>
+        <CODIPROC>3015170</CODIPROC>
+        <DIRFICHA>https://www.caib.es/seucaib/ca/201/empreses/tramites/tramite/5720135</DIRFICHA>
+        <CADUCA indice="1">Caduca</CADUCA>
+        <FECHACAD>31/03/2024</FECHACAD>
+        <DESCRIPCION>Proceso ayudas para Asociaciones de Familias de Alumnos y Asocaciones de Alumnos y sus Federaciones y Confederaciones</DESCRIPCION>
+        <PETICIONESDIA>10</PETICIONESDIA>
+        <PETICIONESMES>200</PETICIONESMES>
+        <LELSERVICIOS>
+            <ID1>
+                <NOMSERVEI indice="SVDCCAACPASWS01">(SVDCCAACPASWS01) Corriente de pago para ayudas y subvenciones de la CCAA</NOMSERVEI>
+                <CODISERV>SVDCCAACPASWS01</CODISERV>
+                <NORMALEGAL>Resolución del consejero de Educación y Formación Profesional de 13 de junio de 2023 por la que se convocan ayudas para gastos de funcionamiento y actividades de las asociaciones de familias de alumno</NORMALEGAL>
+                <ARTICULOS>4.6</ARTICULOS>
+                <CONSENTIMIENTO indice="noop">No oposició</CONSENTIMIENTO>
+                <ENLACENOR>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACENOR>
+                <LDECONSENTIMIENTO indice="1">Publicat</LDECONSENTIMIENTO>
+                <ENLACECON>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACECON>
+            </ID1>
+            <ID2>
+                <NOMSERVEI indice="ECOT103">(ECOT103) ECOT103 Solicitud de ayudas y subvenciones</NOMSERVEI>
+                <CODISERV>ECOT103</CODISERV>
+                <NORMALEGAL>Resolución del consejero de Educación y Formación Profesional de 13 de junio de 2023 por la que se convocan ayudas para gastos de funcionamiento y actividades de las asociaciones de familias de alumno</NORMALEGAL>
+                <ARTICULOS>4.6</ARTICULOS>
+                <CONSENTIMIENTO indice="noop">No oposició</CONSENTIMIENTO>
+                <ENLACENOR>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACENOR>
+                <LDECONSENTIMIENTO indice="1">Publicat</LDECONSENTIMIENTO>
+                <ENLACECON>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACECON>
+            </ID2>
+            <ID3>
+                <NOMSERVEI indice="Q2827003ATGSS001">(Q2827003ATGSS001) Estar al Corriente de Pago con la Seguridad Social</NOMSERVEI>
+                <CODISERV>Q2827003ATGSS001</CODISERV>
+                <NORMALEGAL>Resolución del consejero de Educación y Formación Profesional de 13 de junio de 2023 por la que se convocan ayudas para gastos de funcionamiento y actividades de las asociaciones de familias de alumno</NORMALEGAL>
+                <ARTICULOS>4.6</ARTICULOS>
+                <CONSENTIMIENTO indice="noop">No oposició</CONSENTIMIENTO>
+                <ENLACENOR>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACENOR>
+                <LDECONSENTIMIENTO indice="1">Publicat</LDECONSENTIMIENTO>
+                <ENLACECON>https://intranet.caib.es/eboibfront/pdf/ca/2023/84/1139401</ENLACECON>
+            </ID3>
+        </LELSERVICIOS>
+        <LELSERVICIOSOCULEXCEL/>
+        <CONTCONSADJ>false</CONTCONSADJ>
+        <ELEMREPT>SVDCCAACPASWS01,ECOT103,Q2827003ATGSS001</ELEMREPT>
+        <VALIDAELEMREPT/>
+    </DATOS_SOLICITUD>
+</FORMULARIO>
