@@ -49,7 +49,7 @@
             </td>
           <td id="incidenciaTecnica_dataInici_columnvalueid">
     <form:errors path="incidenciaTecnica.dataInici" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="incidenciaTecnica_dataInici" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAINICI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#incidenciaTecnica_dataInici" path="incidenciaTecnica.dataInici" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAINICI)}" >
@@ -85,7 +85,7 @@
             </td>
           <td id="incidenciaTecnica_dataFi_columnvalueid">
     <form:errors path="incidenciaTecnica.dataFi" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="incidenciaTecnica_dataFi" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAFI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#incidenciaTecnica_dataFi" path="incidenciaTecnica.dataFi" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DATAFI)}" >

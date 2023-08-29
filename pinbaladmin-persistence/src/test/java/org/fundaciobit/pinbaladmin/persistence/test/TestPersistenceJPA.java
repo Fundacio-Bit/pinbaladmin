@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import org.fundaciobit.pinbaladmin.persistence.PinbalAdminJPADaoManagers;
 import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
+import org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager;
 
 /*
  * IMPORTANT - NO MODIFICAR - DERIVA AQUESTA CLASSE SI VOLS FER UN TEST 
@@ -40,7 +41,10 @@ public class TestPersistenceJPA {
             EntityTransaction tx = em.getTransaction();
 
             tx.begin();
-
+            
+            Long tramitID = 1118L;
+            new TestPinbalAdminFormulari().cridadaAPICrearSolicitutMadrid(tramitID);
+            
             // CADA TEST HA d'ANAR DINS D'UNA TRANSACCIO  !!!!!!!
 
             /*   EXEMPLE DE CRIDADA DIRECTE
@@ -59,21 +63,20 @@ public class TestPersistenceJPA {
             
             */
 
-            /*
-             EXEMPLE DE LLISTAT 
+//             EXEMPLE DE LLISTAT 
              
-            IPluginManager pluginMan = PinbalAdminDaoManager.getDaoManagers().getPluginManager();
+//            ITramitAPersAutManager tramitADao = PinbalAdminDaoManager.getDaoManagers().getTramitAPersAutManager();
+//            
+//            
+//            
+//            SelectTraduccio st = new SelectTraduccio(PluginFields.NOMID, "es");
+//            
+//            List<String> noms = pluginMan.executeQuery(st, null);
+//            
+//            for (String nom : noms) {
+//                System.out.println("NOM[" + nom + "]");
+//            }
             
-            
-            SelectTraduccio st = new SelectTraduccio(PluginFields.NOMID, "es");
-            
-            List<String> noms = pluginMan.executeQuery(st, null);
-            
-            for (String nom : noms) {
-                System.out.println("NOM[" + nom + "]");
-            }
-            
-            */
 
             /*  CONSULTA IDIOMES DISPONIBLES
              * IIdiomaManager idioma = PinbalAdminDaoManager.getDaoManagers().getIdiomaManager();
@@ -111,14 +114,14 @@ public class TestPersistenceJPA {
 
         prop.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         prop.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
-        prop.put("javax.persistence.jdbc.url", "jdbc:postgresql://localhost:5432/pinbaladmin");
-        prop.put("javax.persistence.jdbc.user", "pinbaladmin");
-        prop.put("javax.persistence.jdbc.password", "pinbaladmin");
+        prop.put("javax.persistence.jdbc.url", "jdbc:postgresql://localhost:5432/pinbaladmin2");
+        prop.put("javax.persistence.jdbc.user", "pinbaladmin2");
+        prop.put("javax.persistence.jdbc.password", "pinbaladmin2");
 
         prop.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        prop.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/pinbaladmin");
-        prop.put("hibernate.connection.username", "pinbaladmin");
-        prop.put("hibernate.connection.password", "pinbaladmin");
+        prop.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/pinbaladmin2");
+        prop.put("hibernate.connection.username", "pinbaladmin2");
+        prop.put("hibernate.connection.password", "pinbaladmin2");
 
         prop.put("hibernate.show_sql", "true");
 

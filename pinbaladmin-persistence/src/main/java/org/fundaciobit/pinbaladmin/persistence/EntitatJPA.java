@@ -162,6 +162,19 @@ public class EntitatJPA implements Entitat {
     }
 
 
+// EXP  Field:entitatid | Table: pad_organ | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entitat")
+    private Set<OrganJPA> organs = new HashSet<OrganJPA>(0);
+    public  Set<OrganJPA> getOrgans() {
+    return this.organs;
+  }
+
+    public void setOrgans(Set<OrganJPA> organs) {
+      this.organs = organs;
+    }
+
+
 // IMP Field:grupentitatid | Table: pad_grupentitat | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -219,6 +232,10 @@ public class EntitatJPA implements Entitat {
     if(!"DocumentEntitatJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentEntitats) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentEntitats())) ) {
       __tmp.setDocumentEntitats(DocumentEntitatJPA.copyJPA(__jpa.getDocumentEntitats(), __alreadyCopied,"EntitatJPA"));
+    }
+    if(!"OrganJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organs) || org.hibernate.Hibernate.isInitialized(__jpa.getOrgans())) ) {
+      __tmp.setOrgans(OrganJPA.copyJPA(__jpa.getOrgans(), __alreadyCopied,"EntitatJPA"));
     }
     if(!"AreaJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.areas) || org.hibernate.Hibernate.isInitialized(__jpa.getAreas())) ) {

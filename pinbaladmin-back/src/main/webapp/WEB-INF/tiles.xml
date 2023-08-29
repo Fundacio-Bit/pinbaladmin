@@ -271,7 +271,72 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/queesticfent.jsp" />
     </definition>
     
+    <definition name="tramitview" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/tramitView.jsp" />
+    </definition>
     
+    
+    <!-- =====   TRAMIT SISTRA  ===== -->
+    <definition name="tramitSistraListOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutList.jsp" />
+    </definition>
+    
+     <definition name="tramitAFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
+         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutForm.jsp" /> 
+    </definition>
+    
+    <definition name="tramitBFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitBDadesSoli.tramitBDadesSoli" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitBDadesSoliForm.jsp" />
+    </definition>
+
+    <definition name="tramitCFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitCDadesCesi.tramitCDadesCesi" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitCDadesCesiForm.jsp" />
+    </definition>
+    
+    <definition name="tramitDFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitDCteAut.tramitDCteAut" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitDCteAutForm.jsp" />
+    </definition>
+    
+    <definition name="tramitEFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitECteAud.tramitECteAud" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitECteAudForm.jsp" />
+    </definition>
+    
+    <definition name="tramitFFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitFCteTec.tramitFCteTec" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitFCteTecForm.jsp" />
+    </definition>
+    
+    <definition name="tramitGFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitGDadesTit.tramitGDadesTit" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitGDadesTitForm.jsp" />
+    </definition>
+    
+    <definition name="tramitHFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitHProc.tramitHProc" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitHProcForm.jsp" />
+    </definition>
+    
+    
+    <definition name="tramitIFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitIServ.tramitIServ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServForm.jsp" />
+    </definition>
+    <definition name="tramitIListOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServList.jsp" />
+    </definition>
+
+    <definition name="tramitJFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="tramitJConsent.tramitJConsent" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp" />
+    </definition>
+
+
     <definition name="postCreateIframeOperador" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
     <definition name="postCreateIframePublic" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
     
@@ -541,6 +606,16 @@
     </definition>
 
 
+    <definition name="organFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="organ.organ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organForm.jsp" />
+    </definition>
+    
+    <definition name="organListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organList.jsp" />
+    </definition>
+
+
     <definition name="serveiFormWebDB" extends="webdb">
         <put-attribute name="titol" value="servei.servei" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiForm.jsp" />
@@ -598,6 +673,106 @@
     
     <definition name="traduccioListWebDB" extends="webdb">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/traduccioList.jsp" />
+    </definition>
+
+
+    <definition name="tramitAPersAutFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutForm.jsp" />
+    </definition>
+    
+    <definition name="tramitAPersAutListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutList.jsp" />
+    </definition>
+
+
+    <definition name="tramitBDadesSoliFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitBDadesSoli.tramitBDadesSoli" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitBDadesSoliForm.jsp" />
+    </definition>
+    
+    <definition name="tramitBDadesSoliListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitBDadesSoliList.jsp" />
+    </definition>
+
+
+    <definition name="tramitCDadesCesiFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitCDadesCesi.tramitCDadesCesi" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitCDadesCesiForm.jsp" />
+    </definition>
+    
+    <definition name="tramitCDadesCesiListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitCDadesCesiList.jsp" />
+    </definition>
+
+
+    <definition name="tramitDCteAutFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitDCteAut.tramitDCteAut" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitDCteAutForm.jsp" />
+    </definition>
+    
+    <definition name="tramitDCteAutListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitDCteAutList.jsp" />
+    </definition>
+
+
+    <definition name="tramitECteAudFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitECteAud.tramitECteAud" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitECteAudForm.jsp" />
+    </definition>
+    
+    <definition name="tramitECteAudListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitECteAudList.jsp" />
+    </definition>
+
+
+    <definition name="tramitFCteTecFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitFCteTec.tramitFCteTec" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitFCteTecForm.jsp" />
+    </definition>
+    
+    <definition name="tramitFCteTecListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitFCteTecList.jsp" />
+    </definition>
+
+
+    <definition name="tramitGDadesTitFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitGDadesTit.tramitGDadesTit" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitGDadesTitForm.jsp" />
+    </definition>
+    
+    <definition name="tramitGDadesTitListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitGDadesTitList.jsp" />
+    </definition>
+
+
+    <definition name="tramitHProcFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitHProc.tramitHProc" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitHProcForm.jsp" />
+    </definition>
+    
+    <definition name="tramitHProcListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitHProcList.jsp" />
+    </definition>
+
+
+    <definition name="tramitIServFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitIServ.tramitIServ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServForm.jsp" />
+    </definition>
+    
+    <definition name="tramitIServListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServList.jsp" />
+    </definition>
+
+
+    <definition name="tramitJConsentFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="tramitJConsent.tramitJConsent" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp" />
+    </definition>
+    
+    <definition name="tramitJConsentListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitJConsentList.jsp" />
     </definition>
 
 <!-- ==== GENAPP MARK END -->

@@ -26,12 +26,23 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final IdiomaJPAManager pad_idioma;
    private final IncidenciaTecnicaJPAManager pad_incidenciatecnica;
    private final OperadorJPAManager pad_operador;
+   private final OrganJPAManager pad_organ;
    private final ServeiJPAManager pad_servei;
    private final SolicitudJPAManager pad_solicitud;
    private final SolicitudServeiJPAManager pad_solicitudservei;
    private final TipusTiquetJPAManager pad_tipustiquet;
    private final TiquetJPAManager pad_tiquet;
    private final TraduccioJPAManager pad_traduccio;
+   private final TramitAPersAutJPAManager pad_tramit_a_pers_aut;
+   private final TramitBDadesSoliJPAManager pad_tramit_b_dades_soli;
+   private final TramitCDadesCesiJPAManager pad_tramit_c_dades_cesi;
+   private final TramitDCteAutJPAManager pad_tramit_d_cte_aut;
+   private final TramitECteAudJPAManager pad_tramit_e_cte_aud;
+   private final TramitFCteTecJPAManager pad_tramit_f_cte_tec;
+   private final TramitGDadesTitJPAManager pad_tramit_g_dades_tit;
+   private final TramitHProcJPAManager pad_tramit_h_proc;
+   private final TramitIServJPAManager pad_tramit_i_serv;
+   private final TramitJConsentJPAManager pad_tramit_j_consent;
 
   public  PinbalAdminJPADaoManagers(EntityManager __em) {
     this.pad_area = new AreaJPAManager(__em);
@@ -54,12 +65,23 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_idioma = new IdiomaJPAManager(__em);
     this.pad_incidenciatecnica = new IncidenciaTecnicaJPAManager(__em);
     this.pad_operador = new OperadorJPAManager(__em);
+    this.pad_organ = new OrganJPAManager(__em);
     this.pad_servei = new ServeiJPAManager(__em);
     this.pad_solicitud = new SolicitudJPAManager(__em);
     this.pad_solicitudservei = new SolicitudServeiJPAManager(__em);
     this.pad_tipustiquet = new TipusTiquetJPAManager(__em);
     this.pad_tiquet = new TiquetJPAManager(__em);
     this.pad_traduccio = new TraduccioJPAManager(__em);
+    this.pad_tramit_a_pers_aut = new TramitAPersAutJPAManager(__em);
+    this.pad_tramit_b_dades_soli = new TramitBDadesSoliJPAManager(__em);
+    this.pad_tramit_c_dades_cesi = new TramitCDadesCesiJPAManager(__em);
+    this.pad_tramit_d_cte_aut = new TramitDCteAutJPAManager(__em);
+    this.pad_tramit_e_cte_aud = new TramitECteAudJPAManager(__em);
+    this.pad_tramit_f_cte_tec = new TramitFCteTecJPAManager(__em);
+    this.pad_tramit_g_dades_tit = new TramitGDadesTitJPAManager(__em);
+    this.pad_tramit_h_proc = new TramitHProcJPAManager(__em);
+    this.pad_tramit_i_serv = new TramitIServJPAManager(__em);
+    this.pad_tramit_j_consent = new TramitJConsentJPAManager(__em);
   }
 
     public IAreaManager getAreaManager() {
@@ -142,6 +164,10 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
         return this.pad_operador;
     };
 
+    public IOrganManager getOrganManager() {
+        return this.pad_organ;
+    };
+
     public IServeiManager getServeiManager() {
         return this.pad_servei;
     };
@@ -164,6 +190,46 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public ITraduccioManager getTraduccioManager() {
         return this.pad_traduccio;
+    };
+
+    public ITramitAPersAutManager getTramitAPersAutManager() {
+        return this.pad_tramit_a_pers_aut;
+    };
+
+    public ITramitBDadesSoliManager getTramitBDadesSoliManager() {
+        return this.pad_tramit_b_dades_soli;
+    };
+
+    public ITramitCDadesCesiManager getTramitCDadesCesiManager() {
+        return this.pad_tramit_c_dades_cesi;
+    };
+
+    public ITramitDCteAutManager getTramitDCteAutManager() {
+        return this.pad_tramit_d_cte_aut;
+    };
+
+    public ITramitECteAudManager getTramitECteAudManager() {
+        return this.pad_tramit_e_cte_aud;
+    };
+
+    public ITramitFCteTecManager getTramitFCteTecManager() {
+        return this.pad_tramit_f_cte_tec;
+    };
+
+    public ITramitGDadesTitManager getTramitGDadesTitManager() {
+        return this.pad_tramit_g_dades_tit;
+    };
+
+    public ITramitHProcManager getTramitHProcManager() {
+        return this.pad_tramit_h_proc;
+    };
+
+    public ITramitIServManager getTramitIServManager() {
+        return this.pad_tramit_i_serv;
+    };
+
+    public ITramitJConsentManager getTramitJConsentManager() {
+        return this.pad_tramit_j_consent;
     };
 
 

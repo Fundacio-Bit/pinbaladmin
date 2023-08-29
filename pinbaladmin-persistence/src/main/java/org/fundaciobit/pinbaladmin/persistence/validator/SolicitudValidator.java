@@ -6,6 +6,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
 
@@ -29,6 +30,7 @@ public class SolicitudValidator<I extends Solicitud>
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
     ,org.fundaciobit.pinbaladmin.model.dao.IDepartamentManager __departamentManager
+    ,org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
 
     // Valors Not Null
@@ -235,6 +237,20 @@ public class SolicitudValidator<I extends Solicitud>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("departament.departament"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("departament.departamentID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__departamentid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(ORGANID) == 0) {
+      java.lang.Long __organid = __target__.getOrganid();
+      if (__organid != null ) {
+        Long __count_ = null;
+        try { __count_ = __organManager.count(OrganFields.ORGANID.equal(__organid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(ORGANID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organ"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organid"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__organid)));
         }
       }
     }

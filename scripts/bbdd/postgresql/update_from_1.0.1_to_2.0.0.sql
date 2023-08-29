@@ -178,7 +178,7 @@ WHERE
  
  
 ---
----  Aplicar Select multiple en entrades COMBOBOX #123
+---  13/06/2023 - Aplicar Select multiple en entrades COMBOBOX #123
 ---
 
 ALTER TABLE pad_solicitud  DROP CONSTRAINT pad_solicitud_estatsoli_fk;
@@ -189,5 +189,3 @@ ALTER TABLE pad_servei DROP CONSTRAINT pad_servei_estatserv_fk;
 DROP TABLE pad_estatservei;
 DROP TABLE pad_estatsolicitud;
 DROP TABLE pad_estatsolicitudservei;
-
- 

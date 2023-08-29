@@ -89,17 +89,16 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
             solicitudServeiFilterForm.setDefaultOrderBy(new OrderBy[] {
                     new OrderBy(new SolicitudServeiQueryPath().SOLICITUD().DATAINICI().javaName, OrderType.DESC) });
 
-            final String[][] addFields = { { String.valueOf(SOLI_ENTITAT_LOCAL), "solicitud.entitatLocalID" },
+            final String[][] addFields = {
+                    { String.valueOf(SOLI_ENTITAT_LOCAL), "solicitud.entitatLocalID" },
                     { String.valueOf(SOLI_ENTITAT_ESTATAL), "solicitud.entitatEstatal" },
-
                     // { String.valueOf(SOLI_DATA), "solicitud.dataInici" },
                     { String.valueOf(SOLI_ESTAT), "solicitud.estatID" },
                     { String.valueOf(SOLI_NOM), "solicitud.procedimentNom" },
                     { String.valueOf(SOLI_CODI), "solicitud.procedimentCodi" },
-
-                    { String.valueOf(SERV_CODI), "servei.codi" }, { String.valueOf(SERV_NOM), "servei.nom" },
+                    { String.valueOf(SERV_CODI), "servei.codi" }, 
+                    { String.valueOf(SERV_NOM), "servei.nom" },
                     { String.valueOf(SERV_ESTAT), "estat.servei" },
-
                     { String.valueOf(SOLI_SERV_ESTAT), "estat.soliservei" },
 
             };

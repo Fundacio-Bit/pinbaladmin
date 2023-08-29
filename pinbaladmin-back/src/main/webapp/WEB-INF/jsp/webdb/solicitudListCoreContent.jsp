@@ -172,6 +172,14 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
+          <td>
+          <c:set var="tmp">${solicitud.organid}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfOrganForOrganid[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

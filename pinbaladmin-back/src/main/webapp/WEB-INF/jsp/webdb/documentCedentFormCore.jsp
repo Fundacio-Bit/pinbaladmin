@@ -80,7 +80,7 @@
             </td>
           <td id="documentCedent_dataCreacio_columnvalueid">
     <form:errors path="documentCedent.dataCreacio" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="documentCedent_dataCreacio" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,DocumentCedentFields.DATACREACIO)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#documentCedent_dataCreacio" path="documentCedent.dataCreacio" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,DocumentCedentFields.DATACREACIO)}" >

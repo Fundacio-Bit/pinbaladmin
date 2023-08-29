@@ -93,6 +93,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.OPERADOR)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.OPERADOR)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ORGANID)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

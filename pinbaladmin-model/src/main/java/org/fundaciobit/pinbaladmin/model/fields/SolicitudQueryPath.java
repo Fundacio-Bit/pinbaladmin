@@ -119,6 +119,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.OPERADOR);
   }
 
+  public LongField ORGANID() {
+    return new LongField(getQueryPath(), SolicitudFields.ORGANID);
+  }
+
 
 
   @Override
@@ -190,6 +194,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "solicitudXml" + ".";
+      }
+    });
+  }
+
+  public OrganQueryPath ORGAN() {
+    return new OrganQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "organ" + ".";
       }
     });
   }

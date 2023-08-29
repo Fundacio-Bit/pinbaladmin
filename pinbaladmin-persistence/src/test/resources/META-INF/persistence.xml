@@ -27,6 +27,7 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.IdiomaJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.OperadorJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.OrganJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.ServeiJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA</class>
@@ -34,6 +35,16 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.TiquetJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.TraduccioJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.TraduccioMapJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitECteAudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitGDadesTitJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitIServJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA</class>
 
         <!-- Desactivar cache -->
         <shared-cache-mode>NONE</shared-cache-mode>

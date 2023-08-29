@@ -67,7 +67,7 @@
             </td>
           <td id="tiquet_dataAlta_columnvalueid">
     <form:errors path="tiquet.dataAlta" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="tiquet_dataAlta" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAALTA)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#tiquet_dataAlta" path="tiquet.dataAlta" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAALTA)}" >
@@ -183,7 +183,7 @@
             </td>
           <td id="tiquet_dataInici_columnvalueid">
     <form:errors path="tiquet.dataInici" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="tiquet_dataInici" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAINICI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#tiquet_dataInici" path="tiquet.dataInici" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAINICI)}" >
@@ -219,7 +219,7 @@
             </td>
           <td id="tiquet_dataIncidencia_columnvalueid">
     <form:errors path="tiquet.dataIncidencia" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="tiquet_dataIncidencia" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAINCIDENCIA)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#tiquet_dataIncidencia" path="tiquet.dataIncidencia" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAINCIDENCIA)}" >
@@ -273,7 +273,7 @@
             </td>
           <td id="tiquet_datafi_columnvalueid">
     <form:errors path="tiquet.datafi" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="tiquet_datafi" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAFI)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#tiquet_datafi" path="tiquet.datafi" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,TiquetFields.DATAFI)}" >

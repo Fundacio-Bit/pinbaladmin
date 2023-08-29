@@ -158,7 +158,7 @@
             </td>
           <td id="documentEntitat_dataAlta_columnvalueid">
     <form:errors path="documentEntitat.dataAlta" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="documentEntitat_dataAlta" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,DocumentEntitatFields.DATAALTA)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#documentEntitat_dataAlta" path="documentEntitat.dataAlta" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,DocumentEntitatFields.DATAALTA)}" >

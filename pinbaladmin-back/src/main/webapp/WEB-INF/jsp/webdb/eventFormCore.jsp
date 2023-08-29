@@ -94,7 +94,7 @@
             </td>
           <td id="event_dataEvent_columnvalueid">
     <form:errors path="event.dataEvent" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="event_dataEvent" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.DATAEVENT)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#event_dataEvent" path="event.dataEvent" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,EventFields.DATAEVENT)}" >

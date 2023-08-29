@@ -223,9 +223,9 @@ public class BasePreparer implements ViewPreparer, Constants {
 
                 String user = httpRequest.getRemoteUser();
 
-                log.info("BasePreparer => httpRequest:  " + httpRequest);
-                log.info("BasePreparer => httpRequest.getRemoteUser():  " + user);
-                log.info("BasePreparer => eventLogicaEjb:  " + eventLogicaEjb);
+//                log.info("BasePreparer => httpRequest:  " + httpRequest);
+//                log.info("BasePreparer => httpRequest.getRemoteUser():  " + user);
+//                log.info("BasePreparer => eventLogicaEjb:  " + eventLogicaEjb);
 
                 Where wNoLlegit = EventFields.NOLLEGIT.equal(Boolean.TRUE);
                 

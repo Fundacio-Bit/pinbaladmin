@@ -14,7 +14,7 @@
             </td>
           <td id="email_dataEnviament_columnvalueid">
     <form:errors path="email.dataEnviament" cssClass="errorField alert alert-danger" />
-            <div class="form-group">
+            <div class="form-group"  style="margin-bottom: 0px;" >
                 <div class="input-group date" id="email_dataEnviament" data-target-input="nearest">
                       <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EmailFields.DATAENVIAMENT)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#email_dataEnviament" path="email.dataEnviament" />
                     <c:if test="${!gen:contains(__theForm.readOnlyFields ,EmailFields.DATAENVIAMENT)}" >

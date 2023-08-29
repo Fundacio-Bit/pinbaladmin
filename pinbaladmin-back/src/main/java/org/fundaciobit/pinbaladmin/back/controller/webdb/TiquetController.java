@@ -818,7 +818,7 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getSessionAttributeFilterForm() {
-    return "TiquetWebDB_FilterForm";
+    return "Tiquet_FilterForm_" + this.getClass().getName();
   }
 
 

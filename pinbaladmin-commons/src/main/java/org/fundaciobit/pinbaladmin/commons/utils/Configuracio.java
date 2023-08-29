@@ -204,6 +204,11 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
     }
 
+    
+    public static String getTemplateTramitSistraXml() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "template_tramit_sistra_xml");
+    }
+    
     public static String getCAIDSeleniumUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "caidseleniumurl");
     }

@@ -633,7 +633,7 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getSessionAttributeFilterForm() {
-    return "DocumentWebDB_FilterForm";
+    return "Document_FilterForm_" + this.getClass().getName();
   }
 
 

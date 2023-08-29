@@ -252,6 +252,19 @@ public class FitxerJPA implements Fitxer {
     }
 
 
+// EXP  Field:adjuntid | Table: pad_tramit_j_consent | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "adjuntID")
+    private Set<TramitJConsentJPA> tramitJConsents = new HashSet<TramitJConsentJPA>(0);
+    public  Set<TramitJConsentJPA> getTramitJConsents() {
+    return this.tramitJConsents;
+  }
+
+    public void setTramitJConsents(Set<TramitJConsentJPA> tramitJConsents) {
+      this.tramitJConsents = tramitJConsents;
+    }
+
+
 
   @javax.persistence.Transient
   javax.activation.DataHandler data;
@@ -376,6 +389,10 @@ public class FitxerJPA implements Fitxer {
     if(!"DocumentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.document_fitxeroriginalids) || org.hibernate.Hibernate.isInitialized(__jpa.getDocument_fitxeroriginalids())) ) {
       __tmp.setDocument_fitxeroriginalids(DocumentJPA.copyJPA(__jpa.getDocument_fitxeroriginalids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"TramitJConsentJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitJConsents) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitJConsents())) ) {
+      __tmp.setTramitJConsents(TramitJConsentJPA.copyJPA(__jpa.getTramitJConsents(), __alreadyCopied,"FitxerJPA"));
     }
     // Copia de beans complexes (IMP)
 

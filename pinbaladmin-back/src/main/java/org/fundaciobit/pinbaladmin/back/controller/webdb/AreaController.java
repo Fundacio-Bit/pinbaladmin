@@ -654,7 +654,7 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getSessionAttributeFilterForm() {
-    return "AreaWebDB_FilterForm";
+    return "Area_FilterForm_" + this.getClass().getName();
   }
 
 

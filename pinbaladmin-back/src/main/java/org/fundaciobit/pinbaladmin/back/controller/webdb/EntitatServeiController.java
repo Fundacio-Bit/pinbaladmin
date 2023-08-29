@@ -589,7 +589,7 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getSessionAttributeFilterForm() {
-    return "EntitatServeiWebDB_FilterForm";
+    return "EntitatServei_FilterForm_" + this.getClass().getName();
   }
 
 

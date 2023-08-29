@@ -39,6 +39,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField NIF = new StringField(_TABLE_MODEL, "nif", "nif");
 	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
 	 public static final StringField OPERADOR = new StringField(_TABLE_MODEL, "operador", "operador");
+	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -68,7 +69,8 @@ public interface SolicitudFields extends java.io.Serializable {
     DIR3,
     NIF,
     CREADOR,
-    OPERADOR
+    OPERADOR,
+    ORGANID
   };
 
 
