@@ -23,11 +23,22 @@ public interface IPinbalAdminDaoManagers {
 	public IIdiomaManager getIdiomaManager();
 	public IIncidenciaTecnicaManager getIncidenciaTecnicaManager();
 	public IOperadorManager getOperadorManager();
+	public IOrganManager getOrganManager();
 	public IServeiManager getServeiManager();
 	public ISolicitudManager getSolicitudManager();
 	public ISolicitudServeiManager getSolicitudServeiManager();
 	public ITipusTiquetManager getTipusTiquetManager();
 	public ITiquetManager getTiquetManager();
 	public ITraduccioManager getTraduccioManager();
+	public ITramitAPersAutManager getTramitAPersAutManager();
+	public ITramitBDadesSoliManager getTramitBDadesSoliManager();
+	public ITramitCDadesCesiManager getTramitCDadesCesiManager();
+	public ITramitDCteAutManager getTramitDCteAutManager();
+	public ITramitECteAudManager getTramitECteAudManager();
+	public ITramitFCteTecManager getTramitFCteTecManager();
+	public ITramitGDadesTitManager getTramitGDadesTitManager();
+	public ITramitHProcManager getTramitHProcManager();
+	public ITramitIServManager getTramitIServManager();
+	public ITramitJConsentManager getTramitJConsentManager();
 
 }

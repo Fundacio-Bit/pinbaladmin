@@ -1500,6 +1500,12 @@
               "table": "pad_documententitat",
               "field": "entitatid",
               "type": 0
+            },
+            {
+              "name": "pad_organ_entitat_fk",
+              "table": "pad_organ",
+              "field": "entitatid",
+              "type": 0
             }
           ]
         },
@@ -2370,6 +2376,12 @@
               "table": "pad_tiquet",
               "field": "adjunt2id",
               "type": 0
+            },
+            {
+              "name": "pad_tramitj_fitxer_adj_fk",
+              "table": "pad_tramit_j_consent",
+              "field": "adjuntid",
+              "type": 0
             }
           ]
         },
@@ -3201,6 +3213,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "defaultValue": "1",
           "minAllowedValue": "1,2,3,4",
           "filter": true,
           "orderBy": 0,
@@ -3364,7 +3377,7 @@
           "isAutoIncrement": false,
           "sqlName": "creador",
           "sqlType": 12,
-          "size": 255,
+          "size": 100,
           "digits": 0,
           "isNotNullable": true,
           "labels": {
@@ -3535,6 +3548,178 @@
             "webtype": 1
           },
           "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_organ",
+      "nameJava": "Organ",
+      "shortName": "Organ",
+      "labels": {
+        "ca": "Organ",
+        "es": "Órgano"
+      },
+      "labelsPlural": {
+        "ca": "Organs",
+        "es": "Órganos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_organ_pk",
+          "index": "pad_organ_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "organid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "organid",
+            "es": "organid"
+          },
+          "javaName": "organid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_organ_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_organ_fk",
+              "table": "pad_solicitud",
+              "field": "organid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "nom",
+            "es": "nom"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dir3",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "dir3",
+            "es": "dir3"
+          },
+          "javaName": "dir3",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dir3pare",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "dir3pare",
+            "es": "dir3pare"
+          },
+          "javaName": "dir3pare",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_organ_entitatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "entitatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "entitatid",
+            "es": "entitatid"
+          },
+          "javaName": "entitatid",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_organ_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_organ_entitat_fk",
+              "table": "pad_entitat",
+              "field": "entitatid",
+              "type": 1
+            }
+          ]
         }
       ]
     },
@@ -4596,6 +4781,45 @@
             "webtype": 16
           },
           "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_organid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "organid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "organid",
+            "es": "organid"
+          },
+          "javaName": "organid",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          ]
         }
       ]
     },
@@ -5729,6 +5953,2519 @@
           "foreignKeys": []
         }
       ]
+    },
+    {
+      "name": "pad_tramit_a_pers_aut",
+      "nameJava": "TramitAPersAut",
+      "shortName": "tramita",
+      "labels": {
+        "ca": "Tramit A Pers Aut_ca",
+        "es": "Tramit A Pers Aut_es"
+      },
+      "labelsPlural": {
+        "ca": "TramitsA: Persona Autorizada",
+        "es": "TramitesA: Persona Autorizada"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_a_pers_aut_pk",
+          "index": "pad_tramit_a_pers_aut_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "persautid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "persautid",
+            "es": "persautid"
+          },
+          "javaName": "persautid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_a_pers_aut_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "unique": "pad_tramita_tramitid_uk",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitb_tramita_fk",
+              "table": "pad_tramit_b_dades_soli",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitc_tramita_fk",
+              "table": "pad_tramit_c_dades_cesi",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitd_tramita_fk",
+              "table": "pad_tramit_d_cte_aut",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramite_tramita_fk",
+              "table": "pad_tramit_e_cte_aud",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitf_tramita_fk",
+              "table": "pad_tramit_f_cte_tec",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitg_tramita_fk",
+              "table": "pad_tramit_g_dades_tit",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramith_tramita_fk",
+              "table": "pad_tramit_h_proc",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramiti_tramita_fk",
+              "table": "pad_tramit_i_serv",
+              "field": "tramitid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitj_tramita_fk",
+              "table": "pad_tramit_j_consent",
+              "field": "tramitid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datatramit",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "datatramit",
+            "es": "datatramit"
+          },
+          "javaName": "datatramit",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF/NIE",
+            "es": "NIF/NIE"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Correu electrònic",
+            "es": "Correo electrónico"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Telèfon de contacte",
+            "es": "Teléfono de contacto"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Primer Llinatge",
+            "es": "Primer Apellido"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Segon Llinatge",
+            "es": "Segundo Apellido"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_b_dades_soli",
+      "nameJava": "TramitBDadesSoli",
+      "shortName": "tramitb",
+      "labels": {
+        "ca": "Tramit B Dades Soli_ca",
+        "es": "Tramit B Dades Soli_es"
+      },
+      "labelsPlural": {
+        "ca": "TramitsB: Dades Solicitant",
+        "es": "TramitesB: Dades Solicitant"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_b_dades_soli_pk",
+          "index": "pad_tramit_b_dades_soli_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "dadessoliid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "dadessoliid",
+            "es": "dadessoliid"
+          },
+          "javaName": "dadessoliid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_b_dades_soli_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitb_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitb_trimita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitb_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipussolicitud",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Tipus de sol·licitud",
+            "es": "Tipo de solicitud"
+          },
+          "javaName": "tipussolicitud",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "0,1,2",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "entorn",
+          "sqlType": 12,
+          "size": 20,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Entorn",
+            "es": "Entorno"
+          },
+          "javaName": "entorn",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "minAllowedValue": "pre,pro",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_c_dades_cesi",
+      "nameJava": "TramitCDadesCesi",
+      "shortName": "tramitc",
+      "labels": {
+        "ca": "Tramit C Dades Cesi_ca",
+        "es": "Tramit C Dades Cesi_es"
+      },
+      "labelsPlural": {
+        "ca": "TramitsC: Dades Cesionari",
+        "es": "TramitesC: Dades Cesionari"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_c_dades_cesi_pk",
+          "index": "pad_tramit_c_dades_cesi_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "dadescesiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "dadescesiid",
+            "es": "dadescesiid"
+          },
+          "javaName": "dadescesiid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_c_dades_cesi_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitc_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitc_trimita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitc_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "denominacio",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Denominació",
+            "es": "Denominación"
+          },
+          "javaName": "denominacio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "denom1,denom2,denom3",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF",
+            "es": "NIF"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsable",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Unitat responsable",
+            "es": "Unidad responsable"
+          },
+          "javaName": "responsable",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dir3responsable",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi DIR3 de la Unitat Responsable",
+            "es": "Código DIR3 de la Unidad Responsable"
+          },
+          "javaName": "dir3responsable",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dir3arrel",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi DIR3 de l\u0027Organisme Arrel",
+            "es": "Código DIR3 del Organismo Raiz"
+          },
+          "javaName": "dir3arrel",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "direccio",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Adreça",
+            "es": "Dirección"
+          },
+          "javaName": "direccio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codipostal",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi Postal",
+            "es": "Código Postal"
+          },
+          "javaName": "codipostal",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "municipi",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Municipi",
+            "es": "Municipio"
+          },
+          "javaName": "municipi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "palma,inca,manacor",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_d_cte_aut",
+      "nameJava": "TramitDCteAut",
+      "shortName": "tramitd",
+      "labels": {
+        "ca": "Tramit D: Cte Aut",
+        "es": "Tramite D: Cte Aut"
+      },
+      "labelsPlural": {
+        "ca": "Tramits D: Cte Aut",
+        "es": "Tramites D: Cte Aut"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_d_cte_aut_pk",
+          "index": "pad_tramit_d_cte_aut_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "cteautid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "cteautid",
+            "es": "cteautid"
+          },
+          "javaName": "cteautid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_d_cte_aut_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitd_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitd_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitd_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF/NIE",
+            "es": "NIF/NIE"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Primer Llinatge",
+            "es": "Primer Apellido"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Segon Llinatge",
+            "es": "Segundo Apellido"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "carrec",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Càrrec",
+            "es": "Cargo"
+          },
+          "javaName": "carrec",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Telèfon",
+            "es": "Teléfono"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Correu electrònic",
+            "es": "Correo electrónico"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_e_cte_aud",
+      "nameJava": "TramitECteAud",
+      "shortName": "tramite",
+      "labels": {
+        "ca": "Tramit E: Cte Aud",
+        "es": "Tramite E: Cte Aud"
+      },
+      "labelsPlural": {
+        "ca": "Tramits E: Cte Aud",
+        "es": "Tramites E: Cte Aud"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_e_cte_aud_pk",
+          "index": "pad_tramit_e_cte_aud_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "cteaudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "cteaudid",
+            "es": "cteaudid"
+          },
+          "javaName": "cteaudid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_e_cte_aud_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramite_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramite_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramite_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF/NIE",
+            "es": "NIF/NIE"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Primer Llinatge",
+            "es": "Primer Apellido"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Segon Llinatge",
+            "es": "Segundo Apellido"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "carrec",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Càrrec",
+            "es": "Cargo"
+          },
+          "javaName": "carrec",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Telèfon",
+            "es": "Teléfono"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Correu Electrònic",
+            "es": "Correo Electrónico"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_f_cte_tec",
+      "nameJava": "TramitFCteTec",
+      "shortName": "tramitf",
+      "labels": {
+        "ca": "Tramit F: Cte Tec",
+        "es": "Tramite F: Cte Tec"
+      },
+      "labelsPlural": {
+        "ca": "Tramits F: Cte Tec",
+        "es": "Tramites F: Cte Tec"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_f_cte_tec_pk",
+          "index": "pad_tramit_f_cte_tec_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "ctetecid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "ctetecid",
+            "es": "ctetecid"
+          },
+          "javaName": "ctetecid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_f_cte_tec_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitf_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitf_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitf_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF/NIE",
+            "es": "NIF/NIE"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Primer Llinatge",
+            "es": "Primer Apellido"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Segon Llinatge",
+            "es": "Segundo Apellido"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "carrec",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Càrrec",
+            "es": "Cargo"
+          },
+          "javaName": "carrec",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Telèfon",
+            "es": "Teléfono"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Correu electrònic",
+            "es": "Correo electrónico"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_g_dades_tit",
+      "nameJava": "TramitGDadesTit",
+      "shortName": "tramitg",
+      "labels": {
+        "ca": "Tramit G: Dades Tit",
+        "es": "Tramite G: Dades Tit"
+      },
+      "labelsPlural": {
+        "ca": "Tramits G: Dades Tit",
+        "es": "Tramites G: Dades Tit"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_g_dades_tit_pk",
+          "index": "pad_tramit_g_dades_tit_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "dadestitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "dadestitid",
+            "es": "dadestitid"
+          },
+          "javaName": "dadestitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_g_dades_tit_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitg_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitg_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitg_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF/NIE",
+            "es": "NIF/NIE"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Primer Llinatge",
+            "es": "Primer Apellido"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 40,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Segon Llinatge",
+            "es": "Segundo Apellido"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "carrec",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Càrrec",
+            "es": "Cargo"
+          },
+          "javaName": "carrec",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_h_proc",
+      "nameJava": "TramitHProc",
+      "shortName": "tramith",
+      "labels": {
+        "ca": "Tramit H: Proc",
+        "es": "Tramite H: Proc"
+      },
+      "labelsPlural": {
+        "ca": "Tramits H: Proc",
+        "es": "Tramites H: Proc"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_h_proc_pk",
+          "index": "pad_tramit_h_proc_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "procid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "procid",
+            "es": "procid"
+          },
+          "javaName": "procid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_h_proc_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramith_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramith_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramith_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipus",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Tipus de procediment",
+            "es": "Tipo de procedimiento"
+          },
+          "javaName": "tipus",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3,4",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom del procediment",
+            "es": "Nombre de procedimiento"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codi",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi del procediment",
+            "es": "Código del procedimiento"
+          },
+          "javaName": "codi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlseu",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Adreça fitxa Seu Electrònica",
+            "es": "Dirección ficha Seu Electrónica"
+          },
+          "javaName": "urlseu",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caducitat",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Caducitat",
+            "es": "Caducidad"
+          },
+          "javaName": "caducitat",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "caducitatdata",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data de caducitat",
+            "es": "Fecha de caducidad"
+          },
+          "javaName": "caducitatdata",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "descripcio",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Descripció",
+            "es": "Descripción"
+          },
+          "javaName": "descripcio",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "peticionsaldia",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Peticions estimades al dia",
+            "es": "Peticiones estimadas al día"
+          },
+          "javaName": "peticionsaldia",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "peticionsalmes",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Volum estimat de peticions al mes",
+            "es": "Volumen estimado de peticiones al mes"
+          },
+          "javaName": "peticionsalmes",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "periodico",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Periòdic",
+            "es": "Periódico"
+          },
+          "javaName": "periodico",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "automatizado",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Automatizat",
+            "es": "Automatizado"
+          },
+          "javaName": "automatizado",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_i_serv",
+      "nameJava": "TramitIServ",
+      "shortName": "tramiti",
+      "labels": {
+        "ca": "Tramit I: Serv",
+        "es": "Tramite I: Serv"
+      },
+      "labelsPlural": {
+        "ca": "Tramits I: Serv",
+        "es": "Tramites I: Serv"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_i_serv_pk",
+          "index": "pad_tramit_i_serv_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "servid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "servid",
+            "es": "servid"
+          },
+          "javaName": "servid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_i_serv_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramiti_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramiti_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramiti_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom del servei",
+            "es": "Nombre del servicio"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "Procediment1,Procediment2",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codi",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi del Servei",
+            "es": "Código del Servicio"
+          },
+          "javaName": "codi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "norma",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Norma legal",
+            "es": "Norma legal"
+          },
+          "javaName": "norma",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Articles",
+            "es": "Artículos"
+          },
+          "javaName": "articles",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentiment",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Consentiment",
+            "es": "Consentimiento"
+          },
+          "javaName": "consentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "NoOposició,Llei",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlnorma",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Enllaç norma legal",
+            "es": "Enlace norma legal"
+          },
+          "javaName": "urlnorma",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentimentpublicat",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Consentiment publicat o adjunt",
+            "es": "Consentimiento publicado o adjunto"
+          },
+          "javaName": "consentimentpublicat",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "Publicat,Adjunt",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlconsentiment",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Enllaç Consentiment",
+            "es": "Enlace Consentimiento"
+          },
+          "javaName": "urlconsentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_tramit_j_consent",
+      "nameJava": "TramitJConsent",
+      "shortName": "tramitj",
+      "labels": {
+        "ca": "Tramit J: Consentiment",
+        "es": "Tramite J: Consentimiento"
+      },
+      "labelsPlural": {
+        "ca": "Tramits J: Consentiments",
+        "es": "Tramites J: Consentimientos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_tramit_j_consent_pk",
+          "index": "pad_tramit_j_consent_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "consentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "consentid",
+            "es": "consentid"
+          },
+          "javaName": "consentid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_tramit_j_consent_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramitj_tramitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "tramitid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "tramitid",
+            "es": "tramitid"
+          },
+          "javaName": "tramitid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitj_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitj_tramita_fk",
+              "table": "pad_tramit_a_pers_aut",
+              "field": "tramitid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_tramitj_adjuntid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "adjuntid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Consentiment",
+            "es": "Consentimiento"
+          },
+          "javaName": "adjuntID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitj_fitxer_adj_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitj_fitxer_adj_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        }
+      ]
     }
   ],
   "languages": [
@@ -5736,5 +8473,6 @@
     "es"
   ],
   "generateBack": true,
+  "generateFront": false,
   "generateWS": false
 }

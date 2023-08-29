@@ -147,6 +147,13 @@ ${entityname}
         </span></a>
         </li>
 
+    <%-- Organ --%>
+       <fmt:message var="entityname" key="organ.organ.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/organ/list/1"/>" ><span style="${(fn:contains(url, 'organ/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
     <%-- Servei --%>
        <fmt:message var="entityname" key="servei.servei.plural"/>
         <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/servei/list/1"/>" ><span style="${(fn:contains(url, 'servei/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
@@ -185,6 +192,76 @@ ${entityname}
     <%-- Traduccio --%>
        <fmt:message var="entityname" key="traduccio.traduccio.plural"/>
         <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/traduccio/list/1"/>" ><span style="${(fn:contains(url, 'traduccio/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitAPersAut --%>
+       <fmt:message var="entityname" key="tramitAPersAut.tramitAPersAut.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitAPersAut/list/1"/>" ><span style="${(fn:contains(url, 'tramitAPersAut/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitBDadesSoli --%>
+       <fmt:message var="entityname" key="tramitBDadesSoli.tramitBDadesSoli.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitBDadesSoli/list/1"/>" ><span style="${(fn:contains(url, 'tramitBDadesSoli/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitCDadesCesi --%>
+       <fmt:message var="entityname" key="tramitCDadesCesi.tramitCDadesCesi.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitCDadesCesi/list/1"/>" ><span style="${(fn:contains(url, 'tramitCDadesCesi/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitDCteAut --%>
+       <fmt:message var="entityname" key="tramitDCteAut.tramitDCteAut.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitDCteAut/list/1"/>" ><span style="${(fn:contains(url, 'tramitDCteAut/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitECteAud --%>
+       <fmt:message var="entityname" key="tramitECteAud.tramitECteAud.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitECteAud/list/1"/>" ><span style="${(fn:contains(url, 'tramitECteAud/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitFCteTec --%>
+       <fmt:message var="entityname" key="tramitFCteTec.tramitFCteTec.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitFCteTec/list/1"/>" ><span style="${(fn:contains(url, 'tramitFCteTec/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitGDadesTit --%>
+       <fmt:message var="entityname" key="tramitGDadesTit.tramitGDadesTit.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitGDadesTit/list/1"/>" ><span style="${(fn:contains(url, 'tramitGDadesTit/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitHProc --%>
+       <fmt:message var="entityname" key="tramitHProc.tramitHProc.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitHProc/list/1"/>" ><span style="${(fn:contains(url, 'tramitHProc/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitIServ --%>
+       <fmt:message var="entityname" key="tramitIServ.tramitIServ.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitIServ/list/1"/>" ><span style="${(fn:contains(url, 'tramitIServ/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- TramitJConsent --%>
+       <fmt:message var="entityname" key="tramitJConsent.tramitJConsent.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/tramitJConsent/list/1"/>" ><span style="${(fn:contains(url, 'tramitJConsent/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
 ${entityname}
         </span></a>
         </li>

@@ -165,6 +165,15 @@
 
 
 
+        <hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+
+        <li style="list-style-type: disc; list-style-position: inside;"><a
+            href="<c:url value="/operador/tramita/list"/>"> <span
+                style="${(fn:contains(url, '/operador/tramit'))? "font-weight:bold;" : ""}">Tramit Sistra</span>
+        </a></li>
+
+
 
 		<%--
     <hr  style="margin-top: 6px;  margin-bottom: 6px;" />
