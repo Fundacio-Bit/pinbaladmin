@@ -86,3 +86,5 @@ hs_err_pid*
 /tramit sistra dades/Libro2.xlsx
 /tramit sistra dades/formulario.xml
 /tramit sistra dades/~$DatosSistraSQL.xlsx
+/ejb.bat
+/cmd_compile.bat
