@@ -127,7 +127,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
 
         if (solicitudFilterForm.isNou()) {
 
-            solicitudFilterForm.getHiddenFields().remove(DEPARTAMENTID);
+            solicitudFilterForm.getHiddenFields().remove(ORGANID);
 
             if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
                 //solicitudFilterForm.setEstatIDDesde(-1L);

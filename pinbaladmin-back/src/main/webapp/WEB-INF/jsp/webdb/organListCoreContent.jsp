@@ -52,6 +52,11 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,OrganFields.CIF)}">
+          <td>
+          ${organ.cif}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

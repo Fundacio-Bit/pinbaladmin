@@ -17,6 +17,9 @@ public interface Organ extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getEntitatid();
 	public void setEntitatid(java.lang.Long _entitatid_);
 
+	public java.lang.String getCif();
+	public void setCif(java.lang.String _cif_);
+
 
 
   // ======================================

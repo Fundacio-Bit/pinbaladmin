@@ -45,6 +45,7 @@ import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
@@ -52,6 +53,7 @@ import org.fundaciobit.pinbaladmin.model.fields.DepartamentQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -109,6 +111,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.AreaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.AreaService areaEjb;
+
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OrganService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.OrganService organEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DepartamentService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.DepartamentService departamentEjb;
@@ -462,9 +467,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     // groupList.remove(ENTITATLOCALID);
 
                 } else {
-                    // hiddenFields.remove(ENTITATLOCALID);
-                    // hiddenFields.remove(DEPARTAMENTID);
-                    // hiddenFields.remove(AREAID);
+                     hiddenFields.remove(ORGANID);
+                  //   hiddenFields.remove(DEPARTAMENTID);
+                  //   hiddenFields.remove(NOTES);
                     filterList.remove(ENTITATESTATAL);
                     groupList.remove(ENTITATESTATAL);
 
@@ -544,8 +549,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 // solicitudFilterForm.getFilterByFields().remove(AREAID);
                 // solicitudFilterForm.getGroupByFields().remove(AREAID);
             }
-
         }
+        
 
         String departamentIDDesde = request.getParameter("departamentIDDesde");
         String departamentIDFins = request.getParameter("departamentIDFins");
@@ -1365,6 +1370,41 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
     }
 
+    @Override
+    public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        
+        log.info("where: " + where);
+//        log.info("where.toSQL: " + where.toSQL());
+        
+        List<Organ> organs = organEjb.select(where);
+
+        for (Organ organ : organs) {
+
+            Organ aux = organ;
+            List<String> jerarquia = new ArrayList<String>();
+            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
+            jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+
+            if (where != null) {
+                while (aux.getCif() == null && aux.getDir3pare() != null) {
+                    List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+                    aux = listAux.get(0);
+                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
+                    jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+                }
+            }
+            String j = String.join(" - ", jerarquia);
+
+            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), j));
+        }
+
+        return __tmp;
+        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
+    }    
+    
     public static final Map<Long, String> ESTATS_SOLICITUD = new HashMap<Long, String>();
 
     static {

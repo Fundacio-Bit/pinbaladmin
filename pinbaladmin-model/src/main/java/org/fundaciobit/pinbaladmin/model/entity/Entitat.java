@@ -20,6 +20,9 @@ public interface Entitat extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public boolean isConvenipmsbae();
 	public void setConvenipmsbae(boolean _convenipmsbae_);
 
+	public java.lang.String getDir3();
+	public void setDir3(java.lang.String _dir3_);
+
 
 
   // ======================================

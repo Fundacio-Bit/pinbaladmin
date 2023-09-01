@@ -98,6 +98,17 @@ public class OrganFilterForm extends PinbalAdminBaseFilterForm implements OrganF
   }
 
 
+  private java.lang.String cif;
+
+  public java.lang.String getCif() {
+    return this.cif;
+  }
+
+  public void setCif(java.lang.String cif) {
+    this.cif = cif;
+  }
+
+
   public OrganFilterForm() {
   }
   
@@ -110,6 +121,7 @@ public class OrganFilterForm extends PinbalAdminBaseFilterForm implements OrganF
     this.dir3pare = __toClone.dir3pare;
     this.entitatidDesde = __toClone.entitatidDesde;
     this.entitatidFins = __toClone.entitatidFins;
+    this.cif = __toClone.cif;
     this.mapOfEntitatForEntitatid = __toClone.mapOfEntitatForEntitatid;
   }
   

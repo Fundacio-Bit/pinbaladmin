@@ -47,6 +47,9 @@ public class EntitatJPA implements Entitat {
     @Column(name="convenipmsbae",nullable = false,length = 1)
     boolean convenipmsbae = false;
 
+    @Column(name="dir3",length = 30)
+    java.lang.String dir3;
+
 
 
   /** Constructor Buit */
@@ -54,18 +57,28 @@ public class EntitatJPA implements Entitat {
   }
 
   /** Constructor amb tots els camps  */
-  public EntitatJPA(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
+  public EntitatJPA(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3) {
     this.entitatID=entitatID;
     this.nom=nom;
     this.personaContacte=personaContacte;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
     this.convenipmsbae=convenipmsbae;
+    this.dir3=dir3;
 }
   /** Constructor sense valors autoincrementals */
-  public EntitatJPA(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
+  public EntitatJPA(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3) {
     this.nom=nom;
     this.personaContacte=personaContacte;
+    this.CIF=CIF;
+    this.grupEntitatID=grupEntitatID;
+    this.convenipmsbae=convenipmsbae;
+    this.dir3=dir3;
+}
+  /** Constructor dels valors Not Null */
+  public EntitatJPA(long entitatID , java.lang.String nom , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
+    this.entitatID=entitatID;
+    this.nom=nom;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
     this.convenipmsbae=convenipmsbae;
@@ -77,6 +90,7 @@ public class EntitatJPA implements Entitat {
     this.setCIF(__bean.getCIF());
     this.setGrupEntitatID(__bean.getGrupEntitatID());
     this.setConvenipmsbae(__bean.isConvenipmsbae());
+    this.setDir3(__bean.getDir3());
 	}
 
 	public long getEntitatID() {
@@ -119,6 +133,13 @@ public class EntitatJPA implements Entitat {
 	};
 	public void setConvenipmsbae(boolean _convenipmsbae_) {
 		this.convenipmsbae = _convenipmsbae_;
+	};
+
+	public java.lang.String getDir3() {
+		return(dir3);
+	};
+	public void setDir3(java.lang.String _dir3_) {
+		this.dir3 = _dir3_;
 	};
 
 
@@ -200,6 +221,7 @@ public class EntitatJPA implements Entitat {
     __tmp.setCIF(__bean.getCIF());
     __tmp.setGrupEntitatID(__bean.getGrupEntitatID());
     __tmp.setConvenipmsbae(__bean.isConvenipmsbae());
+    __tmp.setDir3(__bean.getDir3());
 		return __tmp;
 	}
 

@@ -55,8 +55,8 @@ public class EntitatJPAManager
         return list.toArray(new Entitat[list.size()]);
     };
 
-    public Entitat create( java.lang.String _nom_, java.lang.String _personaContacte_, java.lang.String _CIF_, long _grupEntitatID_, boolean _convenipmsbae_) throws I18NException {
-        EntitatJPA __bean =  new EntitatJPA(_nom_,_personaContacte_,_CIF_,_grupEntitatID_,_convenipmsbae_);
+    public Entitat create( java.lang.String _nom_, java.lang.String _personaContacte_, java.lang.String _CIF_, long _grupEntitatID_, boolean _convenipmsbae_, java.lang.String _dir3_) throws I18NException {
+        EntitatJPA __bean =  new EntitatJPA(_nom_,_personaContacte_,_CIF_,_grupEntitatID_,_convenipmsbae_,_dir3_);
         return create(__bean);
     }
 

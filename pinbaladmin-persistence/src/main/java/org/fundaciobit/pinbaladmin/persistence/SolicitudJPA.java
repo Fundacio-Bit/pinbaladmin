@@ -23,9 +23,9 @@ import javax.persistence.Id;
         @Index(name="pad_solicitud_pk_i", columnList = "solicitudid"),
         @Index(name="pad_solicitud_estatid_fk_i", columnList = "estatid"),
         @Index(name="pad_solicitud_departid_fk_i", columnList = "departamentid"),
+        @Index(name="pad_solicitud_organid_fk_i", columnList = "organid"),
         @Index(name="pad_solicitud_docsoli_fk_i", columnList = "documentsolicitudid"),
-        @Index(name="pad_solicitud_solixml_fk_i", columnList = "solicitudxmlid"),
-        @Index(name="pad_solicitud_organid_fk_i", columnList = "organid")})
+        @Index(name="pad_solicitud_solixml_fk_i", columnList = "solicitudxmlid")})
 @SequenceGenerator(name="SOLICITUD_SEQ", sequenceName="pad_solicitud_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
 public class SolicitudJPA implements Solicitud {
@@ -58,6 +58,9 @@ public class SolicitudJPA implements Solicitud {
 
     @Column(name="departamentid",length = 19)
     java.lang.Long departamentID;
+
+    @Column(name="organid",length = 19)
+    java.lang.Long organid;
 
     @Column(name="entitatestatal",length = 255)
     java.lang.String entitatEstatal;
@@ -114,9 +117,6 @@ public class SolicitudJPA implements Solicitud {
     @Column(name="operador",nullable = false,length = 100)
     java.lang.String operador;
 
-    @Column(name="organid",length = 19)
-    java.lang.Long organid;
-
 
 
   /** Constructor Buit */
@@ -124,7 +124,7 @@ public class SolicitudJPA implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long organid) {
+  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -134,6 +134,7 @@ public class SolicitudJPA implements Solicitud {
     this.ticketAssociat=ticketAssociat;
     this.ticketNumeroSeguiment=ticketNumeroSeguiment;
     this.departamentID=departamentID;
+    this.organid=organid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
     this.dataInici=dataInici;
@@ -152,10 +153,9 @@ public class SolicitudJPA implements Solicitud {
     this.nif=nif;
     this.creador=creador;
     this.operador=operador;
-    this.organid=organid;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long organid) {
+  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.String ticketAssociat , java.lang.String ticketNumeroSeguiment , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
@@ -164,6 +164,7 @@ public class SolicitudJPA implements Solicitud {
     this.ticketAssociat=ticketAssociat;
     this.ticketNumeroSeguiment=ticketNumeroSeguiment;
     this.departamentID=departamentID;
+    this.organid=organid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
     this.dataInici=dataInici;
@@ -182,7 +183,6 @@ public class SolicitudJPA implements Solicitud {
     this.nif=nif;
     this.creador=creador;
     this.operador=operador;
-    this.organid=organid;
 }
   /** Constructor dels valors Not Null */
   public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
@@ -206,6 +206,7 @@ public class SolicitudJPA implements Solicitud {
     this.setTicketAssociat(__bean.getTicketAssociat());
     this.setTicketNumeroSeguiment(__bean.getTicketNumeroSeguiment());
     this.setDepartamentID(__bean.getDepartamentID());
+    this.setOrganid(__bean.getOrganid());
     this.setEntitatEstatal(__bean.getEntitatEstatal());
     this.setPinfo(__bean.getPinfo());
     this.setDataInici(__bean.getDataInici());
@@ -224,7 +225,6 @@ public class SolicitudJPA implements Solicitud {
     this.setNif(__bean.getNif());
     this.setCreador(__bean.getCreador());
     this.setOperador(__bean.getOperador());
-    this.setOrganid(__bean.getOrganid());
     // Fitxer
     this.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer
@@ -292,6 +292,13 @@ public class SolicitudJPA implements Solicitud {
 	};
 	public void setDepartamentID(java.lang.Long _departamentID_) {
 		this.departamentID = _departamentID_;
+	};
+
+	public java.lang.Long getOrganid() {
+		return(organid);
+	};
+	public void setOrganid(java.lang.Long _organid_) {
+		this.organid = _organid_;
 	};
 
 	public java.lang.String getEntitatEstatal() {
@@ -420,13 +427,6 @@ public class SolicitudJPA implements Solicitud {
 		this.operador = _operador_;
 	};
 
-	public java.lang.Long getOrganid() {
-		return(organid);
-	};
-	public void setOrganid(java.lang.Long _organid_) {
-		this.organid = _organid_;
-	};
-
 
 
   @Override
@@ -495,6 +495,20 @@ public class SolicitudJPA implements Solicitud {
     this.departament = departament;
   }
 
+// IMP Field:organid | Table: pad_organ | Type: 1  
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organid", referencedColumnName ="organid", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_solicitud_organ_fk"))
+    private OrganJPA organ;
+
+    public OrganJPA getOrgan() {
+    return this.organ;
+  }
+
+    public  void setOrgan(OrganJPA organ) {
+    this.organ = organ;
+  }
+
 // IMP Field:fitxerid | Table: pad_fitxer | Type: 1  
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -523,20 +537,6 @@ public class SolicitudJPA implements Solicitud {
     this.solicitudXml = solicitudXml;
   }
 
-// IMP Field:organid | Table: pad_organ | Type: 1  
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organid", referencedColumnName ="organid", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_solicitud_organ_fk"))
-    private OrganJPA organ;
-
-    public OrganJPA getOrgan() {
-    return this.organ;
-  }
-
-    public  void setOrgan(OrganJPA organ) {
-    this.organ = organ;
-  }
-
 
  // ---------------  STATIC METHODS ------------------
   public static SolicitudJPA toJPA(Solicitud __bean) {
@@ -551,6 +551,7 @@ public class SolicitudJPA implements Solicitud {
     __tmp.setTicketAssociat(__bean.getTicketAssociat());
     __tmp.setTicketNumeroSeguiment(__bean.getTicketNumeroSeguiment());
     __tmp.setDepartamentID(__bean.getDepartamentID());
+    __tmp.setOrganid(__bean.getOrganid());
     __tmp.setEntitatEstatal(__bean.getEntitatEstatal());
     __tmp.setPinfo(__bean.getPinfo());
     __tmp.setDataInici(__bean.getDataInici());
@@ -569,7 +570,6 @@ public class SolicitudJPA implements Solicitud {
     __tmp.setNif(__bean.getNif());
     __tmp.setCreador(__bean.getCreador());
     __tmp.setOperador(__bean.getOperador());
-    __tmp.setOrganid(__bean.getOrganid());
     // Fitxer
     __tmp.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer

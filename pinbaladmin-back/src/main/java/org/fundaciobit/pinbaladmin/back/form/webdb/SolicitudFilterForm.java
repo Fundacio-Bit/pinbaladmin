@@ -142,6 +142,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long organidDesde;
+
+  public java.lang.Long getOrganidDesde() {
+    return this.organidDesde;
+  }
+
+  public void setOrganidDesde(java.lang.Long organidDesde) {
+    this.organidDesde = organidDesde;
+  }
+
+
+  private java.lang.Long organidFins;
+
+  public java.lang.Long getOrganidFins() {
+    return this.organidFins;
+  }
+
+  public void setOrganidFins(java.lang.Long organidFins) {
+    this.organidFins = organidFins;
+  }
+
+
   private java.lang.String entitatEstatal;
 
   public java.lang.String getEntitatEstatal() {
@@ -318,28 +340,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.Long organidDesde;
-
-  public java.lang.Long getOrganidDesde() {
-    return this.organidDesde;
-  }
-
-  public void setOrganidDesde(java.lang.Long organidDesde) {
-    this.organidDesde = organidDesde;
-  }
-
-
-  private java.lang.Long organidFins;
-
-  public java.lang.Long getOrganidFins() {
-    return this.organidFins;
-  }
-
-  public void setOrganidFins(java.lang.Long organidFins) {
-    this.organidFins = organidFins;
-  }
-
-
   public SolicitudFilterForm() {
   }
   
@@ -356,6 +356,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.ticketNumeroSeguiment = __toClone.ticketNumeroSeguiment;
     this.departamentIDDesde = __toClone.departamentIDDesde;
     this.departamentIDFins = __toClone.departamentIDFins;
+    this.organidDesde = __toClone.organidDesde;
+    this.organidFins = __toClone.organidFins;
     this.entitatEstatal = __toClone.entitatEstatal;
     this.pinfo = __toClone.pinfo;
     this.dataIniciDesde = __toClone.dataIniciDesde;
@@ -372,14 +374,12 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.nif = __toClone.nif;
     this.creador = __toClone.creador;
     this.operador = __toClone.operador;
-    this.organidDesde = __toClone.organidDesde;
-    this.organidFins = __toClone.organidFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
+    this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
-    this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
   }
   
   /* ========= UTILS ========== */
@@ -450,6 +450,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
 
 
+  private Map<String, String> mapOfOrganForOrganid;
+
+  public Map<String, String> getMapOfOrganForOrganid() {
+    return this.mapOfOrganForOrganid;
+  }
+
+  public void setMapOfOrganForOrganid(Map<String, String> mapOfOrganForOrganid) {
+    this.mapOfOrganForOrganid = mapOfOrganForOrganid;
+  }
+
+
+
   private Map<String, String> mapOfValuesForCreador;
 
   public Map<String, String> getMapOfValuesForCreador() {
@@ -470,18 +482,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfValuesForOperador(Map<String, String> mapOfValuesForOperador) {
     this.mapOfValuesForOperador = mapOfValuesForOperador;
-  }
-
-
-
-  private Map<String, String> mapOfOrganForOrganid;
-
-  public Map<String, String> getMapOfOrganForOrganid() {
-    return this.mapOfOrganForOrganid;
-  }
-
-  public void setMapOfOrganForOrganid(Map<String, String> mapOfOrganForOrganid) {
-    this.mapOfOrganForOrganid = mapOfOrganForOrganid;
   }
 
 

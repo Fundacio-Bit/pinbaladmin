@@ -55,8 +55,8 @@ public class OrganJPAManager
         return list.toArray(new Organ[list.size()]);
     };
 
-    public Organ create( java.lang.String _nom_, java.lang.String _dir3_, java.lang.String _dir3pare_, java.lang.Long _entitatid_) throws I18NException {
-        OrganJPA __bean =  new OrganJPA(_nom_,_dir3_,_dir3pare_,_entitatid_);
+    public Organ create( java.lang.String _nom_, java.lang.String _dir3_, java.lang.String _dir3pare_, java.lang.Long _entitatid_, java.lang.String _cif_) throws I18NException {
+        OrganJPA __bean =  new OrganJPA(_nom_,_dir3_,_dir3pare_,_entitatid_,_cif_);
         return create(__bean);
     }
 

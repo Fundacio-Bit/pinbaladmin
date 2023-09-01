@@ -219,6 +219,16 @@ public class SolicitudController
       };
     }
 
+    // Field organid
+    {
+      _listSKV = getReferenceListForOrganid(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfOrganForOrganid(_tmp);
+      if (filterForm.getGroupByFields().contains(ORGANID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANID, false);
+      };
+    }
+
 
       fillValuesToGroupByItemsBoolean("solicitud.firmatdocsolicitud", groupByItemsMap, FIRMATDOCSOLICITUD);
 
@@ -245,16 +255,6 @@ public class SolicitudController
       };
     }
 
-    // Field organid
-    {
-      _listSKV = getReferenceListForOrganid(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfOrganForOrganid(_tmp);
-      if (filterForm.getGroupByFields().contains(ORGANID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANID, false);
-      };
-    }
-
 
     return groupByItemsMap;
   }
@@ -273,9 +273,9 @@ public class SolicitudController
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
     __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
+    __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
-    __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -351,6 +351,15 @@ public class SolicitudController
       solicitudForm.setListOfDepartamentForDepartamentID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfOrganForOrganid() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForOrganid(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfOrganForOrganid(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfValuesForCreador() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForCreador(request, mav, solicitudForm, null);
 
@@ -367,15 +376,6 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForOperador(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (solicitudForm.getListOfOrganForOrganid() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForOrganid(request, mav, solicitudForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      solicitudForm.setListOfOrganForOrganid(_listSKV);
     }
     
   }
@@ -836,6 +836,46 @@ public java.lang.Long stringToPK(String value) {
   }
 
 
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(ORGANID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (solicitudForm.isReadOnlyField(ORGANID)) {
+      _where = OrganFields.ORGANID.equal(solicitudForm.getSolicitud().getOrganid());
+    }
+    return getReferenceListForOrganid(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(ORGANID)
+       && !solicitudFilterForm.isGroupByField(ORGANID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(ORGANID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Solicitud _item : list) {
+        if(_item.getOrganid() == null) { continue; };
+        _pkList.add(_item.getOrganid());
+        }
+        _w = OrganFields.ORGANID.in(_pkList);
+      }
+    return getReferenceListForOrganid(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return organRefList.getReferenceList(OrganFields.ORGANID, where );
+  }
+
+
   public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request,
        ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
     if (solicitudForm.isHiddenField(CREADOR)) {
@@ -907,46 +947,6 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("fsalas" , "fsalas"));
     __tmp.add(new StringKeyValue("ptrias" , "ptrias"));
     return __tmp;
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
-       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
-    if (solicitudForm.isHiddenField(ORGANID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _where = null;
-    if (solicitudForm.isReadOnlyField(ORGANID)) {
-      _where = OrganFields.ORGANID.equal(solicitudForm.getSolicitud().getOrganid());
-    }
-    return getReferenceListForOrganid(request, mav, Where.AND(where, _where));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
-       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
-       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (solicitudFilterForm.isHiddenField(ORGANID)
-       && !solicitudFilterForm.isGroupByField(ORGANID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    if (!_groupByItemsMap.containsKey(ORGANID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (Solicitud _item : list) {
-        if(_item.getOrganid() == null) { continue; };
-        _pkList.add(_item.getOrganid());
-        }
-        _w = OrganFields.ORGANID.in(_pkList);
-      }
-    return getReferenceListForOrganid(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    return organRefList.getReferenceList(OrganFields.ORGANID, where );
   }
 
 

@@ -29,6 +29,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getDepartamentID();
 	public void setDepartamentID(java.lang.Long _departamentID_);
 
+	public java.lang.Long getOrganid();
+	public void setOrganid(java.lang.Long _organid_);
+
 	public java.lang.String getEntitatEstatal();
 	public void setEntitatEstatal(java.lang.String _entitatEstatal_);
 
@@ -82,9 +85,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.String getOperador();
 	public void setOperador(java.lang.String _operador_);
-
-	public java.lang.Long getOrganid();
-	public void setOrganid(java.lang.Long _organid_);
 
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();

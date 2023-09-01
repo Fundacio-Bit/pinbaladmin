@@ -21,6 +21,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField TICKETASSOCIAT = new StringField(_TABLE_MODEL, "ticketAssociat", "ticketassociat");
 	 public static final StringField TICKETNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "ticketNumeroSeguiment", "ticketnumeroseguiment");
 	 public static final LongField DEPARTAMENTID = new LongField(_TABLE_MODEL, "departamentID", "departamentid");
+	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
 	 public static final StringField ENTITATESTATAL = new StringField(_TABLE_MODEL, "entitatEstatal", "entitatestatal");
 	 public static final StringField PINFO = new StringField(_TABLE_MODEL, "pinfo", "pinfo");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
@@ -39,7 +40,6 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField NIF = new StringField(_TABLE_MODEL, "nif", "nif");
 	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
 	 public static final StringField OPERADOR = new StringField(_TABLE_MODEL, "operador", "operador");
-	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -52,6 +52,7 @@ public interface SolicitudFields extends java.io.Serializable {
     TICKETASSOCIAT,
     TICKETNUMEROSEGUIMENT,
     DEPARTAMENTID,
+    ORGANID,
     ENTITATESTATAL,
     PINFO,
     DATAINICI,
@@ -69,8 +70,7 @@ public interface SolicitudFields extends java.io.Serializable {
     DIR3,
     NIF,
     CREADOR,
-    OPERADOR,
-    ORGANID
+    OPERADOR
   };
 
 

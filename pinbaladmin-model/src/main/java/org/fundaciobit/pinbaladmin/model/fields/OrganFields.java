@@ -17,6 +17,7 @@ public interface OrganFields extends java.io.Serializable {
 	 public static final StringField DIR3 = new StringField(_TABLE_MODEL, "dir3", "dir3");
 	 public static final StringField DIR3PARE = new StringField(_TABLE_MODEL, "dir3pare", "dir3pare");
 	 public static final LongField ENTITATID = new LongField(_TABLE_MODEL, "entitatid", "entitatid");
+	 public static final StringField CIF = new StringField(_TABLE_MODEL, "cif", "cif");
 
 
   public static final Field<?>[] ALL_ORGAN_FIELDS = {
@@ -24,7 +25,8 @@ public interface OrganFields extends java.io.Serializable {
     NOM,
     DIR3,
     DIR3PARE,
-    ENTITATID
+    ENTITATID,
+    CIF
   };
 
 

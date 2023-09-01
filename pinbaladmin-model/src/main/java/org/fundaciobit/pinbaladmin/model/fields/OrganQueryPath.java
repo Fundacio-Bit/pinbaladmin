@@ -31,6 +31,10 @@ public class OrganQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new LongField(getQueryPath(), OrganFields.ENTITATID);
   }
 
+  public StringField CIF() {
+    return new StringField(getQueryPath(), OrganFields.CIF);
+  }
+
 
 
   @Override

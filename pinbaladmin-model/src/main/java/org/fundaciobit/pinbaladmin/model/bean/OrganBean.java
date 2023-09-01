@@ -13,6 +13,7 @@ public class OrganBean implements Organ {
 	java.lang.String dir3;
 	java.lang.String dir3pare;
 	java.lang.Long entitatid;
+	java.lang.String cif;
 
 
   /** Constructor Buit */
@@ -20,19 +21,21 @@ public class OrganBean implements Organ {
   }
 
   /** Constructor amb tots els camps  */
-  public OrganBean(long organid , java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid) {
+  public OrganBean(long organid , java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid , java.lang.String cif) {
     this.organid=organid;
     this.nom=nom;
     this.dir3=dir3;
     this.dir3pare=dir3pare;
     this.entitatid=entitatid;
+    this.cif=cif;
 }
   /** Constructor sense valors autoincrementals */
-  public OrganBean(java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid) {
+  public OrganBean(java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid , java.lang.String cif) {
     this.nom=nom;
     this.dir3=dir3;
     this.dir3pare=dir3pare;
     this.entitatid=entitatid;
+    this.cif=cif;
 }
   /** Constructor dels valors Not Null */
   public OrganBean(long organid , java.lang.String nom , java.lang.String dir3) {
@@ -46,6 +49,7 @@ public class OrganBean implements Organ {
     this.setDir3(__bean.getDir3());
     this.setDir3pare(__bean.getDir3pare());
     this.setEntitatid(__bean.getEntitatid());
+    this.setCif(__bean.getCif());
 	}
 
 	public long getOrganid() {
@@ -83,6 +87,13 @@ public class OrganBean implements Organ {
 		this.entitatid = _entitatid_;
 	};
 
+	public java.lang.String getCif() {
+		return(cif);
+	};
+	public void setCif(java.lang.String _cif_) {
+		this.cif = _cif_;
+	};
+
 
 
   // ======================================
@@ -95,6 +106,7 @@ public class OrganBean implements Organ {
     __tmp.setDir3(__bean.getDir3());
     __tmp.setDir3pare(__bean.getDir3pare());
     __tmp.setEntitatid(__bean.getEntitatid());
+    __tmp.setCif(__bean.getCif());
 		return __tmp;
 	}
 

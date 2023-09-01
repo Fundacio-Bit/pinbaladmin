@@ -18,6 +18,7 @@ public interface EntitatFields extends java.io.Serializable {
 	 public static final StringField CIF = new StringField(_TABLE_MODEL, "CIF", "cif");
 	 public static final LongField GRUPENTITATID = new LongField(_TABLE_MODEL, "grupEntitatID", "grupentitatid");
 	 public static final BooleanField CONVENIPMSBAE = new BooleanField(_TABLE_MODEL, "convenipmsbae", "convenipmsbae");
+	 public static final StringField DIR3 = new StringField(_TABLE_MODEL, "dir3", "dir3");
 
 
   public static final Field<?>[] ALL_ENTITAT_FIELDS = {
@@ -26,7 +27,8 @@ public interface EntitatFields extends java.io.Serializable {
     PERSONACONTACTE,
     CIF,
     GRUPENTITATID,
-    CONVENIPMSBAE
+    CONVENIPMSBAE,
+    DIR3
   };
 
 

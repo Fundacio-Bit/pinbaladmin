@@ -39,6 +39,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DEPARTAMENTID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ORGANID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ENTITATESTATAL)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ENTITATESTATAL)}</th>
         </c:if>
@@ -92,9 +95,6 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.OPERADOR)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.OPERADOR)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ORGANID)}</th>
         </c:if>
 
 

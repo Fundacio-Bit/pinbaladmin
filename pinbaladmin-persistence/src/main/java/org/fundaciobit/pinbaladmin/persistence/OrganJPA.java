@@ -43,6 +43,9 @@ public class OrganJPA implements Organ {
     @Column(name="entitatid",length = 19)
     java.lang.Long entitatid;
 
+    @Column(name="cif",length = 30)
+    java.lang.String cif;
+
 
 
   /** Constructor Buit */
@@ -50,19 +53,21 @@ public class OrganJPA implements Organ {
   }
 
   /** Constructor amb tots els camps  */
-  public OrganJPA(long organid , java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid) {
+  public OrganJPA(long organid , java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid , java.lang.String cif) {
     this.organid=organid;
     this.nom=nom;
     this.dir3=dir3;
     this.dir3pare=dir3pare;
     this.entitatid=entitatid;
+    this.cif=cif;
 }
   /** Constructor sense valors autoincrementals */
-  public OrganJPA(java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid) {
+  public OrganJPA(java.lang.String nom , java.lang.String dir3 , java.lang.String dir3pare , java.lang.Long entitatid , java.lang.String cif) {
     this.nom=nom;
     this.dir3=dir3;
     this.dir3pare=dir3pare;
     this.entitatid=entitatid;
+    this.cif=cif;
 }
   /** Constructor dels valors Not Null */
   public OrganJPA(long organid , java.lang.String nom , java.lang.String dir3) {
@@ -76,6 +81,7 @@ public class OrganJPA implements Organ {
     this.setDir3(__bean.getDir3());
     this.setDir3pare(__bean.getDir3pare());
     this.setEntitatid(__bean.getEntitatid());
+    this.setCif(__bean.getCif());
 	}
 
 	public long getOrganid() {
@@ -111,6 +117,13 @@ public class OrganJPA implements Organ {
 	};
 	public void setEntitatid(java.lang.Long _entitatid_) {
 		this.entitatid = _entitatid_;
+	};
+
+	public java.lang.String getCif() {
+		return(cif);
+	};
+	public void setCif(java.lang.String _cif_) {
+		this.cif = _cif_;
 	};
 
 
@@ -165,6 +178,7 @@ public class OrganJPA implements Organ {
     __tmp.setDir3(__bean.getDir3());
     __tmp.setDir3pare(__bean.getDir3pare());
     __tmp.setEntitatid(__bean.getEntitatid());
+    __tmp.setCif(__bean.getCif());
 		return __tmp;
 	}
 

@@ -159,3 +159,21 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,OrganFields.CIF)}">
+        <tr id="organ_cif_rowid">
+          <td id="organ_cif_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[OrganFields.CIF])?'organ.cif':__theForm.labels[OrganFields.CIF]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[OrganFields.CIF]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[OrganFields.CIF]}" ></i>
+              </c:if>
+            </td>
+          <td id="organ_cif_columnvalueid">
+            <form:errors path="organ.cif" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,OrganFields.CIF)? 'true' : 'false'}" cssClass="w-50 form-control  ${gen:contains(__theForm.readOnlyFields ,OrganFields.CIF)? ' uneditable-input' : ''}"  style="" maxlength="30" path="organ.cif"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

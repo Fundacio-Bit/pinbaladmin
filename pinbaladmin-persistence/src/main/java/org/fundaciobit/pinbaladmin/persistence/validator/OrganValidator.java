@@ -65,6 +65,14 @@ public class OrganValidator<I extends Organ>
       }
     }
 
+    if (__vr.getFieldErrorCount(CIF) == 0) {
+      java.lang.String __cif = __target__.getCif();
+      if (__cif!= null && __cif.length() > 30) {
+        __vr.rejectValue(CIF, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(30)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

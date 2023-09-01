@@ -125,6 +125,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,OrganFields.CIF)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="organ.cif" var="cif" />
+              <fmt:message key="genapp.form.searchby" var="cercapercif" >                
+                 <fmt:param value="${cif}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${cif}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercif}" path="cif" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

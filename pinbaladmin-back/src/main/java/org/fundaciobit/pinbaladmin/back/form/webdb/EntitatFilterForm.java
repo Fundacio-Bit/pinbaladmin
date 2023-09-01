@@ -98,6 +98,17 @@ public class EntitatFilterForm extends PinbalAdminBaseFilterForm implements Enti
   }
 
 
+  private java.lang.String dir3;
+
+  public java.lang.String getDir3() {
+    return this.dir3;
+  }
+
+  public void setDir3(java.lang.String dir3) {
+    this.dir3 = dir3;
+  }
+
+
   public EntitatFilterForm() {
   }
   
@@ -110,6 +121,7 @@ public class EntitatFilterForm extends PinbalAdminBaseFilterForm implements Enti
     this.CIF = __toClone.CIF;
     this.grupEntitatIDDesde = __toClone.grupEntitatIDDesde;
     this.grupEntitatIDFins = __toClone.grupEntitatIDFins;
+    this.dir3 = __toClone.dir3;
     this.mapOfGrupEntitatForGrupEntitatID = __toClone.mapOfGrupEntitatForGrupEntitatID;
   }
   
