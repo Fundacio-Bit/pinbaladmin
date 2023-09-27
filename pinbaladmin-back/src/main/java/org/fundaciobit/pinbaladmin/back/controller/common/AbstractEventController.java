@@ -249,8 +249,17 @@ public abstract class AbstractEventController<T> extends EventController impleme
             request.getSession().setAttribute("persona_operador", request.getUserPrincipal().getName());
         }
 
-        String email = getPersonaContacteEmail(item);
-        String nom = getPersonaContacteNom(item);
+        String email;
+        String nom;
+
+        if (eventForm.isNou()) {
+            email = getPersonaContacteEmail(item);
+            nom = getPersonaContacteNom(item);
+        }else {
+            email = eventForm.getEvent().getDestinatarimail();
+            nom = eventForm.getEvent().getDestinatari();
+        }
+        
         if (email == null || email.trim().length() == 0) {
 
             Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
@@ -348,7 +357,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         if (request.getUserPrincipal() != null) {
             // Accés loguejat
-            Event ev = eventForm.getEvent();
+            EventJPA ev = eventForm.getEvent();
 
             if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
 
@@ -366,7 +375,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
                 try {
                     final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
                             + getTitolItem(itemID);
+                    
                     final String from = Configuracio.getAppEmail();
+                    
                     final String message = getCapCorreu(tipus, itemID) + "<div style=\"background-color:#f6f6f6;\">"
                             + eventForm.getEvent().getComentari().replace("\n", "<br/>")
                             + (eventForm.getEvent().getFitxerID() == null ? ""
@@ -377,25 +388,29 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                     final boolean isHtml = true;
 
-                    String email = getPersonaContacteEmailByItemID(itemID);
-                    String persona = getPersonaContacteByItemID(itemID);
+                    //eventForm.getEvent().getDestinatarimail();
                     
-                    ev.setDestinatari(persona);
+                    String email = eventForm.getEvent().getDestinatarimail();
                     ev.setDestinatarimail(email);
+                    
+                    String persona = eventForm.getEvent().getDestinatari();
+                    ev.setDestinatari(persona);
+                    
+                    eventLogicaEjb.update(ev);
                     
                     log.info("CORREU PER ENVIAR");
                     EmailUtil.postMail(subject, message, isHtml, from, email);
                     log.info("CORREU ENVIAT");
                     
-                    
+                } catch (I18NException e) {
+                    String msg;
+                    msg = I18NUtils.getMessage(e);
+
+                    HtmlUtils.saveMessageError(request, "Error I18N enviant correu: " + msg);
                 } catch (Throwable th) {
 
                     String msg;
-                    if (th instanceof I18NException) {
-                        msg = I18NUtils.getMessage((I18NException) th);
-                    } else {
-                        msg = th.getMessage();
-                    }
+                    msg = th.getMessage();
                     HtmlUtils.saveMessageError(request, "Error enviant correu: " + msg);
                 }
             }

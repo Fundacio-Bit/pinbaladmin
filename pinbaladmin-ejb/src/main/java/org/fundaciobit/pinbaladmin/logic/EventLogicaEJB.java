@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.EventEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 
@@ -54,4 +56,11 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 
     }
 
+    @Override
+    @PermitAll
+    public Event update(Event instance) throws I18NException {
+        log.info("Update de EventLogicaEJB");
+        log.info(instance.getDestinatari() + " - " + instance.getDestinatarimail());
+        return super.update(instance);
+    }
 }

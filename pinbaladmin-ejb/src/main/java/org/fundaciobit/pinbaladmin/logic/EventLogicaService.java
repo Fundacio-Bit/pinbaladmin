@@ -28,4 +28,6 @@ public interface EventLogicaService extends EventService {
 
     public Set<Long> deleteFullBySolicitantID(Long soliID) throws I18NException;
 
+    public Event update(Event instance) throws I18NException;
+
 }
