@@ -61,7 +61,7 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
         emailForm.addHiddenField(ENVIADOR);
 
         emailForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "plantilla",
-                "javascript:document.getElementById('email.message').value = 'HOLA CARACOLA'", "btn-info"));
+                "javascript:document.getElementById('email.message').value = 'prova text plantilla'", "btn-info"));
 
         emailForm.getReadOnlyFields().remove(DESTINATARIS);
 

@@ -86,16 +86,22 @@
 						key="entitat.entitat.plural" /></span>
 		</a></li>
 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/area/list"/>"> <span
-				style="${(fn:contains(url, 'area'))? "font-weight:bold;" : ""}"><fmt:message
-						key="area.area.plural" /></span>
-		</a></li>
+        <li style="list-style-type: disc; list-style-position: inside;"><a
+            href="<c:url value="/operador/organ/list"/>"> <span
+                style="${(fn:contains(url, 'organ'))? "font-weight:bold;" : ""}"><fmt:message
+                        key="organ.organ.plural" /></span>
+        </a></li>
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/area/list"/>"> <span
+				style="text-decoration:line-through;${(fn:contains(url, 'area'))? "font-weight:bold;" : ""} "><fmt:message
+						key="area.area.plural" />(Deprecat)</span>
+		</a></li>
+		
+		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/departament/list"/>"> <span
-				style="${(fn:contains(url, 'departament'))? "font-weight:bold;" : ""}"><fmt:message
-						key="departament.departament.plural" /></span>
+				style="text-decoration:line-through;${(fn:contains(url, 'departament'))? "font-weight:bold;" : ""}"><fmt:message
+						key="departament.departament.plural" />(Deprecat)</span>
 		</a></li>
 
 

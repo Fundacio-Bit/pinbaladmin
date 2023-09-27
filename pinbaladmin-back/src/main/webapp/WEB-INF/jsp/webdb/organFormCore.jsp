@@ -52,30 +52,9 @@
               </c:if>
             </td>
           <td id="organ_dir3_columnvalueid">
-              <form:errors path="organ.dir3" cssClass="errorField alert alert-danger" />
-  <table style="width:100%">
-  <tr>
-  <td>
-       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3)? 'true' : 'false'}" path="organ.dir3"  />
-   </td>
-   <td style="width:40px">
-      <div id="dropdownMenuButton_dir3" style="vertical-align:top;display:inline;position:relative;">
-        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
-        <div id="dropdownMenuContainer_dir3" class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('organ.dir3'); ta.wrap='off';" >No Wrap</a>
-          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('organ.dir3'); ta.wrap='soft';">Soft Wrap</a>
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('organ.dir3'); ta.wrap='hard';">Hard Wrap</a>
-        </div>
-      </div>
-      <script type="text/javascript">
-			$('#dropdownMenuButton_dir3').on('click', function(){
-					var valor = ($('#dropdownMenuContainer_dir3').css('display') != 'none') ? 'none' : 'block';
-                 $('#dropdownMenuContainer_dir3').css('display', valor);
-                 return false;
-				});
-      </script>   </td>
-   </tr>
-   </table>
+            <form:errors path="organ.dir3" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3)? ' uneditable-input' : ''}"  style="" maxlength="255" path="organ.dir3"   />
+
            </td>
         </tr>
         </c:if>
@@ -91,30 +70,9 @@
               </c:if>
             </td>
           <td id="organ_dir3pare_columnvalueid">
-              <form:errors path="organ.dir3pare" cssClass="errorField alert alert-danger" />
-  <table style="width:100%">
-  <tr>
-  <td>
-       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3PARE)? 'true' : 'false'}" path="organ.dir3pare"  />
-   </td>
-   <td style="width:40px">
-      <div id="dropdownMenuButton_dir3pare" style="vertical-align:top;display:inline;position:relative;">
-        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
-        <div id="dropdownMenuContainer_dir3pare" class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('organ.dir3pare'); ta.wrap='off';" >No Wrap</a>
-          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('organ.dir3pare'); ta.wrap='soft';">Soft Wrap</a>
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('organ.dir3pare'); ta.wrap='hard';">Hard Wrap</a>
-        </div>
-      </div>
-      <script type="text/javascript">
-			$('#dropdownMenuButton_dir3pare').on('click', function(){
-					var valor = ($('#dropdownMenuContainer_dir3pare').css('display') != 'none') ? 'none' : 'block';
-                 $('#dropdownMenuContainer_dir3pare').css('display', valor);
-                 return false;
-				});
-      </script>   </td>
-   </tr>
-   </table>
+            <form:errors path="organ.dir3pare" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3PARE)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,OrganFields.DIR3PARE)? ' uneditable-input' : ''}"  style="" maxlength="255" path="organ.dir3pare"   />
+
            </td>
         </tr>
         </c:if>

@@ -232,6 +232,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         if (solicitudForm.isNou()) {
             solicitudForm.addHiddenField(DATAFI);
 
+            solicitudForm.setAttachedAdditionalJspCode(true);
+            mav.addObject("isNou", solicitudForm.isNou());
+            mav.addObject("isView", __isView);
+
             soli.setEstatID(10L);
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
@@ -413,6 +417,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             throws I18NException {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
+        
         if (solicitudFilterForm.isNou()) {
 
             {
@@ -1377,7 +1382,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
         
         log.info("where: " + where);
-//        log.info("where.toSQL: " + where.toSQL());
+        if (where != null) {
+            log.info("where.toSQL: " + where.toSQL());
+        }
         
         List<Organ> organs = organEjb.select(where);
 
@@ -1396,9 +1403,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
                 }
             }
-            String j = String.join(" - ", jerarquia);
+            String str = String.join("|", jerarquia);
 
-            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), j));
+            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), str));
         }
 
         return __tmp;

@@ -186,6 +186,18 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/departamentList.jsp" />
     </definition>
 
+
+    <definition name="organFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="organ.organ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organForm.jsp" />
+    </definition>
+
+    <definition name="organListOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organList.jsp" />
+    </definition>
+
+
+
     <definition name="grupEntitatCedentFormOperador" extends="operador_base">
         <put-attribute name="titol" value="grupEntitatCedent.grupEntitatCedent" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/grupEntitatCedentForm.jsp" />

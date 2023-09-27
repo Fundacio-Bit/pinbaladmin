@@ -3581,12 +3581,12 @@
       "nameJava": "Organ",
       "shortName": "Organ",
       "labels": {
-        "ca": "Organ",
-        "es": "Órgano"
+        "ca": "Organ Gestor",
+        "es": "Órgano Gestor"
       },
       "labelsPlural": {
-        "ca": "Organs",
-        "es": "Órganos"
+        "ca": "Organs Gestors",
+        "es": "Órganos Gestores"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -3640,8 +3640,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "nom",
-            "es": "nom"
+            "ca": "Nom",
+            "es": "Nombre"
           },
           "javaName": "nom",
           "javaType": "java.lang.String",
@@ -3649,7 +3649,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "filter": true,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
@@ -3665,8 +3665,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "dir3",
-            "es": "dir3"
+            "ca": "Codi DIR3",
+            "es": "Código DIR3"
           },
           "javaName": "dir3",
           "javaType": "java.lang.String",
@@ -3674,11 +3674,11 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "filter": true,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 2
+            "webtype": 1
           },
           "foreignKeys": []
         },
@@ -3690,8 +3690,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "dir3pare",
-            "es": "dir3pare"
+            "ca": "DIR3 Pare",
+            "es": "DIR3 Padre"
           },
           "javaName": "dir3pare",
           "javaType": "java.lang.String",
@@ -3699,11 +3699,11 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "filter": true,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 2
+            "webtype": 1
           },
           "foreignKeys": []
         },
@@ -3754,8 +3754,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "cif",
-            "es": "cif"
+            "ca": "CIF",
+            "es": "CIF"
           },
           "javaName": "cif",
           "javaType": "java.lang.String",
@@ -3763,7 +3763,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "filter": true,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
@@ -4356,8 +4356,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "organid",
-            "es": "organid"
+            "ca": "Órgan Gestor",
+            "es": "Órgano Gestor"
           },
           "javaName": "organid",
           "javaType": "java.lang.Long",
@@ -8524,5 +8524,6 @@
   ],
   "generateBack": true,
   "generateFront": false,
-  "generateWS": false
+  "generateApiInterna": false,
+  "generateApiExterna": false
 }

@@ -107,8 +107,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     
     SolicitudJPA solicitud = solicitudForm.getSolicitud();
     
-
-    
+    mav.addObject("isView", __isView);
+    mav.addObject("isNou", solicitudForm.isNou());
     
     if (__isView) {
       // Canviam el cancel·lar per un tornar.....
