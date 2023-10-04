@@ -1,14 +1,25 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -126,8 +137,7 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
         if (solicitudFilterForm.isNou()) {
-
-            solicitudFilterForm.getHiddenFields().remove(ORGANID);
+//            solicitudFilterForm.getHiddenFields().remove(ORGANID);
 
             if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
                 //solicitudFilterForm.setEstatIDDesde(-1L);
@@ -140,11 +150,51 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
                 }
                 solicitudFilterForm.setAddButtonVisible(false);
             }
-
         }
-
         return solicitudFilterForm;
-
     }
 
+//    @Override
+//    public void postList(HttpServletRequest request, ModelAndView mav, SolicitudFilterForm filterForm,
+//            List<Solicitud> list) throws I18NException {
+//
+//        super.postList(request, mav, filterForm, list);
+//
+//        Map<Long, String> map;
+//        map = (Map<Long, String>) filterForm.getAdditionalField(COLUMNA_ORGAN).getValueMap();
+//        map.clear();
+//
+//        for (Solicitud sol : list) {
+//            Long organid = sol.getOrganid();
+//            Organ aux = organEjb.findByPrimaryKey(organid);
+//
+//            String html = "";
+//            html += "<td class='elemOrgan' onclick='toggleJerarquia(this);'>";
+//            html += "<p class='pOrganClose'>";
+//            html += "(" + aux.getDir3() + ") " + aux.getNom();
+//            html += "<span class='spanOrganClose'>";
+//            
+//            while (aux.getCif() == null && aux.getDir3pare() != null) {
+//                List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+//                aux = listAux.get(0);
+//                String linea = "<br>" + "&nbsp;".repeat(3) + '└' + "(" + aux.getDir3() + ") " + aux.getNom();
+//                html += linea;
+//                log.info(linea);
+////                jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+//            }
+//            html += "</span>";
+//            html += "</p>";
+//            html += "</td>";
+//
+//            
+////            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
+////            List<String> jerarquia = new ArrayList<String>();
+////            jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+//
+//            
+////            String text = String.join("|", jerarquia);
+//            map.put(sol.getSolicitudID(), html);
+//
+//        }
+//    }
 }

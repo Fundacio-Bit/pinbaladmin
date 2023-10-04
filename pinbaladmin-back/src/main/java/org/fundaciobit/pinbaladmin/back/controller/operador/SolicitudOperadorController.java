@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -80,13 +82,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     public static final Field<?> AREA_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA().AREAID();
 
+    public static final int FILTRE_AVANZAT_COLUMN = -1;
+
+    public static final int COLUMNA_ORGAN = 1;
+    public static final int MISSATGES_SENSE_LLEGIR_COLUMN = 2;
     public static final int ENTITAT_COLUMN = 1;
 
-    public static final int MISSATGES_SENSE_LLEGIR_COLUMN = 2;
+
+
 
     public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().ENTITATID();
 
-    public static final int FILTRE_AVANZAT_COLUMN = -1;
 
     public static final StringField FILTRE_AVANZAT_FIELD = CODIDESCRIPTIU; // new
                                                                            // StringField("filtreavtable",
@@ -449,7 +455,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 // XYZ ZZZ
                 // solicitudFilterForm.getHiddenFields().remove(ENTITATLOCALID);
                 // solicitudFilterForm.getHiddenFields().remove(ENTITATESTATAL);
-
+                log.info("Afegim la columna ENTITAT_COLUMN");
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
                 adfield4.setCodeName("=Entitat");
                 adfield4.setPosition(ENTITAT_COLUMN);
@@ -470,16 +476,29 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     // filterList.remove(ENTITATLOCALID);
                     filterList.remove(PINFO);
                     // groupList.remove(ENTITATLOCALID);
-
+//                    groupList.add(ESTATID);
+//
                 } else {
-                     hiddenFields.remove(ORGANID);
+                    AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
+                    adfield.setCodeName("=Organ Gestor Calculat");
+                    adfield.setPosition(COLUMNA_ORGAN);
+                    adfield.setEscapeXml(false);
+                    adfield.setValueMap(new HashMap<Long, String>());
+
+                    solicitudFilterForm.addAdditionalField(adfield);
+
+                    
+                    
+//                     hiddenFields.remove(ORGANID);
                   //   hiddenFields.remove(DEPARTAMENTID);
                   //   hiddenFields.remove(NOTES);
                     filterList.remove(ENTITATESTATAL);
                     groupList.remove(ENTITATESTATAL);
+                    
+                    groupList.add(ORGANID);
 
-                    groupList.add(AREA_NOVA_ID);
-                    groupList.add(ENTITAT_NOVA_ID);
+//                    groupList.add(AREA_NOVA_ID);
+//                    groupList.add(ENTITAT_NOVA_ID);
 
                 }
                 solicitudFilterForm.setFilterByFields(filterList);
@@ -531,32 +550,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     getContextWeb() + "/fullexport", "btn-info"));
 
             solicitudFilterForm
-                    .addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol", /*
-                                                                                                            * "javascript:window.open('" + request.getContextPath() +
-                                                                                                            */
-                            EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/{0}"
-                                    + (isestatal == null ? "" : ("/" + isestatal)) /* ','_blank');" */,
+                    .addAdditionalButtonForEachItem(new AdditionalButton(
+                            "fas fa-bullhorn", "events.titol", EventSolicitudOperadorController.CONTEXTWEB
+                                    + "/veureevents/{0}" + (isestatal == null ? "" : ("/" + isestatal)),
                             "btn-success"));
 
             solicitudFilterForm.setVisibleMultipleSelection(true);
 
             solicitudFilterForm.setOrderBy(SolicitudFields.DATAINICI.fullName);
             solicitudFilterForm.setOrderAsc(false);
-
-            Boolean estatal = isEstatal();
-            if (estatal != null && estatal) {
-                if (solicitudFilterForm.getFilterByFields() == null) {
-                    solicitudFilterForm
-                            .setFilterByFields(new ArrayList<Field<?>>(solicitudFilterForm.getDefaultFilterByFields()));
-                }
-                solicitudFilterForm.getFilterByFields().remove(DEPARTAMENTID);
-                solicitudFilterForm.getGroupByFields().remove(DEPARTAMENTID);
-                // solicitudFilterForm.getFilterByFields().remove(AREAID);
-                // solicitudFilterForm.getGroupByFields().remove(AREAID);
-            }
         }
         
-
         String departamentIDDesde = request.getParameter("departamentIDDesde");
         String departamentIDFins = request.getParameter("departamentIDFins");
 
@@ -567,9 +571,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.setDepartamentIDFins(Long.parseLong(departamentIDFins));
 
         }
-
-        // solicitudFilterForm.setItemsPerPage(10);
-
+        
+        TreeMap<Integer, AdditionalField<?, ?>> fi = solicitudFilterForm.getAdditionalFields();
+        
+        for (int i = 0; i < fi.size(); i++) {
+            log.info(solicitudFilterForm.getAdditionalFields().get(i));
+            
+        }
+        
+        
         return solicitudFilterForm;
     }
 
@@ -609,7 +619,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             List<Solicitud> list) throws I18NException {
 
         {
-
             Map<Long, String> map;
             map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
             map.clear();
@@ -643,19 +652,24 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     map.put(inc.getSolicitudID(), text);
 
                 }
-
             }
-
         }
 
         filterForm.getAdditionalButtonsByPK().clear();
         boolean error = false;
 
-        Map<Long, String> map = null;
-
+        Map<Long, String> mapEntitat = null;
+        Map<Long, String> mapOrgan = null;
+        log.info("isEstatal(): " + isEstatal());
+        
         if (isEstatal() == null) {
-            map = (Map<Long, String>) filterForm.getAdditionalField(ENTITAT_COLUMN).getValueMap();
-            map.clear();
+            mapEntitat = (Map<Long, String>) filterForm.getAdditionalField(ENTITAT_COLUMN).getValueMap();
+            mapEntitat.clear();
+        }else {
+            if (!isEstatal()) {
+                mapOrgan = (Map<Long, String>) filterForm.getAdditionalField(COLUMNA_ORGAN).getValueMap();
+                mapOrgan.clear();
+            }
         }
 
         Map<String, String> departamentLocalMap = filterForm.getMapOfDepartamentForDepartamentID();
@@ -680,8 +694,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 }
             }
 
+            
             // COLUMNA ENTITAT
-            if (map != null) {
+            if (mapEntitat != null) {
                 Long departamentId = soli.getDepartamentID();
                 String tipus, nom;
                 if (departamentId == null) {
@@ -696,8 +711,33 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 String img;
                 img = "<img src=\"" + request.getContextPath() + "/img/" + tipus + "_petit_on.gif\" alt=\"" + tipus
                         + "\" width=\"17\" height=\"14\" border=\"0\" />";
-                map.put(soli.getSolicitudID(), img + " " + nom);
+                mapEntitat.put(soli.getSolicitudID(), img + " " + nom);
             }
+
+            if (mapOrgan != null) {
+                Long organid = soli.getOrganid();
+                Organ aux = organEjb.findByPrimaryKey(organid);
+
+                String html = "";
+//                html += "<div class='elemOrgan' onclick='toggleJerarquia(this);'>";
+                html += "<p class='elemOrgan pOrganClose' onclick='toggleJerarquia(this);'>";
+                html += "(" + aux.getDir3() + ") " + aux.getNom();
+                html += "<span class='spanOrganClose'>";
+                int i = 0;
+                while (aux.getCif() == null && aux.getDir3pare() != null) {
+                    i++;
+                    List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+                    aux = listAux.get(0);
+                    String linea = "<br>" + "&nbsp;".repeat(3*i) + '└' + " (" + aux.getDir3() + ") " + aux.getNom();
+                    html += linea;
+                    log.info(linea);
+                }
+                html += "</span>";
+                html += "</p>";
+        //        html += "</div>";
+                mapOrgan.put(soli.getSolicitudID(), html);
+            }
+           
 
         }
 

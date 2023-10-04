@@ -73,8 +73,9 @@
 
 <style>
 .elemOrgan {
-	width: 30%;
+/* 	width: 30%; */
 }
+
 
 .pOrganOpen {
 	/* 	color: green; */
@@ -101,7 +102,8 @@
 </style>
 
 <script>
-	var tabla = document.getElementsByTagName("table");
+/*
+    var tabla = document.getElementsByTagName("table");
 	var ths = tabla[0].children[0].children[0].children;
 	var trs = tabla[0].children[1].children;
 
@@ -123,13 +125,13 @@
 		
 	}
 
-	for (var i = 0; i < trs[0].children.length; i++) {
+ 	for (var i = 0; i < trs[0].children.length; i++) {
 		if (i != nColOrgan && i != nColNomProc && i != nColEntitat) {
 			trs[0].children[i].style.width = "0px";
 		}
 	}
 
-	if (nColOrgan != null) {
+ 	if (nColOrgan != null) {
 		var espacioEnBlanco = String.fromCharCode(32); // Carácter de espacio en blanco
 
 		for (var i = 0; i < trs.length; i++) {
@@ -140,8 +142,11 @@
 			tdNomProc.classList.add("nomProcOrganOpen");
 
 			var txt = tdOrgan.innerText;
+		     console.log(txt);
+		     
 			var lineas = txt.split('|');
 
+	
 			var stringJerarquia = "";
 			for (var j = 1; j < lineas.length; j++) {
 				stringJerarquia += "<br>" + "&nbsp;".repeat(3 * j)
@@ -165,15 +170,24 @@
 				toggleJerarquia(this);
 			}
 		}
+	} */
+
+	var organs = $(".elemOrgan");
+	for (var i = 0; i < organs.length; i++) {
+		var pa = organs[i];
+		pa.parentElement.style.width = "30%";
+		pa.parentElement.onclick = pa.onclick;
+		pa.onclick = null;
 	}
-
+	
 	function toggleJerarquia(elem) {
-		var myP = elem.firstChild;
-		var mySpan = myP.children[0];
 
-		/* 		$(elem).toggleClass("elemOrganOpen");
-		 $(elem).toggleClass("elemOrganClose");
-		 */
+		console.log(elem);
+		var myP = elem.getElementsByTagName("p")[0];
+		console.log(myP);
+		var mySpan = elem.getElementsByTagName("span")[0];
+		console.log(mySpan);
+
 		$(myP).toggleClass("pOrganOpen");
 		$(myP).toggleClass("pOrganClose");
 
