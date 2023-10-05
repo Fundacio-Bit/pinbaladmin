@@ -239,18 +239,20 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudForm.addHiddenField(DATAFI);
 
             solicitudForm.setAttachedAdditionalJspCode(true);
-            mav.addObject("isNou", solicitudForm.isNou());
-            mav.addObject("isView", __isView);
-
+            
             soli.setEstatID(10L);
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
             soli.setOperador(request.getRemoteUser());
-        } else {
-            // solicitudForm.addReadOnlyField(ENTITATID);
         }
 
+        if (!__isView) {
+            mav.addObject("desplegableOrgans", true);
+            solicitudForm.setAttachedAdditionalJspCode(true);
+
+        }
+        
         if (isestatal == null) {
             // NO SABEM SI ES ESTATAL O LOCAL
             // log.info("XYZ ZZZ __isView = " + __isView);
@@ -480,7 +482,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 //
                 } else {
                     AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
-                    adfield.setCodeName("=Organ Gestor Calculat");
+                    adfield.setCodeName("=Organ Gestor");
                     adfield.setPosition(COLUMNA_ORGAN);
                     adfield.setEscapeXml(false);
                     adfield.setValueMap(new HashMap<Long, String>());
@@ -716,28 +718,28 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             if (mapOrgan != null) {
                 Long organid = soli.getOrganid();
-                Organ aux = organEjb.findByPrimaryKey(organid);
+                if (organid != null) {
 
-                String html = "";
-//                html += "<div class='elemOrgan' onclick='toggleJerarquia(this);'>";
-                html += "<p class='elemOrgan pOrganClose' onclick='toggleJerarquia(this);'>";
-                html += "(" + aux.getDir3() + ") " + aux.getNom();
-                html += "<span class='spanOrganClose'>";
-                int i = 0;
-                while (aux.getCif() == null && aux.getDir3pare() != null) {
-                    i++;
-                    List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                    aux = listAux.get(0);
-                    String linea = "<br>" + "&nbsp;".repeat(3*i) + '└' + " (" + aux.getDir3() + ") " + aux.getNom();
-                    html += linea;
-                    log.info(linea);
+                    Organ aux = organEjb.findByPrimaryKey(organid);
+
+                    String html = "";
+                    html += "<p class='elemOrgan pOrganClose' onclick='toggleJerarquia(this);'>";
+                    html += "(" + aux.getDir3() + ") " + aux.getNom();
+                    html += "<span class='spanOrganClose'>";
+                    int i = 0;
+                    while (aux.getCif() == null && aux.getDir3pare() != null) {
+                        i++;
+                        List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+                        aux = listAux.get(0);
+                        String linea = "<br>" + "&nbsp;".repeat(3 * i) + '└' + " (" + aux.getDir3() + ") "
+                                + aux.getNom();
+                        html += linea;
+                    }
+                    html += "</span>";
+                    html += "</p>";
+                    mapOrgan.put(soli.getSolicitudID(), html);
                 }
-                html += "</span>";
-                html += "</p>";
-        //        html += "</div>";
-                mapOrgan.put(soli.getSolicitudID(), html);
-            }
-           
+            }           
 
         }
 
@@ -1432,14 +1434,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             Organ aux = organ;
             List<String> jerarquia = new ArrayList<String>();
-            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
+//            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
             jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
 
             if (where != null) {
                 while (aux.getCif() == null && aux.getDir3pare() != null) {
                     List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
                     aux = listAux.get(0);
-                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
+//                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
                     jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
                 }
             }

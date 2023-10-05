@@ -58,7 +58,7 @@
 </c:if>
 
 
-<c:if test="${isNou == 'true'}">
+<c:if test="${desplegableOrgans == 'true'}">
 	<!-- Incluye jQuery desde un CDN -->
 	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -88,7 +88,7 @@
  -->
 	<script>
 	document.addEventListener("DOMContentLoaded", function() {
-	    // Obtener el select existente
+	    // Obtener el select existente          solicitud_organid
 	    const select = document.getElementById("solicitud_organid");
 
 	    // Crear un campo de entrada de texto
@@ -99,6 +99,14 @@
 	    input.placeholder = "Escribe para buscar";
 	    input.autocomplete = "off";
 	    input.name = "solicitud.organid";
+	    
+        //Asigna valor actual (per si es edició i no creació)
+        const selected = select.selectedOptions[0];
+	    if (selected.value.length > 0) {
+            input.value = selected.innerHTML;
+        }else{
+           input.value = "";
+        }
 
 	    // Crear un div para el desplegable de opciones
 	    const dropdown = document.createElement("div");
@@ -108,11 +116,10 @@
 	    // Agregar el campo de entrada de texto y el desplegable después del select
 	    select.parentNode.insertBefore(dropdown, select.nextSibling);
 	    select.parentNode.insertBefore(input, select.nextSibling);
+	    
+        // Ocultar el select original
+        select.style.display = "none";
 
-	    // Ocultar el select original
-	    select.style.display = "none";
-	    
-	    
 	    // Manejar eventos de entrada en el campo de entrada de texto
 	    input.addEventListener("input", function() {
 	        const value = input.value.trim().toLowerCase();
