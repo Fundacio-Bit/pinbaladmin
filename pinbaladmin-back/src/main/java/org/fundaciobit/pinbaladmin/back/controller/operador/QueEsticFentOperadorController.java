@@ -2,6 +2,7 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -41,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mysql.jdbc.PreparedStatement;
 
 /**
  * 
@@ -230,9 +230,9 @@ public class QueEsticFentOperadorController {
             String url = Configuracio.getQueEsticFentBDURL();
             
             Connection con = DriverManager.getConnection(url, login, password);
-            String SQL_INSERT = "INSERT INTO modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
+            String SQL_INSERT = "INSERT INTO qef_modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
 
-            PreparedStatement preparedStatement = (PreparedStatement) con.prepareStatement(SQL_INSERT);
+            PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT);
 
             preparedStatement.setInt(1, -3);
             preparedStatement.setString(2, usuari);
