@@ -112,7 +112,8 @@
 	    const dropdown = document.createElement("div");
 	    dropdown.id = "autocomplete-dropdown";
 	    dropdown.className = "autocomplete-dropdown";
-
+	    dropdown.style.zIndex = 5;
+	    
 	    // Agregar el campo de entrada de texto y el desplegable después del select
 	    select.parentNode.insertBefore(dropdown, select.nextSibling);
 	    select.parentNode.insertBefore(input, select.nextSibling);

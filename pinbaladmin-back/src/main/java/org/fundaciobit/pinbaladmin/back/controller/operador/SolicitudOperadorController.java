@@ -67,11 +67,14 @@ import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
 
 /**
  * 
@@ -248,6 +251,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
 
         if (!__isView) {
+            log.info("desplegableOrgans = true");
             mav.addObject("desplegableOrgans", true);
             solicitudForm.setAttachedAdditionalJspCode(true);
 
@@ -387,11 +391,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                  */
                 // ===== DEPARTAMENT
 
-                Long departamentID = solicitudForm.getSolicitud().getDepartamentID();
+                Long organID = solicitudForm.getSolicitud().getOrganid();
 
-                if (departamentID == null) {
-                    ValidationUtils.rejectIfEmptyOrWhitespace(result, get(DEPARTAMENTID), "genapp.validation.required",
-                            new Object[] { I18NUtils.tradueix(DEPARTAMENTID.fullName) });
+                if (organID == null) {
+                    ValidationUtils.rejectIfEmptyOrWhitespace(result, get(ORGANID), "genapp.validation.required",
+                            new Object[] { I18NUtils.tradueix(ORGANID.fullName) });
                     return;
                 }
 
@@ -1501,4 +1505,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
      * 
      */
 
+    @Override
+    @RequestMapping(value = "/{solicitudID}/edit", method = RequestMethod.POST)
+    public String editarSolicitudPost(@ModelAttribute SolicitudForm solicitudForm, BindingResult result,
+            SessionStatus status, HttpServletRequest request, HttpServletResponse response) throws I18NException {
+        
+        String ret = super.editarSolicitudPost(solicitudForm, result, status, request, response);
+        
+        if (result.hasErrors()) {
+            request.setAttribute("desplegableOrgans", true);
+        }
+        return ret;
+    }
+    
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public String crearSolicitudPost(@ModelAttribute SolicitudForm solicitudForm,
+        BindingResult result, HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+        
+        String ret = super.crearSolicitudPost(solicitudForm, result, request, response);
+        
+        if (result.hasErrors()) {
+            request.setAttribute("desplegableOrgans", true);
+        }
+
+        return ret;
+    }
 }
