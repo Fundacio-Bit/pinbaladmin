@@ -333,6 +333,14 @@
             <version>3.10</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
+        <dependency>
+            <groupId>javax.xml.parsers</groupId>
+            <artifactId>jaxp-api</artifactId>
+            <version>1.4.5</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <!-- OPENSAGRES XDOCREPORT (to merge odt,docx with Java model and convert to PDF) -->
         <dependency>
@@ -382,6 +390,20 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.31</version>
+        </dependency>
+        
+        
+        <!-- Api per donar d'alta solicituds de Pinbal a Madrid'-->
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-altapeticions-api-client</artifactId>
+            <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

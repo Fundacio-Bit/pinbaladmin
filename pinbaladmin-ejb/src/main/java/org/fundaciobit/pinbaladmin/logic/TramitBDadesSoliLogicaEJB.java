@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -13,7 +12,6 @@ import org.fundaciobit.pinbaladmin.ejb.TramitBDadesSoliEJB;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
-import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA;
 
 /**

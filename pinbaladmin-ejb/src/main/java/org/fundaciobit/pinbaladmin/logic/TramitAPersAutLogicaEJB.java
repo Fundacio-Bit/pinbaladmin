@@ -3,13 +3,10 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -30,7 +27,6 @@ import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
-import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitBDadesSoliFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
@@ -42,7 +38,6 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
-import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
 
 /**

@@ -88,3 +88,16 @@ hs_err_pid*
 /tramit sistra dades/~$DatosSistraSQL.xlsx
 /ejb.bat
 /cmd_compile.bat
+/scripts/bbdd/postgresql/backup/pinbaladmin2_2.0.0_data.sql
+/scripts/bbdd/postgresql/backup/pinbaladmin2_2.0.0_schema.sql
+/scripts/bbdd/postgresql/backup/pinbaladmin2_local_2.0.0_data.sql
+/scripts/bbdd/postgresql/organs gestors/CANVIS PER ACTUALITZAR ORGANS GESTORS DE PROCEDIMENTS.sql
+/scripts/bbdd/postgresql/organs gestors/DadesPinbalOrgansGestors.xlsx
+/scripts/bbdd/postgresql/organs gestors/DadesPinbalOrgansGestorsProd.xlsx
+/scripts/bbdd/postgresql/organs gestors/InsertOrgans.sql
+/scripts/bbdd/postgresql/organs gestors/InsertOrgansProd.sql
+/scripts/bbdd/postgresql/organs gestors/Organs Gestors Prod.sql
+/scripts/bbdd/postgresql/organs gestors/Organs Ok.xlsx
+/scripts/bbdd/postgresql/organs gestors/dades script.txt
+/scripts/bbdd/postgresql/organs gestors/procediments Ok.xlsx
+/scripts/bbdd/postgresql/organs gestors/~$entitats Ok.xlsx

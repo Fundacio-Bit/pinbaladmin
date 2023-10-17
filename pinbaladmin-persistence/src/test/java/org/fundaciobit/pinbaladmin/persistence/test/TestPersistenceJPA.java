@@ -42,8 +42,8 @@ public class TestPersistenceJPA {
 
             tx.begin();
             
-            Long tramitID = 1118L;
-            new TestPinbalAdminFormulari().cridadaAPICrearSolicitutMadrid(tramitID);
+//            Long tramitID = 1118L;
+//            new TestPinbalAdminFormulari().cridadaAPICrearSolicitudMadridAmbSolicitudID(tramitID);
             
             // CADA TEST HA d'ANAR DINS D'UNA TRANSACCIO  !!!!!!!
 

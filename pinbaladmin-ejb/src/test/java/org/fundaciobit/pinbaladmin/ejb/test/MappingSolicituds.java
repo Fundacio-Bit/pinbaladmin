@@ -1,13 +1,9 @@
 package org.fundaciobit.pinbaladmin.ejb.test;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitBDadesSoliLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
@@ -26,15 +22,6 @@ import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
-import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitBDadesSoliFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitECteAudFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitFCteTecFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitGDadesTitFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 
 //import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
 //import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
