@@ -16,7 +16,6 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
-import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;

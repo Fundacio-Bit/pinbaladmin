@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -429,6 +428,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             throws I18NException {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
+        
+        log.info("------------------------------------\n\n"
+         + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") + "|\n"
+         + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") + "|\n"
+         + "\n"
+         + "     solicitudFilterForm.getGroupBy() = |" + solicitudFilterForm.getGroupBy() + "|\n"
+         + "  solicitudFilterForm.getGroupValue() = |" + solicitudFilterForm.getGroupValue() + "|\n"
+         + "\n\n\n"   
+             
+             );        
+        
         
         if (solicitudFilterForm.isNou()) {
 

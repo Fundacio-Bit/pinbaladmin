@@ -2,9 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pinbaladmin-altapeticions-api-client</artifactId>
-    <groupId>org.fundaciobit.pinbaladmin</groupId>
     <packaging>jar</packaging>
-    <version>2.0.0</version>
     <name>PinbalAdmin - AltaPeticions Api Client</name>
     <parent>
         <groupId>org.fundaciobit.pinbaladmin</groupId>
@@ -72,7 +70,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
@@ -80,6 +77,7 @@
             </plugin>
         </plugins>
     </build>
+    <!--
     <profiles>
         <profile>
             <id>regenerateapi</id>
@@ -100,8 +98,6 @@
                             <goalPrefix>wsconsume</goalPrefix>
                             <extension>true</extension>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <!--
-							<targetPackage>es.caib.apialtapeticions.ws.api.v1</targetPackage> -->
                             <bindingFiles>
                                 <bindingFile>${basedir}/bindings.xjb</bindingFile>
                             </bindingFiles>
@@ -117,7 +113,6 @@
                                         <wsdl>${basedir}/PID.SolicitudAutorizacion.wsdl</wsdl>
                                     </wsdls>
                                     <wsdlLocation>https://intermediacionpp.redsara.es/servicios/SVD/PID.SolicitudAutorizacion?wsdl</wsdlLocation>
-                                    <!-- <argLine>-n</argLine> -->
                                 </configuration>
                             </execution>
                         </executions>
@@ -133,6 +128,7 @@
             </dependencies>
         </profile>
     </profiles>
+    -->
     <dependencies>
 
         <dependency>
@@ -164,7 +160,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.10</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

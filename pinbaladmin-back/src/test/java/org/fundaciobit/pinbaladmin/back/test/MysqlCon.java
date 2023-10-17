@@ -28,7 +28,7 @@ public class MysqlCon {
 
     public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
-    private static void ferConsulta(String query) {
+    protected static void ferConsulta(String query) {
         try {
             //            Class.forName("com.mysql.cj.jdbc.Driver");
 

@@ -8,7 +8,6 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitDCteAutEJB;
-import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
 import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitDCteAut;
 import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;

@@ -1,23 +1,16 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
-import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
-import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitJConsentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
-import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

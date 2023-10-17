@@ -1,25 +1,14 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
-import org.fundaciobit.pinbaladmin.model.entity.Organ;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
-import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
-import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;

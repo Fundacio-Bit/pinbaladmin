@@ -27,6 +27,7 @@ public class ParserSolicitudXLSX {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("deprecation")
     public static SolicitudInfo extreureInfo(InputStream input_document, boolean debug) throws Exception {
 
         // convert it into a POI object
@@ -69,6 +70,7 @@ public class ParserSolicitudXLSX {
                         if (cell == null) {
                             v = " => --NULL--";
                         } else {
+
 
                             CellType type = cell.getCellTypeEnum();
 
@@ -154,6 +156,7 @@ public class ParserSolicitudXLSX {
                     final int col = NORMA_LEGAL_COL_I;
                     cellNorma = therow.getCell(col); // Norma legal
 
+                    
                     if (cellNorma == null || cellNorma.getCellTypeEnum() == CellType.BLANK) {
 
                         log.info("(r:" + row + "c:" + col + ") BLANK");
@@ -177,6 +180,7 @@ public class ParserSolicitudXLSX {
 
                     String codiProc;
                     Cell cell = therow.getCell(CODI_PROC_COL_A);
+                    
                     if (cell.getCellTypeEnum() == CellType.BLANK) {
                         codiProc = lastCodiProcediment;
                     } else {
@@ -230,14 +234,17 @@ public class ParserSolicitudXLSX {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static String toString(Cell cell) {
         if (cell == null) {
             return null;
         }
+
         if (cell.getCellTypeEnum() == CellType.BLANK) {
             return "";
         }
         String str;
+
         if (cell.getCellTypeEnum() == CellType.NUMERIC) {
             str = String.valueOf((long) cell.getNumericCellValue());
         } else {

@@ -1,19 +1,17 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.Iterator;
+
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitJConsentEJB;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
-import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 
 /**
