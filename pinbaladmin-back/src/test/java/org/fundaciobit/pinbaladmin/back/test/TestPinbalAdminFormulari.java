@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 //import java.time.LocalDateTime;
@@ -100,11 +101,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-//import org.w3c.dom.Document;
-//import org.w3c.dom.Element;
-//import org.w3c.dom.NodeList;
-//import javax.xml.parsers.DocumentBuilder;
-//import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * 
@@ -134,9 +130,9 @@ El documento de la norma tiene que ser solo el enlace, porque todo está publica
 
 public class TestPinbalAdminFormulari {
 
-    @Test
-    public void main() {
 
+    public static void main(String[] args) {
+        
         FileSystemManager.setFilesPath(new File("D:\\Projectes\\pinbaladmin-files\\files"));
         cridadaAPICrearSolicitudMadridAmbSolicitudID();
     }
