@@ -16,6 +16,8 @@
 
     <properties>
         <xdocreport.version>2.0.4</xdocreport.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <repositories>
@@ -334,12 +336,14 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
+        <!--
         <dependency>
             <groupId>javax.xml.parsers</groupId>
             <artifactId>jaxp-api</artifactId>
             <version>1.4.5</version>
             <scope>test</scope>
         </dependency>
+        -->
 
 
         <!-- OPENSAGRES XDOCREPORT (to merge odt,docx with Java model and convert to PDF) -->
