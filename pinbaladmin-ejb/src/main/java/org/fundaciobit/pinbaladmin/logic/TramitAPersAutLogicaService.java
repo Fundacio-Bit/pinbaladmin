@@ -5,7 +5,6 @@ import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutService;
-import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 
 /**

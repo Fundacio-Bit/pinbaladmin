@@ -96,10 +96,10 @@
                             <c:if test="${counterG ne 0}">,</c:if>
                             <c:set var="counterG" value="${counterG + 1}" />
                             {
-                                "id": '<c:out value="${groupby_item.value}_${groupbyvalue_item.value}_${counterG}"/>',
+                                "id": '${groupby_item.value}_${fn:replace(groupbyvalue_item.value,"'","_")}_${counterG}',
                                 "text": '<span style="${groupbyvalue_item.selected? "font-weight: bold;" : ""}" ><c:out value = "${ (empty groupbyvalue_item.codeLabel) ? buit : groupbyvalue_item.codeLabel}" /> (${groupbyvalue_item.count})</span>',
                                 "field": '${groupby_item.value}',
-                                "value" : '<c:out value = "${groupbyvalue_item.value}"/>',
+                                "value" : '${fn:replace(groupbyvalue_item.value,'\'','\\\'')}',
                                 "hasChildren": false,
                                 "children": []
                             }
@@ -120,6 +120,10 @@
           uiLibrary: 'bootstrap4',
           select: function (e, node, id) {
               var nodedata = tree.getDataById(id);
+              if (!nodedata) {
+                 alert("No he trobat entrada per id =]" + id + "[");
+                 return;
+              };
               if (!nodedata.hasChildren) {
                   groupByFieldValue(nodedata.field, nodedata.value);                  
               }

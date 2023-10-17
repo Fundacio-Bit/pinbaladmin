@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -104,7 +105,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     public void generaXml(Long tramitID) throws I18NException {
 
         try {
-            String plantilla = FileUtils.readFileToString(new File(Configuracio.getTemplateTramitSistraXml()));
+            String plantilla = FileUtils.readFileToString(new File(Configuracio.getTemplateTramitSistraXml()), Charset.defaultCharset());
 
             Map<String, Object> map = new HashMap<String, Object>();
 

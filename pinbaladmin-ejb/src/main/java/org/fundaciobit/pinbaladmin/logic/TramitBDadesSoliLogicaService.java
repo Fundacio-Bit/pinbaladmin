@@ -8,7 +8,6 @@ import javax.ejb.Local;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitBDadesSoliService;
-import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
 import org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA;
 
 /**

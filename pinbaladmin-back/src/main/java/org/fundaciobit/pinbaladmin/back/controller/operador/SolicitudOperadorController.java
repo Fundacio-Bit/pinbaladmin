@@ -433,6 +433,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
         
+        log.info("------------------------------------\n\n"
+         + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") + "|\n"
+         + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") + "|\n"
+         + "\n"
+         + "     solicitudFilterForm.getGroupBy() = |" + solicitudFilterForm.getGroupBy() + "|\n"
+         + "  solicitudFilterForm.getGroupValue() = |" + solicitudFilterForm.getGroupValue() + "|\n"
+         + "\n\n\n"   
+             
+             );        
+        
+        
         if (solicitudFilterForm.isNou()) {
 
             {
