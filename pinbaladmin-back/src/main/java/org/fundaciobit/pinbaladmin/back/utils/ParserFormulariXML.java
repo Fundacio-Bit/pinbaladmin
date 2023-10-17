@@ -2,9 +2,7 @@ package org.fundaciobit.pinbaladmin.back.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Date;
@@ -14,14 +12,13 @@ import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import fr.opensagres.xdocreport.converter.ConverterTypeTo;
 import fr.opensagres.xdocreport.converter.Options;
@@ -208,7 +205,7 @@ public class ParserFormulariXML {
   };
 
   public static Properties getPropertiesFromFormulario(String xml)
-      throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
+      throws Exception {
     DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     InputSource is = new InputSource();
     is.setCharacterStream(new StringReader(xml));
@@ -245,14 +242,25 @@ public class ParserFormulariXML {
 
       String key = base + element.getNodeName();
       String value = element.getTextContent();
+
+      
+//      for (int i = 0; i < nodeMap.getLength(); i++) {
+//        System.out.println(nodeMap.item(i).getNodeName());
+//    }
+
       /*System.out.println("Item NAME => " + key);
       System.out.println("Item VALUE => " + value);
       System.out.println(); */
+//    XYZ JDK11 afegit if, s'ha de llevar
 
-      prop.setProperty(key, value);
-
+//      Node node = element.getFirstChild();
+//      if (node != null) 
+      {
+          prop.setProperty(key, value);
+//          System.out.println("" + node.getValue());
+//          System.out.println("" + node.getStringValue());
+          System.out.println(key + " : " + element.getFirstChild().getNodeValue());
+      }
     }
-
   }
-
 }
