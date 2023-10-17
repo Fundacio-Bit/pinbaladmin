@@ -52,15 +52,6 @@ package org.fundaciobit.pinbaladmin.persistence.test;
 //import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicios;
 //import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
 
-import java.io.FileOutputStream;
-
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
-import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
-import org.fundaciobit.pinbaladmin.model.bean.SolicitudBean;
-import org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager;
-import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.junit.Test;
-
 //import org.w3c.dom.Document;
 //import org.w3c.dom.Element;
 //import org.w3c.dom.NodeList;

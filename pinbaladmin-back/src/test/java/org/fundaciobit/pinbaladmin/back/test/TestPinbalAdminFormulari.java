@@ -53,6 +53,8 @@ import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
 import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
 import org.fundaciobit.pinbaladmin.model.bean.SolicitudBean;
 import org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager;
@@ -278,6 +280,7 @@ public class TestPinbalAdminFormulari {
     }
 
     public Procedimiento getProcedimiento(Properties prop, SolicitudBean soli) {
+
         String _Automatizado = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
         String _Periodico = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
 
@@ -285,23 +288,13 @@ public class TestPinbalAdminFormulari {
         Integer _PeticionesEstimadas = Integer.parseInt(petsDia);
 
         String tipusProc = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
-                Integer _ClaseTramite = Integer.parseInt(tipusProc);
-        //        Integer _ClaseTramite = Integer.parseInt(soli.getProcedimentTipus());
-//        Integer _ClaseTramite = 13;
+        Integer _ClaseTramite = Integer.parseInt(tipusProc);
 
         String _Codigo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIPROC");
         String _Descripcion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
         String _Nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
         String _Observaciones = null;
-        //        String _Codigo = soli.getProcedimentCodi();
-        //        String _Descripcion = soli.getCodiDescriptiu();
-        //        String _Nombre = soli.getProcedimentNom();
-        //        String _Observaciones = soli.getNotes();
-
         
-        
-        
-
         String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
         Timestamp dataCaducitat = null;
         if (caduca.equals("SI")) {
@@ -320,6 +313,7 @@ public class TestPinbalAdminFormulari {
         
         
         
+        //Solicitud -> DocumentSolicitud -> Document -> FitxerID
         
         Fitxer[] docAut = { soli.getDocumentSolicitud() };
         DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docAut);
@@ -478,8 +472,40 @@ public class TestPinbalAdminFormulari {
         return docs;
     }
     
+//    private DocumentosAutorizacion getDocsAutorizacion(Long[] fitxersID) {
+//
+//        DocumentosAutorizacion docs = new DocumentosAutorizacion();
+//        for (Long fitxerID : fitxersID) {
+//            try {
+//
+//                Fitxer document = fitxerEjb.findByPrimaryKey(fitxerID);
+//                String descripcio = document.getDescripcio();
+//                System.out.println(descripcio);
+//                String nom = document.getNom();
+//                String tipo = document.getMime();
+//                
+//                File file = FileSystemManager.getFile(fitxerID);
+//                byte[] contingut = FileUtils.readFromFile(file);
+//
+//                DocumentoAutorizacion docAut = new DocumentoAutorizacion();
+//                docAut.setContenido(null); //contingut);
+//                docAut.setDescripcion(descripcio);
+//                docAut.setNombre(nom);
+//                docAut.setTipo(tipo);
+//
+//                docs.getDocumentoAutorizacion().add(docAut);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        return docs;
+//    }
 
+    
     private Servicios getServicios(Properties prop) {
+        
+        
         Servicios servicios = new Servicios();
 
         String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID";
@@ -562,32 +588,34 @@ public class TestPinbalAdminFormulari {
     }
 
     private Contactos getContactos(Properties prop) {
-
+        
+        String base = "FORMULARIO.DATOS_SOLICITUD.";
+        
         Contactos contactos = new Contactos();
 
-        String contactoAutApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
-        String contactoAutApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
-        String contactoAutMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
-        String contactoAutNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
-        String contactoAutTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
+        String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
+        String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
+        String contactoAutMail = prop.getProperty(base + "MAILSECD");
+        String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
+        String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
 
         contactos.getContacto().add(createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, null,
                 contactoAutNombre, contactoAutTelefon));
 
-        String contactoAudApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
-        String contactoAudApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
-        String contactoAudMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE");
-        String contactoAudNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
-        String contactoAudTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECE");
+        String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
+        String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
+        String contactoAudMail = prop.getProperty(base + "MAILSECE");
+        String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
+        String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
 
         contactos.getContacto().add(createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, null,
                 contactoAudNombre, contactoAudTelefon));
 
-        String contactoTecApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECF");
-        String contactoTecApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECF");
-        String contactoTecMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECF");
-        String contactoTecNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECF");
-        String contactoTecTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECF");
+        String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
+        String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
+        String contactoTecMail = prop.getProperty(base + "MAILSECF");
+        String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
+        String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
 
         contactos.getContacto().add(createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, null,
                 contactoTecNombre, contactoTecTelefon));

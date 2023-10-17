@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -253,8 +252,8 @@ public class ParserFormulariXML {
       System.out.println(); */
 //    XYZ JDK11 afegit if, s'ha de llevar
 
-//      Node node = element.getFirstChild();
-//      if (node != null) 
+      Node node = element.getFirstChild();
+      if (node != null) 
       {
           prop.setProperty(key, value);
 //          System.out.println("" + node.getValue());
