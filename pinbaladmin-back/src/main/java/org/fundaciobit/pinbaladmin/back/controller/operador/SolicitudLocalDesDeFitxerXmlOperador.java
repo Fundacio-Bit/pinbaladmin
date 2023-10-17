@@ -78,7 +78,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 all.remove(DOCUMENTSOLICITUDID);
                 all.remove(ESTATID);
                 all.remove(ORGANID);
-                all.remove(DEPARTAMENTID);
+                //all.remove(DEPARTAMENTID);
 
                 form.setHiddenFields(all);
 

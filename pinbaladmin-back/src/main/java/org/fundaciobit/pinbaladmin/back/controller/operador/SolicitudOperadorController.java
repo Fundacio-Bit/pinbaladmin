@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,8 +40,9 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.persistence.EventJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
@@ -61,9 +61,8 @@ import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
-import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -265,10 +264,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 // log.info("XYZ ZZZ _jpa.getDepartamentID() = " +
                 // _jpa.getDepartamentID());
 
-                if (_jpa.getDepartamentID() == null) {
+                if (_jpa.getDepartamentID() == null && _jpa.getOrganid() == null) {
                     // Es Estatal
 
                     amagarCampsEstatal(solicitudForm);
+                    
                 } else {
                     // Es Local
                     solicitudForm.addHiddenField(ENTITATESTATAL);
@@ -276,9 +276,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             } else {
 
                 if (!solicitudForm.isNou()) {
-                    if (_jpa.getDepartamentID() == null) {
+                    if (_jpa.getDepartamentID() == null  && _jpa.getOrganid() == null) {
                         // solicitudForm.addHiddenField(ENTITATLOCALID);
                         solicitudForm.addHiddenField(DEPARTAMENTID);
+                        solicitudForm.addHiddenField(ORGANID);
                     } else {
                         solicitudForm.addHiddenField(ENTITATESTATAL);
                     }
@@ -323,6 +324,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     private void amagarCampsEstatal(SolicitudForm solicitudForm) {
+        
+        solicitudForm.addHiddenField(ORGANID);
         solicitudForm.addHiddenField(DEPARTAMENTID);
         solicitudForm.addHiddenField(PINFO);
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
@@ -703,16 +706,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             
             // COLUMNA ENTITAT
             if (mapEntitat != null) {
-                Long departamentId = soli.getDepartamentID();
+                Long organId = soli.getOrganid();
                 String tipus, nom;
-                if (departamentId == null) {
+                if (organId == null) {
                     // Estatal
                     tipus = "es";
                     nom = soli.getEntitatEstatal();
                 } else {
                     // Catala
                     tipus = "ca";
-                    nom = departamentLocalMap.get(String.valueOf(departamentId));
+                    nom = departamentLocalMap.get(String.valueOf(organId));
                 }
                 String img;
                 img = "<img src=\"" + request.getContextPath() + "/img/" + tipus + "_petit_on.gif\" alt=\"" + tipus
@@ -1127,7 +1130,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             if (esestatal) {
                 tipusEstatalService = SolicitudFields.ENTITATESTATAL.isNotNull();
             } else {
-                tipusEstatalService = SolicitudFields.DEPARTAMENTID.isNotNull();
+                tipusEstatalService =  Where.OR(SolicitudFields.DEPARTAMENTID.isNotNull(), SolicitudFields.ORGANID.isNotNull());
             }
         }
 
@@ -1387,7 +1390,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         Boolean estatal = isEstatal();
 
         if (estatal == null) {
-            estatal = (solicitudForm.getSolicitud().getDepartamentID() == null);
+            estatal = (solicitudForm.getSolicitud().getDepartamentID() == null && solicitudForm.getSolicitud().getOrganid() == null);
         }
 
         List<StringKeyValue> __tmp;
