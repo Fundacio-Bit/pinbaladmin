@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FORMULARIO modelo="IN0025PBAL" version="1" >
+    <DATOS_REGISTRO>
+        <!-- TramitAPersAut A -->
+        <NIF>${A.nif}</NIF>
+        <EMAIL>${A.mail}</EMAIL>
+        <TELEFONO>${A.telefon}</TELEFONO>
+        <NOMBRE>${A.nom}</NOMBRE>
+        <APELLIDO1>${A.llinatge1}</APELLIDO1>
+        <APELLIDO2>${A.llinatge2}</APELLIDO2>
+        <NOMBRECOMPLETO>${fullNameA}</NOMBRECOMPLETO>
+    </DATOS_REGISTRO>
+    <DATOS_SOLICITUD>
+        <!-- TramitBDadesSoli B -->
+        <LDATIPOSOL indice="${B.tipussolicitud}">${tipussolicitudNom}</LDATIPOSOL>
+        <#switch B.entorn>
+            <#case "pre">
+        <LDAENTORNO indice="Pre">${pre}</LDAENTORNO>
+            <#break>
+            <#case "pro">
+        <LDAENTORNO indice="Pro">${pro}</LDAENTORNO>
+            <#break>
+        </#switch>
+        <!-- TramitCDadesCesi C -->
+        <DENOMINACION indice="${C.denominacio}">${denominacioNom}</DENOMINACION>
+        <CIF>${C.nif}</CIF>
+        <UNIDAD>${C.responsable}</UNIDAD>
+        <CODIUR>${C.dir3responsable}</CODIUR>
+        <CODIOA>${C.dir3arrel}</CODIOA>
+        <DIRECCION>${C.direccio}</DIRECCION>
+        <CP>${C.codipostal}</CP>
+        <MUNICIPIO indice="${C.municipi}">${municipiNom}</MUNICIPIO>
+
+        <!-- TramitDCteAut D -->
+        <NIFSECD>${D.nif}</NIFSECD>
+        <NOMBRESECD>${D.nom}</NOMBRESECD>
+        <APE1SECD>${D.llinatge1}</APE1SECD>
+        <APE2SECD>${D.llinatge2}</APE2SECD>
+        <CARGOSECD>${D.carrec}</CARGOSECD>
+        <TELEFONOSECD>${D.telefon}</TELEFONOSECD>
+        <MAILSECD>${D.mail}</MAILSECD>
+        <NOMOCULSECD>${fullNameD}</NOMOCULSECD>
+
+        <LDAENTORNOCULTO>- Producció</LDAENTORNOCULTO>
+        <LDAENTOCULTOEXCEL>'- Entornos: Producció</LDAENTOCULTOEXCEL>
+        <IDIOMA>ca</IDIOMA>
+
+        <!-- TramitECteAud E -->
+        <COPIARDATOS>false</COPIARDATOS>
+        <NIFSECE>${E.nif}</NIFSECE>
+        <NOMBRESECE>${E.nom}</NOMBRESECE>
+        <APE1SECE>${E.llinatge1}</APE1SECE>
+        <APE2SECE>${E.llinatge2}</APE2SECE>
+        <CARGOSECE>${E.carrec}</CARGOSECE>
+        <TELEFONOSECE>${E.telefon}</TELEFONOSECE>
+        <MAILSECE>${E.mail}</MAILSECE>
+        <NOMOCULSECE>${fullNameE}</NOMOCULSECE>
+
+        <!-- TramitFCteTec F -->
+        <NIFSECF>${F.nif}</NIFSECF>
+        <NOMBRESECF>${F.nom}</NOMBRESECF>
+        <APE1SECF>${F.llinatge1}</APE1SECF>
+        <APE2SECF>${F.llinatge2}</APE2SECF>
+        <CARGOSECF>${F.carrec}</CARGOSECF>
+        <TELEFONOSECF>${F.telefon}</TELEFONOSECF>
+        <MAILSECF>${F.mail}</MAILSECF>
+        <NOMOCULSECF>${fullNameF}</NOMOCULSECF>
+        
+        <!-- TramitGDadesTit G -->
+        <NIFSECG>${G.nif}</NIFSECG>
+        <NOMBRESECG>${G.nom}</NOMBRESECG>
+        <APE1SECG>${G.llinatge1}</APE1SECG>
+        <APE2SECG>${G.llinatge2}</APE2SECG>
+        <CARGOSECG>${G.carrec}</CARGOSECG>
+        <NOMOCULSECG>${fullNameG}</NOMOCULSECG>
+        
+        <!-- TramitHProc H -->
+        <TIPOPROCEDIMIENTO>${H.tipus}</TIPOPROCEDIMIENTO>
+        <NOMTIPUSPROCEDIMIENT>${tipusProcedimentNom}</NOMTIPUSPROCEDIMIENT>
+        <NOMBREPROC>${H.nom}</NOMBREPROC>
+        <CODIPROC>${H.codi}</CODIPROC>
+        <DIRFICHA>${H.urlseu}</DIRFICHA>
+        <#assign caduca = H.caducitat>
+        ${caduca?then('<CADUCA>SI</CADUCA>', '<CADUCA>NO</CADUCA>')}
+        <FECHACAD>${dataCaducitat}</FECHACAD>
+        <DESCRIPCION>${H.descripcio}</DESCRIPCION>
+        <PETICIONESDIA>${H.peticionsaldia}</PETICIONESDIA>
+        <PETICIONESMES>${H.peticionsalmes}</PETICIONESMES>
+        <#assign autom = H.automatizado>
+        ${autom?then('<AUTOMATIZADO>SI</AUTOMATIZADO>', '<AUTOMATIZADO>NO</AUTOMATIZADO>')}
+        <#assign periodic = H.periodico>
+        ${periodic?then('<PERIODICO>SI</PERIODICO>', '<PERIODICO>NO</PERIODICO>')}
+
+        <!-- TramitIServ I -->
+        <#assign id = 0>
+        <LELSERVICIOS>
+        <#list servicios as I>
+            <#assign id = id?number+1?number>
+            <ID${id}>
+                <NOMSERVEI indice="${I.codi}">${nomServeis[id-1]}</NOMSERVEI>
+                <CODISERV>${I.codi}</CODISERV>
+                <NORMALEGAL>${I.norma}</NORMALEGAL>
+                <ARTICULOS>${I.articles}</ARTICULOS>
+                <#switch I.consentiment>
+                    <#case "noop">
+                <CONSENTIMIENTO indice="noop">${noop}</CONSENTIMIENTO>
+                    <#break>
+                    <#case "llei">
+                <CONSENTIMIENTO indice="llei">${llei}</CONSENTIMIENTO>
+                    <#break>
+                </#switch>
+                <ENLACENOR>${I.urlnorma}</ENLACENOR>
+                <LDECONSENTIMIENTO indice="${I.consentimentpublicat}"><#switch I.consentimentpublicat>
+                    <#case "1">Publicat<#break>
+                    <#case "2">Adjunt<#break>
+                    </#switch></LDECONSENTIMIENTO>
+                <ENLACECON>${I.urlconsentiment}</ENLACECON>
+            </ID${id}>
+        </#list>
+        </LELSERVICIOS>
+        <LELSERVICIOSOCULEXCEL/>
+        <CONTCONSADJ>false</CONTCONSADJ>
+        <ELEMREPT>${codisServeisString}</ELEMREPT>
+        <VALIDAELEMREPT/>
+    </DATOS_SOLICITUD>
+</FORMULARIO>
