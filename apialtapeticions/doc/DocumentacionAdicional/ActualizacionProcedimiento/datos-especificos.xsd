@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 sp1 (http://www.altova.com) by End User (free.org) -->
+<xs:schema xmlns="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos" xmlns:dat="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DatosEspecificos" type="DatosEspecificos"/>
+	<xs:complexType name="DatosEspecificos">
+		<xs:choice>
+			<xs:element ref="Solicitud"/>
+			<xs:element ref="Respuesta"/>
+		</xs:choice>
+		<xs:attribute name="Id" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:element name="Respuesta">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="Estado"/>
+				<xs:element ref="Errores" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Estado">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="CodigoEstado">
+					<xs:annotation>
+						<xs:documentation>Codigo del estado de la solicitud</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="4"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Descripcion">
+					<xs:annotation>
+						<xs:documentation>Descripción del estado de la solicitud</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="1024"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Solicitud">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="Contactos"/>
+				<xs:element ref="Procedimiento"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<!-- Nodo errores -->
+	<xs:element name="Errores">
+		<xs:annotation>
+			<xs:documentation>Lista de errores obtenidos cuando la respuesta no ha pasado las validaciones requeridas</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="Error"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Error">
+		<xs:annotation>
+			<xs:documentation>Error de vallidación de la petición</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="Codigo">
+					<xs:annotation>
+						<xs:documentation>Codigo del error de validación del mensaje de petición</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="2"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Descripcion">
+					<xs:annotation>
+						<xs:documentation>Descripción del error de validación del mensaje de petición</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="1024"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<!-- Fin Errores -->
+	<xs:element name="Contactos">
+		<xs:annotation>
+			<xs:documentation>Información de las personas de contacto que envían la solicitud. </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="Contacto"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DocumentoAutorizacion">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="Nombre">
+					<xs:annotation>
+						<xs:documentation>Nombre del archivo de la autoriazación a adjuntar. (Extensión xlsx|xls|XLSX|XLS|pdf|PDF)</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:minLength value="1"/>
+							<xs:maxLength value="512"/>
+							<xs:pattern value=".+\.(xlsx|xls|XLSX|XLS|pdf|PDF)"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="Descripcion"/>
+				<xs:element ref="Contenido"/>
+				<xs:element name="Tipo">
+					<xs:annotation>
+						<xs:documentation>El tipo deberá ser FORMULARIO DE AUTORIZACION o CONVENIO.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="CONVENIO"/>
+							<xs:enumeration value="FORMULARIO DE AUTORIZACION"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<!-- Inicio procedimiento -->
+	<xs:element name="Procedimiento">
+		<xs:annotation>
+			<xs:documentation>Datos del procedimiento en base al cual se solicita autorización para la consulta de los servicios</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="PeticionesEstimadas"/>
+				<xs:element ref="Codigo"/>
+				<xs:element ref="ClaseTramite" minOccurs="0"/>
+				<xs:element name="Nombre" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nombre del procedimiento sobre el que solicita el alta de autorizaciones.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="500"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Descripcion" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Descripción del procedimiento sobre el que solicita el alta de autorizaciones.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:minLength value="1"/>
+							<xs:maxLength value="500"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="Periodico" minOccurs="0"/>
+				<xs:element ref="FechaCaducidad" minOccurs="0"/>
+				<xs:element ref="Automatizado" minOccurs="0"/>
+				<xs:element ref="Consentimiento"/>
+				<xs:element ref="Observaciones" minOccurs="0"/>
+				<xs:element ref="Servicios"/>
+				<xs:element ref="DocumentosAutorizacion" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<!-- Fin procedimiento -->
+	<xs:element name="Consentimiento">
+		<xs:annotation>
+			<xs:documentation>Datos del consentimiento</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="Tipo">
+					<xs:annotation>
+						<xs:documentation>Si, Ley, NoOpo</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Si"/>
+							<xs:enumeration value="NoOpo"/>
+							<xs:enumeration value="Ley"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="Enlace" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Enlace del consentimiento.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Documento" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Documento en el que se recaba el consentimiento del ciudadano para la consulta de sus datos. Debe ser un pdf</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Nombre">
+								<xs:annotation>
+									<xs:documentation>Nombre del archivo de consentimiento a adjuntar. (Extensión pdf|PDF)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:whiteSpace value="collapse"/>
+										<xs:minLength value="1"/>
+										<xs:maxLength value="512"/>
+										<xs:pattern value=".+\.(pdf|PDF)"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element ref="Descripcion"/>
+							<xs:element ref="Contenido"/>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FechaCaducidad" type="xs:date">
+		<xs:annotation>
+			<xs:documentation>Formato: YYYY-MM-DD</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Periodico">
+		<xs:annotation>
+			<xs:documentation>Indentifica el procedimiento como periódico. Valores: SI o NO</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="N"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Automatizado">
+		<xs:annotation>
+			<xs:documentation>Indentifica el procedimiento como procedente de un proceso automatico. Valores: SI o NO</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="N"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Servicios">
+		<xs:annotation>
+			<xs:documentation>Datos de los servicios solicitados para la autorización</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="Servicio"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Normas">
+		<xs:annotation>
+			<xs:documentation>Normas legales que justifican la autorización para el envío de peticiones all servicio</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="Norma"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Norma">
+		<xs:annotation>
+			<xs:documentation>Norma legal que justifica la autorización para el envío de peticiones all servicio.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all maxOccurs="1">
+				<xs:element ref="NormaLegal"/>
+				<xs:element name="Documento">
+					<xs:annotation>
+						<xs:documentation>Documento que recoge la norma legal en la que se basa la autorización a los servicicios. Debe ser un pdf</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Nombre">
+								<xs:annotation>
+									<xs:documentation>Nombre del archivo de la norma legal a adjuntar. (Extensión pdf|PDF)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:whiteSpace value="collapse"/>
+										<xs:minLength value="1"/>
+										<xs:maxLength value="512"/>
+										<xs:pattern value=".+\.(pdf|PDF)"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element ref="Descripcion"/>
+							<xs:element ref="Contenido"/>
+							<xs:element ref="Enlace" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Enlace de la norma legal que regula el procedimiento</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Articulos"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Servicio">
+		<xs:annotation>
+			<xs:documentation>Datos de los servicios a autorizar</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="Normas">
+					<xs:annotation>
+						<xs:documentation>Normas legales que justifican la autorización para el envío de peticiones al servicio</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CodigoCertificado">
+					<xs:annotation>
+						<xs:documentation>Código de certificado para el que se solicita autorización.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DocumentosAutorizacion">
+		<xs:annotation>
+			<xs:documentation>Documento que contiene o bien el formulario de autorización a los servicios o bien un convenio para la autorización de acceso a los servicios que lo requieran. Ambos documentos deben ser un pdf.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="DocumentoAutorizacion"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PeticionesEstimadas">
+		<xs:annotation>
+			<xs:documentation>Número de peticiones estimadas al día para el procedimiento (será la suma de todas las peticiones a todos los servicios solicitados para el procedimiento).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="1"/>
+				<xs:maxInclusive value="10000000"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Codigo">
+		<xs:annotation>
+			<xs:documentation>Código de procedimiento sobre el que solicita el alta de autorizaciones.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:minLength value="3"/>
+				<xs:maxLength value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ClaseTramite">
+		<xs:annotation>
+			<xs:documentation>Clase del trámite realizado que propicia la consulta de datos: 
+0 .- Pruebas
+2 .- Recursos Humanos
+3 .- Tributario
+14 .- Sancionador
+19 .- Afiliación y cotización a la Seguridad Social
+20 .- Autorizaciones, licencias, concesiones y homologaciones
+21 .- Ayudas, Becas y Subvenciones
+22 .- Certificados
+23 .- Contratación pública
+24 .- Convenios de Colaboración y Comunicaciones administrativas
+25 .- Gestión Económica y Patrimonial
+26 .- Declaraciones y comunicaciones de los interesados
+27 .- Inspectora
+28 .- Premios
+29 .- Prestaciones
+30 .- Registros y Censos
+31 .- Responsabilidad patrimonial y otras solicitudes de indemnización
+32 .- Revisión de Actos administrativos y Recursos
+33 .- Sugerencias, Quejas, Denuncias e Información a los ciudadanos
+34 .- Aduanero
+99 .- Resolución de incidencias</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="14"/>
+				<xs:enumeration value="19"/>
+				<xs:enumeration value="20"/>
+				<xs:enumeration value="21"/>
+				<xs:enumeration value="22"/>
+				<xs:enumeration value="23"/>
+				<xs:enumeration value="24"/>
+				<xs:enumeration value="25"/>
+				<xs:enumeration value="26"/>
+				<xs:enumeration value="27"/>
+				<xs:enumeration value="28"/>
+				<xs:enumeration value="29"/>
+				<xs:enumeration value="30"/>
+				<xs:enumeration value="31"/>
+				<xs:enumeration value="32"/>
+				<xs:enumeration value="33"/>
+				<xs:enumeration value="34"/>
+				<xs:enumeration value="99"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Enlace">
+		<xs:simpleType>
+			<xs:restriction base="xs:anyURI">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="2000"/>
+				<xs:whiteSpace value="collapse"/>
+				<xs:pattern value="https?://.+"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Observaciones">
+		<xs:annotation>
+			<xs:documentation>Observaciones adicionales.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:minLength value="1"/>
+				<xs:maxLength value="500"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CodigoCertificado">
+		<xs:annotation>
+			<xs:documentation>Código de certificado del servicio solicitado a autorizar.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:minLength value="1"/>
+				<xs:maxLength value="64"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="NormaLegal">
+		<xs:annotation>
+			<xs:documentation>Norma legal que regula el prcedimiento y servicios solicitados.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="2000"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Articulo">
+		<xs:annotation>
+			<xs:documentation>Texto libre con Articulo/Decreto que regulan la norma</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:minLength value="1"/>
+				<xs:maxLength value="2000"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Articulos">
+		<xs:annotation>
+			<xs:documentation>Lista con Articulos/Decretos que regulan la norma</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="Articulo"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Descripcion">
+		<xs:annotation>
+			<xs:documentation>Texto que describe brevemente el documento</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:minLength value="1"/>
+				<xs:maxLength value="1024"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Contenido">
+		<xs:annotation>
+			<xs:documentation>Contenido del documento en Base64</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:base64Binary">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="4194304"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Contacto">
+		<xs:annotation>
+			<xs:documentation>Información de contacto de la persona que envía la solicitud.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="Nombre"/>
+				<xs:element ref="Apellido1"/>
+				<xs:element ref="Apellido2" minOccurs="0"/>
+				<xs:element ref="Email"/>
+				<xs:element ref="Telefono"/>
+				<xs:element ref="Fax" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Nombre">
+		<xs:annotation>
+			<xs:documentation>Nombre del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="40"/>
+				<xs:minLength value="1"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Apellido1">
+		<xs:annotation>
+			<xs:documentation>Primer apellido del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="40"/>
+				<xs:minLength value="1"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Apellido2">
+		<xs:annotation>
+			<xs:documentation>Segundo apellido del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="40"/>
+				<xs:minLength value="1"/>
+				<xs:whiteSpace value="collapse"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Email">
+		<xs:annotation>
+			<xs:documentation>Email del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:maxLength value="100"/>
+				<xs:pattern value="[^@]+@[^\.]+\..+"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Telefono">
+		<xs:annotation>
+			<xs:documentation>Teléfono del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:pattern value="\d{9,10}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Fax">
+		<xs:annotation>
+			<xs:documentation>Fax del contacto al que se le notificarán las acciones realizadas, desestimiento o aprobación</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:whiteSpace value="collapse"/>
+				<xs:pattern value="\d{9,10}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>
