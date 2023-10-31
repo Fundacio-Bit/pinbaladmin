@@ -11,12 +11,16 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import es.caib.pinbal.client.recobriment.ClientGeneric;
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspRespuesta;
+import es.caib.pinbal.client.recobriment.model.ScspSolicitante.ScspConsentimiento;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.Solicitud;
-import es.caib.pinbal.client.recobriment.model.ScspSolicitante.ScspConsentimiento;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
@@ -45,7 +49,7 @@ public class PinbalAdminSolicitudsApi {
      * @return
      * @throws Exception
      */
-    public Incidencia crearSolicitud(
+    public Respuesta crearSolicitud(
             es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud soliIncidencia,
             ScspTitular titular, ScspFuncionario funcionario) throws Exception {
 
@@ -55,7 +59,6 @@ public class PinbalAdminSolicitudsApi {
         SolicitudPinbalAdmin solicitud = new SolicitudPinbalAdmin(de);
 
         {
-
             solicitud.setIdentificadorSolicitante(this.configuracio.getIdentificadorSolicitante());
             solicitud.setUnidadTramitadora(this.configuracio.getUnidadTramitadora());
             solicitud.setCodigoProcedimiento(this.configuracio.getCodProcedimiento());
@@ -74,7 +77,13 @@ public class PinbalAdminSolicitudsApi {
         resposta = getConnexio(List.of(solicitud));
 
         String datosEspecificos = resposta.getTransmisiones().get(0).getDatosEspecificos();
+        
+        datosEspecificos = datosEspecificos.replace("DatosEspecificos", "datosEspecificos");
+        datosEspecificos = datosEspecificos.replace("<datosEspecificos>",
+                "<datosEspecificos xmlns=\"http://intermediacion.redsara.es/scsp/esquemas/datosespecificos\">");
+        datosEspecificos = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + datosEspecificos;
 
+        System.out.println(datosEspecificos);
         JAXBContext contexto = JAXBContext.newInstance(DatosEspecificos.class);
 
         Unmarshaller datosEspecificosItem = contexto.createUnmarshaller();
@@ -82,34 +91,45 @@ public class PinbalAdminSolicitudsApi {
         DatosEspecificos dte = (DatosEspecificos) datosEspecificosItem.unmarshal(new StringReader(datosEspecificos));
 
         Respuesta respuesta = dte.getRespuesta();
-        System.out.println(" # Errors: " + respuesta.getErrores().getError().size());
 
         String estado = respuesta.getEstado().getCodigoEstado();
         System.out.println(" # Estado: " + estado);
 
-        if ("00".equals(estado)) {
-
-            Incidencia in = respuesta.getIncidencia();
-
-            log.info("Email: " + in.getEmail());
-
-            log.info("NumeroIncidencia: " + in.getNumeroIncidencia());
-
-            log.info("getNumeroSeguimiento: " + in.getNumeroSeguimiento());
-
-            return in;
-
-        } else {
-
-            String error = "Error amb codi d'estat " + estado + " i descripció "
-                    + respuesta.getEstado().getDescripcion();
-
-            Exception ex = new Exception(error);
-            log.error(error, ex);
-
-            throw ex;
-
-        }
+        return respuesta;
+        
+//        if (respuesta.getErrores() == null) {
+//            System.out.println(" # Errors: 0");
+//
+//            Incidencia in = respuesta.getIncidencia();
+//
+////            log.info("Email: " + in.getEmail());
+////            log.info("NumeroIncidencia: " + in.getNumeroIncidencia());
+////            log.info("getNumeroSeguimiento: " + in.getNumeroSeguimiento());
+//
+//            return in;
+//
+//        } else {
+//            
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+//            ObjectWriter prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
+//            String errorJson = prettyWriter.writeValueAsString(respuesta);
+//            
+////            String errorMsg = " # Errors: " + respuesta.getErrores().getError().size();
+////
+////            for (es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Error error : respuesta.getErrores()
+////                    .getError()) {
+////                errorMsg += "\t" + error.getCodigo() + ": " + error.getDescripcion();
+////            }
+////
+////            String error = "Error amb codi d'estat " + estado + " i descripció "
+////                    + respuesta.getEstado().getDescripcion();
+//
+//            Exception ex = new Exception(errorJson);
+//            log.error(errorJson, ex);
+//
+//            throw ex;
+//        }
 
     }
 

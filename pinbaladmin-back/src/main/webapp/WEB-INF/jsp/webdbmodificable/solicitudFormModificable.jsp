@@ -1,6 +1,11 @@
 <script>
 	$(".fa-bullhorn").parent().insertBefore($("#solicitudForm").prev());
 	$(".fa-bullhorn").parent().css("float", "right");
+	
+    $(".fa-cloud-upload-alt").parent().insertBefore($("#solicitudForm").prev());
+	$(".fa-cloud-upload-alt").parent().css("float", "right");
+	$(".fa-cloud-upload-alt").parent().css("margin-right", "1rem");
+
 </script>
 
 <!-- Canvi de tamany de les columnes de la vista d'una sol·licitud -->

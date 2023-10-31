@@ -9,6 +9,7 @@ public interface Constants {
 
     public static final String PINBALADMIN_PROPERTY_BASE = "org.fundaciobit.pinbaladmin.";
     public static final String PINBALADMIN_QUEESTICFENT_PROPERTY_BASE = PINBALADMIN_PROPERTY_BASE + "queesticfent.bd.";
+    public static final String PINBALADMIN_PINBALAPI_PROPERTY_BASE = PINBALADMIN_PROPERTY_BASE + "pinbalapi.";
 
     public static final String SECURITY_DOMAIN = "seycon";
 
@@ -72,5 +73,11 @@ public interface Constants {
     public static final long SOLICITUD_ESTAT_AUTORITZAT = 40;
     public static final long SOLICITUD_ESTAT_PENDENT_PINFO = 50;
     public static final long SOLICITUD_ESTAT_TANCAT = 60;
+    
+    
+    public static final int DOCUMENT_SOLICITUD_ALTRES = 0;
+    public static final int DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF = 1;
+    public static final int DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT = 2;
+    public static final int DOCUMENT_SOLICITUD_EXCEL_SERVEIS = 3;
 
 }
