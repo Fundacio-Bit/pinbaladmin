@@ -34,6 +34,8 @@ import org.fundaciobit.pinbaladmin.ejb.DocumentService;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
+import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -303,8 +305,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
         Respuesta respuesta = api.crearSolicitud(solicitud, titular, funcionario);
 
-        return respuesta; //"Alta tramitada correctament"; //incidencia.getEmail();
-
+        return respuesta;
     }
     
     @Override
@@ -445,9 +446,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docsAuth );
 
-        //Ahora está cogiendo los datos del xml. Luego tendrá que coger los datos solicitud-servei.
-        //También habrá que modificar el tramite y pedir los PDF de las normas en tramitI
-        Servicios _Servicios = getServicios(soli, consentiment);
+        Servicios _Servicios = getServicios(soli);
 
         Procedimiento proc = new Procedimiento();
         proc.setAutomatizado(_Automatizado);
@@ -462,10 +461,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
         proc.setConsentimiento(_Consentimiento);
         proc.setServicios(_Servicios);
-
-        //        Procedimiento proc = getProcedimiento(_Automatizado, _ClaseTramite, _Codigo, _Descripcion, _Nombre,
-        //                _Observaciones, _Periodico, _PeticionesEstimadas, _FechaCaducidad, _Consentimiento,
-        //                _DocumentosAutorizacion, _Servicios);
         return proc;
     }
 
@@ -586,12 +581,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return docs;
     }
 
-    private Servicios getServicios(SolicitudJPA soli, Fitxer fitcheroPrueba) throws Exception {
-
-        //        SolicitudJPA soli = this.findByPrimaryKey(null);
-        //
-        //        List<SolicitudServei> serveis = solicitudServeiLogicaEJB
-        //                .select(SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()));
+    private Servicios getServicios(SolicitudJPA soli) throws Exception {
 
         Servicios servicios = new Servicios();
         Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
@@ -603,28 +593,29 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
                 Norma norma = new Norma();
                 {
-                    String normaLegal = ss.getNormaLegal(); //  prop.getProperty(base + i + ".NORMALEGAL"); //tramitI.getNorma();
+                    String normaLegal = ss.getNormaLegal();
                     Norma.Documento docNorma = new Norma.Documento();
                     {
-                        String enlace = ss.getEnllazNormaLegal(); //  prop.getProperty(base + i + ".ENLACENOR");// tramitI.getUrlnorma();
-                        String descripcio = "Descripció Norma " + codigoCertificado;
-                        String nom = codigoCertificado + "_" + fitcheroPrueba.getNom();
-                        Long consentimentID = fitcheroPrueba.getFitxerID();
+                        String enlace = ss.getEnllazNormaLegal(); 
 
-                        File fileConsentiment = FileSystemManager.getFile(consentimentID);
-                        byte[] contingut = FileUtils.readFromFile(fileConsentiment);
-
-                        log.info("NORMA: " + nom + " : " + contingut.length + " bytes");
                         log.info("url norma: " + enlace);
-
-                        docNorma.setContenido(contingut);
-                        docNorma.setDescripcion(descripcio);
-                        docNorma.setEnlace(enlace);
+                        boolean debug = false;
+                        FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
+                        
+                        String nom = normaFileInfo.getFileName();
+                        String descripcio = normaFileInfo.getSize() + " bytes";
+                        byte[] contingut = normaFileInfo.getContent();
+                        
+                        log.info("NORMA: " + nom + " : " + contingut.length + " bytes");
+                        
                         docNorma.setNombre(nom);
+                        docNorma.setDescripcion(descripcio);
+                        docNorma.setContenido(contingut);
+                        docNorma.setEnlace(enlace);
                     }
 
                     Articulos articulos = new Articulos();
-                    String articulosString = ss.getArticles(); //  prop.getProperty(base + i + ".ARTICULOS");
+                    String articulosString = ss.getArticles();
                     String[] articulosArray = articulosString.split(",");
 
                     for (String articulo : articulosArray) {

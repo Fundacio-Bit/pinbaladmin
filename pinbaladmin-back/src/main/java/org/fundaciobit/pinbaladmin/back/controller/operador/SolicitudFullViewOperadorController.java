@@ -135,9 +135,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       solicitudForm.addAdditionalButton(
               new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
 
-      solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.api",
-//              getContextWeb() + "/altasolicitudpinbal/" + solicitud.getSolicitudID(), "btn-primary"));
-              "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-primary"));
+//      solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.api",
+//              "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-primary"));
 
       solicitudForm.setAttachedAdditionalJspCode(true);
       
