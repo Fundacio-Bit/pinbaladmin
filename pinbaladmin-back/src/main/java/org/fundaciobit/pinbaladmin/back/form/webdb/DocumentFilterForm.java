@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.back.form.webdb;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -64,6 +65,17 @@ public class DocumentFilterForm extends PinbalAdminBaseFilterForm implements Doc
   }
 
 
+  private java.util.List<java.lang.Long> tipusSelect;
+
+  public java.util.List<java.lang.Long> getTipusSelect() {
+    return this.tipusSelect;
+  }
+
+  public void setTipusSelect(java.util.List<java.lang.Long> tipusSelect) {
+    this.tipusSelect = tipusSelect;
+  }
+
+
   public DocumentFilterForm() {
   }
   
@@ -73,6 +85,8 @@ public class DocumentFilterForm extends PinbalAdminBaseFilterForm implements Doc
     this.documentIDFins = __toClone.documentIDFins;
     this.nom = __toClone.nom;
     this.notes = __toClone.notes;
+    this.tipusSelect = __toClone.tipusSelect;
+    this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
   }
   
   /* ========= UTILS ========== */
@@ -107,6 +121,18 @@ public class DocumentFilterForm extends PinbalAdminBaseFilterForm implements Doc
    // -----------------------
    // Maps de referencies.
    // -----------------------
+  private Map<String, String> mapOfValuesForTipus;
+
+  public Map<String, String> getMapOfValuesForTipus() {
+    return this.mapOfValuesForTipus;
+  }
+
+  public void setMapOfValuesForTipus(Map<String, String> mapOfValuesForTipus) {
+    this.mapOfValuesForTipus = mapOfValuesForTipus;
+  }
+
+
+
 
    // --------------------------------
    // Camps traduibles de referencies.

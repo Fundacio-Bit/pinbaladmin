@@ -17,6 +17,9 @@ public interface Document extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getNotes();
 	public void setNotes(java.lang.String _notes_);
 
+	public java.lang.Long getTipus();
+	public void setTipus(java.lang.Long _tipus_);
+
   // Fitxer
   public <F extends Fitxer> F getFitxerOriginal();
   // Fitxer

@@ -40,6 +40,7 @@ import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Norma;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Normas;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Procedimiento;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicio;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicios;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
@@ -170,12 +171,10 @@ public class TestPinbalAdminFormulari {
             //            System.out.println(jsonProc);
 
             PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
-            Incidencia incidencia = api.crearSolicitud(solicitud, titular, funcionario);
-            
-            System.out.println(incidencia.getNumeroSeguimiento());
-            System.out.println(incidencia.getNumeroIncidencia());
-            System.out.println(incidencia.getEmail());
+            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
 
+            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
+            System.out.println("Descripción: " + re.getEstado().getDescripcion());
         } catch (I18NException e) {
             e.printStackTrace();
         } catch (Exception e) {

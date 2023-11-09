@@ -34,6 +34,10 @@ public class DocumentValidator<I extends Document>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOM)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,TIPUS, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
+
     // Check size
     if (__vr.getFieldErrorCount(NOM) == 0) {
       java.lang.String __nom = __target__.getNom();

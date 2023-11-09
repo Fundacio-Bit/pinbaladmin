@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -30,6 +29,7 @@ import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.ejb.DocumentService;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
@@ -48,20 +48,14 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.hibernate.Hibernate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contactos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentoAutorizacion;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentosAutorizacion;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Norma;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Normas;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Procedimiento;
@@ -69,7 +63,6 @@ import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicio;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicios;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
-
 
 /**
  * 
@@ -258,8 +251,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
                     Fitxer attachFile = createFile(fitxerEjb, attach.getFileName(), attach.getContentType(), null,
                             attach.getData());
-
-                    DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null);
+                    Long tipus = Constants.DOCUMENT_SOLICITUD_ALTRES;
+                    
+                    DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null, tipus);
 
                     documentEjb.create(doc);
 
@@ -301,79 +295,130 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             throws Exception {
 
         log.info("EJB: consulta: " + solicitud.getConsulta());
-        
+
         PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
         Respuesta respuesta = api.crearSolicitud(solicitud, titular, funcionario);
 
         return respuesta;
     }
-    
+
     @Override
     public Solicitud getDadesSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception {
 
         SolicitudJPA soli = this.findByPrimaryKey(solicitudID);
         Solicitud solicitud = new Solicitud();
-        
+
         String asunto = "Alta Servicios. Codigo Solicitud: " + soli.getProcedimentCodi();
         solicitud.setAsunto(asunto);
-        
+
         Contactos contactos = getContactos(prop);
         solicitud.setContactos(contactos);
-
+        
         Procedimiento proc = getProcedimiento(soli);
         solicitud.setProcedimiento(proc);
 
         return solicitud;
     }
 
+
+    
     private Contactos getContactos(Properties prop) {
 
         String base = "FORMULARIO.DATOS_SOLICITUD.";
 
         Contactos contactos = new Contactos();
 
+        // Contacto Aut
         String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
         String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
         String contactoAutMail = prop.getProperty(base + "MAILSECD");
         String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
         String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
 
-        contactos.getContacto().add(createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, null,
-                contactoAutNombre, contactoAutTelefon));
+        Contacto contactoAut = createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
+                contactoAutTelefon);
 
+        if (contactoAut != null) {
+            contactos.getContacto().add(contactoAut);
+        }
+
+        // Contacto Aud
         String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
         String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
         String contactoAudMail = prop.getProperty(base + "MAILSECE");
         String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
         String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
 
-        contactos.getContacto().add(createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, null,
-                contactoAudNombre, contactoAudTelefon));
+        Contacto contactoAud = createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
+                contactoAudTelefon);
 
+        if (contactoAud != null) {
+            contactos.getContacto().add(contactoAud);
+        }
+
+        // Contacto Tec
         String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
         String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
         String contactoTecMail = prop.getProperty(base + "MAILSECF");
         String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
         String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
 
-        contactos.getContacto().add(createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, null,
-                contactoTecNombre, contactoTecTelefon));
+        Contacto contactoTec = createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
+                contactoTecTelefon);
+
+        if (contactoTec != null) {
+            contactos.getContacto().add(contactoTec);
+        }
 
         return contactos;
     }
 
-    private Contacto createContacto(String contactoApe1, String contactoApe2, String contactoMail, String contactoFax,
+    private Contacto createContacto(String contactoApe1, String contactoApe2, String contactoMail,
             String contactoNombre, String contactoTelefono) {
-        Contacto contacto = new Contacto();
-        contacto.setApellido1(contactoApe1);
-        contacto.setApellido2(contactoApe2);
-        contacto.setEmail(contactoMail);
-        contacto.setFax(contactoFax);
-        contacto.setNombre(contactoNombre);
-        contacto.setTelefono(contactoTelefono);
-        return contacto;
+        
+        if (contactoApe1 != null && contactoMail != null && contactoNombre != null && contactoTelefono != null) {
+            Contacto contacto = new Contacto();
+            contacto.setApellido1(contactoApe1);
+
+            if (contactoApe2 == null) {
+             //   contactoApe2 = "Apellido2";
+            }
+            
+            log.info("Apellido 2: " + contactoApe2);
+            contacto.setApellido2(contactoApe2);
+            contacto.setEmail(contactoMail);
+            contacto.setFax(null);
+            contacto.setNombre(contactoNombre);
+            contacto.setTelefono(contactoTelefono);
+            return contacto;
+        } else {
+            return null;
+        }
     }
 
+    private class DocAuthInfo {
+        
+        private FitxerJPA fitxer;
+        private String descripcio;
+        private String tipo;
+        
+        public FitxerJPA getFitxer() {
+            return fitxer;
+        }
+        public String getDescripcio() {
+            return descripcio;
+        }
+        public String getTipo() {
+            return tipo;
+        }
+        public DocAuthInfo(FitxerJPA fitxer, String descripcio, String tipo) {
+            super();
+            this.fitxer = fitxer;
+            this.descripcio = descripcio;
+            this.tipo = tipo;
+        }
+    }
+    
     public Procedimiento getProcedimiento(SolicitudJPA soli) throws Exception {
 
         String _Automatizado = "N";// soli.getAutomatizado();
@@ -382,18 +427,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String petsDia = "40"; //soli.getPetsDia();
         Integer _PeticionesEstimadas = Integer.parseInt(petsDia);
 
-        //        String tipusProc = soli.getProcedimentTipus();
-        //        Integer _ClaseTramite = Integer.parseInt(tipusProc);
-        Integer _ClaseTramite = 0; //Pruebas
-        //        Integer [] tipusAceptats = {0, 2, 3, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 99};
-        //
-        //        for (Integer element : tipusAceptats ) {
-        //            if (element == _ClaseTramite ) {
-        //                tipusProcediment = element;
-        //                break;
-        //            }
-        //        }
-
+        String tipusProc = soli.getProcedimentTipus();
+        Integer _ClaseTramite = getIdentificadorNuevoPorId(tipusProc);
+        
         String _Codigo = soli.getProcedimentCodi();
         String _Nombre = soli.getProcedimentNom();
         String _Descripcion = soli.getCodiDescriptiu();
@@ -405,47 +441,45 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         Timestamp dataCaducitat = soli.getDataFi();
         XMLGregorianCalendar _FechaCaducidad = parseTimestampToXMLGregorian(dataCaducitat);
 
-        //Hay que modificar el tramite. Hay que pedir el tipo de consentimiento y el pdf/enlace en TramitH. 
-        // Y pasar en enlace por el xml
-        Fitxer consentiment = soli.getDocumentSolicitud();
+        Fitxer consentiment = null;
+        //Aquí son el excel de servicios y el documento PDF del Director General.
+        Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
         
-        
-        Consentimiento _Consentimiento = getConsentimiento(soli.getSolicitudServeis(), consentiment);
-
-        /*
-         * Aquí son el excel de servicios y el documento PDF del Director General. 
-         * Falta también aclarar lo de CONVENIO y FORMULARIO DE AUTORIZACION 
-         * 
-         * Solicitud -> DocumentSolicitud -> Document -> FitxerID
-         * 
-         * Fitxer[] docAut = { soli.getDocumentSolicitud(), soli.getDocumentSolicitud() }; 
-         * DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docAut); 
-         */
-
-        Set<FitxerJPA> docsAuth = new HashSet<FitxerJPA>();
         for (DocumentSolicitudJPA document : soli.getDocumentSolicituds()) {
+
+            Long tipus = document.getDocument().getTipus();
             
-            int tipus = 0; // document.getTipus();
-            switch (tipus) {
-                case Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF:
-                    docsAuth.add(document.getDocument().getFitxerFirmat()); // Formulari PDF Firmat
-                break;
+            if (tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+                FitxerJPA fitxer = document.getDocument().getFitxerFirmat();
+                if (fitxer != null) {
+                    String desc = "Formulari PDF firmat per el director";
+                    String tipo = "FORMULARIO DE AUTORIZACION";
+                    docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+                }else {
+                    log.info("Fa falta el formulari firmat per el DG");
+                }
                 
-                case Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS:
-                    docsAuth.add(document.getDocument().getFitxerOriginal()); // Excel de Serveis
-                break;
-                
-                default:
-                    FitxerJPA original = document.getDocument().getFitxerOriginal();
-                    if (original.getMime().equals("application/pdf")) {
-                        docsAuth.add(original);
-                    }
-                break;
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
+                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
+                String desc = "Excel de serveis i procediments";
+                String tipo = "EXCEL DE SERVICIOS";
+//                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
+                consentiment = document.getDocument().getFitxerFirmat(); // Document consentiment
+            } else {
+                FitxerJPA original = document.getDocument().getFitxerOriginal();
+                if (original.getMime().equals("application/pdf")) {
+                    FitxerJPA fitxer = original;
+                    String desc = "Fitxer PDF associat al procediment";
+                    String tipo = "DOC AUTORITZACÓ";
+                    docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+                }
             }
         }
-        
-        DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docsAuth );
 
+        Consentimiento _Consentimiento = getConsentimiento(soli.getSolicitudServeis(), consentiment);
+        DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docsAuth);
         Servicios _Servicios = getServicios(soli);
 
         Procedimiento proc = new Procedimiento();
@@ -488,15 +522,14 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         }
         return cal;
     }
-    
 
     private Consentimiento getConsentimiento(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
 
         Consentimiento cons = new Consentimiento();
 
         String consentiment = null;
-        String tipo = null; //prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");* //Si, Ley, NoOpo
-        String enlace = null; //prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTOENLACE");*
+        String tipo = null;
+        String enlace = null;
 
         for (SolicitudServeiJPA solSerJPA : set) {
             consentiment = solSerJPA.getConsentiment(); //Si, Llei, No oposició
@@ -510,7 +543,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 } else {
                     tipo = consentiment.startsWith("S") ? "Si" : "NoOpo";
                     enlace = solSerJPA.getEnllazConsentiment();
-                    
+
                     if (enlace != null && enlace.trim().length() != 0) {
                         cons.setEnlace(enlace);
                         cons.setTipo(tipo);
@@ -521,63 +554,69 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             }
         }
 
-        //Si arriba aqui es que tots els serveis necessiten document
-        try {
-            Consentimiento.Documento doc = new Consentimiento.Documento();
+        //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
+        if (fitxerConsentiment != null) {
+            try {
+                Consentimiento.Documento doc = new Consentimiento.Documento();
 
-            Long consentimentID = fitxerConsentiment.getFitxerID();
+                Long consentimentID = fitxerConsentiment.getFitxerID();
 
-            String nom = fitxerConsentiment.getNom();
-            String descripcio = "Fitxer de consentiment. IDFitxer:" + consentimentID;
+                String nom = fitxerConsentiment.getNom();
+                String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
 
-            File fileConsentiment = FileSystemManager.getFile(consentimentID);
-            byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+                File fileConsentiment = FileSystemManager.getFile(consentimentID);
+                byte[] contingut = FileUtils.readFromFile(fileConsentiment);
 
-            log.info("CONS: " + nom + " : " + contingut.length + " bytes");
-            doc.setNombre(nom);
-            doc.setDescripcion(descripcio);
-            doc.setContenido(contingut);
-            
+                log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+                doc.setNombre(nom);
+                doc.setDescripcion(descripcio);
+                doc.setContenido(contingut);
+
+                cons.setTipo(tipo);
+                cons.setDocumento(doc);
+                return cons;
+            } catch (Exception e) {
+                String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+                log.error(msg);
+                throw new Exception(msg);
+            }
+        } else {
             cons.setTipo(tipo);
-            cons.setDocumento(doc);
+            cons.setEnlace(null);
+            cons.setDocumento(null);
+            log.info("CONS: No tenim fitxer de consentiment. Demanar-ho a la vista prèvia");
             return cons;
-        } catch (Exception e) {
-            String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
-            log.error(msg);
-            throw new Exception(msg);
         }
+
     }
 
-    private DocumentosAutorizacion getDocsAutorizacion(Set<FitxerJPA> fitxers) {
+    private DocumentosAutorizacion getDocsAutorizacion(Set<DocAuthInfo> documents) throws Exception {
 
-        log.info("Documents de la solicitud: " + fitxers.size());
+        log.info("Documents de la solicitud: " + documents.size());
         DocumentosAutorizacion docs = new DocumentosAutorizacion();
-        
-        for (FitxerJPA fitxer : fitxers) {
-            try {
-                String nom = fitxer.getNom();
-                String descripcio = "Formulari d'atorització firmar per el Director General";
-//                String descripcio = "Excel de Procediments i serveis";
-                String tipo = "FORMULARIO DE AUTORIZACION";
-                
-                Long fitxerID = fitxer.getFitxerID();
-                File file = FileSystemManager.getFile(fitxerID);
-                byte[] contingut = FileUtils.readFromFile(file);
-                
-                DocumentoAutorizacion docAut = new DocumentoAutorizacion();
-                log.info("AUT: " + nom + " : " + contingut.length + " bytes");
-                
-                docAut.setContenido(contingut);
-                docAut.setDescripcion(descripcio);
-                docAut.setNombre(nom);
-                docAut.setTipo(tipo);
-                
-                docs.getDocumentoAutorizacion().add(docAut);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
+        for (DocAuthInfo docInfo : documents) {
+            FitxerJPA fitxer = docInfo.getFitxer();
+
+            String nom = fitxer.getNom();
+            String descripcio = docInfo.getDescripcio();
+            String tipo = docInfo.getTipo();
+
+            Long fitxerID = fitxer.getFitxerID();
+            File file = FileSystemManager.getFile(fitxerID);
+            byte[] contingut = FileUtils.readFromFile(file);
+
+            DocumentoAutorizacion docAut = new DocumentoAutorizacion();
+            // AUT - FORMULARIO AUTORIZACION: FicherFirmart09.pdf (124562 bytes)
+            log.info("AUT - " + tipo + ": " + nom + " (" + contingut.length + " bytes)");
+
+            docAut.setNombre(nom);
+            docAut.setDescripcion(descripcio);
+            docAut.setTipo(tipo);
+            docAut.setContenido(contingut);
+
+            docs.getDocumentoAutorizacion().add(docAut);
+        }
         return docs;
     }
 
@@ -586,32 +625,35 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         Servicios servicios = new Servicios();
         Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
+        Long estat_Autoritzat = 50L;
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
-            Servicio servicio = new Servicio();
-            {
-                String codigoCertificado = ss.getServei().getCodi();
+            if (ss.getEstatSolicitudServeiID() == estat_Autoritzat) {
+
+                Servicio servicio = new Servicio();
 
                 Norma norma = new Norma();
                 {
                     String normaLegal = ss.getNormaLegal();
-                    Norma.Documento docNorma = new Norma.Documento();
-                    {
-                        String enlace = ss.getEnllazNormaLegal(); 
 
-                        log.info("url norma: " + enlace);
-                        boolean debug = false;
-                        FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
-                        
+                    Norma.Documento docNorma = new Norma.Documento();
+                    String enlace = ss.getEnllazNormaLegal();
+
+                    boolean debug = false;
+                    FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
+
+                    if (normaFileInfo != null) {
                         String nom = normaFileInfo.getFileName();
-                        String descripcio = normaFileInfo.getSize() + " bytes";
+                        String descripcio = "Norma del servicio: " + ss.getServei().getNom();
                         byte[] contingut = normaFileInfo.getContent();
-                        
-                        log.info("NORMA: " + nom + " : " + contingut.length + " bytes");
-                        
+
+                        log.info("NORMA - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
+
                         docNorma.setNombre(nom);
                         docNorma.setDescripcion(descripcio);
                         docNorma.setContenido(contingut);
                         docNorma.setEnlace(enlace);
+                    } else {
+                        docNorma = null;
                     }
 
                     Articulos articulos = new Articulos();
@@ -623,21 +665,62 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     }
 
                     norma.setNormaLegal(normaLegal);
-                    norma.setArticulos(articulos);
                     norma.setDocumento(docNorma);
+                    norma.setArticulos(articulos);
                 }
+
+                String codigoCertificado = ss.getServei().getCodi();
 
                 Normas normas = new Normas();
                 normas.getNorma().add(norma);
 
                 servicio.setCodigoCertificado(codigoCertificado);
                 servicio.setNormas(normas);
-            }
-            servicios.getServicio().add(servicio);
 
+                servicios.getServicio().add(servicio);
+            }
         }
 
         return servicios;
+    }
+
+    private int getIdentificadorNuevoPorId(String tipoProcedimiento) {
+        int idTipoProcedimiento = TipusProcediments.getIdentificadorTipoProcedimiento(tipoProcedimiento);
+
+        // Mapeo de identificadores en la lista actual a identificadores en la nueva lista
+        Map<Integer, Integer> mapeoIdentificadores = new HashMap<>();
+
+        // Mapeo de identificadores en la lista actual a identificadores en la nueva lista
+        mapeoIdentificadores.put(1, 34);  // Aduanero
+        mapeoIdentificadores.put(2, 19);  // Afiliación y cotización a la Seguridad Social
+        mapeoIdentificadores.put(3, 20);  // Autorizaciones, licencias, concesiones y homologaciones
+        mapeoIdentificadores.put(4, 21);  // Ayudas, Becas y Subvenciones
+        mapeoIdentificadores.put(5, 22);  // Certificados
+        mapeoIdentificadores.put(6, 23);  // Contratación pública
+        mapeoIdentificadores.put(7, 24);  // Convenios de Colaboración y Comunicaciones administrativas
+        mapeoIdentificadores.put(8, 25);  // Gestión Económica y Patrimonial
+        mapeoIdentificadores.put(9, 26);  // Declaraciones y comunicaciones de los interesados
+        mapeoIdentificadores.put(10, 27); // Inspectora
+        mapeoIdentificadores.put(11, 28); // Premios
+        mapeoIdentificadores.put(12, 29); // Prestaciones
+        mapeoIdentificadores.put(13, 2);  // Recursos Humanos
+        mapeoIdentificadores.put(14, 30); // Registros y Censos
+        mapeoIdentificadores.put(15, 31); // Responsabilidad patrimonial y otras solicitudes de indemnización
+        mapeoIdentificadores.put(16, 32); // Revisión de Actos administrativos y Recursos
+        mapeoIdentificadores.put(17, 14); // Sancionador
+        mapeoIdentificadores.put(18, 33); // Sugerencias, Quejas, Denuncias e Información a los ciudadanos
+        mapeoIdentificadores.put(19, 3);  // Tributario
+
+        // Busca el identificador en el nuevo mapeo
+        Integer identificadorNuevo = mapeoIdentificadores.get(idTipoProcedimiento);
+
+        // Si se encuentra, devuelve el identificador en la nueva lista
+        if (identificadorNuevo != null) {
+            return identificadorNuevo;
+        }
+
+        // Si no se encuentra se devolverá 0 (Pruebas) para indicar que no se encontró ningún mapeo correspondiente en la nueva lista.
+        return 0;
     }
 
 }

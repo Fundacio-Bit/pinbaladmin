@@ -30,39 +30,32 @@ th {
 	width: 25rem;
 }
 
-#button-container {
-	position: absolute;
-	top: 5rem;
-	right: 10rem;
-}
-
 #button-alta-solicitud {
-	width: 10rem;
-	height: 3rem;
-	border-radius: 4px;
-	background-color: rgb(0, 123, 255);
 	color: white;
+	float: right;
+	margin-right: 10rem;
 }
 
 #servicios-container {
 	width: fit-content;
 }
 
-.solicitud.servicio.item {
+table.solicitud.servicio.item {
 	width: 100%;
 }
 </style>
 
-<div id="button-container">
-	<button id="button-alta-solicitud" onclick="altaSolicitud()">Alta
-		Solicitud</button>
-</div>
+<a id="button-alta-solicitud" class="btn btn-primary"
+	onclick="altaSolicitud()"> <i class="fas fa-cloud-upload-alt"></i>
+	&nbsp; Alta Solicitud
+</a>
 
 
 <h3>Vista previa alta solicitud</h3>
 
-<form id="formulari" action="<c:url value="/operador/altapinbal/altasolicitud"/>"
-	method="post">
+<form id="formulari"
+	action="<c:url value="/operador/altapinbal/altasolicitud"/>"
+	method="post" enctype="multipart/form-data">
 
 	<div class="solicitud item">
 		<table class="table-rol titular" border="1">
@@ -175,7 +168,7 @@ th {
 						id="consentimiento-enlace" href="${consentimiento.enlace}">${consentimiento.enlace}</a></td>
 				</tr>
 				<tr data-type="documento">
-					<th>Documentos</th>
+					<th>Documento</th>
 					<td id="consentimiento-doc-nombre"
 						class="solicitud consentimiento item">${consentimiento.documento.nombre}</td>
 				</tr>
@@ -187,8 +180,18 @@ th {
 				<tr data-type="documento">
 					<th>Contenido</th>
 					<td id="consentimiento-doc-contenido"
-						class="solicitud consentimiento item">${consentimiento.documento.contenido}</td>
+						class="solicitud consentimiento item contenido">${fn:length(consentimiento.documento.contenido)}</td>
 				</tr>
+
+                <tr data-type="fichero">
+                    <th>Fichero</th>
+                    <td id="consentimiento-doc-fichero"
+                        class="solicitud consentimiento item fichero">
+					<input type="file" name="consentiment-file" />
+					</td>
+                </tr>
+				
+				
 			</table>
 
 		</div>
@@ -213,9 +216,10 @@ th {
 					</tr>
 					<tr>
 						<th>Contenido</th>
-						<td class="solicitud docsauth item">${docauth.contenido}</td>
+						<td class="solicitud docsauth item contenido">${fn:length(docauth.contenido)}</td>
 					</tr>
 				</table>
+				<br>
 			</c:forEach>
 
 		</div>
@@ -247,7 +251,7 @@ th {
 									</tr>
 									<tr>
 										<th>Contenido</th>
-										<td class="solicitud servicio norma item">${norma.documento.contenido}</td>
+										<td class="solicitud servicio norma item contenido">${fn:length(norma.documento.contenido)}</td>
 									</tr>
 									<tr>
 										<th>Enlace</th>
@@ -276,125 +280,159 @@ th {
 </form>
 
 <script type="text/javascript">
-		actualizarElemento("periodico");
-		actualizarElemento("automatizado");
+	actualizarElemento("periodico");
+	actualizarElemento("automatizado");
 
-		function actualizarElemento(id) {
-			var elem = document.getElementById(id);
-			var value = elem.innerHTML;
-			elem.innerHTML = value == "N" ? "No" : "Si";
-		}
+	function actualizarElemento(id) {
+		var elem = document.getElementById(id);
+		var value = elem.innerHTML;
+		elem.innerHTML = value == "N" ? "No" : "Si";
+	}
 
-		customConsentimiento();
-		function customConsentimiento() {
-			var tipo = document.getElementById("consentimiento-tipo");
-			var tipoValue = tipo.innerHTML;
+	var FILES_REQUIRED = 0;
+	customConsentimiento();
+	function customConsentimiento() {
+		var tipo = document.getElementById("consentimiento-tipo");
+		var tipoValue = tipo.innerHTML;
 
-			var enlace = document.getElementById("consentimiento-enlace").innerHTML;
+		var enlace = document.getElementById("consentimiento-enlace").innerHTML;
+	    var documento = document.getElementById("consentimiento-doc-nombre").innerHTML;
+		if (tipoValue === "NoOpo")
+			tipo.innerHTML = "No Oposició";
+		if (tipoValue === "Ley")
+			tipo.innerHTML = "Llei";
+		if (tipoValue === "Si")
+			tipo.innerHTML = "Si";
 
-			if (tipoValue === "NoOpo")
-				tipo.innerHTML = "No Oposició";
-			if (tipoValue === "Ley")
-				tipo.innerHTML = "Llei";
-			if (tipoValue === "Si")
-				tipo.innerHTML = "Si";
 
-			if (tipoValue === "Ley") {
-				$("tr[data-type='enlace'], tr[data-type='documento']").hide();
-			} else if (enlace === "") {
-				$("tr[data-type='enlace']").hide();
-			} else {
+		if (tipoValue === "Ley") {
+			$("tr[data-type='enlace']").hide();
+			$("tr[data-type='documento']").hide();
+			$("tr[data-type='fichero']").hide();
+		} else {
+			if (enlace != "") {
 				$("tr[data-type='documento']").hide();
+				$("tr[data-type='fichero']").hide();
+			} else {
+				$("tr[data-type='enlace']").hide();
+				if (documento != "") {
+					$("tr[data-type='fichero']").hide();
+				} else {
+					$("tr[data-type='documento']").hide();
+					FILES_REQUIRED = 1;
+				}
 			}
 		}
+	}
 
-		getClaseTramitFromProcedimiento();
-		function getClaseTramitFromProcedimiento() {
-			var claseTramit = document.getElementById("clase-tramite");
+	getClaseTramitFromProcedimiento();
+	function getClaseTramitFromProcedimiento() {
+		var claseTramit = document.getElementById("clase-tramite");
 
-			switch (claseTramit.innerHTML) {
-			case "0":
-				claseTramit.innerHTML = "Pruebas";
-				break;
-			case "2":
-				claseTramit.innerHTML = "Recursos Humanos";
-				break;
-			case "3":
-				claseTramit.innerHTML = "Tributario";
-				break;
-			case "14":
-				claseTramit.innerHTML = "Sancionador";
-				break;
-			case "19":
-				claseTramit.innerHTML = "Afiliación y cotización a la Seguridad Social";
-				break;
-			case "20":
-				claseTramit.innerHTML = "Autorizaciones, licencias, concesiones y homologaciones";
-				break;
-			case "21":
-				claseTramit.innerHTML = "Ayudas, Becas y Subvenciones";
-				break;
-			case "22":
-				claseTramit.innerHTML = "Certificados";
-				break;
-			case "23":
-				claseTramit.innerHTML = "Contratación pública";
-				break;
-			case "24":
-				claseTramit.innerHTML = "Convenios de Colaboración y Comunicaciones administrativas";
-				break;
-			case "25":
-				claseTramit.innerHTML = "Gestión Económica y Patrimonial";
-				break;
-			case "26":
-				claseTramit.innerHTML = "Declaraciones y comunicaciones de los interesados";
-				break;
-			case "27":
-				claseTramit.innerHTML = "Inspectora";
-				break;
-			case "28":
-				claseTramit.innerHTML = "Premios";
-				break;
-			case "29":
-				claseTramit.innerHTML = "Prestaciones";
-				break;
-			case "30":
-				claseTramit.innerHTML = "Registros y Censos";
-				break;
-			case "31":
-				claseTramit.innerHTML = "Responsabilidad patrimonial y otras solicitudes de indemnización";
-				break;
-			case "32":
-				claseTramit.innerHTML = "Revisión de Actos administrativos y Recursos";
-				break;
-			case "33":
-				claseTramit.innerHTML = "Sugerencias, Quejas, Denuncias e Información a los ciudadanos";
-				break;
-			case "34":
-				claseTramit.innerHTML = "Aduanero";
-				break;
-			case "99":
-				claseTramit.innerHTML = "Resolución de incidencias";
-				break;
-			default:
-				claseTramit.innerHTML = "";
-				break;
-			}
+		switch (claseTramit.innerHTML) {
+		case "0":
+			claseTramit.innerHTML = "Pruebas";
+			break;
+		case "2":
+			claseTramit.innerHTML = "Recursos Humanos";
+			break;
+		case "3":
+			claseTramit.innerHTML = "Tributario";
+			break;
+		case "14":
+			claseTramit.innerHTML = "Sancionador";
+			break;
+		case "19":
+			claseTramit.innerHTML = "Afiliación y cotización a la Seguridad Social";
+			break;
+		case "20":
+			claseTramit.innerHTML = "Autorizaciones, licencias, concesiones y homologaciones";
+			break;
+		case "21":
+			claseTramit.innerHTML = "Ayudas, Becas y Subvenciones";
+			break;
+		case "22":
+			claseTramit.innerHTML = "Certificados";
+			break;
+		case "23":
+			claseTramit.innerHTML = "Contratación pública";
+			break;
+		case "24":
+			claseTramit.innerHTML = "Convenios de Colaboración y Comunicaciones administrativas";
+			break;
+		case "25":
+			claseTramit.innerHTML = "Gestión Económica y Patrimonial";
+			break;
+		case "26":
+			claseTramit.innerHTML = "Declaraciones y comunicaciones de los interesados";
+			break;
+		case "27":
+			claseTramit.innerHTML = "Inspectora";
+			break;
+		case "28":
+			claseTramit.innerHTML = "Premios";
+			break;
+		case "29":
+			claseTramit.innerHTML = "Prestaciones";
+			break;
+		case "30":
+			claseTramit.innerHTML = "Registros y Censos";
+			break;
+		case "31":
+			claseTramit.innerHTML = "Responsabilidad patrimonial y otras solicitudes de indemnización";
+			break;
+		case "32":
+			claseTramit.innerHTML = "Revisión de Actos administrativos y Recursos";
+			break;
+		case "33":
+			claseTramit.innerHTML = "Sugerencias, Quejas, Denuncias e Información a los ciudadanos";
+			break;
+		case "34":
+			claseTramit.innerHTML = "Aduanero";
+			break;
+		case "99":
+			claseTramit.innerHTML = "Resolución de incidencias";
+			break;
+		default:
+			claseTramit.innerHTML = "";
+			break;
+		}
+	}
+
+	function altaSolicitud() {
+		var msg = document.getElementById("consulta").value;
+
+		var file = document.getElementById("consentimiento-doc-fichero").children[0];
+		var nFiles = file.files.length;
+		
+		if (nFiles == FILES_REQUIRED) {
+		     document.getElementById("formulari").submit();
+		}else{
+			alert("Faltan ficheros: " + nFiles + " - " + FILES_REQUIRED);
 		}
 		
-		function altaSolicitud(){
-			var msg = document.getElementById("consulta").value;
-			
-			document.getElementById("formulari").submit();
-			
-<%-- 			var msgEnc = btoa(msg);
-			
-            var url = '<%=request.getContextPath()%>
-	${contexte}/altasolicitud/'
-				+ msgEnc;
+	//	document.getElementById("formulari").submit();
+	}
 
-		alert("Consulta: " + url);
+	setTamanyFitxersOk();
+	function setTamanyFitxersOk() {
+		var contenidos = document.getElementsByClassName("contenido");
+		for (let i = 0; i < contenidos.length; i++) {
+			const bytes = contenidos[i].innerHTML;
+			const resultado = convertirBytes(bytes);
+			contenidos[i].innerHTML = resultado;
+		}
+	}
 
-		window.location = url;
- --%>	}
+	function convertirBytes(bytes) {
+		if (bytes < 1024) {
+			return bytes + " bytes";
+		} else if (bytes < 1048576) {
+			const kilobytes = (bytes / 1024).toFixed(2);
+			return kilobytes + " KB";
+		} else {
+			const megabytes = (bytes / 1048576).toFixed(2);
+			return megabytes + " MB";
+		}
+	}
 </script>

@@ -8,6 +8,7 @@ import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contactos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Procedimiento;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
 
 import java.io.File;
@@ -62,13 +63,10 @@ public class TestPinbalAdminFormulari {
 
             PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
 
-            Incidencia in = api.crearSolicitud(solicitud, titular, funcionario);
+            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
 
-            System.out.println("Email: " + in.getEmail());
-
-            System.out.println("NumeroIncidencia: " + in.getNumeroIncidencia());
-
-            System.out.println("getNumeroSeguimiento: " + in.getNumeroSeguimiento());
+            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
+            System.out.println("Descripción: " + re.getEstado().getDescripcion());
 
         } catch (Throwable e) {
             // TODO Auto-generated catch block

@@ -27,6 +27,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.NOTES)}">
         <th>${pad:getSortIcons(__theFilterForm,DocumentFields.NOTES)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.TIPUS)}">
+        <th>${pad:getSortIcons(__theFilterForm,DocumentFields.TIPUS)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

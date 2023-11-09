@@ -123,4 +123,29 @@ public class TipusProcediments {
         return castellaMap.keySet();
     }
 
+    
+    public static int getIdentificadorTipoProcedimiento(String tipoProcedimiento) {
+        // Convierte el tipo de procedimiento a minúsculas para una búsqueda sin distinción entre mayúsculas y minúsculas
+        if (tipoProcedimiento == null) {
+            return -1;
+        }
+        String tipoProcedimientoLowerCase = tipoProcedimiento.toLowerCase();
+
+        // Busca en el mapa castellaMap
+        TipusProcediment tipusProcediment = castellaMap.get(tipoProcedimientoLowerCase);
+
+        // Si no se encuentra en el mapa castellaMap, busca en el mapa catalaMap
+        if (tipusProcediment == null) {
+            tipusProcediment = catalaMap.get(tipoProcedimientoLowerCase);
+        }
+
+        // Si se encuentra el tipo de procedimiento, devuelve su identificador
+        if (tipusProcediment != null) {
+            return (int) tipusProcediment.id;
+        }
+
+        // Si no se encuentra, puedes devolver un valor predeterminado o lanzar una excepción, dependiendo de tus necesidades.
+        // En este caso, se devolverá -1 para indicar que no se encontró ningún tipo de procedimiento correspondiente.
+        return -1;
+    }
 }

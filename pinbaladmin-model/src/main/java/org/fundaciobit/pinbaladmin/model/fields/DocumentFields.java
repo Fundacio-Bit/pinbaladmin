@@ -17,6 +17,7 @@ public interface DocumentFields extends java.io.Serializable {
 	 public static final LongField FITXERORIGINALID = new LongField(_TABLE_MODEL, "fitxerOriginalID", "fitxeroriginalid");
 	 public static final LongField FITXERFIRMATID = new LongField(_TABLE_MODEL, "fitxerFirmatID", "fitxerfirmatid");
 	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "notes");
+	 public static final LongField TIPUS = new LongField(_TABLE_MODEL, "tipus", "tipus");
 
 
   public static final Field<?>[] ALL_DOCUMENT_FIELDS = {
@@ -24,7 +25,8 @@ public interface DocumentFields extends java.io.Serializable {
     NOM,
     FITXERORIGINALID,
     FITXERFIRMATID,
-    NOTES
+    NOTES,
+    TIPUS
   };
 
 

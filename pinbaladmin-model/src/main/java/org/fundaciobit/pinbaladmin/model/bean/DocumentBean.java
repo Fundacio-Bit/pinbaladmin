@@ -13,6 +13,7 @@ public class DocumentBean implements Document {
 	long fitxerOriginalID;
 	java.lang.Long fitxerFirmatID;
 	java.lang.String notes;
+	java.lang.Long tipus;
 
 
   /** Constructor Buit */
@@ -20,25 +21,28 @@ public class DocumentBean implements Document {
   }
 
   /** Constructor amb tots els camps  */
-  public DocumentBean(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes) {
+  public DocumentBean(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes , java.lang.Long tipus) {
     this.documentID=documentID;
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
     this.fitxerFirmatID=fitxerFirmatID;
     this.notes=notes;
+    this.tipus=tipus;
 }
   /** Constructor sense valors autoincrementals */
-  public DocumentBean(java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes) {
+  public DocumentBean(java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes , java.lang.Long tipus) {
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
     this.fitxerFirmatID=fitxerFirmatID;
     this.notes=notes;
+    this.tipus=tipus;
 }
   /** Constructor dels valors Not Null */
-  public DocumentBean(long documentID , java.lang.String nom , long fitxerOriginalID) {
+  public DocumentBean(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long tipus) {
     this.documentID=documentID;
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
+    this.tipus=tipus;
 }
   public DocumentBean(Document __bean) {
     this.setDocumentID(__bean.getDocumentID());
@@ -46,6 +50,7 @@ public class DocumentBean implements Document {
     this.setFitxerOriginalID(__bean.getFitxerOriginalID());
     this.setFitxerFirmatID(__bean.getFitxerFirmatID());
     this.setNotes(__bean.getNotes());
+    this.setTipus(__bean.getTipus());
     // Fitxer
     this.setFitxerOriginal(FitxerBean.toBean(__bean.getFitxerOriginal()));
     // Fitxer
@@ -87,6 +92,13 @@ public class DocumentBean implements Document {
 		this.notes = _notes_;
 	};
 
+	public java.lang.Long getTipus() {
+		return(tipus);
+	};
+	public void setTipus(java.lang.Long _tipus_) {
+		this.tipus = _tipus_;
+	};
+
 
 
   // ======================================
@@ -99,6 +111,7 @@ public class DocumentBean implements Document {
     __tmp.setFitxerOriginalID(__bean.getFitxerOriginalID());
     __tmp.setFitxerFirmatID(__bean.getFitxerFirmatID());
     __tmp.setNotes(__bean.getNotes());
+    __tmp.setTipus(__bean.getTipus());
     // Fitxer
     __tmp.setFitxerOriginal(FitxerBean.toBean(__bean.getFitxerOriginal()));
     // Fitxer

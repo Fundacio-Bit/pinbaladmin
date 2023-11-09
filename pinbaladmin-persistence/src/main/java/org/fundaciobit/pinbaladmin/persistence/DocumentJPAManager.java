@@ -55,8 +55,8 @@ public class DocumentJPAManager
         return list.toArray(new Document[list.size()]);
     };
 
-    public Document create( java.lang.String _nom_, long _fitxerOriginalID_, java.lang.Long _fitxerFirmatID_, java.lang.String _notes_) throws I18NException {
-        DocumentJPA __bean =  new DocumentJPA(_nom_,_fitxerOriginalID_,_fitxerFirmatID_,_notes_);
+    public Document create( java.lang.String _nom_, long _fitxerOriginalID_, java.lang.Long _fitxerFirmatID_, java.lang.String _notes_, java.lang.Long _tipus_) throws I18NException {
+        DocumentJPA __bean =  new DocumentJPA(_nom_,_fitxerOriginalID_,_fitxerFirmatID_,_notes_,_tipus_);
         return create(__bean);
     }
 

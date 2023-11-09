@@ -391,7 +391,6 @@ public class TestPinbalAdminFormulari {
 //        config.setCodigoCertificado("SVDPIDSOLAUTWS01");
 //
 //        return config;
-//
 //    }
 //
 //    private ScspFuncionario getFuncionari(TramitAPersAut tramitA) {
