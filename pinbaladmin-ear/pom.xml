@@ -265,7 +265,7 @@
 
 					<displayName>PinbalAdmin</displayName>
 					<description>PinbalAdmin</description>
-
+                    <skinnyWars>true</skinnyWars>
 					<generateApplicationXml>true</generateApplicationXml>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<includeLibInApplicationXml>false</includeLibInApplicationXml>
