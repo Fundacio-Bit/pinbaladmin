@@ -66,11 +66,11 @@ public class AltaSolicitudPinbalOperadorController {
         SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
         
         List<String> errors = new ArrayList<String>();
-        
-        if (soli.getEstatID() != Constants.SOLICITUD_ESTAT_AUTORITZAT
-                && soli.getEstatID() != Constants.SOLICITUD_ESTAT_TANCAT) {
-            errors.add("L'estat es " + SolicitudOperadorController.ESTATS_SOLICITUD.get(soli.getEstatID()));
-        }
+//        
+//        if (soli.getEstatID() != Constants.SOLICITUD_ESTAT_AUTORITZAT
+//                && soli.getEstatID() != Constants.SOLICITUD_ESTAT_TANCAT) {
+//            errors.add("L'estat es " + SolicitudOperadorController.ESTATS_SOLICITUD.get(soli.getEstatID()));
+//        }
 
         if (soli.getDataFi() != null && soli.getDataFi().before(new Timestamp(System.currentTimeMillis()))) {
             errors.add("La data de caducitat ha de ser posterior a avui");
