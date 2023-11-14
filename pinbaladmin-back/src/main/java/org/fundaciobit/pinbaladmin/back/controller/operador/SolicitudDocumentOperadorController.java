@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
@@ -245,4 +246,16 @@ public class SolicitudDocumentOperadorController extends DocumentController {
         return "redirect:/operador/solicitudfullview/viewsessio";
     }
 
+    public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request,
+            ModelAndView mav, Where where)  throws I18NException {
+         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+         __tmp.add(new StringKeyValue("0" , "Altres"));
+         __tmp.add(new StringKeyValue("1" , "Formulari PDF"));
+         __tmp.add(new StringKeyValue("2" , "Formulari ODT"));
+         __tmp.add(new StringKeyValue("3" , "Excel Serveis"));
+         __tmp.add(new StringKeyValue("4" , "Consentiment"));
+         return __tmp;
+       }    
+    
+    
 }

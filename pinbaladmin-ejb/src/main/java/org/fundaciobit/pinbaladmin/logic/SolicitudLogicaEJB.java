@@ -294,8 +294,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud)
             throws Exception {
 
-        log.info("EJB: consulta: " + solicitud.getConsulta());
-
         PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
         Respuesta respuesta = api.crearSolicitud(solicitud, titular, funcionario);
 
@@ -379,12 +377,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         if (contactoApe1 != null && contactoMail != null && contactoNombre != null && contactoTelefono != null) {
             Contacto contacto = new Contacto();
             contacto.setApellido1(contactoApe1);
-
             if (contactoApe2 == null) {
              //   contactoApe2 = "Apellido2";
             }
             
-            log.info("Apellido 2: " + contactoApe2);
             contacto.setApellido2(contactoApe2);
             contacto.setEmail(contactoMail);
             contacto.setFax(null);
@@ -625,9 +621,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         Servicios servicios = new Servicios();
         Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
-        Long estat_Autoritzat = 50L;
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
-            if (ss.getEstatSolicitudServeiID() == estat_Autoritzat) {
+            boolean balear = ss.getServei().getEntitatServei().isBalears();
+            if (!balear) {
 
                 Servicio servicio = new Servicio();
 

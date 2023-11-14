@@ -216,7 +216,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         InputStream xlsxIS = new ByteArrayInputStream(xlsx.getData());
 
-        final boolean debug = false;
+        final boolean debug = true;
         SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
 
         log.info(" #Procediments de Solicitud = " + info.getProcediments().size());
