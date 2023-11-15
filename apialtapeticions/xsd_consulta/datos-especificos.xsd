@@ -1,0 +1,547 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos"
+           xmlns:dat="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="http://intermediacion.redsara.es/scsp/esquemas/datosespecificos">
+   <xs:element name="DatosEspecificos" type="DatosEspecificos"/>
+   <xs:complexType name="DatosEspecificos">
+      <xs:choice>
+         <xs:element ref="Consulta"/>
+         <xs:element ref="Retorno"/>
+      </xs:choice>
+      <xs:attribute name="Id" type="xs:string" use="optional"/>
+   </xs:complexType>
+   <xs:element name="Retorno">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="Estado"/>
+            <xs:element minOccurs="0" ref="Procedimiento"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Estado">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="CodigoEstado"/>
+            <xs:element ref="LiteralError"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="CodigoEstado">
+      <xs:annotation>
+         <xs:documentation>Codigo del estado de la solicitud</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="4"/>
+            <xs:whiteSpace value="collapse"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="LiteralError">
+      <xs:annotation>
+         <xs:documentation>Descripción del estado de la solicitud</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="1024"/>
+            <xs:whiteSpace value="collapse"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Consulta">
+      <xs:complexType>
+         <xs:all>
+            <xs:element name="CodigoProcedimiento" type="CodigoProcedimiento">
+               <xs:annotation>
+                  <xs:documentation>Código de procedimiento sobre el que solicita el estado de las autorizaciones.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Procedimiento">
+      <xs:annotation>
+         <xs:documentation>Datos del procedimiento para el que se consulta el estado de las autorizaciones solicitadas en base a él.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:all>
+            <xs:element name="Codigo" type="CodigoProcedimiento">
+               <xs:annotation>
+                  <xs:documentation>Código de procedimiento sobre el se ha solicitado el estado de las autorizaciones.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="ClaseTramite"/>
+            <xs:element ref="Nombre"/>
+            <xs:element name="Descripcion" type="DescripcionProcedimiento">
+               <xs:annotation>
+                  <xs:documentation>Descripción del procedimiento para el que se consulta el estado de las solicitudes de autorización solicitadas en base a él.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Periodico"/>
+            <xs:element minOccurs="0" ref="FechaCaducidad"/>
+            <xs:element ref="Automatizado"/>
+            <xs:element ref="Consentimiento"/>
+            <xs:element ref="EstadoProcedimiento">
+               <xs:annotation>
+                  <xs:documentation>Estado de la autorización del procedimiento</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Servicios"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Nombre">
+      <xs:annotation>
+         <xs:documentation>Nombre del procedimiento para el que se consulta el estado de las autorización solicitadas en base a él.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="500"/>
+            <xs:whiteSpace value="collapse"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:simpleType name="DescripcionProcedimiento">
+      <xs:restriction base="xs:string">
+         <xs:whiteSpace value="collapse"/>
+         <xs:minLength value="1"/>
+         <xs:maxLength value="500"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:element name="Consentimiento">
+      <xs:annotation>
+         <xs:documentation>Datos del consentimiento</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="Tipo"/>
+            <xs:element minOccurs="0" ref="Enlace">
+               <xs:annotation>
+                  <xs:documentation>Enlace del consentimiento.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Tipo">
+      <xs:annotation>
+         <xs:documentation>Si, Ley, NoOpo</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:enumeration value="Si"/>
+            <xs:enumeration value="NoOpo"/>
+            <xs:enumeration value="Ley"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="FechaCaducidad" type="xs:date">
+      <xs:annotation>
+         <xs:documentation>Formato: YYYY-MM-DD</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="Periodico">
+      <xs:annotation>
+         <xs:documentation>Indentifica el procedimiento como periódico. Valores: SI o NO</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:enumeration value="S"/>
+            <xs:enumeration value="N"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Automatizado">
+      <xs:annotation>
+         <xs:documentation>Indentifica el procedimiento como procedente de un proceso automatico. Valores: SI o NO</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:enumeration value="S"/>
+            <xs:enumeration value="N"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Servicios">
+      <xs:annotation>
+         <xs:documentation>Datos de los servicios para los que se solicitó autorización</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="Servicio"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Servicio">
+      <xs:annotation>
+         <xs:documentation>Datos del servicio para el que se solicitó autorización</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="Normas">
+               <xs:annotation>
+                  <xs:documentation>Normas legales que justifican la autorización para el envío de peticiones al servicio</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="CodigoCertificado">
+               <xs:annotation>
+                  <xs:documentation>Código de certificado</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="Nombre" type="NombreServicio">
+               <xs:annotation>
+                  <xs:documentation>Nombre del servicio</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="EstadoAutorizacion">
+               <xs:annotation>
+                  <xs:documentation>Estado de la autorización del servicio</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" ref="EstadoAutorizacionCedentes">
+               <xs:annotation>
+                  <xs:documentation>Estado de la autorización del servicio en cada cedente</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Normas">
+      <xs:annotation>
+         <xs:documentation>Normas legales que justifican la autorización para el envío de peticiones al servicio</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="Norma"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Norma">
+      <xs:annotation>
+         <xs:documentation>Norma legal que justifica la autorización para el envío de peticiones al servicio.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="NormaLegal"/>
+            <xs:element minOccurs="0" ref="Enlace">
+               <xs:annotation>
+                  <xs:documentation>Enlace de la norma legal que regula el procedimiento</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Articulos"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:simpleType name="CodigoProcedimiento">
+      <xs:restriction base="xs:string">
+         <xs:minLength value="3"/>
+         <xs:maxLength value="20"/>
+         <xs:whiteSpace value="collapse"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:element name="ClaseTramite">
+      <xs:annotation>
+         <xs:documentation>Clase del trámite realizado que propicia la consulta de datos: 
+0 .- Pruebas
+2 .- Recursos Humanos
+3 .- Tributario
+14 .- Sancionador
+19 .- Afiliación y cotización a la Seguridad Social
+20 .- Autorizaciones, licencias, concesiones y homologaciones
+21 .- Ayudas, Becas y Subvenciones
+22 .- Certificados
+23 .- Contratación pública
+24 .- Convenios de Colaboración y Comunicaciones administrativas
+25 .- Gestión Económica y Patrimonial
+26 .- Declaraciones y comunicaciones de los interesados
+27 .- Inspectora
+28 .- Premios
+29 .- Prestaciones
+30 .- Registros y Censos
+31 .- Responsabilidad patrimonial y otras solicitudes de indemnización
+32 .- Revisión de Actos administrativos y Recursos
+33 .- Sugerencias, Quejas, Denuncias e Información a los ciudadanos
+34 .- Aduanero
+99 .- Resolución de incidencias</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:int">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="14"/>
+            <xs:enumeration value="19"/>
+            <xs:enumeration value="20"/>
+            <xs:enumeration value="21"/>
+            <xs:enumeration value="22"/>
+            <xs:enumeration value="23"/>
+            <xs:enumeration value="24"/>
+            <xs:enumeration value="25"/>
+            <xs:enumeration value="26"/>
+            <xs:enumeration value="27"/>
+            <xs:enumeration value="28"/>
+            <xs:enumeration value="29"/>
+            <xs:enumeration value="30"/>
+            <xs:enumeration value="31"/>
+            <xs:enumeration value="32"/>
+            <xs:enumeration value="33"/>
+            <xs:enumeration value="34"/>
+            <xs:enumeration value="99"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Enlace">
+      <xs:simpleType>
+         <xs:restriction base="xs:anyURI">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="2000"/>
+            <xs:whiteSpace value="collapse"/>
+            <xs:pattern value="https?://.+"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="CodigoCertificado">
+      <xs:annotation>
+         <xs:documentation>Código de certificado del servicio solicitado a autorizar.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="64"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="EstadoAutorizacion">
+      <xs:complexType>
+         <xs:all>
+            <xs:element name="Estado" type="EstadoAutorizacion">
+               <xs:annotation>
+                  <xs:documentation>Estado en que se encuentra la autorización al servicio:
+0.- Pendiente de tramitar: No se ha empezado a gestionar la autorización al servicio.
+1.- Desistido: Se requirió subsanación y no se realizo en la plazo establecido, por lo que se la solicitud de autorizción se dio por desistida.
+2.- Aprobado: Se ha revisado que la solicitud de autorización es correcta pero aún no se ha gestionado.
+3.- No aprobado: La solicitud de autorización no es correcta  y requiere subsanación, ya que la normativa indicada no justifica el acceso al servicio.
+6.- Pendiente de autorización por parte del cedente: Se ha solicitado la autorización al cedente de los datos pero aún no se ha recibido respuesta por su parte
+7.- Autorizado: El servicio ya está autorizado.
+8.- Desestimado: La solicitud de autorización se ha desestimado.
+			</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Descripcion"/>
+            <xs:element minOccurs="0" name="Observaciones">
+               <xs:annotation>
+                  <xs:documentation>Solamente se devolverá cuando la solicitud de autorización se deba subsanar e indicará la subsanación que se debe realizar. (Código 3: No aprobado)</xs:documentation>
+               </xs:annotation>
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:minLength value="1"/>
+                     <xs:maxLength value="1024"/>
+                     <xs:whiteSpace value="collapse"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="NormaLegal">
+      <xs:annotation>
+         <xs:documentation>Norma legal que regula el prcedimiento y servicios solicitados.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="2000"/>
+            <xs:whiteSpace value="collapse"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Articulo">
+      <xs:annotation>
+         <xs:documentation>Texto libre con Articulo/Decreto que regulan la norma</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="2000"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Articulos">
+      <xs:annotation>
+         <xs:documentation>Lista con Articulos/Decretos que regulan la norma</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="Articulo"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EstadoProcedimiento">
+      <xs:complexType>
+         <xs:all>
+            <xs:element name="Estado" type="EstadoProcedimiento">
+               <xs:annotation>
+                  <xs:documentation>Estado en que se encuentra la autorización al servicio
+				0: Pendiente de tramitar: No se ha empezado a gestionar la solicitud.
+				4: Pendiente de subsanación: La solicitud no es correcta y requiere subsanación.
+				7: Autorizado: El procedimiento se ha autorizado
+				8: Desestimado
+				9: Autorizado con solicitudes de autorizacion pendientes de subsanacion: El procedimiento se ha autorizado pero existe alguna solicitud de autorización a servicios que requiere subsanación, ya que la normativa indicada no justifica el acceso al servicio.
+			</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Descripcion"/>
+            <xs:element minOccurs="0" name="Observaciones">
+               <xs:annotation>
+                  <xs:documentation>Solamente se devolverá cuando se deban realizar subsanaciones. (Código 4: Pendiente de subsanacion y 9 Autorizado con solicitudes de autorizacion pendientes de subsanacion: )</xs:documentation>
+               </xs:annotation>
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:minLength value="1"/>
+                     <xs:maxLength value="1024"/>
+                     <xs:whiteSpace value="collapse"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EstadoAutorizacionCedentes">
+      <xs:annotation>
+         <xs:documentation>Lista con el estado en que se encuentra la autorización en cada uno de los cedentes que ofrece el servicio</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="EstadoAutorizacionCedente"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EstadoAutorizacionCedente">
+      <xs:annotation>
+         <xs:documentation>Estado de la autorización en el cedente</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="Cedente"/>
+            <xs:element ref="NombreServicio"/>
+            <xs:element name="Estado" type="EstadoServicioCedente">
+               <xs:annotation>
+                  <xs:documentation>Estado en que se encuentra la autorización al servicio
+				0: Pendiente de tramitar: No se ha empezado a gestionar la autorización al servicio.
+				4: Pendiente de subsanación: La solicitud de autorización no es correcta  y requiere subsanación.
+				7: Autorizado: El servicio ya está autorizado.
+				8: Desestimado: La solicitud de autorización se ha desestimado.
+			</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element ref="Descripcion"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="NombreServicio">
+      <xs:annotation>
+         <xs:documentation>Nombre del servicio cedente</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="2000"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:element name="Cedente">
+      <xs:annotation>
+         <xs:documentation>Nombre del cedente</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+   <xs:simpleType name="EstadoAutorizacion">
+      <xs:annotation>
+         <xs:documentation>Estado en que se encuentra la autorización al servicio:
+0.- Pendiente de tramitar: No se ha empezado a gestionar la autorización al servicio.
+1.- Desistido: Se requirió subsanación y no se realizo en la plazo establecido, por lo que se la solicitud de autorizción se dio por desistida.
+2.- Aprobado: Se ha revisado que la solicitud de autorización es correcta pero aún no se ha gestionado.
+3.- No aprobado: La solicitud de autorización no es correcta  y requiere subsanación, ya que la normativa indicada no justifica el acceso al servicio.
+6.- Pendiente de autorización por parte del cedente: Se ha solicitado la autorización al cedente de los datos pero aún no se ha recibido respuesta por su parte
+7.- Autorizado: El servicio ya está autorizado.
+8.- Desestimado: La solicitud de autorización se ha desestimado.
+			</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="1"/>
+         <xs:enumeration value="2"/>
+         <xs:enumeration value="3"/>
+         <xs:enumeration value="6"/>
+         <xs:enumeration value="7"/>
+         <xs:enumeration value="8"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="EstadoServicioCedente">
+      <xs:annotation>
+         <xs:documentation>Estado en que se encuentra la autorización al servicio
+				0: Pendiente de tramitar: No se ha empezado a gestionar la autorización al servicio.
+				4: Pendiente de subsanación: La solicitud de autorización no es correcta  y requiere subsanación.
+				7: Autorizado: El servicio ya está autorizado.
+				8: Desestimado: La solicitud de autorización se ha desestimado.
+			</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="4"/>
+         <xs:enumeration value="7"/>
+         <xs:enumeration value="8"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="EstadoProcedimiento">
+      <xs:annotation>
+         <xs:documentation>Estado en que se encuentra la autorización al servicio
+				0: Pendiente de tramitar: No se ha empezado a gestionar la solicitud.
+				4: Pendiente de subsanación: La solicitud no es correcta y requiere subsanación.
+				7: Autorizado: El procedimiento se ha autorizado
+				8: Desestimado
+				9: Autorizado con solicitudes de autorizacion pendientes de subsanacion: El procedimiento se ha autorizado pero existe alguna solicitud de autorización a servicios que  
+				requiere subsanación, ya que la normativa indicada no justifica el acceso al servicio.
+			</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="4"/>
+         <xs:enumeration value="7"/>
+         <xs:enumeration value="8"/>
+         <xs:enumeration value="9"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="NombreServicio">
+      <xs:annotation>
+         <xs:documentation>Nombre del servicio</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:minLength value="1"/>
+         <xs:maxLength value="2000"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:element name="Descripcion">
+      <xs:annotation>
+         <xs:documentation>Descripción del estado</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+         <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="500"/>
+         </xs:restriction>
+      </xs:simpleType>
+   </xs:element>
+</xs:schema>
