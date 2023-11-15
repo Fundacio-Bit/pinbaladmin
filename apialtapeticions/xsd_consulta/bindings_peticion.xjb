@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.1">
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='CodigoEstado']">
+        <jaxb:class name="CodigoEstadoPET"/>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='LiteralError']">
+        <jaxb:class name="LiteralErrorPET"/>
+    </jaxb:bindings>
+   
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='ClaseTramite']">
+        <jaxb:class name="ClaseTramitePET"/>
+    </jaxb:bindings>   
+    
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='NombreEmisor']">
+        <jaxb:class name="NombreEmisorPET"/>
+    </jaxb:bindings>  
+    
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='CodigoCertificado']">
+        <jaxb:class name="CodigoCertificadoPET"/>
+    </jaxb:bindings>
+    
+    
+    <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='Automatizado']">
+        <jaxb:class name="AutomatizadoPET"/>
+    </jaxb:bindings>
+    
+    
+     <jaxb:bindings schemaLocation="peticion.xsd" node="//xs:element[@name='Nombre']">
+        <jaxb:class name="NombrePET"/>
+    </jaxb:bindings>
+    
+
+</jaxb:bindings>
