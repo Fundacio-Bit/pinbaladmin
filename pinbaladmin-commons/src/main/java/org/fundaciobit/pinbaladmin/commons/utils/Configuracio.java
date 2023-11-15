@@ -228,4 +228,16 @@ public class Configuracio implements Constants {
     public static String getQueEsticFentBDURL() {
         return getProperty(PINBALADMIN_QUEESTICFENT_PROPERTY_BASE + "url");
     }
+
+    public static String getApiPinbalUrl() {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "urlbase");
+    }
+
+    public static String getApiPinbalUsername() {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "username");
+    }
+
+    public static String getApiPinbalPassword() {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "password");
+    }
 }

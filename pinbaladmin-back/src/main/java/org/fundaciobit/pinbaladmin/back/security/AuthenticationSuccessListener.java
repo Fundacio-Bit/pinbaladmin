@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
@@ -38,7 +39,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationSuccessListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final static Logger log = Logger.getLogger(AuthenticationSuccessListener.class);
     
     public static final String LOGIN_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "userinformationplugin";
 
@@ -118,12 +119,25 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
     
     public static IUserInformationPlugin getUserInformationPluginInstance() throws I18NException {
         if (loginPlugin == null) {
-            final String propertyPlugin = LOGIN_PLUGIN_KEY;
+//            final String propertyPlugin = LOGIN_PLUGIN_KEY;
 
-            Properties propTmp = Configuracio.getFilesProperties();
+            Properties propTmp = Configuracio.getSystemAndFileProperties();
 
-            Object pluginInstance = PluginsManager.instancePluginByProperty(propertyPlugin,
+            Set<Object> set = propTmp.keySet();
+            for (Object object : set) {
+                String key = (String) object;
+                String value = propTmp.getProperty(key);
+                log.info(key + ": " + value);
+            }
+            
+            String className = propTmp.getProperty(LOGIN_PLUGIN_KEY);
+            
+            log.info("className: " + className);
+            Object pluginInstance = PluginsManager.instancePluginByClassName(className,
                     Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
+
+//            Object pluginInstance = PluginsManager.instancePluginByProperty(propertyPlugin,
+//                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
 
             if (pluginInstance == null) {
                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");

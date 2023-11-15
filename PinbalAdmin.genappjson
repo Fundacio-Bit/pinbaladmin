@@ -737,6 +737,32 @@
             "webtype": 2
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "tipus",
+          "sqlType": 4,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Tipus",
+            "es": "Tipo"
+          },
+          "javaName": "tipus",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "0,1,2,3,4",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
         }
       ]
     },

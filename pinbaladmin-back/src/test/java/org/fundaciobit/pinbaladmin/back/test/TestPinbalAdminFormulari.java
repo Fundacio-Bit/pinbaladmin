@@ -1,49 +1,12 @@
 package org.fundaciobit.pinbaladmin.back.test;
 
-import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
-import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contactos;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentoAutorizacion;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentosAutorizacion;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Error;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Errores;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Estado;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Norma;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Norma.Documento;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Normas;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Procedimiento;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicio;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicios;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-//import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 
-import javax.ejb.EJB;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.Persistence;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -53,52 +16,34 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
-import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
-import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
 import org.fundaciobit.pinbaladmin.model.bean.SolicitudBean;
-import org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitBDadesSoliManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitCDadesCesiManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitDCteAutManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitECteAudManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitFCteTecManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitGDadesTitManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitHProcManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitIServManager;
-import org.fundaciobit.pinbaladmin.model.dao.ITramitJConsentManager;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
-import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
-import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
-import org.fundaciobit.pinbaladmin.model.entity.TramitDCteAut;
-import org.fundaciobit.pinbaladmin.model.entity.TramitECteAud;
-import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
-import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
-import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
-import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
-import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
-import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitBDadesSoliFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitECteAudFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitFCteTecFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitGDadesTitFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
-import org.fundaciobit.pinbaladmin.persistence.PinbalAdminJPADaoManagers;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
+import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contactos;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentoAutorizacion;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DocumentosAutorizacion;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Incidencia;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Norma;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Normas;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Procedimiento;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicio;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Servicios;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
 
 /**
  * 
@@ -128,11 +73,22 @@ El documento de la norma tiene que ser solo el enlace, porque todo está publica
 
 public class TestPinbalAdminFormulari {
 
-
     public static void main(String[] args) {
-        
+        TestPinbalAdminFormulari t = new TestPinbalAdminFormulari();
+        try {
+            t.test();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void test() throws Exception {
         FileSystemManager.setFilesPath(new File("D:\\Projectes\\pinbaladmin-files\\files"));
         cridadaAPICrearSolicitudMadridAmbSolicitudID();
+
     }
 
     //    @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
@@ -203,23 +159,32 @@ public class TestPinbalAdminFormulari {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
             ObjectWriter prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
-            //            String jsonTit = prettyWriter.writeValueAsString(titular);
-            //            String jsonFunc = prettyWriter.writeValueAsString(funcionario);
-            //            String jsonSoli = prettyWriter.writeValueAsString(solicitud);
-            String jsonProc = prettyWriter.writeValueAsString(proc);
+            String jsonTit = prettyWriter.writeValueAsString(titular);
+            String jsonFunc = prettyWriter.writeValueAsString(funcionario);
+            String jsonSoli = prettyWriter.writeValueAsString(solicitud);
+
+            //            String jsonProc = prettyWriter.writeValueAsString(proc);
 
             //            System.out.println(jsonTit);
             //            System.out.println(jsonFunc);
             //            System.out.println(jsonSoli);
-            System.out.println(jsonProc);
+            //            System.out.println(jsonProc);
 
-            //            PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
-            //            Incidencia incidencia = api.crearSolicitud(solicitud, titular, funcionario);
+            PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
+            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
 
+            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
+            System.out.println("Descripción: " + re.getEstado().getDescripcion());
         } catch (I18NException e) {
             e.printStackTrace();
         } catch (Exception e) {
+ //           String msg = "" + e.getMessage();
             e.printStackTrace();
+//            System.out.println(msg);
+        } catch (Throwable e) {
+            String msg = "" + e.getCause();
+            System.out.println(msg);
+            //            e.printStackTrace();
         }
     }
 
@@ -239,7 +204,7 @@ public class TestPinbalAdminFormulari {
 
         ScspTitular titular = new ScspTitular();
 
-        ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.DNI;
+        ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
         String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
         String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
         String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
@@ -259,8 +224,8 @@ public class TestPinbalAdminFormulari {
     private Solicitud getSolicitud(Properties prop) {
 
         //Asunto y consulta
-        String asunto = null;
-        String consulta = null;
+        String asunto = "Alta Servicios";
+        String consulta = "Alta procedimiento";
 
         //Contactos
         Contactos contactos = getContactos(prop);
@@ -274,6 +239,7 @@ public class TestPinbalAdminFormulari {
     }
 
     public Procedimiento getProcedimiento(Properties prop, SolicitudBean soli) {
+
         String _Automatizado = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
         String _Periodico = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
 
@@ -281,58 +247,55 @@ public class TestPinbalAdminFormulari {
         Integer _PeticionesEstimadas = Integer.parseInt(petsDia);
 
         String tipusProc = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
-                Integer _ClaseTramite = Integer.parseInt(tipusProc);
-        //        Integer _ClaseTramite = Integer.parseInt(soli.getProcedimentTipus());
-//        Integer _ClaseTramite = 13;
+        Integer _ClaseTramite = Integer.parseInt(tipusProc);
+        Integer tipusProcediment = 0; //Pruebas
+        //        Integer [] tipusAceptats = {0, 2, 3, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 99};
+        //
+        //        for (Integer element : tipusAceptats ) {
+        //            if (element == _ClaseTramite ) {
+        //                tipusProcediment = element;
+        //                break;
+        //            }
+        //        }
 
         String _Codigo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIPROC");
         String _Descripcion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
         String _Nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
         String _Observaciones = null;
-        //        String _Codigo = soli.getProcedimentCodi();
-        //        String _Descripcion = soli.getCodiDescriptiu();
-        //        String _Nombre = soli.getProcedimentNom();
-        //        String _Observaciones = soli.getNotes();
-
-        
-        
-        
 
         String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
         Timestamp dataCaducitat = null;
-        if (caduca.equals("SI")) {
+        if (caduca.equals("S")) {
             dataCaducitat = soli.getDataFi();
         }
-        //        Timestamp dataFi =  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
+        //Timestamp dataFi =  prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
         XMLGregorianCalendar _FechaCaducidad = parseTimestampToXMLGregorian(dataCaducitat);
 
-        
-        
-        
+        //Hay que modificar el tramite. Hay que pedir el tipo de consentimiento y el pdf/enlace en TramitH. 
+        // Y pasar en enlace por el xml
         Fitxer consentiment = soli.getDocumentSolicitud();
         Consentimiento _Consentimiento = getConsentimiento(prop, consentiment);
 
+        /*
+         * Aquí son el excel de servicios y el documento PDF del Director General. 
+         * Falta también aclarar lo de CONVENIO y FORMULARIO DE AUTORIZACION 
+         * 
+         * Solicitud -> DocumentSolicitud -> Document -> FitxerID
+         * 
+         * Fitxer[] docAut = { soli.getDocumentSolicitud(), soli.getDocumentSolicitud() }; 
+         * DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docAut); 
+         */            
         
-        
-        
-        
-        
-        Fitxer[] docAut = { soli.getDocumentSolicitud() };
-        DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docAut);
+        Long[] fitxerIDs = {39106L, 39107L};
+        DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(fitxerIDs);
 
-        
-        
-        
-        
-        Servicios _Servicios = getServicios(prop);
-        
+        //Ahora está cogiendo los datos del xml. Luego tendrá que coger los datos solicitud-servei.
+        //También habrá que modificar el tramite y pedir los PDF de las normas en tramitI
+        Servicios _Servicios = getServicios(prop, consentiment);
 
-        
-        
-        
         Procedimiento proc = new Procedimiento();
         proc.setAutomatizado(_Automatizado);
-        proc.setClaseTramite(_ClaseTramite);
+        proc.setClaseTramite(tipusProcediment);
         proc.setCodigo(_Codigo);
         proc.setDescripcion(_Descripcion);
         proc.setNombre(_Nombre);
@@ -357,22 +320,28 @@ public class TestPinbalAdminFormulari {
         Properties prop = new Properties();
         prop.load(new FileInputStream(new File("test.properties")));
 
-        config.setUrlBase(prop.getProperty("urlbase"));
+        String url = prop.getProperty("urlbase");
+
+        System.out.println(url);
+        config.setUrlBase(url);
         config.setUsername(prop.getProperty("username"));
         config.setPassword(prop.getProperty("password"));
 
-        config.setFinalidad("Baremacions per el proces d'escolaritzacio"); // getPropertyRequired(propertyBase + "finalitat"); // "Baremacions per el proces d'escolaritzacio";
+        config.setFinalidad("Solicitar autorización procedimiento"); // getPropertyRequired(propertyBase + "finalitat"); // "Baremacions per el proces d'escolaritzacio";
         config.setIdentificadorSolicitante("S0711001H"); // getPropertyRequired(propertyBase + "identificadorsolicitant"); // "S0711001H";
-        config.setUnidadTramitadora("Servei d'escolarització"); // getPropertyRequired(propertyBase + "unitattramitadora"); // "Servei d'escolarització";
+        config.setUnidadTramitadora("Fundacio BIT"); // getPropertyRequired(propertyBase + "unitattramitadora"); // "Servei d'escolarització";
 
-        config.setCodProcedimiento("INCIDENCIES_CAID"); // getPropertyRequired(propertyBase + "codiprocediment"); // "CODSVDR_GBA_20121107";
+        config.setCodProcedimiento("PREALTAS");//INCIDENCIES_CAID"); 
+        // getPropertyRequired(propertyBase + "codiprocediment"); // "CODSVDR_GBA_20121107";
 
         // TODO crec que això hauria d'estar dins de PinbalAdminSolicitudsApi
         /**
-         * SVDPIDSOLAUTWS01 | Solicitud de autorizaciones en PID
+        SVDPIDSOLAUTWS01    | Solicitud de autorizaciones en PID
         SVDPIDESTADOAUTWS01 | Servicio de estado de las autorizaciones en PID 
-        SVDPIDACTPROCWS01 | Servicio de actualización de un procedimiento ya dado de alta en PID
+        SVDPIDACTPROCWS01   | Servicio de actualización de un procedimiento ya dado de alta en PID
          */
+
+        //        SVDPIDSOLAUTWS01
         config.setCodigoCertificado("SVDPIDSOLAUTWS01");
 
         return config;
@@ -386,62 +355,64 @@ public class TestPinbalAdminFormulari {
         Consentimiento cons = new Consentimiento();
         Consentimiento.Documento doc = new Consentimiento.Documento();
 
-        String enlace = null;
-        String tipo = "llei";
+        String tipo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO"); //Si, Ley, NoOpo
+        String enlace = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTOENLACE");
 
-        String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID";
-        int i = 1;
+        tipo = "Ley";
 
-        String consentiment = prop.getProperty(base + i + ".CONSENTIMIENTO");
-        System.out.println(consentiment);
+        System.out.println("tipo: " + tipo);
+        cons.setTipo(tipo);
 
-        while (consentiment != null) {
-            if (consentiment.equals("No OposiciÃ³")) {
-                tipo = "noop";
-                String consPublicat = prop.getProperty(base + i + ".LDECONSENTIMIENTO");
-                if (consPublicat.equals("Adjunt")) {
-                    enlace = null;
-                    break;
-                } else {
-                    enlace = prop.getProperty(base + i + ".ENLACECON"); //getUrlconsentiment();
-                }
-            }
-            i++;
-            consentiment = prop.getProperty(base + i + ".CONSENTIMIENTO");
-        }
+        if (tipo.equals("Si") || tipo.equals("NoOpo")) {
+            if (enlace == null && fitxerConsentiment != null) {
+                try {
+                    //   System.out.println(documentConsentiment.getFitxerID());
 
-        if (tipo.equals("noop")) {
-            if (enlace == null) {
-                if (fitxerConsentiment != null) {
-                    try {
-                        //   System.out.println(documentConsentiment.getFitxerID());
+                    String descripcio = "descripcio de prova: " + fitxerConsentiment.getDescripcio();
+                    String nom = fitxerConsentiment.getNom();
+                    Long consentimentID = fitxerConsentiment.getFitxerID();
+                    File fileConsentiment = FileSystemManager.getFile(consentimentID);
+                    byte[] contingut = FileUtils.readFromFile(fileConsentiment);
 
-                        String descripcio = fitxerConsentiment.getDescripcio();
-                        String nom = fitxerConsentiment.getNom();
-                        Long consentimentID = fitxerConsentiment.getFitxerID();
-                        File fileConsentiment = FileSystemManager.getFile(consentimentID);
-                        byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+                    System.out.println("CONS: " + nom + " : " + contingut.length + " bytes");
+                    doc.setContenido(contingut);
+                    doc.setDescripcion(descripcio);
+                    doc.setNombre(nom);
 
-                        doc.setContenido(null); //contingut);
-                        doc.setDescripcion(descripcio);
-                        doc.setNombre(nom);
+                    cons.setDocumento(doc);
 
-                        cons.setDocumento(doc);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    //                    } catch (FileNotFoundException e) {
-                    //                        e.printStackTrace();
-                    //                    } catch (IOException e) {
-                    //                        e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 cons.setEnlace(enlace);
             }
         }
-        cons.setTipo(tipo);
         return cons;
+
+        //      while (tipoConsentiment != null && !necessitaDocument) {
+        //
+        //          tipo = tipoConsentiment;
+        //
+        //          if (consPublicat.equals("Adjunt")) {
+        //              //Si es adjunto, no necesita enlace
+        //              enlace = null;
+        //              if (tipoConsentiment.equals("noop")) {
+        //                  //Si ademas es noop, necesita el documento
+        //                  necessitaDocument = true;
+        //              } else {
+        //                  //El caso de ley adjunta es muy raro. Se puede dar pero no se dará
+        //              }
+        //          } else {
+        //              //Si está publicado, necesita enlace. Da igual tipo de consentimiento
+        //              enlace = prop.getProperty(base + i + ".ENLACECON");
+        //          }
+        //
+        //          i++;
+        //          tipoConsentiment = prop.getProperty(base + i + ".CONSENTIMIENTO");
+        //          consPublicat = prop.getProperty(base + i + ".LDECONSENTIMIENTO");
+        //      }
+
     }
 
     private DocumentosAutorizacion getDocsAutorizacion(Fitxer[] documents) {
@@ -450,17 +421,25 @@ public class TestPinbalAdminFormulari {
         for (Fitxer document : documents) {
             try {
 
-                String descripcio = document.getDescripcio();
-                System.out.println(descripcio);
+                String descripcio = "Descripcio autorització: " + document.getDescripcio();
                 String nom = document.getNom();
-                String tipo = document.getMime();
+                String tipo = null;
+                switch (document.getMime()) {
+                    case "application/pdf":
+                        tipo = "CONVENIO";
+                    break;
+                    case "application/msexcel":
+                        tipo = "FORMULARIO DE AUTORIZACION";
+                }
 
                 Long documentID = document.getFitxerID();
                 File file = FileSystemManager.getFile(documentID);
                 byte[] contingut = FileUtils.readFromFile(file);
 
                 DocumentoAutorizacion docAut = new DocumentoAutorizacion();
-                docAut.setContenido(null); //contingut);
+                System.out.println("AUT: " + nom + " : " + contingut.length + " bytes");
+
+                docAut.setContenido(contingut);
                 docAut.setDescripcion(descripcio);
                 docAut.setNombre(nom);
                 docAut.setTipo(tipo);
@@ -473,9 +452,49 @@ public class TestPinbalAdminFormulari {
 
         return docs;
     }
-    
 
-    private Servicios getServicios(Properties prop) {
+        private DocumentosAutorizacion getDocsAutorizacion(Long[] fitxersID) {
+    
+            DocumentosAutorizacion docs = new DocumentosAutorizacion();
+            for (Long fitxerID : fitxersID) {
+                try {
+                    File file = FileSystemManager.getFile(fitxerID);
+    
+                    String nom = file.getName() + ".pdf";
+
+                    //                    Fitxer document = fitxerEjb.findByPrimaryKey(fitxerID);
+                    String descripcio = file.getAbsolutePath();
+//                    System.out.println(descripcio);
+//                    String tipo = document.getMime();
+                    
+                    String tipo = null;
+                    if (fitxerID == 39106L) {
+                        tipo = "CONVENIO";
+                    } else {
+                        tipo = "FORMULARIO DE AUTORIZACION";
+                    }
+
+                    byte[] contingut = FileUtils.readFromFile(file);
+    
+                    DocumentoAutorizacion docAut = new DocumentoAutorizacion();
+                    System.out.println("AUT: " + nom + " : " + contingut.length + " bytes");
+
+                    docAut.setContenido(contingut);
+                    docAut.setDescripcion(descripcio);
+                    docAut.setNombre(nom);
+                    docAut.setTipo(tipo);
+    
+                    docs.getDocumentoAutorizacion().add(docAut);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+    
+            return docs;
+        }
+
+    private Servicios getServicios(Properties prop, Fitxer fitcheroPrueba) {
+
         Servicios servicios = new Servicios();
 
         String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID";
@@ -491,17 +510,30 @@ public class TestPinbalAdminFormulari {
                 Norma norma = new Norma();
                 {
                     String normaLegal = prop.getProperty(base + i + ".NORMALEGAL"); //tramitI.getNorma();
-                    Norma.Documento documento = new Norma.Documento();
+                    Norma.Documento docNorma = new Norma.Documento();
                     {
-                        byte[] docNormaContenido = new byte[0];
-                        String docNormaDesc = null;
-                        String docNormaEnlace = prop.getProperty(base + i + ".ENLACENOR");// tramitI.getUrlnorma();
-                        String docNormaNombre = null;
 
-                        documento.setContenido(docNormaContenido);
-                        documento.setDescripcion(docNormaDesc);
-                        documento.setEnlace(docNormaEnlace);
-                        documento.setNombre(docNormaNombre);
+                        try {
+                            String enlace = prop.getProperty(base + i + ".ENLACENOR");// tramitI.getUrlnorma();
+                            System.out.println(enlace);
+                            String descripcio = "DocNorma prova " + i + ": " + fitcheroPrueba.getDescripcio();
+                            String nom = i  + "_" + fitcheroPrueba.getNom();
+                            Long consentimentID = fitcheroPrueba.getFitxerID();
+
+                            File fileConsentiment = FileSystemManager.getFile(consentimentID);
+                            byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+
+                            System.out.println("NORMA: " + nom + " : " + contingut.length + " bytes");
+
+                            docNorma.setContenido(contingut);
+                            docNorma.setDescripcion(descripcio);
+                            docNorma.setEnlace(enlace);
+                            docNorma.setNombre(nom);
+
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
 
                     Articulos articulos = new Articulos();
@@ -514,7 +546,7 @@ public class TestPinbalAdminFormulari {
 
                     norma.setNormaLegal(normaLegal);
                     norma.setArticulos(articulos);
-                    norma.setDocumento(documento);
+                    norma.setDocumento(docNorma);
                 }
 
                 Normas normas = new Normas();
@@ -559,31 +591,33 @@ public class TestPinbalAdminFormulari {
 
     private Contactos getContactos(Properties prop) {
 
+        String base = "FORMULARIO.DATOS_SOLICITUD.";
+
         Contactos contactos = new Contactos();
 
-        String contactoAutApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
-        String contactoAutApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
-        String contactoAutMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
-        String contactoAutNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
-        String contactoAutTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
+        String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
+        String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
+        String contactoAutMail = prop.getProperty(base + "MAILSECD");
+        String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
+        String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
 
         contactos.getContacto().add(createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, null,
                 contactoAutNombre, contactoAutTelefon));
 
-        String contactoAudApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
-        String contactoAudApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
-        String contactoAudMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE");
-        String contactoAudNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
-        String contactoAudTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECE");
+        String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
+        String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
+        String contactoAudMail = prop.getProperty(base + "MAILSECE");
+        String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
+        String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
 
         contactos.getContacto().add(createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, null,
                 contactoAudNombre, contactoAudTelefon));
 
-        String contactoTecApe1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECF");
-        String contactoTecApe2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECF");
-        String contactoTecMail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECF");
-        String contactoTecNombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECF");
-        String contactoTecTelefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECF");
+        String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
+        String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
+        String contactoTecMail = prop.getProperty(base + "MAILSECF");
+        String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
+        String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
 
         contactos.getContacto().add(createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, null,
                 contactoTecNombre, contactoTecTelefon));

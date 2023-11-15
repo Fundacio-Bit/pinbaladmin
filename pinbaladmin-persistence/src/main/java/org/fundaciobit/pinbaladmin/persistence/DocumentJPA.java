@@ -44,6 +44,9 @@ public class DocumentJPA implements Document {
     @Column(name="notes",length = 255)
     java.lang.String notes;
 
+    @Column(name="tipus",nullable = false,length = 10)
+    java.lang.Long tipus;
+
 
 
   /** Constructor Buit */
@@ -51,25 +54,28 @@ public class DocumentJPA implements Document {
   }
 
   /** Constructor amb tots els camps  */
-  public DocumentJPA(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes) {
+  public DocumentJPA(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes , java.lang.Long tipus) {
     this.documentID=documentID;
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
     this.fitxerFirmatID=fitxerFirmatID;
     this.notes=notes;
+    this.tipus=tipus;
 }
   /** Constructor sense valors autoincrementals */
-  public DocumentJPA(java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes) {
+  public DocumentJPA(java.lang.String nom , long fitxerOriginalID , java.lang.Long fitxerFirmatID , java.lang.String notes , java.lang.Long tipus) {
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
     this.fitxerFirmatID=fitxerFirmatID;
     this.notes=notes;
+    this.tipus=tipus;
 }
   /** Constructor dels valors Not Null */
-  public DocumentJPA(long documentID , java.lang.String nom , long fitxerOriginalID) {
+  public DocumentJPA(long documentID , java.lang.String nom , long fitxerOriginalID , java.lang.Long tipus) {
     this.documentID=documentID;
     this.nom=nom;
     this.fitxerOriginalID=fitxerOriginalID;
+    this.tipus=tipus;
 }
   public DocumentJPA(Document __bean) {
     this.setDocumentID(__bean.getDocumentID());
@@ -77,6 +83,7 @@ public class DocumentJPA implements Document {
     this.setFitxerOriginalID(__bean.getFitxerOriginalID());
     this.setFitxerFirmatID(__bean.getFitxerFirmatID());
     this.setNotes(__bean.getNotes());
+    this.setTipus(__bean.getTipus());
     // Fitxer
     this.setFitxerOriginal(FitxerJPA.toJPA(__bean.getFitxerOriginal()));
     // Fitxer
@@ -116,6 +123,13 @@ public class DocumentJPA implements Document {
 	};
 	public void setNotes(java.lang.String _notes_) {
 		this.notes = _notes_;
+	};
+
+	public java.lang.Long getTipus() {
+		return(tipus);
+	};
+	public void setTipus(java.lang.Long _tipus_) {
+		this.tipus = _tipus_;
 	};
 
 
@@ -184,6 +198,7 @@ public class DocumentJPA implements Document {
     __tmp.setFitxerOriginalID(__bean.getFitxerOriginalID());
     __tmp.setFitxerFirmatID(__bean.getFitxerFirmatID());
     __tmp.setNotes(__bean.getNotes());
+    __tmp.setTipus(__bean.getTipus());
     // Fitxer
     __tmp.setFitxerOriginal(FitxerJPA.toJPA(__bean.getFitxerOriginal()));
     // Fitxer

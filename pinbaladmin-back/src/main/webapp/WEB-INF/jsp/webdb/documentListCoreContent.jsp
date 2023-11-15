@@ -53,6 +53,14 @@
           ${document.notes}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,DocumentFields.TIPUS)}">
+          <td>
+          <c:set var="tmp">${document.tipus}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForTipus[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

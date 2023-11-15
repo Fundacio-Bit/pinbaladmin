@@ -28,10 +28,8 @@ import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumControlle
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -39,7 +37,11 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
+import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,16 +121,19 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, "btn-info"));
 
       solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EDIT, "solicitud.edit",
-          "/operador/solicitud" + (_jpa.getDepartamentID() == null ? "estatal" : "local") + "/"
+          "/operador/solicitud" + ((_jpa.getDepartamentID() == null && _jpa.getOrganid() == null) ? "estatal" : "local") + "/"
               + soliID + "/edit",
           "btn-warning"));
 
       String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/"
               + solicitud.getSolicitudID() + (isEstatal() == null ? "" : ("/" + isEstatal()));
 
-      solicitudForm
-              .addAdditionalButton(new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));      
-      
+      solicitudForm.addAdditionalButton(
+              new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
+
+      solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+              "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-primary"));
+
       solicitudForm.setAttachedAdditionalJspCode(true);
       
       if (solicitud.getEntitatEstatal() == null) {
@@ -441,8 +446,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
 
+      Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
       Document doc = documentEjb.create(prefix + "Formulario_Director_General (PDF)",
-          fitxer.getFitxerID(), null, null);
+          fitxer.getFitxerID(), null, null, tipus);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
 
@@ -457,8 +463,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
 
+      Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
       Document doc = documentEjb.create(prefix + "Formulario_Director_General (ODT)",
-          fitxer.getFitxerID(), null, null);
+          fitxer.getFitxerID(), null, null, tipus);
 
       DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
 
@@ -603,5 +610,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   public boolean showAdvancedFilter() {
     return false;
   }
+  
+  
 
 }

@@ -59,6 +59,11 @@ public class CrearExcelDeServeis {
     String tipusProcediment = soli.getProcedimentTipus();
     String descripcio = soli.getCodiDescriptiu(); // values.get("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
 
+    String automatizado = "NO"; //soli.getAutomatizado(); // values.get("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
+    String periodico = "NO"; //soli.getPeriodico(); // values.get("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
+    String peticionsDia = "30"; //soli.getPetsDia(); // values.get("FORMULARIO.DATOS_SOLICITUD.PETICIONESDIA");
+    String peticionsMes = "40"; //soli.getPetsMes(); // values.get("FORMULARIO.DATOS_SOLICITUD.PETICIONESMES");
+    
     Map<Long, String[]> dadesByServeiSolicitudID = new HashMap<Long, String[]>();
 
     for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
@@ -136,16 +141,16 @@ public class CrearExcelDeServeis {
         }
         dades[11] = caduca;
       }
-      // M 12 ???????????? (NO)
-      dades[12] = "NO";
-      // N 13 ???????????? (NO)
-      dades[13] = "NO";
+
+      // M 12 Periodico (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[12] = periodico;
+      // N 13 Automatizado (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[13] = automatizado;
       
-      // N 14 Peticiones estimadas (día)
-      dades[14] = "40";
-      
-      // N 15 Peticiones estimadas (mes)
-      dades[15] = "300";
+      // O 14 Peticiones estimadas (día) (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[14] = peticionsDia;
+      // P 15 Peticiones estimadas (mes) (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[15] = peticionsMes;
 
       dadesByServeiSolicitudID.put(ss.getId(), dades);
 

@@ -752,3 +752,9 @@ ALTER TABLE pad_solicitud
   ADD CONSTRAINT pad_solicitud_organ_fk FOREIGN KEY (organid)
       REFERENCES pad_organ (organid) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+-- 07/11/2023 AFEGIR TIPUS DE DOCUMENT A TAULA DE DOCUMENTS D'UNA SOLICITUD
+ALTER TABLE pad_document
+   ADD COLUMN tipus integer;
+

@@ -253,7 +253,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             log.info("desplegableOrgans = true");
             mav.addObject("desplegableOrgans", true);
             solicitudForm.setAttachedAdditionalJspCode(true);
-
+        } else {
+            String tipusProc = solicitudForm.getSolicitud().getProcedimentTipus();
+            if (tipusProc != null) {
+                String minusc = tipusProc.toLowerCase();
+                if (!tipusProc.equals(minusc)) {
+                    solicitudForm.getSolicitud().setProcedimentTipus(minusc);
+                }
+            }
         }
         
         if (isestatal == null) {
@@ -1278,8 +1285,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
         for (String s : tp) {
-
-            __tmp.add(new StringKeyValue(s, s));
+            String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
+            __tmp.add(new StringKeyValue(s, tipus));
         }
 
         return __tmp;

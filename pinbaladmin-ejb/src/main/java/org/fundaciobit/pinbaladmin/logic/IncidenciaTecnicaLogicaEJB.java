@@ -69,6 +69,10 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String destinatariEmail = null;
 
         
+        if (contacteEmail.contains("governdigital.pinbal@fundaciobit.org") && titol.contains("CAI-")) {
+            contacteEmail = "suport@caib.es";
+        }
+        
         IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, tipus, nomEntitat,
                 contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
 

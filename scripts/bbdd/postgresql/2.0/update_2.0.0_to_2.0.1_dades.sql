@@ -2544,3 +2544,13 @@ UPDATE pad_solicitud SET organid='70006' WHERE solicitudid=141;
 UPDATE pad_solicitud SET organid='70682' WHERE solicitudid=151;
 UPDATE pad_solicitud SET organid='70682' WHERE solicitudid=152;
 UPDATE pad_solicitud SET organid='70828' WHERE solicitudid=3530;
+
+
+
+-- AFEGIR CAMP TIPUS A DOCUMENTS D'UNA SOLICITUD
+
+UPDATE pad_document SET tipus = 1 WHERE nom like '%Formulario_Director_General (PDF)%'
+UPDATE pad_document SET tipus = 2 WHERE nom like '%Formulario_Director_General (ODT)%'
+UPDATE pad_document SET tipus = 3 WHERE nom like '%_Plantilla-Procedimientos.xlsx%'
+UPDATE pad_document SET tipus = 4 WHERE nom like '%onsentim%'
+UPDATE pad_document SET tipus = 0 WHERE tipus is null

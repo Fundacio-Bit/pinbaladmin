@@ -31,6 +31,10 @@ public class DocumentQueryPath extends org.fundaciobit.genapp.common.query.Query
     return new StringField(getQueryPath(), DocumentFields.NOTES);
   }
 
+  public LongField TIPUS() {
+    return new LongField(getQueryPath(), DocumentFields.TIPUS);
+  }
+
 
 
   @Override

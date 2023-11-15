@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
@@ -11,6 +12,12 @@ import javax.ejb.Local;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudService;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+
+import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
+import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
+import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
+
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 
@@ -46,5 +53,9 @@ public interface SolicitudLogicaService extends SolicitudService {
      */
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs) throws I18NException;
+
+    public Solicitud getDadesSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
+    
+    public Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud) throws Exception;
 
 }

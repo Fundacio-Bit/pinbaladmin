@@ -188,3 +188,34 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,DocumentFields.TIPUS)}">
+        <tr id="document_tipus_rowid">
+          <td id="document_tipus_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[DocumentFields.TIPUS])?'document.tipus':__theForm.labels[DocumentFields.TIPUS]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[DocumentFields.TIPUS]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[DocumentFields.TIPUS]}" ></i>
+              </c:if>
+            </td>
+          <td id="document_tipus_columnvalueid">
+          <form:errors path="document.tipus" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,DocumentFields.TIPUS)}" >
+          <form:hidden path="document.tipus"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.document.tipus,__theForm.listOfValuesForTipus)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,DocumentFields.TIPUS)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="document_tipus"  onchange="if(typeof onChangeTipus == 'function') {  onChangeTipus(this); };"  cssClass="form-control col-md-9-optional" path="document.tipus">
+            <c:forEach items="${__theForm.listOfValuesForTipus}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

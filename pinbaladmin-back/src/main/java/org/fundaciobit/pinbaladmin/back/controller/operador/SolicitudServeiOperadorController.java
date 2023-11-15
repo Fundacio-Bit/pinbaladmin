@@ -39,6 +39,7 @@ import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -256,7 +257,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
             FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
-            Document doc = documentEjb.create(nom, f.getFitxerID(), null, null);
+            Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+            Document doc = documentEjb.create(nom, f.getFitxerID(), null, null,tipus);
 
             DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
 

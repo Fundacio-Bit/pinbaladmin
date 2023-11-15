@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.form.webdb;
 
+import java.util.List;
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.fundaciobit.pinbaladmin.back.form.PinbalAdminBaseForm;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
@@ -26,6 +28,7 @@ public class DocumentForm extends PinbalAdminBaseForm {
   public DocumentForm(DocumentForm __toClone) {
     super(__toClone);
       this.document = __toClone.document;
+    this.listOfValuesForTipus = __toClone.listOfValuesForTipus;
   }
   
   public DocumentForm(DocumentJPA document, boolean nou) {
@@ -69,5 +72,17 @@ public class DocumentForm extends PinbalAdminBaseForm {
   public void setFitxerFirmatIDDelete(boolean fitxerFirmatIDDelete) {
     this.fitxerFirmatIDDelete = fitxerFirmatIDDelete;
    }
+  private List<StringKeyValue> listOfValuesForTipus;
+
+  public List<StringKeyValue> getListOfValuesForTipus() {
+    return this.listOfValuesForTipus;
+  }
+
+  public void setListOfValuesForTipus(List<StringKeyValue> listOfValuesForTipus) {
+    this.listOfValuesForTipus = listOfValuesForTipus;
+  }
+
+
+
   
 } // Final de Classe 
