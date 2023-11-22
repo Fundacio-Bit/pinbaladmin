@@ -77,6 +77,57 @@
             </plugin>
             
             <!-- 
+            
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xsdtojava</goal>
+                        </goals>
+                        <configuration>
+                            <sourceRoot>${basedir}/generated/</sourceRoot>
+                            <xsdOptions>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_alta/soapfaultatributos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.soapfaultatributos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_alta/datos-especificos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_alta/peticion.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.peticion</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_alta/bindings_peticion.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_alta/respuesta.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.respuesta</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_alta/bindings_respuesta.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                            </xsdOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> 
+            -->
+            
+            <!-- 
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-xjc-plugin</artifactId>

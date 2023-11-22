@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.1">
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='CodigoEstado']">
+        <jaxb:class name="CodigoEstadoRES"/>
+    </jaxb:bindings>
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='LiteralError']">
+        <jaxb:class name="LiteralErrorRES"/>
+    </jaxb:bindings>
+   
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='ClaseTramite']">
+        <jaxb:class name="ClaseTramiteRES"/>
+    </jaxb:bindings>   
+    
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='NombreEmisor']">
+        <jaxb:class name="NombreEmisorRES"/>
+    </jaxb:bindings>  
+    
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='CodigoCertificado']">
+        <jaxb:class name="CodigoCertificadoRES"/>
+    </jaxb:bindings>
+    
+    
+    <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='Automatizado']">
+        <jaxb:class name="AutomatizadoRES"/>
+    </jaxb:bindings>
+    
+    
+     <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='Nombre']">
+        <jaxb:class name="NombreRES"/>
+    </jaxb:bindings>
+    
+
+
+     <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='Apellido1']">
+        <jaxb:class name="Apellido1RES"/>
+    </jaxb:bindings>
+    
+     <jaxb:bindings schemaLocation="respuesta.xsd" node="//xs:element[@name='Apellido2']">
+        <jaxb:class name="Apellido2RES"/>
+    </jaxb:bindings>
+    
+</jaxb:bindings>
