@@ -75,61 +75,108 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            
+            <!-- 
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xsdtojava</goal>
+                        </goals>
+                        <configuration>
+                            <sourceRoot>${basedir}/generated/</sourceRoot>
+                            <xsdOptions>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_modificacio/soapfaultatributos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.soapfaultatributos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_modificacio/datos-especificos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_modificacio/peticion.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.peticion</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_modificacio/bindings_peticion.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_modificacio/respuesta.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.respuesta</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_modificacio/bindings_respuesta.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                            </xsdOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> -->
+            
+           <!-- <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xsdtojava</goal>
+                        </goals>
+                        <configuration>
+                            <sourceRoot>${basedir}/generated/</sourceRoot>
+                            <xsdOptions>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_consulta/soapfaultatributos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.soapfaultatributos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_consulta/datos-especificos.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_consulta/peticion.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.peticion</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_consulta/bindings_peticion.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsd>${basedir}/xsd_consulta/respuesta.xsd</xsd>
+                                    <packagename>es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.respuesta</packagename>
+                                    <extensionArgs>
+                                        <extensionArg>-XautoNameResolution</extensionArg>
+                                    </extensionArgs>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/xsd_consulta/bindings_respuesta.xjb</bindingFile>
+                                    </bindingFiles>
+                                </xsdOption>
+                            </xsdOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> --> 
+            
+            
         </plugins>
     </build>
-    <!--
-    <profiles>
-        <profile>
-            <id>regenerateapi</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>regenerateapi</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jboss.ws.plugins</groupId>
-                        <artifactId>jaxws-tools-maven-plugin</artifactId>
-                        <version>1.3.0.Final</version>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <goalPrefix>wsconsume</goalPrefix>
-                            <extension>true</extension>
-                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <bindingFiles>
-                                <bindingFile>${basedir}/bindings.xjb</bindingFile>
-                            </bindingFiles>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>WSDL to Java API</id>
-                                <goals>
-                                    <goal>wsconsume</goal>
-                                </goals>
-                                <configuration>
-                                    <wsdls>
-                                        <wsdl>${basedir}/PID.SolicitudAutorizacion.wsdl</wsdl>
-                                    </wsdls>
-                                    <wsdlLocation>https://intermediacionpp.redsara.es/servicios/SVD/PID.SolicitudAutorizacion?wsdl</wsdlLocation>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.ws.cxf</groupId>
-                    <artifactId>jbossws-cxf-client</artifactId>
-                    <version>5.2.4.Final-redhat-00001</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-    -->
-    <dependencies>
+<dependencies>
 
         <dependency>
             <groupId>es.caib.pinbal</groupId>
