@@ -19,8 +19,7 @@ import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.Solicitud;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
-//import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
+import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
 
 /**
  * 
@@ -39,10 +38,10 @@ public class PinbalAdminSolicitudsApi {
     }
 
     public Respuesta altaSolicitudPinbalApi(
-            es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud soliIncidencia,
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud soliIncidencia,
             ScspTitular titular, ScspFuncionario funcionario) throws Exception {
 
-        es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos de = new es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos de = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos();
         de.setSolicitud(soliIncidencia);
 
         SolicitudPinbalAdminAlta solicitud = new SolicitudPinbalAdminAlta(de);
@@ -66,12 +65,12 @@ public class PinbalAdminSolicitudsApi {
         datosEspecificos = parseDatosEspecificosXML(datosEspecificos);
 
         JAXBContext contexto = JAXBContext
-                .newInstance(es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos.class);
+                .newInstance(es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos.class);
 
         Unmarshaller datosEspecificosItem = contexto.createUnmarshaller();
 
-        es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos dte;
-        dte = (es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos) datosEspecificosItem
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos dte;
+        dte = (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos) datosEspecificosItem
                 .unmarshal(new StringReader(datosEspecificos));
 
         Respuesta respuesta = dte.getRespuesta();
@@ -159,10 +158,10 @@ public class PinbalAdminSolicitudsApi {
 
         protected Logger log = Logger.getLogger(this.getClass());
 
-        final es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos datosEspecificos;
+        final es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos datosEspecificos;
 
         public SolicitudPinbalAdminAlta(
-                es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos datosEspecificos) {
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos datosEspecificos) {
             super();
             this.datosEspecificos = datosEspecificos;
         }
@@ -174,7 +173,7 @@ public class PinbalAdminSolicitudsApi {
             try {
 
                 JAXBContext contexto = JAXBContext.newInstance(
-                        es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.DatosEspecificos.class);
+                        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos.class);
 
                 Marshaller marshaller = contexto.createMarshaller();
 
