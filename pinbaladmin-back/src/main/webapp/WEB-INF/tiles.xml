@@ -291,6 +291,10 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/altaSolicitudPinbal.jsp" />
     </definition>
     
+    <definition name="consultaestatpinbal" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/consultaEstatPinbal.jsp" />
+    </definition>
+
     <!-- =====   TRAMIT SISTRA  ===== -->
     <definition name="tramitSistraListOperador" extends="operador_base">
         <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />

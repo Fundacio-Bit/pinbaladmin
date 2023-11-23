@@ -14,11 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -35,9 +37,14 @@ import org.springframework.web.servlet.view.RedirectView;
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Respuesta;
-import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Solicitud;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Estado;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Servicio;
+import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento;
+import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
+import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
 
 /**
  * 
@@ -108,6 +115,7 @@ public class AltaSolicitudPinbalOperadorController {
             mav.addObject("titular", titular);
             mav.addObject("funcionario", funcionario);
             mav.addObject("solicitud", solicitud);
+            mav.addObject("soliID", soliID);
 
 //            HtmlUtils.saveMessageSuccess(request, "Dades obtingudes correctament");
             return mav;
@@ -120,7 +128,9 @@ public class AltaSolicitudPinbalOperadorController {
     }
 
     @RequestMapping(value = "/altasolicitud", method = RequestMethod.POST)
-    public String altaSolicitud(HttpServletRequest request, HttpServletResponse response, @RequestParam("consentiment-file") MultipartFile fitxerConsentiment ) {
+    public String altaSolicitud(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("consentiment-file") MultipartFile fitxerConsentiment,
+            @RequestParam("soliID") String soliID) {
 
         String consulta = request.getParameter("consulta");
 
@@ -154,12 +164,26 @@ public class AltaSolicitudPinbalOperadorController {
                 System.out.println(" # Errors: 0");
 
                 String mensaje = resposta.getEstado().getDescripcion();
-//                Incidencia in = resposta.getIncidencia();
                 HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
 
+                log.info("Actualitzam solicitud amb ID= " + soliID);
+                
+                solicitudLogicaEjb.update(SolicitudFields.TICKETNUMEROSEGUIMENT,
+                        solicitud.getProcedimiento().getCodigo(),
+                        SolicitudFields.SOLICITUDID.equal(Long.parseLong(soliID)));                
+                
+                
             } else {
-                for (es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Error error : resposta.getErrores()
+                for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
                         .getError()) {
+                    
+                    if (error.getCodigo().equals("01")) {
+                        solicitudLogicaEjb.update(SolicitudFields.TICKETNUMEROSEGUIMENT,
+                                solicitud.getProcedimiento().getCodigo(),
+                                SolicitudFields.SOLICITUDID.equal(Long.parseLong(soliID)));                
+                        
+                        HtmlUtils.saveMessageInfo(request, "Actualitzat el numero de seguiment: " + Long.parseLong(soliID));
+                    }
                     String errorMsg = "PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")";
                     HtmlUtils.saveMessageError(request, errorMsg);
                 }
@@ -173,6 +197,55 @@ public class AltaSolicitudPinbalOperadorController {
         return "redirect:" + returnUrl;
     }
 
+    @RequestMapping(value = "/consultaestado/{soliID}", method = RequestMethod.GET)
+    public ModelAndView consultaEstado(HttpServletRequest request, HttpServletResponse response, @PathVariable Long soliID) {
+
+        log.info("Entra a consultaestado amb soliID = " + soliID);
+
+        SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+
+        try {
+            Long fitxerID = soli.getSolicitudXmlID();
+
+            String contenidoXml = obtenerContenidoXml(fitxerID);
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
+
+            ScspTitular titular = getTitular(prop);
+            ScspFuncionario funcionario = getFuncionari();
+
+            Consulta consulta = new Consulta();
+            consulta.setCodigoProcedimiento(soli.getTicketNumeroSeguiment());
+
+            Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consulta);
+
+            ModelAndView mav = new ModelAndView("consultaestatpinbal");
+            mav.addObject("retorno", retorno);
+
+            log.info("estado: " + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
+            
+            HtmlUtils.saveMessageSuccess(request,  "Dades de la consutla:");
+            return mav;
+        } catch (Exception e) {
+            HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
+            
+            if (e.getMessage() == null) {
+                soli.setTicketNumeroSeguiment(null);
+                try {
+                    solicitudLogicaEjb.update(soli);
+                } catch (I18NException e1) {
+                    log.error("Error fent UPDATE: " + e1.getMessage(), e1);
+                }
+            }
+            
+            log.error(e.getMessage(), e);
+            
+            String returnUrl = SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
+            return new ModelAndView(new RedirectView(returnUrl, true));
+        }
+    }
+    
+    
+    
     public String getContextWeb() {
         RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);
         return rm.value()[0];

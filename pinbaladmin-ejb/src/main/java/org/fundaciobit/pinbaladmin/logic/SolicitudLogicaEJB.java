@@ -50,6 +50,8 @@ import org.hibernate.Hibernate;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
@@ -266,7 +268,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         }
     }
 
-    protected PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration() throws Exception {
+    public enum TipusCridada{
+        ALTA, CONSULTA, MODIFICACIO,
+    }
+    protected PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus) throws Exception {
 
         PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
 
@@ -285,17 +290,42 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         SVDPIDESTADOAUTWS01 | Servicio de estado de las autorizaciones en PID 
         SVDPIDACTPROCWS01   | Servicio de actualización de un procedimiento ya dado de alta en PID
          */
-        config.setCodigoCertificado("SVDPIDSOLAUTWS01");
+
+        String codigoCertificado;
+        switch (tipus) {
+            case ALTA:
+                codigoCertificado = "SVDPIDSOLAUTWS01";
+            break;
+            case CONSULTA:
+                codigoCertificado = "SVDPIDESTADOAUTWS01";
+            break;
+            case MODIFICACIO:
+                codigoCertificado = "SVDPIDACTPROCWS01";
+            break;
+            default:
+                throw new Exception("El tipus de cridada no es conegut: ]" + tipus.toString() + "[");
+        }
+       
+        config.setCodigoCertificado(codigoCertificado);
 
         return config;
     }
 
     @Override
+    public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Consulta consulta) throws Exception {
+
+        PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA));
+        Retorno retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
+
+        return retorno;
+    }
+    
+    @Override
     public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud)
             throws Exception {
 
-        PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
-        Respuesta respuesta = api.crearSolicitud(solicitud, titular, funcionario);
+        PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA));
+        Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
 
         return respuesta;
     }
@@ -314,7 +344,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         Procedimiento proc = getProcedimiento(soli);
         solicitud.setProcedimiento(proc);
-
         return solicitud;
     }
 

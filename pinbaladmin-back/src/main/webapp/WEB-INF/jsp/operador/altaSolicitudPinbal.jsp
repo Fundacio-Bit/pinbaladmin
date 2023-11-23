@@ -57,6 +57,8 @@ table.solicitud.servicio.item {
 	action="<c:url value="/operador/altapinbal/altasolicitud"/>"
 	method="post" enctype="multipart/form-data">
 
+	<input type="hidden" name="soliID" value="${soliID}" />
+
 	<div class="solicitud item">
 		<table class="table-rol titular" border="1">
 			<tr>
