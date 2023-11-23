@@ -30,6 +30,8 @@ import com.google.gson.GsonBuilder;
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Articulos;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Consentimiento;
 import es.caib.scsp.esquemas.SVDSCTFNWS01v3.peticion.datosespecificos.Contacto;
@@ -87,7 +89,8 @@ public class TestPinbalAdminFormulari {
     @Test
     public void test() throws Exception {
         FileSystemManager.setFilesPath(new File("D:\\Projectes\\pinbaladmin-files\\files"));
-        cridadaAPICrearSolicitudMadridAmbSolicitudID();
+//        cridadaAPICrearSolicitudMadridAmbSolicitudID();
+        consultaEstatSolicitudPinbal();
 
     }
 
@@ -127,6 +130,50 @@ public class TestPinbalAdminFormulari {
         return new String(xmlData);
     }
 
+
+    public void consultaEstatSolicitudPinbal () {
+        try {
+            GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+            Gson gson = builder.create();
+
+            byte[] soliJSONBytes = FileUtils.readFromFile(new File("solicitud.json"));
+            String soliJSON = new String(soliJSONBytes);
+            SolicitudBean soli = gson.fromJson(soliJSON, SolicitudBean.class);
+
+            System.out.println("HOLA OLA " + soli.getPersonaContacte());
+
+            Long fitxerID = soli.getSolicitudXmlID();
+            String contenidoXml = obtenerContenidoXml(fitxerID);
+            System.out.println(contenidoXml);
+
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
+            
+            ScspTitular titular = getTitular(prop);
+            ScspFuncionario funcionario = getFuncionari(prop);
+            Consulta consulta = getConsultaEstat(prop);
+            
+            
+            PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA));
+            Retorno retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
+            
+            String estado = retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion();
+            System.out.println(" # Estado: " + estado);
+            
+        }catch(Exception e) {
+            
+        }
+    }
+    
+    private Consulta getConsultaEstat(Properties prop) {
+        
+        Consulta consulta = new Consulta();
+        
+        consulta.setCodigoProcedimiento("1841768");
+        
+        return consulta;
+    }
+    
+    
     public void cridadaAPICrearSolicitudMadridAmbSolicitudID() {
         try {
 
@@ -170,11 +217,12 @@ public class TestPinbalAdminFormulari {
             //            System.out.println(jsonSoli);
             //            System.out.println(jsonProc);
 
-            PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
-            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
+            PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA));
+            Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
 
-            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
-            System.out.println("Descripción: " + re.getEstado().getDescripcion());
+            System.out.println("Estado: " + respuesta.getEstado().getCodigoEstado());
+            System.out.println("Descripción: " + respuesta.getEstado().getDescripcion());
+
         } catch (I18NException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -313,7 +361,12 @@ public class TestPinbalAdminFormulari {
         return proc;
     }
 
-    protected PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration() throws Exception {
+    
+    public enum TipusCridada{
+        ALTA, CONSULTA, MODIFICACIO,
+    }
+
+    protected PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus) throws Exception {
 
         PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
 
@@ -341,8 +394,23 @@ public class TestPinbalAdminFormulari {
         SVDPIDACTPROCWS01   | Servicio de actualización de un procedimiento ya dado de alta en PID
          */
 
+        String codigoCertificado;
+        switch (tipus) {
+            case ALTA:
+                codigoCertificado = "SVDPIDSOLAUTWS01";
+            break;
+            case CONSULTA:
+                codigoCertificado = "SVDPIDESTADOAUTWS01";
+            break;
+            case MODIFICACIO:
+                codigoCertificado = "SVDPIDACTPROCWS01";
+            break;
+            default:
+                throw new Exception("El tipus de cridada no es conegut: ]" + tipus.toString() + "[");
+        }
+       
         //        SVDPIDSOLAUTWS01
-        config.setCodigoCertificado("SVDPIDSOLAUTWS01");
+        config.setCodigoCertificado(codigoCertificado);
 
         return config;
 

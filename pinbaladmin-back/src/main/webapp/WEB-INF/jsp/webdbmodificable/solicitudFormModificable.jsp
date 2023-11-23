@@ -2,9 +2,9 @@
 	$(".fa-bullhorn").parent().insertBefore($("#solicitudForm").prev());
 	$(".fa-bullhorn").parent().css("float", "right");
 	
-    $(".fa-cloud-upload-alt").parent().insertBefore($("#solicitudForm").prev());
-	$(".fa-cloud-upload-alt").parent().css("float", "right");
-	$(".fa-cloud-upload-alt").parent().css("margin-right", "1rem");
+    $(".btn-api-pinbal").insertBefore($("#solicitudForm").prev());
+    $(".btn-api-pinbal").css("float", "right");
+    $(".btn-api-pinbal").css("margin-right", "1rem");
 
 </script>
 
