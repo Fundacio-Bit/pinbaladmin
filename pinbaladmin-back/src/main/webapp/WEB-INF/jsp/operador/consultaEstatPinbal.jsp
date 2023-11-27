@@ -51,8 +51,7 @@ table.solicitud.servicio.item {
 </style>
 
 <a id="button-alta-solicitud" class="btn btn-primary"
-	onclick="altaSolicitud()"> <i class="fas fa-cloud-upload-alt"></i>
-	&nbsp; Alta Solicitud
+	href="${returnUrl}" > Tornar a Solicitud
 </a>
 
 

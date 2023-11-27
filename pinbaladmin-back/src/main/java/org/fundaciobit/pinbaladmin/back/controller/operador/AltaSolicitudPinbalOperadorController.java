@@ -220,6 +220,8 @@ public class AltaSolicitudPinbalOperadorController {
 
             ModelAndView mav = new ModelAndView("consultaestatpinbal");
             mav.addObject("retorno", retorno);
+            log.info("context:: " + getContextWeb());
+            mav.addObject("returnUrl", "/pinbaladmin" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID);
 
             log.info("estado: " + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
             

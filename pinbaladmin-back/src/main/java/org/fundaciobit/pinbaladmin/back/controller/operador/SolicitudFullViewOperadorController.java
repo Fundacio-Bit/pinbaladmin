@@ -137,7 +137,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       } else {
           solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
                   "/operador/altapinbal/consultaestado/" + solicitud.getSolicitudID(), "btn-secondary btn-api-pinbal"));
-          solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "modificacio.pinbal.madrid",
+          solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
                   "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-success btn-api-pinbal"));
       }
 
