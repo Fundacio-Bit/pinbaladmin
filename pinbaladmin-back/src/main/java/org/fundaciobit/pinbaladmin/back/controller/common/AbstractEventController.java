@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.common;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
@@ -31,6 +34,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -396,10 +400,12 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     String persona = eventForm.getEvent().getDestinatari();
                     ev.setDestinatari(persona);
                     
+                    FitxerJPA adjunt = ev.getFitxer();
+
                     eventLogicaEjb.update(ev);
                     
                     log.info("CORREU PER ENVIAR");
-                    EmailUtil.postMail(subject, message, isHtml, from, email);
+                    EmailUtil.postMail(subject, message, isHtml, from, adjunt, email);
                     log.info("CORREU ENVIAT");
                     
                 } catch (I18NException e) {
@@ -476,6 +482,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
                 final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
 
                 final boolean isHtml = true;
+
+                FitxerJPA adjunt = null;
+                
                 for (String address : emails) {
 
                     String url = getLinkPublic(itemID);
@@ -502,7 +511,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
                      */
                     try {
 
-                        EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
+                        EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
                         HtmlUtils.saveMessageSuccess(request,
                                 "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
                     } catch (Exception e) {
@@ -833,6 +842,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
             final boolean isHtml = true;
 
+            FitxerJPA adjunt = event.getFitxer();;
+            
             final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO " + tipus.toUpperCase() + " - "
                     + titol;
 
@@ -843,7 +854,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
                     + "\">CONTESTAR</a>" + "<br/><br/>" + getPeuCorreu();
             try {
 
-                EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), address);
+                EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
                 HtmlUtils.saveMessageSuccess(request, "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
             } catch (Exception e) {
                 msg = "Error enviant correu: " + e.getMessage();

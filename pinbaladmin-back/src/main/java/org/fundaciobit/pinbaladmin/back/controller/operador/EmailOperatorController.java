@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
@@ -56,13 +58,13 @@ public class EmailOperatorController extends EmailController {
     public EmailJPA create(HttpServletRequest request, EmailJPA email) throws I18NException, I18NValidationException {
 
         final boolean isHtml = false;
-
+        final FitxerJPA adjunt = null;
         String[] emails = email.getDestinataris().split(";");
         log.error("Dest: " + Arrays.toString(emails));
 
         for (String address : emails) {
             try {
-                EmailUtil.postMail(email.getSubject(), email.getMessage(), isHtml, Configuracio.getAppEmail(), address);
+                EmailUtil.postMail(email.getSubject(), email.getMessage(), isHtml,  Configuracio.getAppEmail(), adjunt, address);
             } catch (Exception e) {
                 final String msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
                 log.error(msg, e);

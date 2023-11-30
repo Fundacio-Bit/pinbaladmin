@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic.utils;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
@@ -13,18 +14,26 @@ import java.util.Set;
 //import javax.jms.QueueSession;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message.RecipientType;
+import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 
 //import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 //import org.fundaciobit.genapp.common.i18n.I18NException;
 
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 /**
  * 
@@ -48,11 +57,13 @@ public class EmailUtil {
       * @param isHtml
       *          Decide si el contenido del mensaje a de ser visualizado en html o
       *          no
+      * @param adjunt
+      *          El fichero adjunto en caso de que lo hubiera
       * @param recipients
       *          Conjunto de emails para los que va dirigido el mensaje
       * @throws Exception
       */
-    public static void postMail(String subject, String message, boolean isHtml, String from, String... recipients)
+    public static void postMail(String subject, String message, boolean isHtml, String from, FitxerJPA adjunt, String... recipients)
             throws Exception {
 
         
@@ -73,6 +84,7 @@ public class EmailUtil {
         
         // Creamos el mensaje
         MimeMessage msg = new MimeMessage(session);
+        
         log.info("msg: " + msg);
 
         log.info("PRE-from: " + from);
@@ -103,16 +115,37 @@ public class EmailUtil {
         msg.setSubject(subject, "UTF-8");
         msg.setSentDate(new Date());
 
+        
+        
+        
         // Configuramos el contenido
+        
+        
         if (isHtml) {
             msg.setHeader("Content-Type", "text/html;charset=utf-8");
-            /*
-            URL urlToAdd = new URL(url);
-            msg.setDataHandler(new DataHandler(urlToAdd));
-            */
-            msg.setContent(message, "text/html;charset=utf-8");
+
+            Multipart multipart = new MimeMultipart();
+            
+            BodyPart messageBodyPart = new MimeBodyPart(); 
+            messageBodyPart.setContent(message,  "text/html; charset=utf-8");
+            
+            multipart.addBodyPart(messageBodyPart);
+            
+            if (adjunt != null) {
+                log.info("fitxerJPA: " + adjunt.getNom() + " - mime: " + adjunt.getMime());
+                
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                File fileAdjunt = FileSystemManager.getFile(adjunt.getFitxerID());
+
+                attachmentPart.setDataHandler(new DataHandler(new FileDataSource(fileAdjunt)));
+                attachmentPart.setFileName(adjunt.getNom());
+                
+                multipart.addBodyPart(attachmentPart);
+            }
+            
+            msg.setContent(multipart);
         } else {
-            msg.setContent(message, "text/plain" /*; charset=UTF-8"*/);
+            msg.setContent(message, "text/plain");
         }
 
         // Mandamos el mail
