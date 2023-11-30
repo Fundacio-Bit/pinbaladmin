@@ -42,9 +42,6 @@ import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Estad
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Servicio;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
 
 /**
  * 
@@ -63,9 +60,9 @@ public class AltaSolicitudPinbalOperadorController {
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
-    @RequestMapping(value = "/vistaprevia/{soliID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/vistaprevia/{tipus}/{soliID}", method = RequestMethod.GET)
     public ModelAndView vistaPrevia(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable Long soliID) {
+            @PathVariable String tipus, @PathVariable Long soliID) {
 
         log.info("Entra a vistaprevia amb soliID = " + soliID);
         String returnUrl = SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
@@ -73,11 +70,6 @@ public class AltaSolicitudPinbalOperadorController {
         SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
         
         List<String> errors = new ArrayList<String>();
-//        
-//        if (soli.getEstatID() != Constants.SOLICITUD_ESTAT_AUTORITZAT
-//                && soli.getEstatID() != Constants.SOLICITUD_ESTAT_TANCAT) {
-//            errors.add("L'estat es " + SolicitudOperadorController.ESTATS_SOLICITUD.get(soli.getEstatID()));
-//        }
 
         if (soli.getDataFi() != null && soli.getDataFi().before(new Timestamp(System.currentTimeMillis()))) {
             errors.add("La data de caducitat ha de ser posterior a avui");
@@ -100,21 +92,28 @@ public class AltaSolicitudPinbalOperadorController {
             ScspTitular titular = getTitular(prop);
             ScspFuncionario funcionario = getFuncionari();
             
-            Solicitud solicitud = solicitudLogicaEjb.getDadesSolicitudApiPinbal(soliID, prop);
-
             request.getSession().setAttribute("titular", titular);
             request.getSession().setAttribute("funcionario", funcionario);
-            request.getSession().setAttribute("solicitud", solicitud);
-
+ 
             request.getSession().setAttribute(RETURN_URL, returnUrl);
-
-            ModelAndView mav = new ModelAndView("altasolicitudpinbal");
+            
+            ModelAndView mav;
+            if (tipus.equals("alta")) {
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitudA = solicitudLogicaEjb.getDadesAltaSolicitudApiPinbal(soliID, prop);
+                request.getSession().setAttribute("solicitud", solicitudA);
+                mav = new ModelAndView("altasolicitudpinbal");
+                mav.addObject("solicitud", solicitudA);
+            } else {
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudM = solicitudLogicaEjb.getDadesModificarSolicitudApiPinbal(soliID, prop);
+                request.getSession().setAttribute("solicitud", solicitudM);
+                mav = new ModelAndView("modificaciosolicitudpinbal");
+                mav.addObject("solicitud", solicitudM);
+            }
 
             mav.addObject("contexte", getContextWeb());
 
             mav.addObject("titular", titular);
             mav.addObject("funcionario", funcionario);
-            mav.addObject("solicitud", solicitud);
             mav.addObject("soliID", soliID);
 
 //            HtmlUtils.saveMessageSuccess(request, "Dades obtingudes correctament");
@@ -136,14 +135,14 @@ public class AltaSolicitudPinbalOperadorController {
 
         ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
         ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
-        Solicitud solicitud = (Solicitud) request.getSession().getAttribute("solicitud");
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud = (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud) request.getSession().getAttribute("solicitud");
 
         solicitud.setConsulta(consulta);
         log.info("consulta: " + solicitud.getConsulta());
 
         try {
             if (fitxerConsentiment.getSize() > 0 ) {
-                Consentimiento.Documento docConsentimiento = new Consentimiento.Documento();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento docConsentimiento = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
 
                 String nombre = fitxerConsentiment.getOriginalFilename();
                 byte[] contenido = fitxerConsentiment.getBytes(); 
@@ -158,7 +157,7 @@ public class AltaSolicitudPinbalOperadorController {
                 solicitud.getProcedimiento().getConsentimiento().setDocumento(docConsentimiento);
             }
            
-            Respuesta resposta = solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
             if (resposta.getErrores() == null) {
                 System.out.println(" # Errors: 0");
@@ -247,6 +246,63 @@ public class AltaSolicitudPinbalOperadorController {
     }
     
     
+    @RequestMapping(value = "/modificaciosolicitud", method = RequestMethod.POST)
+    public String modificacioSolicitud(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("consentiment-file") MultipartFile fitxerConsentiment,
+            @RequestParam("soliID") String soliID) {
+
+        ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
+        ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud = (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud) request.getSession().getAttribute("solicitud");
+
+        try {
+            if (fitxerConsentiment.getSize() > 0 ) {
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento docConsentimiento = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento();
+
+                String nombre = fitxerConsentiment.getOriginalFilename();
+                byte[] contenido = fitxerConsentiment.getBytes(); 
+                String desc = "Fitxer consentiment: " + nombre + ". " + contenido.length + " bytes";
+
+                log.info(desc);
+
+                docConsentimiento.setNombre(nombre);
+                docConsentimiento.setDescripcion(desc);
+                docConsentimiento.setContenido(contenido);
+                
+                solicitud.getProcedimiento().getConsentimiento().setDocumento(docConsentimiento);
+            }
+           
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta = solicitudLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
+
+            if (resposta.getErrores() == null) {
+                System.out.println(" # Errors: 0");
+
+                String mensaje = resposta.getEstado().getDescripcion();
+                HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
+
+                log.info("Actualitzam solicitud amb ID= " + soliID);
+                
+                solicitudLogicaEjb.update(SolicitudFields.TICKETNUMEROSEGUIMENT,
+                        solicitud.getProcedimiento().getCodigo(),
+                        SolicitudFields.SOLICITUDID.equal(Long.parseLong(soliID)));                
+                
+                
+            } else {
+                for (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Error error : resposta.getErrores()
+                        .getError()) {
+                    
+                    String errorMsg = "PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")";
+                    HtmlUtils.saveMessageError(request, errorMsg);
+                }
+            }
+        } catch (Exception e) {
+            HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
+        }
+
+        String returnUrl = (String) request.getSession().getAttribute(RETURN_URL);
+        log.info("returnUrl :" + returnUrl);
+        return "redirect:" + returnUrl;
+    }
     
     public String getContextWeb() {
         RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);

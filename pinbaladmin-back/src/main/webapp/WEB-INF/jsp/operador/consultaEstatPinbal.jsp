@@ -30,7 +30,7 @@ th {
 	width: 25rem;
 }
 
-#button-alta-solicitud {
+#button-consulta-solicitud{
 	color: white;
 	float: right;
 	margin-right: 10rem;
@@ -50,7 +50,7 @@ table.solicitud.servicio.item {
 }
 </style>
 
-<a id="button-alta-solicitud" class="btn btn-primary"
+<a id="button-consulta-solicitud" class="btn btn-primary"
 	href="${returnUrl}" > Tornar a Solicitud
 </a>
 

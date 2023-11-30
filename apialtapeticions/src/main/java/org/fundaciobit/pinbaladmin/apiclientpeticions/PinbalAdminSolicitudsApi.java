@@ -19,7 +19,6 @@ import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.Solicitud;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
 
 /**
  * 
@@ -37,7 +36,7 @@ public class PinbalAdminSolicitudsApi {
         this.configuracio = configuracio;
     }
 
-    public Respuesta altaSolicitudPinbalApi(
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudPinbalApi(
             es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud soliIncidencia,
             ScspTitular titular, ScspFuncionario funcionario) throws Exception {
 
@@ -73,7 +72,7 @@ public class PinbalAdminSolicitudsApi {
         dte = (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos) datosEspecificosItem
                 .unmarshal(new StringReader(datosEspecificos));
 
-        Respuesta respuesta = dte.getRespuesta();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta respuesta = dte.getRespuesta();
 
         return respuesta;
     }
@@ -116,6 +115,47 @@ public class PinbalAdminSolicitudsApi {
         return retorno;
     }
 
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudPinbalApi(
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud soliIncidencia,
+            ScspTitular titular, ScspFuncionario funcionario) throws Exception {
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos de = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos();
+        de.setSolicitud(soliIncidencia);
+
+        SolicitudPinbalAdminModificacio solicitud = new SolicitudPinbalAdminModificacio(de);
+
+        {
+            solicitud.setIdentificadorSolicitante(this.configuracio.getIdentificadorSolicitante());
+            solicitud.setUnidadTramitadora(this.configuracio.getUnidadTramitadora());
+            solicitud.setCodigoProcedimiento(this.configuracio.getCodProcedimiento());
+            solicitud.setFinalidad(this.configuracio.getFinalidad());
+            solicitud.setConsentimiento(ScspConsentimiento.Si);
+            solicitud.setFuncionario(funcionario);
+            solicitud.setTitular(titular);
+        }
+
+        /*
+         * Petició a PINBAL i processament de la resposta XML
+         */
+        ScspRespuesta resposta = cridadaSincronaPINBAL(solicitud);
+
+        String datosEspecificos = resposta.getTransmisiones().get(0).getDatosEspecificos();
+        datosEspecificos = parseDatosEspecificosXML(datosEspecificos);
+
+        JAXBContext contexto = JAXBContext
+                .newInstance(es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos.class);
+
+        Unmarshaller datosEspecificosItem = contexto.createUnmarshaller();
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos dte;
+        dte = (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos) datosEspecificosItem
+                .unmarshal(new StringReader(datosEspecificos));
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta respuesta = dte.getRespuesta();
+
+        return respuesta;
+    }
+    
     private String parseDatosEspecificosXML(String datosEspecificos) {
         datosEspecificos = datosEspecificos.replace("DatosEspecificos", "datosEspecificos");
         datosEspecificos = datosEspecificos.replace("<datosEspecificos>",
@@ -221,4 +261,39 @@ public class PinbalAdminSolicitudsApi {
             }
         }
     }
+    
+    protected static class SolicitudPinbalAdminModificacio extends Solicitud {
+
+        protected Logger log = Logger.getLogger(this.getClass());
+
+        final es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos datosEspecificos;
+
+        public SolicitudPinbalAdminModificacio(
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos datosEspecificos) {
+            super();
+            this.datosEspecificos = datosEspecificos;
+        }
+
+        @Override
+        public String getDatosEspecificos() { // xml
+
+            StringWriter sw = new StringWriter();
+            try {
+
+                JAXBContext contexto = JAXBContext.newInstance(
+                        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos.class);
+
+                Marshaller marshaller = contexto.createMarshaller();
+
+                marshaller.marshal(this.datosEspecificos, sw);
+
+                return sw.toString();
+
+            } catch (JAXBException e) {
+                log.error(e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 }

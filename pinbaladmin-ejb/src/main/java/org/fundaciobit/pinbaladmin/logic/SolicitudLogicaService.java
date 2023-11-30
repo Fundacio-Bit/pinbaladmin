@@ -18,7 +18,6 @@ import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
 
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
@@ -56,10 +55,14 @@ public interface SolicitudLogicaService extends SolicitudService {
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs) throws I18NException;
 
-    public Solicitud getDadesSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
-    
-    public Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
 
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud) throws Exception;
+    
     public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Consulta consulta) throws Exception;
+    
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
+
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception;
 
 }

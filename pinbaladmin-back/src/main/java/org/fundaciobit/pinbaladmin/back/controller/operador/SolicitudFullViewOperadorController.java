@@ -133,12 +133,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       if (solicitud.getTicketNumeroSeguiment() == null) {
           solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-primary btn-api-pinbal"));
+                  "/operador/altapinbal/vistaprevia/alta/" + solicitud.getSolicitudID(), "btn-primary btn-api-pinbal"));
       } else {
           solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
                   "/operador/altapinbal/consultaestado/" + solicitud.getSolicitudID(), "btn-secondary btn-api-pinbal"));
           solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/" + solicitud.getSolicitudID(), "btn-success btn-api-pinbal"));
+                  "/operador/altapinbal/vistaprevia/modificacio/" + solicitud.getSolicitudID(), "btn-success btn-api-pinbal"));
       }
 
       solicitudForm.setAttachedAdditionalJspCode(true);

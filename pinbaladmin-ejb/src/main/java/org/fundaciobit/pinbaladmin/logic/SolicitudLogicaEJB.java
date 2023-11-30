@@ -46,25 +46,13 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
+import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 import org.hibernate.Hibernate;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contactos;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentoAutorizacion;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
 
 /**
  * 
@@ -321,39 +309,64 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     }
     
     @Override
-    public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud)
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud)
             throws Exception {
 
         PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA));
-        Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
+
+        return respuesta;
+    }
+    
+    @Override
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal(
+            ScspTitular titular, ScspFuncionario funcionario,
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception {
+
+        PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.MODIFICACIO));
+        log.info("Estamos en EJB. Llamamos al metodo de API");
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta respuesta = api.modificacioSolicitudPinbalApi(solicitud, titular, funcionario);
 
         return respuesta;
     }
 
     @Override
-    public Solicitud getDadesSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception {
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception {
 
         SolicitudJPA soli = this.findByPrimaryKey(solicitudID);
-        Solicitud solicitud = new Solicitud();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud();
 
         String asunto = "Alta Servicios. Codigo Solicitud: " + soli.getProcedimentCodi();
         solicitud.setAsunto(asunto);
 
-        Contactos contactos = getContactos(prop);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contactos contactos = getContactosAlta(prop);
         solicitud.setContactos(contactos);
         
-        Procedimiento proc = getProcedimiento(soli);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento proc = getProcedimientoAlta(soli);
         solicitud.setProcedimiento(proc);
         return solicitud;
     }
 
+    @Override
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception {
+
+        SolicitudJPA soli = this.findByPrimaryKey(solicitudID);
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud();
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contactos contactos = getContactosModificacio(prop);
+        solicitud.setContactos(contactos);
+        
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento proc = getProcedimientoModificacio(soli);
+        solicitud.setProcedimiento(proc);
+        return solicitud;
+    }
 
     
-    private Contactos getContactos(Properties prop) {
+    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contactos getContactosAlta(Properties prop) {
 
         String base = "FORMULARIO.DATOS_SOLICITUD.";
 
-        Contactos contactos = new Contactos();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contactos contactos = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contactos();
 
         // Contacto Aut
         String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
@@ -362,7 +375,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
         String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
 
-        Contacto contactoAut = createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto contactoAut = createContactoAlta(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
                 contactoAutTelefon);
 
         if (contactoAut != null) {
@@ -376,7 +389,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
         String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
 
-        Contacto contactoAud = createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto contactoAud = createContactoAlta(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
                 contactoAudTelefon);
 
         if (contactoAud != null) {
@@ -390,7 +403,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
         String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
 
-        Contacto contactoTec = createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto contactoTec = createContactoAlta(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
                 contactoTecTelefon);
 
         if (contactoTec != null) {
@@ -400,11 +413,11 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return contactos;
     }
 
-    private Contacto createContacto(String contactoApe1, String contactoApe2, String contactoMail,
+    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto createContactoAlta(String contactoApe1, String contactoApe2, String contactoMail,
             String contactoNombre, String contactoTelefono) {
         
         if (contactoApe1 != null && contactoMail != null && contactoNombre != null && contactoTelefono != null) {
-            Contacto contacto = new Contacto();
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto contacto = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto();
             contacto.setApellido1(contactoApe1);
             if (contactoApe2 == null) {
              //   contactoApe2 = "Apellido2";
@@ -421,6 +434,22 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         }
     }
 
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private class DocAuthInfo {
         
         private FitxerJPA fitxer;
@@ -444,7 +473,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         }
     }
     
-    public Procedimiento getProcedimiento(SolicitudJPA soli) throws Exception {
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento getProcedimientoAlta(SolicitudJPA soli) throws Exception {
 
         String _Automatizado = "N";// soli.getAutomatizado();
         String _Periodico = "N"; //soli.getPeriodico();
@@ -464,7 +493,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String _Observaciones = null;//soli.getNotes();
 
         Timestamp dataCaducitat = soli.getDataFi();
-        XMLGregorianCalendar _FechaCaducidad = parseTimestampToXMLGregorian(dataCaducitat);
+        XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat); //parseTimestampToXMLGregorian(dataCaducitat);
 
         Fitxer consentiment = null;
         //Aquí son el excel de servicios y el documento PDF del Director General.
@@ -503,11 +532,11 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             }
         }
 
-        Consentimiento _Consentimiento = getConsentimiento(soli.getSolicitudServeis(), consentiment);
-        DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docsAuth);
-        Servicios _Servicios = getServicios(soli);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento _Consentimiento = getConsentimientoAlta(soli.getSolicitudServeis(), consentiment);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionAlta(docsAuth);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios _Servicios = getServiciosAlta(soli);
 
-        Procedimiento proc = new Procedimiento();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento proc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento();
         proc.setAutomatizado(_Automatizado);
         proc.setClaseTramite(_ClaseTramite);
         proc.setCodigo(_Codigo);
@@ -548,9 +577,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return cal;
     }
 
-    private Consentimiento getConsentimiento(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
+    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento getConsentimientoAlta(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
 
-        Consentimiento cons = new Consentimiento();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento();
 
         String consentiment = null;
         String tipo = null;
@@ -582,7 +611,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
         if (fitxerConsentiment != null) {
             try {
-                Consentimiento.Documento doc = new Consentimiento.Documento();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
 
                 Long consentimentID = fitxerConsentiment.getFitxerID();
 
@@ -615,10 +644,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     }
 
-    private DocumentosAutorizacion getDocsAutorizacion(Set<DocAuthInfo> documents) throws Exception {
+    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion getDocsAutorizacionAlta(Set<DocAuthInfo> documents) throws Exception {
 
         log.info("Documents de la solicitud: " + documents.size());
-        DocumentosAutorizacion docs = new DocumentosAutorizacion();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion docs = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion();
 
         for (DocAuthInfo docInfo : documents) {
             FitxerJPA fitxer = docInfo.getFitxer();
@@ -631,7 +660,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             File file = FileSystemManager.getFile(fitxerID);
             byte[] contingut = FileUtils.readFromFile(file);
 
-            DocumentoAutorizacion docAut = new DocumentoAutorizacion();
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentoAutorizacion docAut = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentoAutorizacion();
             // AUT - FORMULARIO AUTORIZACION: FicherFirmart09.pdf (124562 bytes)
             log.info("AUT - " + tipo + ": " + nom + " (" + contingut.length + " bytes)");
 
@@ -645,22 +674,22 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return docs;
     }
 
-    private Servicios getServicios(SolicitudJPA soli) throws Exception {
+    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios getServiciosAlta(SolicitudJPA soli) throws Exception {
 
-        Servicios servicios = new Servicios();
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios servicios = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios();
         Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
             if (!balear) {
 
-                Servicio servicio = new Servicio();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio();
 
-                Norma norma = new Norma();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma norma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma();
                 {
                     String normaLegal = ss.getNormaLegal();
 
-                    Norma.Documento docNorma = new Norma.Documento();
+                    es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento();
                     String enlace = ss.getEnllazNormaLegal();
 
                     boolean debug = false;
@@ -681,7 +710,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                         docNorma = null;
                     }
 
-                    Articulos articulos = new Articulos();
+                    es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos articulos = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos();
                     String articulosString = ss.getArticles();
                     String[] articulosArray = articulosString.split(",");
 
@@ -696,7 +725,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
                 String codigoCertificado = ss.getServei().getCodi();
 
-                Normas normas = new Normas();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas normas = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas();
                 normas.getNorma().add(norma);
 
                 servicio.setCodigoCertificado(codigoCertificado);
@@ -709,6 +738,326 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return servicios;
     }
 
+    
+    
+    
+    
+    
+    
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contactos getContactosModificacio(Properties prop) {
+
+        String base = "FORMULARIO.DATOS_SOLICITUD.";
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contactos contactos = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contactos();
+
+        // Contacto Aut
+        String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
+        String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
+        String contactoAutMail = prop.getProperty(base + "MAILSECD");
+        String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
+        String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto contactoAut = createContactoModificacio(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
+                contactoAutTelefon);
+
+        if (contactoAut != null) {
+            contactos.getContacto().add(contactoAut);
+        }
+
+        // Contacto Aud
+        String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
+        String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
+        String contactoAudMail = prop.getProperty(base + "MAILSECE");
+        String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
+        String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto contactoAud = createContactoModificacio(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
+                contactoAudTelefon);
+
+        if (contactoAud != null) {
+            contactos.getContacto().add(contactoAud);
+        }
+
+        // Contacto Tec
+        String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
+        String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
+        String contactoTecMail = prop.getProperty(base + "MAILSECF");
+        String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
+        String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto contactoTec = createContactoModificacio(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
+                contactoTecTelefon);
+
+        if (contactoTec != null) {
+            contactos.getContacto().add(contactoTec);
+        }
+
+        return contactos;
+    }
+
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto createContactoModificacio(String contactoApe1, String contactoApe2, String contactoMail,
+            String contactoNombre, String contactoTelefono) {
+        
+        if (contactoApe1 != null && contactoMail != null && contactoNombre != null && contactoTelefono != null) {
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto contacto = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto();
+            contacto.setApellido1(contactoApe1);
+            if (contactoApe2 == null) {
+             //   contactoApe2 = "Apellido2";
+            }
+            
+            contacto.setApellido2(contactoApe2);
+            contacto.setEmail(contactoMail);
+            contacto.setFax(null);
+            contacto.setNombre(contactoNombre);
+            contacto.setTelefono(contactoTelefono);
+            return contacto;
+        } else {
+            return null;
+        }
+    }
+
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento getProcedimientoModificacio(SolicitudJPA soli) throws Exception {
+
+        String _Automatizado = "N";// soli.getAutomatizado();
+        String _Periodico = "N"; //soli.getPeriodico();
+
+        String petsDia = "40"; //soli.getPetsDia();
+        Integer _PeticionesEstimadas = Integer.parseInt(petsDia);
+
+        String tipusProc = soli.getProcedimentTipus();
+        Integer _ClaseTramite = getIdentificadorNuevoPorId(tipusProc);
+        
+        String _Codigo = soli.getProcedimentCodi();
+        String _Nombre = soli.getProcedimentNom();
+        String _Descripcion = soli.getCodiDescriptiu();
+        if (_Nombre.equals(_Descripcion)) {
+            _Descripcion = "_" + _Descripcion;
+        }
+        String _Observaciones = null;//soli.getNotes();
+
+        Timestamp dataCaducitat = soli.getDataFi();
+        
+        XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat);
+
+        Fitxer consentiment = null;
+        //Aquí son el excel de servicios y el documento PDF del Director General.
+        Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
+        
+        for (DocumentSolicitudJPA document : soli.getDocumentSolicituds()) {
+
+            Long tipus = document.getDocument().getTipus();
+            
+            if (tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+                FitxerJPA fitxer = document.getDocument().getFitxerFirmat();
+                if (fitxer != null) {
+                    String desc = "Formulari PDF firmat per el director";
+                    String tipo = "FORMULARIO DE AUTORIZACION";
+                    docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+                }else {
+                    log.info("Fa falta el formulari firmat per el DG");
+                }
+                
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
+                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
+                String desc = "Excel de serveis i procediments";
+                String tipo = "EXCEL DE SERVICIOS";
+//                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
+                consentiment = document.getDocument().getFitxerFirmat(); // Document consentiment
+            } else {
+                FitxerJPA original = document.getDocument().getFitxerOriginal();
+                if (original.getMime().equals("application/pdf")) {
+                    FitxerJPA fitxer = original;
+                    String desc = "Fitxer PDF associat al procediment";
+                    String tipo = "DOC AUTORITZACÓ";
+                    docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
+                }
+            }
+        }
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento _Consentimiento = getConsentimientoModificacio(soli.getSolicitudServeis(), consentiment);
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionModificacio(docsAuth);
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios _Servicios = getServiciosModificacio(soli);
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento proc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento();
+        proc.setAutomatizado(_Automatizado);
+        proc.setClaseTramite(_ClaseTramite);
+        proc.setCodigo(_Codigo);
+        proc.setDescripcion(_Descripcion);
+        proc.setNombre(_Nombre);
+        proc.setObservaciones(_Observaciones);
+        proc.setPeriodico(_Periodico);
+        proc.setPeticionesEstimadas(_PeticionesEstimadas);
+        proc.setFechaCaducidad(_FechaCaducidad);
+        proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
+        proc.setConsentimiento(_Consentimiento);
+        proc.setServicios(_Servicios);
+        return proc;
+    }
+
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento getConsentimientoModificacio(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento();
+
+        String consentiment = null;
+        String tipo = null;
+        String enlace = null;
+
+        for (SolicitudServeiJPA solSerJPA : set) {
+            consentiment = solSerJPA.getConsentiment(); //Si, Llei, No oposició
+            if (consentiment != null) {
+                if ("Llei".equals(consentiment) || "Ley".equals(consentiment)) {
+
+                    cons.setTipo("Ley");
+                    log.info("CONS: Ley");
+                    return cons;
+
+                } else {
+                    tipo = consentiment.startsWith("S") ? "Si" : "NoOpo";
+                    enlace = solSerJPA.getEnllazConsentiment();
+
+                    if (enlace != null && enlace.trim().length() != 0) {
+                        cons.setEnlace(enlace);
+                        cons.setTipo(tipo);
+                        log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
+                        return cons;
+                    }
+                }
+            }
+        }
+
+        //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
+        if (fitxerConsentiment != null) {
+            try {
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento();
+
+                Long consentimentID = fitxerConsentiment.getFitxerID();
+
+                String nom = fitxerConsentiment.getNom();
+                String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+
+                File fileConsentiment = FileSystemManager.getFile(consentimentID);
+                byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+
+                log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+                doc.setNombre(nom);
+                doc.setDescripcion(descripcio);
+                doc.setContenido(contingut);
+
+                cons.setTipo(tipo);
+                cons.setDocumento(doc);
+                return cons;
+            } catch (Exception e) {
+                String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+                log.error(msg);
+                throw new Exception(msg);
+            }
+        } else {
+            cons.setTipo(tipo);
+            cons.setEnlace(null);
+            cons.setDocumento(null);
+            log.info("CONS: No tenim fitxer de consentiment. Demanar-ho a la vista prèvia");
+            return cons;
+        }
+
+    }
+
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion getDocsAutorizacionModificacio(Set<DocAuthInfo> documents) throws Exception {
+
+        log.info("Documents de la solicitud: " + documents.size());
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion docs = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion();
+
+        for (DocAuthInfo docInfo : documents) {
+            FitxerJPA fitxer = docInfo.getFitxer();
+
+            String nom = fitxer.getNom();
+            String descripcio = docInfo.getDescripcio();
+            String tipo = docInfo.getTipo();
+
+            Long fitxerID = fitxer.getFitxerID();
+            File file = FileSystemManager.getFile(fitxerID);
+            byte[] contingut = FileUtils.readFromFile(file);
+
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentoAutorizacion docAut = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentoAutorizacion();
+            // AUT - FORMULARIO AUTORIZACION: FicherFirmart09.pdf (124562 bytes)
+            log.info("AUT - " + tipo + ": " + nom + " (" + contingut.length + " bytes)");
+
+            docAut.setNombre(nom);
+            docAut.setDescripcion(descripcio);
+            docAut.setTipo(tipo);
+            docAut.setContenido(contingut);
+
+            docs.getDocumentoAutorizacion().add(docAut);
+        }
+        return docs;
+    }
+
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios getServiciosModificacio(SolicitudJPA soli) throws Exception {
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios servicios = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios();
+        Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
+
+        for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
+            boolean balear = ss.getServei().getEntitatServei().isBalears();
+            if (!balear) {
+
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio();
+
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma norma = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma();
+                {
+                    String normaLegal = ss.getNormaLegal();
+
+                    es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma.Documento();
+                    String enlace = ss.getEnllazNormaLegal();
+
+                    boolean debug = false;
+                    FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
+
+                    if (normaFileInfo != null) {
+                        String nom = normaFileInfo.getFileName();
+                        String descripcio = "Norma del servicio: " + ss.getServei().getNom();
+                        byte[] contingut = normaFileInfo.getContent();
+
+                        log.info("NORMA - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
+
+                        docNorma.setNombre(nom);
+                        docNorma.setDescripcion(descripcio);
+                        docNorma.setContenido(contingut);
+                        docNorma.setEnlace(enlace);
+                    } else {
+                        docNorma = null;
+                    }
+
+                    es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Articulos articulos = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Articulos();
+                    String articulosString = ss.getArticles();
+                    String[] articulosArray = articulosString.split(",");
+
+                    for (String articulo : articulosArray) {
+                        articulos.getArticulo().add(articulo);
+                    }
+
+                    norma.setNormaLegal(normaLegal);
+                    norma.setDocumento(docNorma);
+                    norma.setArticulos(articulos);
+                }
+
+                String codigoCertificado = ss.getServei().getCodi();
+
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Normas normas = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Normas();
+                normas.getNorma().add(norma);
+
+                servicio.setCodigoCertificado(codigoCertificado);
+                servicio.setNormas(normas);
+
+                servicios.getServicio().add(servicio);
+            }
+        }
+
+        return servicios;
+    }
+
+    
+    
     private int getIdentificadorNuevoPorId(String tipoProcedimiento) {
         int idTipoProcedimiento = TipusProcediments.getIdentificadorTipoProcedimiento(tipoProcedimiento);
 
@@ -747,5 +1096,4 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         // Si no se encuentra se devolverá 0 (Pruebas) para indicar que no se encontró ningún mapeo correspondiente en la nueva lista.
         return 0;
     }
-
 }
