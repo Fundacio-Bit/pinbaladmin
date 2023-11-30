@@ -552,30 +552,30 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return proc;
     }
 
-    private XMLGregorianCalendar parseTimestampToXMLGregorian(Timestamp caducitatdata) {
-        if (caducitatdata == null) {
-            return null;
-        }
-        XMLGregorianCalendar cal = null;
-        try {
-
-            LocalDateTime ldt = caducitatdata.toLocalDateTime();
-            cal = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-
-            cal.setYear(ldt.getYear());
-            cal.setMonth(ldt.getMonthValue());
-            cal.setDay(ldt.getDayOfMonth());
-            cal.setHour(ldt.getHour());
-            cal.setMinute(ldt.getMinute());
-            cal.setSecond(ldt.getSecond());
-            cal.setFractionalSecond(new BigDecimal("0." + ldt.getNano()));
-
-        } catch (DatatypeConfigurationException e) {
-
-            e.printStackTrace();
-        }
-        return cal;
-    }
+//    private XMLGregorianCalendar parseTimestampToXMLGregorian(Timestamp caducitatdata) {
+//        if (caducitatdata == null) {
+//            return null;
+//        }
+//        XMLGregorianCalendar cal = null;
+//        try {
+//
+//            LocalDateTime ldt = caducitatdata.toLocalDateTime();
+//            cal = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+//
+//            cal.setYear(ldt.getYear());
+//            cal.setMonth(ldt.getMonthValue());
+//            cal.setDay(ldt.getDayOfMonth());
+//            cal.setHour(ldt.getHour());
+//            cal.setMinute(ldt.getMinute());
+//            cal.setSecond(ldt.getSecond());
+//            cal.setFractionalSecond(new BigDecimal("0." + ldt.getNano()));
+//
+//        } catch (DatatypeConfigurationException e) {
+//
+//            e.printStackTrace();
+//        }
+//        return cal;
+//    }
 
     private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento getConsentimientoAlta(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
 
