@@ -59,10 +59,10 @@ public class CrearExcelDeServeis {
     String tipusProcediment = soli.getProcedimentTipus();
     String descripcio = soli.getCodiDescriptiu(); // values.get("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
 
+    String periodo = "10 años";
     String automatizado = "NO"; //soli.getAutomatizado(); // values.get("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
     String periodico = "NO"; //soli.getPeriodico(); // values.get("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
     String peticionsDia = "30"; //soli.getPetsDia(); // values.get("FORMULARIO.DATOS_SOLICITUD.PETICIONESDIA");
-    String peticionsMes = "40"; //soli.getPetsMes(); // values.get("FORMULARIO.DATOS_SOLICITUD.PETICIONESMES");
     
     Map<Long, String[]> dadesByServeiSolicitudID = new HashMap<Long, String[]>();
 
@@ -87,13 +87,19 @@ public class CrearExcelDeServeis {
       // D 3 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.NOMSERVEI
       dades[3] = ss.getServei().getNom(); // values.get(base + "NOMSERVEI");
 
-      // E 4 FORMULARIO.DATOS_SOLICITUD.DESCRIPCION
-      dades[4] = descripcio;
+      //E 4 PERIODO 
+      if (ss.getServei().getCodi().equals("SVDINESECOPAHISTORICOMUNICIPIOSWS01")) {
+          dades[4] = periodo;        
+      }else {
+          dades[4] = "";        
+      }
+      // F 5 FORMULARIO.DATOS_SOLICITUD.DESCRIPCION
+      dades[5] = descripcio;
 
-      // F 5 ???' (Ayudas, Becas y Subvenciones) TIPUS PROCEDIMENT
-      dades[5] = tipusProcediment;
+      //  G 6 (Ayudas, Becas y Subvenciones) TIPUS PROCEDIMENT
+      dades[6] = tipusProcediment;
 
-      // G 6 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.CONSENTIMIENTO No
+      // H 7 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.CONSENTIMIENTO No
       // oposición => NO_OPOSICION
       {
         String origen = ss.getConsentiment(); // values.get(base +
@@ -113,47 +119,44 @@ public class CrearExcelDeServeis {
         }
 
         // values.get(base + "CONSENTIMIENTO");
-        dades[6] = valor;
+        dades[7] = valor;
       }
 
-      // H 7 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.NORMALEGAL
-      dades[7] = ss.getNormaLegal(); // values.get(base + "NORMALEGAL");
-      // I 8 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
-      dades[8] = ss.getArticles(); // values.get(base + "ARTICULOS");
-      // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
-      dades[9] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
-      // K 10 L'Enllaç de Consentiment
+      // I 8 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.NORMALEGAL
+      dades[8] = ss.getNormaLegal(); // values.get(base + "NORMALEGAL");
+      // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
+      dades[9] = ss.getArticles(); // values.get(base + "ARTICULOS");
+      // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
+      dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      // L 11 L'Enllaç de Consentiment
       {
         String ec = ss.getEnllazConsentiment();
         if (ec == null || ec.trim().length() == 0) {
-          dades[10] = "Adjunto";
+          dades[11] = "Adjunto";
         } else {
-          dades[10] = ec;
+          dades[11] = ec;
         }
       }
 
-      // L 11 FORMULARIO.DATOS_SOLICITUD.CADUCA o
+      // M 12 FORMULARIO.DATOS_SOLICITUD.CADUCA o
       // FORMULARIO.DATOS_SOLICITUD.FECHACAD
       {
         String caduca = ss.getFechaCaduca(); // values.get("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
         if (caduca == null || caduca.trim().length() == 0) {
           caduca = ss.getCaduca(); // values.get("FORMULARIO.DATOS_SOLICITUD.CADUCA");
         }
-        dades[11] = caduca;
+        dades[12] = caduca;
       }
 
-      // M 12 Periodico (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
-      dades[12] = periodico;
-      // N 13 Automatizado (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
-      dades[13] = automatizado;
+      // N 13 Periodico (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[13] = periodico;
+      // O 14 Automatizado (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[14] = automatizado;
       
-      // O 14 Peticiones estimadas (día) (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
-      dades[14] = peticionsDia;
-      // P 15 Peticiones estimadas (mes) (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
-      dades[15] = peticionsMes;
+      // P 15 Peticiones estimadas (día) (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
+      dades[15] = peticionsDia;
 
       dadesByServeiSolicitudID.put(ss.getId(), dades);
-
     }
 
     return dadesByServeiSolicitudID;
