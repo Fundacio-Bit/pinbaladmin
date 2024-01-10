@@ -6,17 +6,20 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -24,7 +27,9 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NCommonUtils;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
@@ -38,7 +43,9 @@ import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
@@ -46,12 +53,16 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 import org.hibernate.Hibernate;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 /**
@@ -63,6 +74,9 @@ import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retor
 //@SecurityDomain("seycon")
 @PermitAll
 public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaService {
+
+    protected static final long TRANSACTION_TIMEOUT_IN_SEC = 180;
+    protected static final long TRANSACTION_EXIT_IN_MILI = (TRANSACTION_TIMEOUT_IN_SEC * 2 / 3) * 1000;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.FitxerService fitxerEjb;
@@ -514,13 +528,13 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 }
                 
             } else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
-                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
-                String desc = "Excel de serveis i procediments";
-                String tipo = "EXCEL DE SERVICIOS";
+//                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
+//                String desc = "Excel de serveis i procediments";
+//                String tipo = "EXCEL DE SERVICIOS";
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
             } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
-                consentiment = document.getDocument().getFitxerFirmat(); // Document consentiment
+                consentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
             } else {
                 FitxerJPA original = document.getDocument().getFitxerOriginal();
                 if (original.getMime().equals("application/pdf")) {
@@ -532,10 +546,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             }
         }
 
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento _Consentimiento = getConsentimientoAlta(soli.getSolicitudServeis(), consentiment);
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionAlta(docsAuth);
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios _Servicios = getServiciosAlta(soli);
-
+        
         es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento proc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimiento();
         proc.setAutomatizado(_Automatizado);
         proc.setClaseTramite(_ClaseTramite);
@@ -546,9 +557,20 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         proc.setPeriodico(_Periodico);
         proc.setPeticionesEstimadas(_PeticionesEstimadas);
         proc.setFechaCaducidad(_FechaCaducidad);
+
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionAlta(docsAuth);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento _Consentimiento = getConsentimientoAlta(soli.getSolicitudServeis(), consentiment);
+
         proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
         proc.setConsentimiento(_Consentimiento);
+        
+        if (_DocumentosAutorizacion == null|| _Consentimiento == null) {
+            return proc;
+        }
+        
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios _Servicios = getServiciosAlta(soli);
         proc.setServicios(_Servicios);
+
         return proc;
     }
 
@@ -635,18 +657,19 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 throw new Exception(msg);
             }
         } else {
-            cons.setTipo(tipo);
-            cons.setEnlace(null);
-            cons.setDocumento(null);
-            log.info("CONS: No tenim fitxer de consentiment. Demanar-ho a la vista prèvia");
-            return cons;
+            log.info("CONS: No tenim fitxer de consentiment.");
+            return null;
         }
-
     }
 
     private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion getDocsAutorizacionAlta(Set<DocAuthInfo> documents) throws Exception {
 
         log.info("Documents de la solicitud: " + documents.size());
+        
+        if (documents.size() == 0) {
+            return null;
+        }
+        
         es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion docs = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion();
 
         for (DocAuthInfo docInfo : documents) {
@@ -864,7 +887,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
             } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
-                consentiment = document.getDocument().getFitxerFirmat(); // Document consentiment
+                consentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
             } else {
                 FitxerJPA original = document.getDocument().getFitxerOriginal();
                 if (original.getMime().equals("application/pdf")) {
@@ -875,11 +898,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 }
             }
         }
-
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento _Consentimiento = getConsentimientoModificacio(soli.getSolicitudServeis(), consentiment);
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionModificacio(docsAuth);
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios _Servicios = getServiciosModificacio(soli);
-
+        
         es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento proc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Procedimiento();
         proc.setAutomatizado(_Automatizado);
         proc.setClaseTramite(_ClaseTramite);
@@ -890,9 +909,20 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         proc.setPeriodico(_Periodico);
         proc.setPeticionesEstimadas(_PeticionesEstimadas);
         proc.setFechaCaducidad(_FechaCaducidad);
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionModificacio(docsAuth);
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento _Consentimiento = getConsentimientoModificacio(soli.getSolicitudServeis(), consentiment);
+
         proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
         proc.setConsentimiento(_Consentimiento);
+        
+        if (_DocumentosAutorizacion == null|| _Consentimiento == null) {
+            return proc;
+        }
+        
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicios _Servicios = getServiciosModificacio(soli);
         proc.setServicios(_Servicios);
+
         return proc;
     }
 
@@ -953,11 +983,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 throw new Exception(msg);
             }
         } else {
-            cons.setTipo(tipo);
-            cons.setEnlace(null);
-            cons.setDocumento(null);
-            log.info("CONS: No tenim fitxer de consentiment. Demanar-ho a la vista prèvia");
-            return cons;
+            log.info("CONS: No tenim fitxer de consentiment.");
+            return null;
         }
 
     }
@@ -1096,4 +1123,84 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         // Si no se encuentra se devolverá 0 (Pruebas) para indicar que no se encontró ningún mapeo correspondiente en la nueva lista.
         return 0;
     }
+    
+//    
+//    /**
+//     * Funció que s'executa cada vespre a les 5:00 i actualitza l'estat de les solicituds a pinbal
+//     */
+//    @TransactionTimeout(value = TRANSACTION_TIMEOUT_IN_SEC)
+//    @Schedule(hour = "14", minute = "56",  persistent = false)
+//    protected void eliminarFitxersSignatsDeLocal() {
+//        log.info("Comença eliminarFitxersSignatsDeLocal()");
+//
+//        long startTime = System.currentTimeMillis();
+//        try {
+//            //Llistat de solicituds: 
+//            ScspFuncionario funcionario = new ScspFuncionario();
+//
+//            funcionario.setNifFuncionario("45186147W");
+//            funcionario.setNombreCompletoFuncionario("Juan Pablo Trias Segura");
+//            
+//            ScspTitular titular = new ScspTitular();
+//
+//            ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+//            titular.setTipoDocumentacion(tipoDocumentacion);
+//            titular.setDocumentacion("45186147W");
+//            titular.setNombre("Juan Pablo");
+//            titular.setApellido1("Trias");
+//            titular.setApellido2("Segura");
+//            titular.setNombreCompleto("Juan Pablo Trias Segura");
+//
+//            
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTimeInMillis(System.currentTimeMillis());
+//            cal.add(Calendar.MONTH, -5);
+//            
+//            List<Solicitud> solicituds = this.select(Where.AND(
+//                SolicitudFields.DATAINICI.greaterThan(new Timestamp(cal.getTimeInMillis()))),
+//                SolicitudFields.ORGANID.isNotNull()
+//            );
+//            
+//            log.info("Solicituds a procesasr: " + solicituds.size());
+//            for (Solicitud solicitud : solicituds) {
+//                Consulta consulta = new Consulta();
+//                consulta.setCodigoProcedimiento(solicitud.getProcedimentCodi());
+//                
+//                try {
+//                    Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, consulta);
+//                    if (retorno.getEstado().getCodigoEstado().equals("2")) {
+//                        log.info("estado procedimiento " + solicitud.getProcedimentCodi() + ": "
+//                                + Constants.ESTAT_PINBAL_NO_SOLICITAT + " - " + "no solicitat");
+//                        solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+//                    } else if (retorno.getEstado().getCodigoEstado().equals("0")) {
+//                        EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
+//                        log.info("estado procedimiento " + solicitud.getProcedimentCodi() + ": " + estado.getEstado()
+//                                + " - " + estado.getDescripcion());
+//
+//                        solicitud.setEstatpinbal(estado.getEstado());
+//                    }
+//                } catch (Exception e) {
+//                    // TODO Auto-generated catch block
+//                    log.warn("Error solicitud " + solicitud.getProcedimentCodi() + ": " + e.getMessage());
+//                    solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+//                }
+//                
+//                this.update(solicitud);
+//                
+//                //El Timeout son 3 minuts. Si el CRON s'executa durant 2 min, surt del for i acaba la funció.
+//                if ((System.currentTimeMillis() - startTime) > TRANSACTION_EXIT_IN_MILI) {
+//                    log.warn("Timeout.");
+//                    break;
+//                }
+//            }
+//
+//        } catch (I18NException e) {
+//            final String msg = "Error";
+//            log.error(msg, e);
+//        }
+//
+//        long endTime = System.currentTimeMillis();
+//        log.info("Total time: " + (endTime - startTime));
+//        log.info("Acaba eliminarFitxersSignatsDeLocal()");
+//    }
 }
