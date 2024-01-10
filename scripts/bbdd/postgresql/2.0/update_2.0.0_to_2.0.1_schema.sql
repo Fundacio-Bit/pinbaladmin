@@ -758,3 +758,7 @@ ALTER TABLE pad_solicitud
 ALTER TABLE pad_document
    ADD COLUMN tipus integer;
 
+
+-- AFEGIR CAMP PER SABER L'ESTAT D'UNA SOLICITUD A PINBAL
+ALTER TABLE pad_solicitud 
+    ADD COLUMN estatpinbal integer;
