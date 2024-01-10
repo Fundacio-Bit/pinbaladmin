@@ -1552,4 +1552,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         return ret;
     }
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForEstatpinbal(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+        for (int estat : Constants.ESTATS_PINBAL) {
+            String key = String.valueOf(estat);
+            __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("estat.pinbal." + key)));
+        }
+        return __tmp;
+    }
+
 }

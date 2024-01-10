@@ -340,6 +340,17 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.util.List<java.lang.Integer> estatpinbalSelect;
+
+  public java.util.List<java.lang.Integer> getEstatpinbalSelect() {
+    return this.estatpinbalSelect;
+  }
+
+  public void setEstatpinbalSelect(java.util.List<java.lang.Integer> estatpinbalSelect) {
+    this.estatpinbalSelect = estatpinbalSelect;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -374,12 +385,14 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.nif = __toClone.nif;
     this.creador = __toClone.creador;
     this.operador = __toClone.operador;
+    this.estatpinbalSelect = __toClone.estatpinbalSelect;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
+    this.mapOfValuesForEstatpinbal = __toClone.mapOfValuesForEstatpinbal;
   }
   
   /* ========= UTILS ========== */
@@ -482,6 +495,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfValuesForOperador(Map<String, String> mapOfValuesForOperador) {
     this.mapOfValuesForOperador = mapOfValuesForOperador;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForEstatpinbal;
+
+  public Map<String, String> getMapOfValuesForEstatpinbal() {
+    return this.mapOfValuesForEstatpinbal;
+  }
+
+  public void setMapOfValuesForEstatpinbal(Map<String, String> mapOfValuesForEstatpinbal) {
+    this.mapOfValuesForEstatpinbal = mapOfValuesForEstatpinbal;
   }
 
 

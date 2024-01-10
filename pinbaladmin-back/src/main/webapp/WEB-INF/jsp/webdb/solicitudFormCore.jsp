@@ -759,3 +759,43 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATPINBAL)}">
+        <tr id="solicitud_estatpinbal_rowid">
+          <td id="solicitud_estatpinbal_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.ESTATPINBAL])?'solicitud.estatpinbal':__theForm.labels[SolicitudFields.ESTATPINBAL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.ESTATPINBAL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.ESTATPINBAL]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_estatpinbal_columnvalueid">
+          <form:errors path="solicitud.estatpinbal" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATPINBAL)}" >
+          <form:hidden path="solicitud.estatpinbal"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatpinbal,__theForm.listOfValuesForEstatpinbal)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATPINBAL)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_estatpinbal"  onchange="if(typeof onChangeEstatpinbal == 'function') {  onChangeEstatpinbal(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatpinbal">
+            <c:forEach items="${__theForm.listOfValuesForEstatpinbal}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.estatpinbal }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.estatpinbal }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

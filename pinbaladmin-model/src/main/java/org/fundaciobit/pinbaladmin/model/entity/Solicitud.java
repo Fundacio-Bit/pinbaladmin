@@ -86,6 +86,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getOperador();
 	public void setOperador(java.lang.String _operador_);
 
+	public java.lang.Integer getEstatpinbal();
+	public void setEstatpinbal(java.lang.Integer _estatpinbal_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

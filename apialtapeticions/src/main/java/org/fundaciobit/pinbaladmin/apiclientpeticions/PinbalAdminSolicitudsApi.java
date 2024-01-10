@@ -162,7 +162,7 @@ public class PinbalAdminSolicitudsApi {
                 "<datosEspecificos xmlns=\"http://intermediacion.redsara.es/scsp/esquemas/datosespecificos\">");
         datosEspecificos = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + datosEspecificos;
 
-        System.out.println(datosEspecificos);
+//        System.out.println(datosEspecificos);
 
         return datosEspecificos;
     }

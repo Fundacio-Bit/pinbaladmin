@@ -171,15 +171,6 @@ table.solicitud.servicio.item {
 						class="solicitud consentimiento item contenido">${fn:length(consentimiento.documento.contenido)}</td>
 				</tr>
 
-                <tr data-type="fichero">
-                    <th>Fichero</th>
-                    <td id="consentimiento-doc-fichero"
-                        class="solicitud consentimiento item fichero">
-					<input type="file" name="consentiment-file" />
-					</td>
-                </tr>
-				
-				
 			</table>
 
 		</div>
@@ -284,7 +275,7 @@ table.solicitud.servicio.item {
 		var tipoValue = tipo.innerHTML;
 
 		var enlace = document.getElementById("consentimiento-enlace").innerHTML;
-	    var documento = document.getElementById("consentimiento-doc-nombre").innerHTML;
+		var documento = document.getElementById("consentimiento-doc-nombre").innerHTML;
 		if (tipoValue === "NoOpo")
 			tipo.innerHTML = "No Oposició";
 		if (tipoValue === "Ley")
@@ -292,20 +283,15 @@ table.solicitud.servicio.item {
 		if (tipoValue === "Si")
 			tipo.innerHTML = "Si";
 
-
 		if (tipoValue === "Ley") {
 			$("tr[data-type='enlace']").hide();
 			$("tr[data-type='documento']").hide();
-			$("tr[data-type='fichero']").hide();
 		} else {
 			if (enlace != "") {
 				$("tr[data-type='documento']").hide();
-				$("tr[data-type='fichero']").hide();
 			} else {
 				$("tr[data-type='enlace']").hide();
-				if (documento != "") {
-					$("tr[data-type='fichero']").hide();
-				} else {
+				if (documento == "") {
 					$("tr[data-type='documento']").hide();
 					FILES_REQUIRED = 1;
 				}
@@ -389,16 +375,7 @@ table.solicitud.servicio.item {
 
 	function altaSolicitud() {
 
-		var file = document.getElementById("consentimiento-doc-fichero").children[0];
-		var nFiles = file.files.length;
-		
-		if (nFiles == FILES_REQUIRED) {
-		     document.getElementById("formulari").submit();
-		}else{
-			alert("Faltan ficheros: " + nFiles + " - " + FILES_REQUIRED);
-		}
-		
-	//	document.getElementById("formulari").submit();
+		document.getElementById("formulari").submit();
 	}
 
 	setTamanyFitxersOk();

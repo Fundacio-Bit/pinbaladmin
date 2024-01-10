@@ -3,6 +3,8 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -42,6 +45,7 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +53,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
+import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 
 
@@ -131,16 +141,91 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       solicitudForm.addAdditionalButton(
               new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
 
-      if (solicitud.getTicketNumeroSeguiment() == null) {
-          solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/alta/" + solicitud.getSolicitudID(), "btn-primary btn-api-pinbal"));
-      } else {
-          solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-                  "/operador/altapinbal/consultaestado/" + solicitud.getSolicitudID(), "btn-secondary btn-api-pinbal"));
-          solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/modificacio/" + solicitud.getSolicitudID(), "btn-success btn-api-pinbal"));
-      }
+      
+//      int estatPinbal = getEstatPinbal(solicitudForm.getSolicitud());
+      
+        log.info("Estat PBL: " + solicitud.getEstatpinbal());
+        
+      AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+              "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
 
+      AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+              "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
+      
+      AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+              "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
+      
+      
+      
+      if (solicitud.getEstatpinbal() == null) {
+          solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+      }     
+      
+      int estatPinbal = solicitud.getEstatpinbal();
+      
+      if (estatPinbal >= 0) {
+          solicitudForm.addAdditionalButton(consulta);
+
+      }
+      
+      switch (solicitud.getEstatpinbal()) {
+          case Constants.ESTAT_PINBAL_ERROR:
+          case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+          case Constants.ESTAT_PINBAL_NO_APROVAT:
+          case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+          case Constants.ESTAT_PINBAL_DESESTIMAT:
+              solicitudForm.addAdditionalButton(alta);
+          break;
+
+          case Constants.ESTAT_PINBAL_APROVAT:
+          case Constants.ESTAT_PINBAL_SUBSANAT:
+              solicitudForm.addAdditionalButton(modificacio);
+          break;
+
+          case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+          case Constants.ESTAT_PINBAL_DESISTIT:
+          case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+          case Constants.ESTAT_PINBAL_AUTORITZAT:
+          case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+          break;
+
+          default:
+          break;
+      }
+      
+//      switch (solicitud.getEstatpinbal()) {
+//          case Constants.ESTAT_PINBAL_ERROR:
+//          case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+//              solicitudForm.addAdditionalButton(alta);
+//          break;
+//          case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+//              solicitudForm.addAdditionalButton(consulta);
+//              solicitudForm.addAdditionalButton(modificacio);
+//          break;
+//          case Constants.ESTAT_PINBAL_DESISTIT:
+//          break;
+//          case Constants.ESTAT_PINBAL_APROVAT:
+//              solicitudForm.addAdditionalButton(alta);
+//          break;
+//          case Constants.ESTAT_PINBAL_NO_APROVAT:
+//          break;
+//          case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+//          break;
+//          case Constants.ESTAT_PINBAL_SUBSANAT:
+//          break;
+//          case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+//          break;
+//          case Constants.ESTAT_PINBAL_AUTORITZAT:
+//          break;
+//          case Constants.ESTAT_PINBAL_DESESTIMAT:
+//          break;
+//          case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+//          break;
+//
+//          default:
+//          break;
+//      }
+      
       solicitudForm.setAttachedAdditionalJspCode(true);
       
       if (solicitud.getEntitatEstatal() == null) {
@@ -178,7 +263,63 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     return solicitudForm;
   }
+  
+  private int getEstatPinbal(SolicitudJPA solicitud) {
+      try {
+          
+          Long fitxerID = solicitud.getSolicitudXmlID();
+          ScspTitular titular = getTitular(fitxerID);
+          
+          ScspFuncionario funcionario = new ScspFuncionario();
+          {
+              UserInfo ui = LoginInfo.getInstance().getUserInfo();
+              String nif = ui.getAdministrationID();
+              String fullName = ui.getFullName();
+              funcionario.setNifFuncionario(nif);
+              funcionario.setNombreCompletoFuncionario(fullName);
+          }
 
+          Consulta consulta = new Consulta();
+          consulta.setCodigoProcedimiento(solicitud.getProcedimentCodi());
+
+          Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consulta);
+
+          String estado = retorno.getEstado().getCodigoEstado();
+          log.info("Estado de la autorización: " + retorno.getEstado().getCodigoEstado() + "-" + estado);
+          return Integer.parseInt(estado);
+      } catch (Exception e) {
+          log.error("Error obtenint estat: " + e.getMessage(), e);
+          
+          return -1;
+      }
+  }
+  private ScspTitular getTitular(Long fitxerID) throws Exception {
+
+      File f = FileSystemManager.getFile(fitxerID);
+      byte[] xmlData = FileUtils.readFromFile(f);
+      String contenidoXml = new String(xmlData, StandardCharsets.UTF_8 );
+      
+      Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
+
+      ScspTitular titular = new ScspTitular();
+
+      ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+      String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECE");
+      String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
+      String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
+      String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
+      String fullName = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE");
+
+      titular.setTipoDocumentacion(tipoDocumentacion);
+      titular.setDocumentacion(documentacion);
+      titular.setNombre(nombre);
+      titular.setApellido1(ape1);
+      titular.setApellido2(ape2);
+      titular.setNombreCompleto(fullName);
+
+      return titular;
+  }
+  
   @RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
   public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request,
       HttpServletResponse response, @PathVariable Long soliID) throws I18NException {

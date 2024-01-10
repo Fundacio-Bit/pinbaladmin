@@ -81,4 +81,25 @@ public interface Constants {
     public static final Long DOCUMENT_SOLICITUD_EXCEL_SERVEIS = 3L;
     public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT = 4L;
 
+    /**
+     * Estat de Solicituds a PINBAL
+     */
+    public static final int ESTAT_PINBAL_ERROR= -2;
+    public static final int ESTAT_PINBAL_NO_SOLICITAT = -1;
+    public static final int ESTAT_PINBAL_PENDENT_TRAMITAR = 0;
+    public static final int ESTAT_PINBAL_DESISTIT= 1;
+    public static final int ESTAT_PINBAL_APROVAT= 2;
+    public static final int ESTAT_PINBAL_NO_APROVAT= 3;
+    public static final int ESTAT_PINBAL_PENDENT_SUBSANACIO= 4;
+    public static final int ESTAT_PINBAL_SUBSANAT= 5;
+    public static final int ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT= 6;
+    public static final int ESTAT_PINBAL_AUTORITZAT= 7;
+    public static final int ESTAT_PINBAL_DESESTIMAT= 8;
+    public static final int ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO= 9;
+
+    public static final int[] ESTATS_PINBAL = { ESTAT_PINBAL_ERROR, ESTAT_PINBAL_NO_SOLICITAT,
+            ESTAT_PINBAL_PENDENT_TRAMITAR, ESTAT_PINBAL_DESISTIT, ESTAT_PINBAL_APROVAT, ESTAT_PINBAL_NO_APROVAT,
+            ESTAT_PINBAL_PENDENT_SUBSANACIO, ESTAT_PINBAL_SUBSANAT, ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT,
+            ESTAT_PINBAL_AUTORITZAT, ESTAT_PINBAL_DESESTIMAT, ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO };    
+    
 }

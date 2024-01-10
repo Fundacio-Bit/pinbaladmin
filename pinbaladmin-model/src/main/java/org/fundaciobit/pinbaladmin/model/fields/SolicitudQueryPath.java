@@ -123,6 +123,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.OPERADOR);
   }
 
+  public IntegerField ESTATPINBAL() {
+    return new IntegerField(getQueryPath(), SolicitudFields.ESTATPINBAL);
+  }
+
 
 
   @Override

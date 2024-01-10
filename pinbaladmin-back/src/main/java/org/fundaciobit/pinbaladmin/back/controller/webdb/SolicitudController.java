@@ -255,6 +255,16 @@ public class SolicitudController
       };
     }
 
+    // Field estatpinbal
+    {
+      _listSKV = getReferenceListForEstatpinbal(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForEstatpinbal(_tmp);
+      if (filterForm.getGroupByFields().contains(ESTATPINBAL)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATPINBAL, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -276,6 +286,7 @@ public class SolicitudController
     __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
+    __mapping.put(ESTATPINBAL, filterForm.getMapOfValuesForEstatpinbal());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -376,6 +387,15 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForOperador(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForEstatpinbal() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEstatpinbal(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfValuesForEstatpinbal(_listSKV);
     }
     
   }
@@ -946,6 +966,46 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("mcapo" , "mcapo"));
     __tmp.add(new StringKeyValue("fsalas" , "fsalas"));
     __tmp.add(new StringKeyValue("ptrias" , "ptrias"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatpinbal(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(ESTATPINBAL)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForEstatpinbal(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatpinbal(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(ESTATPINBAL)
+       && !solicitudFilterForm.isGroupByField(ESTATPINBAL)
+       && !solicitudFilterForm.isFilterByField(ESTATPINBAL)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForEstatpinbal(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatpinbal(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("-1" , "-1"));
+    __tmp.add(new StringKeyValue("0" , "0"));
+    __tmp.add(new StringKeyValue("1" , "1"));
+    __tmp.add(new StringKeyValue("2" , "2"));
+    __tmp.add(new StringKeyValue("3" , "3"));
+    __tmp.add(new StringKeyValue("4" , "4"));
+    __tmp.add(new StringKeyValue("5" , "5"));
+    __tmp.add(new StringKeyValue("6" , "6"));
+    __tmp.add(new StringKeyValue("7" , "7"));
+    __tmp.add(new StringKeyValue("8" , "8"));
+    __tmp.add(new StringKeyValue("9" , "9"));
     return __tmp;
   }
 
