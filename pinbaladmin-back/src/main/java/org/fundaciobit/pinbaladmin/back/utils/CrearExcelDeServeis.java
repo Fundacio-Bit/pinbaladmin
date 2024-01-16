@@ -107,19 +107,22 @@ public class CrearExcelDeServeis {
         // Sí => Si
         // No oposición => NO_OPOSICION
         // Ley => Ley
-        final String valor;
-        if ("No oposición".equals(origen) || "No oposició".equals(origen)) {
-          valor = "NO_OPOSICION";
-        } else if ("Sí".equals(origen) || "Si".equals(origen)) {
-          valor = "Si";
-        } else if ("Llei".equals(origen) || "Ley".equals(origen)) {
-          valor = "Ley";
+
+        log.info("Consentiment: " + origen);
+        
+        final String consentiment;
+        if ("No oposición".toLowerCase().equals(origen.toLowerCase()) || "No oposició".toLowerCase().equals(origen.toLowerCase())) {
+            consentiment = "NO_OPOSICION";
+        } else if ("Sí".toLowerCase().equals(origen.toLowerCase()) || "Si".toLowerCase().equals(origen.toLowerCase())) {
+            consentiment = "Si";
+        } else if ("Llei".toLowerCase().equals(origen.toLowerCase()) || "Ley".toLowerCase().equals(origen.toLowerCase())) {
+            consentiment = "Ley";
         } else {
-          valor = null;
+            consentiment = null;
         }
 
         // values.get(base + "CONSENTIMIENTO");
-        dades[7] = valor;
+        dades[7] = consentiment;
       }
 
       // I 8 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.NORMALEGAL

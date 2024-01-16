@@ -134,9 +134,9 @@ public class TramitIOperadorController extends TramitIServController {
             request.getSession().setAttribute("tramitid", tramitID);
 
             tramitI.setNorma("Norma Legal inventada");
-            tramitI.setArticles("6.9");
-            tramitI.setUrlnorma("urlnorma.com");
-            tramitI.setUrlconsentiment("urlconsentiement.com");
+            tramitI.setArticles("Art1, 2 i Art 5");
+            tramitI.setUrlnorma("https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347");
+            tramitI.setUrlconsentiment("toDelete");
         }
 
         tramitForm.setAttachedAdditionalJspCode(true);

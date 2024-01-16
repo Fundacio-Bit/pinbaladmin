@@ -5,6 +5,7 @@ import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutService;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 
 /**
@@ -23,8 +24,9 @@ public interface TramitAPersAutLogicaService extends TramitAPersAutService {
 
     public void deleteFull(Long _ID_) throws I18NException;
 
-    public void generaXml(Long tramitID) throws I18NException;
-
     public Long[] getPartsTramitIDs(long tramitID) throws I18NException;
+
+    public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException;
+    
 
 }

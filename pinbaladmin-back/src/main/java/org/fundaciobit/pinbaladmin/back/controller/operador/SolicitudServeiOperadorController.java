@@ -406,7 +406,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
         Long soliID = solicitudServeiForm.getSolicitudServei().getSolicitudID();
 
-        Long departamentID = solicitudLogicaEjb.executeQueryOne(SolicitudFields.DEPARTAMENTID,
+        Long organID = solicitudLogicaEjb.executeQueryOne(SolicitudFields.ORGANID,
                 SolicitudFields.SOLICITUDID.equal(soliID));
 
         // Filtrar pels serveis que estan en producció (codi 20)
@@ -414,7 +414,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
         // Només per solicituds estatals
         Where w3 = null;
-        if (departamentID == null) {
+        if (organID == null) {
             ServeiQueryPath sqp = new ServeiQueryPath();
             w3 = sqp.ENTITATSERVEI().BALEARS().equal(true);
         }

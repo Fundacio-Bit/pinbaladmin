@@ -882,6 +882,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     @Override
+    public String getRedirectWhenModified(HttpServletRequest request, SolicitudForm solicitudForm, Throwable __e) {
+        return getRedirectWhenCreated(request, solicitudForm);
+        
+//        if (__e == null) {
+//          return "redirect:" + getContextWeb() + "/list";
+//        } else {
+//          return  getTileForm();
+//        }
+      }
+    @Override
     public String getRedirectWhenCancel(HttpServletRequest request, Long solicitudID) {
 
         return "redirect:" + getContextWeb() + "/list";

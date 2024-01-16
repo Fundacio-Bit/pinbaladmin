@@ -218,10 +218,10 @@ public class TestPinbalAdminFormulari {
             //            System.out.println(jsonProc);
 
             PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA));
-            Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
-
-            System.out.println("Estado: " + respuesta.getEstado().getCodigoEstado());
-            System.out.println("Descripción: " + respuesta.getEstado().getDescripcion());
+//            Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
+//
+//            System.out.println("Estado: " + respuesta.getEstado().getCodigoEstado());
+//            System.out.println("Descripción: " + respuesta.getEstado().getDescripcion());
 
         } catch (I18NException e) {
             e.printStackTrace();

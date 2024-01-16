@@ -1,17 +1,27 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
@@ -20,14 +30,26 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitAPersAutController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
+import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.ejb.FitxerService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
+import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +57,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 /**
  * 
@@ -51,11 +78,24 @@ public class TramitAOperadorController extends TramitAPersAutController {
 
     public static final int ADDITONAL_FIELD_START = 1;
 
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH.mm_");
+
+    @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+    protected SolicitudLogicaService solicitudLogicaEjb;
+    
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
     @EJB(mappedName = TramitIServLogicaService.JNDI_NAME)
     protected TramitIServLogicaService tramitIServLogicEjb;
+    
+    @EJB(mappedName = FitxerService.JNDI_NAME)
+    protected FitxerService fitxerEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService documentSolicitudEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.DocumentService documentEjb;
+
 
     @Override
     public String getTileForm() {
@@ -155,10 +195,31 @@ public class TramitAOperadorController extends TramitAPersAutController {
     @RequestMapping(value = "/generaxml/{tramitid}", method = RequestMethod.GET)
     public String generarXml(HttpServletRequest request, @PathVariable Long tramitid)
             throws I18NException, I18NValidationException {
-        log.info("Generador del fitxer XML amb tramitID=" + tramitid);
 
-        tramitAPersAutLogicEjb.generaXml(tramitid);
-        log.info("Generat");
+        //        tramitAPersAutLogicEjb.generaXml(tramitid);
+        try {
+            log.info("Generador del fitxer XML amb tramitID=" + tramitid);
+
+            SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitid);
+
+            String xml;
+            {
+                byte[] xmlData = FileSystemManager.getFileContent(soli.getSolicitudXmlID());
+                xml = new String(xmlData, "UTF-8");
+            }
+
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+            
+            generarDocumentSolicitudAmbXML(soli, prop);
+            generarDocumentsSolicitud(soli, prop);
+            generarExcelDeServeis(soli);
+            
+            log.info("Generat");
+            
+        } catch (Exception e) {
+            log.error(e);
+            HtmlUtils.saveMessageError(request, "Error creant solicitud: " + e.getMessage());
+        }
 
         return "redirect:" + TramitAOperadorController.RETURN_URL;
     }
@@ -249,9 +310,9 @@ public class TramitAOperadorController extends TramitAPersAutController {
                     Where w = Where.AND(TramitIServFields.TRAMITID.equal(tramitID),
                             TramitIServFields.CONSENTIMENT.equal("noop"),
                             TramitIServFields.CONSENTIMENTPUBLICAT.equal("2"));
-                    
+
                     Long consentimentNecessari = tramitIServLogicEjb.count(w);
-                    
+
                     if (consentimentNecessari > 0) {
                         if (identificadorsTramit[i] != null) {
                             url += "/" + identificadorsTramit[i] + "/edit";
@@ -261,7 +322,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
                             msg += "*";
                             permetFinalitzar &= false;
                         }
-                    }else {
+                    } else {
                         msg = "";
                     }
 
@@ -275,7 +336,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
                         permetFinalitzar &= false;
                     }
                 }
-                
+
                 String div = "<a href='" + url + "'/> " + msg;
                 map.put(tramitID, div);
             }
@@ -292,4 +353,111 @@ public class TramitAOperadorController extends TramitAPersAutController {
         tramitAPersAutLogicEjb.deleteFull(tramitAPersAut.getTramitid());
     }
 
+    private void generarDocumentsSolicitud(SolicitudJPA soli, Properties prop) throws Exception, I18NException {
+
+        Long solicitudID = soli.getSolicitudID();
+
+        File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
+        File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
+
+        File plantilla = new File(Configuracio.getTemplateFormulari());
+
+        ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
+
+        {
+            FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(), "application/pdf",
+                    "");
+
+            fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
+
+            FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
+
+            Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
+            Document doc = documentEjb.create("Formulario_Director_General (PDF)", fitxer.getFitxerID(), null, null,
+                    tipus);
+
+            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+            documentSolicitudEjb.create(ds);
+        }
+
+        {
+            FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
+                    "application/vnd.oasis.opendocument.text", "");
+
+            fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
+
+            FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
+
+            Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
+            Document doc = documentEjb.create("Formulario_Director_General (ODT)", fitxer.getFitxerID(), null, null,
+                    tipus);
+
+            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+            documentSolicitudEjb.create(ds);
+        }
+    }
+
+    private void generarExcelDeServeis(SolicitudJPA soli) throws Exception, I18NException {
+
+        Long solicitudID = soli.getSolicitudID();
+
+        log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
+
+        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+
+        byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli);
+
+        String nom = SDF.format(new Date()) + plantillaXLSX.getName();
+        Fitxer f = fitxerEjb.create(nom, data.length,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
+
+        FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
+
+        Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+        Document doc = documentEjb.create(nom, f.getFitxerID(), null, null, tipus);
+
+        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+
+        documentSolicitudEjb.create(ds);
+
+        log.info("Generat el fitxer de serveis. Revisar un document titulat " + nom
+                + " dins de l'apartat de 'Llistat de Documents-Sol·licitud'");
+    }
+
+
+    private void generarDocumentSolicitudAmbXML(SolicitudJPA soli, Properties prop) throws Exception {
+
+        String fileName = "Datos_de_la_solicitud_" + soli.getProcedimentCodi() + ".pdf";
+
+        com.lowagie.text.Document documento = new com.lowagie.text.Document();
+        FileOutputStream ficheroPdf = new FileOutputStream(fileName);
+
+        PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
+
+        documento.open();
+        Set<Entry<Object,Object>> set = prop.entrySet();
+        for (Entry<Object, Object> entry : set) {
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+
+            documento.add(new Paragraph(key + ": " + value));
+        }
+        documento.add(new Paragraph("Esto es el primer párrafo, normalito"));
+
+        
+        documento.close();
+
+        File file = new File(fileName);
+        long size = file.length();
+        String mime = "application/pdf";
+        String desc = "";
+
+        FitxerJPA fitxer = new FitxerJPA(fileName, size, mime, desc);
+        fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
+
+        FileSystemManager.crearFitxer(file, fitxer.getFitxerID());
+
+        soli.setDocumentSolicitudID(fitxer.getFitxerID());
+        solicitudLogicaEjb.update(soli);
+    }
 }

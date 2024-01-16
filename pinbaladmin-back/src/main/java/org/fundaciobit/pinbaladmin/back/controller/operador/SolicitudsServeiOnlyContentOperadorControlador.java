@@ -16,6 +16,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.EntitatServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.springframework.stereotype.Controller;
@@ -112,7 +113,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
     @Override
     public List<StringKeyValue> getReferenceListForServeiID(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
-
+        
         String separator = "|";
         OrderBy order = new OrderBy(ServeiFields.SERVEIID);
 
@@ -121,7 +122,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
         Select<StringKeyValue> select = new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(
                 ServeiFields.SERVEIID.select, separator, valueSelects);
         List<StringKeyValue> list = serveiEjb.executeQuery(select, where, order);
-
+        
         return list;
     }
 
