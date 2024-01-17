@@ -41,7 +41,7 @@ public class CallbackSeleniumController implements Constants {
             log.info("\n\n  REBUT CALLBACK: soliID => " + soliID + " | incidencia => " + incidencia + " | seguiment => "
                     + seguiment + "\n\n");
 
-            solicitudLogicaEjb.updateCAID(soliID, incidencia, seguiment);
+       //     solicitudLogicaEjb.updateCAID(soliID, incidencia, seguiment);
 
             response.getWriter().append("OK");
         } catch (IOException e) {

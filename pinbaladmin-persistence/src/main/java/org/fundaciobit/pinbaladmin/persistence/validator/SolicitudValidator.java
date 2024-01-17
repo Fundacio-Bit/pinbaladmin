@@ -99,22 +99,6 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
-    if (__vr.getFieldErrorCount(TICKETASSOCIAT) == 0) {
-      java.lang.String __ticketassociat = __target__.getTicketAssociat();
-      if (__ticketassociat!= null && __ticketassociat.length() > 255) {
-        __vr.rejectValue(TICKETASSOCIAT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TICKETASSOCIAT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(TICKETNUMEROSEGUIMENT) == 0) {
-      java.lang.String __ticketnumeroseguiment = __target__.getTicketNumeroSeguiment();
-      if (__ticketnumeroseguiment!= null && __ticketnumeroseguiment.length() > 255) {
-        __vr.rejectValue(TICKETNUMEROSEGUIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TICKETNUMEROSEGUIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(ENTITATESTATAL) == 0) {
       java.lang.String __entitatestatal = __target__.getEntitatEstatal();
       if (__entitatestatal!= null && __entitatestatal.length() > 255) {

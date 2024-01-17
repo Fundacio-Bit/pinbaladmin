@@ -762,3 +762,21 @@ ALTER TABLE pad_document
 -- AFEGIR CAMP PER SABER L'ESTAT D'UNA SOLICITUD A PINBAL
 ALTER TABLE pad_solicitud 
     ADD COLUMN estatpinbal integer;
+
+
+-- ESBORRAR CAMPS NUMERO DE SEGUIMENT I TICKET ASSOCIAT PERQUE JA NO S'EMPLEEN, I GUARDAR DADES A 'NOTES' PER SOLICITUDS ANTIGUES
+UPDATE pad_solicitud
+SET estat = 
+  COALESCE(
+    CASE WHEN estat IS NOT NULL THEN estat || E'\n\n' ELSE '' END ||
+    TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY') || ' - Datos Seguimiento CAID:' ||
+    CASE WHEN ticketassociat IS NOT NULL THEN E'\n - Identificador de Consulta: ' || ticketassociat ELSE '' END ||
+    CASE WHEN ticketnumeroseguiment IS NOT NULL THEN E'\n - Número de Seguimiento: ' || ticketnumeroseguiment ELSE '' END
+  , '')
+WHERE (ticketassociat IS NOT NULL OR ticketnumeroseguiment IS NOT NULL);
+
+
+ALTER TABLE pad_solicitud
+DROP COLUMN IF EXISTS ticketassociat,
+DROP COLUMN IF EXISTS ticketnumeroseguiment;
+

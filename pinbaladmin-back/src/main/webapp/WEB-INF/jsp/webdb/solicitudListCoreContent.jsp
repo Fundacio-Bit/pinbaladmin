@@ -60,16 +60,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TICKETASSOCIAT)}">
-          <td>
-          ${solicitud.ticketAssociat}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TICKETNUMEROSEGUIMENT)}">
-          <td>
-          ${solicitud.ticketNumeroSeguiment}
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
           <td>
           <c:set var="tmp">${solicitud.departamentID}</c:set>

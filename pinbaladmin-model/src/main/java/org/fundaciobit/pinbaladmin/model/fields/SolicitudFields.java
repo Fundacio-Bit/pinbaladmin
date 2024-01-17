@@ -18,8 +18,6 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField PROCEDIMENTNOM = new StringField(_TABLE_MODEL, "procedimentNom", "procedimentnom");
 	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
 	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
-	 public static final StringField TICKETASSOCIAT = new StringField(_TABLE_MODEL, "ticketAssociat", "ticketassociat");
-	 public static final StringField TICKETNUMEROSEGUIMENT = new StringField(_TABLE_MODEL, "ticketNumeroSeguiment", "ticketnumeroseguiment");
 	 public static final LongField DEPARTAMENTID = new LongField(_TABLE_MODEL, "departamentID", "departamentid");
 	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
 	 public static final StringField ENTITATESTATAL = new StringField(_TABLE_MODEL, "entitatEstatal", "entitatestatal");
@@ -50,8 +48,6 @@ public interface SolicitudFields extends java.io.Serializable {
     PROCEDIMENTNOM,
     PROCEDIMENTTIPUS,
     ESTATID,
-    TICKETASSOCIAT,
-    TICKETNUMEROSEGUIMENT,
     DEPARTAMENTID,
     ORGANID,
     ENTITATESTATAL,

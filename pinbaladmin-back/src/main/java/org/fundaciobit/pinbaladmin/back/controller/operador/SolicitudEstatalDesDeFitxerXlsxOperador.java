@@ -78,7 +78,6 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
                 all.remove(SOLICITUDXMLID);
                 all.remove(DOCUMENTSOLICITUDID);
                 all.remove(ESTATID);
-                all.remove(TICKETASSOCIAT);
                 //all.remove(PROCEDIMENTTIPUS);
                 //all.remove(DEPARTAMENTID);
 
@@ -115,7 +114,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
         log.info(" =========== ENTRA A PRE VALIDATE  ESTATAL " + request.getSession().getAttribute(NOMES_FITXERS)
                 + "===============");
 
-        log.info(" =========== XXXXXXXXXXXX PV => " + solicitudForm.getSolicitud().getTicketNumeroSeguiment());
+        log.info(" =========== XXXXXXXXXXXX PV => " + solicitudForm.getSolicitud().getProcedimentCodi());
 
         if (Boolean.TRUE.equals(request.getSession().getAttribute(NOMES_FITXERS))
                 && !solicitudForm.getSolicitudXmlID().isEmpty()) {
@@ -203,7 +202,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
     public SolicitudJPA create(HttpServletRequest request, SolicitudJPA solicitud)
             throws I18NException, I18NValidationException {
 
-        log.info(" =========== XXXXXXXXXXXX CREA => " + solicitud.getTicketNumeroSeguiment());
+        log.info(" =========== XXXXXXXXXXXX CREA => " + solicitud.getProcedimentCodi());
 
         SolicitudJPA soli = (SolicitudJPA) solicitudEjb.create(solicitud);
 

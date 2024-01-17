@@ -147,32 +147,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.TICKETASSOCIAT)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitud.ticketAssociat" var="ticketAssociat" />
-              <fmt:message key="genapp.form.searchby" var="cercaperticketAssociat" >                
-                 <fmt:param value="${ticketAssociat}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${ticketAssociat}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperticketAssociat}" path="ticketAssociat" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.TICKETNUMEROSEGUIMENT)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitud.ticketNumeroSeguiment" var="ticketNumeroSeguiment" />
-              <fmt:message key="genapp.form.searchby" var="cercaperticketNumeroSeguiment" >                
-                 <fmt:param value="${ticketNumeroSeguiment}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${ticketNumeroSeguiment}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperticketNumeroSeguiment}" path="ticketNumeroSeguiment" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.DEPARTAMENTID)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>

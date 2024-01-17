@@ -242,15 +242,6 @@ public class AltaSolicitudPinbalOperadorController {
         } catch (Exception e) {
             HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
 
-            if (e.getMessage() == null) {
-                soli.setTicketNumeroSeguiment(null);
-                try {
-                    solicitudLogicaEjb.update(soli);
-                } catch (I18NException e1) {
-                    log.error("Error fent UPDATE: " + e1.getMessage(), e1);
-                }
-            }
-
             log.error(e.getMessage(), e);
 
             String returnUrl = SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
@@ -260,7 +251,7 @@ public class AltaSolicitudPinbalOperadorController {
 
     @RequestMapping(value = "/modificaciosolicitud", method = RequestMethod.POST)
     public String modificacioSolicitud(HttpServletRequest request, HttpServletResponse response,
-           @RequestParam("soliID") String soliID) {
+            @RequestParam("soliID") Long soliID) {
 
         ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
         ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
@@ -274,14 +265,21 @@ public class AltaSolicitudPinbalOperadorController {
             if (resposta.getErrores() == null) {
                 System.out.println(" # Errors: 0");
 
-                String mensaje = resposta.getEstado().getDescripcion();
-                HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
+                //Quan hem enviat la modificació, hem de veure quin es el nou estat a Pinbal.
+                Consulta consultaEstat = new Consulta();
+                consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
 
-                log.info("Actualitzam solicitud amb ID= " + soliID);
+                Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario,
+                        consultaEstat);
 
-                solicitudLogicaEjb.update(SolicitudFields.TICKETNUMEROSEGUIMENT,
-                        solicitud.getProcedimiento().getCodigo(),
-                        SolicitudFields.SOLICITUDID.equal(Long.parseLong(soliID)));
+                int estatPinbal = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
+                log.info("estado procedimiento: " + estatPinbal + " - "
+                        + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
+
+                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
+                        SolicitudFields.SOLICITUDID.equal(soliID));
+
+                HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
 
             } else {
                 for (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Error error : resposta

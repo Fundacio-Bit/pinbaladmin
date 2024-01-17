@@ -338,8 +338,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
 
-        solicitudForm.addHiddenField(SolicitudFields.TICKETNUMEROSEGUIMENT);
-
         solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCEMAIL);
         solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCNOM);
 
@@ -1190,8 +1188,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             // identificador de consulta o numero seguiment de la solicitud
             if (isNumber) {
-                w = Where.OR(w, SolicitudFields.TICKETASSOCIAT.like(likeStr),
-                        SolicitudFields.TICKETNUMEROSEGUIMENT.like(likeStr));
+                w = Where.OR(w, SolicitudFields.NOTES.like(likeStr));
             }
 
             // Procediment: codi i nom

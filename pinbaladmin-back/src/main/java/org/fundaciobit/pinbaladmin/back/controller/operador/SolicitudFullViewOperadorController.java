@@ -233,21 +233,21 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
             new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
                 getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
 
-        if (solicitud.getTicketNumeroSeguiment() == null) {
-          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
-              "solicitud.caid", getContextWeb() + "/formularicaidfitxers/"
-                  + solicitud.getSolicitudID(),
-              "btn-info"));
-        } else {
-
-          String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
-              + "email=gd.pinbal@fundaciobit.org" + "&incidencia="
-              + solicitud.getTicketAssociat() + "&seguimiento="
-              + solicitud.getTicketNumeroSeguiment();
-
-          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
-              "consulta.caid", "javascript:window.open('" + url + "', '_blank')", "btn-info"));
-        }
+//        if (solicitud.getTicketNumeroSeguiment() == null) {
+//          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
+//              "solicitud.caid", getContextWeb() + "/formularicaidfitxers/"
+//                  + solicitud.getSolicitudID(),
+//              "btn-info"));
+//        } else {
+//
+//          String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
+//              + "email=gd.pinbal@fundaciobit.org" + "&incidencia="
+//              + solicitud.getTicketAssociat() + "&seguimiento="
+//              + solicitud.getTicketNumeroSeguiment();
+//
+//          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
+//              "consulta.caid", "javascript:window.open('" + url + "', '_blank')", "btn-info"));
+//        }
 
       }
     }

@@ -35,14 +35,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.ESTATID);
   }
 
-  public StringField TICKETASSOCIAT() {
-    return new StringField(getQueryPath(), SolicitudFields.TICKETASSOCIAT);
-  }
-
-  public StringField TICKETNUMEROSEGUIMENT() {
-    return new StringField(getQueryPath(), SolicitudFields.TICKETNUMEROSEGUIMENT);
-  }
-
   public LongField DEPARTAMENTID() {
     return new LongField(getQueryPath(), SolicitudFields.DEPARTAMENTID);
   }

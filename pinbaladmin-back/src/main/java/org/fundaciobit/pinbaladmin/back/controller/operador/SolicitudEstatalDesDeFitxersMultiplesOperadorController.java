@@ -230,8 +230,6 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
             SolicitudJPA solicitud = new SolicitudJPA();
 
-            solicitud.setTicketAssociat(pid);
-
             // String procedimentCodi = null;
             solicitud.setProcedimentCodi(proc.getCodi());
 

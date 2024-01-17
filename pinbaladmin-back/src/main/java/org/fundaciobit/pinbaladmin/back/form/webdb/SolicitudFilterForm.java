@@ -98,28 +98,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.String ticketAssociat;
-
-  public java.lang.String getTicketAssociat() {
-    return this.ticketAssociat;
-  }
-
-  public void setTicketAssociat(java.lang.String ticketAssociat) {
-    this.ticketAssociat = ticketAssociat;
-  }
-
-
-  private java.lang.String ticketNumeroSeguiment;
-
-  public java.lang.String getTicketNumeroSeguiment() {
-    return this.ticketNumeroSeguiment;
-  }
-
-  public void setTicketNumeroSeguiment(java.lang.String ticketNumeroSeguiment) {
-    this.ticketNumeroSeguiment = ticketNumeroSeguiment;
-  }
-
-
   private java.lang.Long departamentIDDesde;
 
   public java.lang.Long getDepartamentIDDesde() {
@@ -363,8 +341,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.procedimentNom = __toClone.procedimentNom;
     this.procedimentTipus = __toClone.procedimentTipus;
     this.estatIDSelect = __toClone.estatIDSelect;
-    this.ticketAssociat = __toClone.ticketAssociat;
-    this.ticketNumeroSeguiment = __toClone.ticketNumeroSeguiment;
     this.departamentIDDesde = __toClone.departamentIDDesde;
     this.departamentIDFins = __toClone.departamentIDFins;
     this.organidDesde = __toClone.organidDesde;
@@ -399,7 +375,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,ESTATID ,TICKETASSOCIAT ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,ESTATID ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
   }
 
   @Override

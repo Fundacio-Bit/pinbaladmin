@@ -20,12 +20,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getEstatID();
 	public void setEstatID(java.lang.Long _estatID_);
 
-	public java.lang.String getTicketAssociat();
-	public void setTicketAssociat(java.lang.String _ticketAssociat_);
-
-	public java.lang.String getTicketNumeroSeguiment();
-	public void setTicketNumeroSeguiment(java.lang.String _ticketNumeroSeguiment_);
-
 	public java.lang.Long getDepartamentID();
 	public void setDepartamentID(java.lang.Long _departamentID_);
 

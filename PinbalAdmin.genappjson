@@ -4285,56 +4285,6 @@
           "foreignKeys": []
         },
         {
-          "isAutoIncrement": false,
-          "sqlName": "ticketassociat",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "CAID: Identificador de Consulta",
-            "ca": "CAID: Identificador de Consulta"
-          },
-          "javaName": "ticketAssociat",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": true,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "ticketnumeroseguiment",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "CAID: Número de Seguimiento",
-            "ca": "CAID: Número de Seguimiento"
-          },
-          "javaName": "ticketNumeroSeguiment",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
           "index": "pad_solicitud_departid_fk_i",
           "isAutoIncrement": false,
           "sqlName": "departamentid",

@@ -63,10 +63,10 @@ public class TestPinbalAdminFormulari {
 
             PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(getPinbalAdminSolicitudsConfiguration());
 
-            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
-
-            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
-            System.out.println("Descripción: " + re.getEstado().getDescripcion());
+//            Respuesta re = api.crearSolicitud(solicitud, titular, funcionario);
+//
+//            System.out.println("Estado: " + re.getEstado().getCodigoEstado());
+//            System.out.println("Descripción: " + re.getEstado().getDescripcion());
 
         } catch (Throwable e) {
             // TODO Auto-generated catch block

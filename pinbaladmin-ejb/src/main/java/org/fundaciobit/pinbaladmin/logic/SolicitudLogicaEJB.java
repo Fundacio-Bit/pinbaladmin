@@ -199,17 +199,17 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     }
 
-    @Override
-    @PermitAll
-    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException {
-
-        SolicitudJPA soli = this.findByPrimaryKey(soliID);
-
-        soli.setTicketAssociat(incidencia);
-        soli.setTicketNumeroSeguiment(seguiment);
-
-        this.update(soli);
-    }
+//    @Override
+//    @PermitAll
+//    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException {
+//
+//        SolicitudJPA soli = this.findByPrimaryKey(soliID);
+//
+//        soli.setTicketAssociat(incidencia);
+//        soli.setTicketNumeroSeguiment(seguiment);
+//
+//        this.update(soli);
+//    }
 
     protected Fitxer createFile(FitxerService fitxerEJB, String fileName, String mime, String descripcio, byte[] data)
             throws I18NException {

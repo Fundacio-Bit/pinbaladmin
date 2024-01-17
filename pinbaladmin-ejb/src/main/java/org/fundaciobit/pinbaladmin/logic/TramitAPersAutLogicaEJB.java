@@ -331,8 +331,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         //Depercats
         Long departamentID = null;
-        String ticketAssociat = null;
-        String ticketNumeroSeguiment = null;
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -470,8 +468,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setProcedimentNom(procedimentNom);
         soli.setProcedimentTipus(procedimentTipus);
         soli.setEstatID(estatID);
-        soli.setTicketAssociat(ticketAssociat);
-        soli.setTicketNumeroSeguiment(ticketNumeroSeguiment);
         soli.setDepartamentID(departamentID);
         soli.setOrganid(organid);
         soli.setEntitatEstatal(entitatEstatal);

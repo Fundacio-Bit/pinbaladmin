@@ -42,8 +42,8 @@ public interface SolicitudLogicaService extends SolicitudService {
 
     public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException;
 
-    @PermitAll
-    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
+//    @PermitAll
+//    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
 
     /**
      * 

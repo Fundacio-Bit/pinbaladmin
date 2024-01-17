@@ -127,42 +127,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TICKETASSOCIAT)}">
-        <tr id="solicitud_ticketAssociat_rowid">
-          <td id="solicitud_ticketAssociat_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TICKETASSOCIAT])?'solicitud.ticketAssociat':__theForm.labels[SolicitudFields.TICKETASSOCIAT]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TICKETASSOCIAT]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TICKETASSOCIAT]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_ticketAssociat_columnvalueid">
-            <form:errors path="solicitud.ticketAssociat" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TICKETASSOCIAT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TICKETASSOCIAT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.ticketAssociat"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TICKETNUMEROSEGUIMENT)}">
-        <tr id="solicitud_ticketNumeroSeguiment_rowid">
-          <td id="solicitud_ticketNumeroSeguiment_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TICKETNUMEROSEGUIMENT])?'solicitud.ticketNumeroSeguiment':__theForm.labels[SolicitudFields.TICKETNUMEROSEGUIMENT]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TICKETNUMEROSEGUIMENT]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TICKETNUMEROSEGUIMENT]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_ticketNumeroSeguiment_columnvalueid">
-            <form:errors path="solicitud.ticketNumeroSeguiment" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TICKETNUMEROSEGUIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TICKETNUMEROSEGUIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.ticketNumeroSeguiment"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
         <tr id="solicitud_departamentID_rowid">
           <td id="solicitud_departamentID_columnlabelid">
