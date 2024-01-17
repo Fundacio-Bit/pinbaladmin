@@ -14,7 +14,63 @@ public class ServeiInfo {
   
   protected String cedent;
 
-  protected List<NormativaInfo> normatives = new ArrayList<NormativaInfo>();
+  protected String tipusConsentiment;
+  protected String consentiment;
+  protected String enllazConsentiment;
+  protected String notes;
+  protected String caduca;
+  protected String fechaCaduca;
+
+  
+  public String getTipusConsentiment() {
+    return tipusConsentiment;
+}
+
+public void setTipusConsentiment(String tipusConsentiment) {
+    this.tipusConsentiment = tipusConsentiment;
+}
+
+public String getConsentiment() {
+    return consentiment;
+}
+
+public void setConsentiment(String consentiment) {
+    this.consentiment = consentiment;
+}
+
+public String getEnllazConsentiment() {
+    return enllazConsentiment;
+}
+
+public void setEnllazConsentiment(String enllazConsentiment) {
+    this.enllazConsentiment = enllazConsentiment;
+}
+
+public String getNotes() {
+    return notes;
+}
+
+public void setNotes(String notes) {
+    this.notes = notes;
+}
+
+public String getCaduca() {
+    return caduca;
+}
+
+public void setCaduca(String caduca) {
+    this.caduca = caduca;
+}
+
+public String getFechaCaduca() {
+    return fechaCaduca;
+}
+
+public void setFechaCaduca(String fechaCaduca) {
+    this.fechaCaduca = fechaCaduca;
+}
+
+protected List<NormativaInfo> normatives = new ArrayList<NormativaInfo>();
 
   /**
    * @param nom
@@ -25,7 +81,20 @@ public class ServeiInfo {
     this.cedent = cedent;
   }
 
-  public String getNom() {
+  public ServeiInfo(String nom, String cedent, String tipusConsentiment, String consentiment, String enllazConsentiment,
+        String notes, String caduca, String fechaCaduca) {
+    super();
+    this.nom = nom;
+    this.cedent = cedent;
+    this.tipusConsentiment = tipusConsentiment;
+    this.consentiment = consentiment;
+    this.enllazConsentiment = enllazConsentiment;
+    this.notes = notes;
+    this.caduca = caduca;
+    this.fechaCaduca = fechaCaduca;
+}
+
+public String getNom() {
     return nom;
   }
 

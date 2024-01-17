@@ -310,12 +310,12 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 enllazNormaLegal = Utils.crop(enllazNormaLegal);
                 articles = Utils.crop(articles);
 
-                java.lang.String tipusConsentiment = null;
-                java.lang.String consentiment = null;
-                java.lang.String enllazConsentiment = null;
-                java.lang.String notes = null;
-                java.lang.String caduca = null;
-                java.lang.String fechaCaduca = null;
+                java.lang.String tipusConsentiment = servei.getTipusConsentiment();
+                java.lang.String consentiment = servei.getConsentiment();
+                java.lang.String enllazConsentiment = servei.getEnllazConsentiment();
+                java.lang.String notes = servei.getNotes();
+                java.lang.String caduca = servei.getCaduca();
+                java.lang.String fechaCaduca = servei.getFechaCaduca();
 
                 SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
                         normaLegal, enllazNormaLegal, articles, tipusConsentiment, consentiment, enllazConsentiment,
