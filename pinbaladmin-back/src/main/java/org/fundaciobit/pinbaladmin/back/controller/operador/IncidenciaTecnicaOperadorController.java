@@ -401,24 +401,13 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         IncidenciaTecnicaJPA it;
         it = (IncidenciaTecnicaJPA) incidenciaTecnicaEjb.create(incidenciaTecnica);
 
-        try {
-            java.lang.Long _solicitudID_ = null;
-            java.lang.Long _incidenciaTecnicaID_ = it.getIncidenciaTecnicaID();
-            java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-            java.lang.String _persona_ = request.getUserPrincipal().getName();
-            java.lang.String _comentari_ = "S'ha creat la Incidència";
-            java.lang.Long _fitxerID_ = null;
-            boolean _noLlegit_ = false;
-            java.lang.String _destinatari_ = null;
-            java.lang.String _destinatariMail_ = null;
-
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
-                    _fitxerID_, _noLlegit_, null, null);
-        } catch (Throwable th) {
-            log.error("Error creant el primer event de la incidència tecnica: " + th.getMessage(), th);
-        }
-
+        String username = request.getUserPrincipal().getName();
+        Long incidenciaID = it.getIncidenciaTecnicaID();
+        String msg = "S'ha creat la Incidència";
+        boolean noLlegit = false;
+        
+        afegirEventIncidencia(incidenciaID, username, msg, noLlegit);
+        
         return it;
     }
 
@@ -468,15 +457,25 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     public String closeIncidenciaTecnicaGet(@PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
             HttpServletRequest request, HttpServletResponse response) throws I18NException {
 
-        IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
+        IncidenciaTecnicaJPA it = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
-        i.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
-        i.setDataFi(new Timestamp(System.currentTimeMillis()));
+        it.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
+        it.setDataFi(new Timestamp(System.currentTimeMillis()));
         
         try {
-            this.update(request, i);
+            this.update(request, it);
 
+            
+            String username = request.getUserPrincipal().getName();
+            Long incidenciaID = it.getIncidenciaTecnicaID();
+            java.lang.String msg = "S'ha tancat la Incidència";
+            boolean noLlegit = false;
+            
+            afegirEventIncidencia(incidenciaID, username, msg, noLlegit);
+            
+            
             HtmlUtils.saveMessageSuccess(request, "Tancada Incidència correctament.");
+            
         } catch (Throwable e) {
             String msg = "Error tancant incidència " + e.getMessage();
             log.error(msg, e);
@@ -511,26 +510,18 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         try {
             this.update(request, i);
 
-            Timestamp data = new Timestamp(System.currentTimeMillis());
-            int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-            String persona = request.getUserPrincipal().getName();
+            String username = request.getUserPrincipal().getName();
+            Long incidenciaID = incidenciaTecnicaID;
+            boolean noLlegit = true;
             
-            String comentari = I18NUtils.tradueix("missatge.canvi.operador", "incidencia", operador, nom_operador,
+            String msg = I18NUtils.tradueix("missatge.canvi.operador", "incidencia", operador, nom_operador,
                     operador_old, nom_operador_old);
-            
-            EventJPA evt = new EventJPA();
-            evt.setIncidenciaTecnicaID(incidenciaTecnicaID);
-            evt.setDataEvent(data);
-            evt.setTipus(tipus);
-            evt.setPersona(persona);
-            evt.setComentari(comentari);
-            evt.setNoLlegit(true);
-            
-            eventLogicaEjb.create(evt);
+
+            afegirEventIncidencia(incidenciaID, username, msg, noLlegit);
 
             HtmlUtils.saveMessageSuccess(request,
                     "Operador canviat correctament. (" + operador_old + " -> " + operador + ")");
-            
+
         } catch (Throwable e) {
             String msg = "Error canviant operador: " + e.getMessage();
             log.error(msg, e);
@@ -606,6 +597,27 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
     public List<StringKeyValue> getReferenceListForOperador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
         return getReferenceListForCreador(request, mav, where);
+    }
+    
+    private void afegirEventIncidencia(Long incidenciaID, String username, String msg, boolean noLlegit) {
+        try {
+            java.lang.Long _solicitudID_ = null;
+            java.lang.Long _incidenciaTecnicaID_ = incidenciaID;
+            java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            java.lang.String _persona_ = username;
+            java.lang.String _comentari_ = msg;
+            java.lang.Long _fitxerID_ = null;
+            boolean _noLlegit_ = noLlegit;
+            java.lang.String _destinatari_ = null;
+            java.lang.String _destinatariMail_ = null;
+
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
+                    _fitxerID_, _noLlegit_, null, null);
+        } catch (Throwable th) {
+            log.error("Error afegint event a la incidència tecnica: " + th.getMessage(), th);
+        }
+        
     }
 
 }
