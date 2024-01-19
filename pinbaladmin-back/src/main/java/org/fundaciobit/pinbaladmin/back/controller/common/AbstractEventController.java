@@ -719,12 +719,27 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
             tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
             tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-            tipusIncidencies
-                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-            tipusIncidencies.add(
-                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
 
             mav.addObject("tipusIncidencies", tipusIncidencies);
+        }
+
+        // Tipus de Solicituds
+        {
+
+            List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
+
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
+
+            mav.addObject("estatSolicituds", estatSolicituds);
         }
 
         return eventFilterForm;

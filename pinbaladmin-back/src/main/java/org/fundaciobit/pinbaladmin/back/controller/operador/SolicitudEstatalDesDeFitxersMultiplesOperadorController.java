@@ -122,7 +122,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
                 }
 
-                crearSolicitudsDesDeEmail(request, emi, fileName, log, serveiEjb, solicitudLogicaEjb);
+                String operador = request.getRemoteUser();
+                crearSolicitudsDesDeEmail(request, emi, operador, log, serveiEjb, solicitudLogicaEjb);
             }
 
             long end = System.currentTimeMillis();
@@ -139,7 +140,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
     }
 
     public static List<SolicitudJPA> crearSolicitudsDesDeEmail(HttpServletRequest request, EmailMessageInfo emi,
-            String fileName, Logger log, ServeiService serveiEjb, SolicitudLogicaService solicitudLogicaEjb)
+            String operador, Logger log, ServeiService serveiEjb, SolicitudLogicaService solicitudLogicaEjb)
             throws Exception {
         // Cercar XLSX dins dels attachments
 
@@ -169,27 +170,20 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         }
 
         if (xlsx == null) {
-            String msg = "El document enviat " + fileName + " no conté cap fitxer .xlsx";
+
+            String msg = "El document enviat " + emi.getSubject() + " no conté cap fitxer .xlsx";
             log.error(msg);
             throw new Exception(msg);
-        }
-
-        // Convertir xlsx a Sol·licitud (inclou serveis i fitxers)
-        String pid = Utils.getPidFromSubject(emi.getSubject());
-
-        log.info("PID => " + pid);
-        if (pid == null) {
-            HtmlUtils.saveMessageWarning(request, "Les següents sol.licituds no tenen el PID assignat. ");
         }
 
         List<SolicitudJPA> solicituds;
         try {
             log.info("processSolicitud  start ");
-            solicituds = processSolicitud(request, emi, xlsx, pid, log, serveiEjb);
+            solicituds = processSolicitud(request, emi, xlsx, operador, log, serveiEjb);
 
             log.info("processSolicitud  end " + solicituds.size());
         } catch (Throwable e) {
-            String msg = "Error processant solicitud o serveis del fitxer " + fileName + ": " + e.getMessage();
+            String msg = "Error processant solicitud o serveis del fitxer " + emi.getSubject() + ": " + e.getMessage();
             log.error(msg, e);
             throw new Exception(msg);
         }
@@ -212,7 +206,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
     }
 
     protected static List<SolicitudJPA> processSolicitud(HttpServletRequest request, EmailMessageInfo emi,
-            EmailAttachmentInfo xlsx, String pid, Logger log, ServeiService serveiEjb) throws Exception, I18NException {
+            EmailAttachmentInfo xlsx, String operador, Logger log, ServeiService serveiEjb) throws Exception, I18NException {
 
         InputStream xlsxIS = new ByteArrayInputStream(xlsx.getData());
 
@@ -222,9 +216,19 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         log.info(" #Procediments de Solicitud = " + info.getProcediments().size());
 
         List<SolicitudJPA> solicituds = new ArrayList<SolicitudJPA>();
-
         List<String> serveisNoTrobats = new ArrayList<String>();
 
+        String nomContacte = emi.getNameFrom();
+        if (nomContacte == null || nomContacte.trim().length() == 0) {
+            nomContacte = info.getEntitat();
+        }
+
+        String mailContacte = emi.getDisplayFrom();
+//        if (mailContacte == null || mailContacte.trim().length() == 0) {
+//            mailContacte = info.getEntitat();
+//        }
+
+        
         // El primer de la llista ...
         for (ProcedimentInfo proc : info.getProcediments().values()) {
 
@@ -233,12 +237,12 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
             // String procedimentCodi = null;
             solicitud.setProcedimentCodi(proc.getCodi());
 
-            solicitud.setPersonaContacte(emi.getNameFrom());
-            solicitud.setPersonaContacteEmail(emi.getDisplayFrom());
+            solicitud.setPersonaContacte(nomContacte );
+            solicitud.setPersonaContacteEmail(mailContacte);
 
             // solicitud.setCodiDescriptiu(null);
             solicitud.setCreador(request.getRemoteUser());
-            solicitud.setOperador(request.getRemoteUser());
+            solicitud.setOperador(operador);
 
             solicitud.setProcedimentNom(proc.getNom());
             solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));

@@ -26,7 +26,7 @@
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/solicituddesdefitxer/nou"/>"> <span
 				style="${(fn:contains(url, '/solicituddesdefitxer/'))? "font-weight:bold;" : ""}">Sol·licitud
-					Service des de Fitxer</span>
+					Local des de Fitxer</span>
 		</a></li>
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a

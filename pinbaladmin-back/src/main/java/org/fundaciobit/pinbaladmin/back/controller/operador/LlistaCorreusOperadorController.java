@@ -185,6 +185,23 @@ public class LlistaCorreusOperadorController extends EmailController {
 
             mav.addObject("tipusIncidencies", tipusIncidencies);
         }
+        
+        // Tipus de Solicituds
+        {
+
+            List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
+
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
+            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
+
+            mav.addObject("estatSolicituds", estatSolicituds);
+        }
 
         Boolean mostrarMissatgeArxiu = (Boolean) request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
@@ -304,7 +321,6 @@ public class LlistaCorreusOperadorController extends EmailController {
     public String incidencia(HttpServletRequest request, HttpServletResponse response,
             @PathVariable("emailID") Long emailID, @PathVariable("operador") String operador,
             @PathVariable("tipusIncidencia") int tipusIncidencia) {
-
         try {
 
             //Map<Long, EmailMessageInfo> cache
@@ -359,8 +375,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     }
 
-    @RequestMapping(value = "/solicitud/{emailID}", method = RequestMethod.GET)
-    public String solicitud(HttpServletRequest request, HttpServletResponse response, @PathVariable Long emailID) {
+    @RequestMapping(value = "/solicitud/{emailID}/{operador}/{estatSoli}", method = RequestMethod.GET)
+    public String solicitud(HttpServletRequest request, HttpServletResponse response, @PathVariable Long emailID,
+            @PathVariable("operador") String operador, @PathVariable Long estatSoli) {
 
         try {
 
@@ -372,19 +389,10 @@ public class LlistaCorreusOperadorController extends EmailController {
             EmailReader er = new EmailReader(enableCertificationCheck);
 
             if (er.getCountMessages() == cachesize(request)) {
-
-                //EmailMessageInfo emi = cache.get(emailID);
-
                 EmailMessageInfo emi = er.getMessage((int) (long) emailID);
 
-                // IncidenciaTecnica it =
-                // incidenciaTecnicaLogicaEjb.createFromEmail(emi,
-                // request.getRemoteUser());
-
-                String fileName = emi.getSubject();
-
                 SolicitudEstatalDesDeFitxersMultiplesOperadorController.crearSolicitudsDesDeEmail(request, emi,
-                        fileName, log, serveiEjb, solicitudLogicaEjb);
+                        operador, log, serveiEjb, solicitudLogicaEjb);
 
                 er.deleteMessage((int) (long) emailID);
 

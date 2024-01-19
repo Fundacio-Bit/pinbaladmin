@@ -2,34 +2,25 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
-import org.fundaciobit.genapp.common.i18n.I18NCommonUtils;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
@@ -43,9 +34,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
@@ -53,16 +42,12 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
-import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 import org.hibernate.Hibernate;
-import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
-import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 /**
@@ -220,7 +205,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         return f;
     }
-
+    
     @Override
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs) throws I18NException {
@@ -248,6 +233,29 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 solicitudServeiLogicaEJB.create(ss);
             }
 
+            //Afegim event de Solicitud Creada
+            java.lang.Long _incidenciaTecnicaID_ = null;
+            java.lang.Long _solicitudID_ = soliID;
+
+            boolean isEstatal = soli.getEntitatEstatal() != null;
+
+            String descripcio = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
+
+            java.sql.Timestamp _dataEvent_ = soli.getDataInici();
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+            java.lang.String _persona_ = soli.getCreador();
+            boolean _noLlegit_ = false;
+
+            java.lang.String _caidIdentificadorConsulta_ = null;
+            java.lang.String _caidNumeroSeguiment_ = null;
+
+            java.lang.String _destinatari_ = soli.getPersonaContacte();
+            java.lang.String _destinatariEmail_ = soli.getPersonaContacteEmail();
+
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+                    _destinatariEmail_, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
+                    _caidNumeroSeguiment_);
+
             // Afegir Documents per cada Solicitud
             for (EmailAttachmentInfo attach : attachs) {
 
@@ -256,8 +264,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     Fitxer attachFile = createFile(fitxerEjb, attach.getFileName(), attach.getContentType(), null,
                             attach.getData());
                     Long tipus = Constants.DOCUMENT_SOLICITUD_ALTRES;
-                    
-                    DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null, tipus);
+
+                    DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null,
+                            tipus);
 
                     documentEjb.create(doc);
 
@@ -265,10 +274,16 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
                     documentSolicitudLogicaEjb.create(ds);
 
+                    java.lang.String _comentari_ = "Afegit fitxer";
+
+                    eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
+                            _destinatari_, _destinatariEmail_, _comentari_, attachFile.getFitxerID(), _noLlegit_,
+                            _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
                 }
             }
         }
     }
+    
 
     public enum TipusCridada{
         ALTA, CONSULTA, MODIFICACIO,

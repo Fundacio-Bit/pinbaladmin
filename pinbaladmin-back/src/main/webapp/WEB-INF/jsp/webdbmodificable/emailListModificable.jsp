@@ -6,22 +6,36 @@
 
     function myFunction() {
         var operador = document.getElementById("operador").value;
-        var tipusIncidencia = document.getElementById("tipusIncidencia").value;
-        var root = "<%=request.getContextPath()%>${contexte}/"
-        window.location.href = root
-                + ((tipus == 1) ? "incidencia" : "solicitud") + "/"
-                + itemIDCache + "/" + operador + "/" + tipusIncidencia;
+        var root = "<%=request.getContextPath()%>${contexte}";
+
+        var returnUrl = root;
+        if (tipus == 1) {
+            var tipusIncidencia = document.getElementById("tipusIncidencia").value;
+            returnUrl += "/incidencia/" + itemIDCache + "/" + operador + "/" + tipusIncidencia
+		}else{
+            var estatSoli = document.getElementById("estatSolicitud").value;
+			returnUrl += "/solicitud/" + itemIDCache + "/" + operador + "/" + estatSoli;
+		}
+        window.location.href = returnUrl;
     }
 
     function crearIncidencia(itemID) {
         itemIDCache = itemID;
         tipus = 1;
+        
+        $("#incidencia-info").show();
+        $("#solicitud-info").hide();
+        
         $("#modelSeleccioTramitador").modal();
     }
 
     function crearSolicitud(itemID) {
         itemIDCache = itemID;
-        tipus = 2;
+        tipus = 0;
+
+        $("#incidencia-info").hide();
+        $("#solicitud-info").show();
+
         $("#modelSeleccioTramitador").modal();
     }
 </script>
@@ -49,14 +63,23 @@
 					</c:forEach>
 				</select> 
 
-				<br> 
-				<label id="label_tipusIncidencia" for="tipusIncidencia">Tipus d'incidencia:</label> 
-				<select id="tipusIncidencia" class="my_select">
-					<c:forEach items="${tipusIncidencies}" var="tipusIncidencia">
-						<option value="${tipusIncidencia.key}">${tipusIncidencia.value}</option>
-					</c:forEach>
-				</select>
-
+				<br>
+				<div id="incidencia-info">
+					<label id="label_tipusIncidencia" for="tipusIncidencia">Tipus d'incidencia:</label> 
+					<select id="tipusIncidencia" class="my_select">
+						<c:forEach items="${tipusIncidencies}" var="tipusIncidencia">
+							<option value="${tipusIncidencia.key}">${tipusIncidencia.value}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div id="solicitud-info">
+					<label id="label_estatSolicitud" for="estatSolicitud">Estats Solicitud </label> 
+					<select id="estatSolicitud" class="my_select">
+						<c:forEach items="${estatSolicituds}" var="estatSolicitud">
+							<option value="${estatSolicitud.key}">${estatSolicitud.value}</option>
+						</c:forEach>
+					</select>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" onClick="myFunction()"
@@ -122,7 +145,7 @@
 	grid-area: select;
 }
 
-#label_tipusIncidencia, #label_operador {
+#label_tipusIncidencia, #label_operador, #label_estatSolicitud {
 	font-size: 1.15rem;
 }
 </style>

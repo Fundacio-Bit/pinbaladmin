@@ -56,6 +56,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
 
         java.lang.String titol = emi.getSubject();
         java.lang.String descripcio = emi.getBody(); // TODO limit tamany
+        
         java.sql.Timestamp dataInici = new Timestamp(System.currentTimeMillis());
         java.sql.Timestamp dataFi = null;
         int estat = Constants.ESTAT_INCIDENCIA_OBERTA;
@@ -68,16 +69,17 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String destinatari = null;
         java.lang.String destinatariEmail = null;
 
+        log.info(destinatariEmail);
         
         if (contacteEmail.contains("governdigital.pinbal@fundaciobit.org") && titol.contains("CAI-")) {
             contacteEmail = "suport@caib.es";
         }
         
-        IncidenciaTecnica it = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, tipus, nomEntitat,
+        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(titol, descripcio, dataInici, dataFi, estat, tipus, nomEntitat,
                 contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
 
-        it = this.create(it);
-
+        IncidenciaTecnica it = (IncidenciaTecnica) this.create(itJPA);
+        
         java.lang.Long _incidenciaTecnicaID_ = it.getIncidenciaTecnicaID();
         java.lang.Long _solicitudID_ = null;
         java.sql.Timestamp _dataEvent_ = dataInici;

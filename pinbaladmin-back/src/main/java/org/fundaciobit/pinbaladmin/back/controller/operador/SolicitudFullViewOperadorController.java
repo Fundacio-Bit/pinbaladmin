@@ -140,91 +140,56 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
       solicitudForm.addAdditionalButton(
               new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
+      
+      if (_jpa.getEntitatEstatal() == null) {
 
-      
-//      int estatPinbal = getEstatPinbal(solicitudForm.getSolicitud());
-      
-        log.info("Estat PBL: " + solicitud.getEstatpinbal());
-        
-      AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-              "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
+          log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
-      AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-              "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
-      
-      AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-              "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
-      
-      
-      
-      if (solicitud.getEstatpinbal() == null) {
-          solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
-      }     
-      
-      int estatPinbal = solicitud.getEstatpinbal();
-      
-      if (estatPinbal >= 0) {
-          solicitudForm.addAdditionalButton(consulta);
+          AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+                  "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
 
+          AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+                  "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
+
+          AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+                  "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
+
+          if (solicitud.getEstatpinbal() == null) {
+              solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+          }
+
+          int estatPinbal = solicitud.getEstatpinbal();
+
+          if (estatPinbal >= 0) {
+              solicitudForm.addAdditionalButton(consulta);
+
+          }
+
+          switch (solicitud.getEstatpinbal()) {
+              case Constants.ESTAT_PINBAL_ERROR:
+              case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+              case Constants.ESTAT_PINBAL_NO_APROVAT:
+              case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+              case Constants.ESTAT_PINBAL_DESESTIMAT:
+                  solicitudForm.addAdditionalButton(alta);
+              break;
+
+              case Constants.ESTAT_PINBAL_APROVAT:
+              case Constants.ESTAT_PINBAL_SUBSANAT:
+                  solicitudForm.addAdditionalButton(modificacio);
+              break;
+
+              case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+              case Constants.ESTAT_PINBAL_DESISTIT:
+              case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+              case Constants.ESTAT_PINBAL_AUTORITZAT:
+              case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+              break;
+
+              default:
+              break;
+          }
       }
-      
-      switch (solicitud.getEstatpinbal()) {
-          case Constants.ESTAT_PINBAL_ERROR:
-          case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-          case Constants.ESTAT_PINBAL_NO_APROVAT:
-          case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-          case Constants.ESTAT_PINBAL_DESESTIMAT:
-              solicitudForm.addAdditionalButton(alta);
-          break;
-
-          case Constants.ESTAT_PINBAL_APROVAT:
-          case Constants.ESTAT_PINBAL_SUBSANAT:
-              solicitudForm.addAdditionalButton(modificacio);
-          break;
-
-          case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-          case Constants.ESTAT_PINBAL_DESISTIT:
-          case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-          case Constants.ESTAT_PINBAL_AUTORITZAT:
-          case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-          break;
-
-          default:
-          break;
-      }
-      
-//      switch (solicitud.getEstatpinbal()) {
-//          case Constants.ESTAT_PINBAL_ERROR:
-//          case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-//              solicitudForm.addAdditionalButton(alta);
-//          break;
-//          case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-//              solicitudForm.addAdditionalButton(consulta);
-//              solicitudForm.addAdditionalButton(modificacio);
-//          break;
-//          case Constants.ESTAT_PINBAL_DESISTIT:
-//          break;
-//          case Constants.ESTAT_PINBAL_APROVAT:
-//              solicitudForm.addAdditionalButton(alta);
-//          break;
-//          case Constants.ESTAT_PINBAL_NO_APROVAT:
-//          break;
-//          case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-//          break;
-//          case Constants.ESTAT_PINBAL_SUBSANAT:
-//          break;
-//          case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-//          break;
-//          case Constants.ESTAT_PINBAL_AUTORITZAT:
-//          break;
-//          case Constants.ESTAT_PINBAL_DESESTIMAT:
-//          break;
-//          case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-//          break;
-//
-//          default:
-//          break;
-//      }
       
       solicitudForm.setAttachedAdditionalJspCode(true);
       

@@ -11,16 +11,14 @@ import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudService;
+import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
-
-import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
-import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 
 /**
  * 
