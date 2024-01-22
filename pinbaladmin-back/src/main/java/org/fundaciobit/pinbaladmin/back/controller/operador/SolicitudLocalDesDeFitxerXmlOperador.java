@@ -20,6 +20,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
@@ -76,9 +77,8 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 Set<Field<?>> all = new HashSet<Field<?>>(Arrays.asList(SolicitudFields.ALL_SOLICITUD_FIELDS));
                 all.remove(SOLICITUDXMLID);
                 all.remove(DOCUMENTSOLICITUDID);
-                all.remove(ESTATID);
-                all.remove(ORGANID);
-                //all.remove(DEPARTAMENTID);
+//                all.remove(ESTATID);
+//                all.remove(ORGANID);
 
                 form.setHiddenFields(all);
 
@@ -148,13 +148,26 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                     solicitud.setProcedimentNom(nomProcediment);
                 }
                 {
-                    String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
+                    String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR");
                     if (codiDescriptiu != null && codiDescriptiu.length() > 250) {
                         codiDescriptiu = codiDescriptiu.substring(0, 250);
                     }
                     solicitud.setCodiDescriptiu(codiDescriptiu);
                 }
-
+                
+                
+                String dir3Gestor = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR");
+                if (dir3Gestor != null && dir3Gestor.trim().length() > 0) {
+                    Long organId = organEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3Gestor));
+                    if (organId == null) {
+                        organId = 70000L;
+                        String msg = "No hem trobat l'organ amb dir3 ]" + dir3Gestor + "[. Posam el de GovernIB";
+                        HtmlUtils.saveMessageError(request, msg);
+                    }
+                    solicitud.setOrganid(organId);
+                    log.info("dire3: " + dir3Gestor + ". OrganID: " + organId);
+                }
+                
                 // java.lang.Long estatID = null;
                 solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
                 // java.lang.String ticketAssociat = null;
