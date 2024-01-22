@@ -36,8 +36,10 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
@@ -549,6 +551,24 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     File plantilla = new File(Configuracio.getTemplateFormulari());
 
+    SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
+    
+    Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
+    while(organGestor.getDir3pare() != null) {
+        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
+        if (organ.size() == 1) {
+            organGestor = organ.get(0);
+        }
+    }
+    
+    if (organGestor.getCif().equals("S0711001H")) {
+        Organ dgtic = organEjb.findByPrimaryKey(70012);
+        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+    }
+
+    
+    
     ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
 
     {

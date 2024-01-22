@@ -107,6 +107,21 @@ public class ParserFormulariXML {
       data.put("preproduccion", true);
     }
     
+    
+    String dir3Gestor = props.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
+    if (dir3Gestor == null || dir3Gestor.trim().length() == 0 ) {
+      cp = "";
+    }else {
+        
+    }
+    data.put("cp", "");
+    
+//  String nouOrganGestor = soli.getOrgan().getNom();
+//  prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", nouOrganGestor);
+    
+    
+    
+    
 
     FileOutputStream fosPDF = new FileOutputStream(outputPDF);
     FileOutputStream fosODT = new FileOutputStream(outputOdt);

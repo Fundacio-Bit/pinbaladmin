@@ -39,12 +39,15 @@ import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
+import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
@@ -88,6 +91,9 @@ public class TramitAOperadorController extends TramitAPersAutController {
 
     @EJB(mappedName = TramitIServLogicaService.JNDI_NAME)
     protected TramitIServLogicaService tramitIServLogicEjb;
+
+    @EJB(mappedName = OrganService.JNDI_NAME)
+    protected OrganService organEjb;
     
     @EJB(mappedName = FitxerService.JNDI_NAME)
     protected FitxerService fitxerEjb;
@@ -357,6 +363,21 @@ public class TramitAOperadorController extends TramitAPersAutController {
 
         Long solicitudID = soli.getSolicitudID();
 
+        Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
+        while(organGestor.getDir3pare() != null) {
+            List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
+            if (organ.size() == 1) {
+                organGestor = organ.get(0);
+            }
+        }
+        
+        if (organGestor.getCif().equals("S0711001H")) {
+            Organ dgtic = organEjb.findByPrimaryKey(70012);
+            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+        }
+
+        
         File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
         File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
