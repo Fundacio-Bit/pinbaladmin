@@ -48,6 +48,10 @@ public class TramitIServValidator<I extends TramitIServ>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMA)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,URLNORMA, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLNORMA)));
+
     __vr.rejectIfEmptyOrWhitespace(__target__,ARTICLES, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)));
@@ -55,18 +59,6 @@ public class TramitIServValidator<I extends TramitIServ>
     __vr.rejectIfEmptyOrWhitespace(__target__,CONSENTIMENT, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,URLNORMA, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLNORMA)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,CONSENTIMENTPUBLICAT, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENTPUBLICAT)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,URLCONSENTIMENT, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLCONSENTIMENT)));
 
     // Check size
     if (__vr.getFieldErrorCount(NOM) == 0) {
@@ -93,6 +85,14 @@ public class TramitIServValidator<I extends TramitIServ>
       }
     }
 
+    if (__vr.getFieldErrorCount(URLNORMA) == 0) {
+      java.lang.String __urlnorma = __target__.getUrlnorma();
+      if (__urlnorma!= null && __urlnorma.length() > 240) {
+        __vr.rejectValue(URLNORMA, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLNORMA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(ARTICLES) == 0) {
       java.lang.String __articles = __target__.getArticles();
       if (__articles!= null && __articles.length() > 60) {
@@ -106,14 +106,6 @@ public class TramitIServValidator<I extends TramitIServ>
       if (__consentiment!= null && __consentiment.length() > 30) {
         __vr.rejectValue(CONSENTIMENT, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(30)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(URLNORMA) == 0) {
-      java.lang.String __urlnorma = __target__.getUrlnorma();
-      if (__urlnorma!= null && __urlnorma.length() > 240) {
-        __vr.rejectValue(URLNORMA, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLNORMA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
       }
     }
 

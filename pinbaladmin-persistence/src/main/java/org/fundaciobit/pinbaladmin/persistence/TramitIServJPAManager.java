@@ -55,8 +55,8 @@ public class TramitIServJPAManager
         return list.toArray(new TramitIServ[list.size()]);
     };
 
-    public TramitIServ create( long _tramitid_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _norma_, java.lang.String _articles_, java.lang.String _consentiment_, java.lang.String _urlnorma_, java.lang.String _consentimentpublicat_, java.lang.String _urlconsentiment_) throws I18NException {
-        TramitIServJPA __bean =  new TramitIServJPA(_tramitid_,_nom_,_codi_,_norma_,_articles_,_consentiment_,_urlnorma_,_consentimentpublicat_,_urlconsentiment_);
+    public TramitIServ create( long _tramitid_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _norma_, java.lang.String _urlnorma_, java.lang.String _articles_, java.lang.String _consentiment_, java.lang.String _consentimentpublicat_, java.lang.String _urlconsentiment_) throws I18NException {
+        TramitIServJPA __bean =  new TramitIServJPA(_tramitid_,_nom_,_codi_,_norma_,_urlnorma_,_articles_,_consentiment_,_consentimentpublicat_,_urlconsentiment_);
         return create(__bean);
     }
 

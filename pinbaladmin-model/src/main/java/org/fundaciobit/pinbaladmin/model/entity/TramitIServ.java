@@ -17,14 +17,14 @@ public interface TramitIServ extends org.fundaciobit.genapp.common.IGenAppEntity
 	public java.lang.String getNorma();
 	public void setNorma(java.lang.String _norma_);
 
+	public java.lang.String getUrlnorma();
+	public void setUrlnorma(java.lang.String _urlnorma_);
+
 	public java.lang.String getArticles();
 	public void setArticles(java.lang.String _articles_);
 
 	public java.lang.String getConsentiment();
 	public void setConsentiment(java.lang.String _consentiment_);
-
-	public java.lang.String getUrlnorma();
-	public void setUrlnorma(java.lang.String _urlnorma_);
 
 	public java.lang.String getConsentimentpublicat();
 	public void setConsentimentpublicat(java.lang.String _consentimentpublicat_);

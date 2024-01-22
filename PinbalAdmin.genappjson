@@ -8266,6 +8266,31 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "urlnorma",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Enllaç norma legal",
+            "es": "Enlace norma legal"
+          },
+          "javaName": "urlnorma",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "articles",
           "sqlType": 12,
           "size": 60,
@@ -8306,7 +8331,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "minAllowedValue": "NoOposició,Llei",
+          "minAllowedValue": "NoOposició,Llei,Si",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
@@ -8317,39 +8342,14 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "urlnorma",
-          "sqlType": 12,
-          "size": 240,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "ca": "Enllaç norma legal",
-            "es": "Enlace norma legal"
-          },
-          "javaName": "urlnorma",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "consentimentpublicat",
           "sqlType": 12,
           "size": 30,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
-            "ca": "Consentiment publicat o adjunt",
-            "es": "Consentimiento publicado o adjunto"
+            "ca": "Publicat o adjunt",
+            "es": "Publicado o adjunto"
           },
           "javaName": "consentimentpublicat",
           "javaType": "java.lang.String",
@@ -8372,10 +8372,10 @@
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
-            "ca": "Enllaç Consentiment",
-            "es": "Enlace Consentimiento"
+            "ca": "URL Consentiment",
+            "es": "URL Consentimiento"
           },
           "javaName": "urlconsentiment",
           "javaType": "java.lang.String",
@@ -8487,8 +8487,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Consentiment",
-            "es": "Consentimiento"
+            "ca": "Fitxer consentiment",
+            "es": "Fichero consentimiento"
           },
           "javaName": "adjuntID",
           "javaType": "java.lang.Long",

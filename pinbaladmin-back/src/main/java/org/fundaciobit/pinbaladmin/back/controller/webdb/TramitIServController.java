@@ -724,6 +724,7 @@ public java.lang.Long stringToPK(String value) {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
     __tmp.add(new StringKeyValue("NoOposició" , "NoOposició"));
     __tmp.add(new StringKeyValue("Llei" , "Llei"));
+    __tmp.add(new StringKeyValue("Si" , "Si"));
     return __tmp;
   }
 

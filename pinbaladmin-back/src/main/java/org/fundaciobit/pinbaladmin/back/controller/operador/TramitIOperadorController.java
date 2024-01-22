@@ -15,14 +15,20 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
+import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,6 +49,9 @@ public class TramitIOperadorController extends TramitIServController {
 
     @EJB(mappedName = TramitIServLogicaService.JNDI_NAME)
     protected TramitIServLogicaService tramitIServLogicEjb;
+
+    @EJB(mappedName = TramitJConsentLogicaService.JNDI_NAME)
+    protected TramitJConsentLogicaService tramitJConsentLogicaEjb;
 
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
@@ -122,22 +131,31 @@ public class TramitIOperadorController extends TramitIServController {
         TramitIServForm tramitForm = super.getTramitIServForm(_jpa, __isView, request, mav);
         tramitForm.setTitleCode("tramit.sistra.titol.i.form");
 
-        if (__isView) {
+        tramitForm.addHiddenField(TRAMITID);
 
-        } else if (tramitForm.isNou()) {
-            TramitIServJPA tramitI = tramitForm.getTramitIServ();
+        TramitIServJPA tramitI = tramitForm.getTramitIServ();
+        Long tramitID;
+         if (tramitForm.isNou()) {
 
             String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            tramitID = Long.parseLong(tramitIDStr);
             tramitI.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
-            request.getSession().setAttribute("tramitid", tramitID);
 
             tramitI.setNorma("Norma Legal inventada");
-            tramitI.setArticles("Art1, 2 i Art 5");
             tramitI.setUrlnorma("https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347");
-            tramitI.setUrlconsentiment("toDelete");
+
+            tramitI.setConsentimentpublicat("1");
+            
+            tramitI.setArticles("Art1, 2 i Art 5");
+        }else {
+            tramitID = tramitI.getTramitid();
         }
+         request.getSession().setAttribute("tramitid", tramitID);
+         
+        final Section section = new Section("consentiment", "tramitIServ.consentiment", TramitIServFields.CONSENTIMENT,
+                TramitIServFields.CONSENTIMENTPUBLICAT, TramitIServFields.URLCONSENTIMENT);
+        
+        tramitForm.addSection(section);
 
         tramitForm.setAttachedAdditionalJspCode(true);
         return tramitForm;
@@ -182,9 +200,22 @@ public class TramitIOperadorController extends TramitIServController {
                 long consentimentNecessari = tramitIServLogicEjb.count(w);
 
                 if (consentimentNecessari > 0) {
-                    tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-                            "afegir consentiment", TramitJOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitID,
-                            "btn-primary"));
+
+                    //Chek si ja tenim consentiment.
+                    Where wh = Where.AND(TramitJConsentFields.TRAMITID.equal(tramitID),
+                            TramitJConsentFields.CONSENTID.isNotNull());
+                    List<TramitJConsent> tramitJ = tramitJConsentLogicaEjb.select(wh);
+
+                    if (tramitJ.size() == 0) {
+                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+                                "afegir consentiment",
+                                TramitJOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitID, "btn-primary"));
+                    } else if (tramitJ.size() == 1) {
+                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+                                "veure consentiment",
+                                TramitJOperadorController.CONTEXT_WEB + "/view/" + tramitJ.get(0).getConsentid(),
+                                "btn-primary"));
+                    }
                 } else {
                     tramitIServFilterForm.addAdditionalButton(
                             new AdditionalButton("fas fa-check-circle", "tramit.i.finalitzar.tramit",
@@ -228,6 +259,7 @@ public class TramitIOperadorController extends TramitIServController {
         __tmp.add(new StringKeyValue("", "..."));
         __tmp.add(new StringKeyValue("noop", "No oposició"));
         __tmp.add(new StringKeyValue("llei", "Llei"));
+        __tmp.add(new StringKeyValue("si", "Si"));
         return __tmp;
     }
 
@@ -235,7 +267,6 @@ public class TramitIOperadorController extends TramitIServController {
     public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        __tmp.add(new StringKeyValue("", "..."));
         __tmp.add(new StringKeyValue("1", "Publicat"));
         __tmp.add(new StringKeyValue("2", "Adjunt"));
         return __tmp;
@@ -246,4 +277,16 @@ public class TramitIOperadorController extends TramitIServController {
         return tramitIServLogicEjb.getReferenceListForServei();
     }
 
+    @Override
+    public void preValidate(HttpServletRequest request, TramitIServForm tramitIServForm, BindingResult result)
+            throws I18NException {
+        
+        TramitIServJPA I = tramitIServForm.getTramitIServ();
+
+        if (I.getUrlconsentiment() == null) {
+            I.setUrlconsentiment("");
+        }
+    }
+
+    
 }

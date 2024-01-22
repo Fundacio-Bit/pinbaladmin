@@ -27,14 +27,14 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NORMA)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.NORMA)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.URLNORMA)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.ARTICLES)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENT)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.CONSENTIMENT)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.URLNORMA)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENTPUBLICAT)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.CONSENTIMENTPUBLICAT)}</th>

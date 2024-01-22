@@ -125,6 +125,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.URLNORMA)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitIServ.urlnorma" var="urlnorma" />
+              <fmt:message key="genapp.form.searchby" var="cercaperurlnorma" >                
+                 <fmt:param value="${urlnorma}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${urlnorma}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlnorma}" path="urlnorma" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.ARTICLES)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -147,19 +160,6 @@
               </fmt:message>
               <span class="add-on"><c:out value="${consentiment}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperconsentiment}" path="consentiment" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.URLNORMA)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="tramitIServ.urlnorma" var="urlnorma" />
-              <fmt:message key="genapp.form.searchby" var="cercaperurlnorma" >                
-                 <fmt:param value="${urlnorma}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${urlnorma}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlnorma}" path="urlnorma" />
             </div>
 
 

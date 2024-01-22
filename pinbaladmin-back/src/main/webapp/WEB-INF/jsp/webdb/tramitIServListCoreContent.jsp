@@ -55,6 +55,11 @@
           ${tramitIServ.norma}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA)}">
+          <td>
+          ${tramitIServ.urlnorma}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES)}">
           <td>
           ${tramitIServ.articles}
@@ -66,11 +71,6 @@
           <c:if test="${not empty tmp}">
           ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
           </c:if>
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA)}">
-          <td>
-          ${tramitIServ.urlnorma}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENTPUBLICAT)}">

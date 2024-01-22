@@ -17,9 +17,9 @@ public interface TramitIServFields extends java.io.Serializable {
 	 public static final StringField NOM = new StringField(_TABLE_MODEL, "nom", "nom");
 	 public static final StringField CODI = new StringField(_TABLE_MODEL, "codi", "codi");
 	 public static final StringField NORMA = new StringField(_TABLE_MODEL, "norma", "norma");
+	 public static final StringField URLNORMA = new StringField(_TABLE_MODEL, "urlnorma", "urlnorma");
 	 public static final StringField ARTICLES = new StringField(_TABLE_MODEL, "articles", "articles");
 	 public static final StringField CONSENTIMENT = new StringField(_TABLE_MODEL, "consentiment", "consentiment");
-	 public static final StringField URLNORMA = new StringField(_TABLE_MODEL, "urlnorma", "urlnorma");
 	 public static final StringField CONSENTIMENTPUBLICAT = new StringField(_TABLE_MODEL, "consentimentpublicat", "consentimentpublicat");
 	 public static final StringField URLCONSENTIMENT = new StringField(_TABLE_MODEL, "urlconsentiment", "urlconsentiment");
 
@@ -30,9 +30,9 @@ public interface TramitIServFields extends java.io.Serializable {
     NOM,
     CODI,
     NORMA,
+    URLNORMA,
     ARTICLES,
     CONSENTIMENT,
-    URLNORMA,
     CONSENTIMENTPUBLICAT,
     URLCONSENTIMENT
   };

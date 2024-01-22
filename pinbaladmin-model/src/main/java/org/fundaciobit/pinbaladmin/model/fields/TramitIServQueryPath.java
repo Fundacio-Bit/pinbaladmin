@@ -31,16 +31,16 @@ public class TramitIServQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new StringField(getQueryPath(), TramitIServFields.NORMA);
   }
 
+  public StringField URLNORMA() {
+    return new StringField(getQueryPath(), TramitIServFields.URLNORMA);
+  }
+
   public StringField ARTICLES() {
     return new StringField(getQueryPath(), TramitIServFields.ARTICLES);
   }
 
   public StringField CONSENTIMENT() {
     return new StringField(getQueryPath(), TramitIServFields.CONSENTIMENT);
-  }
-
-  public StringField URLNORMA() {
-    return new StringField(getQueryPath(), TramitIServFields.URLNORMA);
   }
 
   public StringField CONSENTIMENTPUBLICAT() {

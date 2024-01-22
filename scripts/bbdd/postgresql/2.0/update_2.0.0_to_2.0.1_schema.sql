@@ -780,3 +780,12 @@ ALTER TABLE pad_solicitud
 DROP COLUMN IF EXISTS ticketassociat,
 DROP COLUMN IF EXISTS ticketnumeroseguiment;
 
+
+
+
+
+-- MODIFICAR CAMPS OBLIGATORIS TRAMIT SISTRA
+ALTER TABLE pad_tramit_i_serv ALTER COLUMN urlconsentiment DROP NOT NULL;
+
+ALTER TABLE pad_tramit_i_serv ALTER COLUMN consentimentpublicat DROP NOT NULL;
+

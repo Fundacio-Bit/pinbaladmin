@@ -296,9 +296,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         config.setUsername(Configuracio.getApiPinbalUsername());
         config.setPassword(Configuracio.getApiPinbalPassword());
 
-        config.setFinalidad("Solicitar autorización procedimiento"); // getPropertyRequired(propertyBase + "finalitat"); 
-        config.setIdentificadorSolicitante("S0711001H"); // getPropertyRequired(propertyBase + "identificadorsolicitant");
-        config.setUnidadTramitadora("Fundacio BIT"); // getPropertyRequired(propertyBase + "unitattramitadora");
+        config.setFinalidad("Solicitar autorización procedimiento");
+        config.setIdentificadorSolicitante("S0711001H");
+        config.setUnidadTramitadora("Fundacio BIT");
 
         config.setCodProcedimiento("PREALTAS");
 

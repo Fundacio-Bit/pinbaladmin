@@ -13,9 +13,9 @@ public class TramitIServBean implements TramitIServ {
 	java.lang.String nom;
 	java.lang.String codi;
 	java.lang.String norma;
+	java.lang.String urlnorma;
 	java.lang.String articles;
 	java.lang.String consentiment;
-	java.lang.String urlnorma;
 	java.lang.String consentimentpublicat;
 	java.lang.String urlconsentiment;
 
@@ -25,29 +25,40 @@ public class TramitIServBean implements TramitIServ {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String articles , java.lang.String consentiment , java.lang.String urlnorma , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
+  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
     this.servid=servid;
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
+    this.urlnorma=urlnorma;
     this.articles=articles;
     this.consentiment=consentiment;
-    this.urlnorma=urlnorma;
     this.consentimentpublicat=consentimentpublicat;
     this.urlconsentiment=urlconsentiment;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitIServBean(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String articles , java.lang.String consentiment , java.lang.String urlnorma , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
+  public TramitIServBean(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
+    this.urlnorma=urlnorma;
     this.articles=articles;
     this.consentiment=consentiment;
-    this.urlnorma=urlnorma;
     this.consentimentpublicat=consentimentpublicat;
     this.urlconsentiment=urlconsentiment;
+}
+  /** Constructor dels valors Not Null */
+  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment) {
+    this.servid=servid;
+    this.tramitid=tramitid;
+    this.nom=nom;
+    this.codi=codi;
+    this.norma=norma;
+    this.urlnorma=urlnorma;
+    this.articles=articles;
+    this.consentiment=consentiment;
 }
   public TramitIServBean(TramitIServ __bean) {
     this.setServid(__bean.getServid());
@@ -55,9 +66,9 @@ public class TramitIServBean implements TramitIServ {
     this.setNom(__bean.getNom());
     this.setCodi(__bean.getCodi());
     this.setNorma(__bean.getNorma());
+    this.setUrlnorma(__bean.getUrlnorma());
     this.setArticles(__bean.getArticles());
     this.setConsentiment(__bean.getConsentiment());
-    this.setUrlnorma(__bean.getUrlnorma());
     this.setConsentimentpublicat(__bean.getConsentimentpublicat());
     this.setUrlconsentiment(__bean.getUrlconsentiment());
 	}
@@ -97,6 +108,13 @@ public class TramitIServBean implements TramitIServ {
 		this.norma = _norma_;
 	};
 
+	public java.lang.String getUrlnorma() {
+		return(urlnorma);
+	};
+	public void setUrlnorma(java.lang.String _urlnorma_) {
+		this.urlnorma = _urlnorma_;
+	};
+
 	public java.lang.String getArticles() {
 		return(articles);
 	};
@@ -109,13 +127,6 @@ public class TramitIServBean implements TramitIServ {
 	};
 	public void setConsentiment(java.lang.String _consentiment_) {
 		this.consentiment = _consentiment_;
-	};
-
-	public java.lang.String getUrlnorma() {
-		return(urlnorma);
-	};
-	public void setUrlnorma(java.lang.String _urlnorma_) {
-		this.urlnorma = _urlnorma_;
 	};
 
 	public java.lang.String getConsentimentpublicat() {
@@ -144,9 +155,9 @@ public class TramitIServBean implements TramitIServ {
     __tmp.setNom(__bean.getNom());
     __tmp.setCodi(__bean.getCodi());
     __tmp.setNorma(__bean.getNorma());
+    __tmp.setUrlnorma(__bean.getUrlnorma());
     __tmp.setArticles(__bean.getArticles());
     __tmp.setConsentiment(__bean.getConsentiment());
-    __tmp.setUrlnorma(__bean.getUrlnorma());
     __tmp.setConsentimentpublicat(__bean.getConsentimentpublicat());
     __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
 		return __tmp;

@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,6 @@ import org.fundaciobit.pinbaladmin.ejb.EventService;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
-import org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -240,6 +238,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                                 TramitIServ I = (TramitIServ) lista.get(j);
                                 codis[j] = I.getCodi();
                                 noms[j] =  tramitIEjb.getServeiValue(I.getNom());
+                                if (I.getUrlconsentiment() == null) {
+                                    I.setUrlconsentiment("");
+                                }
                             }
 
                             /*
@@ -563,11 +564,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     String articles = I.getArticles();
                     String tipusConsentiment = I.getConsentimentpublicat();  //Publicad/Adjunt
                     String consentiment = I.getConsentiment();
-                    
                     String enllazConsentiment = I.getUrlconsentiment();
-                    if (enllazConsentiment.equals("toDelete")) {
-                        enllazConsentiment = null;
-                    }
                     
                     String caduca;
                     String caducafecha;

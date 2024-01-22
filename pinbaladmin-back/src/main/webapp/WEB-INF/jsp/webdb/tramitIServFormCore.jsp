@@ -100,6 +100,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.URLNORMA)}">
+        <tr id="tramitIServ_urlnorma_rowid">
+          <td id="tramitIServ_urlnorma_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLNORMA])?'tramitIServ.urlnorma':__theForm.labels[TramitIServFields.URLNORMA]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.URLNORMA]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLNORMA]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_urlnorma_columnvalueid">
+            <form:errors path="tramitIServ.urlnorma" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.urlnorma"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES)}">
         <tr id="tramitIServ_articles_rowid">
           <td id="tramitIServ_articles_columnlabelid">
@@ -149,29 +167,11 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.URLNORMA)}">
-        <tr id="tramitIServ_urlnorma_rowid">
-          <td id="tramitIServ_urlnorma_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLNORMA])?'tramitIServ.urlnorma':__theForm.labels[TramitIServFields.URLNORMA]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.URLNORMA]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLNORMA]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_urlnorma_columnvalueid">
-            <form:errors path="tramitIServ.urlnorma" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.urlnorma"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.CONSENTIMENTPUBLICAT)}">
         <tr id="tramitIServ_consentimentpublicat_rowid">
           <td id="tramitIServ_consentimentpublicat_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.CONSENTIMENTPUBLICAT])?'tramitIServ.consentimentpublicat':__theForm.labels[TramitIServFields.CONSENTIMENTPUBLICAT]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.CONSENTIMENTPUBLICAT])?'tramitIServ.consentimentpublicat':__theForm.labels[TramitIServFields.CONSENTIMENTPUBLICAT]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitIServFields.CONSENTIMENTPUBLICAT]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.CONSENTIMENTPUBLICAT]}" ></i>
@@ -192,6 +192,15 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.tramitIServ.consentimentpublicat }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.tramitIServ.consentimentpublicat }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
           </form:select>
           </c:if>
            </td>
@@ -202,7 +211,7 @@
         <tr id="tramitIServ_urlconsentiment_rowid">
           <td id="tramitIServ_urlconsentiment_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLCONSENTIMENT])?'tramitIServ.urlconsentiment':__theForm.labels[TramitIServFields.URLCONSENTIMENT]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLCONSENTIMENT])?'tramitIServ.urlconsentiment':__theForm.labels[TramitIServFields.URLCONSENTIMENT]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitIServFields.URLCONSENTIMENT]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLCONSENTIMENT]}" ></i>

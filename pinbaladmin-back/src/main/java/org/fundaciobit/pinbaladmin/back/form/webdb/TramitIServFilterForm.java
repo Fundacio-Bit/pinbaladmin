@@ -98,6 +98,17 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
   }
 
 
+  private java.lang.String urlnorma;
+
+  public java.lang.String getUrlnorma() {
+    return this.urlnorma;
+  }
+
+  public void setUrlnorma(java.lang.String urlnorma) {
+    this.urlnorma = urlnorma;
+  }
+
+
   private java.lang.String articles;
 
   public java.lang.String getArticles() {
@@ -117,17 +128,6 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
 
   public void setConsentiment(java.lang.String consentiment) {
     this.consentiment = consentiment;
-  }
-
-
-  private java.lang.String urlnorma;
-
-  public java.lang.String getUrlnorma() {
-    return this.urlnorma;
-  }
-
-  public void setUrlnorma(java.lang.String urlnorma) {
-    this.urlnorma = urlnorma;
   }
 
 
@@ -165,9 +165,9 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
     this.nom = __toClone.nom;
     this.codi = __toClone.codi;
     this.norma = __toClone.norma;
+    this.urlnorma = __toClone.urlnorma;
     this.articles = __toClone.articles;
     this.consentiment = __toClone.consentiment;
-    this.urlnorma = __toClone.urlnorma;
     this.consentimentpublicat = __toClone.consentimentpublicat;
     this.urlconsentiment = __toClone.urlconsentiment;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
