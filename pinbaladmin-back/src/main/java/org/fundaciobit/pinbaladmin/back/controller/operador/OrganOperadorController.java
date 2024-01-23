@@ -102,7 +102,7 @@ public class OrganOperadorController extends OrganController {
 //            log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
             jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
         }
-        String str = String.join("|", jerarquia);
+        String str = String.join("", jerarquia);
         
         response.getWriter().write(str);
         response.getWriter().flush();

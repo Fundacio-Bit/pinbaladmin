@@ -498,10 +498,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 if (isestatal) {
                     hiddenFields.remove(ENTITATESTATAL);
                     hiddenFields.add(SolicitudFields.DEPARTAMENTID);
-                    // filterList.remove(ENTITATLOCALID);
                     filterList.remove(PINFO);
-                    // groupList.remove(ENTITATLOCALID);
-//                    groupList.add(ESTATID);
 //
                 } else {
                     AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
@@ -514,18 +511,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
                     
                     
-//                     hiddenFields.remove(ORGANID);
-                  //   hiddenFields.remove(DEPARTAMENTID);
-                  //   hiddenFields.remove(NOTES);
+                    filterList.remove(PINFO);
                     filterList.remove(ENTITATESTATAL);
                     groupList.remove(ENTITATESTATAL);
                     
+                    filterList.add(ORGANID);
                     groupList.add(ORGANID);
-
-//                    groupList.add(AREA_NOVA_ID);
-//                    groupList.add(ENTITAT_NOVA_ID);
-
+                    
+                    solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_SEARCH, "filtre.organ",
+                            "javascript:openFiltreOrgans();", "btn-warning"));
+                    
                 }
+                
                 solicitudFilterForm.setFilterByFields(filterList);
                 solicitudFilterForm.setGroupByFields(groupList);
 
@@ -1123,6 +1120,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     // }
 
     public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
+        
+        String organidStr = request.getParameter("solicitud.organid");
+
+        if (organidStr != null && organidStr.trim().length() != 0) {
+            Long organID = Long.parseLong(organidStr);
+            
+            log.info("\n\norganid: " + organID + "\n\n");
+            return SolicitudFields.ORGANID.equal(organID);
+        }
+        
         return null;
     }
 

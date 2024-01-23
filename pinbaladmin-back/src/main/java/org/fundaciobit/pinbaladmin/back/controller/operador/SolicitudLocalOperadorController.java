@@ -1,6 +1,11 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SubQuery;
@@ -8,9 +13,14 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -125,8 +135,37 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
             throws I18NException {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
+        
+        request.setAttribute("desplegableOrgans", true);
+
+        List<Organ> organs = organEjb.select();
+        mav.addObject("organs", organs);
+
+        String organidStr = request.getParameter("solicitud.organid");
+        if (organidStr != null && organidStr.trim().length() != 0) {
+            long organID = Long.parseLong(organidStr);
+            Organ selected = organEjb.findByPrimaryKey(organID);
+            
+            log.info(selected.getNom());
+            mav.addObject("organSelected", organID);
+        }
+        
+        
+
+//        1. afegir llistat de organs
+        
+//        2. Afegir organ acutal (quan toqui) a mav.addObject('organid-selected');
+        
+        
         if (solicitudFilterForm.isNou()) {
 //            solicitudFilterForm.getHiddenFields().remove(ORGANID);
+            
+            
+            
+            
+            
+            
+            
 
             if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
                 //solicitudFilterForm.setEstatIDDesde(-1L);
@@ -186,4 +225,24 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
 //
 //        }
 //    }
+    
+    
+    @RequestMapping(value = "/getAllOrgansGestors", method = RequestMethod.GET)
+    public void mostrarJerarquia(HttpServletRequest request, HttpServletResponse response) throws I18NException, IOException {
+
+        List<Organ> organs = organEjb.select();
+        List<String> jsSelect = new ArrayList<String>();
+
+        jsSelect.add("<option selected=\"true\" value=\"\"></option>");
+        for (Organ organ : organs) {
+            String jsOption = "<option value='" + organ.getOrganid() + "'>(" + organ.getDir3() + ") " + organ.getNom() + "</option>";
+            jsSelect.add(jsOption);
+        }
+        
+        String str = String.join("|", jsSelect);
+        
+        response.getWriter().write(str);
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
 }
