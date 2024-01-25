@@ -46,6 +46,10 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTATSOLICITUDSERVEIID)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,CONSENTIMENT, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)));
+
     // Check size
     if (__vr.getFieldErrorCount(NORMALEGAL) == 0) {
       java.lang.String __normalegal = __target__.getNormaLegal();

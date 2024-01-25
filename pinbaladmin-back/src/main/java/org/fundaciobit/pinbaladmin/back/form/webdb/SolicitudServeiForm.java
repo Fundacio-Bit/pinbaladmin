@@ -22,6 +22,8 @@ public class SolicitudServeiForm extends PinbalAdminBaseForm {
     this.listOfSolicitudForSolicitudID = __toClone.listOfSolicitudForSolicitudID;
     this.listOfServeiForServeiID = __toClone.listOfServeiForServeiID;
     this.listOfValuesForEstatSolicitudServeiID = __toClone.listOfValuesForEstatSolicitudServeiID;
+    this.listOfValuesForTipusConsentiment = __toClone.listOfValuesForTipusConsentiment;
+    this.listOfValuesForConsentiment = __toClone.listOfValuesForConsentiment;
   }
   
   public SolicitudServeiForm(SolicitudServeiJPA solicitudServei, boolean nou) {
@@ -69,6 +71,30 @@ public class SolicitudServeiForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForEstatSolicitudServeiID(List<StringKeyValue> listOfValuesForEstatSolicitudServeiID) {
     this.listOfValuesForEstatSolicitudServeiID = listOfValuesForEstatSolicitudServeiID;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForTipusConsentiment;
+
+  public List<StringKeyValue> getListOfValuesForTipusConsentiment() {
+    return this.listOfValuesForTipusConsentiment;
+  }
+
+  public void setListOfValuesForTipusConsentiment(List<StringKeyValue> listOfValuesForTipusConsentiment) {
+    this.listOfValuesForTipusConsentiment = listOfValuesForTipusConsentiment;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForConsentiment;
+
+  public List<StringKeyValue> getListOfValuesForConsentiment() {
+    return this.listOfValuesForConsentiment;
+  }
+
+  public void setListOfValuesForConsentiment(List<StringKeyValue> listOfValuesForConsentiment) {
+    this.listOfValuesForConsentiment = listOfValuesForConsentiment;
   }
 
 

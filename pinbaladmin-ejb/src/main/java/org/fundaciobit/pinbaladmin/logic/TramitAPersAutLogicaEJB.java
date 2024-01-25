@@ -141,7 +141,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     private Long generaXml(Long tramitID) throws I18NException {
 
         try {
-            String plantilla = FileUtils.readFileToString(new File(Configuracio.getTemplateTramitSistraXml()), Charset.defaultCharset());
+            String fileXml=Configuracio.getTemplateTramitSistraXml();
+            log.info("fileXml: "+fileXml);
+            
+            String plantilla = FileUtils.readFileToString(new File(fileXml), Charset.defaultCharset());
 
             Map<String, Object> map = new HashMap<String, Object>();
 
@@ -562,7 +565,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     String normaLegal = I.getNorma();
                     String enllazNormaLegal = I.getUrlnorma();
                     String articles = I.getArticles();
-                    String tipusConsentiment = I.getConsentimentpublicat();  //Publicad/Adjunt
+                    String tipusConsentiment = I.getConsentimentpublicat();  //"publicat"/"adjunt"
                     String consentiment = I.getConsentiment();
                     String enllazConsentiment = I.getUrlconsentiment();
                     

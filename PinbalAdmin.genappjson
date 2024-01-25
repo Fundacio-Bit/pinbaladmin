@@ -5125,11 +5125,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "adjunt,publicat",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 1
+            "webtype": 16
           },
           "foreignKeys": []
         },
@@ -5139,7 +5140,7 @@
           "sqlType": 12,
           "size": 255,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "es": "Consentiment",
             "ca": "Consentiment"
@@ -5150,11 +5151,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "si,llei,noop",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 1
+            "webtype": 16
           },
           "foreignKeys": []
         },

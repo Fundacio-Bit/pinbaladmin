@@ -457,4 +457,21 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         ESTATS_SOLICITUD_SERVEI.put(90L, "No disponible");
     }
 
+    public List<StringKeyValue> getReferenceListForTipusConsentiment(HttpServletRequest request,
+            ModelAndView mav, Where where)  throws I18NException {
+         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+         __tmp.add(new StringKeyValue("", "..."));
+         __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_PUBLICAT , "Publicat"));
+         __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_ADJUNT, "Adjunt"));
+         return __tmp;
+       }
+    
+    public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
+            ModelAndView mav, Where where)  throws I18NException {
+         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+         __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_SI , "Si"));
+         __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_LLEI, "Llei"));
+         __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_NOOP, "No Oposició"));
+         return __tmp;
+       }
 }

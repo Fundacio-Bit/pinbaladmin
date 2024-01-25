@@ -59,11 +59,12 @@ public class SolicitudServeiBean implements SolicitudServei {
     this.fechaCaduca=fechaCaduca;
 }
   /** Constructor dels valors Not Null */
-  public SolicitudServeiBean(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID) {
+  public SolicitudServeiBean(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String consentiment) {
     this.id=id;
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
     this.estatSolicitudServeiID=estatSolicitudServeiID;
+    this.consentiment=consentiment;
 }
   public SolicitudServeiBean(SolicitudServei __bean) {
     this.setId(__bean.getId());

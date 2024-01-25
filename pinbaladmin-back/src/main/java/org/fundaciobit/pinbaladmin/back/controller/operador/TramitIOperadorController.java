@@ -19,6 +19,7 @@ import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
@@ -195,8 +196,8 @@ public class TramitIOperadorController extends TramitIServController {
 
             if (serveisAfegits > 0) {
 
-                Where w = Where.AND(TRAMITID.equal(tramitID), CONSENTIMENT.equal("noop"),
-                        CONSENTIMENTPUBLICAT.equal("2"));
+                Where w = Where.AND(TRAMITID.equal(tramitID), CONSENTIMENT.equal(Constants.CONSENTIMENT_TIPUS_NOOP),
+                        CONSENTIMENTPUBLICAT.equal(Constants.CONSENTIMENT_ADJUNT));
                 long consentimentNecessari = tramitIServLogicEjb.count(w);
 
                 if (consentimentNecessari > 0) {
@@ -257,9 +258,9 @@ public class TramitIOperadorController extends TramitIServController {
             Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
         __tmp.add(new StringKeyValue("", "..."));
-        __tmp.add(new StringKeyValue("noop", "No oposició"));
-        __tmp.add(new StringKeyValue("llei", "Llei"));
-        __tmp.add(new StringKeyValue("si", "Si"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_NOOP, "No oposició"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_LLEI, "Llei"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_SI, "Si"));
         return __tmp;
     }
 
@@ -267,8 +268,9 @@ public class TramitIOperadorController extends TramitIServController {
     public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        __tmp.add(new StringKeyValue("1", "Publicat"));
-        __tmp.add(new StringKeyValue("2", "Adjunt"));
+        __tmp.add(new StringKeyValue("", "..."));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_PUBLICAT, "Publicat"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_ADJUNT, "Adjunt"));
         return __tmp;
     }
 

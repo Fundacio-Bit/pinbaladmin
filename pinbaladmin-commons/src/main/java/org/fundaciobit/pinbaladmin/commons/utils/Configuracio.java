@@ -240,4 +240,8 @@ public class Configuracio implements Constants {
     public static String getApiPinbalPassword() {
         return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "password");
     }
+
+    public static String getApiPinbalCodiProcediment() {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "codiprocediment");
+    }
 }

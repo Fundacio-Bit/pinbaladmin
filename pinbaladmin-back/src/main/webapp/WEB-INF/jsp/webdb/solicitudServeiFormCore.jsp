@@ -193,9 +193,31 @@
               </c:if>
             </td>
           <td id="solicitudServei_tipusConsentiment_columnvalueid">
-            <form:errors path="solicitudServei.tipusConsentiment" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.TIPUSCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.TIPUSCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.tipusConsentiment"   />
-
+          <form:errors path="solicitudServei.tipusConsentiment" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.TIPUSCONSENTIMENT)}" >
+          <form:hidden path="solicitudServei.tipusConsentiment"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitudServei.tipusConsentiment,__theForm.listOfValuesForTipusConsentiment)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.TIPUSCONSENTIMENT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitudServei_tipusConsentiment"  onchange="if(typeof onChangeTipusConsentiment == 'function') {  onChangeTipusConsentiment(this); };"  cssClass="form-control col-md-9-optional" path="solicitudServei.tipusConsentiment">
+            <c:forEach items="${__theForm.listOfValuesForTipusConsentiment}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitudServei.tipusConsentiment }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitudServei.tipusConsentiment }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>
@@ -204,16 +226,29 @@
         <tr id="solicitudServei_consentiment_rowid">
           <td id="solicitudServei_consentiment_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.CONSENTIMENT])?'solicitudServei.consentiment':__theForm.labels[SolicitudServeiFields.CONSENTIMENT]}" />
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.CONSENTIMENT])?'solicitudServei.consentiment':__theForm.labels[SolicitudServeiFields.CONSENTIMENT]}" /> &nbsp;(*)
              </label>
               <c:if test="${not empty __theForm.help[SolicitudServeiFields.CONSENTIMENT]}">
               <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.CONSENTIMENT]}" ></i>
               </c:if>
             </td>
           <td id="solicitudServei_consentiment_columnvalueid">
-            <form:errors path="solicitudServei.consentiment" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.consentiment"   />
-
+          <form:errors path="solicitudServei.consentiment" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CONSENTIMENT)}" >
+          <form:hidden path="solicitudServei.consentiment"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitudServei.consentiment,__theForm.listOfValuesForConsentiment)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CONSENTIMENT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitudServei_consentiment"  onchange="if(typeof onChangeConsentiment == 'function') {  onChangeConsentiment(this); };"  cssClass="form-control col-md-9-optional" path="solicitudServei.consentiment">
+            <c:forEach items="${__theForm.listOfValuesForConsentiment}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

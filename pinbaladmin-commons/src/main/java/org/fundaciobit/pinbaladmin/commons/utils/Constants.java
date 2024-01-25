@@ -102,4 +102,12 @@ public interface Constants {
             ESTAT_PINBAL_PENDENT_SUBSANACIO, ESTAT_PINBAL_SUBSANAT, ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT,
             ESTAT_PINBAL_AUTORITZAT, ESTAT_PINBAL_DESESTIMAT, ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO };    
     
+    
+    public static final String CONSENTIMENT_TIPUS_SI = "si";
+    public static final String CONSENTIMENT_TIPUS_LLEI = "llei";
+    public static final String CONSENTIMENT_TIPUS_NOOP = "noop";
+
+    public static final String CONSENTIMENT_PUBLICAT = "publicat";
+    public static final String CONSENTIMENT_ADJUNT = "adjunt";
+    
 }

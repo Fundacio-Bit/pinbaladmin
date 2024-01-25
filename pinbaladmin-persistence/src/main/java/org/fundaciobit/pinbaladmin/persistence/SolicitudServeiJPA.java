@@ -57,7 +57,7 @@ public class SolicitudServeiJPA implements SolicitudServei {
     @Column(name="tipusconsentiment",length = 255)
     java.lang.String tipusConsentiment;
 
-    @Column(name="consentiment",length = 255)
+    @Column(name="consentiment",nullable = false,length = 255)
     java.lang.String consentiment;
 
     @Column(name="enllazconsentiment",length = 255)
@@ -110,11 +110,12 @@ public class SolicitudServeiJPA implements SolicitudServei {
     this.fechaCaduca=fechaCaduca;
 }
   /** Constructor dels valors Not Null */
-  public SolicitudServeiJPA(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID) {
+  public SolicitudServeiJPA(long id , long solicitudID , long serveiID , java.lang.Long estatSolicitudServeiID , java.lang.String consentiment) {
     this.id=id;
     this.solicitudID=solicitudID;
     this.serveiID=serveiID;
     this.estatSolicitudServeiID=estatSolicitudServeiID;
+    this.consentiment=consentiment;
 }
   public SolicitudServeiJPA(SolicitudServei __bean) {
     this.setId(__bean.getId());

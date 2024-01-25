@@ -73,12 +73,18 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.TIPUSCONSENTIMENT)}">
           <td>
-          ${solicitudServei.tipusConsentiment}
+          <c:set var="tmp">${solicitudServei.tipusConsentiment}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForTipusConsentiment[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CONSENTIMENT)}">
           <td>
-          ${solicitudServei.consentiment}
+          <c:set var="tmp">${solicitudServei.consentiment}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ENLLAZCONSENTIMENT)}">

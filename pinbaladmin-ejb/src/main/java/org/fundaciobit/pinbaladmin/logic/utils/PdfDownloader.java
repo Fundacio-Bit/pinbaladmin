@@ -145,7 +145,7 @@ public class PdfDownloader {
     protected static FileInfo getPdfUrlFromHtml(String url, String html, boolean debug) throws Exception {
 
         for (HtmlPagePdfUrlParser parser : AVAILABLE_HTML_PARSERS) {
-            String urlToPdf = parser.parse(url, html);
+            String urlToPdf = parser.parse(url, html, debug);
 
             if (urlToPdf != null) {
                 FileInfo fi = downloadPDFFromBoeBoibUrl(urlToPdf, debug);
@@ -209,14 +209,14 @@ public class PdfDownloader {
          * @param html
          * @return null si no troba els resultats esperats. URL al pdf.
          */
-        public abstract String parse(String url, String htmlText);
+        public abstract String parse(String url, String htmlText, boolean debug);
 
     }
 
     protected static class BoeParser extends HtmlPagePdfUrlParser {
 
         @Override
-        public String parse(String url, String htmlText) {
+        public String parse(String url, String htmlText, boolean debug) {
             /*
              <a target="_blank" title="Abre el PDF en una nueva ventana" href="/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf">PDF</a>
              */
@@ -253,12 +253,16 @@ public class PdfDownloader {
     protected static class BoibParser extends HtmlPagePdfUrlParser {
 
         @Override
-        public String parse(String url, String htmlText) {
+        public String parse(String url, String htmlText, boolean debug) {
 
             // /eboibfront/img/ico/ico_pdf.gif\" alt=\"Documento pdf\">&nbsp;<a class=\"document\" rel=\"external\" href=\"/eboibfront/pdf/es/2023/25/1130476\" 
 
-            int index = htmlText.indexOf("/eboibfront/img/ico/ico_pdf.gif");
+            String toSearch = "<img src=\"/eboibfront/img/ico/ico_pdf.gif\" alt=\"Documento adjunto\" />";
+            //"/eboibfront/img/ico/ico_pdf.gif"
+            int index = htmlText.indexOf(toSearch);
 
+            
+            
             if (index != -1) {
 
                 final String href = "href=\"";
@@ -274,8 +278,13 @@ public class PdfDownloader {
                     try {
                         URL u = new URL(url);
 
-                        return u.getProtocol() + "://" + u.getHost() + (u.getPort() == -1 ? "" : (":" + u.getPort()))
-                                + htmlText.substring(index, index2);
+                        String PdfURL = htmlText.substring(index, index2);
+                        String newUrl = u.getProtocol() + "://" + u.getHost() + (u.getPort() == -1 ? "" : (":" + u.getPort()))
+                                + PdfURL;
+                        if (debug) {
+                            System.out.println("PdfURL: " + PdfURL);
+                        }
+                        return newUrl;
 
                     } catch (MalformedURLException e) {
                         // TODO Auto-generated catch block

@@ -300,7 +300,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         config.setIdentificadorSolicitante("S0711001H");
         config.setUnidadTramitadora("Fundacio BIT");
 
-        config.setCodProcedimiento("PREALTAS");
+        config.setCodProcedimiento(Configuracio.getApiPinbalCodiProcediment());
 
         /**
         SVDPIDSOLAUTWS01    | Solicitud de autorizaciones en PID
@@ -622,17 +622,19 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String tipo = null;
         String enlace = null;
 
+        final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+        final String PINBAL_CONSENTIMENT_SI = "Si";
+        final String PINBAL_CONSENTIMENT_NOOP= "NoOpo";
+        
         for (SolicitudServeiJPA solSerJPA : set) {
-            consentiment = solSerJPA.getConsentiment(); //Si, Llei, No oposició
+            consentiment = solSerJPA.getConsentiment(); //si, llei, noop
             if (consentiment != null) {
-                if ("Llei".equals(consentiment) || "Ley".equals(consentiment)) {
-
-                    cons.setTipo("Ley");
-                    log.info("CONS: Ley");
+                if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+                    cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+                    log.info("CONS: "  + PINBAL_CONSENTIMENT_LLEI);
                     return cons;
-
                 } else {
-                    tipo = consentiment.startsWith("S") ? "Si" : "NoOpo";
+                    tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI : PINBAL_CONSENTIMENT_NOOP;
                     enlace = solSerJPA.getEnllazConsentiment();
 
                     if (enlace != null && enlace.trim().length() != 0) {
@@ -730,7 +732,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento();
                     String enlace = ss.getEnllazNormaLegal();
 
-                    boolean debug = false;
+                    boolean debug = true;
                     FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
 
                     if (normaFileInfo != null) {
@@ -948,17 +950,19 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         String tipo = null;
         String enlace = null;
 
+        final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+        final String PINBAL_CONSENTIMENT_SI = "Si";
+        final String PINBAL_CONSENTIMENT_NOOP= "NoOpo";
+        
         for (SolicitudServeiJPA solSerJPA : set) {
-            consentiment = solSerJPA.getConsentiment(); //Si, Llei, No oposició
+            consentiment = solSerJPA.getConsentiment(); //si, llei, noop
             if (consentiment != null) {
-                if ("Llei".equals(consentiment) || "Ley".equals(consentiment)) {
-
-                    cons.setTipo("Ley");
-                    log.info("CONS: Ley");
+                if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+                    cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+                    log.info("CONS: "  + PINBAL_CONSENTIMENT_LLEI);
                     return cons;
-
                 } else {
-                    tipo = consentiment.startsWith("S") ? "Si" : "NoOpo";
+                    tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI : PINBAL_CONSENTIMENT_NOOP;
                     enlace = solSerJPA.getEnllazConsentiment();
 
                     if (enlace != null && enlace.trim().length() != 0) {
