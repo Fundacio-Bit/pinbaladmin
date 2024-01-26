@@ -42,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -107,8 +108,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
             emailFilterForm.setAddButtonVisible(false);
             emailFilterForm.setEditButtonVisible(false);
-            emailFilterForm.setDeleteSelectedButtonVisible(false);
-            emailFilterForm.setVisibleMultipleSelection(false);
+
+            emailFilterForm.setVisibleMultipleSelection(true);            
+            emailFilterForm.setDeleteSelectedButtonVisible(true);
 
             emailFilterForm.setOrderBy(DATAENVIAMENT.javaName);
             emailFilterForm.setOrderAsc(false);
@@ -606,6 +608,43 @@ public class LlistaCorreusOperadorController extends EmailController {
     @Override
     public boolean isActiveFormView() {
         return false;
+    }
+
+    @Override
+    public String deleteSelected(HttpServletRequest request, HttpServletResponse response,
+            @ModelAttribute EmailFilterForm filterForm) throws Exception {
+
+        if (!isActiveDelete()) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        try {
+            final boolean enableCertificationCheck = false;
+            EmailReader er = new EmailReader(enableCertificationCheck);
+
+            if (er.getCountMessages() == cachesize(request)) {
+
+                String[] seleccionats = filterForm.getSelectedItems();
+                String redirect = null;
+                if (seleccionats != null && seleccionats.length != 0) {
+                    for (int i = seleccionats.length; i > 0; i--) {
+                        redirect = eliminarEmail(stringToPK(seleccionats[i - 1]), request, response);
+                    }
+                }
+                if (redirect == null) {
+                    redirect = getRedirectWhenDelete(request, null, null);
+                }
+
+                return redirect;
+            } else {
+                HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
+            }
+        } catch (Exception e) {
+            String msg = "Error esborrant correus: " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+        return getRedirectWhenDelete(request, null, null);
     }
 
 }
