@@ -590,7 +590,7 @@ public class LlistaCorreusOperadorController extends EmailController {
             throw new I18NException("genapp.comodi", e.getMessage());
         }
 
-        log.info("XYZ ZZZ findByPrimaryKey(" + pos + ") => " + emi);
+        log.info("XYZ ZZZ findByPrimaryKey(" + pos + ") => " + emi.getSubject());
 
         return message2email(emi);
     }

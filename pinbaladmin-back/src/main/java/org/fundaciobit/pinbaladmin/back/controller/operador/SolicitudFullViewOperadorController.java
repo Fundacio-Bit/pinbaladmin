@@ -42,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -145,51 +146,57 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       
       if (_jpa.getEntitatEstatal() == null) {
 
-          log.info("Estat PBL: " + solicitud.getEstatpinbal());
-
-          AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
-
-          AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-                  "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
-
-          AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-                  "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
-
-          if (solicitud.getEstatpinbal() == null) {
-              solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
-          }
-
-          int estatPinbal = solicitud.getEstatpinbal();
-
-          if (estatPinbal >= 0) {
-              solicitudForm.addAdditionalButton(consulta);
-
-          }
-
-          switch (solicitud.getEstatpinbal()) {
-              case Constants.ESTAT_PINBAL_ERROR:
-              case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-              case Constants.ESTAT_PINBAL_NO_APROVAT:
-              case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-              case Constants.ESTAT_PINBAL_DESESTIMAT:
-                  solicitudForm.addAdditionalButton(alta);
-              break;
-
-              case Constants.ESTAT_PINBAL_APROVAT:
-              case Constants.ESTAT_PINBAL_SUBSANAT:
-                  solicitudForm.addAdditionalButton(modificacio);
-              break;
-
-              case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-              case Constants.ESTAT_PINBAL_DESISTIT:
-              case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-              case Constants.ESTAT_PINBAL_AUTORITZAT:
-              case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-              break;
-
-              default:
-              break;
+          if (!isFirmatPelDirector(solicitud)) {
+              solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
+                      getContextWeb() + "/afegirFormulariFirmat/" + soliID,
+                      "btn-warning btn-api-pinbal"));
+          }else {
+              log.info("Estat PBL: " + solicitud.getEstatpinbal());
+    
+              AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+                      "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
+    
+              AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+                      "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
+    
+              AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+                      "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
+    
+              if (solicitud.getEstatpinbal() == null) {
+                  solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+              }
+    
+              int estatPinbal = solicitud.getEstatpinbal();
+    
+              if (estatPinbal >= 0) {
+                  solicitudForm.addAdditionalButton(consulta);
+    
+              }
+    
+              switch (solicitud.getEstatpinbal()) {
+                  case Constants.ESTAT_PINBAL_ERROR:
+                  case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+                  case Constants.ESTAT_PINBAL_NO_APROVAT:
+                  case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+                  case Constants.ESTAT_PINBAL_DESESTIMAT:
+                      solicitudForm.addAdditionalButton(alta);
+                  break;
+    
+                  case Constants.ESTAT_PINBAL_APROVAT:
+                  case Constants.ESTAT_PINBAL_SUBSANAT:
+                      solicitudForm.addAdditionalButton(modificacio);
+                  break;
+    
+                  case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+                  case Constants.ESTAT_PINBAL_DESISTIT:
+                  case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+                  case Constants.ESTAT_PINBAL_AUTORITZAT:
+                  case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+                  break;
+    
+                  default:
+                  break;
+              }
           }
       }
       
@@ -260,6 +267,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
           return -1;
       }
   }
+  
   private ScspTitular getTitular(Long fitxerID) throws Exception {
 
       File f = FileSystemManager.getFile(fitxerID);
@@ -745,5 +753,35 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   }
   
   
+  public boolean isFirmatPelDirector(SolicitudJPA soli) throws I18NException {
 
+      List<Long> listDocumentsSolicitud = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+              DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID()));
+
+      List<Document> documentsPDF = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud),
+              DocumentFields.TIPUS.equal(Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF)));
+
+      for (Document document : documentsPDF) {
+          if (document.getFitxerFirmatID() != null) {
+              return true;
+          }
+      }
+      
+      return false;
+  }
+
+  @RequestMapping(value = "/afegirFormulariFirmat/{soliID}", method = RequestMethod.GET)
+  public String afegirFormulariFirmat(HttpServletRequest request, HttpServletResponse response,
+          @PathVariable Long soliID) throws I18NException {
+      
+      List<DocumentSolicitud> listDocumentsSolicitud = documentSolicitudEjb.select(DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+      for (DocumentSolicitud docSol: listDocumentsSolicitud) {
+          Document document = documentEjb.findByPrimaryKey(docSol.getDocumentID());
+          
+          if (document.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+              return "redirect:" + "/operador" +  "/solicituddocumentonlycontent/" + docSol.getDocumentSolicitudID() + "/edit";
+          }
+      }
+      return null;
+  }
 }
