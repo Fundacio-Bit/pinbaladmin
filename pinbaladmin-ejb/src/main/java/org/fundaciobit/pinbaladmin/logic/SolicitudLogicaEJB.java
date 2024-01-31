@@ -721,7 +721,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
-            if (!balear) {
+            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+            
+            if (!balear && estatPendentMadrid) {
 
                 es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio();
 
@@ -732,7 +734,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento();
                     String enlace = ss.getEnllazNormaLegal();
 
-                    boolean debug = true;
+                    boolean debug = false;
                     FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
 
                     if (normaFileInfo != null) {
@@ -1045,8 +1047,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
-            if (!balear) {
-
+            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+            
+            if (!balear && estatPendentMadrid) {
                 es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio();
 
                 es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma norma = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Norma();

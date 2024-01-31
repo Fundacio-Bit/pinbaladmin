@@ -96,12 +96,21 @@ public class AltaSolicitudPinbalOperadorController {
                     errors.add("Fa falta un document d'autorització");
                 }
 
+                if (solicitudA.getProcedimiento().getServicios().getServicio().size() == 0) {
+                    errors.add("No hi ha serveis pendents d'autoritzar");
+                }
+                
                 request.getSession().setAttribute("solicitud", solicitudA);
                 mav = new ModelAndView("altasolicitudpinbal");
                 mav.addObject("solicitud", solicitudA);
             } else {
                 es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudM = solicitudLogicaEjb
                         .getDadesModificarSolicitudApiPinbal(soliID, prop);
+                
+                if (solicitudM.getProcedimiento().getServicios().getServicio().size() == 0) {
+                    errors.add("No hi ha serveis pendents d'autoritzar");
+                }
+
                 request.getSession().setAttribute("solicitud", solicitudM);
                 mav = new ModelAndView("modificaciosolicitudpinbal");
                 mav.addObject("solicitud", solicitudM);
