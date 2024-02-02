@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -21,6 +23,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
@@ -34,7 +37,9 @@ import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
@@ -1145,7 +1150,27 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         // Si no se encuentra se devolverá 0 (Pruebas) para indicar que no se encontró ningún mapeo correspondiente en la nueva lista.
         return 0;
     }
-    
+
+    @Override
+    public Solicitud getSolicitudFromTramitID(String ticketGFE) throws Exception {
+        
+        final String likeStr = "%tramitid[" + ticketGFE + "]%";
+
+        Where w = SolicitudFields.NOTES.like(likeStr);
+        
+        log.info("Where: "  + w.toSQL());
+        
+        List<Solicitud> llistat = this.select(w);
+        int size = llistat.size();
+        
+        if (size == 1) {
+            return llistat.get(0);
+        }else if (size == 0) {
+            throw new Exception("No s'ha trobat la solicitud [" + ticketGFE + "]a la BBDD");
+        } else {
+            throw new Exception("Hi ha mes d'una solicitud amb aquest codi tramit");
+        }
+    }
 //    
 //    /**
 //     * Funció que s'executa cada vespre a les 5:00 i actualitza l'estat de les solicituds a pinbal

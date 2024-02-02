@@ -17,7 +17,6 @@
 
 	<name>PinbalAdmin - Ear</name>
 
-
 	<properties>
 		<!-- Format del timestamp -->
 		<maven.build.timestamp.format>dd/MM/yyyy HH:mm</maven.build.timestamp.format>
@@ -220,13 +219,24 @@
 			<version>2.13.0</version>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+
+
+		<!-- API REST de PinbalAdmin -->
+
+		<!-- API EXTERNA START -->
+		<!-- http://localhost:8080/pinbaladminapi/externa/index.html -->
 		<dependency>
-			<groupId>apache-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.0</version>
+			<groupId>org.fundaciobit.pinbaladmin</groupId>
+			<artifactId>pinbaladmin-api-externa</artifactId>
+			<version>1.0</version>
+			<type>war</type>
 		</dependency>
-
-
+		<!-- API EXTERNA END -->
 	</dependencies>
 
 
@@ -265,9 +275,10 @@
 
 					<displayName>PinbalAdmin</displayName>
 					<description>PinbalAdmin</description>
-                    <skinnyWars>true</skinnyWars>
+
 					<generateApplicationXml>true</generateApplicationXml>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <skinnyWars>true</skinnyWars>
 					<includeLibInApplicationXml>false</includeLibInApplicationXml>
 					<!--suppress UnresolvedMavenProperty -->
 					<!-- Nom mòduls d'acord amb punt 4.2 de l'Estàndard CAIB -->
@@ -295,6 +306,8 @@
 							<contextRoot>pinbaladmin</contextRoot>
                             <bundleFileName>pinbaladmin-back.war</bundleFileName>
 						</webModule>
+                        
+                        
 
 						<ejbModule>
 							<groupId>org.fundaciobit.pinbaladmin</groupId>
@@ -308,6 +321,14 @@
                           <bundleFileName>pinbaladmin-ws-domini-sistra-server.jar</bundleFileName>
                         </ejbModule>
 
+						<!-- API EXTERNA START -->
+						<webModule>
+							<groupId>org.fundaciobit.pinbaladmin</groupId>
+							<artifactId>pinbaladmin-api-externa</artifactId>
+							<contextRoot>/pinbaladminapi/externa</contextRoot>
+							<bundleFileName>pinbaladmin-api-externa.war</bundleFileName>
+						</webModule>
+						<!-- API EXTERNA END -->
 					</modules>
 
 				</configuration>

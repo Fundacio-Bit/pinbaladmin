@@ -8529,5 +8529,5 @@
   "generateBack": true,
   "generateFront": false,
   "generateApiInterna": false,
-  "generateApiExterna": false
+  "generateApiExterna": true
 }
