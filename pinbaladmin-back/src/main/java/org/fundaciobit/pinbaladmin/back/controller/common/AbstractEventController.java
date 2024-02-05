@@ -233,8 +233,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
                 eventForm.addHiddenField(NOLLEGIT);
                 eventForm.addHiddenField(DESTINATARI);
                 eventForm.addHiddenField(DESTINATARIMAIL);
-                eventForm.addReadOnlyField(DATAEVENT);
-                eventForm.addReadOnlyField(PERSONA);
+                eventForm.addHiddenField(DATAEVENT);
+                eventForm.addHiddenField(PERSONA);
                 eventForm.getEvent().setNoLlegit(true);
                 
             } else {

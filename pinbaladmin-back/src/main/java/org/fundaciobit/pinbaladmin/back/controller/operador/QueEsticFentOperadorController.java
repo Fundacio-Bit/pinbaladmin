@@ -213,7 +213,7 @@ public class QueEsticFentOperadorController {
             break;
         }
 
-        String hash = encode("PINBAL: " + tipus + ": " + titol);
+        String hash = encode(tipus + ": " + titol);
 
         String[] missatge = { tipus, titol, hash };
         fullevents.put(event + id, missatge);
@@ -234,9 +234,9 @@ public class QueEsticFentOperadorController {
 
             PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT);
 
-            preparedStatement.setInt(1, -3);
-            preparedStatement.setString(2, usuari);
-            preparedStatement.setInt(3, 28);
+            int accioID = -3;
+            String usuariID = usuari;
+            int projecteID = 1021; //PINBAL
 
             Date date;
             try {
@@ -246,16 +246,21 @@ public class QueEsticFentOperadorController {
                 dateStr = SDF.format(date);
             }
             Timestamp data = new Timestamp(date.getTime());
-            preparedStatement.setTimestamp(4, data);
 
-            String missatge = decode(msgEnc);
-            preparedStatement.setString(5, missatge);
+            String dada1 = decode(msgEnc);
+
+            preparedStatement.setInt(1, accioID);
+            preparedStatement.setString(2, usuariID);
+            preparedStatement.setInt(3, projecteID);
+            preparedStatement.setTimestamp(4, data);
+            preparedStatement.setString(5, dada1);
 
             int row = preparedStatement.executeUpdate();
             // rows affected
             if (row == 1) {
-                log.info("Afegit missatge: " + missatge);
+                log.info("Afegit missatge: " + dada1);
             }
+            
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (Exception e) {

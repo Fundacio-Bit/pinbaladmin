@@ -138,160 +138,32 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         super.delete(TramitAPersAutFields.TRAMITID.equal(tramitID));
     }
 
-    private Long generaXml(Long tramitID) throws I18NException {
-
+    private Long generarXMLFromMap(Map<String, Object> map) {
         try {
-            String fileXml=Configuracio.getTemplateTramitSistraXml();
-            log.info("fileXml: "+fileXml);
-            
+
+            String fileXml = Configuracio.getTemplateTramitSistraXml();
+            log.info("fileXml: " + fileXml);
+
             String plantilla = FileUtils.readFileToString(new File(fileXml), Charset.defaultCharset());
 
-            Map<String, Object> map = new HashMap<String, Object>();
-
-            List<List<?>> listas = Arrays.asList(this.select(TRAMITID.equal(tramitID)),
-                    tramitBEjb.select(TramitBDadesSoliFields.TRAMITID.equal(tramitID)),
-                    tramitCEjb.select(TramitCDadesCesiFields.TRAMITID.equal(tramitID)),
-                    tramitDEjb.select(TramitDCteAutFields.TRAMITID.equal(tramitID)),
-                    tramitEEjb.select(TramitECteAudFields.TRAMITID.equal(tramitID)),
-                    tramitFEjb.select(TramitFCteTecFields.TRAMITID.equal(tramitID)),
-                    tramitGEjb.select(TramitGDadesTitFields.TRAMITID.equal(tramitID)),
-                    tramitHEjb.select(TramitHProcFields.TRAMITID.equal(tramitID)),
-                    tramitIEjb.select(TramitIServFields.TRAMITID.equal(tramitID)), 
-                    tramitJEjb.select(TramitJConsentFields.TRAMITID.equal(tramitID)));
-
-            List<String> keys = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
-
-            for (int i = 0; i < listas.size(); i++) {
-                List<?> lista = listas.get(i);
-                if (!lista.isEmpty()) {
-                    String letra = keys.get(i);
-                    Object obj = lista.get(0);
-                    map.put(letra, obj);
-
-                    switch (letra) {
-                        case "A":
-                            TramitAPersAut A = (TramitAPersAut) obj;
-                            if (A.getLlinatge2() == null) {
-                                A.setLlinatge2("");
-                            }
-                            String fullNameA = toFullName(A.getNom(), A.getLlinatge1(), A.getLlinatge2());
-                            map.put("fullNameA", fullNameA);
-                        break;
-                        case "B":
-                            TramitBDadesSoli B = (TramitBDadesSoli) obj;
-                            String tipussolicitudNom = tramitBEjb.getTipussolicitudValue(B.getTipussolicitud());
-                            map.put("tipussolicitudNom", tipussolicitudNom);
-
-                            map.put("pre", "Preproducció");
-                            map.put("pro", "Producció");
-                        break;
-                        case "C":
-                            TramitCDadesCesi C = (TramitCDadesCesi) obj;
-                            String denominacioNom = tramitCEjb.getDenominacioValue(C.getDenominacio());
-                            map.put("denominacioNom", denominacioNom);
-
-                            String municipiNom = tramitCEjb.getMunicipiValue(C.getMunicipi());
-                            map.put("municipiNom", municipiNom);
-                        break;
-                        case "D":
-                            TramitDCteAut D = (TramitDCteAut) obj;
-                            String fullNameD = toFullName(D.getNom(), D.getLlinatge1(), D.getLlinatge2());
-                            map.put("fullNameD", fullNameD);
-                        break;
-                        case "E":
-                            TramitECteAud E = (TramitECteAud) obj;
-                            String fullNameE = toFullName(E.getNom(), E.getLlinatge1(), E.getLlinatge2());
-                            map.put("fullNameE", fullNameE);
-
-                        break;
-                        case "F":
-                            TramitFCteTec F = (TramitFCteTec) obj;
-                            String fullNameF = toFullName(F.getNom(), F.getLlinatge1(), F.getLlinatge2());
-                            map.put("fullNameF", fullNameF);
-
-                        break;
-                        case "G":
-                            TramitGDadesTit G = (TramitGDadesTit) obj;
-                            String fullNameG = toFullName(G.getNom(), G.getLlinatge1(), G.getLlinatge2());
-                            map.put("fullNameG", fullNameG);
-                        break;
-                        case "H":
-                            TramitHProc H = (TramitHProc) obj;
-
-                            Long tipus = Long.parseLong(H.getTipus());
-                            String tipusProcedimentNom = getTipusProcediment(tipus);
-                            map.put("tipusProcedimentNom", tipusProcedimentNom);
-
-                            String dataCaducitat;
-                            if (H.isCaducitat()) {
-                                dataCaducitat = SDF.format(H.getCaducitatdata());
-                            } else {
-                                dataCaducitat = "";
-                            }
-                            map.put("dataCaducitat", dataCaducitat);
-                        break;
-                        case "I":
-                            map.put("noop", "No Oposició");
-                            map.put("llei", "Llei");
-
-                            map.put("servicios", lista);
-                            String[] codis = new String[lista.size()];
-                            String[] noms = new String[lista.size()];
-                            for (int j = 0; j < lista.size(); j++) {
-                                TramitIServ I = (TramitIServ) lista.get(j);
-                                codis[j] = I.getCodi();
-                                noms[j] =  tramitIEjb.getServeiValue(I.getNom());
-                                if (I.getUrlconsentiment() == null) {
-                                    I.setUrlconsentiment("");
-                                }
-                            }
-
-                            /*
-                            CONSENTIMIENTO:
-                            noop -> No oposició
-                            llei -> Llei
-                            
-                            LDECONSENTIMIENTO:
-                            0 -> ...
-                            1 -> Publicat
-                            2 -> Adjunt
-                             */
-
-                            String codisServeisString = String.join(",", codis);
-                            map.put("codisServeisString", codisServeisString);
-                            map.put("nomServeis", noms);
-                        break;
-                        case "J":
-                            TramitJConsent J = (TramitJConsent) obj;
-//                            J.get
-                        break;
-                        
-                    }
-                }
-            }
             String result = TemplateEngine.processExpressionLanguage(plantilla, map);
-            
+
             String fileName = "D:/Projectes/pinbaladmin-files/formulario.xml";
-            
-            FileUtils.writeStringToFile(new File(fileName), result,
-                    StandardCharsets.UTF_8, false);
-            
+
+            FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
+
             byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
             Fitxer f = fitxerEjb.create("formulari.xml", data.length, "aplication.xml", null);
             FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
             return f.getFitxerID();
-
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
     
-
     @Override
     public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException {
         /*
@@ -306,7 +178,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         //Constants
         Long estatID = Constants.SOLICITUD_ESTAT_PENDENT;
-        String notesSoli = "Procediment creat amb Formulari. TramitID[" +  tramitID + "]";
+        String notesSoli = "Procediment creat amb Formulari. TramitID[" + tramitID + "]";
         Timestamp dataInici = new Timestamp(System.currentTimeMillis());
         Integer estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
         String creador = "pvico";
@@ -332,6 +204,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String dir3 = null;
         String nif = null;
         boolean produccio = true;
+        List<TramitIServ> listaTramitsI = null;
+        TramitJConsent tramitJ = null;
 
         //Depercats
         Long departamentID = null;
@@ -345,10 +219,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                 tramitEEjb.select(TramitECteAudFields.TRAMITID.equal(tramitID)),
                 tramitFEjb.select(TramitFCteTecFields.TRAMITID.equal(tramitID)),
                 tramitGEjb.select(TramitGDadesTitFields.TRAMITID.equal(tramitID)),
-                tramitHEjb.select(TramitHProcFields.TRAMITID.equal(tramitID))
-                //                    tramitIEjb.select(TramitIServFields.TRAMITID.equal(tramitID)), 
-                // tramitJEjb.select(TramitJConsentFields.TRAMITID.equal(tramitID))
-                );
+                tramitHEjb.select(TramitHProcFields.TRAMITID.equal(tramitID)),
+                tramitIEjb.select(TramitIServFields.TRAMITID.equal(tramitID)),
+                tramitJEjb.select(TramitJConsentFields.TRAMITID.equal(tramitID)));
 
         List<String> keys = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
 
@@ -362,20 +235,19 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                 switch (letra) {
                     case "A":
                         TramitAPersAut A = (TramitAPersAut) obj;
-
+                        if (A.getLlinatge2() == null) {
+                            A.setLlinatge2("");
+                        }
                         String fullNameA = toFullName(A.getNom(), A.getLlinatge1(), A.getLlinatge2());
+                        map.put("fullNameA", fullNameA);
                         personaContacte = fullNameA;
                         personaContacteEmail = A.getMail();
-
                     break;
                     case "B":
                         TramitBDadesSoli B = (TramitBDadesSoli) obj;
-
                         produccio = B.getEntorn().equals("pro");
-
                         String tipussolicitudNom = tramitBEjb.getTipussolicitudValue(B.getTipussolicitud());
                         map.put("tipussolicitudNom", tipussolicitudNom);
-
                         map.put("pre", "Preproducció");
                         map.put("pro", "Producció");
                     break;
@@ -383,13 +255,16 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         TramitCDadesCesi C = (TramitCDadesCesi) obj;
 
                         dir3 = C.getDir3responsable();
-                        denominacio = tramitCEjb.getDenominacioValue(C.getDenominacio());
+                        organid = organJEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3));
+
                         nif = C.getNif();
 
-                        organid = organJEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3));
+                        denominacio = tramitCEjb.getDenominacioValue(C.getDenominacio());
+                        map.put("denominacioNom", denominacio);
 
                         String municipiNom = tramitCEjb.getMunicipiValue(C.getMunicipi());
                         map.put("municipiNom", municipiNom);
+
                     break;
                     case "D":
                         TramitDCteAut D = (TramitDCteAut) obj;
@@ -398,17 +273,15 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     break;
                     case "E":
                         TramitECteAud E = (TramitECteAud) obj;
-
                         String fullNameE = toFullName(E.getNom(), E.getLlinatge1(), E.getLlinatge2());
+                        map.put("fullNameE", fullNameE);
                         responsableProcNom = fullNameE;
                         responsableProcEmail = E.getMail();
-
                     break;
                     case "F":
                         TramitFCteTec F = (TramitFCteTec) obj;
                         String fullNameF = toFullName(F.getNom(), F.getLlinatge1(), F.getLlinatge2());
                         map.put("fullNameF", fullNameF);
-
                     break;
                     case "G":
                         TramitGDadesTit G = (TramitGDadesTit) obj;
@@ -417,22 +290,29 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     break;
                     case "H":
                         TramitHProc H = (TramitHProc) obj;
-
                         procedimentCodi = H.getCodi();
                         codiDescriptiu = H.getDescripcio();
                         procedimentNom = H.getNom();
-
                         Long tipus = Long.parseLong(H.getTipus());
                         procedimentTipus = getTipusProcediment(tipus);
+                        map.put("tipusProcedimentNom", procedimentTipus);
 
                         dataFi = H.getCaducitatdata();
-
+                        String dataFiStr;
+                        if (H.isCaducitat()) {
+                            dataFiStr = SDF.format(dataFi);
+                        } else {
+                            dataFiStr = "";
+                        }
+                        map.put("dataCaducitat", dataFiStr);
                     break;
                     case "I":
+                        listaTramitsI = (List<TramitIServ>) lista;
+
                         map.put("noop", "No Oposició");
                         map.put("llei", "Llei");
+                        map.put("servicios", listaTramitsI);
 
-                        map.put("servicios", lista);
                         String[] codis = new String[lista.size()];
                         String[] noms = new String[lista.size()];
                         for (int j = 0; j < lista.size(); j++) {
@@ -440,31 +320,19 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                             codis[j] = I.getCodi();
                             noms[j] = tramitIEjb.getServeiValue(I.getNom());
                         }
-
-                        /*
-                        CONSENTIMIENTO:
-                        noop -> No oposició
-                        llei -> Llei
-                        
-                        LDECONSENTIMIENTO:
-                        0 -> ...
-                        1 -> Publicat
-                        2 -> Adjunt
-                         */
-
                         String codisServeisString = String.join(",", codis);
                         map.put("codisServeisString", codisServeisString);
                         map.put("nomServeis", noms);
                     break;
                     case "J":
-                        TramitJConsent J = (TramitJConsent) obj;
+                        tramitJ = (TramitJConsent) obj;
                     break;
-
                 }
             }
         }
+
         //Documents
-        Long solicitudXmlID = generaXml(tramitID);
+        Long solicitudXmlID = generarXMLFromMap(map);
         Long documentSolicitudID = null; //generaDcoumentSolicitudAmbXML();
 
         soli.setProcedimentCodi(procedimentCodi);
@@ -501,9 +369,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         eventSolicitudCreada(creador, soliID);
 
-        afegirServeisSolicitud(tramitID, dataFi, soliID);
-        
-        afegirDocumentConsentiment(tramitID, soliID);
+        afegirServeisSolicitud(listaTramitsI, dataFi, soliID);
+
+        afegirDocumentConsentiment(tramitJ, soliID);
 
         /*
          * Afegir documents:
@@ -516,12 +384,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         return solicitud;
     }
 
-    private void afegirDocumentConsentiment(Long tramitID, Long soliID) throws I18NException {
+    private void afegirDocumentConsentiment(TramitJConsent J, Long soliID) throws I18NException {
 
-        List<TramitJConsent> queryConsentiment = tramitJEjb.select(TramitJConsentFields.TRAMITID.equal(tramitID));
-        if (queryConsentiment.size() == 1) {
-            TramitJConsent J = (TramitJConsent) queryConsentiment.get(0);
-
+        if (J != null) {
             Long fitxerID = J.getAdjuntID();
 
             Long tipus = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
@@ -536,10 +401,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     }
 
-    private void afegirServeisSolicitud(Long tramitID, Timestamp dataFi, Long soliID) throws I18NException {
+    private void afegirServeisSolicitud( List<TramitIServ> listaTramitsI, Timestamp dataFi, Long soliID) throws I18NException {
         {
-            List<TramitIServ> listaTramitsI = tramitIEjb.select(TramitIServFields.TRAMITID.equal(tramitID));
-
             for (TramitIServ I : listaTramitsI) {
                 String codiServei = I.getCodi();
                 log.info("Codi: " + codiServei);
@@ -547,7 +410,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                 List<Servei> llistaSservei = serveiEjb.select(ServeiFields.CODI.equal(codiServei));
                 
                 if (llistaSservei.size() != 1) {
-                    break;
+                    continue;
                 }
 
                 ServeiJPA servei = (ServeiJPA) llistaSservei.get(0);
@@ -560,7 +423,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
                 if (count == 0) {
 
-                    Long estatSolicitudServeiID = 10L; //ESTATS_SOLICITUD_SERVEI
+                    Long estatSolicitudServeiID = 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
 
                     String normaLegal = I.getNorma();
                     String enllazNormaLegal = I.getUrlnorma();

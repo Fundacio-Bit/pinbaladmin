@@ -221,13 +221,14 @@ public class TramitAOperadorController extends TramitAPersAutController {
             generarExcelDeServeis(soli);
             
             log.info("Generat");
+            return "redirect:" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soli.getSolicitudID();
             
         } catch (Exception e) {
             log.error(e);
             HtmlUtils.saveMessageError(request, "Error creant solicitud: " + e.getMessage());
+            return "redirect:" + TramitAOperadorController.RETURN_URL;
         }
 
-        return "redirect:" + TramitAOperadorController.RETURN_URL;
     }
 
     public TramitAPersAutFilterForm getTramitAPersAutFilterForm(Integer pagina, ModelAndView mav,
