@@ -570,9 +570,14 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
     
     if (organGestor.getCif().equals("S0711001H")) {
-        Organ dgtic = organEjb.findByPrimaryKey(70012);
-        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+        String dir3Dgtic = "A04027005";
+        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+        if (organ.size() == 1) {
+            Organ dgtic = organ.get(0);
+            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+        }
+        
     }
 
     

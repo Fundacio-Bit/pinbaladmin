@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.api.externa.secure.tramitsistra;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Locale;
 import java.util.UUID;
@@ -26,10 +27,14 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
+import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
 import org.fundaciobit.pluginsib.utils.rest.RestExceptionInfo;
 
@@ -65,6 +70,9 @@ public class TramitSistraService {
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
+    @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
+    protected TramitAPersAutLogicaService tramitAEjb;
+    
     @Path("/formulario")
     @RolesAllowed({ Constants.PAD_WS })
     @SecurityRequirement(name = SEC)
@@ -88,10 +96,38 @@ public class TramitSistraService {
             @Parameter(hidden = true) @Context HttpServletRequest request) throws RestException {
 
         final String methodName = "getUrlFormulari";
-        final String language = "ca";
+        final String language = parametrosFormulario.getIdioma();
 
         try {
+            Timestamp datatramit = new Timestamp(System.currentTimeMillis());
 
+            Usuario u =parametrosFormulario.getUsuario();
+
+            String nif = u.getNif();
+            String nom = u.getNombre();
+            String llinatge1 = u.getApellido1();
+            String llinatge2 = u.getApellido2();
+
+            String mail = "mail@test.com";
+            String telefon = "telf";
+            
+            TramitAPersAutJPA tramitA = new TramitAPersAutJPA(); 
+            
+            tramitA.setNif(nif);
+            tramitA.setNom(nom);
+            tramitA.setLlinatge1(llinatge1);
+            tramitA.setLlinatge2(llinatge2);
+            
+            tramitA.setMail(mail);
+            tramitA.setTelefon(telefon);
+            
+            tramitA.setDatatramit(datatramit);
+            
+            
+            tramitAEjb.create(tramitA);
+            
+            String uuid =  HibernateFileUtil.encryptFileID(tramitA.getTramitid());
+            
             //Amb les dades d'entrada, crear un TramitA, obtenir el tramitID, i retornar la URL amb el tramitB i parametre TramitID.
             
             //Crear un métode per saber si el TramitB que es vol crear ja existeix o no.
@@ -106,11 +142,9 @@ public class TramitSistraService {
             //S'hauria de canviar el tramitid de un Long a un uuid. Per a que ningú pugui modificar la URL. perque a la url, si canvies el tramitid, pots accedir a altres tramits, creats o no.
             //Així nomes el que te la url original pot fer canvis al tramit.
             
-            //I si perd el tramit i el deixa a mitges, serà recuperamble amb la URL amb  uuid.
+            //I si es perd el tramit o es deixa a mitges, serà recuperamble amb la URL amb  uuid.
             
-            String uuid = UUID.randomUUID().toString();
-
-            String toReturn = "pinbaladmin/all/generatramit/" + uuid;
+            String toReturn = "http://ptrias:8080/pinbaladmin/operador/tramitb/new?tramitid=" + uuid;
             Gson gson = new GsonBuilder().create();
 
             return gson.toJson(toReturn);
@@ -142,7 +176,7 @@ public class TramitSistraService {
                     @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Resultado.class)) }) })
 
     public Resultado getDatosFormularioFromTicket(
-            @Parameter(description = "Ticket del fomulario", required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:50125", schema = @Schema(implementation = String.class)) @QueryParam("ticket") String ticket)
+            @Parameter(description = "Ticket del fomulario", required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA==", schema = @Schema(implementation = String.class)) @QueryParam("ticket") String ticket)
             throws RestException {
 
         final String methodName = "getDatosFormularioFromTicket";

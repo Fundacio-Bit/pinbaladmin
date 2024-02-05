@@ -20,6 +20,7 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
@@ -93,8 +94,7 @@ public class TramitIOperadorController extends TramitIServController {
     }
 
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
-        String tramitIDStr = request.getParameter("tramitid");
-        Long tramitID = Long.parseLong(tramitIDStr);
+        Long tramitID = getTramitIDFromRequest(request);
 
         return TRAMITID.equal(tramitID);
     }
@@ -122,8 +122,10 @@ public class TramitIOperadorController extends TramitIServController {
     }
 
     public String redirectToLlistatServeis(HttpServletRequest request) {
-        Long tramitID = (Long) request.getSession().getAttribute("tramitid");
-        return "redirect:" + getContextWeb() + "/list/1?tramitid=" + tramitID;
+        Long tramitId = (Long) request.getSession().getAttribute("tramitid");
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
+        return "redirect:" + getContextWeb() + "/list/1?tramitid=" + uuid;
     }
 
     @Override
@@ -135,11 +137,10 @@ public class TramitIOperadorController extends TramitIServController {
         tramitForm.addHiddenField(TRAMITID);
 
         TramitIServJPA tramitI = tramitForm.getTramitIServ();
-        Long tramitID;
+        Long tramitID = getTramitIDFromRequest(request);
          if (tramitForm.isNou()) {
 
-            String tramitIDStr = request.getParameter("tramitid");
-            tramitID = Long.parseLong(tramitIDStr);
+
             tramitI.setTramitid(tramitID);
 
             tramitI.setNorma("Norma Legal inventada");
@@ -179,8 +180,8 @@ public class TramitIOperadorController extends TramitIServController {
         }
 
         {
-            String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            Long tramitID = getTramitIDFromRequest(request);
+
             log.info("Estamos en I, servicios del tramite " + tramitID);
 
             tramitIServFilterForm.getAdditionalButtons().clear();
@@ -188,8 +189,9 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("", "genapp.cancel",
                     getContextWeb() + "/cancelarTramit/" + tramitID, "btn-secondary"));
 
+            String uuid = request.getParameter("tramitid");
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
-                    getContextWeb() + "/new?tramitid=" + tramitID, "btn-info"));
+                    getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
 
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
             log.info("serveisAfegits: " + serveisAfegits);
@@ -288,6 +290,11 @@ public class TramitIOperadorController extends TramitIServController {
         if (I.getUrlconsentiment() == null) {
             I.setUrlconsentiment("");
         }
+    }
+
+    
+    public Long getTramitIDFromRequest(HttpServletRequest request) {
+        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
     }
 
     

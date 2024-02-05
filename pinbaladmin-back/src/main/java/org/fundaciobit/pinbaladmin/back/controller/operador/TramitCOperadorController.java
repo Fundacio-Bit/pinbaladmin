@@ -13,6 +13,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitCDadesCesiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
 import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
@@ -74,8 +75,10 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         //Cada vegada que es faci create, anar al tramit B
         Long tramitId = tramitCDadesCesiForm.getTramitCDadesCesi().getTramitid();
 
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitDOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitId;
+        return "redirect:" + TramitDOperadorController.CONTEXT_WEB + "/new?tramitid=" + uuid;
     }
 
     @Override
@@ -108,8 +111,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         } else if (tramitForm.isNou()) {
             TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
 
-            String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            Long tramitID = getTramitIDFromRequest(request);
+
             tramitC.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
@@ -157,6 +160,10 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         } else {
             return getTileForm();
         }
+    }
+    
+    public Long getTramitIDFromRequest(HttpServletRequest request) {
+        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
     }
 
 }

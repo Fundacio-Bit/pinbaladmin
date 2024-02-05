@@ -17,6 +17,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcForm;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
@@ -79,8 +80,10 @@ public class TramitHOperadorController extends TramitHProcController {
     public String getRedirectWhenCreated(HttpServletRequest request, TramitHProcForm tramitHProcForm) {
         Long tramitId = tramitHProcForm.getTramitHProc().getTramitid();
 
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitIOperadorController.CONTEXT_WEB + "/list/1?tramitid=" + tramitId;
+        return "redirect:" + TramitIOperadorController.CONTEXT_WEB + "/list/1?tramitid=" + uuid;
     }
 
     @Override
@@ -113,8 +116,8 @@ public class TramitHOperadorController extends TramitHProcController {
         } else if (tramitForm.isNou()) {
             TramitHProcJPA tramitH = tramitForm.getTramitHProc();
 
-            String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            Long tramitID = getTramitIDFromRequest(request);
+
             tramitH.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
@@ -215,4 +218,9 @@ public class TramitHOperadorController extends TramitHProcController {
             }
         }
     }
+    
+    public Long getTramitIDFromRequest(HttpServletRequest request) {
+        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
+    }
+
 }

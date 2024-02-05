@@ -279,6 +279,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 } else {
                     // Es Local
                     solicitudForm.addHiddenField(ENTITATESTATAL);
+                    solicitudForm.addHiddenField(EXPEDIENTPID);
                 }
             } else {
 
@@ -289,11 +290,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                         solicitudForm.addHiddenField(ORGANID);
                     } else {
                         solicitudForm.addHiddenField(ENTITATESTATAL);
+                        solicitudForm.addHiddenField(EXPEDIENTPID);
                     }
+                    solicitudForm.addReadOnlyField(ENTITATESTATAL);
                 }
 
                 // solicitudForm.addReadOnlyField(ENTITATLOCALID);
-                solicitudForm.addReadOnlyField(ENTITATESTATAL);
             }
         } else {
             if (isestatal) {
@@ -303,6 +305,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             } else {
                 solicitudForm.addHiddenField(ENTITATESTATAL);
+                solicitudForm.addHiddenField(EXPEDIENTPID);
                 // solicitudForm.addHiddenField(AREAID);
             }
         }
@@ -508,10 +511,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     adfield.setValueMap(new HashMap<Long, String>());
 
                     solicitudFilterForm.addAdditionalField(adfield);
-
-                    
                     
                     filterList.remove(PINFO);
+                    filterList.remove(EXPEDIENTPID);
                     filterList.remove(ENTITATESTATAL);
                     groupList.remove(ENTITATESTATAL);
                     

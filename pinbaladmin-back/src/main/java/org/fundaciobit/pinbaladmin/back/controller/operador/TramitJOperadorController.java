@@ -9,6 +9,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitJConsentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
@@ -70,8 +71,10 @@ public class TramitJOperadorController extends TramitJConsentController {
     public String getRedirectWhenCreated(HttpServletRequest request, TramitJConsentForm tramitJConsentForm) {
         Long tramitId = tramitJConsentForm.getTramitJConsent().getTramitid();
 
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitJ
-        return "redirect:" + TramitAOperadorController.CONTEXT_WEB + "/generaxml/" + tramitId;
+        return "redirect:" + TramitAOperadorController.CONTEXT_WEB + "/generaxml/" + uuid;
     }
 
     @Override
@@ -102,8 +105,8 @@ public class TramitJOperadorController extends TramitJConsentController {
         } else if (tramitForm.isNou()) {
             TramitJConsentJPA tramitJ = tramitForm.getTramitJConsent();
 
-            String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            Long tramitID = getTramitIDFromRequest(request);
+
             tramitJ.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
@@ -131,6 +134,11 @@ public class TramitJOperadorController extends TramitJConsentController {
         } else {
             return getTileForm();
         }
+    }
+
+    
+    public Long getTramitIDFromRequest(HttpServletRequest request) {
+        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
     }
 
 }

@@ -13,6 +13,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitBDadesSoliController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitBDadesSoliFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitBDadesSoliForm;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitBDadesSoliLogicaService;
 import org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA;
@@ -73,8 +74,9 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
     public String getRedirectWhenCreated(HttpServletRequest request, TramitBDadesSoliForm tramitBDadesSoliForm) {
         Long tramitId = tramitBDadesSoliForm.getTramitBDadesSoli().getTramitid();
 
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
         //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitCOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitId;
+        return "redirect:" + TramitCOperadorController.CONTEXT_WEB + "/new?tramitid=" + uuid ;
     }
 
     @Override
@@ -105,8 +107,8 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
         } else if (tramitForm.isNou()) {
             TramitBDadesSoliJPA tramitB = tramitForm.getTramitBDadesSoli();
 
-            String tramitIDStr = request.getParameter("tramitid");
-            Long tramitID = Long.parseLong(tramitIDStr);
+            Long tramitID = getTramitIDFromRequest(request);
+            
             tramitB.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
@@ -151,8 +153,7 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
         }
     }
 
-    //    @Override
-    //    public void delete(HttpServletRequest request, TramitBDadesSoli tramitBDadesSoli) throws I18NException {
-    //        tramitBDadesSoliLogicEjb.deleteFull(tramitBDadesSoli);
-    //      }
+    public Long getTramitIDFromRequest(HttpServletRequest request) {
+        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
+    }
 }
