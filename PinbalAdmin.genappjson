@@ -4258,6 +4258,31 @@
           "foreignKeys": []
         },
         {
+          "isAutoIncrement": false,
+          "sqlName": "expedientpid",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Expedient PID",
+            "es": "Expediente PID"
+          },
+          "javaName": "expedientPid",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
           "index": "pad_solicitud_estatid_fk_i",
           "isAutoIncrement": false,
           "sqlName": "estatid",

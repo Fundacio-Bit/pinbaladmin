@@ -131,7 +131,7 @@
           "schema" : {
             "type" : "string"
           },
-          "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR:50125"
+          "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA=="
         } ],
         "responses" : {
           "200" : {

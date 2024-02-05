@@ -87,6 +87,17 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String expedientPid;
+
+  public java.lang.String getExpedientPid() {
+    return this.expedientPid;
+  }
+
+  public void setExpedientPid(java.lang.String expedientPid) {
+    this.expedientPid = expedientPid;
+  }
+
+
   private java.util.List<java.lang.Long> estatIDSelect;
 
   public java.util.List<java.lang.Long> getEstatIDSelect() {
@@ -340,6 +351,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.codiDescriptiu = __toClone.codiDescriptiu;
     this.procedimentNom = __toClone.procedimentNom;
     this.procedimentTipus = __toClone.procedimentTipus;
+    this.expedientPid = __toClone.expedientPid;
     this.estatIDSelect = __toClone.estatIDSelect;
     this.departamentIDDesde = __toClone.departamentIDDesde;
     this.departamentIDFins = __toClone.departamentIDFins;
@@ -375,7 +387,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,ESTATID ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,EXPEDIENTPID ,ESTATID ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
   }
 
   @Override

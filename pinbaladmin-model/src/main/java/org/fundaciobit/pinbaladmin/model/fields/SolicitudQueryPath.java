@@ -31,6 +31,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.PROCEDIMENTTIPUS);
   }
 
+  public StringField EXPEDIENTPID() {
+    return new StringField(getQueryPath(), SolicitudFields.EXPEDIENTPID);
+  }
+
   public LongField ESTATID() {
     return new LongField(getQueryPath(), SolicitudFields.ESTATID);
   }

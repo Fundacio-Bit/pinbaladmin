@@ -94,7 +94,7 @@ paths:
       operationId: getDatosFormularioFromTicket
       parameters:
       - description: Ticket del fomulario
-        example: CFDEKWNL-UHMZR8T8-T8WTFOOR:50125
+        example: CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA==
         explode: true
         in: query
         name: ticket

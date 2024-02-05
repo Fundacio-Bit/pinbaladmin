@@ -96,6 +96,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
+        <tr id="solicitud_expedientPid_rowid">
+          <td id="solicitud_expedientPid_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.EXPEDIENTPID])?'solicitud.expedientPid':__theForm.labels[SolicitudFields.EXPEDIENTPID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.EXPEDIENTPID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.EXPEDIENTPID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_expedientPid_columnvalueid">
+            <form:errors path="solicitud.expedientPid" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? ' uneditable-input' : ''}"  style="" maxlength="2147483647" path="solicitud.expedientPid"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATID)}">
         <tr id="solicitud_estatID_rowid">
           <td id="solicitud_estatID_columnlabelid">

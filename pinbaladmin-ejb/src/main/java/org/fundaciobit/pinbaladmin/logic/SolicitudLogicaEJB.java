@@ -32,6 +32,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.ejb.DocumentService;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
@@ -1154,7 +1155,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     @Override
     public Solicitud getSolicitudFromTramitID(String ticketGFE) throws Exception {
         
-        final String likeStr = "%tramitid[" + ticketGFE + "]%";
+        Long tramitID = HibernateFileUtil.decryptFileID(ticketGFE);
+        
+        final String likeStr = "%tramitid[" + tramitID + "]%";
 
         Where w = SolicitudFields.NOTES.like(likeStr);
         
@@ -1166,7 +1169,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         if (size == 1) {
             return llistat.get(0);
         }else if (size == 0) {
-            throw new Exception("No s'ha trobat la solicitud [" + ticketGFE + "]a la BBDD");
+            throw new Exception("No s'ha trobat la solicitud [" + tramitID + "]a la BBDD");
         } else {
             throw new Exception("Hi ha mes d'una solicitud amb aquest codi tramit");
         }

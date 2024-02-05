@@ -4,11 +4,13 @@ import org.fundaciobit.pinbaladmin.model.entity.*;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.Set;
+import org.hibernate.annotations.Type;
 import java.util.HashSet;
 import javax.persistence.GenerationType;
 import javax.persistence.Index;
@@ -46,6 +48,11 @@ public class SolicitudJPA implements Solicitud {
 
     @Column(name="procedimenttipus",length = 255)
     java.lang.String procedimentTipus;
+
+    @Column(name="expedientpid",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    java.lang.String expedientPid;
 
     @Column(name="estatid",nullable = false,length = 19)
     java.lang.Long estatID;
@@ -121,12 +128,13 @@ public class SolicitudJPA implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal) {
+  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
     this.procedimentTipus=procedimentTipus;
+    this.expedientPid=expedientPid;
     this.estatID=estatID;
     this.departamentID=departamentID;
     this.organid=organid;
@@ -151,11 +159,12 @@ public class SolicitudJPA implements Solicitud {
     this.estatpinbal=estatpinbal;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal) {
+  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
     this.procedimentTipus=procedimentTipus;
+    this.expedientPid=expedientPid;
     this.estatID=estatID;
     this.departamentID=departamentID;
     this.organid=organid;
@@ -197,6 +206,7 @@ public class SolicitudJPA implements Solicitud {
     this.setCodiDescriptiu(__bean.getCodiDescriptiu());
     this.setProcedimentNom(__bean.getProcedimentNom());
     this.setProcedimentTipus(__bean.getProcedimentTipus());
+    this.setExpedientPid(__bean.getExpedientPid());
     this.setEstatID(__bean.getEstatID());
     this.setDepartamentID(__bean.getDepartamentID());
     this.setOrganid(__bean.getOrganid());
@@ -258,6 +268,13 @@ public class SolicitudJPA implements Solicitud {
 	};
 	public void setProcedimentTipus(java.lang.String _procedimentTipus_) {
 		this.procedimentTipus = _procedimentTipus_;
+	};
+
+	public java.lang.String getExpedientPid() {
+		return(expedientPid);
+	};
+	public void setExpedientPid(java.lang.String _expedientPid_) {
+		this.expedientPid = _expedientPid_;
 	};
 
 	public java.lang.Long getEstatID() {
@@ -534,6 +551,7 @@ public class SolicitudJPA implements Solicitud {
     __tmp.setCodiDescriptiu(__bean.getCodiDescriptiu());
     __tmp.setProcedimentNom(__bean.getProcedimentNom());
     __tmp.setProcedimentTipus(__bean.getProcedimentTipus());
+    __tmp.setExpedientPid(__bean.getExpedientPid());
     __tmp.setEstatID(__bean.getEstatID());
     __tmp.setDepartamentID(__bean.getDepartamentID());
     __tmp.setOrganid(__bean.getOrganid());

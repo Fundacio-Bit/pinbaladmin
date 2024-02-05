@@ -52,6 +52,11 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
+          <td>
+          ${solicitud.expedientPid}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
           <td>
           <c:set var="tmp">${solicitud.estatID}</c:set>

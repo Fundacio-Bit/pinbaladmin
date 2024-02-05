@@ -17,6 +17,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField CODIDESCRIPTIU = new StringField(_TABLE_MODEL, "codiDescriptiu", "codidescriptiu");
 	 public static final StringField PROCEDIMENTNOM = new StringField(_TABLE_MODEL, "procedimentNom", "procedimentnom");
 	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
+	 public static final StringField EXPEDIENTPID = new StringField(_TABLE_MODEL, "expedientPid", "expedientpid");
 	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
 	 public static final LongField DEPARTAMENTID = new LongField(_TABLE_MODEL, "departamentID", "departamentid");
 	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
@@ -47,6 +48,7 @@ public interface SolicitudFields extends java.io.Serializable {
     CODIDESCRIPTIU,
     PROCEDIMENTNOM,
     PROCEDIMENTTIPUS,
+    EXPEDIENTPID,
     ESTATID,
     DEPARTAMENTID,
     ORGANID,

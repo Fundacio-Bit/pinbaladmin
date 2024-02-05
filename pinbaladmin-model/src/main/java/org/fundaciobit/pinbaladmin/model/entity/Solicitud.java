@@ -17,6 +17,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getProcedimentTipus();
 	public void setProcedimentTipus(java.lang.String _procedimentTipus_);
 
+	public java.lang.String getExpedientPid();
+	public void setExpedientPid(java.lang.String _expedientPid_);
+
 	public java.lang.Long getEstatID();
 	public void setEstatID(java.lang.Long _estatID_);
 

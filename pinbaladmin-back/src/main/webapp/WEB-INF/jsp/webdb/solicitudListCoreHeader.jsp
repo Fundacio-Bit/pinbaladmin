@@ -27,6 +27,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTTIPUS)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PROCEDIMENTTIPUS)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.EXPEDIENTPID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ESTATID)}</th>
         </c:if>

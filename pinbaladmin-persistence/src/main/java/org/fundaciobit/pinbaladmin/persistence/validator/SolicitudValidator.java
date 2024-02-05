@@ -99,6 +99,14 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(EXPEDIENTPID) == 0) {
+      java.lang.String __expedientpid = __target__.getExpedientPid();
+      if (__expedientpid!= null && __expedientpid.length() > 2147483647) {
+        __vr.rejectValue(EXPEDIENTPID, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(EXPEDIENTPID)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(ENTITATESTATAL) == 0) {
       java.lang.String __entitatestatal = __target__.getEntitatEstatal();
       if (__entitatestatal!= null && __entitatestatal.length() > 255) {

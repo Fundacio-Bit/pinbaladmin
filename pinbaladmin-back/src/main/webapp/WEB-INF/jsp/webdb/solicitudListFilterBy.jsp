@@ -120,6 +120,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.EXPEDIENTPID)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.expedientPid" var="expedientPid" />
+              <fmt:message key="genapp.form.searchby" var="cercaperexpedientPid" >                
+                 <fmt:param value="${expedientPid}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${expedientPid}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperexpedientPid}" path="expedientPid" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ESTATID)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
               <%-- FILTRE NUMERO SELECT MULTIPLE --%>

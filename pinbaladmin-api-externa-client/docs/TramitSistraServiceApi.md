@@ -37,7 +37,7 @@ public class Example {
         BasicAuth.setPassword("YOUR PASSWORD");
 
         TramitSistraServiceApi apiInstance = new TramitSistraServiceApi(defaultClient);
-        String ticket = "CFDEKWNL-UHMZR8T8-T8WTFOOR:50125"; // String | Ticket del fomulario
+        String ticket = "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA=="; // String | Ticket del fomulario
         try {
             Resultado result = apiInstance.getDatosFormularioFromTicket(ticket);
             System.out.println(result);

@@ -786,3 +786,10 @@ ALTER TABLE pad_tramit_i_serv ALTER COLUMN urlconsentiment DROP NOT NULL;
 
 ALTER TABLE pad_tramit_i_serv ALTER COLUMN consentimentpublicat DROP NOT NULL;
 
+
+
+--AFEGIR EL CAMP EXPEDIENT PID A SOLICITUD ESTATALS
+ALTER TABLE pad_solicitud ADD COLUMN expedientpid character varying(50);
+UPDATE pad_solicitud
+SET expedientpid = substring(estat from 'Identificador de Consulta: (\d+)')
+WHERE entitatestatal IS NOT NULL
