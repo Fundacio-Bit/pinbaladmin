@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -212,6 +214,9 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         final boolean debug = true;
         SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
+        
+        String expedientID = getPIDFromSubject(emi.getSubject());
+        info.setExpedientPID(expedientID);
 
         log.info(" #Procediments de Solicitud = " + info.getProcediments().size());
 
@@ -249,6 +254,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
             solicitud.setEstatID(10L);
             solicitud.setEntitatEstatal(info.getEntitat());
+            solicitud.setExpedientPid(info.getExpedientPID());
 
             String tpOrig = proc.getTipusProcediment();
 
@@ -338,6 +344,20 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         }
 
         return solicituds;
+    }
+
+    private static String getPIDFromSubject(String subject) {
+
+        Pattern patron = Pattern.compile("\\[(\\d+)\\]");
+        
+        // Crear un objeto Matcher para encontrar coincidencias en el texto
+        Matcher matcher = patron.matcher(subject);
+        
+        // Buscar el número entre corchetes y mostrarlo
+        while (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 
 }

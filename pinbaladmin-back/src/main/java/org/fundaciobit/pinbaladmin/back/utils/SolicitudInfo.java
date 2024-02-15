@@ -12,6 +12,7 @@ import java.util.Map;
 public class SolicitudInfo {
 
   protected String entitat;
+  protected String expedientPID;
 
   protected final Map<String, ProcedimentInfo> procediments = new HashMap<String, ProcedimentInfo>();
 
@@ -21,6 +22,7 @@ public class SolicitudInfo {
   public SolicitudInfo(String entitat) {
     super();
     this.entitat = entitat;
+    this.expedientPID = null;
   }
 
   public String getEntitat() {
@@ -30,6 +32,14 @@ public class SolicitudInfo {
   public void setEntitat(String entitat) {
     this.entitat = entitat;
   }
+
+  public String getExpedientPID() {
+      return expedientPID;
+    }
+
+    public void setExpedientPID(String expedientPID) {
+      this.expedientPID = expedientPID;
+    }
 
   public Map<String, ProcedimentInfo> getProcediments() {
     return procediments;

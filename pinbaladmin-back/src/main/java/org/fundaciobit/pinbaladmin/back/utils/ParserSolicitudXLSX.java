@@ -62,7 +62,9 @@ public class ParserSolicitudXLSX {
             // =============== DEPURACIO VOLCAT DE XLSX ===========================
             // ==========================================================
 
-            SolicitudInfo info = new SolicitudInfo(my_worksheet.getRow(1).getCell(0).getStringCellValue());
+            String entitat = my_worksheet.getRow(1).getCell(0).getStringCellValue();
+            
+            SolicitudInfo info = new SolicitudInfo(entitat);
             String [] filaExcel;
             
             Cell cell;
