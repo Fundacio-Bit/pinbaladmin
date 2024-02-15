@@ -55,6 +55,7 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
@@ -91,18 +92,18 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     protected SolicitudLogicaService solicitudLogicaEjb;
     @EJB(mappedName = OrganService.JNDI_NAME)
     protected OrganService organJEjb;
-    @EJB(mappedName = FitxerService.JNDI_NAME)
-    protected FitxerService fitxerEjb;
-    @EJB(mappedName = EventService.JNDI_NAME)
-    protected EventService eventEjb;
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerLogicEjb;
+    @EJB(mappedName = EventLogicaService.JNDI_NAME)
+    protected EventLogicaService eventLogicEjb;
     @EJB(mappedName = SolicitudServeiLogicaService.JNDI_NAME)
     protected SolicitudServeiLogicaService solicitudServeiLogicaEjb;
     @EJB(mappedName = ServeiService.JNDI_NAME)
     protected ServeiService serveiEjb;
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService documentSolicitudEjb;
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.DocumentService documentEjb;
+    @EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
+    protected DocumentSolicitudLogicaService documentSolicitudLogicEjb;
+    @EJB(mappedName = DocumentLogicaService.JNDI_NAME)
+    protected DocumentLogicaService documentLogicaEjb;
     
     public static SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -154,7 +155,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
             byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
-            Fitxer f = fitxerEjb.create("formulari.xml", data.length, "aplication.xml", null);
+            Fitxer f = fitxerLogicEjb.create("formulari.xml", data.length, "aplication.xml", null);
             FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
             return f.getFitxerID();
@@ -181,8 +182,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String notesSoli = "Procediment creat amb Formulari. TramitID[" + tramitID + "]";
         Timestamp dataInici = new Timestamp(System.currentTimeMillis());
         Integer estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-        String creador = "pvico";
-        String operador = "pvico";
+        String creador = "ptrias";
+        String operador = "ptrias";
         boolean firmatDocSolicitud = false;
 
         //nulls
@@ -391,11 +392,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
             Long tipus = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
             String nom = "Document Consentiment";
-            Document doc = documentEjb.create(nom, fitxerID, null, null, tipus);
+            Document doc = documentLogicaEjb.create(nom, fitxerID, null, null, tipus);
 
             DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
 
-            documentSolicitudEjb.create(ds);
+            documentSolicitudLogicEjb.create(ds);
             log.info("Afegit document de Consentiment");
         }
 
@@ -482,9 +483,25 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             boolean _noLlegit_ = false;
             java.lang.String _destinatari_ = null;
             java.lang.String _destinatariMail_ = null;
+            java.lang.String _caidConsulta_ = null;
+            java.lang.String _caidSeguiment_ = null;
 
-            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-                    _destinatariMail_, _comentari_, _fitxerID_, _noLlegit_, null, null);
+            EventJPA event = new EventJPA();
+            event.setSolicitudID(_solicitudID_);
+            event.setIncidenciaTecnicaID(_incidenciaTecnicaID_);
+            event.setDataEvent(_dataEvent_);
+            event.setTipus(_tipus_);
+            event.setPersona(_persona_);
+            event.setComentari(_comentari_);
+            event.setFitxerID(_fitxerID_);
+            event.setNoLlegit(_noLlegit_);
+            event.setDestinatari(_destinatari_);
+            event.setDestinatarimail(_destinatariMail_);
+            event.setCaidIdentificadorConsulta(_caidConsulta_);
+            event.setCaidNumeroSeguiment(_caidSeguiment_);
+            
+            eventLogicEjb.create(event);
+            
         } catch (Throwable th) {
             log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
         }

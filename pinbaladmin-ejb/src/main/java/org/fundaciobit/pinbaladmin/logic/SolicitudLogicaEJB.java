@@ -81,8 +81,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
 
-    @EJB(mappedName = DocumentService.JNDI_NAME)
-    protected DocumentService documentEjb;
+    @EJB(mappedName = DocumentLogicaService.JNDI_NAME)
+    protected DocumentLogicaService documentLogicaEjb;
 
     @Override
     public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
@@ -113,6 +113,19 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return resultMap;
     }
 
+    @Override
+    @PermitAll
+    public Solicitud create(Solicitud instance) throws I18NException {
+        return super.create(instance);
+    }
+    
+    @Override
+    @PermitAll
+    public Solicitud update(Solicitud instance) throws I18NException {
+        return super.update(instance);
+    }
+    
+    
     @Override
     public Set<Long> deleteFull(Long solicitudId, boolean deleteFiles) throws I18NException {
 
@@ -274,7 +287,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null,
                             tipus);
 
-                    documentEjb.create(doc);
+                    documentLogicaEjb.create(doc);
 
                     DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
 
