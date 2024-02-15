@@ -15,6 +15,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -26,6 +27,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
@@ -35,8 +37,10 @@ import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
+import org.fundaciobit.pluginsib.core.utils.PluginsManager;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
 import org.fundaciobit.pluginsib.utils.rest.RestExceptionInfo;
+import org.fundaciobit.pluginsib.utils.xml.XmlValidation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,6 +48,7 @@ import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -108,8 +113,6 @@ public class TramitSistraService {
             String llinatge1 = u.getApellido1();
             String llinatge2 = u.getApellido2();
 
-            String mail = "mail@test.com";
-            String telefon = "telf";
             
             TramitAPersAutJPA tramitA = new TramitAPersAutJPA(); 
             
@@ -118,8 +121,16 @@ public class TramitSistraService {
             tramitA.setLlinatge1(llinatge1);
             tramitA.setLlinatge2(llinatge2);
             
-            tramitA.setMail(mail);
-            tramitA.setTelefon(telefon);
+            log.info("CallBack URL: " + parametrosFormulario.getUrlCallback());
+            request.getSession().setAttribute("urlCallbackSistra", parametrosFormulario.getUrlCallback());
+            
+            log.info("IdSesionFormulario: " + parametrosFormulario.getIdSesionFormulario());
+            log.info("XML Actuales: " + parametrosFormulario.getXmlDatosActuales());
+
+            String callbackUrl = parametrosFormulario.getUrlCallback();
+            String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
+            tramitA.setMail(idSesionFormulario );
+            tramitA.setTelefon("telf");
             
             tramitA.setDatatramit(datatramit);
             
@@ -144,17 +155,18 @@ public class TramitSistraService {
             
             //I si es perd el tramit o es deixa a mitges, serà recuperamble amb la URL amb  uuid.
             
-            String toReturn = "http://ptrias:8080/pinbaladmin/operador/tramitb/new?tramitid=" + uuid;
+            String toReturn = Configuracio.getUrlFormulariToSistra() + uuid;
             Gson gson = new GsonBuilder().create();
 
-            return gson.toJson(toReturn);
+//            return gson.toJson(toReturn);
+            return toReturn;
         } catch (Throwable th) {
             return processException(methodName, language, th);
         }
 
     }
 
-    @Path("/resultado")
+    @Path("/resultado/{ticket}")
     @RolesAllowed({ Constants.PAD_WS })
     @SecurityRequirement(name = SEC)
     @GET
@@ -176,29 +188,113 @@ public class TramitSistraService {
                     @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Resultado.class)) }) })
 
     public Resultado getDatosFormularioFromTicket(
-            @Parameter(description = "Ticket del fomulario", required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA==", schema = @Schema(implementation = String.class)) @QueryParam("ticket") String ticket)
+            @Parameter(in = ParameterIn.PATH, name = "ticket", description = "Ticket del fomulario", allowReserved = true, required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA==", schema = @Schema(implementation = String.class)) @PathParam("ticket") String ticket)
             throws RestException {
 
         final String methodName = "getDatosFormularioFromTicket";
         final String language = "ca";
 
         try {
-
+            
+            log.info("Metode REST: " + methodName);
+            log.info("ticket: " +  ticket);
             String[] splitTicket = ticket.split(":");
 
             String idSesionFormulario = splitTicket[0];
             String ticketGFE = splitTicket[1];//tramitid
+            
+            log.info("ticketGFE: " + ticketGFE);
 
             Solicitud soli = solicitudLogicaEjb.getSolicitudFromTramitID(ticketGFE);
 
             // Si no troba cap solicitud, s'hauria de veure si el tramit està a mitges i indicar cancelado = true, o veure que fer
                         
+            String XMLTest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+                    + "<FORMULARIO xmlns=\"urn:es:caib:sistra2:xml:formulario:v1:model\" accion=\"submit\">\r\n"
+                    + "    <CAMPO id=\"DATOS_REGISTRO\" tipo=\"compuesto\" xmlns=\"\">\r\n"
+                    + "        <VALOR codigo=\"NIF\">45186147W</VALOR>\r\n"
+                    + "        <VALOR codigo=\"EMAIL\">V4IZQZEY-1GW0CET8-T8NPS4ZE</VALOR>\r\n"
+                    + "        <VALOR codigo=\"TELEFONO\">telf</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRE\">JUAN PABLO</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APELLIDO1\">TRIAS</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APELLIDO2\">SEGURA</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRECOMPLETO\">JUAN PABLO TRIAS SEGURA</VALOR>\r\n"
+                    + "    </CAMPO>\r\n"
+                    + "    <CAMPO id=\"DATOS_SOLICITUD\" tipo=\"compuesto\" xmlns=\"\">\r\n"
+                    + "        <VALOR codigo=\"LDATIPOSOL\">Alta</VALOR>\r\n"
+                    + "        <VALOR codigo=\"LDAENTORNO\">Pro</VALOR>\r\n"
+                    + "        <VALOR codigo=\"DENOMINACION\">Ajuntament d'Andratx</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CIF\">P0700500B</VALOR>\r\n"
+                    + "        <VALOR codigo=\"UNIDAD\">Dirección General de Primera Infancia, Innovación y Comunidad Educativa</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CODIUR\">A04026925</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CODIOA\">A04026923</VALOR>\r\n"
+                    + "        <VALOR codigo=\"DIRECCION\">Carrer de la dirección</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CP\">07003</VALOR>\r\n"
+                    + "        <VALOR codigo=\"MUNICIPIO\">Búger</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NIFSECD\">11111111A</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRESECD\">Toni</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE1SECD\">Mesquida</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE2SECD\">Mestre</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CARGOSECD\">Gestio: Profesor de Gestió</VALOR>\r\n"
+                    + "        <VALOR codigo=\"TELEFONOSECD\">971456789</VALOR>\r\n"
+                    + "        <VALOR codigo=\"MAILSECD\">gestio@fbit.org</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMOCULSECD\">Toni Mesquida Mestre</VALOR>\r\n"
+                    + "        <VALOR codigo=\"LDAENTORNOCULTO\">- Producción</VALOR>\r\n"
+                    + "        <VALOR codigo=\"LDAENTOCULTOEXCEL\">'- Entornos: Producción</VALOR>\r\n"
+                    + "        <VALOR codigo=\"IDIOMA\">ca</VALOR>\r\n"
+                    + "        <VALOR codigo=\"COPIARDATOS\">false</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NIFSECE\">22222222E</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRESECE\">Paco</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE1SECE\">Gaita</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE2SECE\">Sureda</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CARGOSECE\">Auditor: Petats Gaita's Leader</VALOR>\r\n"
+                    + "        <VALOR codigo=\"TELEFONOSECE\">971213458</VALOR>\r\n"
+                    + "        <VALOR codigo=\"MAILSECE\">auditor@fbit.org</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMOCULSECE\">Paco Gaita Sureda</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NIFSECF\">33333333I</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRESECF\">Toni</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE1SECF\">Nadal</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE2SECF\">Bennassar</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CARGOSECF\">Tecnic: L'amo dels Tecnics</VALOR>\r\n"
+                    + "        <VALOR codigo=\"TELEFONOSECF\">971745318</VALOR>\r\n"
+                    + "        <VALOR codigo=\"MAILSECF\">tecnic@fbit.org</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMOCULSECF\">Toni Nadal Bennassar</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NIFSECG\">444444444O</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBRESECG\">Isi</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE1SECG\">Palazón</VALOR>\r\n"
+                    + "        <VALOR codigo=\"APE2SECG\">Rayo</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CARGOSECG\">Titular: Jugador del Rayo titularisimo</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMOCULSECG\">Isi Palazón Rayo</VALOR>\r\n"
+                    + "        <VALOR codigo=\"TIPOPROCEDIMIENTO\">1</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMTIPUSPROCEDIMIENT\">Aduanero</VALOR>\r\n"
+                    + "        <VALOR codigo=\"NOMBREPROC\">Subvencions que m'acab d'inventar</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CODIPROC\">2874870</VALOR>\r\n"
+                    + "        <VALOR codigo=\"DIRFICHA\">https://www.google.es</VALOR>\r\n"
+                    + "        <VALOR codigo=\"CADUCA\">N</VALOR>\r\n"
+                    + "        <VALOR codigo=\"FECHACAD\"></VALOR>\r\n"
+                    + "        <VALOR codigo=\"DESCRIPCION\">Proceso ayudas para Asociaciones de Familias de Alumnos</VALOR>\r\n"
+                    + "        <VALOR codigo=\"PETICIONESDIA\">12</VALOR>\r\n"
+                    + "        <VALOR codigo=\"PETICIONESMES\">450</VALOR>\r\n"
+                    + "        <VALOR codigo=\"AUTOMATIZADO\">S</VALOR>\r\n"
+                    + "        <VALOR codigo=\"PERIODICO\">N</VALOR>\r\n"
+                    + "        \r\n"
+                    + "        <VALOR codigo=\"CONTCONSADJ\">false</VALOR>\r\n"
+                    + "        <VALOR codigo=\"ELEMREPT\">SVDMUFAFIWS01</VALOR>\r\n"
+                    + "        <VALOR codigo=\"VALIDAELEMREPT\"></VALOR>\r\n"
+                    + "    </CAMPO>\r\n"
+                    + "</FORMULARIO>\r\n";
+            
+            
             
             String id = idSesionFormulario;
             String pdf = fileToBase64(soli.getDocumentSolicitudID());
-            String xml = fileToBase64(soli.getSolicitudXmlID());
+            //String xml = fileToBase64(soli.getSolicitudXmlID());
+            
+            String xml = Base64.getEncoder().encodeToString(XMLTest.getBytes());
             Boolean cancelado = false;
-
+            
+//            XmlValidation.validateXMLSchema(xml, xsd);
+            
             Resultado resultado = new Resultado();
             resultado.setCancelado(cancelado);
             resultado.setIdSesionFormulario(id);

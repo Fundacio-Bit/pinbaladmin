@@ -118,20 +118,21 @@
         } ]
       }
     },
-    "/secure/TramitSistraService/v1/resultado" : {
+    "/secure/TramitSistraService/v1/resultado/{ticket}" : {
       "get" : {
         "tags" : [ "TramitSistraService" ],
         "summary" : "Retorna les dades del formulari",
         "operationId" : "getDatosFormularioFromTicket",
         "parameters" : [ {
           "name" : "ticket",
-          "in" : "query",
+          "in" : "path",
           "description" : "Ticket del fomulario",
           "required" : true,
+          "allowReserved" : true,
           "schema" : {
             "type" : "string"
           },
-          "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA=="
+          "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA=="
         } ],
         "responses" : {
           "200" : {

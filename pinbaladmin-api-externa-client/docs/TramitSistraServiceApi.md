@@ -4,7 +4,7 @@ All URIs are relative to */pinbaladminapi/externa*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getDatosFormularioFromTicket**](TramitSistraServiceApi.md#getDatosFormularioFromTicket) | **GET** /secure/TramitSistraService/v1/resultado | Retorna les dades del formulari |
+| [**getDatosFormularioFromTicket**](TramitSistraServiceApi.md#getDatosFormularioFromTicket) | **GET** /secure/TramitSistraService/v1/resultado/{ticket} | Retorna les dades del formulari |
 | [**getUrlFormulari**](TramitSistraServiceApi.md#getUrlFormulari) | **POST** /secure/TramitSistraService/v1/formulario | Retorna la URL per iniciar el tramit |
 
 
@@ -37,7 +37,7 @@ public class Example {
         BasicAuth.setPassword("YOUR PASSWORD");
 
         TramitSistraServiceApi apiInstance = new TramitSistraServiceApi(defaultClient);
-        String ticket = "CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA=="; // String | Ticket del fomulario
+        String ticket = "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA=="; // String | Ticket del fomulario
         try {
             Resultado result = apiInstance.getDatosFormularioFromTicket(ticket);
             System.out.println(result);

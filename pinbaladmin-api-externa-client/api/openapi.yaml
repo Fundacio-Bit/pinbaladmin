@@ -89,19 +89,20 @@ paths:
       tags:
       - ExempleSeguritzat
       x-accepts: application/json
-  /secure/TramitSistraService/v1/resultado:
+  /secure/TramitSistraService/v1/resultado/{ticket}:
     get:
       operationId: getDatosFormularioFromTicket
       parameters:
-      - description: Ticket del fomulario
-        example: CFDEKWNL-UHMZR8T8-T8WTFOOR:MhufBxRLLomvdOjC9nZhPA==
-        explode: true
-        in: query
+      - allowReserved: true
+        description: Ticket del fomulario
+        example: CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA==
+        explode: false
+        in: path
         name: ticket
         required: true
         schema:
           type: string
-        style: form
+        style: simple
       responses:
         "200":
           content:

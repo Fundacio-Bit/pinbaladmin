@@ -120,7 +120,7 @@ All URIs are relative to */pinbaladminapi/externa*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ExempleSeguritzatApi* | [**echo**](docs/ExempleSeguritzatApi.md#echo) | **GET** /secure/exempleseguritzat/echo | Fa un ECHO
-*TramitSistraServiceApi* | [**getDatosFormularioFromTicket**](docs/TramitSistraServiceApi.md#getDatosFormularioFromTicket) | **GET** /secure/TramitSistraService/v1/resultado | Retorna les dades del formulari
+*TramitSistraServiceApi* | [**getDatosFormularioFromTicket**](docs/TramitSistraServiceApi.md#getDatosFormularioFromTicket) | **GET** /secure/TramitSistraService/v1/resultado/{ticket} | Retorna les dades del formulari
 *TramitSistraServiceApi* | [**getUrlFormulari**](docs/TramitSistraServiceApi.md#getUrlFormulari) | **POST** /secure/TramitSistraService/v1/formulario | Retorna la URL per iniciar el tramit
 *VersioApi* | [**versio**](docs/VersioApi.md#versio) | **GET** /public/exemplepublic/versio | Versio de l&#39;Aplicació
 

@@ -52,7 +52,8 @@ public class TramitSistraServiceApi {
     }
     
     // create path and map variables
-    String localVarPath = "/secure/TramitSistraService/v1/resultado".replaceAll("\\{format\\}","json");
+    String localVarPath = "/secure/TramitSistraService/v1/resultado/{ticket}".replaceAll("\\{format\\}","json")
+      .replaceAll("\\{" + "ticket" + "\\}", apiClient.escapeString(ticket.toString()));
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -60,7 +61,6 @@ public class TramitSistraServiceApi {
     Map<String, String> localVarCookieParams = new HashMap<String, String>();
     Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
-    localVarQueryParams.addAll(apiClient.parameterToPairs("", "ticket", ticket));
 
     
     
