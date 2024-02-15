@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitGDadesTitEJB;
+import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
 import org.fundaciobit.pinbaladmin.persistence.TramitGDadesTitJPA;
@@ -33,6 +34,12 @@ public class TramitGDadesTitLogicaEJB extends TramitGDadesTitEJB implements Tram
     public TramitGDadesTit create(TramitGDadesTit instance) throws I18NException {
         log.info("TramitGDadesTit::TramitID: " + instance.getTramitid());
         return super.create(instance);
+    }
+
+    @Override
+    @PermitAll
+    public TramitGDadesTit update(TramitGDadesTit instance) throws I18NException {
+        return super.update(instance);
     }
 
     @Override

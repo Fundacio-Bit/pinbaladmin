@@ -34,6 +34,13 @@ public class TramitDCteAutLogicaEJB extends TramitDCteAutEJB implements TramitDC
         log.info("TramitDCteAut::TramitID: " + instance.getTramitid());
         return super.create(instance);
     }
+
+    @Override
+    @PermitAll
+    public TramitDCteAut update(TramitDCteAut instance) throws I18NException {
+        return super.update(instance);
+    }
+
     @Override
     public void deleteFull(Long tramitid) throws I18NException {
         //Borrar B i llamar a borrarFullB

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -26,6 +27,12 @@ public class SolicitudServeiLogicaEJB extends SolicitudServeiEJB implements Soli
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.CampSolicitudService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.CampSolicitudService campSolicitudEjb;
 
+    @Override
+    @PermitAll
+    public SolicitudServei create(SolicitudServei instance) throws I18NException {
+        return super.create(instance);
+    }
+    
     @Override
     public Set<Long> deleteFull(Long serveiId, Long solicitudId, boolean deleteFiles) throws I18NException {
 

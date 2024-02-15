@@ -11,6 +11,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitIServEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
+import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
@@ -39,6 +40,12 @@ public class TramitIServLogicaEJB extends TramitIServEJB implements TramitIServL
     public TramitIServ create(TramitIServ instance) throws I18NException {
         log.info("TramitIServ::TramitID: " + instance.getTramitid());
         return super.create(instance);
+    }
+
+    @Override
+    @PermitAll
+    public TramitIServ update(TramitIServ instance) throws I18NException {
+        return super.update(instance);
     }
 
     @Override

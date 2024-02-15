@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitHProcEJB;
+import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA;
@@ -33,6 +34,12 @@ public class TramitHProcLogicaEJB extends TramitHProcEJB implements TramitHProcL
     public TramitHProc create(TramitHProc instance) throws I18NException {
         log.info("TramitHProc::TramitID: " + instance.getTramitid());
         return super.create(instance);
+    }
+
+    @Override
+    @PermitAll
+    public TramitHProc update(TramitHProc instance) throws I18NException {
+        return super.update(instance);
     }
 
     @Override

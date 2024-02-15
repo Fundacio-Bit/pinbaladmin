@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -11,6 +12,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.DocumentService;
 import org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 
@@ -28,6 +30,12 @@ public class DocumentSolicitudLogicaEJB extends DocumentSolicitudEJB implements 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.FitxerService fitxerEjb;
 
+    @Override
+    @PermitAll
+    public DocumentSolicitud create(DocumentSolicitud instance) throws I18NException {
+        return super.create(instance);
+    }
+    
     @Override
     public Set<Long> deleteFull(Long documentId, Long solicitudId, boolean deleteFiles) throws I18NException {
 

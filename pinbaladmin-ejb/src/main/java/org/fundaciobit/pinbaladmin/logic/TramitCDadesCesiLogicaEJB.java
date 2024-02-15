@@ -44,6 +44,12 @@ public class TramitCDadesCesiLogicaEJB extends TramitCDadesCesiEJB implements Tr
     }
 
     @Override
+    @PermitAll
+    public TramitCDadesCesi update(TramitCDadesCesi instance) throws I18NException {
+        return super.update(instance);
+    }
+
+    @Override
     public void deleteFull(Long tramitid) throws I18NException {
         //Borrar B i llamar a borrarFullB
         log.info("Borramos con TRAMITID = " + tramitid);

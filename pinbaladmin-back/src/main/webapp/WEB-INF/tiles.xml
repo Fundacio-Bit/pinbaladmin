@@ -299,7 +299,7 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/modificacioSolicitudPinbal.jsp" />
     </definition>
 
-    <!-- =====   TRAMIT SISTRA  ===== -->
+    <!-- =====   TRAMIT SISTRA OPERADOR ===== -->
     <definition name="tramitSistraListOperador" extends="operador_base">
         <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutList.jsp" />
@@ -345,7 +345,6 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitHProcForm.jsp" />
     </definition>
     
-    
     <definition name="tramitIFormOperador" extends="operador_base">
         <put-attribute name="titol" value="tramitIServ.tramitIServ" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServForm.jsp" />
@@ -358,6 +357,58 @@
         <put-attribute name="titol" value="tramitJConsent.tramitJConsent" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp" />
     </definition>
+
+
+    <!-- =====   TRAMIT SISTRA PUBLIC ===== -->
+    
+    
+     <definition name="tramitAFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitAPersAutForm.jsp" /> 
+    </definition>
+    
+    <definition name="tramitBFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitBDadesSoliForm.jsp" />
+    </definition>
+
+    <definition name="tramitCFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitCDadesCesiForm.jsp" />
+    </definition>
+    
+    <definition name="tramitDFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitDCteAutForm.jsp" />
+    </definition>
+    
+    <definition name="tramitEFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitECteAudForm.jsp" />
+    </definition>
+    
+    <definition name="tramitFFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitFCteTecForm.jsp" />
+    </definition>
+    
+    <definition name="tramitGFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitGDadesTitForm.jsp" />
+    </definition>
+    
+    <definition name="tramitHFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitHProcForm.jsp" />
+    </definition>
+    
+    <definition name="tramitIFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServForm.jsp" />
+    </definition>
+    <definition name="tramitIListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitIServList.jsp" />
+    </definition>
+
+    <definition name="tramitJFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp" />
+    </definition>
+
+
+    <definition name="returnToSistraPost" template="/WEB-INF/jsp/all/callbackSistra.jsp">
+    </definition>
+
 
 
     <definition name="postCreateIframeOperador" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />

@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitFCteTecEJB;
+import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitECteAud;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA;
@@ -33,6 +34,12 @@ public class TramitFCteTecLogicaEJB extends TramitFCteTecEJB implements TramitFC
     public TramitFCteTec create(TramitFCteTec instance) throws I18NException {
         log.info("TramitFCteTec::TramitID: " + instance.getTramitid());
         return super.create(instance);
+    }
+
+    @Override
+    @PermitAll
+    public TramitFCteTec update(TramitFCteTec instance) throws I18NException {
+        return super.update(instance);
     }
 
     @Override
