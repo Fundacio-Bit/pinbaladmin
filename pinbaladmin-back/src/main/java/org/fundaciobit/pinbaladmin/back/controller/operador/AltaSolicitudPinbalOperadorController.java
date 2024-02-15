@@ -71,9 +71,7 @@ public class AltaSolicitudPinbalOperadorController {
             }
 
             Long fitxerID = soli.getSolicitudXmlID();
-
-            String contenidoXml = obtenerContenidoXml(fitxerID);
-            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
 
             ScspTitular titular = getTitular(prop);
             ScspFuncionario funcionario = getFuncionari();
@@ -215,9 +213,7 @@ public class AltaSolicitudPinbalOperadorController {
 
         try {
             Long fitxerID = soli.getSolicitudXmlID();
-
-            String contenidoXml = obtenerContenidoXml(fitxerID);
-            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
 
             ScspTitular titular = getTitular(prop);
             ScspFuncionario funcionario = getFuncionari();

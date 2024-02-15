@@ -238,63 +238,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     return solicitudForm;
   }
   
-  private int getEstatPinbal(SolicitudJPA solicitud) {
-      try {
-          
-          Long fitxerID = solicitud.getSolicitudXmlID();
-          ScspTitular titular = getTitular(fitxerID);
-          
-          ScspFuncionario funcionario = new ScspFuncionario();
-          {
-              UserInfo ui = LoginInfo.getInstance().getUserInfo();
-              String nif = ui.getAdministrationID();
-              String fullName = ui.getFullName();
-              funcionario.setNifFuncionario(nif);
-              funcionario.setNombreCompletoFuncionario(fullName);
-          }
-
-          Consulta consulta = new Consulta();
-          consulta.setCodigoProcedimiento(solicitud.getProcedimentCodi());
-
-          Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consulta);
-
-          String estado = retorno.getEstado().getCodigoEstado();
-          log.info("Estado de la autorización: " + retorno.getEstado().getCodigoEstado() + "-" + estado);
-          return Integer.parseInt(estado);
-      } catch (Exception e) {
-          log.error("Error obtenint estat: " + e.getMessage(), e);
-          
-          return -1;
-      }
-  }
-  
-  private ScspTitular getTitular(Long fitxerID) throws Exception {
-
-      File f = FileSystemManager.getFile(fitxerID);
-      byte[] xmlData = FileUtils.readFromFile(f);
-      String contenidoXml = new String(xmlData, StandardCharsets.UTF_8 );
-      
-      Properties prop = ParserFormulariXML.getPropertiesFromFormulario(contenidoXml);
-
-      ScspTitular titular = new ScspTitular();
-
-      ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-      String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECE");
-      String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
-      String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
-      String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
-      String fullName = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE");
-
-      titular.setTipoDocumentacion(tipoDocumentacion);
-      titular.setDocumentacion(documentacion);
-      titular.setNombre(nombre);
-      titular.setApellido1(ape1);
-      titular.setApellido2(ape2);
-      titular.setNombreCompleto(fullName);
-
-      return titular;
-  }
-  
   @RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
   public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request,
       HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
@@ -462,20 +405,10 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     } else {
       
-//      log.info("\n\n XML ==> " + soli.getSolicitudXml().getMime() + " \n\n");
-
       // Si és local
       if ("application/xml".equals(soli.getSolicitudXml().getMime())) {
         try {
-  
-          String xml;
-          {
-            byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
-  
-            xml = new String(xmlData, "UTF-8");
-          }
-  
-          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
   
           generarServeis(request, soliID, prop);
   
@@ -518,14 +451,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
         try {
   
-          String xml;
-          {
-            byte[] xmlData = FileSystemManager.getFileContent(fitxerID);
-  
-            xml = new String(xmlData, "UTF-8");
-          }
-  
-          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+          Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
   
           String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
   

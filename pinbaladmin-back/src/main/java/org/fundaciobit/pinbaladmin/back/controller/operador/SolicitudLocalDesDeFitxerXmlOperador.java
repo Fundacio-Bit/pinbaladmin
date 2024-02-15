@@ -115,20 +115,19 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 && !solicitudForm.getSolicitudXmlID().isEmpty()) {
 
             try {
-                byte[] xmlData;
-                if (solicitudForm.getSolicitud().getSolicitudXmlID() == null) {
+                Long fitxerID = solicitudForm.getSolicitud().getSolicitudXmlID();
+                Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+                
+                if (prop == null) {
                     InputStream is = solicitudForm.getSolicitudXmlID().getInputStream();
 
-                    xmlData = FileUtils.toByteArray(is);
+                    byte[] xmlData = FileUtils.toByteArray(is);
 
                     is.close();
-                } else {
-                    xmlData = FileSystemManager.getFileContent(solicitudForm.getSolicitud().getSolicitudXmlID());
+                    String xml = new String(xmlData, "UTF-8");
+                    prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
+                    
                 }
-
-                String xml = new String(xmlData, "UTF-8");
-
-                Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xml);
 
                 // XYZ ZZZ
                 //prop.store(new java.io.FileOutputStream("d://tmp//formulario.properties"), "PINBAL_TRAMIT");

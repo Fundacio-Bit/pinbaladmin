@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -218,6 +220,16 @@ public class ParserFormulariXML {
 
   };
 
+  public static Properties getPropertiesFromFormulario(Long fitxerID) throws Exception {
+      if (fitxerID != null) {
+          File f = FileSystemManager.getFile(fitxerID);
+          byte[] xmlData = FileUtils.readFromFile(f);
+          String xml = new String(xmlData, StandardCharsets.UTF_8);
+          return getPropertiesFromFormulario(xml);
+      }
+      return null;
+  }
+  
   public static Properties getPropertiesFromFormulario(String xml)
       throws Exception {
     DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -235,6 +247,8 @@ public class ParserFormulariXML {
     return prop;
   }
 
+  
+  
   private static void findAttrInChildren(String base, Node element, Properties prop) {
     // if (!element.getAttribute(tag).isEmpty()) {
     // return element.getAttribute(tag);
