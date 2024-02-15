@@ -244,4 +244,12 @@ public class Configuracio implements Constants {
     public static String getApiPinbalCodiProcediment() {
         return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "codiprocediment");
     }
+
+    public static String getUrlFormulariToSistra() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "sistra.formulariurl");
+    }
+
+    public static String getUrlRetornSistra() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "sistra.returnurl");
+    }
 }

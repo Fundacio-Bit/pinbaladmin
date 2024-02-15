@@ -11,6 +11,10 @@ import javax.persistence.Persistence;
 import org.apache.log4j.Logger;
 
 import org.fundaciobit.pinbaladmin.persistence.PinbalAdminJPADaoManagers;
+import org.fundaciobit.genapp.common.crypt.AlgorithmEncrypter;
+import org.fundaciobit.genapp.common.crypt.FileIDEncrypter;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
 
 /*
@@ -31,6 +35,24 @@ public class TestPersistenceJPA {
     public static final void main(String[] args) {
         try {
             log.info(">>>>>>>>>>>>  Hello World!");
+            
+            
+            Long tramitID = 1176L;
+            
+            // Encriptador d'identificador de Fitxer
+            String encriptKey = "1234567890123456";
+            FileIDEncrypter encrypter = new FileIDEncrypter(encriptKey.getBytes(), AlgorithmEncrypter.ALGORITHM_AES);
+            HibernateFileUtil.setEncrypter(encrypter);
+            
+            
+            String uuid = HibernateFileUtil.encryptFileID(tramitID);
+            
+            System.out.println(uuid);
+            
+            if (true) {
+                return;
+                        
+            }
 
             // USING GENAPP
             // ============
