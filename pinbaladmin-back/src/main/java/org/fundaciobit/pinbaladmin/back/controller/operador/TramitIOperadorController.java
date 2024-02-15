@@ -16,6 +16,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.Section;
+import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
@@ -25,8 +26,11 @@ import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
+import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
+import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
@@ -47,7 +51,9 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { TramitIServForm.class, TramitIServFilterForm.class })
 public class TramitIOperadorController extends TramitIServController {
 
+    public static final String CONTEXT_WEB_PREV = TramitHOperadorController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/operador/tramiti";
+    public static final String CONTEXT_WEB_NEXT = TramitJOperadorController.CONTEXT_WEB;
 
     @EJB(mappedName = TramitIServLogicaService.JNDI_NAME)
     protected TramitIServLogicaService tramitIServLogicEjb;
@@ -58,6 +64,14 @@ public class TramitIOperadorController extends TramitIServController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public String getContextWebNext() {
+        return CONTEXT_WEB_NEXT;
+    }
+
+    public String getContextWebPrev() {
+        return CONTEXT_WEB_PREV;
+    }
+    
     @Override
     public String getTileForm() {
         return "tramitIFormOperador";
@@ -94,7 +108,7 @@ public class TramitIOperadorController extends TramitIServController {
     }
 
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
-        Long tramitID = getTramitIDFromRequest(request);
+        Long tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
 
         return TRAMITID.equal(tramitID);
     }
@@ -137,9 +151,10 @@ public class TramitIOperadorController extends TramitIServController {
         tramitForm.addHiddenField(TRAMITID);
 
         TramitIServJPA tramitI = tramitForm.getTramitIServ();
-        Long tramitID = getTramitIDFromRequest(request);
+        Long tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
          if (tramitForm.isNou()) {
 
+             String uuid = HibernateFileUtil.encryptFileID(tramitID);
 
             tramitI.setTramitid(tramitID);
 
@@ -180,53 +195,68 @@ public class TramitIOperadorController extends TramitIServController {
         }
 
         {
-            Long tramitID = getTramitIDFromRequest(request);
+            Long tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
+            String uuid = HibernateFileUtil.encryptFileID(tramitID);
 
             log.info("Estamos en I, servicios del tramite " + tramitID);
 
             tramitIServFilterForm.getAdditionalButtons().clear();
 
-            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("", "genapp.cancel",
-                    getContextWeb() + "/cancelarTramit/" + tramitID, "btn-secondary"));
+            tramitIServFilterForm.addAdditionalButton(
+                    new AdditionalButton("", "Cancelar Tramit", getContextWeb() + "/delete/" + uuid, "btn-secondary"));
 
-            String uuid = request.getParameter("tramitid");
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
                     getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
 
+            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
+                    getContextWebPrev() + "/back/" + uuid, "btn-info"));
+
+            
+            
+            
+            
+            
+            
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
             log.info("serveisAfegits: " + serveisAfegits);
 
             if (serveisAfegits > 0) {
-
                 Where w = Where.AND(TRAMITID.equal(tramitID), CONSENTIMENT.equal(Constants.CONSENTIMENT_TIPUS_NOOP),
                         CONSENTIMENTPUBLICAT.equal(Constants.CONSENTIMENT_ADJUNT));
+
                 long consentimentNecessari = tramitIServLogicEjb.count(w);
 
                 if (consentimentNecessari > 0) {
+                    tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+                            "consentiment", getContextWebNext() + "/next/" + uuid, "btn-primary"));
 
-                    //Chek si ja tenim consentiment.
-                    Where wh = Where.AND(TramitJConsentFields.TRAMITID.equal(tramitID),
-                            TramitJConsentFields.CONSENTID.isNotNull());
-                    List<TramitJConsent> tramitJ = tramitJConsentLogicaEjb.select(wh);
-
-                    if (tramitJ.size() == 0) {
-                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-                                "afegir consentiment",
-                                TramitJOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitID, "btn-primary"));
-                    } else if (tramitJ.size() == 1) {
-                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-                                "veure consentiment",
-                                TramitJOperadorController.CONTEXT_WEB + "/view/" + tramitJ.get(0).getConsentid(),
-                                "btn-primary"));
-                    }
+//                    //Chek si ja tenim consentiment.
+//                    Where wh = Where.AND(TramitJConsentFields.TRAMITID.equal(tramitID),
+//                            TramitJConsentFields.CONSENTID.isNotNull());
+//                    List<TramitJConsent> tramitJ = tramitJConsentLogicaEjb.select(wh);
+//
+//                    if (tramitJ.size() == 0) {
+//                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+//                                "afegir consentiment",
+//                                TramitJOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitID, "btn-primary"));
+//                    } else if (tramitJ.size() == 1) {
+//                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+//                                "veure consentiment",
+//                                TramitJOperadorController.CONTEXT_WEB + "/view/" + tramitJ.get(0).getConsentid(),
+//                                "btn-primary"));
+//                    }
                 } else {
                     tramitIServFilterForm.addAdditionalButton(
                             new AdditionalButton("fas fa-check-circle", "tramit.i.finalitzar.tramit",
-                                    TramitAOperadorController.CONTEXT_WEB + "/generaxml/" + tramitID, "btn-primary"));
+                                    TramitAPublicController.CONTEXT_WEB + "/finalitzarTramit/" + uuid, "btn-primary"));
                 }
             }
+            
+            
+            
+            
+            
         }
-
         return tramitIServFilterForm;
     }
 
@@ -236,24 +266,17 @@ public class TramitIOperadorController extends TramitIServController {
         return (TramitIServJPA) tramitIServLogicEjb.create(tramitIServ);
     }
 
-    @RequestMapping(value = "/cancelarTramit/{tramitid}", method = RequestMethod.GET)
-    public String cancelarTramit(HttpServletRequest request, @PathVariable("tramitid") Long tramitID) {
-
-        try {
-            log.info("Estamos en I, vamos a borrar. TramitID=" + tramitID);
-
-            if (tramitID == null) {
-                log.info("No se borran tablas porque estás en edit o en view");
-            } else {
-                tramitAPersAutLogicEjb.deleteFull(tramitID);
-                request.getSession().removeAttribute("tramitid");
-                HtmlUtils.saveMessageError(request, "Tramit Cancelat (taules borrades)");
-            }
-        } catch (I18NException e) {
-            HtmlUtils.saveMessageError(request, "Error esborrant les taules del tramit sistra");
-        }
-        return "redirect:" + TramitAOperadorController.RETURN_URL;
+    @Override
+    public TramitIServJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long id) throws I18NException {
+        return (TramitIServJPA) tramitIServLogicEjb.findByPrimaryKey(id);
     }
+
+    @Override
+    public TramitIServJPA update(HttpServletRequest request, TramitIServJPA tramitJPA)
+            throws I18NException, I18NValidationException {
+        return (TramitIServJPA) tramitIServLogicEjb.update(tramitJPA);
+    }
+
 
     @Override
     public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
@@ -291,11 +314,27 @@ public class TramitIOperadorController extends TramitIServController {
             I.setUrlconsentiment("");
         }
     }
-
     
-    public Long getTramitIDFromRequest(HttpServletRequest request) {
-        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
+    //===========================================================================================================================
+
+    //En este caso, cuando H llama a next, siempre llevará al listado, esté vacío o lleno.
+    @RequestMapping(value = "/next/{uuid}", method = RequestMethod.GET)
+    public String getNextTramitFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return "redirect:" + getContextWeb() + "/list/1?tramitid=" + uuid;
     }
 
+    //Si estamos en D, miramos el back de C, y que nos de su /edit
+    @RequestMapping(value = "/back/{uuid}", method = RequestMethod.GET)
+    public String getEditUrlFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return "redirect:" + getContextWeb() + "/list/1?tramitid=" + uuid;
+    }
+    
+    @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
+    public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    }
     
 }

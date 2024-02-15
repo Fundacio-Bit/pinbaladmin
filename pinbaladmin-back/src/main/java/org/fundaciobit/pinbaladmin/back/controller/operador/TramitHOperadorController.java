@@ -5,14 +5,17 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitHProcController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcForm;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
@@ -21,11 +24,19 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
+import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
+import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -38,7 +49,9 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { TramitHProcForm.class, TramitHProcFilterForm.class })
 public class TramitHOperadorController extends TramitHProcController {
 
+    public static final String CONTEXT_WEB_PREV = TramitGOperadorController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/operador/tramith";
+    public static final String CONTEXT_WEB_NEXT = TramitIOperadorController.CONTEXT_WEB;
 
     @EJB(mappedName = TramitHProcLogicaService.JNDI_NAME)
     protected TramitHProcLogicaService tramitHProcLogicEjb;
@@ -46,6 +59,14 @@ public class TramitHOperadorController extends TramitHProcController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public String getContextWebNext() {
+        return CONTEXT_WEB_NEXT;
+    }
+
+    public String getContextWebPrev() {
+        return CONTEXT_WEB_PREV;
+    }
+    
     @Override
     public String getTileForm() {
         return "tramitHFormOperador";
@@ -77,46 +98,15 @@ public class TramitHOperadorController extends TramitHProcController {
     }
 
     @Override
-    public String getRedirectWhenCreated(HttpServletRequest request, TramitHProcForm tramitHProcForm) {
-        Long tramitId = tramitHProcForm.getTramitHProc().getTramitid();
-
-        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
-
-        //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitIOperadorController.CONTEXT_WEB + "/list/1?tramitid=" + uuid;
-    }
-
-    @Override
-    public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long _ID_) {
-        try {
-            Long tramitID = (Long) request.getSession().getAttribute("tramitid");
-            log.info("Estamos en H, vamos a borrar. TramitID=" + tramitID);
-
-            if (tramitID == null) {
-                log.info("No se borran tablas porque estás en edit o en view");
-            } else {
-                tramitAPersAutLogicEjb.deleteFull(tramitID);
-                request.getSession().removeAttribute("tramitid");
-                HtmlUtils.saveMessageError(request, "Tramit Cancelat (taules borrades)");
-            }
-        } catch (I18NException e) {
-            HtmlUtils.saveMessageError(request, "Error esborrant les taules del tramit sistra");
-        }
-        return "redirect:" + TramitAOperadorController.RETURN_URL;
-    }
-
-    @Override
     public TramitHProcForm getTramitHProcForm(TramitHProcJPA _jpa, boolean __isView, HttpServletRequest request,
             ModelAndView mav) throws I18NException {
         TramitHProcForm tramitForm = super.getTramitHProcForm(_jpa, __isView, request, mav);
-        tramitForm.setTitleCode("tramit.sistra.titol.h");
 
-        if (__isView) {
+        Long tramitID; 
 
-        } else if (tramitForm.isNou()) {
+        if (tramitForm.isNou()) {
+            tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
             TramitHProcJPA tramitH = tramitForm.getTramitHProc();
-
-            Long tramitID = getTramitIDFromRequest(request);
 
             tramitH.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
@@ -130,8 +120,23 @@ public class TramitHOperadorController extends TramitHProcController {
             tramitH.setPeticionsaldia(12);
             tramitH.setPeticionsalmes(450);
             tramitH.setAutomatizado(true);
-            //tramitH.setCaducitatdata(new Timestamp(System.currentTimeMillis()));
+
+            tramitForm.setTitleCode("tramit.sistra.titol.h");
+        }else {
+            tramitID = tramitForm.getTramitHProc().getTramitid();
         }
+        
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
+        
+        tramitForm.setCancelButtonVisible(false);
+        tramitForm.setDeleteButtonVisible(false);
+
+        tramitForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
+                getContextWebPrev() + "/back/" + uuid, "btn-info"));
+
+        tramitForm.addAdditionalButton(
+                new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+
         tramitForm.setAttachedAdditionalJspCode(true);
         return tramitForm;
     }
@@ -141,6 +146,18 @@ public class TramitHOperadorController extends TramitHProcController {
             throws I18NException, I18NValidationException {
         return (TramitHProcJPA) tramitHProcLogicEjb.create(tramitHProc);
     }
+
+    @Override
+    public TramitHProcJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long id) throws I18NException {
+        return (TramitHProcJPA) tramitHProcLogicEjb.findByPrimaryKey(id);
+    }
+
+    @Override
+    public TramitHProcJPA update(HttpServletRequest request, TramitHProcJPA tramitJPA)
+            throws I18NException, I18NValidationException {
+        return (TramitHProcJPA) tramitHProcLogicEjb.update(tramitJPA);
+    }
+
 
     @Override
     public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request, ModelAndView mav, Where where)
@@ -184,19 +201,7 @@ public class TramitHOperadorController extends TramitHProcController {
 
         return tp;
     }
-    
-    @Override
-    public String getRedirectWhenModified(HttpServletRequest request, TramitHProcForm tramitHProcForm,
-            Throwable __e) {
-        if (__e == null) {
-            return "redirect:" + TramitAOperadorController.CONTEXT_WEB + "/list";
-        } else {
-            return getTileForm();
-        }
-    }
-    
-    
-    
+
     public void postValidate(HttpServletRequest request, TramitHProcForm tramitHProcForm, BindingResult result)
             throws I18NException {
 
@@ -219,8 +224,78 @@ public class TramitHOperadorController extends TramitHProcController {
         }
     }
     
-    public Long getTramitIDFromRequest(HttpServletRequest request) {
-        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
+    //===========================================================================================================================
+    //Si estamos en D, cuando le damos a /next, E comprueba si existe o no, y le saca el new o el edit.
+    @RequestMapping(value = "/next/{uuid}", method = RequestMethod.GET)
+    public String getNextTramitFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+
+        Long creats = tramitHProcLogicEjb.count(TramitHProcFields.TRAMITID.equal(tramitID));
+
+        if (creats == 0) {
+            return "redirect:" + getContextWeb() + "/new?tramitid=" + uuid;
+        }else {
+            return "redirect:" + getContextWeb() + "/edit/" + uuid;
+        }
     }
 
+    //Si estamos en D, miramos el back de C, y que nos de su /edit
+    @RequestMapping(value = "/back/{uuid}", method = RequestMethod.GET)
+    public String getEditUrlFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return "redirect:" + getContextWeb() + "/edit/" + uuid;
+    }
+    
+    
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.GET)
+    public ModelAndView editarTramitC2(@PathVariable("uuid") java.lang.String uuid, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        
+        Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+        Long id = tramitHProcLogicEjb.executeQueryOne(TramitHProcFields.PROCID,
+                TramitHProcFields.TRAMITID.equal(tramitID));
+    
+        return super.editarTramitHProcGet(id, request, response);
+    }
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.POST)
+    public String editarTramitHProcPost(@ModelAttribute TramitHProcForm tramitForm,
+            BindingResult result, SessionStatus status, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        return super.editarTramitHProcPost(tramitForm, result, status, request, response);
+    }
+
+    @Override
+    public String getRedirectWhenCreated(HttpServletRequest request, TramitHProcForm tramitHProcForm) {
+        Long tramitId = tramitHProcForm.getTramitHProc().getTramitid();
+        
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+        return "redirect:" + getContextWebNext() + "/next/" + uuid;
+    }
+
+    @Override
+    public String getRedirectWhenModified(HttpServletRequest request, TramitHProcForm tramitForm,
+            Throwable __e) {
+        log.info("Esteim a getRedirectWhenModified de TramitH");
+
+        if (__e == null) {
+            return getRedirectWhenCreated(request, tramitForm);
+        } else {
+            return getTileForm();
+        }
+    }
+
+//    @Override
+//    public ModelAndView editarTramitHProcGet(@PathVariable("dadescesiid") java.lang.Long dadescesiid,
+//            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+//    
+//        return editAndViewTramitHProcGet(dadescesiid, request, response, false);
+//    }
+    
+    @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
+    public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    }
+    
 }

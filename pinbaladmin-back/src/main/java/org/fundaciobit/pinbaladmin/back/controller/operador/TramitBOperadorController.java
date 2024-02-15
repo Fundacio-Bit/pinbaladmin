@@ -4,22 +4,32 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitBDadesSoliController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitBDadesSoliFilterForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitBDadesSoliForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitBDadesSoliForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitBDadesSoliLogicaService;
+import org.fundaciobit.pinbaladmin.model.fields.TramitBDadesSoliFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitBDadesSoliFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -33,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class TramitBOperadorController extends TramitBDadesSoliController {
 
     public static final String CONTEXT_WEB = "/operador/tramitb";
+    public static final String CONTEXT_WEB_NEXT = TramitCOperadorController.CONTEXT_WEB;
 
     @EJB(mappedName = TramitBDadesSoliLogicaService.JNDI_NAME)
     protected TramitBDadesSoliLogicaService tramitBDadesSoliLogicEjb;
@@ -40,6 +51,10 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public String getContextWebNext() {
+        return CONTEXT_WEB_NEXT;
+    }
+    
     @Override
     public String getTileForm() {
         return "tramitBFormOperador";
@@ -71,52 +86,35 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
     }
 
     @Override
-    public String getRedirectWhenCreated(HttpServletRequest request, TramitBDadesSoliForm tramitBDadesSoliForm) {
-        Long tramitId = tramitBDadesSoliForm.getTramitBDadesSoli().getTramitid();
-
-        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
-        //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitCOperadorController.CONTEXT_WEB + "/new?tramitid=" + uuid ;
-    }
-
-    @Override
-    public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long _ID_) {
-        try {
-            Long tramitID = (Long) request.getSession().getAttribute("tramitid");
-            log.info("Estamos en B, vamos a borrar. TramitID=" + tramitID);
-
-            tramitAPersAutLogicEjb.deleteFull(tramitID);
-            request.getSession().removeAttribute("tramitid");
-
-            HtmlUtils.saveMessageError(request, "Tramit Cancelat (taules borrades");
-        } catch (I18NException e) {
-            HtmlUtils.saveMessageError(request, "Error esborrant les taules del tramit sistra");
-        }
-        return "redirect:" + TramitAOperadorController.RETURN_URL;
-    }
-
-    @Override
     public TramitBDadesSoliForm getTramitBDadesSoliForm(TramitBDadesSoliJPA _jpa, boolean __isView,
             HttpServletRequest request, ModelAndView mav) throws I18NException {
         TramitBDadesSoliForm tramitForm = super.getTramitBDadesSoliForm(_jpa, __isView, request, mav);
         tramitForm.setTitleCode("tramit.sistra.titol.b");
 
-        
-        if (__isView) {
+        Long tramitID; 
 
-        } else if (tramitForm.isNou()) {
+        if (tramitForm.isNou()) {
+            tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
             TramitBDadesSoliJPA tramitB = tramitForm.getTramitBDadesSoli();
 
-            Long tramitID = getTramitIDFromRequest(request);
-            
             tramitB.setTramitid(tramitID);
             tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
 
-            tramitB.setEntorn("pro");
-        } else {
-
+            tramitB.setEntorn("pro");            
+        }else {
+            tramitID = tramitForm.getTramitBDadesSoli().getTramitid();
         }
+        
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
+
+        tramitForm.setCancelButtonVisible(false);
+        tramitForm.setDeleteButtonVisible(false);
+
+        tramitForm.addAdditionalButton(
+                new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+
+        tramitForm.setAttachedAdditionalJspCode(true);
         return tramitForm;
     }
 
@@ -143,17 +141,77 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
         return __tmp;
     }
 
+    //Si estamos en D, cuando le damos a /next, E comprueba si existe o no, y le saca el new o el edit.
+    @RequestMapping(value = "/next/{uuid}", method = RequestMethod.GET)
+    public String getNextTramitFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+
+        Long creats = tramitBDadesSoliLogicEjb.count(TramitBDadesSoliFields.TRAMITID.equal(tramitID));
+
+        if (creats == 0) {
+            return "redirect:" + getContextWeb() + "/new?tramitid=" + uuid;
+        }else {
+            return "redirect:" + getContextWeb() + "/edit/" + uuid;
+        }
+    }
+
+    //Si estamos en D, miramos el back de C, y que nos de su /edit
+    @RequestMapping(value = "/back/{uuid}", method = RequestMethod.GET)
+    public String getEditUrlFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return "redirect:" + getContextWeb() + "/edit/" + uuid;
+    }
+    
+    
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.GET)
+    public ModelAndView editarTramitC2(@PathVariable("uuid") java.lang.String uuid, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        
+        Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+        Long id = tramitBDadesSoliLogicEjb.executeQueryOne(TramitBDadesSoliFields.DADESSOLIID,
+                TramitBDadesSoliFields.TRAMITID.equal(tramitID));
+    
+        return super.editarTramitBDadesSoliGet(id, request, response);
+    }
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.POST)
+    public String editarTramitBDadesSoliPost(@ModelAttribute TramitBDadesSoliForm tramitForm,
+            BindingResult result, SessionStatus status, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        return super.editarTramitBDadesSoliPost(tramitForm, result, status, request, response);
+    }
+
     @Override
-    public String getRedirectWhenModified(HttpServletRequest request, TramitBDadesSoliForm tramitBDadesSoliForm,
+    public String getRedirectWhenCreated(HttpServletRequest request, TramitBDadesSoliForm tramitBDadesSoliForm) {
+        Long tramitId = tramitBDadesSoliForm.getTramitBDadesSoli().getTramitid();
+        
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+        return "redirect:" + getContextWebNext() + "/next/" + uuid;
+    }
+
+    @Override
+    public String getRedirectWhenModified(HttpServletRequest request, TramitBDadesSoliForm tramitForm,
             Throwable __e) {
+        log.info("Esteim a getRedirectWhenModified de TramitB");
+
         if (__e == null) {
-            return "redirect:" + TramitAOperadorController.CONTEXT_WEB + "/list";
+            return getRedirectWhenCreated(request, tramitForm);
         } else {
             return getTileForm();
         }
     }
 
-    public Long getTramitIDFromRequest(HttpServletRequest request) {
-        return HibernateFileUtil.decryptFileID(request.getParameter("tramitid")); 
+//    @Override
+//    public ModelAndView editarTramitBDadesSoliGet(@PathVariable("dadescesiid") java.lang.Long dadescesiid,
+//            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+//    
+//        return editAndViewTramitBDadesSoliGet(dadescesiid, request, response, false);
+//    }
+    
+    @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
+    public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
+            throws I18NException, I18NValidationException {
+        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
     }
+    
 }
