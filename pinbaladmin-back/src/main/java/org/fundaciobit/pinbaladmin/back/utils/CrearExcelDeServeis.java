@@ -31,13 +31,24 @@ public class CrearExcelDeServeis {
 
   protected static final Logger log = Logger.getLogger(CrearExcelDeServeis.class);
 
-  public static final String[] CAMPS_EXCEL = { "Código del Procedimiento",
-      "Nombre del Procedimiento", "Cedente", "Servicio",
-      "Descripción (Codi. Desc. de Sol·licitud o DESCRIPCION de formulari.xml))",
-      "Tipo de Procedimiento",
-      "Consentimiento (Possibles valors: Si, Sí, Llei, Ley, No oposició, No oposición) ",
-      "Norma Legal", "Artículos", "Enlace http Norma Legal", "Enlace http Consentimiento ",
-      "ENLACENORCaducidad", "Periódico", "Automatizado" };
+  public static final String[] CAMPS_EXCEL = {
+          "Código del Procedimiento", //0
+          "Nombre del Procedimiento", //1
+          "Cedente", //2
+          "Servicio", //3
+          "Periodo", //4
+          "Descripción (Codi. Desc. de Sol·licitud o DESCRIPCION de formulari.xml))", //5
+          "Tipo de Procedimiento", //6
+          "Consentimiento (Possibles valors: Si, Sí, Llei, Ley, No oposició, No oposición) ", //7
+          "Norma Legal", //8
+          "Artículos", //9
+          "Enlace http Norma Legal", //10
+          "Enlace http Consentimiento ", //11
+          "ENLACENORCaducidad", //12
+          "Periódico", //13
+          "Automatizado", //14
+          "Peticiones al dia" // 15 
+  };
 
   protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli)
       throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
@@ -111,11 +122,11 @@ public class CrearExcelDeServeis {
         log.info("Consentiment: " + origen);
         
         final String consentiment;
-        if ("No oposición".toLowerCase().equals(origen.toLowerCase()) || "No oposició".toLowerCase().equals(origen.toLowerCase())) {
+        if(origen.equals("noop")) {
             consentiment = "NO_OPOSICION";
-        } else if ("Sí".toLowerCase().equals(origen.toLowerCase()) || "Si".toLowerCase().equals(origen.toLowerCase())) {
+        } else if (origen.equals("si")) {
             consentiment = "Si";
-        } else if ("Llei".toLowerCase().equals(origen.toLowerCase()) || "Ley".toLowerCase().equals(origen.toLowerCase())) {
+        } else if (origen.equals("llei")) {
             consentiment = "Ley";
         } else {
             consentiment = null;
