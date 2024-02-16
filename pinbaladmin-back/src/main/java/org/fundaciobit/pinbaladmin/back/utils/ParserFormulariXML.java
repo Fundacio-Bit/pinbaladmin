@@ -91,7 +91,7 @@ public class ParserFormulariXML {
     if (cp == null || cp.trim().length() == 0 ) {
       cp = "";
     }
-    data.put("cp", "");
+    data.put("cp", cp);
     
     
     String entorn = props.getProperty("FORMULARIO.DATOS_SOLICITUD.LDAENTORNOCULTO");
@@ -108,22 +108,6 @@ public class ParserFormulariXML {
     } else { 
       data.put("preproduccion", true);
     }
-    
-    
-    String dir3Gestor = props.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
-    if (dir3Gestor == null || dir3Gestor.trim().length() == 0 ) {
-      cp = "";
-    }else {
-        
-    }
-    data.put("cp", "");
-    
-//  String nouOrganGestor = soli.getOrgan().getNom();
-//  prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", nouOrganGestor);
-    
-    
-    
-    
 
     FileOutputStream fosPDF = new FileOutputStream(outputPDF);
     FileOutputStream fosODT = new FileOutputStream(outputOdt);
@@ -144,7 +128,7 @@ public class ParserFormulariXML {
         fosPDF.flush();
         fosPDF.close();
       } catch (Exception e) {
-        e.printStackTrace();
+          System.err.println("Error creant Documents de Solicitud" + e.getMessage());
       }
 
     }
@@ -243,13 +227,53 @@ public class ParserFormulariXML {
     Properties prop = new Properties();
 
     Node element = nodesForm.item(0);
-    findAttrInChildren("", element, prop);
+
+    boolean xmlIsXsd = xml.indexOf("urn:es:caib:sistra2:xml:formulario:v1:model") > 0;
+    
+    if (xmlIsXsd) {
+        System.out.println("cumpleix XSD");
+        findAttrInChildren("", element, prop);
+    }else {
+        System.out.println("NO cumpleix XSD");
+        findAttrInChildren2("", element, prop);
+    }
+    
     return prop;
   }
 
-  
-  
   private static void findAttrInChildren(String base, Node element, Properties prop) {
+      String name = element.getNodeName();
+
+      if (name.equals("CAMPO")) {
+          Element campoElement = (Element) element;
+          String tramitPart = campoElement.getAttribute("id");
+                  
+          NodeList children = element.getChildNodes();
+          for (int i = 0, len = children.getLength(); i < len; i++) {
+              Node child = children.item(i);
+              if (child.getNodeType() == Node.ELEMENT_NODE) {
+                  Element childElement = (Element) child;
+                  String key = base + tramitPart + "." + childElement.getAttribute("codigo");
+                  String value = childElement.getTextContent().trim();
+                  prop.setProperty(key, value);
+                  System.out.println(key + " : " + value);
+
+              }
+          }
+      } else {
+          NodeList children = element.getChildNodes();
+          for (int i = 0, len = children.getLength(); i < len; i++) {
+              Node child = children.item(i);
+              if (child.getNodeType() == Node.ELEMENT_NODE) {
+                  Element childElement = (Element) child;
+                  findAttrInChildren(base + name + ".", childElement, prop);
+              }
+          }
+      }
+  }
+
+  
+  private static void findAttrInChildren2(String base, Node element, Properties prop) {
     // if (!element.getAttribute(tag).isEmpty()) {
     // return element.getAttribute(tag);
     // }
@@ -263,7 +287,7 @@ public class ParserFormulariXML {
       for (int i = 0, len = children.getLength(); i < len; i++) {
         if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
           Element childElement = (Element) children.item(i);
-          findAttrInChildren(base + name + ".", childElement, prop);
+          findAttrInChildren2(base + name + ".", childElement, prop);
         }
       }
     } else {

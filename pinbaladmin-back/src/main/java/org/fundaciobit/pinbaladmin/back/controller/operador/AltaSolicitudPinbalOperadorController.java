@@ -94,7 +94,8 @@ public class AltaSolicitudPinbalOperadorController {
                     errors.add("Fa falta un document d'autorització");
                 }
 
-                if (solicitudA.getProcedimiento().getServicios().getServicio().size() == 0) {
+                if (solicitudA.getProcedimiento().getServicios() == null
+                        || solicitudA.getProcedimiento().getServicios().getServicio().size() == 0) {
                     errors.add("No hi ha serveis pendents d'autoritzar");
                 }
                 
@@ -317,7 +318,7 @@ public class AltaSolicitudPinbalOperadorController {
         String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
         String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
         String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
-        String fullName = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE");
+        String fullName = toFullName(nombre, ape1, ape2);
 
         titular.setTipoDocumentacion(tipoDocumentacion);
         titular.setDocumentacion(documentacion);
@@ -347,4 +348,10 @@ public class AltaSolicitudPinbalOperadorController {
         funcionario.setNombreCompletoFuncionario(fullName);
         return funcionario;
     }
+    
+    private String toFullName(String nom, String l1, String l2) {
+        String fullName = nom + " " + l1 + (l2 == "" ? "" : " " + l2);
+        return fullName;
+    }
+
 }

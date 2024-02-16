@@ -148,6 +148,8 @@ public class TramitAPublicController extends TramitAOperadorController {
         log.info("Generador del fitxer XML amb tramitID=" + tramitID);
 
         SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitID);
+        log.info("Solicitud Creada a BBDD: " + soli.getSolicitudID());
+        
         Long fitxerID = soli.getSolicitudXmlID();
         Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
 

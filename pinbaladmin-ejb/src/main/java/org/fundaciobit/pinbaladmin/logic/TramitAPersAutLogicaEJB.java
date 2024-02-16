@@ -142,14 +142,14 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     private Long generarXMLFromMap(Map<String, Object> map) {
         try {
 
-            String fileXml = Configuracio.getTemplateTramitSistraXml();
-            log.info("fileXml: " + fileXml);
+            String plantillaFitxerXml = Configuracio.getTemplateTramitSistraXml();
+            log.info("fileXml: " + plantillaFitxerXml );
 
-            String plantilla = FileUtils.readFileToString(new File(fileXml), Charset.defaultCharset());
+            String plantilla = FileUtils.readFileToString(new File(plantillaFitxerXml ), Charset.defaultCharset());
 
             String result = TemplateEngine.processExpressionLanguage(plantilla, map);
 
-            String fileName = "D:/Projectes/pinbaladmin-files/formulario.xml";
+            String fileName = "D:/Projectes/pinbaladmin-files/formulario_nuevo.xml";
 
             FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
 

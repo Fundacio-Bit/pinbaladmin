@@ -147,7 +147,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                     solicitud.setProcedimentNom(nomProcediment);
                 }
                 {
-                    String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR");
+                    String codiDescriptiu = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
                     if (codiDescriptiu != null && codiDescriptiu.length() > 250) {
                         codiDescriptiu = codiDescriptiu.substring(0, 250);
                     }

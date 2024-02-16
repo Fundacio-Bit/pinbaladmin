@@ -2554,3 +2554,15 @@ UPDATE pad_document SET tipus = 2 WHERE nom like '%Formulario_Director_General (
 UPDATE pad_document SET tipus = 3 WHERE nom like '%_Plantilla-Procedimientos.xlsx%'
 UPDATE pad_document SET tipus = 4 WHERE nom like '%onsentim%'
 UPDATE pad_document SET tipus = 0 WHERE tipus is null
+
+-- POSAR CORRECTAMENT EL CONSENTIMENT A LES SOLICITUDS
+UPDATE pad_solicitudservei
+SET consentiment = 
+    CASE 
+        WHEN UPPER(consentiment) IN ('LEY', 'LLEI') THEN 'llei'
+        WHEN UPPER(consentiment) IN ('NOOP', 'NOOPO', 'NO OPO', 'NOOPOSICION', 'NO OPOSICION', 'NO OPOSICIÓ', 'NO OPOSICIÓN') THEN 'noop'
+        WHEN UPPER(consentiment) IN ('SI', 'SÍ') THEN 'si'
+        ELSE consentiment
+    END;
+
+
