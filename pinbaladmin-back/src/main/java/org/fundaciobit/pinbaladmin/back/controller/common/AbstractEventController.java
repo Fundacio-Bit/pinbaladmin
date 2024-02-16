@@ -459,6 +459,55 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public static final String ENVIAR_ENLLAZ = "/enviarenllaz/";
 
+    public void enviarCorreuASuport(HttpServletRequest request, Long itemID, String titol) {
+
+        log.info("Enviarem correu a Suport: " + titol);
+        final String emailSuport = "suport@caib.es";
+
+        Long solicitudID = null;
+        Long incidenciaTecnicaID = itemID;
+        String tipusItem = "Incidència";
+
+        boolean isHtml = true;
+        FitxerJPA adjunt = null;
+        String subject = "PINBAL [" + itemID + "] - ALTA " + tipusItem.toUpperCase() + " - " + titol;
+
+        String msg = getCapCorreu(tipusItem, itemID) + "    Des de la Fundació Bit l'informam que s'ha creat la "
+                + tipusItem + " titulada '" + titol + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+                + "    Per fer el seguiment de la " + tipusItem + " ho podrà fer utilitzant el següent enllaç: "
+                + "<a href=\"" + getLinkPublic(itemID) + "\" > Accedir a " + tipusItem + "</a>" + "<br/><br/>"
+                + getPeuCorreu();
+
+        try {
+            log.info("Enviam CORREU");
+            EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, emailSuport);
+            log.info("CORREU enviat");
+            HtmlUtils.saveMessageSuccess(request, "S'ha enviat un correu a suport (" + emailSuport + ")");
+
+            {
+                final Timestamp data = new Timestamp(System.currentTimeMillis());
+                final String caidIdentificadorConsulta = null;
+                final String caidNumeroSeguiment = null;
+
+                int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
+                boolean _noLlegit_ = true;
+                Long _fitxerID_ = null;
+                String _contacteNom_ = "PinbalAdmin"; //Quien envia el mensaje
+                String _destinatari_ = "Suport DGSAMAD"; //Quien recibe el mensaje
+                String _destinatariEmail_ = emailSuport; //Correo de quien lo recibe
+                msg = "<div>" + msg  + "</div>";
+                eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, _contacteNom_, _destinatari_,
+                        _destinatariEmail_, msg, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                        caidNumeroSeguiment);
+            }
+
+        } catch (Exception e) {
+            msg = "No s'ha pogut enviar el correu a suport (" + emailSuport + "): " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+    }
+    
     @RequestMapping(value = ENVIAR_ENLLAZ + "{itemID}", method = RequestMethod.GET)
     public String enviarEnllaz(HttpServletRequest request, HttpServletResponse response, @PathVariable Long itemID) {
 
@@ -511,6 +560,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
                         EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
                         HtmlUtils.saveMessageSuccess(request,
                                 "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
+                        
+                        if (titol.indexOf("CAI-") > 0) {
+                            enviarCorreuASuport(request, itemID, titol);
+//                            HtmlUtils.saveMessageWarning(request,"Hauriem d'enviar un correu a suport");
+                        }
                     } catch (Exception e) {
                         msg = "No s'ha pogut enviar el correu a " + address + ": " + e.getMessage();
                         log.error(msg, e);
