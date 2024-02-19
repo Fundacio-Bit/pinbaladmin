@@ -9,7 +9,6 @@ import javax.ejb.Stateless;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.TramitJConsentEJB;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
-import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;

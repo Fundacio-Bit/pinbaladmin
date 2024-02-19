@@ -2,9 +2,7 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,11 +26,8 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
-import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
-import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitAPersAutController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
@@ -40,9 +35,6 @@ import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.ejb.FitxerService;
-import org.fundaciobit.pinbaladmin.ejb.OrganService;
-import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutService;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
@@ -57,7 +49,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
-import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -70,10 +61,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 /**
  * 

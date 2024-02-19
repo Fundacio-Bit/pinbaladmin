@@ -36,25 +36,8 @@
           <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/externa/secure/tramitsistra/TramitSistraPojo.class</string>
           <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/externa/secure/tramitsistra/TramitSistraService.class</string>
           <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/externa/secure/tramitsistra/Usuario.class</string>
-          <string>WEB-INF/lib/activation-1.1.1.jar</string>
-          <string>WEB-INF/lib/genapp-core-2.0.0-SNAPSHOT.jar</string>
-          <string>WEB-INF/lib/javax.annotation-api-1.3.2.jar</string>
-          <string>WEB-INF/lib/commons-io-2.5.0.redhat-3.jar</string>
           <string>WEB-INF/lib/pluginsib-utils-rest-2.0.0-SNAPSHOT.jar</string>
           <string>WEB-INF/lib/commons-lang3-3.8.0.redhat-00001.jar</string>
-          <string>WEB-INF/lib/pluginsib-utils-xml-2.0.0.jar</string>
-          <string>WEB-INF/lib/jaxb-api-2.3.1.jar</string>
-          <string>WEB-INF/lib/javax.activation-api-1.2.0.jar</string>
-          <string>WEB-INF/lib/jaxb-runtime-2.3.1.redhat-00001.jar</string>
-          <string>WEB-INF/lib/txw2-2.3.1.redhat-00001.jar</string>
-          <string>WEB-INF/lib/istack-commons-runtime-3.0.7.redhat-00001.jar</string>
-          <string>WEB-INF/lib/stax-ex-1.8.jar</string>
-          <string>WEB-INF/lib/FastInfoset-1.2.13.redhat-1.jar</string>
-          <string>WEB-INF/lib/jakarta.activation-api-1.2.2.jar</string>
-          <string>WEB-INF/lib/jakarta.mail-api-1.6.4.jar</string>
-          <string>WEB-INF/lib/pluginsib-core-2.0.0.jar</string>
-          <string>WEB-INF/lib/pluginsib-utils-commons-2.0.0.jar</string>
-          <string>WEB-INF/lib/gson-2.8.2.redhat-5.jar</string>
         </pathsSet>
       </path-set>
     </entry>
@@ -380,80 +363,6 @@
         </versionLocation>
         <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-rest:jar</managementKey>
       </dependency>
-    </org.apache.maven.plugins.war.util.DependencyInfo>
-    <org.apache.maven.plugins.war.util.DependencyInfo>
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.utils</groupId>
-        <artifactId>pluginsib-utils-xml</artifactId>
-        <version>2.0.0</version>
-        <type>jar</type>
-        <scope>compile</scope>
-        <exclusions/>
-        <location>
-          <lineNumber>81</lineNumber>
-          <columnNumber>29</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </location>
-        <groupIdLocation>
-          <lineNumber>82</lineNumber>
-          <columnNumber>22</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </groupIdLocation>
-        <artifactIdLocation>
-          <lineNumber>83</lineNumber>
-          <columnNumber>25</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </artifactIdLocation>
-        <versionLocation>
-          <lineNumber>84</lineNumber>
-          <columnNumber>22</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </versionLocation>
-        <typeLocation>
-          <lineNumber>85</lineNumber>
-          <columnNumber>19</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </typeLocation>
-        <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-xml:jar</managementKey>
-      </dependency>
-      <targetFileName>pluginsib-utils-xml-2.0.0.jar</targetFileName>
-    </org.apache.maven.plugins.war.util.DependencyInfo>
-    <org.apache.maven.plugins.war.util.DependencyInfo>
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.utils</groupId>
-        <artifactId>pluginsib-utils-commons</artifactId>
-        <version>2.0.0</version>
-        <type>jar</type>
-        <scope>compile</scope>
-        <exclusions/>
-        <location>
-          <lineNumber>87</lineNumber>
-          <columnNumber>21</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </location>
-        <groupIdLocation>
-          <lineNumber>88</lineNumber>
-          <columnNumber>22</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </groupIdLocation>
-        <artifactIdLocation>
-          <lineNumber>89</lineNumber>
-          <columnNumber>25</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </artifactIdLocation>
-        <versionLocation>
-          <lineNumber>90</lineNumber>
-          <columnNumber>22</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </versionLocation>
-        <typeLocation>
-          <lineNumber>91</lineNumber>
-          <columnNumber>19</columnNumber>
-          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-        </typeLocation>
-        <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-commons:jar</managementKey>
-      </dependency>
-      <targetFileName>pluginsib-utils-commons-2.0.0.jar</targetFileName>
     </org.apache.maven.plugins.war.util.DependencyInfo>
     <org.apache.maven.plugins.war.util.DependencyInfo>
       <dependency>

@@ -1,12 +1,10 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
-import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
@@ -14,9 +12,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
-import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * 

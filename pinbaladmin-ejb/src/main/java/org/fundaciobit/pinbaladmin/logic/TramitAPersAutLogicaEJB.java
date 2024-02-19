@@ -23,8 +23,6 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
-import org.fundaciobit.pinbaladmin.ejb.EventService;
-import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
