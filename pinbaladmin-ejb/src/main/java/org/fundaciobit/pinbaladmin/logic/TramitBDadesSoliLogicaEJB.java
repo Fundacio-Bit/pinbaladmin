@@ -3,11 +3,13 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.TramitBDadesSoliEJB;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
@@ -35,6 +37,12 @@ public class TramitBDadesSoliLogicaEJB extends TramitBDadesSoliEJB implements Tr
     public TramitBDadesSoli create(TramitBDadesSoli instance) throws I18NException {
         log.info("TramitBDadesSoli::TramitID: " + instance.getTramitid());
         return super.create(instance);
+    }
+
+    @Override
+    @PermitAll
+    public TramitBDadesSoli update(TramitBDadesSoli instance) throws I18NException {
+         return super.update(instance);
     }
 
     @Override

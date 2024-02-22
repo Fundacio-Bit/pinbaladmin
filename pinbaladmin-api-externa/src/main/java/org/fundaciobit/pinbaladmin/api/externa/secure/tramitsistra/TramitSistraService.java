@@ -1,12 +1,10 @@
 package org.fundaciobit.pinbaladmin.api.externa.secure.tramitsistra;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -17,13 +15,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -33,14 +28,10 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
-import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
-import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
-import org.fundaciobit.pluginsib.core.utils.PluginsManager;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
 import org.fundaciobit.pluginsib.utils.rest.RestExceptionInfo;
-import org.fundaciobit.pluginsib.utils.xml.XmlValidation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,14 +41,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.media.Content;
 
 @Path("/secure/TramitSistraService/v1")
 @OpenAPIDefinition(tags = { @Tag(name = TramitSistraService.TAG, description = "TramitSistraService"), })

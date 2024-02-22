@@ -121,6 +121,12 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         log.info("TramitID: " + tramitA.getTramitid());
         return tramitA;
     }
+    
+    @Override
+    @PermitAll
+    public TramitAPersAut update(TramitAPersAut instance) throws I18NException {
+        return super.update(instance);
+    }
 
     @Override
     public void deleteFull(Long tramitID) throws I18NException {
@@ -521,7 +527,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                 tramitGEjb.executeQueryOne(TramitGDadesTitFields.DADESTITID,
                         TramitGDadesTitFields.TRAMITID.equal(tramitID)),
                 tramitHEjb.executeQueryOne(TramitHProcFields.PROCID, TramitHProcFields.TRAMITID.equal(tramitID)),
-                tramitIEjb.count(TRAMITID.equal(tramitID)), 
+                tramitIEjb.count(TramitIServFields.TRAMITID.equal(tramitID)), 
                 tramitJEjb.executeQueryOne(TramitJConsentFields.CONSENTID, TramitJConsentFields.TRAMITID.equal(tramitID)),
         };
 
@@ -545,11 +551,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                 } else {
                     tp = tipusProcediment.catala;
                 }
-
                 break;
             }
         }
-
         return tp;
     }
 }
