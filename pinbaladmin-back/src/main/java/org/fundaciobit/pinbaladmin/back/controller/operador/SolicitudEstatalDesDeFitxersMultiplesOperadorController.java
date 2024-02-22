@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -319,12 +320,33 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 articles = Utils.crop(articles);
 
                 java.lang.String tipusConsentiment = servei.getTipusConsentiment();
-                java.lang.String consentiment = servei.getConsentiment();
                 java.lang.String enllazConsentiment = servei.getEnllazConsentiment();
                 java.lang.String notes = servei.getNotes();
                 java.lang.String caduca = servei.getCaduca();
                 java.lang.String fechaCaduca = servei.getFechaCaduca();
 
+                java.lang.String consentiment = servei.getConsentiment();
+                switch (consentiment.trim().toUpperCase()) {
+                    case "SÍ": 
+                    case "SI": 
+                        consentiment = Constants.CONSENTIMENT_TIPUS_SI;
+                        break;
+                    case "NOOPOSICIÓ": 
+                    case "NOOPOSICIÓN":
+                    case "NO_OPOSICIÓN":
+                    case "NO_OPOSICIÓ":
+                    case "NO_OP":
+                    case "NO_OPO":
+                    case "NOOP":
+                    case "NOOPO":
+                        consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
+                        break;
+                    case "LLEI": 
+                    case "LEY":
+                        consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
+                        break;
+                }
+                
                 SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
                         normaLegal, enllazNormaLegal, articles, tipusConsentiment, consentiment, enllazConsentiment,
                         notes, caduca, fechaCaduca);

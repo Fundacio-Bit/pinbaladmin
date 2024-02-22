@@ -2560,7 +2560,7 @@ UPDATE pad_solicitudservei
 SET consentiment = 
     CASE 
         WHEN UPPER(consentiment) IN ('LEY', 'LLEI') THEN 'llei'
-        WHEN UPPER(consentiment) IN ('NOOP', 'NOOPO', 'NO OPO', 'NOOPOSICION', 'NO OPOSICION', 'NO OPOSICIÓ', 'NO OPOSICIÓN') THEN 'noop'
+        WHEN UPPER(consentiment) IN ('NOOP', 'NOOPO', 'NO OPO', 'NOOPOSICION', 'NO OPOSICION', 'NO OPOSICIÓ', 'NO OPOSICIÓN','NO_OPOSICION') THEN 'noop'
         WHEN UPPER(consentiment) IN ('SI', 'SÍ') THEN 'si'
         ELSE consentiment
     END;

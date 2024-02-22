@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -578,20 +579,47 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       // }
 
       java.lang.String notes = ""; // str.toString();
-      java.lang.String normaLegal = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".NORMALEGAL");
+      
+      String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
+      
+      String normaLegal = prop.getProperty(base + "NORMALEGAL");
+      String enllazNormaLegal = prop.getProperty(base + "ENLACENOR");
+      String articles = prop.getProperty(base + "ARTICULOS");
+      String tipusConsentiment = prop.getProperty(base + "LDECONSENTIMIENTO");
+      String enllazConsentiment = prop.getProperty(base + "ENLACECON");
+      
+      String consentiment = prop.getProperty(base + "CONSENTIMIENTO");
+      
+      String consentimentAux = normalize(consentiment).replaceAll("\\p{M}", "");
+      log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]" + consentimentAux.toLowerCase() + "[");
+      switch (consentimentAux.toLowerCase()) {
+          case "sí": 
+          case "si": 
+              consentiment = Constants.CONSENTIMENT_TIPUS_SI;
+              break;
 
-      java.lang.String enllazNormaLegal = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".ENLACENOR");
+          case "nooposicio":
+          case "nooposicion":
+          case "noop":
+          case "noopo":
 
-      java.lang.String articles = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".ARTICULOS");
-      java.lang.String tipusConsentiment = prop.getProperty(
-          "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".LDECONSENTIMIENTO");
-      java.lang.String consentiment = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CONSENTIMIENTO");
-      java.lang.String enllazConsentiment = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".ENLACECON");
+          case "no oposicio":
+          case "no oposicion":
+          case "no op":
+          case "no opo":
+
+          case "no_oposicio":
+          case "no_oposicion":
+          case "no_op":
+          case "no_opo":
+              consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
+              break;
+          case "llei": 
+          case "ley":
+              consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
+              break;
+      }
+      log.info("Consentiment despues: " + consentiment);
 
       String caducafecha = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
       String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
@@ -620,6 +648,11 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
   }
 
+  private static String normalize(String input) {
+      return input == null ? null : Normalizer.normalize(input, Normalizer.Form.NFKD);
+  }
+  
+  
   @Override
   protected ModelAndView editAndViewSolicitudGet(Long solicitudID, HttpServletRequest request,
       HttpServletResponse response, boolean __isView) throws I18NException {
