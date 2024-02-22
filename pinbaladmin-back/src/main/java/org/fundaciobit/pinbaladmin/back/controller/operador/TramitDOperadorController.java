@@ -45,6 +45,10 @@ public class TramitDOperadorController extends TramitDCteAutController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -96,16 +100,7 @@ public class TramitDOperadorController extends TramitDCteAutController {
             TramitDCteAutJPA tramitD = tramitForm.getTramitDCteAut();
 
             tramitD.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
-
-            tramitD.setNif("11111111A");
-            tramitD.setNom("Toni");
-            tramitD.setLlinatge1("Mesquida");
-            tramitD.setLlinatge2("Mestre");
-            tramitD.setCarrec("Gestio: Profesor de Gestió");
-            tramitD.setTelefon("971456789");
-            tramitD.setMail("gestio@fbit.org");            
         }else {
             tramitID = tramitForm.getTramitDCteAut().getTramitid();
         }
@@ -121,6 +116,9 @@ public class TramitDOperadorController extends TramitDCteAutController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
+        mav.addObject("isPublic", isPublic());
+        tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
     }
 

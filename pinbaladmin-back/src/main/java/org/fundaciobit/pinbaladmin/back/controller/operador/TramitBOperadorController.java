@@ -39,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { TramitBDadesSoliForm.class, TramitBDadesSoliFilterForm.class })
 public class TramitBOperadorController extends TramitBDadesSoliController {
 
+    public static final String CONTEXT_WEB_PREV = TramitAOperadorController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/operador/tramitb";
     public static final String CONTEXT_WEB_NEXT = TramitCOperadorController.CONTEXT_WEB;
 
@@ -48,8 +49,16 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
+    }
+    
+    public String getContextWebPrev() {
+        return CONTEXT_WEB_PREV;
     }
     
     @Override
@@ -95,10 +104,7 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
             TramitBDadesSoliJPA tramitB = tramitForm.getTramitBDadesSoli();
 
             tramitB.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
-
-            tramitB.setEntorn("pro");            
         }else {
             tramitID = tramitForm.getTramitBDadesSoli().getTramitid();
         }
@@ -108,18 +114,16 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
         tramitForm.setCancelButtonVisible(false);
         tramitForm.setDeleteButtonVisible(false);
 
+        tramitForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
+                getContextWebPrev() + "/back/" + uuid, "btn-info"));
+
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
+        mav.addObject("isPublic", isPublic());
         tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
-    }
-
-    @Override
-    public List<StringKeyValue> getReferenceListForTipussolicitud(HttpServletRequest request, ModelAndView mav,
-            Where where) throws I18NException {
-
-        return tramitBDadesSoliLogicEjb.getReferenceListForTipussolicitud();
     }
 
     @Override
@@ -127,7 +131,24 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
             throws I18NException, I18NValidationException {
         return (TramitBDadesSoliJPA) tramitBDadesSoliLogicEjb.create(tramitBDadesSoli);
     }
+    
+    @Override
+    public TramitBDadesSoliJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long id) throws I18NException {
+        return (TramitBDadesSoliJPA) tramitBDadesSoliLogicEjb.findByPrimaryKey(id);
+    }
 
+    @Override
+    public TramitBDadesSoliJPA update(HttpServletRequest request, TramitBDadesSoliJPA tramitJPA)
+            throws I18NException, I18NValidationException {
+        return (TramitBDadesSoliJPA) tramitBDadesSoliLogicEjb.update(tramitJPA);
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForTipussolicitud(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+        return tramitBDadesSoliLogicEjb.getReferenceListForTipussolicitud();
+    }
+    
     @Override
     public List<StringKeyValue> getReferenceListForEntorn(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
@@ -198,17 +219,9 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
         }
     }
 
-//    @Override
-//    public ModelAndView editarTramitBDadesSoliGet(@PathVariable("dadescesiid") java.lang.Long dadescesiid,
-//            HttpServletRequest request, HttpServletResponse response) throws I18NException {
-//    
-//        return editAndViewTramitBDadesSoliGet(dadescesiid, request, response, false);
-//    }
-    
     @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
     }
-    
 }

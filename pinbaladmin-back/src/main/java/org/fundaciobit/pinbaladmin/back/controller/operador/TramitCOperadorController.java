@@ -49,6 +49,10 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -91,6 +95,7 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     public TramitCDadesCesiForm getTramitCDadesCesiForm(TramitCDadesCesiJPA _jpa, boolean __isView,
             HttpServletRequest request, ModelAndView mav) throws I18NException {
         TramitCDadesCesiForm tramitForm = super.getTramitCDadesCesiForm(_jpa, __isView, request, mav);
+        tramitForm.setTitleCode("tramit.sistra.titol.c");
 
         Long tramitID; 
 
@@ -98,18 +103,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
             TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
 
-            tramitForm.addHiddenField(TRAMITID);
             tramitC.setTramitid(tramitID);
             request.getSession().setAttribute("tramitid", tramitID);
-
-            tramitC.setResponsable("Dirección General de Primera Infancia, Innovación y Comunidad Educativa");
-            tramitC.setDir3responsable("A04026925");
-            tramitC.setDir3arrel("A04026923");
-            tramitC.setDireccio("Carrer de la direcció");
-            tramitC.setCodipostal("07003");
-            tramitC.setMunicipi("9");
-
-            tramitForm.setTitleCode("tramit.sistra.titol.c");
         }else {
             tramitID = tramitForm.getTramitCDadesCesi().getTramitid();
         }
@@ -125,7 +120,9 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
+        mav.addObject("isPublic", isPublic());
         tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
     }
 
@@ -158,7 +155,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         return tramitCDadesCesiLogicEjb.getReferenceListForMunicipi();
     }
     
-//===========================================================================================================================
+    //===========================================================================================================================
+
     //Si estamos en D, cuando le damos a /next, E comprueba si existe o no, y le saca el new o el edit.
     @RequestMapping(value = "/next/{uuid}", method = RequestMethod.GET)
     public String getNextTramitFromUuid(HttpServletRequest request, @PathVariable String uuid)
@@ -218,13 +216,6 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             return getTileForm();
         }
     }
-
-//    @Override
-//    public ModelAndView editarTramitCDadesCesiGet(@PathVariable("dadescesiid") java.lang.Long dadescesiid,
-//            HttpServletRequest request, HttpServletResponse response) throws I18NException {
-//    
-//        return editAndViewTramitCDadesCesiGet(dadescesiid, request, response, false);
-//    }
     
     @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)

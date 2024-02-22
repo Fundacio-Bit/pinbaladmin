@@ -1,17 +1,24 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
 import javax.ejb.EJB;
+import javax.servlet.http.HttpServletRequest;
 
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
+import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitJOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 
@@ -35,6 +42,11 @@ public class TramitJPublicController extends TramitJOperadorController {
     }
  
     @Override
+    public boolean isPublic() {
+        return true;
+    }
+
+    @Override
     public String getContextWebPrev() {
         return CONTEXT_WEB_PREV;
     }
@@ -44,4 +56,17 @@ public class TramitJPublicController extends TramitJOperadorController {
         return "tramitJFormPublic";
     }
 
+    @Override
+    public TramitJConsentForm getTramitJConsentForm(TramitJConsentJPA _jpa, boolean __isView,
+            HttpServletRequest request, ModelAndView mav) throws I18NException {
+        TramitJConsentForm tramitForm = super.getTramitJConsentForm(_jpa, __isView, request, mav);
+
+        tramitForm.addHiddenField(TRAMITID);
+
+        if (tramitForm.isNou()) {
+            TramitJConsentJPA tramitJ = tramitForm.getTramitJConsent();
+
+        }
+        return tramitForm;
+    }
 }

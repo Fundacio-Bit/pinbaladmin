@@ -54,6 +54,10 @@ public class TramitHOperadorController extends TramitHProcController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -96,6 +100,7 @@ public class TramitHOperadorController extends TramitHProcController {
     public TramitHProcForm getTramitHProcForm(TramitHProcJPA _jpa, boolean __isView, HttpServletRequest request,
             ModelAndView mav) throws I18NException {
         TramitHProcForm tramitForm = super.getTramitHProcForm(_jpa, __isView, request, mav);
+        tramitForm.setTitleCode("tramit.sistra.titol.h");
 
         Long tramitID; 
 
@@ -104,19 +109,8 @@ public class TramitHOperadorController extends TramitHProcController {
             TramitHProcJPA tramitH = tramitForm.getTramitHProc();
 
             tramitH.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
 
-            tramitH.setTipus("1");
-            tramitH.setNom("Subvencions que m'acab d'inventar");
-            tramitH.setCodi("2874870");
-            tramitH.setUrlseu("https://www.google.es");
-            tramitH.setDescripcio("Proceso ayudas para Asociaciones de Famílias de Alumnos");
-            tramitH.setPeticionsaldia(12);
-            tramitH.setPeticionsalmes(450);
-            tramitH.setAutomatizado(true);
-
-            tramitForm.setTitleCode("tramit.sistra.titol.h");
         }else {
             tramitID = tramitForm.getTramitHProc().getTramitid();
         }
@@ -132,7 +126,9 @@ public class TramitHOperadorController extends TramitHProcController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
+        mav.addObject("isPublic", isPublic());
         tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
     }
 

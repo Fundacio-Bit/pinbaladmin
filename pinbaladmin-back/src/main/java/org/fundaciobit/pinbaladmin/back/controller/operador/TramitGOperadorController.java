@@ -45,6 +45,10 @@ public class TramitGOperadorController extends TramitGDadesTitController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -96,14 +100,8 @@ public class TramitGOperadorController extends TramitGDadesTitController {
             TramitGDadesTitJPA tramitG = tramitForm.getTramitGDadesTit();
 
             tramitG.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
 
-            tramitG.setNif("444444444O");
-            tramitG.setNom("Isi");
-            tramitG.setLlinatge1("Palazón");
-            tramitG.setLlinatge2("Rayo");
-            tramitG.setCarrec("Titular: Jugador del Rayo titularisimo");            
         }else {
             tramitID = tramitForm.getTramitGDadesTit().getTramitid();
         }
@@ -119,6 +117,9 @@ public class TramitGOperadorController extends TramitGDadesTitController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
+        mav.addObject("isPublic", isPublic());
+        tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
     }
 

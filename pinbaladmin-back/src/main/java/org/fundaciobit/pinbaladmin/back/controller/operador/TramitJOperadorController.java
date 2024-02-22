@@ -50,6 +50,10 @@ public class TramitJOperadorController extends TramitJConsentController {
         return CONTEXT_WEB_PREV;
     }
     
+    public boolean isPublic() {
+        return false;
+    }
+
     @Override
     public String getTileForm() {
         return "tramitJFormOperador";
@@ -93,9 +97,7 @@ public class TramitJOperadorController extends TramitJConsentController {
             TramitJConsentJPA tramitJ = tramitForm.getTramitJConsent();
 
             tramitJ.setTramitid(tramitID);
-            tramitForm.addHiddenField(TRAMITID);
             request.getSession().setAttribute("tramitid", tramitID);
-
         }else {
             tramitID = tramitForm.getTramitJConsent().getTramitid();
         }
@@ -109,6 +111,9 @@ public class TramitJOperadorController extends TramitJConsentController {
 
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+        
+        mav.addObject("isPublic", isPublic());
+        tramitForm.setAttachedAdditionalJspCode(true);
         
         return tramitForm;
     }

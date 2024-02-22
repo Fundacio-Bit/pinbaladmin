@@ -1,25 +1,18 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
@@ -31,9 +24,6 @@ import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitAPersAutController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
-import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
@@ -43,26 +33,19 @@ import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.Document;
-import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
-import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -77,7 +60,8 @@ public class TramitAOperadorController extends TramitAPersAutController {
     public static final String CONTEXT_WEB = "/operador/tramita";
     public static final String RETURN_URL = "/operador/tramita/list";
     public static final String RETURN_TO_SISTRA = RETURN_URL;
-    
+    public static final String CONTEXT_WEB_NEXT = TramitBOperadorController.CONTEXT_WEB;
+
 
     public static final int ADDITONAL_FIELD_START = 1;
 
@@ -102,7 +86,14 @@ public class TramitAOperadorController extends TramitAPersAutController {
     @EJB(mappedName = DocumentLogicaService.JNDI_NAME)
     protected DocumentLogicaService documentLogicaEjb;
 
+    public String getContextWebNext() {
+        return CONTEXT_WEB_NEXT;
+    }
  
+    public boolean isPublic() {
+        return false;
+    }
+    
     @Override
     public String getTileForm() {
         return "tramitAFormOperador";
@@ -139,63 +130,17 @@ public class TramitAOperadorController extends TramitAPersAutController {
     }
 
     @Override
-    public String getRedirectWhenCreated(HttpServletRequest request, TramitAPersAutForm tramitAPersAutForm) {
-        //Cada vegada que es faci create, anar al tramit B
-        Long tramitId = tramitAPersAutForm.getTramitAPersAut().getTramitid();
-
-        //Al form del seguent, getParameter del tramitid, i utilitzar-ho per crear el tramitB
-        return "redirect:" + TramitBOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitId;
-    }
-
-    @Override
-    public String getRedirectWhenCancel(HttpServletRequest request, java.lang.Long _ID_) {
-        try {
-            Long tramitID = (Long) request.getSession().getAttribute("tramitid");
-            log.info("Estamos en A, vamos a borrar. TramitID=" + tramitID);
-
-            if (tramitID == null) {
-                log.info("No se borran tablas porque estás en edit o en view");
-            } else {
-                tramitAPersAutLogicEjb.deleteFull(tramitID);
-                request.getSession().removeAttribute("tramitid");
-                HtmlUtils.saveMessageError(request, "Tramit Cancelat (taules borrades)");
-            }
-        } catch (I18NException e) {
-            HtmlUtils.saveMessageError(request, "Error esborrant les taules del tramit sistra");
-        }
-        return "redirect:" + TramitAOperadorController.RETURN_URL;
-    }
-
-    @Override
     public TramitAPersAutForm getTramitAPersAutForm(TramitAPersAutJPA _jpa, boolean __isView,
             HttpServletRequest request, ModelAndView mav) throws I18NException {
         TramitAPersAutForm tramitForm = super.getTramitAPersAutForm(_jpa, __isView, request, mav);
-
-        if (__isView) {
-
-        } else if (tramitForm.isNou()) {
-            TramitAPersAutJPA tramitA = tramitForm.getTramitAPersAut();
-            tramitA.setTramitid(tramitA.getPersautid());
-            tramitForm.addHiddenField(TRAMITID);
-            tramitForm.addHiddenField(DATATRAMIT);
-
-            tramitA.setNif("45186147W");
-            tramitA.setNom("Pau");
-            tramitA.setTelefon("971123132");
-            tramitA.setMail("mail@fbit.org");
-            tramitA.setLlinatge1("Trias");
-            tramitA.setLlinatge2("Segura");
-            tramitA.setDatatramit(new Timestamp(System.currentTimeMillis()));
-        }
         tramitForm.setTitleCode("tramit.sistra.titol.a");
+        
+        tramitForm.setDeleteButtonVisible(true);
+        
+        mav.addObject("isPublic", isPublic());
+        tramitForm.setAttachedAdditionalJspCode(true);
 
         return tramitForm;
-    }
-
-    @Override
-    public TramitAPersAutJPA create(HttpServletRequest request, TramitAPersAutJPA tramitAPersAut)
-            throws I18NException, I18NValidationException {
-        return (TramitAPersAutJPA) tramitAPersAutLogicEjb.create(tramitAPersAut);
     }
 
     public TramitAPersAutFilterForm getTramitAPersAutFilterForm(Integer pagina, ModelAndView mav,
@@ -333,145 +278,76 @@ public class TramitAOperadorController extends TramitAPersAutController {
         return  serveisQueNecessitenAdjunts > 0;
     }
     
+
+    @Override
+    public TramitAPersAutJPA create(HttpServletRequest request, TramitAPersAutJPA tramitAPersAut)
+            throws I18NException, I18NValidationException {
+        return (TramitAPersAutJPA) tramitAPersAutLogicEjb.create(tramitAPersAut);
+    }
+
+    @Override
+    public TramitAPersAutJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long id) throws I18NException {
+        return (TramitAPersAutJPA) tramitAPersAutLogicEjb.findByPrimaryKey(id);
+    }
+
+    @Override
+    public TramitAPersAutJPA update(HttpServletRequest request, TramitAPersAutJPA tramitJPA)
+            throws I18NException, I18NValidationException {
+        return (TramitAPersAutJPA) tramitAPersAutLogicEjb.update(tramitJPA);
+    }
+
     @Override
     public void delete(HttpServletRequest request, TramitAPersAut tramitAPersAut) throws I18NException {
         tramitAPersAutLogicEjb.deleteFull(tramitAPersAut.getTramitid());
     }
 
-    public void generarDocumentsSolicitud(SolicitudJPA soli, Properties prop) throws Exception, I18NException {
+    //===========================================================================================================================
 
-        Long solicitudID = soli.getSolicitudID();
-
-        Organ organGestor = organLogicaEjb.findByPrimaryKey(soli.getOrganid());
-        while(organGestor.getDir3pare() != null) {
-            List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
-            if (organ.size() == 1) {
-                organGestor = organ.get(0);
-            }
-        }
-        
-        if (organGestor.getCif().equals("S0711001H")) {
-            Organ dgtic = organLogicaEjb.findByPrimaryKey(70012);
-            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
-        }
-
-        
-        File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
-        File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
-
-        File plantilla = new File(Configuracio.getTemplateFormulari());
-
-        ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
-
-        {
-            FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(), "application/pdf",
-                    "");
-
-            fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-            FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
-
-            Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
-            Document doc = documentLogicaEjb.create("Formulario_Director_General (PDF)", fitxer.getFitxerID(), null, null,
-                    tipus);
-
-            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
-            documentSolicitudLogicaEjb.create(ds);
-        }
-
-        {
-            FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
-                    "application/vnd.oasis.opendocument.text", "");
-
-            fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-            FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
-
-            Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
-            Document doc = documentLogicaEjb.create("Formulario_Director_General (ODT)", fitxer.getFitxerID(), null, null,
-                    tipus);
-
-            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
-            documentSolicitudLogicaEjb.create(ds);
-        }
-    }
-
-    public void generarExcelDeServeis(SolicitudJPA soli) throws Exception, I18NException {
-
-        Long solicitudID = soli.getSolicitudID();
-
-        log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
-
-        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
-
-        byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli);
-
-        String nom = SDF.format(new Date()) + plantillaXLSX.getName();
-        Fitxer f = fitxerPublicLogicaEjb.create(nom, data.length,
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
-
-        FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
-
-        Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
-        Document doc = documentLogicaEjb.create(nom, f.getFitxerID(), null, null, tipus);
-
-        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
-
-        documentSolicitudLogicaEjb.create(ds);
-
-        log.info("Generat el fitxer de serveis. Revisar un document titulat " + nom
-                + " dins de l'apartat de 'Llistat de Documents-Sol·licitud'");
-    }
-
-
-    public void generarDocumentSolicitudAmbXML(SolicitudJPA soli, Properties prop) throws Exception {
-
-        String fileName = "Datos_de_la_solicitud_" + soli.getProcedimentCodi() + ".pdf";
-
-        com.lowagie.text.Document documento = new com.lowagie.text.Document();
-        FileOutputStream ficheroPdf = new FileOutputStream(fileName);
-
-        PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
-
-        documento.open();
-        Set<Entry<Object,Object>> set = prop.entrySet();
-        for (Entry<Object, Object> entry : set) {
-            String key = (String) entry.getKey();
-            String value = (String) entry.getValue();
-
-            documento.add(new Paragraph(key + ": " + value));
-        }
-        documento.add(new Paragraph("Esto es el primer párrafo, normalito"));
-
-        
-        documento.close();
-
-        File file = new File(fileName);
-        long size = file.length();
-        String mime = "application/pdf";
-        String desc = "";
-
-        FitxerJPA fitxer = new FitxerJPA(fileName, size, mime, desc);
-        fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-        FileSystemManager.crearFitxer(file, fitxer.getFitxerID());
-
-        soli.setDocumentSolicitudID(fitxer.getFitxerID());
-        solicitudLogicaEjb.update(soli);
-    }
-
-    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.GET)
+    //Si estamos en D, miramos el back de C, y que nos de su /edit
+    @RequestMapping(value = "/back/{uuid}", method = RequestMethod.GET)
     public String getEditUrlFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
+        return "redirect:" + getContextWeb() + "/edit/" + uuid;
+    }
+    
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.GET)
+    public ModelAndView editarTramitA2(@PathVariable("uuid") java.lang.String uuid, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        
         Long tramitID = HibernateFileUtil.decryptFileID(uuid);
-
         Long id = tramitAPersAutLogicEjb.executeQueryOne(TramitAPersAutFields.PERSAUTID,
                 TramitAPersAutFields.TRAMITID.equal(tramitID));
-
-        return "redirect:" + getContextWeb() + "/" + id + "/edit";
+    
+        return super.editarTramitAPersAutGet(id, request, response);
+    }
+    @RequestMapping(value = "/edit/{uuid}", method = RequestMethod.POST)
+    public String editarTramitAPersAutPost(@ModelAttribute TramitAPersAutForm tramitForm,
+            BindingResult result, SessionStatus status, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+        return super.editarTramitAPersAutPost(tramitForm, result, status, request, response);
     }
 
+    @Override
+    public String getRedirectWhenCreated(HttpServletRequest request, TramitAPersAutForm tramitAPersAutForm) {
+
+        Long tramitId = tramitAPersAutForm.getTramitAPersAut().getTramitid();
+
+        String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+        return "redirect:" + getContextWebNext() + "/next/" + uuid;
+    }
+    
+    @Override
+    public String getRedirectWhenModified(HttpServletRequest request, TramitAPersAutForm tramitForm,
+            Throwable __e) {
+        log.info("Esteim a getRedirectWhenModified de TramitA");
+
+        if (__e == null) {
+            return getRedirectWhenCreated(request, tramitForm);
+        } else {
+            return getTileForm();
+        }
+    }
+    
 //--------------------------------------------------------------------------------------------------------------------------------------------
     
     public static Long getTramitIDFromRequest(HttpServletRequest request) {
@@ -483,6 +359,12 @@ public class TramitAOperadorController extends TramitAPersAutController {
         } catch (Throwable th) {
             return HibernateFileUtil.decryptFileID(param);
         }
+    }
+
+    @Override
+    public String getRedirectWhenCancel(HttpServletRequest request, Long persautid) {
+        // TODO Auto-generated method stub
+        return "redirect:" + TramitAOperadorController.RETURN_URL;
     }
 
     public static String getRedirectWhenDeleted(HttpServletRequest request, String uuid,

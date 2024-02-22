@@ -57,6 +57,10 @@ public class TramitIOperadorController extends TramitIServController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    public boolean isPublic() {
+        return false;
+    }
+
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -141,23 +145,13 @@ public class TramitIOperadorController extends TramitIServController {
         TramitIServForm tramitForm = super.getTramitIServForm(_jpa, __isView, request, mav);
         tramitForm.setTitleCode("tramit.sistra.titol.i.form");
 
-        tramitForm.addHiddenField(TRAMITID);
-
         TramitIServJPA tramitI = tramitForm.getTramitIServ();
-        Long tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
-         if (tramitForm.isNou()) {
-
-             String uuid = HibernateFileUtil.encryptFileID(tramitID);
-
+        Long tramitID;
+        if (tramitForm.isNou()) {
+            tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
             tramitI.setTramitid(tramitID);
 
-            tramitI.setNorma("Norma Legal inventada");
-            tramitI.setUrlnorma("https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347");
-
-            tramitI.setConsentimentpublicat("1");
-            
-            tramitI.setArticles("Art1, 2 i Art 5");
-        }else {
+        } else {
             tramitID = tramitI.getTramitid();
         }
          request.getSession().setAttribute("tramitid", tramitID);
@@ -167,7 +161,9 @@ public class TramitIOperadorController extends TramitIServController {
         
         tramitForm.addSection(section);
 
+        mav.addObject("isPublic", isPublic());
         tramitForm.setAttachedAdditionalJspCode(true);
+
         return tramitForm;
     }
 
@@ -201,15 +197,9 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
                     getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
 
-            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
-                    getContextWebPrev() + "/back/" + uuid, "btn-info"));
+            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left",
+                    "genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, "btn-info"));
 
-            
-            
-            
-            
-            
-            
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
             log.info("serveisAfegits: " + serveisAfegits);
 
@@ -222,34 +212,17 @@ public class TramitIOperadorController extends TramitIServController {
                 if (consentimentNecessari > 0) {
                     tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
                             "consentiment", getContextWebNext() + "/next/" + uuid, "btn-primary"));
-
-//                    //Chek si ja tenim consentiment.
-//                    Where wh = Where.AND(TramitJConsentFields.TRAMITID.equal(tramitID),
-//                            TramitJConsentFields.CONSENTID.isNotNull());
-//                    List<TramitJConsent> tramitJ = tramitJConsentLogicaEjb.select(wh);
-//
-//                    if (tramitJ.size() == 0) {
-//                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-//                                "afegir consentiment",
-//                                TramitJOperadorController.CONTEXT_WEB + "/new?tramitid=" + tramitID, "btn-primary"));
-//                    } else if (tramitJ.size() == 1) {
-//                        tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-//                                "veure consentiment",
-//                                TramitJOperadorController.CONTEXT_WEB + "/view/" + tramitJ.get(0).getConsentid(),
-//                                "btn-primary"));
-//                    }
                 } else {
                     tramitIServFilterForm.addAdditionalButton(
                             new AdditionalButton("fas fa-check-circle", "tramit.i.finalitzar.tramit",
                                     TramitAPublicController.CONTEXT_WEB + "/finalitzarTramit/" + uuid, "btn-primary"));
                 }
             }
-            
-            
-            
-            
-            
         }
+        
+        mav.addObject("isPublic", isPublic());
+        tramitIServFilterForm.setAttachedAdditionalJspCode(true);
+
         return tramitIServFilterForm;
     }
 
