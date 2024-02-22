@@ -120,8 +120,9 @@ public class TramitSistraService {
 
             String callbackUrl = parametrosFormulario.getUrlCallback();
             String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
-            tramitA.setMail(idSesionFormulario );
-            tramitA.setTelefon("telf");
+
+            tramitA.setUrlsistra(callbackUrl);
+            tramitA.setIdsesionformulario(idSesionFormulario );
             
             tramitA.setDatatramit(datatramit);
             

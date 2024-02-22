@@ -39,6 +39,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.LLINATGE2)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitAPersAutFields.LLINATGE2)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.URLSISTRA)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitAPersAutFields.URLSISTRA)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.IDSESIONFORMULARIO)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitAPersAutFields.IDSESIONFORMULARIO)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

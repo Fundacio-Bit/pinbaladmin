@@ -83,6 +83,8 @@ public class TramitAPublicController extends TramitAOperadorController {
         TramitAPersAutForm tramitForm = super.getTramitAPersAutForm(_jpa, __isView, request, mav);
 
         tramitForm.addHiddenField(TRAMITID);
+        tramitForm.addHiddenField(URLSISTRA);
+        tramitForm.addHiddenField(IDSESIONFORMULARIO);
 
         if (tramitForm.isNou()) {
             TramitAPersAutJPA tramitA = tramitForm.getTramitAPersAut();
@@ -110,8 +112,8 @@ public class TramitAPublicController extends TramitAOperadorController {
 
             TramitAPersAut tramitA = tramitAPersAutLogicEjb.findByPrimaryKey(tramitID);
 
-            String urlCallbackSistra = "https://se.caib.es/sistramitfront/asistente/retornoGestorFormularioExterno.html";
-            String idSesionFormulario = tramitA.getMail();
+            String urlCallbackSistra = tramitA.getUrlsistra(); // "https://se.caib.es/sistramitfront/asistente/retornoGestorFormularioExterno.html";
+            String idSesionFormulario = tramitA.getIdsesionformulario();
             String ticketGFE = uuid;
             String ticket = idSesionFormulario + ":" + ticketGFE;
 

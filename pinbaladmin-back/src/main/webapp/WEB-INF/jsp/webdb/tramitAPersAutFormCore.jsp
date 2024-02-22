@@ -164,3 +164,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitAPersAutFields.URLSISTRA)}">
+        <tr id="tramitAPersAut_urlsistra_rowid">
+          <td id="tramitAPersAut_urlsistra_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitAPersAutFields.URLSISTRA])?'tramitAPersAut.urlsistra':__theForm.labels[TramitAPersAutFields.URLSISTRA]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitAPersAutFields.URLSISTRA]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitAPersAutFields.URLSISTRA]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitAPersAut_urlsistra_columnvalueid">
+            <form:errors path="tramitAPersAut.urlsistra" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitAPersAutFields.URLSISTRA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitAPersAutFields.URLSISTRA)? ' uneditable-input' : ''}"  style="" maxlength="2147483647" path="tramitAPersAut.urlsistra"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitAPersAutFields.IDSESIONFORMULARIO)}">
+        <tr id="tramitAPersAut_idsesionformulario_rowid">
+          <td id="tramitAPersAut_idsesionformulario_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitAPersAutFields.IDSESIONFORMULARIO])?'tramitAPersAut.idsesionformulario':__theForm.labels[TramitAPersAutFields.IDSESIONFORMULARIO]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitAPersAutFields.IDSESIONFORMULARIO]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitAPersAutFields.IDSESIONFORMULARIO]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitAPersAut_idsesionformulario_columnvalueid">
+            <form:errors path="tramitAPersAut.idsesionformulario" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitAPersAutFields.IDSESIONFORMULARIO)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitAPersAutFields.IDSESIONFORMULARIO)? ' uneditable-input' : ''}"  style="" maxlength="100" path="tramitAPersAut.idsesionformulario"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

@@ -6337,6 +6337,56 @@
             "webtype": 1
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlsistra",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "urlsistra",
+            "es": "urlsistra"
+          },
+          "javaName": "urlsistra",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "idsesionformulario",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "idsesionformulario",
+            "es": "idsesionformulario"
+          },
+          "javaName": "idsesionformulario",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
         }
       ]
     },

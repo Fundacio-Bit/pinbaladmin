@@ -6,12 +6,14 @@ import javax.persistence.Column;
 import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
+import javax.persistence.Lob;
 import javax.persistence.Index;
 import javax.persistence.GeneratedValue;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Set;
+import org.hibernate.annotations.Type;
 import javax.persistence.Id;
 
 
@@ -51,6 +53,14 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     @Column(name="llinatge2",length = 40)
     java.lang.String llinatge2;
 
+    @Column(name="urlsistra",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    java.lang.String urlsistra;
+
+    @Column(name="idsesionformulario",length = 100)
+    java.lang.String idsesionformulario;
+
 
 
   /** Constructor Buit */
@@ -58,7 +68,7 @@ public class TramitAPersAutJPA implements TramitAPersAut {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitAPersAutJPA(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
+  public TramitAPersAutJPA(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario) {
     this.persautid=persautid;
     this.tramitid=tramitid;
     this.datatramit=datatramit;
@@ -68,9 +78,11 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     this.nom=nom;
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
+    this.urlsistra=urlsistra;
+    this.idsesionformulario=idsesionformulario;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitAPersAutJPA(long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
+  public TramitAPersAutJPA(long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario) {
     this.tramitid=tramitid;
     this.datatramit=datatramit;
     this.nif=nif;
@@ -79,6 +91,19 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     this.nom=nom;
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
+    this.urlsistra=urlsistra;
+    this.idsesionformulario=idsesionformulario;
+}
+  /** Constructor dels valors Not Null */
+  public TramitAPersAutJPA(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1) {
+    this.persautid=persautid;
+    this.tramitid=tramitid;
+    this.datatramit=datatramit;
+    this.nif=nif;
+    this.mail=mail;
+    this.telefon=telefon;
+    this.nom=nom;
+    this.llinatge1=llinatge1;
 }
   public TramitAPersAutJPA(TramitAPersAut __bean) {
     this.setPersautid(__bean.getPersautid());
@@ -90,6 +115,8 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     this.setNom(__bean.getNom());
     this.setLlinatge1(__bean.getLlinatge1());
     this.setLlinatge2(__bean.getLlinatge2());
+    this.setUrlsistra(__bean.getUrlsistra());
+    this.setIdsesionformulario(__bean.getIdsesionformulario());
 	}
 
 	public long getPersautid() {
@@ -153,6 +180,20 @@ public class TramitAPersAutJPA implements TramitAPersAut {
 	};
 	public void setLlinatge2(java.lang.String _llinatge2_) {
 		this.llinatge2 = _llinatge2_;
+	};
+
+	public java.lang.String getUrlsistra() {
+		return(urlsistra);
+	};
+	public void setUrlsistra(java.lang.String _urlsistra_) {
+		this.urlsistra = _urlsistra_;
+	};
+
+	public java.lang.String getIdsesionformulario() {
+		return(idsesionformulario);
+	};
+	public void setIdsesionformulario(java.lang.String _idsesionformulario_) {
+		this.idsesionformulario = _idsesionformulario_;
 	};
 
 
@@ -301,6 +342,8 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     __tmp.setNom(__bean.getNom());
     __tmp.setLlinatge1(__bean.getLlinatge1());
     __tmp.setLlinatge2(__bean.getLlinatge2());
+    __tmp.setUrlsistra(__bean.getUrlsistra());
+    __tmp.setIdsesionformulario(__bean.getIdsesionformulario());
 		return __tmp;
 	}
 

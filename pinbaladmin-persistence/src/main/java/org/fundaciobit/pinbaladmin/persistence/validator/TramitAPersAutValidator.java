@@ -107,6 +107,22 @@ public class TramitAPersAutValidator<I extends TramitAPersAut>
       }
     }
 
+    if (__vr.getFieldErrorCount(URLSISTRA) == 0) {
+      java.lang.String __urlsistra = __target__.getUrlsistra();
+      if (__urlsistra!= null && __urlsistra.length() > 2147483647) {
+        __vr.rejectValue(URLSISTRA, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLSISTRA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(IDSESIONFORMULARIO) == 0) {
+      java.lang.String __idsesionformulario = __target__.getIdsesionformulario();
+      if (__idsesionformulario!= null && __idsesionformulario.length() > 100) {
+        __vr.rejectValue(IDSESIONFORMULARIO, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(IDSESIONFORMULARIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

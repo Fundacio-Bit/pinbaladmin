@@ -214,6 +214,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitAPersAutFields.URLSISTRA)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitAPersAut.urlsistra" var="urlsistra" />
+              <fmt:message key="genapp.form.searchby" var="cercaperurlsistra" >                
+                 <fmt:param value="${urlsistra}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${urlsistra}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlsistra}" path="urlsistra" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitAPersAutFields.IDSESIONFORMULARIO)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitAPersAut.idsesionformulario" var="idsesionformulario" />
+              <fmt:message key="genapp.form.searchby" var="cercaperidsesionformulario" >                
+                 <fmt:param value="${idsesionformulario}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${idsesionformulario}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperidsesionformulario}" path="idsesionformulario" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

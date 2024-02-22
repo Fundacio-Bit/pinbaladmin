@@ -29,6 +29,12 @@ public interface TramitAPersAut extends org.fundaciobit.genapp.common.IGenAppEnt
 	public java.lang.String getLlinatge2();
 	public void setLlinatge2(java.lang.String _llinatge2_);
 
+	public java.lang.String getUrlsistra();
+	public void setUrlsistra(java.lang.String _urlsistra_);
+
+	public java.lang.String getIdsesionformulario();
+	public void setIdsesionformulario(java.lang.String _idsesionformulario_);
+
 
 
   // ======================================

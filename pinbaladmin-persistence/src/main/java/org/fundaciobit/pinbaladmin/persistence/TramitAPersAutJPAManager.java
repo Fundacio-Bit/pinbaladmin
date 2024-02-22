@@ -55,8 +55,8 @@ public class TramitAPersAutJPAManager
         return list.toArray(new TramitAPersAut[list.size()]);
     };
 
-    public TramitAPersAut create( long _tramitid_, java.sql.Timestamp _datatramit_, java.lang.String _nif_, java.lang.String _mail_, java.lang.String _telefon_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_) throws I18NException {
-        TramitAPersAutJPA __bean =  new TramitAPersAutJPA(_tramitid_,_datatramit_,_nif_,_mail_,_telefon_,_nom_,_llinatge1_,_llinatge2_);
+    public TramitAPersAut create( long _tramitid_, java.sql.Timestamp _datatramit_, java.lang.String _nif_, java.lang.String _mail_, java.lang.String _telefon_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_, java.lang.String _urlsistra_, java.lang.String _idsesionformulario_) throws I18NException {
+        TramitAPersAutJPA __bean =  new TramitAPersAutJPA(_tramitid_,_datatramit_,_nif_,_mail_,_telefon_,_nom_,_llinatge1_,_llinatge2_,_urlsistra_,_idsesionformulario_);
         return create(__bean);
     }
 

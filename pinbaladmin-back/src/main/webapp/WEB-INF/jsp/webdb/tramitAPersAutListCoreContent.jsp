@@ -67,6 +67,16 @@
           ${tramitAPersAut.llinatge2}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.URLSISTRA)}">
+          <td>
+          ${tramitAPersAut.urlsistra}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.IDSESIONFORMULARIO)}">
+          <td>
+          ${tramitAPersAut.idsesionformulario}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

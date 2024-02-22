@@ -152,6 +152,28 @@ public class TramitAPersAutFilterForm extends PinbalAdminBaseFilterForm implemen
   }
 
 
+  private java.lang.String urlsistra;
+
+  public java.lang.String getUrlsistra() {
+    return this.urlsistra;
+  }
+
+  public void setUrlsistra(java.lang.String urlsistra) {
+    this.urlsistra = urlsistra;
+  }
+
+
+  private java.lang.String idsesionformulario;
+
+  public java.lang.String getIdsesionformulario() {
+    return this.idsesionformulario;
+  }
+
+  public void setIdsesionformulario(java.lang.String idsesionformulario) {
+    this.idsesionformulario = idsesionformulario;
+  }
+
+
   public TramitAPersAutFilterForm() {
   }
   
@@ -169,6 +191,8 @@ public class TramitAPersAutFilterForm extends PinbalAdminBaseFilterForm implemen
     this.nom = __toClone.nom;
     this.llinatge1 = __toClone.llinatge1;
     this.llinatge2 = __toClone.llinatge2;
+    this.urlsistra = __toClone.urlsistra;
+    this.idsesionformulario = __toClone.idsesionformulario;
   }
   
   /* ========= UTILS ========== */
