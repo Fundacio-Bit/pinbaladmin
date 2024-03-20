@@ -96,6 +96,15 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATPINBAL)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ESTATPINBAL)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONSENTIMENT)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONSENTIMENT)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.URLCONSENTIMENT)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.URLCONSENTIMENT)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONSENTIMENTADJUNT)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONSENTIMENTADJUNT)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

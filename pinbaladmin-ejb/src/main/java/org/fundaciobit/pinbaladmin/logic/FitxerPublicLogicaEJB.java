@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.FitxerEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 /**
  * 
@@ -26,4 +27,9 @@ public class FitxerPublicLogicaEJB extends FitxerEJB implements FitxerPublicLogi
         return super.update(instance);
     }
 
+	@Override
+	@PermitAll
+	public FitxerJPA findByPrimaryKey(Long _fitxerID_) {
+		return super.findByPrimaryKey(_fitxerID_);
+	}
 }

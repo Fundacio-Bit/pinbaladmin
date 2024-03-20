@@ -548,107 +548,141 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   }
 
   protected void generarServeis(HttpServletRequest request, Long soliID, Properties prop)
-      throws I18NException {
-    int x = 1;
+			throws I18NException {
 
-    while (true) {
-      String codi = prop
-          .getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CODISERV");
+		// XXX CONSENT: Modificar metode per obtenir el consentiment amb el nou xml
+//		String consentiment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");
+//		String consAdj = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSADJ");
+//		String consUrl = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSURL");
+//
+//		String consentimentAux = normalize(consentiment).replaceAll("\\p{M}", "");
+//		log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]"
+//				+ consentimentAux.toLowerCase() + "[");
+//		switch (consentimentAux.toLowerCase()) {
+//			case "sí":
+//			case "si":
+//				consentiment = Constants.CONSENTIMENT_TIPUS_SI;
+//				break;
+//	
+//			case "nooposicio":
+//			case "nooposicion":
+//			case "noop":
+//			case "noopo":
+//	
+//			case "no oposicio":
+//			case "no oposicion":
+//			case "no op":
+//			case "no opo":
+//	
+//			case "no_oposicio":
+//			case "no_oposicion":
+//			case "no_op":
+//			case "no_opo":
+//				consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
+//				break;
+//			case "llei":
+//			case "ley":
+//				consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
+//				break;
+//		}
+//		log.info("Consentiment despues: " + consentiment);
 
-      log.info(" CODI PER [" + x + "]  => " + codi);
+		int x = 1;
 
-      if (codi == null) {
-        break;
-      }
+		while (true) {
+			String codi = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CODISERV");
 
-      // TODO XYZ ZZZ
-      Long serveiID = serveiEjb.executeQueryOne(ServeiFields.SERVEIID,
-          ServeiFields.CODI.equal(codi.trim()));
+			log.info(" CODI PER [" + x + "]  => " + codi);
 
-      // XYZ ZZZ
-      java.lang.Long estatSolicitudServeiID = 10L;
-      // StringBuffer str = new StringBuffer();
-      // for (Object k : prop.keySet()) {
-      // String kk = (String) k;
-      //
-      // if (kk.startsWith("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x +
-      // ".")) {
-      // str.append(kk + "=" + prop.getProperty(kk) + "\r\n");
-      // }
-      //
-      // }
+			if (codi == null) {
+				break;
+			}
 
-      java.lang.String notes = ""; // str.toString();
-      
-      String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
-      
-      String normaLegal = prop.getProperty(base + "NORMALEGAL");
-      String enllazNormaLegal = prop.getProperty(base + "ENLACENOR");
-      String articles = prop.getProperty(base + "ARTICULOS");
-      String tipusConsentiment = prop.getProperty(base + "LDECONSENTIMIENTO");
-      String enllazConsentiment = prop.getProperty(base + "ENLACECON");
-      
-      String consentiment = prop.getProperty(base + "CONSENTIMIENTO");
-      
-      String consentimentAux = normalize(consentiment).replaceAll("\\p{M}", "");
-      log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]" + consentimentAux.toLowerCase() + "[");
-      switch (consentimentAux.toLowerCase()) {
-          case "sí": 
-          case "si": 
-              consentiment = Constants.CONSENTIMENT_TIPUS_SI;
-              break;
+			// TODO XYZ ZZZ
+			Long serveiID = serveiEjb.executeQueryOne(ServeiFields.SERVEIID, ServeiFields.CODI.equal(codi.trim()));
 
-          case "nooposicio":
-          case "nooposicion":
-          case "noop":
-          case "noopo":
+			// XYZ ZZZ
+			java.lang.Long estatSolicitudServeiID = 10L;
+			// StringBuffer str = new StringBuffer();
+			// for (Object k : prop.keySet()) {
+			// String kk = (String) k;
+			//
+			// if (kk.startsWith("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x +
+			// ".")) {
+			// str.append(kk + "=" + prop.getProperty(kk) + "\r\n");
+			// }
+			//
+			// }
 
-          case "no oposicio":
-          case "no oposicion":
-          case "no op":
-          case "no opo":
+			java.lang.String notes = ""; // str.toString();
 
-          case "no_oposicio":
-          case "no_oposicion":
-          case "no_op":
-          case "no_opo":
-              consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
-              break;
-          case "llei": 
-          case "ley":
-              consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
-              break;
-      }
-      log.info("Consentiment despues: " + consentiment);
+			String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
 
-      String caducafecha = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
-      String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
+			String normaLegal = prop.getProperty(base + "NORMALEGAL");
+			String enllazNormaLegal = prop.getProperty(base + "ENLACENOR");
+			String articles = prop.getProperty(base + "ARTICULOS");
 
-      Long count = solicitudServeiEjb
-          .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
-              SolicitudServeiFields.SERVEIID.equal(serveiID)));
+			String consAdj = prop.getProperty(base + "LDECONSENTIMIENTO");
+			String consUrl = prop.getProperty(base + "ENLACECON");
+			String consentiment = prop.getProperty(base + "CONSENTIMIENTO");
 
-      if (count == 0) {
+			String consentimentAux = normalize(consentiment).replaceAll("\\p{M}", "");
+			log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]"
+					+ consentimentAux.toLowerCase() + "[");
+			switch (consentimentAux.toLowerCase()) {
+			case "sí":
+			case "si":
+				consentiment = Constants.CONSENTIMENT_TIPUS_SI;
+				break;
 
-        SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID,
-            estatSolicitudServeiID, normaLegal, enllazNormaLegal, articles, tipusConsentiment,
-            consentiment, enllazConsentiment, notes, caduca, caducafecha);
+			case "nooposicio":
+			case "nooposicion":
+			case "noop":
+			case "noopo":
 
-        solicitudServeiEjb.create(ss);
+			case "no oposicio":
+			case "no oposicion":
+			case "no op":
+			case "no opo":
 
-      } else {
+			case "no_oposicio":
+			case "no_oposicion":
+			case "no_op":
+			case "no_opo":
+				consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
+				break;
+			case "llei":
+			case "ley":
+				consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
+				break;
+			}
+			log.info("Consentiment despues: " + consentiment);
 
-        HtmlUtils.saveMessageWarning(request,
-            "El servei [" + x + "] ja existeix. L'ignoram ...");
+			String caducafecha = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
+			String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
 
-      }
+			Long count = solicitudServeiEjb.count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
+					SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
-      x++;
+			if (count == 0) {
 
-    }
-  }
+				SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID, estatSolicitudServeiID, normaLegal,
+						enllazNormaLegal, articles, consAdj, consentiment, consUrl, notes, caduca, caducafecha);
 
-  private static String normalize(String input) {
+				solicitudServeiEjb.create(ss);
+
+			} else {
+
+				HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
+
+			}
+
+			x++;
+
+		}
+	}
+
+  public static String normalize(String input) {
       return input == null ? null : Normalizer.normalize(input, Normalizer.Form.NFKD);
   }
   

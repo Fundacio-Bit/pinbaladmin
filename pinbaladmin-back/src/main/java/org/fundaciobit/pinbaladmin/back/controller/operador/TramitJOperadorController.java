@@ -1,20 +1,32 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
+import org.fundaciobit.genapp.common.query.Field;
+import org.fundaciobit.genapp.common.query.GroupByItem;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitJConsentController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
+import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -53,6 +65,10 @@ public class TramitJOperadorController extends TramitJConsentController {
     public boolean isPublic() {
         return false;
     }
+    public long actual() {
+        return 9;
+    }
+    
 
     @Override
     public String getTileForm() {
@@ -112,10 +128,43 @@ public class TramitJOperadorController extends TramitJConsentController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
-        mav.addObject("isPublic", isPublic());
-        tramitForm.setAttachedAdditionalJspCode(true);
+        {
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+
         
         return tramitForm;
+    }
+
+	@Override
+	public void preValidate(HttpServletRequest request, TramitJConsentForm tramitJConsentForm, BindingResult result)
+			throws I18NException {
+		super.preValidate(request, tramitJConsentForm, result);
+
+		TramitJConsentJPA J = tramitJConsentForm.getTramitJConsent();
+
+	}    
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        __tmp.add(new StringKeyValue("", "..."));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_NOOP, "No oposició"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_LLEI, "Llei"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_SI, "Si"));
+        return __tmp;
+    }
+
+    @Override
+    public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request, ModelAndView mav,
+            Where where) throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        __tmp.add(new StringKeyValue("", "..."));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_PUBLICAT, "Publicat"));
+        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_ADJUNT, "Adjunt"));
+        return __tmp;
     }
 
     @Override
@@ -175,14 +224,29 @@ public class TramitJOperadorController extends TramitJConsentController {
     public String editarTramitJConsentPost(@ModelAttribute TramitJConsentForm tramitForm,
             BindingResult result, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-        return super.editarTramitJConsentPost(tramitForm, result, status, request, response);
+        String ret = super.editarTramitJConsentPost(tramitForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitForm.getTramitJConsent().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
+
     }
 
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, TramitJConsentForm TramitJConsentForm) {
-        Long tramitId = TramitJConsentForm.getTramitJConsent().getTramitid();
-        
+        TramitJConsentJPA tramitJ = TramitJConsentForm.getTramitJConsent();
+        request.getSession().setAttribute("tramitJ", tramitJ);
+
+        Long tramitId = tramitJ.getTramitid();
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         return "redirect:" + TramitAPublicController.CONTEXT_WEB + "/finalitzarTramit/" + uuid;
     }
 
@@ -197,17 +261,24 @@ public class TramitJOperadorController extends TramitJConsentController {
             return getTileForm();
         }
     }
-
-//    @Override
-//    public ModelAndView editarTramitJConsentGet(@PathVariable("dadescesiid") java.lang.Long dadescesiid,
-//            HttpServletRequest request, HttpServletResponse response) throws I18NException {
-//    
-//        return editAndViewTramitJConsentGet(dadescesiid, request, response, false);
-//    }
     
     @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    }
+
+    @Override
+    public String crearTramitJConsentPost(TramitJConsentForm tramitJConsentForm, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String ret = super.crearTramitJConsentPost(tramitJConsentForm, result, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitJConsentForm.getTramitJConsent().getTramitid();
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitJConsentForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 }

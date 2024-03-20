@@ -7,7 +7,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 public interface ITramitJConsentManager extends org.fundaciobit.genapp.common.query.ITableManager<TramitJConsent, Long> {
 
 
-	public TramitJConsent create( long _tramitid_, java.lang.Long _adjuntID_) throws I18NException;
+	public TramitJConsent create( long _tramitid_, java.lang.Long _adjuntID_, java.lang.String _consentiment_, java.lang.String _urlconsentiment_, java.lang.String _consentimentadjunt_) throws I18NException;
 
 	public TramitJConsent findByPrimaryKey(long _consentid_);
 

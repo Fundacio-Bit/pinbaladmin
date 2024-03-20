@@ -56,10 +56,6 @@ public class TramitIServValidator<I extends TramitIServ>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,CONSENTIMENT, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)));
-
     // Check size
     if (__vr.getFieldErrorCount(NOM) == 0) {
       java.lang.String __nom = __target__.getNom();
@@ -98,30 +94,6 @@ public class TramitIServValidator<I extends TramitIServ>
       if (__articles!= null && __articles.length() > 60) {
         __vr.rejectValue(ARTICLES, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(60)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(CONSENTIMENT) == 0) {
-      java.lang.String __consentiment = __target__.getConsentiment();
-      if (__consentiment!= null && __consentiment.length() > 30) {
-        __vr.rejectValue(CONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(30)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(CONSENTIMENTPUBLICAT) == 0) {
-      java.lang.String __consentimentpublicat = __target__.getConsentimentpublicat();
-      if (__consentimentpublicat!= null && __consentimentpublicat.length() > 30) {
-        __vr.rejectValue(CONSENTIMENTPUBLICAT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENTPUBLICAT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(30)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(URLCONSENTIMENT) == 0) {
-      java.lang.String __urlconsentiment = __target__.getUrlconsentiment();
-      if (__urlconsentiment!= null && __urlconsentiment.length() > 240) {
-        __vr.rejectValue(URLCONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
       }
     }
 

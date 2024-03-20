@@ -21,8 +21,6 @@ public class TramitIServForm extends PinbalAdminBaseForm {
       this.tramitIServ = __toClone.tramitIServ;
     this.listOfTramitAPersAutForTramitid = __toClone.listOfTramitAPersAutForTramitid;
     this.listOfValuesForNom = __toClone.listOfValuesForNom;
-    this.listOfValuesForConsentiment = __toClone.listOfValuesForConsentiment;
-    this.listOfValuesForConsentimentpublicat = __toClone.listOfValuesForConsentimentpublicat;
   }
   
   public TramitIServForm(TramitIServJPA tramitIServ, boolean nou) {
@@ -58,30 +56,6 @@ public class TramitIServForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForNom(List<StringKeyValue> listOfValuesForNom) {
     this.listOfValuesForNom = listOfValuesForNom;
-  }
-
-
-
-  private List<StringKeyValue> listOfValuesForConsentiment;
-
-  public List<StringKeyValue> getListOfValuesForConsentiment() {
-    return this.listOfValuesForConsentiment;
-  }
-
-  public void setListOfValuesForConsentiment(List<StringKeyValue> listOfValuesForConsentiment) {
-    this.listOfValuesForConsentiment = listOfValuesForConsentiment;
-  }
-
-
-
-  private List<StringKeyValue> listOfValuesForConsentimentpublicat;
-
-  public List<StringKeyValue> getListOfValuesForConsentimentpublicat() {
-    return this.listOfValuesForConsentimentpublicat;
-  }
-
-  public void setListOfValuesForConsentimentpublicat(List<StringKeyValue> listOfValuesForConsentimentpublicat) {
-    this.listOfValuesForConsentimentpublicat = listOfValuesForConsentimentpublicat;
   }
 
 

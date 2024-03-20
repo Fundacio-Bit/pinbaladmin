@@ -59,7 +59,7 @@ public class TramitDPublicController extends TramitDOperadorController {
         if (tramitForm.isNou()) {
             TramitDCteAutJPA tramitD = tramitForm.getTramitDCteAut();
 
-            tramitD.setNif("11111111A");
+            tramitD.setNif("45186147W");
             tramitD.setNom("Toni");
             tramitD.setLlinatge1("Mesquida");
             tramitD.setLlinatge2("Mestre");

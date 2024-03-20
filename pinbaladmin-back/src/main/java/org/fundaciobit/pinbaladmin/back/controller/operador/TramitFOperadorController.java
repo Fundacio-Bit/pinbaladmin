@@ -8,12 +8,15 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitFCteTecController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitFCteTecLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.fields.TramitFCteTecFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,6 +51,10 @@ public class TramitFOperadorController extends TramitFCteTecController {
     public boolean isPublic() {
         return false;
     }
+    public long actual() {
+        return 5;
+    }
+    
 
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
@@ -117,8 +124,11 @@ public class TramitFOperadorController extends TramitFCteTecController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
-        mav.addObject("isPublic", isPublic());
-        tramitForm.setAttachedAdditionalJspCode(true);
+        {
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+
 
         return tramitForm;
     }
@@ -139,7 +149,6 @@ public class TramitFOperadorController extends TramitFCteTecController {
             throws I18NException, I18NValidationException {
         return (TramitFCteTecJPA) tramitFCteTecLogicEjb.update(tramitJPA);
     }
-
 
   //Si estamos en D, cuando le damos a /next, E comprueba si existe o no, y le saca el new o el edit.
     @RequestMapping(value = "/next/{uuid}", method = RequestMethod.GET)
@@ -178,16 +187,33 @@ public class TramitFOperadorController extends TramitFCteTecController {
     public String editarTramitFCteTecPost(@ModelAttribute TramitFCteTecForm tramitForm,
             BindingResult result, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-        return super.editarTramitFCteTecPost(tramitForm, result, status, request, response);
+
+        String ret =  super.editarTramitFCteTecPost(tramitForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitForm.getTramitFCteTec().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
+
     }
 
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, TramitFCteTecForm TramitFCteTecForm) {
-        Long tramitId = TramitFCteTecForm.getTramitFCteTec().getTramitid();
-        
+
+        TramitFCteTecJPA tramitF = TramitFCteTecForm.getTramitFCteTec();
+        request.getSession().setAttribute("tramitF", tramitF);
+
+        Long tramitId = tramitF.getTramitid();
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         return "redirect:" + getContextWebNext() + "/next/" + uuid;
-    }
+   }
 
     @Override
     public String getRedirectWhenModified(HttpServletRequest request, TramitFCteTecForm tramitForm,
@@ -212,5 +238,24 @@ public class TramitFOperadorController extends TramitFCteTecController {
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    }
+
+    @Override
+    public String crearTramitFCteTecPost(TramitFCteTecForm tramitFCteTecForm, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String ret = super.crearTramitFCteTecPost(tramitFCteTecForm, result, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitFCteTecForm.getTramitFCteTec().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+            
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitFCteTecForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 }

@@ -53,8 +53,13 @@ public class TramitCPublicController extends TramitCOperadorController {
         TramitCDadesCesiForm tramitForm = super.getTramitCDadesCesiForm(_jpa, __isView, request, mav);
 
         tramitForm.addHiddenField(TRAMITID);
+
         if (tramitForm.isNou()) {
             TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
+
+            
+            tramitC.setDenominacio("Q0700733I");
+            tramitC.setNif("Q0700733I");
 
             tramitC.setResponsable("Dirección General de Primera Infancia, Innovación y Comunidad Educativa");
             tramitC.setDir3responsable("A04026925");

@@ -24,6 +24,7 @@ import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitAPersAutController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
@@ -93,7 +94,11 @@ public class TramitAOperadorController extends TramitAPersAutController {
     public boolean isPublic() {
         return false;
     }
+    public long actual() {
+        return 0;
+    }
     
+
     @Override
     public String getTileForm() {
         return "tramitAFormOperador";
@@ -137,7 +142,12 @@ public class TramitAOperadorController extends TramitAPersAutController {
         
         tramitForm.setDeleteButtonVisible(true);
         
-        mav.addObject("isPublic", isPublic());
+        Long tramitID = null;
+        if (!tramitForm.isNou()) {
+            tramitID = tramitForm.getTramitAPersAut().getTramitid();
+        }
+        
+        TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
         tramitForm.setAttachedAdditionalJspCode(true);
 
         return tramitForm;
@@ -218,8 +228,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
 
                 switch (letras[i]) {
                     case "I":
-                        long serveisEfegits = identificadorsTramit[i];
-                        if (serveisEfegits > 0) {
+                        if (identificadorsTramit[i] != null) {
                             msg = "List";
                             permetFinalitzar &= true;
                         } else {
@@ -227,22 +236,6 @@ public class TramitAOperadorController extends TramitAPersAutController {
                             msg = "Add";
                         }
                         url += "/list/1?tramitid=" + uuid;
-                    break;
-                    case "J":
-
-                        if (necessitaConsentiment(tramitID)) {
-                            if (identificadorsTramit[i] != null) {
-                                url += "/" + identificadorsTramit[i] + "/edit" ;
-                                permetFinalitzar &= true;
-                            } else {
-                                url += "/new?tramitid=" + uuid;
-                                msg += "*";
-                                permetFinalitzar &= false;
-                            }
-                        } else {
-                            msg = "";
-                        }
-
                     break;
                     default :
 
@@ -267,17 +260,6 @@ public class TramitAOperadorController extends TramitAPersAutController {
             }
         }
     }
-
-    private boolean necessitaConsentiment(Long tramitID) throws I18NException {
-        Where w = Where.AND(TramitIServFields.TRAMITID.equal(tramitID),
-                TramitIServFields.CONSENTIMENT.equal(Constants.CONSENTIMENT_TIPUS_NOOP),
-                TramitIServFields.CONSENTIMENTPUBLICAT.equal(Constants.CONSENTIMENT_ADJUNT));
-
-        Long serveisQueNecessitenAdjunts = tramitIServLogicEjb.count(w);
-        
-        return  serveisQueNecessitenAdjunts > 0;
-    }
-    
 
     @Override
     public TramitAPersAutJPA create(HttpServletRequest request, TramitAPersAutJPA tramitAPersAut)
@@ -324,15 +306,29 @@ public class TramitAOperadorController extends TramitAPersAutController {
     public String editarTramitAPersAutPost(@ModelAttribute TramitAPersAutForm tramitForm,
             BindingResult result, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-        return super.editarTramitAPersAutPost(tramitForm, result, status, request, response);
+        String ret =  super.editarTramitAPersAutPost(tramitForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitForm.getTramitAPersAut().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+            
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, TramitAPersAutForm tramitAPersAutForm) {
 
-        Long tramitId = tramitAPersAutForm.getTramitAPersAut().getTramitid();
+        TramitAPersAutJPA tramitA = tramitAPersAutForm.getTramitAPersAut();
+        request.getSession().setAttribute("tramitA", tramitA);
 
+        Long tramitId = tramitA.getTramitid();
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         return "redirect:" + getContextWebNext() + "/next/" + uuid;
     }
     
@@ -361,6 +357,18 @@ public class TramitAOperadorController extends TramitAPersAutController {
         }
     }
 
+    public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb) throws I18NException {
+        
+        
+        Long[] identificadorsTramit = tramitAEjb.getPartsTramitIDs(tramitID);
+        request.setAttribute("identificadorsTramit", identificadorsTramit);
+        request.setAttribute("tramitActual", actual);
+        
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
+        request.setAttribute("uuid", uuid);
+        request.setAttribute("isPublic", isPublic);
+    }
+    
     @Override
     public String getRedirectWhenCancel(HttpServletRequest request, Long persautid) {
         // TODO Auto-generated method stub
@@ -379,6 +387,19 @@ public class TramitAOperadorController extends TramitAPersAutController {
             HtmlUtils.saveMessageError(request, "Error esborrant les taules del tramit sistra");
         }
         return "redirect:" + TramitAOperadorController.RETURN_URL;
+    }
+    
+    @Override
+    public String crearTramitAPersAutPost(TramitAPersAutForm tramitAPersAutForm, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        String ret = super.crearTramitAPersAutPost(tramitAPersAutForm, result, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitAPersAutForm.getTramitAPersAut().getTramitid();
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitAPersAutForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 }

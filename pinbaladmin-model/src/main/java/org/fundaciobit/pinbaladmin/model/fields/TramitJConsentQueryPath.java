@@ -23,6 +23,18 @@ public class TramitJConsentQueryPath extends org.fundaciobit.genapp.common.query
     return new LongField(getQueryPath(), TramitJConsentFields.ADJUNTID);
   }
 
+  public StringField CONSENTIMENT() {
+    return new StringField(getQueryPath(), TramitJConsentFields.CONSENTIMENT);
+  }
+
+  public StringField URLCONSENTIMENT() {
+    return new StringField(getQueryPath(), TramitJConsentFields.URLCONSENTIMENT);
+  }
+
+  public StringField CONSENTIMENTADJUNT() {
+    return new StringField(getQueryPath(), TramitJConsentFields.CONSENTIMENTADJUNT);
+  }
+
 
 
   @Override

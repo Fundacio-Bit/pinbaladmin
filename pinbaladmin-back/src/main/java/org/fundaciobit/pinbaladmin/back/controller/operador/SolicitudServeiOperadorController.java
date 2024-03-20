@@ -457,6 +457,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         ESTATS_SOLICITUD_SERVEI.put(90L, "No disponible");
     }
 
+    //XXX CONSENT: Esborrar metodes quan s'eliminin els camps
     public List<StringKeyValue> getReferenceListForTipusConsentiment(HttpServletRequest request,
             ModelAndView mav, Where where)  throws I18NException {
          List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();

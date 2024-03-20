@@ -35,6 +35,15 @@ public class TramitJConsentJPA implements TramitJConsent {
     @Column(name="adjuntid",nullable = false,length = 19)
     java.lang.Long adjuntID;
 
+    @Column(name="consentiment",length = 80)
+    java.lang.String consentiment;
+
+    @Column(name="urlconsentiment",length = 255)
+    java.lang.String urlconsentiment;
+
+    @Column(name="consentimentadjunt",length = 200)
+    java.lang.String consentimentadjunt;
+
 
 
   /** Constructor Buit */
@@ -42,13 +51,25 @@ public class TramitJConsentJPA implements TramitJConsent {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitJConsentJPA(long consentid , long tramitid , java.lang.Long adjuntID) {
+  public TramitJConsentJPA(long consentid , long tramitid , java.lang.Long adjuntID , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
     this.consentid=consentid;
     this.tramitid=tramitid;
     this.adjuntID=adjuntID;
+    this.consentiment=consentiment;
+    this.urlconsentiment=urlconsentiment;
+    this.consentimentadjunt=consentimentadjunt;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitJConsentJPA(long tramitid , java.lang.Long adjuntID) {
+  public TramitJConsentJPA(long tramitid , java.lang.Long adjuntID , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
+    this.tramitid=tramitid;
+    this.adjuntID=adjuntID;
+    this.consentiment=consentiment;
+    this.urlconsentiment=urlconsentiment;
+    this.consentimentadjunt=consentimentadjunt;
+}
+  /** Constructor dels valors Not Null */
+  public TramitJConsentJPA(long consentid , long tramitid , java.lang.Long adjuntID) {
+    this.consentid=consentid;
     this.tramitid=tramitid;
     this.adjuntID=adjuntID;
 }
@@ -56,6 +77,9 @@ public class TramitJConsentJPA implements TramitJConsent {
     this.setConsentid(__bean.getConsentid());
     this.setTramitid(__bean.getTramitid());
     this.setAdjuntID(__bean.getAdjuntID());
+    this.setConsentiment(__bean.getConsentiment());
+    this.setUrlconsentiment(__bean.getUrlconsentiment());
+    this.setConsentimentadjunt(__bean.getConsentimentadjunt());
     // Fitxer
     this.setAdjunt(FitxerJPA.toJPA(__bean.getAdjunt()));
 	}
@@ -79,6 +103,27 @@ public class TramitJConsentJPA implements TramitJConsent {
 	};
 	public void setAdjuntID(java.lang.Long _adjuntID_) {
 		this.adjuntID = _adjuntID_;
+	};
+
+	public java.lang.String getConsentiment() {
+		return(consentiment);
+	};
+	public void setConsentiment(java.lang.String _consentiment_) {
+		this.consentiment = _consentiment_;
+	};
+
+	public java.lang.String getUrlconsentiment() {
+		return(urlconsentiment);
+	};
+	public void setUrlconsentiment(java.lang.String _urlconsentiment_) {
+		this.urlconsentiment = _urlconsentiment_;
+	};
+
+	public java.lang.String getConsentimentadjunt() {
+		return(consentimentadjunt);
+	};
+	public void setConsentimentadjunt(java.lang.String _consentimentadjunt_) {
+		this.consentimentadjunt = _consentimentadjunt_;
 	};
 
 
@@ -132,6 +177,9 @@ public class TramitJConsentJPA implements TramitJConsent {
     __tmp.setConsentid(__bean.getConsentid());
     __tmp.setTramitid(__bean.getTramitid());
     __tmp.setAdjuntID(__bean.getAdjuntID());
+    __tmp.setConsentiment(__bean.getConsentiment());
+    __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
+    __tmp.setConsentimentadjunt(__bean.getConsentimentadjunt());
     // Fitxer
     __tmp.setAdjunt(FitxerJPA.toJPA(__bean.getAdjunt()));
 		return __tmp;

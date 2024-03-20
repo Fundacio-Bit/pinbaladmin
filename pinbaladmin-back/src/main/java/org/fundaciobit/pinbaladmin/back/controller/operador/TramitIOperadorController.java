@@ -1,12 +1,14 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -15,8 +17,10 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.Section;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitIServController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -24,14 +28,18 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
+import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -60,6 +68,10 @@ public class TramitIOperadorController extends TramitIServController {
     public boolean isPublic() {
         return false;
     }
+    public long actual() {
+        return 8;
+    }
+    
 
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
@@ -133,8 +145,10 @@ public class TramitIOperadorController extends TramitIServController {
     }
 
     public String redirectToLlistatServeis(HttpServletRequest request) {
+        
         Long tramitId = (Long) request.getSession().getAttribute("tramitid");
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+        log.info("-> uuid: " + uuid);
 
         return "redirect:" + getContextWeb() + "/list/1?tramitid=" + uuid;
     }
@@ -154,15 +168,13 @@ public class TramitIOperadorController extends TramitIServController {
         } else {
             tramitID = tramitI.getTramitid();
         }
+        
          request.getSession().setAttribute("tramitid", tramitID);
          
-        final Section section = new Section("consentiment", "tramitIServ.consentiment", TramitIServFields.CONSENTIMENT,
-                TramitIServFields.CONSENTIMENTPUBLICAT, TramitIServFields.URLCONSENTIMENT);
-        
-        tramitForm.addSection(section);
-
-        mav.addObject("isPublic", isPublic());
-        tramitForm.setAttachedAdditionalJspCode(true);
+        {
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
 
         return tramitForm;
     }
@@ -181,10 +193,14 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.setHiddenFields(hiddens);
             tramitIServFilterForm.setAddButtonVisible(false);
             tramitIServFilterForm.setVisibleExportList(false);
+            
+            tramitIServFilterForm.setItemsPerPage(-1);
+            
         }
 
         {
             Long tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
+
             String uuid = HibernateFileUtil.encryptFileID(tramitID);
 
             log.info("Estamos en I, servicios del tramite " + tramitID);
@@ -192,7 +208,7 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.getAdditionalButtons().clear();
 
             tramitIServFilterForm.addAdditionalButton(
-                    new AdditionalButton("", "Cancelar Tramit", getContextWeb() + "/delete/" + uuid, "btn-secondary"));
+                    new AdditionalButton("", "tramit.sistra.cancelar.tramit", getContextWeb() + "/delete/" + uuid, "btn-secondary"));
 
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
                     getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
@@ -203,25 +219,16 @@ public class TramitIOperadorController extends TramitIServController {
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
             log.info("serveisAfegits: " + serveisAfegits);
 
-            if (serveisAfegits > 0) {
-                Where w = Where.AND(TRAMITID.equal(tramitID), CONSENTIMENT.equal(Constants.CONSENTIMENT_TIPUS_NOOP),
-                        CONSENTIMENTPUBLICAT.equal(Constants.CONSENTIMENT_ADJUNT));
-
-                long consentimentNecessari = tramitIServLogicEjb.count(w);
-
-                if (consentimentNecessari > 0) {
-                    tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-                            "consentiment", getContextWebNext() + "/next/" + uuid, "btn-primary"));
-                } else {
-                    tramitIServFilterForm.addAdditionalButton(
-                            new AdditionalButton("fas fa-check-circle", "tramit.i.finalitzar.tramit",
-                                    TramitAPublicController.CONTEXT_WEB + "/finalitzarTramit/" + uuid, "btn-primary"));
-                }
+			if (serveisAfegits > 0) {
+				tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
+						"tramitJConsent.tramitJConsent", getContextWebNext() + "/next/" + uuid, "btn-primary"));
+			}
+            {
+                TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+                tramitIServFilterForm.setAttachedAdditionalJspCode(true);
             }
         }
         
-        mav.addObject("isPublic", isPublic());
-        tramitIServFilterForm.setAttachedAdditionalJspCode(true);
 
         return tramitIServFilterForm;
     }
@@ -243,26 +250,9 @@ public class TramitIOperadorController extends TramitIServController {
         return (TramitIServJPA) tramitIServLogicEjb.update(tramitJPA);
     }
 
-
     @Override
-    public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
-            Where where) throws I18NException {
-        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        __tmp.add(new StringKeyValue("", "..."));
-        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_NOOP, "No oposició"));
-        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_LLEI, "Llei"));
-        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_SI, "Si"));
-        return __tmp;
-    }
-
-    @Override
-    public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request, ModelAndView mav,
-            Where where) throws I18NException {
-        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        __tmp.add(new StringKeyValue("", "..."));
-        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_PUBLICAT, "Publicat"));
-        __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_ADJUNT, "Adjunt"));
-        return __tmp;
+    public void delete(HttpServletRequest request, TramitIServ tramitIServ) throws I18NException {
+        tramitIServLogicEjb.delete(tramitIServ);
     }
 
     public List<StringKeyValue> getReferenceListForNom(HttpServletRequest request, ModelAndView mav, Where where)
@@ -270,17 +260,6 @@ public class TramitIOperadorController extends TramitIServController {
         return tramitIServLogicEjb.getReferenceListForServei();
     }
 
-    @Override
-    public void preValidate(HttpServletRequest request, TramitIServForm tramitIServForm, BindingResult result)
-            throws I18NException {
-        
-        TramitIServJPA I = tramitIServForm.getTramitIServ();
-
-        if (I.getUrlconsentiment() == null) {
-            I.setUrlconsentiment("");
-        }
-    }
-    
     //===========================================================================================================================
 
     //En este caso, cuando H llama a next, siempre llevará al listado, esté vacío o lleno.
@@ -303,4 +282,49 @@ public class TramitIOperadorController extends TramitIServController {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
     }
     
+	// Per al Wizard
+	@Override
+	public void postList(HttpServletRequest request, ModelAndView mav, TramitIServFilterForm filterForm,
+			List<TramitIServ> list) throws I18NException {
+
+		super.postList(request, mav, filterForm, list);
+		request.getSession().setAttribute("tramitI", list);
+	}
+
+    @Override
+    public String editarTramitIServPost(TramitIServForm tramitIServForm, BindingResult result, SessionStatus status,
+            HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+        String ret =  super.editarTramitIServPost(tramitIServForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitIServForm.getTramitIServ().getTramitid();
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitIServForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
+    }
+    
+	@Override
+	public String crearTramitIServPost(TramitIServForm tramitIServForm, BindingResult result,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		TramitIServJPA I = tramitIServForm.getTramitIServ();
+		String codi = I.getCodi();
+		Long tramitid = I.getTramitid();
+
+		Long serveisRepetits = tramitIServLogicEjb.count(Where.AND(TRAMITID.equal(tramitid), CODI.equal(codi)));
+		if (serveisRepetits > 0) {
+			result.rejectValue(get(CODI), "genapp.validation.unique",
+					new String[] { codi, I18NUtils.tradueix(CODI.fullName) }, null);
+		}
+
+		String ret = super.crearTramitIServPost(tramitIServForm, result, request, response);
+
+		if (result.hasErrors()) {
+			TramitAOperadorController.dadesWizard(request, tramitid, actual(), isPublic(), tramitAPersAutLogicEjb);
+			tramitIServForm.setAttachedAdditionalJspCode(true);
+		}
+		return ret;
+	}
 }

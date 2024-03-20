@@ -18,6 +18,7 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -52,7 +53,10 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     public boolean isPublic() {
         return false;
     }
-
+    public long actual() {
+        return 2;
+    }
+    
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
     }
@@ -109,19 +113,20 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             tramitID = tramitForm.getTramitCDadesCesi().getTramitid();
         }
         
-        String uuid = HibernateFileUtil.encryptFileID(tramitID);
-        
         tramitForm.setCancelButtonVisible(false);
         tramitForm.setDeleteButtonVisible(false);
 
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
         tramitForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
                 getContextWebPrev() + "/back/" + uuid, "btn-info"));
 
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
-        mav.addObject("isPublic", isPublic());
-        tramitForm.setAttachedAdditionalJspCode(true);
+        {
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
 
         return tramitForm;
     }
@@ -194,14 +199,30 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     public String editarTramitCDadesCesiPost(@ModelAttribute TramitCDadesCesiForm tramitForm,
             BindingResult result, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-        return super.editarTramitCDadesCesiPost(tramitForm, result, status, request, response);
+        
+        String ret =  super.editarTramitCDadesCesiPost(tramitForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitForm.getTramitCDadesCesi().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, TramitCDadesCesiForm tramitCDadesCesiForm) {
-        Long tramitId = tramitCDadesCesiForm.getTramitCDadesCesi().getTramitid();
-        
+
+        TramitCDadesCesiJPA tramitC = tramitCDadesCesiForm.getTramitCDadesCesi();
+        request.getSession().setAttribute("tramitC", tramitC);
+
+        Long tramitId = tramitC.getTramitid();
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         return "redirect:" + getContextWebNext() + "/next/" + uuid;
     }
 
@@ -221,5 +242,24 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    }
+    
+    @Override
+    public String crearTramitCDadesCesiPost(TramitCDadesCesiForm tramitCDadesCesiForm, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String ret = super.crearTramitCDadesCesiPost(tramitCDadesCesiForm, result, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitCDadesCesiForm.getTramitCDadesCesi().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+            
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitCDadesCesiForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
     }
 }

@@ -202,26 +202,6 @@ public class TramitIServController
       };
     }
 
-    // Field consentiment
-    {
-      _listSKV = getReferenceListForConsentiment(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfValuesForConsentiment(_tmp);
-      if (filterForm.getGroupByFields().contains(CONSENTIMENT)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONSENTIMENT, false);
-      };
-    }
-
-    // Field consentimentpublicat
-    {
-      _listSKV = getReferenceListForConsentimentpublicat(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfValuesForConsentimentpublicat(_tmp);
-      if (filterForm.getGroupByFields().contains(CONSENTIMENTPUBLICAT)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONSENTIMENTPUBLICAT, false);
-      };
-    }
-
 
     return groupByItemsMap;
   }
@@ -239,8 +219,6 @@ public class TramitIServController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(TRAMITID, filterForm.getMapOfTramitAPersAutForTramitid());
     __mapping.put(NOM, filterForm.getMapOfValuesForNom());
-    __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
-    __mapping.put(CONSENTIMENTPUBLICAT, filterForm.getMapOfValuesForConsentimentpublicat());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -305,24 +283,6 @@ public class TramitIServController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       tramitIServForm.setListOfValuesForNom(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (tramitIServForm.getListOfValuesForConsentiment() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForConsentiment(request, mav, tramitIServForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      tramitIServForm.setListOfValuesForConsentiment(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (tramitIServForm.getListOfValuesForConsentimentpublicat() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForConsentimentpublicat(request, mav, tramitIServForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      tramitIServForm.setListOfValuesForConsentimentpublicat(_listSKV);
     }
     
   }
@@ -693,69 +653,6 @@ public java.lang.Long stringToPK(String value) {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
     __tmp.add(new StringKeyValue("Procediment1" , "Procediment1"));
     __tmp.add(new StringKeyValue("Procediment2" , "Procediment2"));
-    return __tmp;
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
-       ModelAndView mav, TramitIServForm tramitIServForm, Where where)  throws I18NException {
-    if (tramitIServForm.isHiddenField(CONSENTIMENT)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    return getReferenceListForConsentiment(request, mav, where);
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
-       ModelAndView mav, TramitIServFilterForm tramitIServFilterForm,
-       List<TramitIServ> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (tramitIServFilterForm.isHiddenField(CONSENTIMENT)
-       && !tramitIServFilterForm.isGroupByField(CONSENTIMENT)
-       && !tramitIServFilterForm.isFilterByField(CONSENTIMENT)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    return getReferenceListForConsentiment(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue("NoOposició" , "NoOposició"));
-    __tmp.add(new StringKeyValue("Llei" , "Llei"));
-    __tmp.add(new StringKeyValue("Si" , "Si"));
-    return __tmp;
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request,
-       ModelAndView mav, TramitIServForm tramitIServForm, Where where)  throws I18NException {
-    if (tramitIServForm.isHiddenField(CONSENTIMENTPUBLICAT)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    return getReferenceListForConsentimentpublicat(request, mav, where);
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request,
-       ModelAndView mav, TramitIServFilterForm tramitIServFilterForm,
-       List<TramitIServ> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (tramitIServFilterForm.isHiddenField(CONSENTIMENTPUBLICAT)
-       && !tramitIServFilterForm.isGroupByField(CONSENTIMENTPUBLICAT)
-       && !tramitIServFilterForm.isFilterByField(CONSENTIMENTPUBLICAT)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    return getReferenceListForConsentimentpublicat(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForConsentimentpublicat(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue("Publicat" , "Publicat"));
-    __tmp.add(new StringKeyValue("Adjunt" , "Adjunt"));
     return __tmp;
   }
 

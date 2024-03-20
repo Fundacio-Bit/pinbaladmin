@@ -85,10 +85,11 @@ public class TramitAPublicController extends TramitAOperadorController {
         tramitForm.addHiddenField(TRAMITID);
         tramitForm.addHiddenField(URLSISTRA);
         tramitForm.addHiddenField(IDSESIONFORMULARIO);
+        tramitForm.addHiddenField(DATATRAMIT);
 
+        TramitAPersAutJPA tramitA = tramitForm.getTramitAPersAut();
+        
         if (tramitForm.isNou()) {
-            TramitAPersAutJPA tramitA = tramitForm.getTramitAPersAut();
-
             tramitA.setNif("45186147W");
             tramitA.setNom("Pau");
             tramitA.setTelefon("971123132");
@@ -96,6 +97,9 @@ public class TramitAPublicController extends TramitAOperadorController {
             tramitA.setLlinatge1("Trias");
             tramitA.setLlinatge2("Segura");
             tramitA.setDatatramit(new Timestamp(System.currentTimeMillis()));
+        }else {
+            tramitA.setTelefon("telf");
+            tramitA.setMail("mail@fbit.org");
         }
         
         return tramitForm;

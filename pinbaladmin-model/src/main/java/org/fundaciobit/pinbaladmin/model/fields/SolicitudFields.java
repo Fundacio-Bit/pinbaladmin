@@ -40,6 +40,9 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField CREADOR = new StringField(_TABLE_MODEL, "creador", "creador");
 	 public static final StringField OPERADOR = new StringField(_TABLE_MODEL, "operador", "operador");
 	 public static final IntegerField ESTATPINBAL = new IntegerField(_TABLE_MODEL, "estatpinbal", "estatpinbal");
+	 public static final StringField CONSENTIMENT = new StringField(_TABLE_MODEL, "consentiment", "consentiment");
+	 public static final StringField URLCONSENTIMENT = new StringField(_TABLE_MODEL, "urlconsentiment", "urlconsentiment");
+	 public static final StringField CONSENTIMENTADJUNT = new StringField(_TABLE_MODEL, "consentimentadjunt", "consentimentadjunt");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -70,7 +73,10 @@ public interface SolicitudFields extends java.io.Serializable {
     NIF,
     CREADOR,
     OPERADOR,
-    ESTATPINBAL
+    ESTATPINBAL,
+    CONSENTIMENT,
+    URLCONSENTIMENT,
+    CONSENTIMENTADJUNT
   };
 
 

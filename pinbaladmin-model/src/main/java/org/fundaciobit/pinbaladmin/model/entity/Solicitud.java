@@ -86,6 +86,15 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Integer getEstatpinbal();
 	public void setEstatpinbal(java.lang.Integer _estatpinbal_);
 
+	public java.lang.String getConsentiment();
+	public void setConsentiment(java.lang.String _consentiment_);
+
+	public java.lang.String getUrlconsentiment();
+	public void setUrlconsentiment(java.lang.String _urlconsentiment_);
+
+	public java.lang.String getConsentimentadjunt();
+	public void setConsentimentadjunt(java.lang.String _consentimentadjunt_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitHProcController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcForm;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
@@ -23,6 +24,7 @@ import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
+import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -57,6 +59,10 @@ public class TramitHOperadorController extends TramitHProcController {
     public boolean isPublic() {
         return false;
     }
+    public long actual() {
+        return 7;
+    }
+    
 
     public String getContextWebNext() {
         return CONTEXT_WEB_NEXT;
@@ -126,8 +132,10 @@ public class TramitHOperadorController extends TramitHProcController {
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
-        mav.addObject("isPublic", isPublic());
-        tramitForm.setAttachedAdditionalJspCode(true);
+        {
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
 
         return tramitForm;
     }
@@ -253,14 +261,31 @@ public class TramitHOperadorController extends TramitHProcController {
     public String editarTramitHProcPost(@ModelAttribute TramitHProcForm tramitForm,
             BindingResult result, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-        return super.editarTramitHProcPost(tramitForm, result, status, request, response);
+
+        String ret =  super.editarTramitHProcPost(tramitForm, result, status, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitForm.getTramitHProc().getTramitid();
+
+            log.info("tramitID: " + tramitID);
+            log.info("actual: " + actual());
+            log.info("isPublic: " + isPublic());
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
+
     }
 
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, TramitHProcForm tramitHProcForm) {
-        Long tramitId = tramitHProcForm.getTramitHProc().getTramitid();
-        
+
+        TramitHProcJPA tramitH = tramitHProcForm.getTramitHProc();
+        request.getSession().setAttribute("tramitH", tramitH);
+
+        Long tramitId = tramitH.getTramitid();
         String uuid =  HibernateFileUtil.encryptFileID(tramitId);
+
         return "redirect:" + getContextWebNext() + "/next/" + uuid;
     }
 
@@ -289,4 +314,19 @@ public class TramitHOperadorController extends TramitHProcController {
         return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
     }
     
+ 
+
+    @Override
+    public String crearTramitHProcPost(TramitHProcForm tramitHProcForm, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String ret = super.crearTramitHProcPost(tramitHProcForm, result, request, response);
+        if (result.hasErrors()) {
+            Long tramitID = tramitHProcForm.getTramitHProc().getTramitid();
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            tramitHProcForm.setAttachedAdditionalJspCode(true);
+        }
+        return ret;
+    }
 }

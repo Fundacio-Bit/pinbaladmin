@@ -76,10 +76,12 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
         if (solicitudServeiFilterForm.isNou()) {
             solicitudServeiFilterForm.setItemsPerPage(-1);
             solicitudServeiFilterForm.addHiddenField(ARTICLES);
+            solicitudServeiFilterForm.addHiddenField(ENLLAZNORMALEGAL);
+
+            //XXX CONSENT: Esborrar camps
             solicitudServeiFilterForm.addHiddenField(CONSENTIMENT);
             solicitudServeiFilterForm.addHiddenField(ENLLAZCONSENTIMENT);
             solicitudServeiFilterForm.addHiddenField(TIPUSCONSENTIMENT);
-            solicitudServeiFilterForm.addHiddenField(ENLLAZNORMALEGAL);
 
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.ID);
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.SERVEIID);

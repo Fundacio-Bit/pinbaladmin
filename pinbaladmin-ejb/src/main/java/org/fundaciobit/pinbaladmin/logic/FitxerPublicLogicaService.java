@@ -6,6 +6,7 @@ import javax.ejb.Local;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 /**
  * 
@@ -21,4 +22,8 @@ public interface FitxerPublicLogicaService extends FitxerService {
     @PermitAll
     public Fitxer create(Fitxer bean) throws I18NException;
 
+    @Override
+    @PermitAll
+    public FitxerJPA findByPrimaryKey(Long _ID_);
+    
 }

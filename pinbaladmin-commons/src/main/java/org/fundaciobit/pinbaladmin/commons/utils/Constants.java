@@ -79,7 +79,8 @@ public interface Constants {
     public static final Long DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF = 1L;
     public static final Long DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT = 2L;
     public static final Long DOCUMENT_SOLICITUD_EXCEL_SERVEIS = 3L;
-    public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT = 4L;
+    public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP = 4L;
+    public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT_SI = 5L;
 
     /**
      * Estat de Solicituds a PINBAL

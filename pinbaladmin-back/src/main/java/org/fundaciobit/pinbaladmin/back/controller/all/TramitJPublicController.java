@@ -65,8 +65,9 @@ public class TramitJPublicController extends TramitJOperadorController {
 
         if (tramitForm.isNou()) {
             TramitJConsentJPA tramitJ = tramitForm.getTramitJConsent();
-
+            
+            
         }
-        return tramitForm;
+       return tramitForm;
     }
 }

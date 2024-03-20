@@ -65,27 +65,6 @@
           ${tramitIServ.articles}
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENT)}">
-          <td>
-          <c:set var="tmp">${tramitIServ.consentiment}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
-          </c:if>
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENTPUBLICAT)}">
-          <td>
-          <c:set var="tmp">${tramitIServ.consentimentpublicat}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForConsentimentpublicat[tmp]}
-          </c:if>
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLCONSENTIMENT)}">
-          <td>
-          ${tramitIServ.urlconsentiment}
-          </td>
-        </c:if>
 
 
         <!--  /** Additional Fields */  -->

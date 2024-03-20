@@ -781,3 +781,113 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONSENTIMENT)}">
+        <tr id="solicitud_consentiment_rowid">
+          <td id="solicitud_consentiment_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONSENTIMENT])?'solicitud.consentiment':__theForm.labels[SolicitudFields.CONSENTIMENT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONSENTIMENT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONSENTIMENT]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_consentiment_columnvalueid">
+          <form:errors path="solicitud.consentiment" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONSENTIMENT)}" >
+          <form:hidden path="solicitud.consentiment"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.consentiment,__theForm.listOfValuesForConsentiment)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONSENTIMENT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_consentiment"  onchange="if(typeof onChangeConsentiment == 'function') {  onChangeConsentiment(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.consentiment">
+            <c:forEach items="${__theForm.listOfValuesForConsentiment}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.consentiment }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.consentiment }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.URLCONSENTIMENT)}">
+        <tr id="solicitud_urlconsentiment_rowid">
+          <td id="solicitud_urlconsentiment_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.URLCONSENTIMENT])?'solicitud.urlconsentiment':__theForm.labels[SolicitudFields.URLCONSENTIMENT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.URLCONSENTIMENT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.URLCONSENTIMENT]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_urlconsentiment_columnvalueid">
+           <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.URLCONSENTIMENT)}">
+
+             <c:if test="${ not empty __theForm.solicitud.urlconsentiment}">
+               <a href="${__theForm.solicitud.urlconsentiment}" target="_blank">${__theForm.solicitud.urlconsentiment}</a>
+
+             </c:if>
+           </c:if>
+
+           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,SolicitudFields.URLCONSENTIMENT))}">
+
+            <form:errors path="solicitud.urlconsentiment" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.URLCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.URLCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.urlconsentiment"   />
+
+           </c:if>
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONSENTIMENTADJUNT)}">
+        <tr id="solicitud_consentimentadjunt_rowid">
+          <td id="solicitud_consentimentadjunt_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONSENTIMENTADJUNT])?'solicitud.consentimentadjunt':__theForm.labels[SolicitudFields.CONSENTIMENTADJUNT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONSENTIMENTADJUNT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONSENTIMENTADJUNT]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_consentimentadjunt_columnvalueid">
+          <form:errors path="solicitud.consentimentadjunt" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONSENTIMENTADJUNT)}" >
+          <form:hidden path="solicitud.consentimentadjunt"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.consentimentadjunt,__theForm.listOfValuesForConsentimentadjunt)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONSENTIMENTADJUNT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_consentimentadjunt"  onchange="if(typeof onChangeConsentimentadjunt == 'function') {  onChangeConsentimentadjunt(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.consentimentadjunt">
+            <c:forEach items="${__theForm.listOfValuesForConsentimentadjunt}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.consentimentadjunt }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.consentimentadjunt }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

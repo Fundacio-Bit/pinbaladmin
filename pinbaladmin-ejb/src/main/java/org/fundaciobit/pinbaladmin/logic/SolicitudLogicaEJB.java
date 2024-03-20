@@ -543,7 +543,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         Timestamp dataCaducitat = soli.getDataFi();
         XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat); //parseTimestampToXMLGregorian(dataCaducitat);
 
-        Fitxer consentiment = null;
+        Fitxer fitxerConsentiment = null;
         //Aquí son el excel de servicios y el documento PDF del Director General.
         Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
         
@@ -567,8 +567,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //                String tipo = "EXCEL DE SERVICIOS";
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
-            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
-                consentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI || tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
+            	fitxerConsentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
             } else {
                 FitxerJPA original = document.getDocument().getFitxerOriginal();
                 if (original.getMime().equals("application/pdf")) {
@@ -593,7 +593,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         proc.setFechaCaducidad(_FechaCaducidad);
 
         es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionAlta(docsAuth);
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento _Consentimiento = getConsentimientoAlta(soli.getSolicitudServeis(), consentiment);
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento _Consentimiento = getConsentimientoFromSoliAlta(soli, fitxerConsentiment);
 
         proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
         proc.setConsentimiento(_Consentimiento);
@@ -632,71 +632,138 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //        }
 //        return cal;
 //    }
+    
+	private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento getConsentimientoFromSoliAlta(
+			SolicitudJPA soli, Fitxer fitxerConsentiment) throws Exception {
+		es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento();
 
-    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento getConsentimientoAlta(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
+		final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+		final String PINBAL_CONSENTIMENT_SI = "Si";
+		final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
 
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento();
+		String tipo = null;
+		String enlace = null;
 
-        String consentiment = null;
-        String tipo = null;
-        String enlace = null;
+		String consentiment = soli.getConsentiment(); // si, llei, noop
 
-        final String PINBAL_CONSENTIMENT_LLEI = "Ley";
-        final String PINBAL_CONSENTIMENT_SI = "Si";
-        final String PINBAL_CONSENTIMENT_NOOP= "NoOpo";
-        
-        for (SolicitudServeiJPA solSerJPA : set) {
-            consentiment = solSerJPA.getConsentiment(); //si, llei, noop
-            if (consentiment != null) {
-                if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-                    cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
-                    log.info("CONS: "  + PINBAL_CONSENTIMENT_LLEI);
-                    return cons;
-                } else {
-                    tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI : PINBAL_CONSENTIMENT_NOOP;
-                    enlace = solSerJPA.getEnllazConsentiment();
+		if (consentiment != null) {
+			if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+				cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+				log.info("CONS: " + PINBAL_CONSENTIMENT_LLEI);
+				return cons;
+			} else {
+				tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI
+						: PINBAL_CONSENTIMENT_NOOP;
+				enlace = soli.getUrlconsentiment();
 
-                    if (enlace != null && enlace.trim().length() != 0) {
-                        cons.setEnlace(enlace);
-                        cons.setTipo(tipo);
-                        log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
-                        return cons;
-                    }
-                }
-            }
-        }
+				if (enlace != null && enlace.trim().length() != 0) {
+					cons.setEnlace(enlace);
+					cons.setTipo(tipo);
+					log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
+					return cons;
+				} else {
+					// Afegir el consentiment com a fitxer
+					if (fitxerConsentiment != null) {
+						try {
+							es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
 
-        //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
-        if (fitxerConsentiment != null) {
-            try {
-                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
+							Long consentimentID = fitxerConsentiment.getFitxerID();
 
-                Long consentimentID = fitxerConsentiment.getFitxerID();
+							String nom = fitxerConsentiment.getNom();
+							String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
 
-                String nom = fitxerConsentiment.getNom();
-                String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+							File fileConsentiment = FileSystemManager.getFile(consentimentID);
+							byte[] contingut = FileUtils.readFromFile(fileConsentiment);
 
-                File fileConsentiment = FileSystemManager.getFile(consentimentID);
-                byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+							log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+							doc.setNombre(nom);
+							doc.setDescripcion(descripcio);
+							doc.setContenido(contingut);
 
-                log.info("CONS: " + nom + " : " + contingut.length + " bytes");
-                doc.setNombre(nom);
-                doc.setDescripcion(descripcio);
-                doc.setContenido(contingut);
+							cons.setTipo(tipo);
+							cons.setDocumento(doc);
+							return cons;
+						} catch (Exception e) {
+							String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+							log.error(msg);
+							throw new Exception(msg);
+						}
+					}
+				}
+			}
+		} else {
+			log.info("CONS: No tenim fitxer de consentiment.");
+			return null;
+		}
 
-                cons.setTipo(tipo);
-                cons.setDocumento(doc);
-                return cons;
-            } catch (Exception e) {
-                String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
-                log.error(msg);
-                throw new Exception(msg);
-            }
-        } else {
-            log.info("CONS: No tenim fitxer de consentiment.");
-            return null;
-        }
-    }
+		return cons;
+	}
+
+    //XXX CONSENT: Cnaviar metode per obtenir-ho de solicitud
+//    private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento getConsentimientoAlta(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
+//
+//        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento();
+//
+//        String consentiment = null;
+//        String tipo = null;
+//        String enlace = null;
+//
+//        final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+//        final String PINBAL_CONSENTIMENT_SI = "Si";
+//        final String PINBAL_CONSENTIMENT_NOOP= "NoOpo";
+//        
+//        for (SolicitudServeiJPA solSerJPA : set) {
+//            consentiment = solSerJPA.getConsentiment(); //si, llei, noop
+//            if (consentiment != null) {
+//                if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+//                    cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+//                    log.info("CONS: "  + PINBAL_CONSENTIMENT_LLEI);
+//                    return cons;
+//                } else {
+//                    tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI : PINBAL_CONSENTIMENT_NOOP;
+//                    enlace = solSerJPA.getEnllazConsentiment();
+//
+//                    if (enlace != null && enlace.trim().length() != 0) {
+//                        cons.setEnlace(enlace);
+//                        cons.setTipo(tipo);
+//                        log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
+//                        return cons;
+//                    }
+//                }
+//            }
+//        }
+//
+//        //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
+//        if (fitxerConsentiment != null) {
+//            try {
+//                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
+//
+//                Long consentimentID = fitxerConsentiment.getFitxerID();
+//
+//                String nom = fitxerConsentiment.getNom();
+//                String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+//
+//                File fileConsentiment = FileSystemManager.getFile(consentimentID);
+//                byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+//
+//                log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+//                doc.setNombre(nom);
+//                doc.setDescripcion(descripcio);
+//                doc.setContenido(contingut);
+//
+//                cons.setTipo(tipo);
+//                cons.setDocumento(doc);
+//                return cons;
+//            } catch (Exception e) {
+//                String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+//                log.error(msg);
+//                throw new Exception(msg);
+//            }
+//        } else {
+//            log.info("CONS: No tenim fitxer de consentiment.");
+//            return null;
+//        }
+//    }
 
     private es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DocumentosAutorizacion getDocsAutorizacionAlta(Set<DocAuthInfo> documents) throws Exception {
 
@@ -924,7 +991,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 String tipo = "EXCEL DE SERVICIOS";
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
-            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
+            } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI || tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
                 consentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
             } else {
                 FitxerJPA original = document.getDocument().getFitxerOriginal();
@@ -949,7 +1016,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         proc.setFechaCaducidad(_FechaCaducidad);
 
         es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacionModificacio(docsAuth);
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento _Consentimiento = getConsentimientoModificacio(soli.getSolicitudServeis(), consentiment);
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento _Consentimiento = getConsentimientoFromSoliModificacio(soli, consentiment);
 
         proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
         proc.setConsentimiento(_Consentimiento);
@@ -964,70 +1031,136 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         return proc;
     }
 
-    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento getConsentimientoModificacio(Set<SolicitudServeiJPA> set, Fitxer fitxerConsentiment) throws Exception {
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento();
+    
+    private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento getConsentimientoFromSoliModificacio(
+			SolicitudJPA soli, Fitxer fitxerConsentiment) throws Exception {
+		es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento();
 
-        String consentiment = null;
-        String tipo = null;
-        String enlace = null;
+		final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+		final String PINBAL_CONSENTIMENT_SI = "Si";
+		final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
 
-        final String PINBAL_CONSENTIMENT_LLEI = "Ley";
-        final String PINBAL_CONSENTIMENT_SI = "Si";
-        final String PINBAL_CONSENTIMENT_NOOP= "NoOpo";
-        
-        for (SolicitudServeiJPA solSerJPA : set) {
-            consentiment = solSerJPA.getConsentiment(); //si, llei, noop
-            if (consentiment != null) {
-                if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-                    cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
-                    log.info("CONS: "  + PINBAL_CONSENTIMENT_LLEI);
-                    return cons;
-                } else {
-                    tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI : PINBAL_CONSENTIMENT_NOOP;
-                    enlace = solSerJPA.getEnllazConsentiment();
+		String tipo = null;
+		String enlace = null;
 
-                    if (enlace != null && enlace.trim().length() != 0) {
-                        cons.setEnlace(enlace);
-                        cons.setTipo(tipo);
-                        log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
-                        return cons;
-                    }
-                }
-            }
-        }
+		String consentiment = soli.getConsentiment(); // si, llei, noop
 
-        //Si arriba aqui es que tots els serveis necessiten document. Si no el tenim a DocumentsSolicitud, s'haurà d'adjuntar a la vista previa
-        if (fitxerConsentiment != null) {
-            try {
-                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento();
+		if (consentiment != null) {
+			if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+				cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+				log.info("CONS: " + PINBAL_CONSENTIMENT_LLEI);
+				return cons;
+			} else {
+				tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI
+						: PINBAL_CONSENTIMENT_NOOP;
+				enlace = soli.getUrlconsentiment();
 
-                Long consentimentID = fitxerConsentiment.getFitxerID();
+				if (enlace != null && enlace.trim().length() != 0) {
+					cons.setEnlace(enlace);
+					cons.setTipo(tipo);
+					log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
+					return cons;
+				} else {
+					// Afegir el consentiment com a fitxer
+					if (fitxerConsentiment != null) {
+						try {
+							es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento();
 
-                String nom = fitxerConsentiment.getNom();
-                String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+							Long consentimentID = fitxerConsentiment.getFitxerID();
 
-                File fileConsentiment = FileSystemManager.getFile(consentimentID);
-                byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+							String nom = fitxerConsentiment.getNom();
+							String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
 
-                log.info("CONS: " + nom + " : " + contingut.length + " bytes");
-                doc.setNombre(nom);
-                doc.setDescripcion(descripcio);
-                doc.setContenido(contingut);
+							File fileConsentiment = FileSystemManager.getFile(consentimentID);
+							byte[] contingut = FileUtils.readFromFile(fileConsentiment);
 
-                cons.setTipo(tipo);
-                cons.setDocumento(doc);
-                return cons;
-            } catch (Exception e) {
-                String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
-                log.error(msg);
-                throw new Exception(msg);
-            }
-        } else {
-            log.info("CONS: No tenim fitxer de consentiment.");
-            return null;
-        }
+							log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+							doc.setNombre(nom);
+							doc.setDescripcion(descripcio);
+							doc.setContenido(contingut);
 
-    }
+							cons.setTipo(tipo);
+							cons.setDocumento(doc);
+							return cons;
+						} catch (Exception e) {
+							String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+							log.error(msg);
+							throw new Exception(msg);
+						}
+					}
+				}
+			}
+		} else {
+			log.info("CONS: No tenim fitxer de consentiment.");
+			return null;
+		}
+
+		return cons;
+	}
+    
+    //XXX CONSENT: Cnaviar metode per obtenir-ho de solicitud
+//	private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento getConsentimientoModificacio(
+//			SolicitudJPA soli, Fitxer fitxerConsentiment) throws Exception {
+//		es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento cons = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento();
+//
+//
+//		final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+//		final String PINBAL_CONSENTIMENT_SI = "Si";
+//		final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
+//		
+//		
+//		String consentiment = soli.getConsentiment();
+//
+//		if (consentiment == null) {
+//			return null;
+//		}
+//		
+//		if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+//			cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+//			log.info("CONS: " + PINBAL_CONSENTIMENT_LLEI);
+//			return cons;
+//		} else {
+//			String tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI
+//					: PINBAL_CONSENTIMENT_NOOP;
+//			if (soli.getConsentimentadjunt().equals(Constants.CONSENTIMENT_PUBLICAT)) {
+//				String enlace = soli.getUrlconsentiment();
+//				cons.setEnlace(enlace);
+//				cons.setTipo(tipo);
+//				log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
+//				return cons;
+//			} else {
+//				if (fitxerConsentiment != null) {
+//					try {
+//						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Consentimiento.Documento();
+//
+//						Long consentimentID = fitxerConsentiment.getFitxerID();
+//
+//						String nom = fitxerConsentiment.getNom();
+//						String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+//
+//						File fileConsentiment = FileSystemManager.getFile(consentimentID);
+//						byte[] contingut = FileUtils.readFromFile(fileConsentiment);
+//
+//						log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+//						doc.setNombre(nom);
+//						doc.setDescripcion(descripcio);
+//						doc.setContenido(contingut);
+//
+//						cons.setTipo(tipo);
+//						cons.setDocumento(doc);
+//						return cons;
+//					} catch (Exception e) {
+//						String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
+//						log.error(msg);
+//						throw new Exception(msg);
+//					}
+//				} else {
+//					log.info("CONS: No tenim fitxer de consentiment. Afegir-ho a documents de la solicitud");
+//					return null;
+//				}
+//			}
+//		}
+//	}
 
     private es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DocumentosAutorizacion getDocsAutorizacionModificacio(Set<DocAuthInfo> documents) throws Exception {
 

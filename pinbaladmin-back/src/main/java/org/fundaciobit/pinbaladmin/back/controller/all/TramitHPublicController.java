@@ -69,6 +69,6 @@ public class TramitHPublicController extends TramitHOperadorController {
             tramitH.setPeticionsalmes(450);
             tramitH.setAutomatizado(true);
         }
-        return tramitForm;
+       return tramitForm;
     }
 }

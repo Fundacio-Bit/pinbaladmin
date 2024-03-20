@@ -183,6 +183,30 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONSENTIMENT)}">
+          <td>
+          <c:set var="tmp">${solicitud.consentiment}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.URLCONSENTIMENT)}">
+          <td>
+                       <c:if test="${ not empty solicitud.urlconsentiment}">
+               <a href="${solicitud.urlconsentiment}" target="_blank">${solicitud.urlconsentiment}</a>
+             </c:if>
+
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONSENTIMENTADJUNT)}">
+          <td>
+          <c:set var="tmp">${solicitud.consentimentadjunt}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentimentadjunt[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

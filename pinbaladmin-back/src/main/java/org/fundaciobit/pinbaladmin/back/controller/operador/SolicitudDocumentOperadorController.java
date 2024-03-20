@@ -18,7 +18,9 @@ import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -206,6 +208,38 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     }
 
+    // Si cream un document de consentiment, hem d'actualizar els camps de consentiment de la solicitud
+	@Override
+	public void postValidate(HttpServletRequest request, DocumentForm documentForm, BindingResult result)
+			throws I18NException {
+
+		super.postValidate(request, documentForm, result);
+
+		Long tipusDoc = documentForm.getDocument().getTipus();
+		updateConsentiment(request, tipusDoc);
+	}
+   
+	public void updateConsentiment(HttpServletRequest request, Long tipusDoc) {
+		log.info("Provant si s'executa el metode");
+		if (tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+				|| tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
+			try {
+				Long solicitudID = getSolicitudID(request);
+				if (solicitudID != null) {
+					SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
+					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+							? Constants.CONSENTIMENT_TIPUS_SI
+							: Constants.CONSENTIMENT_TIPUS_NOOP);
+
+					soli.setUrlconsentiment(null);
+					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
+					solicitudEjb.update(soli);
+				}
+			} catch (Throwable th) {
+				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
+			}
+		}
+	}
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
 
@@ -253,7 +287,8 @@ public class SolicitudDocumentOperadorController extends DocumentController {
          __tmp.add(new StringKeyValue("1" , "Formulari PDF"));
          __tmp.add(new StringKeyValue("2" , "Formulari ODT"));
          __tmp.add(new StringKeyValue("3" , "Excel Serveis"));
-         __tmp.add(new StringKeyValue("4" , "Consentiment"));
+         __tmp.add(new StringKeyValue("4" , "Consentiment noop"));
+         __tmp.add(new StringKeyValue("5" , "Consentiment si"));
          return __tmp;
        }    
     

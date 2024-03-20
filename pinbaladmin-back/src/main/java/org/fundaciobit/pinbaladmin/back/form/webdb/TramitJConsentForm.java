@@ -25,6 +25,8 @@ public class TramitJConsentForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.tramitJConsent = __toClone.tramitJConsent;
     this.listOfTramitAPersAutForTramitid = __toClone.listOfTramitAPersAutForTramitid;
+    this.listOfValuesForConsentiment = __toClone.listOfValuesForConsentiment;
+    this.listOfValuesForConsentimentadjunt = __toClone.listOfValuesForConsentimentadjunt;
   }
   
   public TramitJConsentForm(TramitJConsentJPA tramitJConsent, boolean nou) {
@@ -62,6 +64,30 @@ public class TramitJConsentForm extends PinbalAdminBaseForm {
 
   public void setListOfTramitAPersAutForTramitid(List<StringKeyValue> listOfTramitAPersAutForTramitid) {
     this.listOfTramitAPersAutForTramitid = listOfTramitAPersAutForTramitid;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForConsentiment;
+
+  public List<StringKeyValue> getListOfValuesForConsentiment() {
+    return this.listOfValuesForConsentiment;
+  }
+
+  public void setListOfValuesForConsentiment(List<StringKeyValue> listOfValuesForConsentiment) {
+    this.listOfValuesForConsentiment = listOfValuesForConsentiment;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForConsentimentadjunt;
+
+  public List<StringKeyValue> getListOfValuesForConsentimentadjunt() {
+    return this.listOfValuesForConsentimentadjunt;
+  }
+
+  public void setListOfValuesForConsentimentadjunt(List<StringKeyValue> listOfValuesForConsentimentadjunt) {
+    this.listOfValuesForConsentimentadjunt = listOfValuesForConsentimentadjunt;
   }
 
 

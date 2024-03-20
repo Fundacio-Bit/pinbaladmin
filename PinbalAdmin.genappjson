@@ -4897,6 +4897,83 @@
             "webtype": 16
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentiment",
+          "sqlType": 12,
+          "size": 80,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "consentiment",
+            "es": "consentiment"
+          },
+          "javaName": "consentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "si,llei,noop",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlconsentiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "urlconsentiment",
+            "es": "urlconsentiment"
+          },
+          "javaName": "urlconsentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 13
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentimentadjunt",
+          "sqlType": 12,
+          "size": 200,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "consentimentadjunt",
+            "es": "consentimentadjunt"
+          },
+          "javaName": "consentimentadjunt",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "adjunt,publicat",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
         }
       ]
     },
@@ -6038,12 +6115,12 @@
       "nameJava": "TramitAPersAut",
       "shortName": "tramita",
       "labels": {
-        "ca": "Tramit A Pers Aut_ca",
-        "es": "Tramit A Pers Aut_es"
+        "ca": "Persona Autenticada",
+        "es": "Persona Autenticada"
       },
       "labelsPlural": {
-        "ca": "TramitsA: Persona Autorizada",
-        "es": "TramitesA: Persona Autorizada"
+        "ca": "Persones Autenticades",
+        "es": "Personas Autenticadas"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -6395,12 +6472,12 @@
       "nameJava": "TramitBDadesSoli",
       "shortName": "tramitb",
       "labels": {
-        "ca": "Tramit B Dades Soli_ca",
-        "es": "Tramit B Dades Soli_es"
+        "ca": "Dades Solicitud",
+        "es": "Datos Solicitud"
       },
       "labelsPlural": {
-        "ca": "TramitsB: Dades Solicitant",
-        "es": "TramitesB: Dades Solicitant"
+        "ca": "Dades Solicitud",
+        "es": "Datos Solicitud"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -6535,12 +6612,12 @@
       "nameJava": "TramitCDadesCesi",
       "shortName": "tramitc",
       "labels": {
-        "ca": "Tramit C Dades Cesi_ca",
-        "es": "Tramit C Dades Cesi_es"
+        "ca": "Dades Cesionari",
+        "es": "Datos Cesionario"
       },
       "labelsPlural": {
-        "ca": "TramitsC: Dades Cesionari",
-        "es": "TramitesC: Dades Cesionari"
+        "ca": "Dades Cesionari",
+        "es": "Datos Cesionario"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -6824,12 +6901,12 @@
       "nameJava": "TramitDCteAut",
       "shortName": "tramitd",
       "labels": {
-        "ca": "Tramit D: Cte Aut",
-        "es": "Tramite D: Cte Aut"
+        "ca": "Contacte Gestió i Autorització",
+        "es": "Contacto Gestión y Autorización"
       },
       "labelsPlural": {
-        "ca": "Tramits D: Cte Aut",
-        "es": "Tramites D: Cte Aut"
+        "ca": "Contactes Gestió i Autorització",
+        "es": "Contactos Gestión y Autorización"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -7086,12 +7163,12 @@
       "nameJava": "TramitECteAud",
       "shortName": "tramite",
       "labels": {
-        "ca": "Tramit E: Cte Aud",
-        "es": "Tramite E: Cte Aud"
+        "ca": "Contacte Auditories",
+        "es": "Contacto Auditorías"
       },
       "labelsPlural": {
-        "ca": "Tramits E: Cte Aud",
-        "es": "Tramites E: Cte Aud"
+        "ca": "Contactes Auditories",
+        "es": "Contactos Auditorías"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -7348,12 +7425,12 @@
       "nameJava": "TramitFCteTec",
       "shortName": "tramitf",
       "labels": {
-        "ca": "Tramit F: Cte Tec",
-        "es": "Tramite F: Cte Tec"
+        "ca": "Contacte Tècnic",
+        "es": "Contacto Técnico"
       },
       "labelsPlural": {
-        "ca": "Tramits F: Cte Tec",
-        "es": "Tramites F: Cte Tec"
+        "ca": "Contactes Tècnics",
+        "es": "Contactos Técnicos"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -7610,12 +7687,12 @@
       "nameJava": "TramitGDadesTit",
       "shortName": "tramitg",
       "labels": {
-        "ca": "Tramit G: Dades Tit",
-        "es": "Tramite G: Dades Tit"
+        "ca": "Dades Titular",
+        "es": "Datos Titular"
       },
       "labelsPlural": {
-        "ca": "Tramits G: Dades Tit",
-        "es": "Tramites G: Dades Tit"
+        "ca": "Dades Titulars",
+        "es": "Datos Titulares"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -7822,12 +7899,12 @@
       "nameJava": "TramitHProc",
       "shortName": "tramith",
       "labels": {
-        "ca": "Tramit H: Proc",
-        "es": "Tramite H: Proc"
+        "ca": "Procediment",
+        "es": "Procedimiento"
       },
       "labelsPlural": {
-        "ca": "Tramits H: Proc",
-        "es": "Tramites H: Proc"
+        "ca": "Procediments",
+        "es": "Procedimientos"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -8185,12 +8262,12 @@
       "nameJava": "TramitIServ",
       "shortName": "tramiti",
       "labels": {
-        "ca": "Tramit I: Serv",
-        "es": "Tramite I: Serv"
+        "ca": "Servei",
+        "es": "Servicio"
       },
       "labelsPlural": {
-        "ca": "Tramits I: Serv",
-        "es": "Tramites I: Serv"
+        "ca": "Serveis",
+        "es": "Servicios"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -8390,83 +8467,6 @@
             "webtype": 1
           },
           "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "consentiment",
-          "sqlType": 12,
-          "size": 30,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "ca": "Consentiment",
-            "es": "Consentimiento"
-          },
-          "javaName": "consentiment",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "minAllowedValue": "NoOposició,Llei,Si",
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "consentimentpublicat",
-          "sqlType": 12,
-          "size": 30,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Publicat o adjunt",
-            "es": "Publicado o adjunto"
-          },
-          "javaName": "consentimentpublicat",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "minAllowedValue": "Publicat,Adjunt",
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "urlconsentiment",
-          "sqlType": 12,
-          "size": 240,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "URL Consentiment",
-            "es": "URL Consentimiento"
-          },
-          "javaName": "urlconsentiment",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
         }
       ]
     },
@@ -8475,12 +8475,12 @@
       "nameJava": "TramitJConsent",
       "shortName": "tramitj",
       "labels": {
-        "ca": "Tramit J: Consentiment",
-        "es": "Tramite J: Consentimiento"
+        "ca": "Consentiment",
+        "es": "Consentimiento"
       },
       "labelsPlural": {
-        "ca": "Tramits J: Consentiments",
-        "es": "Tramites J: Consentimientos"
+        "ca": "Consentiments",
+        "es": "Consentimientos"
       },
       "generate": true,
       "fileMappingEntity": false,
@@ -8593,6 +8593,83 @@
               "type": 1
             }
           ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentiment",
+          "sqlType": 12,
+          "size": 80,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Consentiment",
+            "es": "Consentimiento"
+          },
+          "javaName": "consentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "si,llei,noop",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlconsentiment",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "URL Consentiment",
+            "es": "URL Consentimiento"
+          },
+          "javaName": "urlconsentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 13
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentimentadjunt",
+          "sqlType": 12,
+          "size": 200,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Consentiment Adj o Pub",
+            "es": "Consentimiento Adj o Pub"
+          },
+          "javaName": "consentimentadjunt",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "adjunt,publicat",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
         }
       ]
     }

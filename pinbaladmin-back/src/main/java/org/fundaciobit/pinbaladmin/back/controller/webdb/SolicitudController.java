@@ -265,6 +265,26 @@ public class SolicitudController
       };
     }
 
+    // Field consentiment
+    {
+      _listSKV = getReferenceListForConsentiment(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForConsentiment(_tmp);
+      if (filterForm.getGroupByFields().contains(CONSENTIMENT)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONSENTIMENT, false);
+      };
+    }
+
+    // Field consentimentadjunt
+    {
+      _listSKV = getReferenceListForConsentimentadjunt(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForConsentimentadjunt(_tmp);
+      if (filterForm.getGroupByFields().contains(CONSENTIMENTADJUNT)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONSENTIMENTADJUNT, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -287,6 +307,8 @@ public class SolicitudController
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
     __mapping.put(ESTATPINBAL, filterForm.getMapOfValuesForEstatpinbal());
+    __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
+    __mapping.put(CONSENTIMENTADJUNT, filterForm.getMapOfValuesForConsentimentadjunt());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -396,6 +418,24 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForEstatpinbal(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForConsentiment() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForConsentiment(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfValuesForConsentiment(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForConsentimentadjunt() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForConsentimentadjunt(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfValuesForConsentimentadjunt(_listSKV);
     }
     
   }
@@ -1006,6 +1046,69 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("7" , "7"));
     __tmp.add(new StringKeyValue("8" , "8"));
     __tmp.add(new StringKeyValue("9" , "9"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CONSENTIMENT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForConsentiment(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CONSENTIMENT)
+       && !solicitudFilterForm.isGroupByField(CONSENTIMENT)
+       && !solicitudFilterForm.isFilterByField(CONSENTIMENT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForConsentiment(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("si" , "si"));
+    __tmp.add(new StringKeyValue("llei" , "llei"));
+    __tmp.add(new StringKeyValue("noop" , "noop"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CONSENTIMENTADJUNT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForConsentimentadjunt(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CONSENTIMENTADJUNT)
+       && !solicitudFilterForm.isGroupByField(CONSENTIMENTADJUNT)
+       && !solicitudFilterForm.isFilterByField(CONSENTIMENTADJUNT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForConsentimentadjunt(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("adjunt" , "adjunt"));
+    __tmp.add(new StringKeyValue("publicat" , "publicat"));
     return __tmp;
   }
 

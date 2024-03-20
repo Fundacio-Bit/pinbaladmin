@@ -203,6 +203,30 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(CONSENTIMENT) == 0) {
+      java.lang.String __consentiment = __target__.getConsentiment();
+      if (__consentiment!= null && __consentiment.length() > 80) {
+        __vr.rejectValue(CONSENTIMENT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(80)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(URLCONSENTIMENT) == 0) {
+      java.lang.String __urlconsentiment = __target__.getUrlconsentiment();
+      if (__urlconsentiment!= null && __urlconsentiment.length() > 255) {
+        __vr.rejectValue(URLCONSENTIMENT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONSENTIMENTADJUNT) == 0) {
+      java.lang.String __consentimentadjunt = __target__.getConsentimentadjunt();
+      if (__consentimentadjunt!= null && __consentimentadjunt.length() > 200) {
+        __vr.rejectValue(CONSENTIMENTADJUNT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENTADJUNT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(200)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

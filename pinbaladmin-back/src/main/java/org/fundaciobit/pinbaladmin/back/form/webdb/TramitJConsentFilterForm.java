@@ -65,6 +65,39 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
   }
 
 
+  private java.lang.String consentiment;
+
+  public java.lang.String getConsentiment() {
+    return this.consentiment;
+  }
+
+  public void setConsentiment(java.lang.String consentiment) {
+    this.consentiment = consentiment;
+  }
+
+
+  private java.lang.String urlconsentiment;
+
+  public java.lang.String getUrlconsentiment() {
+    return this.urlconsentiment;
+  }
+
+  public void setUrlconsentiment(java.lang.String urlconsentiment) {
+    this.urlconsentiment = urlconsentiment;
+  }
+
+
+  private java.lang.String consentimentadjunt;
+
+  public java.lang.String getConsentimentadjunt() {
+    return this.consentimentadjunt;
+  }
+
+  public void setConsentimentadjunt(java.lang.String consentimentadjunt) {
+    this.consentimentadjunt = consentimentadjunt;
+  }
+
+
   public TramitJConsentFilterForm() {
   }
   
@@ -74,7 +107,12 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
     this.consentidFins = __toClone.consentidFins;
     this.tramitidDesde = __toClone.tramitidDesde;
     this.tramitidFins = __toClone.tramitidFins;
+    this.consentiment = __toClone.consentiment;
+    this.urlconsentiment = __toClone.urlconsentiment;
+    this.consentimentadjunt = __toClone.consentimentadjunt;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
+    this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
+    this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;
   }
   
   /* ========= UTILS ========== */
@@ -117,6 +155,30 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
 
   public void setMapOfTramitAPersAutForTramitid(Map<String, String> mapOfTramitAPersAutForTramitid) {
     this.mapOfTramitAPersAutForTramitid = mapOfTramitAPersAutForTramitid;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForConsentiment;
+
+  public Map<String, String> getMapOfValuesForConsentiment() {
+    return this.mapOfValuesForConsentiment;
+  }
+
+  public void setMapOfValuesForConsentiment(Map<String, String> mapOfValuesForConsentiment) {
+    this.mapOfValuesForConsentiment = mapOfValuesForConsentiment;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForConsentimentadjunt;
+
+  public Map<String, String> getMapOfValuesForConsentimentadjunt() {
+    return this.mapOfValuesForConsentimentadjunt;
+  }
+
+  public void setMapOfValuesForConsentimentadjunt(Map<String, String> mapOfValuesForConsentimentadjunt) {
+    this.mapOfValuesForConsentimentadjunt = mapOfValuesForConsentimentadjunt;
   }
 
 

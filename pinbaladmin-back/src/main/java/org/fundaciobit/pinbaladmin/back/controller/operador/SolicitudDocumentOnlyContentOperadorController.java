@@ -6,13 +6,16 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -93,10 +96,12 @@ public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDoc
     
     @Override
     public String getRedirectWhenModified(HttpServletRequest request, DocumentForm docForm, Throwable __e) {
-        
+    	
+		Long tipusDoc = docForm.getDocument().getTipus();
+    	updateConsentiment(request, tipusDoc);
+    	
         Long fitxerFirmat = docForm.getDocument().getFitxerFirmatID();
-        Long tipus = docForm.getDocument().getTipus();
-        if (!TENIM_FIRMAT && fitxerFirmat != null && tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+        if (!TENIM_FIRMAT && fitxerFirmat != null && tipusDoc == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
             //Abans no teniem firmat, i ara si. 
 
             try {
@@ -125,5 +130,6 @@ public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDoc
         
         return super.getRedirectWhenModified(request, docForm, __e);
     }    
+
 
 }

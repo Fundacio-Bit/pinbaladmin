@@ -85,3 +85,113 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.CONSENTIMENT)}">
+        <tr id="tramitJConsent_consentiment_rowid">
+          <td id="tramitJConsent_consentiment_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.CONSENTIMENT])?'tramitJConsent.consentiment':__theForm.labels[TramitJConsentFields.CONSENTIMENT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitJConsentFields.CONSENTIMENT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.CONSENTIMENT]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitJConsent_consentiment_columnvalueid">
+          <form:errors path="tramitJConsent.consentiment" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.CONSENTIMENT)}" >
+          <form:hidden path="tramitJConsent.consentiment"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitJConsent.consentiment,__theForm.listOfValuesForConsentiment)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.CONSENTIMENT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="tramitJConsent_consentiment"  onchange="if(typeof onChangeConsentiment == 'function') {  onChangeConsentiment(this); };"  cssClass="form-control col-md-9-optional" path="tramitJConsent.consentiment">
+            <c:forEach items="${__theForm.listOfValuesForConsentiment}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.tramitJConsent.consentiment }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.tramitJConsent.consentiment }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.URLCONSENTIMENT)}">
+        <tr id="tramitJConsent_urlconsentiment_rowid">
+          <td id="tramitJConsent_urlconsentiment_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.URLCONSENTIMENT])?'tramitJConsent.urlconsentiment':__theForm.labels[TramitJConsentFields.URLCONSENTIMENT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitJConsentFields.URLCONSENTIMENT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.URLCONSENTIMENT]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitJConsent_urlconsentiment_columnvalueid">
+           <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)}">
+
+             <c:if test="${ not empty __theForm.tramitJConsent.urlconsentiment}">
+               <a href="${__theForm.tramitJConsent.urlconsentiment}" target="_blank">${__theForm.tramitJConsent.urlconsentiment}</a>
+
+             </c:if>
+           </c:if>
+
+           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT))}">
+
+            <form:errors path="tramitJConsent.urlconsentiment" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="tramitJConsent.urlconsentiment"   />
+
+           </c:if>
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+        <tr id="tramitJConsent_consentimentadjunt_rowid">
+          <td id="tramitJConsent_consentimentadjunt_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.CONSENTIMENTADJUNT])?'tramitJConsent.consentimentadjunt':__theForm.labels[TramitJConsentFields.CONSENTIMENTADJUNT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitJConsentFields.CONSENTIMENTADJUNT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.CONSENTIMENTADJUNT]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitJConsent_consentimentadjunt_columnvalueid">
+          <form:errors path="tramitJConsent.consentimentadjunt" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.CONSENTIMENTADJUNT)}" >
+          <form:hidden path="tramitJConsent.consentimentadjunt"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitJConsent.consentimentadjunt,__theForm.listOfValuesForConsentimentadjunt)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.CONSENTIMENTADJUNT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="tramitJConsent_consentimentadjunt"  onchange="if(typeof onChangeConsentimentadjunt == 'function') {  onChangeConsentimentadjunt(this); };"  cssClass="form-control col-md-9-optional" path="tramitJConsent.consentimentadjunt">
+            <c:forEach items="${__theForm.listOfValuesForConsentimentadjunt}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.tramitJConsent.consentimentadjunt }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.tramitJConsent.consentimentadjunt }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

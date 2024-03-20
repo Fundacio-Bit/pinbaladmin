@@ -39,18 +39,6 @@ public class TramitIServQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new StringField(getQueryPath(), TramitIServFields.ARTICLES);
   }
 
-  public StringField CONSENTIMENT() {
-    return new StringField(getQueryPath(), TramitIServFields.CONSENTIMENT);
-  }
-
-  public StringField CONSENTIMENTPUBLICAT() {
-    return new StringField(getQueryPath(), TramitIServFields.CONSENTIMENTPUBLICAT);
-  }
-
-  public StringField URLCONSENTIMENT() {
-    return new StringField(getQueryPath(), TramitIServFields.URLCONSENTIMENT);
-  }
-
 
 
   @Override

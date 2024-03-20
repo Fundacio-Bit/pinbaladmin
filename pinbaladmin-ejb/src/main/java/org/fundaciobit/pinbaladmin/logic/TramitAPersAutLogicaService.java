@@ -24,7 +24,7 @@ public interface TramitAPersAutLogicaService extends TramitAPersAutService {
 
     public void deleteFull(Long _ID_) throws I18NException;
 
-    public Long[] getPartsTramitIDs(long tramitID) throws I18NException;
+    public Long[] getPartsTramitIDs(Long tramitID) throws I18NException;
 
     public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException;
     

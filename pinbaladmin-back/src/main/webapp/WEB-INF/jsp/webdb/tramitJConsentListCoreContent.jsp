@@ -44,6 +44,30 @@
             </c:if>
            </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENT)}">
+          <td>
+          <c:set var="tmp">${tramitJConsent.consentiment}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.URLCONSENTIMENT)}">
+          <td>
+                       <c:if test="${ not empty tramitJConsent.urlconsentiment}">
+               <a href="${tramitJConsent.urlconsentiment}" target="_blank">${tramitJConsent.urlconsentiment}</a>
+             </c:if>
+
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+          <td>
+          <c:set var="tmp">${tramitJConsent.consentimentadjunt}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentimentadjunt[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

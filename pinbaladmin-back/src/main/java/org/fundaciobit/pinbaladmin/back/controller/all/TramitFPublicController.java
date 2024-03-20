@@ -59,7 +59,7 @@ public class TramitFPublicController extends TramitFOperadorController {
         if (tramitForm.isNou()) {
             TramitFCteTecJPA tramitF = tramitForm.getTramitFCteTec();
 
-            tramitF.setNif("33333333I");
+            tramitF.setNif("45186147W");
             tramitF.setNom("Toni");
             tramitF.setLlinatge1("Nadal");
             tramitF.setLlinatge2("Bennassar");
@@ -67,6 +67,6 @@ public class TramitFPublicController extends TramitFOperadorController {
             tramitF.setTelefon("971745318");
             tramitF.setMail("tecnic@fbit.org");
         }
-        return tramitForm;
+       return tramitForm;
     }
 }

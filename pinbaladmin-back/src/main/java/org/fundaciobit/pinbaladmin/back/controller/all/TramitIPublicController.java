@@ -67,7 +67,7 @@ public class TramitIPublicController extends TramitIOperadorController {
 
             tramitI.setNorma("Norma Legal inventada");
             tramitI.setUrlnorma("https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347");
-            tramitI.setConsentimentpublicat("1");
+           // tramitI.setConsentimentpublicat("1");
             tramitI.setArticles("Art1, 2 i Art 5");
         }
 

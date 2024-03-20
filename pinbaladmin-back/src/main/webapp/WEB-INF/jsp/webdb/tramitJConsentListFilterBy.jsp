@@ -86,6 +86,45 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitJConsentFields.CONSENTIMENT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitJConsent.consentiment" var="consentiment" />
+              <fmt:message key="genapp.form.searchby" var="cercaperconsentiment" >                
+                 <fmt:param value="${consentiment}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${consentiment}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperconsentiment}" path="consentiment" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitJConsentFields.URLCONSENTIMENT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitJConsent.urlconsentiment" var="urlconsentiment" />
+              <fmt:message key="genapp.form.searchby" var="cercaperurlconsentiment" >                
+                 <fmt:param value="${urlconsentiment}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${urlconsentiment}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlconsentiment}" path="urlconsentiment" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitJConsent.consentimentadjunt" var="consentimentadjunt" />
+              <fmt:message key="genapp.form.searchby" var="cercaperconsentimentadjunt" >                
+                 <fmt:param value="${consentimentadjunt}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${consentimentadjunt}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperconsentimentadjunt}" path="consentimentadjunt" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

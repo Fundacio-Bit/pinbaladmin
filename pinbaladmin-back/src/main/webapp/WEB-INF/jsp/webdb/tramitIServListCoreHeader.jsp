@@ -33,15 +33,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.ARTICLES)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENT)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.CONSENTIMENT)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CONSENTIMENTPUBLICAT)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.CONSENTIMENTPUBLICAT)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLCONSENTIMENT)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.URLCONSENTIMENT)}</th>
-        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

@@ -15,12 +15,18 @@ public interface TramitJConsentFields extends java.io.Serializable {
 	 public static final LongField CONSENTID = new LongField(_TABLE_MODEL, "consentid", "consentid");  // PK
 	 public static final LongField TRAMITID = new LongField(_TABLE_MODEL, "tramitid", "tramitid");
 	 public static final LongField ADJUNTID = new LongField(_TABLE_MODEL, "adjuntID", "adjuntid");
+	 public static final StringField CONSENTIMENT = new StringField(_TABLE_MODEL, "consentiment", "consentiment");
+	 public static final StringField URLCONSENTIMENT = new StringField(_TABLE_MODEL, "urlconsentiment", "urlconsentiment");
+	 public static final StringField CONSENTIMENTADJUNT = new StringField(_TABLE_MODEL, "consentimentadjunt", "consentimentadjunt");
 
 
   public static final Field<?>[] ALL_TRAMITJCONSENT_FIELDS = {
     CONSENTID,
     TRAMITID,
-    ADJUNTID
+    ADJUNTID,
+    CONSENTIMENT,
+    URLCONSENTIMENT,
+    CONSENTIMENTADJUNT
   };
 
 

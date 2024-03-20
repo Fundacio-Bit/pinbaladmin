@@ -15,9 +15,6 @@ public class TramitIServBean implements TramitIServ {
 	java.lang.String norma;
 	java.lang.String urlnorma;
 	java.lang.String articles;
-	java.lang.String consentiment;
-	java.lang.String consentimentpublicat;
-	java.lang.String urlconsentiment;
 
 
   /** Constructor Buit */
@@ -25,7 +22,7 @@ public class TramitIServBean implements TramitIServ {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
+  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles) {
     this.servid=servid;
     this.tramitid=tramitid;
     this.nom=nom;
@@ -33,32 +30,15 @@ public class TramitIServBean implements TramitIServ {
     this.norma=norma;
     this.urlnorma=urlnorma;
     this.articles=articles;
-    this.consentiment=consentiment;
-    this.consentimentpublicat=consentimentpublicat;
-    this.urlconsentiment=urlconsentiment;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitIServBean(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment , java.lang.String consentimentpublicat , java.lang.String urlconsentiment) {
+  public TramitIServBean(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles) {
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
     this.urlnorma=urlnorma;
     this.articles=articles;
-    this.consentiment=consentiment;
-    this.consentimentpublicat=consentimentpublicat;
-    this.urlconsentiment=urlconsentiment;
-}
-  /** Constructor dels valors Not Null */
-  public TramitIServBean(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String consentiment) {
-    this.servid=servid;
-    this.tramitid=tramitid;
-    this.nom=nom;
-    this.codi=codi;
-    this.norma=norma;
-    this.urlnorma=urlnorma;
-    this.articles=articles;
-    this.consentiment=consentiment;
 }
   public TramitIServBean(TramitIServ __bean) {
     this.setServid(__bean.getServid());
@@ -68,9 +48,6 @@ public class TramitIServBean implements TramitIServ {
     this.setNorma(__bean.getNorma());
     this.setUrlnorma(__bean.getUrlnorma());
     this.setArticles(__bean.getArticles());
-    this.setConsentiment(__bean.getConsentiment());
-    this.setConsentimentpublicat(__bean.getConsentimentpublicat());
-    this.setUrlconsentiment(__bean.getUrlconsentiment());
 	}
 
 	public long getServid() {
@@ -122,27 +99,6 @@ public class TramitIServBean implements TramitIServ {
 		this.articles = _articles_;
 	};
 
-	public java.lang.String getConsentiment() {
-		return(consentiment);
-	};
-	public void setConsentiment(java.lang.String _consentiment_) {
-		this.consentiment = _consentiment_;
-	};
-
-	public java.lang.String getConsentimentpublicat() {
-		return(consentimentpublicat);
-	};
-	public void setConsentimentpublicat(java.lang.String _consentimentpublicat_) {
-		this.consentimentpublicat = _consentimentpublicat_;
-	};
-
-	public java.lang.String getUrlconsentiment() {
-		return(urlconsentiment);
-	};
-	public void setUrlconsentiment(java.lang.String _urlconsentiment_) {
-		this.urlconsentiment = _urlconsentiment_;
-	};
-
 
 
   // ======================================
@@ -157,9 +113,6 @@ public class TramitIServBean implements TramitIServ {
     __tmp.setNorma(__bean.getNorma());
     __tmp.setUrlnorma(__bean.getUrlnorma());
     __tmp.setArticles(__bean.getArticles());
-    __tmp.setConsentiment(__bean.getConsentiment());
-    __tmp.setConsentimentpublicat(__bean.getConsentimentpublicat());
-    __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
 		return __tmp;
 	}
 

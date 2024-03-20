@@ -48,6 +48,12 @@ public class TramitIServLogicaEJB extends TramitIServEJB implements TramitIServL
     }
 
     @Override
+    @PermitAll
+    public void delete(TramitIServ instance) {
+        super.delete(instance);
+    }
+    
+    @Override
     public void deleteFull(Long tramitid) throws I18NException {
         //Borrar B i llamar a borrarFullB
         List<TramitFCteTec> list = tramitFCteTecLogicEjb.select(TRAMITID.equal(tramitid));

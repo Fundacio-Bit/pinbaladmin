@@ -55,6 +55,7 @@ public class TramitBPublicController extends TramitBOperadorController {
         TramitBDadesSoliForm tramitForm = super.getTramitBDadesSoliForm(_jpa, __isView, request, mav);
 
         tramitForm.addHiddenField(TRAMITID);
+        
         if (tramitForm.isNou()) {
             TramitBDadesSoliJPA tramitB = tramitForm.getTramitBDadesSoli();
             tramitB.setEntorn("pro");

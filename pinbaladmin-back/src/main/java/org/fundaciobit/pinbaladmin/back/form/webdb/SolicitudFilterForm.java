@@ -340,6 +340,39 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String consentiment;
+
+  public java.lang.String getConsentiment() {
+    return this.consentiment;
+  }
+
+  public void setConsentiment(java.lang.String consentiment) {
+    this.consentiment = consentiment;
+  }
+
+
+  private java.lang.String urlconsentiment;
+
+  public java.lang.String getUrlconsentiment() {
+    return this.urlconsentiment;
+  }
+
+  public void setUrlconsentiment(java.lang.String urlconsentiment) {
+    this.urlconsentiment = urlconsentiment;
+  }
+
+
+  private java.lang.String consentimentadjunt;
+
+  public java.lang.String getConsentimentadjunt() {
+    return this.consentimentadjunt;
+  }
+
+  public void setConsentimentadjunt(java.lang.String consentimentadjunt) {
+    this.consentimentadjunt = consentimentadjunt;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -374,6 +407,9 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.creador = __toClone.creador;
     this.operador = __toClone.operador;
     this.estatpinbalSelect = __toClone.estatpinbalSelect;
+    this.consentiment = __toClone.consentiment;
+    this.urlconsentiment = __toClone.urlconsentiment;
+    this.consentimentadjunt = __toClone.consentimentadjunt;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
@@ -381,6 +417,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
     this.mapOfValuesForEstatpinbal = __toClone.mapOfValuesForEstatpinbal;
+    this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
+    this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;
   }
   
   /* ========= UTILS ========== */
@@ -495,6 +533,30 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfValuesForEstatpinbal(Map<String, String> mapOfValuesForEstatpinbal) {
     this.mapOfValuesForEstatpinbal = mapOfValuesForEstatpinbal;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForConsentiment;
+
+  public Map<String, String> getMapOfValuesForConsentiment() {
+    return this.mapOfValuesForConsentiment;
+  }
+
+  public void setMapOfValuesForConsentiment(Map<String, String> mapOfValuesForConsentiment) {
+    this.mapOfValuesForConsentiment = mapOfValuesForConsentiment;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForConsentimentadjunt;
+
+  public Map<String, String> getMapOfValuesForConsentimentadjunt() {
+    return this.mapOfValuesForConsentimentadjunt;
+  }
+
+  public void setMapOfValuesForConsentimentadjunt(Map<String, String> mapOfValuesForConsentimentadjunt) {
+    this.mapOfValuesForConsentimentadjunt = mapOfValuesForConsentimentadjunt;
   }
 
 

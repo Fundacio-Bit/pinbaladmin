@@ -123,6 +123,18 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new IntegerField(getQueryPath(), SolicitudFields.ESTATPINBAL);
   }
 
+  public StringField CONSENTIMENT() {
+    return new StringField(getQueryPath(), SolicitudFields.CONSENTIMENT);
+  }
+
+  public StringField URLCONSENTIMENT() {
+    return new StringField(getQueryPath(), SolicitudFields.URLCONSENTIMENT);
+  }
+
+  public StringField CONSENTIMENTADJUNT() {
+    return new StringField(getQueryPath(), SolicitudFields.CONSENTIMENTADJUNT);
+  }
+
 
 
   @Override

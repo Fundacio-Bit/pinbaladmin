@@ -325,27 +325,38 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 java.lang.String caduca = servei.getCaduca();
                 java.lang.String fechaCaduca = servei.getFechaCaduca();
 
+                //XXX CONSENT: Estatal, no apliquen els canvis
                 java.lang.String consentiment = servei.getConsentiment();
-                switch (consentiment.trim().toUpperCase()) {
-                    case "SÍ": 
-                    case "SI": 
+                String consentimentAux = SolicitudFullViewOperadorController.normalize(consentiment).replaceAll("\\p{M}", "");
+                log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]" + consentimentAux.toLowerCase() + "[");
+                switch (consentimentAux.toLowerCase()) {
+                    case "sí": 
+                    case "si": 
                         consentiment = Constants.CONSENTIMENT_TIPUS_SI;
                         break;
-                    case "NOOPOSICIÓ": 
-                    case "NOOPOSICIÓN":
-                    case "NO_OPOSICIÓN":
-                    case "NO_OPOSICIÓ":
-                    case "NO_OP":
-                    case "NO_OPO":
-                    case "NOOP":
-                    case "NOOPO":
+
+                    case "nooposicio":
+                    case "nooposicion":
+                    case "noop":
+                    case "noopo":
+
+                    case "no oposicio":
+                    case "no oposicion":
+                    case "no op":
+                    case "no opo":
+
+                    case "no_oposicio":
+                    case "no_oposicion":
+                    case "no_op":
+                    case "no_opo":
                         consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
                         break;
-                    case "LLEI": 
-                    case "LEY":
+                    case "llei": 
+                    case "ley":
                         consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
                         break;
                 }
+                log.info("Consentiment despues: " + consentiment);
                 
                 SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
                         normaLegal, enllazNormaLegal, articles, tipusConsentiment, consentiment, enllazConsentiment,

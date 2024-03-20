@@ -210,6 +210,23 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                     solicitud.setNotes("");
                 }
 
+                //Gestio del consentiment
+                {
+                	String consentiment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");
+                	String urlConsentiment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSURL");
+                	String adjConsentiment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSADJ");
+                	
+					if (consentiment != null && consentiment.trim().length() > 0) {
+						solicitud.setConsentiment(consentiment);
+					}
+					if (urlConsentiment != null && urlConsentiment.trim().length() > 0) {
+						solicitud.setUrlconsentiment(urlConsentiment);
+					}
+					if (adjConsentiment != null && adjConsentiment.trim().length() > 0) {
+						solicitud.setConsentimentadjunt(adjConsentiment);
+					}
+                }
+                
                 // java.lang.Long documentSolicitudID = null;
                 // java.lang.Long documentSolicitudXmlID = null;
                 // boolean firmatDocSolicitud = false;

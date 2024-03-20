@@ -26,6 +26,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcedim
 import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -54,6 +55,7 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
@@ -210,8 +212,13 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String nif = null;
         boolean produccio = true;
         List<TramitIServ> listaTramitsI = null;
+        
         TramitJConsent tramitJ = null;
-
+        String consentiment = null;
+        String urlconsentiment = null;
+        String consentimentadjunt = null;
+        Long fitxerConsentimentID = null;
+        
         //Depercats
         Long departamentID = null;
 
@@ -330,7 +337,26 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         map.put("nomServeis", noms);
                     break;
                     case "J":
-                        tramitJ = (TramitJConsent) obj;
+                        TramitJConsent J = (TramitJConsent) obj;
+                        tramitJ = J;
+                        
+                        consentiment = J.getConsentiment();
+                        
+                        if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
+							urlconsentiment = "";
+							consentimentadjunt = "";
+						}else {
+	                        consentimentadjunt = J.getConsentimentadjunt();
+							if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
+								urlconsentiment = "";
+		                        fitxerConsentimentID = J.getAdjuntID();
+							} else {
+								urlconsentiment = J.getUrlconsentiment();
+							}
+						}
+                        map.put("urlConsentiment", urlconsentiment);
+                        map.put("adjConsentiment", consentimentadjunt);
+
                     break;
                 }
             }
@@ -340,7 +366,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long solicitudXmlID = generarXMLFromMap(map);
         Long documentSolicitudID = null; //generaDcoumentSolicitudAmbXML();
 
-        soli.setProcedimentCodi(procedimentCodi);
+        soli.setProcedimentCodi(procedimentCodi); 
         soli.setCodiDescriptiu(codiDescriptiu);
         soli.setProcedimentNom(procedimentNom);
         soli.setProcedimentTipus(procedimentTipus);
@@ -366,6 +392,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setCreador(creador);
         soli.setOperador(operador);
         soli.setEstatpinbal(estatpinbal);
+        soli.setConsentiment(consentiment);
+        soli.setUrlconsentiment(urlconsentiment);
+        soli.setConsentimentadjunt(consentimentadjunt);
+        
 
         SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soli);
 
@@ -374,9 +404,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         eventSolicitudCreada(creador, soliID);
 
-        afegirServeisSolicitud(listaTramitsI, dataFi, soliID);
+        afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
 
-        afegirDocumentConsentiment(tramitJ, soliID);
+        afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 
         /*
          * Afegir documents:
@@ -389,14 +419,17 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         return solicitud;
     }
 
-    private void afegirDocumentConsentiment(TramitJConsent J, Long soliID) throws I18NException {
+    private void afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
 
-        if (J != null) {
-            Long fitxerID = J.getAdjuntID();
+        if (fitxerConsentimentID != null) {
 
-            Long tipus = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
+        	FitxerJPA cons = fitxerLogicEjb.findByPrimaryKey(fitxerConsentimentID);
+        	FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(), cons.getDescripcio());
+        	fitxerCopia = (FitxerJPA) fitxerLogicEjb.create(fitxerCopia);
+        	
+            Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
             String nom = "Document Consentiment";
-            Document doc = documentLogicaEjb.create(nom, fitxerID, null, null, tipus);
+            Document doc = documentLogicaEjb.create(nom, fitxerCopia.getFitxerID(), null, null, tipus);
 
             DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
 
@@ -406,7 +439,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     }
 
-    private void afegirServeisSolicitud( List<TramitIServ> listaTramitsI, Timestamp dataFi, Long soliID) throws I18NException {
+    private void afegirServeisSolicitud( List<TramitIServ> listaTramitsI, Timestamp dataFi, Long soliID, TramitJConsent J) throws I18NException {
         {
             for (TramitIServ I : listaTramitsI) {
                 String codiServei = I.getCodi();
@@ -433,9 +466,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     String normaLegal = I.getNorma();
                     String enllazNormaLegal = I.getUrlnorma();
                     String articles = I.getArticles();
-                    String tipusConsentiment = I.getConsentimentpublicat();  //"publicat"/"adjunt"
-                    String consentiment = I.getConsentiment();
-                    String enllazConsentiment = I.getUrlconsentiment();
+                    
                     
                     String caduca;
                     String caducafecha;
@@ -455,8 +486,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     
                     ss.setArticles(articles);
                     ss.setCaduca(caduca);
-                    ss.setConsentiment(consentiment);
-                    ss.setEnllazConsentiment(enllazConsentiment);
                     ss.setEnllazNormaLegal(enllazNormaLegal);
                     ss.setEstatSolicitudServeiID(estatSolicitudServeiID);
                     ss.setFechaCaduca(caducafecha);
@@ -464,7 +493,18 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     ss.setNotes(notes);
                     ss.setServeiID(serveiID);
                     ss.setSolicitudID(soliID);
-                    ss.setTipusConsentiment(tipusConsentiment);
+
+					// Gestio consentiment
+					{
+						String tipusConsentiment = J.getConsentimentadjunt();
+						String consentiment = J.getConsentiment(); 
+						String enllazConsentiment = J.getUrlconsentiment();
+
+						//XXX CONSENT: Esborrar
+						ss.setConsentiment(consentiment);
+						ss.setEnllazConsentiment(enllazConsentiment);
+						ss.setTipusConsentiment(tipusConsentiment);
+					}
                     
                     log.info("Norma Legal:" + ss.getNormaLegal());
                     solicitudServeiLogicaEjb.create(ss);
@@ -484,7 +524,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             java.lang.String _persona_ = creador;
             java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir del formulari Sistra de PinbalAdmin";
             java.lang.Long _fitxerID_ = null;
-            boolean _noLlegit_ = false;
+            boolean _noLlegit_ = true;
             java.lang.String _destinatari_ = null;
             java.lang.String _destinatariMail_ = null;
             java.lang.String _caidConsulta_ = null;
@@ -513,21 +553,21 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     
     
     @Override
-    public Long[] getPartsTramitIDs(long tramitID) throws I18NException {
+    public Long[] getPartsTramitIDs(Long tramitID ) throws I18NException {
 
+        String mailA = this.executeQueryOne(TramitAPersAutFields.MAIL, TramitAPersAutFields.TRAMITID.equal(tramitID));
+        Long tramitA= mailA != null ? tramitID : null;
+        
         Long[] tramitIDs = {
-                this.executeQueryOne(TramitAPersAutFields.PERSAUTID, TramitAPersAutFields.TRAMITID.equal(tramitID)),
-                tramitBEjb.executeQueryOne(TramitBDadesSoliFields.DADESSOLIID,
-                        TramitBDadesSoliFields.TRAMITID.equal(tramitID)),
-                tramitCEjb.executeQueryOne(TramitCDadesCesiFields.DADESCESIID,
-                        TramitCDadesCesiFields.TRAMITID.equal(tramitID)),
+                tramitA,
+                tramitBEjb.executeQueryOne(TramitBDadesSoliFields.DADESSOLIID, TramitBDadesSoliFields.TRAMITID.equal(tramitID)),
+                tramitCEjb.executeQueryOne(TramitCDadesCesiFields.DADESCESIID, TramitCDadesCesiFields.TRAMITID.equal(tramitID)),
                 tramitDEjb.executeQueryOne(TramitDCteAutFields.CTEAUTID, TramitDCteAutFields.TRAMITID.equal(tramitID)),
                 tramitEEjb.executeQueryOne(TramitECteAudFields.CTEAUDID, TramitECteAudFields.TRAMITID.equal(tramitID)),
                 tramitFEjb.executeQueryOne(TramitFCteTecFields.CTETECID, TramitFCteTecFields.TRAMITID.equal(tramitID)),
-                tramitGEjb.executeQueryOne(TramitGDadesTitFields.DADESTITID,
-                        TramitGDadesTitFields.TRAMITID.equal(tramitID)),
+                tramitGEjb.executeQueryOne(TramitGDadesTitFields.DADESTITID, TramitGDadesTitFields.TRAMITID.equal(tramitID)),
                 tramitHEjb.executeQueryOne(TramitHProcFields.PROCID, TramitHProcFields.TRAMITID.equal(tramitID)),
-                tramitIEjb.count(TramitIServFields.TRAMITID.equal(tramitID)), 
+                tramitIEjb.executeQueryOne(TramitIServFields.SERVID, TramitIServFields.TRAMITID.equal(tramitID)), 
                 tramitJEjb.executeQueryOne(TramitJConsentFields.CONSENTID, TramitJConsentFields.TRAMITID.equal(tramitID)),
         };
 
