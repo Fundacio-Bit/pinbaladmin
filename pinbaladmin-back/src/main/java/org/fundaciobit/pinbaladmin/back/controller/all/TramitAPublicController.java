@@ -140,14 +140,16 @@ public class TramitAPublicController extends TramitAOperadorController {
         SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitID);
         log.info("Solicitud Creada a BBDD: " + soli.getSolicitudID());
 
-        Long fitxerID = soli.getSolicitudXmlID();
-        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//        log.info("Serveis de la solicitud: " + soli.getSolicitudServeis().size());
+        
+//        Long fitxerID = soli.getSolicitudXmlID();
+//        Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//
+//        generarDocumentSolicitudAmbXML(soli, prop);
+//        generarDocumentsSolicitud(soli, prop);
+//        generarExcelDeServeis(soli);
 
-        generarDocumentSolicitudAmbXML(soli, prop);
-        generarDocumentsSolicitud(soli, prop);
-        generarExcelDeServeis(soli);
-
-        log.info("Generat");
+//        log.info("Generat");
     }
 
     public void generarDocumentsSolicitud(SolicitudJPA soli, Properties prop) throws Exception, I18NException {

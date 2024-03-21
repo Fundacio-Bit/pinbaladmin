@@ -2,14 +2,20 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -27,8 +33,11 @@ import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
@@ -61,6 +70,10 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
+import org.hibernate.Hibernate;
+
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -90,20 +103,22 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
-    @EJB(mappedName = OrganService.JNDI_NAME)
-    protected OrganService organJEjb;
-    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
-    protected FitxerPublicLogicaService fitxerLogicEjb;
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicEjb;
     @EJB(mappedName = SolicitudServeiLogicaService.JNDI_NAME)
     protected SolicitudServeiLogicaService solicitudServeiLogicaEjb;
     @EJB(mappedName = ServeiService.JNDI_NAME)
     protected ServeiService serveiEjb;
+    
     @EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
     protected DocumentSolicitudLogicaService documentSolicitudLogicEjb;
     @EJB(mappedName = DocumentLogicaService.JNDI_NAME)
     protected DocumentLogicaService documentLogicaEjb;
+    @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+    protected OrganLogicaService organLogicaEjb;
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+
     
     public static SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -161,7 +176,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
             byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
-            Fitxer f = fitxerLogicEjb.create("formulari.xml", data.length, "aplication.xml", null);
+            Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "aplication.xml", null);
             FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
             return f.getFitxerID();
@@ -267,7 +282,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         TramitCDadesCesi C = (TramitCDadesCesi) obj;
 
                         dir3 = C.getDir3responsable();
-                        organid = organJEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3));
+                        organid = organLogicaEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3));
 
                         nif = C.getNif();
 
@@ -363,9 +378,18 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         }
 
         //Documents
-        Long solicitudXmlID = generarXMLFromMap(map);
-        Long documentSolicitudID = null; //generaDcoumentSolicitudAmbXML();
-
+        Properties prop = null;
+		try {
+			Long solicitudXmlID = generarXMLFromMap(map);
+			prop = ParserFormulariXML.getPropertiesFromFormulario(solicitudXmlID);
+			Long docSoliID = generarDocumentSolicitudAmbXML(procedimentCodi, prop);
+			
+			soli.setSolicitudXmlID(solicitudXmlID);
+	        soli.setDocumentSolicitudID(docSoliID);
+		} catch (Exception e) {
+			log.error("Error generant document de la sol·licitud: " + e.getMessage(), e);
+		}
+		
         soli.setProcedimentCodi(procedimentCodi); 
         soli.setCodiDescriptiu(codiDescriptiu);
         soli.setProcedimentNom(procedimentNom);
@@ -382,8 +406,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setResponsableProcNom(responsableProcNom);
         soli.setResponsableProcEmail(responsableProcEmail);
         soli.setNotes(notesSoli);
-        soli.setDocumentSolicitudID(documentSolicitudID);
-        soli.setSolicitudXmlID(solicitudXmlID);
         soli.setFirmatDocSolicitud(firmatDocSolicitud);
         soli.setProduccio(produccio);
         soli.setDenominacio(denominacio);
@@ -402,116 +424,149 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long soliID = solicitud.getSolicitudID();
         log.info("SolicitudID de la solicitud creada: " + soliID);
 
-        eventSolicitudCreada(creador, soliID);
-
-        afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
-
-        afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
-
+        try {
+			eventSolicitudCreada(creador, soliID);
+			
+			generarDocumentsSolicitud(soliID, organid, prop);
+			
+			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
+			soli.setSolicitudServeis(solicitudServeis);
+			generarExcelDeServeis(solicitud);
+			
+			afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
+			
+		} catch (Exception e) {
+			String msg = "Error generant documents de la sol·licitud: " + e.getMessage();
+			log.error(msg, e);
+			throw new I18NException(msg);
+		}
+        
         /*
          * Afegir documents:
-         * 1. Document de solicitud
+         * 1. Document de solicitud - Ok
          * 2. PDF Director General - Ok
          * 3. ODT Director General - Ok
          * 4. Excel de Procs-Servs - Ok
          * 5. Consentiment - Ok
          */
+	        
+
+        
         return solicitud;
     }
 
+    private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
+    
+        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+
+        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+
+        documentSolicitudLogicEjb.create(ds);
+        log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
+
+    }
+    
     private void afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
 
         if (fitxerConsentimentID != null) {
 
-        	FitxerJPA cons = fitxerLogicEjb.findByPrimaryKey(fitxerConsentimentID);
+        	FitxerJPA cons = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerConsentimentID);
         	FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(), cons.getDescripcio());
-        	fitxerCopia = (FitxerJPA) fitxerLogicEjb.create(fitxerCopia);
+        	fitxerCopia = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxerCopia);
         	
-            Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
-            String nom = "Document Consentiment";
-            Document doc = documentLogicaEjb.create(nom, fitxerCopia.getFitxerID(), null, null, tipus);
-
-            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
-
-            documentSolicitudLogicEjb.create(ds);
-            log.info("Afegit document de Consentiment");
+        	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
+        	String nom = "Document Consentiment";
+        	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
+//            Document doc = documentLogicaEjb.create(nom, fitxerCopia.getFitxerID(), null, null, tipus);
+//
+//            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+//
+//            documentSolicitudLogicEjb.create(ds);
+//            log.info("Afegit document de Consentiment");
         }
 
     }
 
-    private void afegirServeisSolicitud( List<TramitIServ> listaTramitsI, Timestamp dataFi, Long soliID, TramitJConsent J) throws I18NException {
-        {
-            for (TramitIServ I : listaTramitsI) {
-                String codiServei = I.getCodi();
-                log.info("Codi: " + codiServei);
-                
-                List<Servei> llistaSservei = serveiEjb.select(ServeiFields.CODI.equal(codiServei));
-                
-                if (llistaSservei.size() != 1) {
-                    continue;
-                }
+	private Set<SolicitudServeiJPA> afegirServeisSolicitud(List<TramitIServ> listaTramitsI, Timestamp dataFi,
+			Long soliID, TramitJConsent J) throws I18NException {
 
-                ServeiJPA servei = (ServeiJPA) llistaSservei.get(0);
+		Set<SolicitudServeiJPA> serveisDeLaSolicitud = new HashSet<SolicitudServeiJPA>();
 
-                Long serveiID = servei.getServeiID();
-                log.info("serveiID: " + serveiID);
-                
-                Long count = solicitudServeiLogicaEjb.count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
-                        SolicitudServeiFields.SERVEIID.equal(serveiID)));
+		for (TramitIServ I : listaTramitsI) {
+			String codiServei = I.getCodi();
+			log.info("Codi: " + codiServei);
 
-                if (count == 0) {
+			List<Servei> llistaSservei = serveiEjb.select(ServeiFields.CODI.equal(codiServei));
 
-                    Long estatSolicitudServeiID = 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+			if (llistaSservei.size() != 1) {
+				continue;
+			}
 
-                    String normaLegal = I.getNorma();
-                    String enllazNormaLegal = I.getUrlnorma();
-                    String articles = I.getArticles();
-                    
-                    
-                    String caduca;
-                    String caducafecha;
-                    if (dataFi == null) {
-                        caduca = "No caduca";
-                        caducafecha = "";
-                    }else {
-                        caduca = "Caduca";
-                        caducafecha = dataFi.toString();                            
-                    }
+			ServeiJPA servei = (ServeiJPA) llistaSservei.get(0);
 
-                    String notes = "";
+			Long serveiID = servei.getServeiID();
+			log.info("serveiID: " + serveiID);
 
-                    log.info("Norma Legal:" + normaLegal);
-                    
-                    SolicitudServeiJPA ss = new SolicitudServeiJPA(); 
-                    
-                    ss.setArticles(articles);
-                    ss.setCaduca(caduca);
-                    ss.setEnllazNormaLegal(enllazNormaLegal);
-                    ss.setEstatSolicitudServeiID(estatSolicitudServeiID);
-                    ss.setFechaCaduca(caducafecha);
-                    ss.setNormaLegal(normaLegal);
-                    ss.setNotes(notes);
-                    ss.setServeiID(serveiID);
-                    ss.setSolicitudID(soliID);
+			Long count = solicitudServeiLogicaEjb.count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soliID),
+					SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
-					// Gestio consentiment
-					{
-						String tipusConsentiment = J.getConsentimentadjunt();
-						String consentiment = J.getConsentiment(); 
-						String enllazConsentiment = J.getUrlconsentiment();
+			if (count == 0) {
 
-						//XXX CONSENT: Esborrar
-						ss.setConsentiment(consentiment);
-						ss.setEnllazConsentiment(enllazConsentiment);
-						ss.setTipusConsentiment(tipusConsentiment);
-					}
-                    
-                    log.info("Norma Legal:" + ss.getNormaLegal());
-                    solicitudServeiLogicaEjb.create(ss);
-                }
-            }
-        }
-    }
+				Long estatSolicitudServeiID = 40L; // ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+
+				String normaLegal = I.getNorma();
+				String enllazNormaLegal = I.getUrlnorma();
+				String articles = I.getArticles();
+
+				String caduca;
+				String caducafecha;
+				if (dataFi == null) {
+					caduca = "No caduca";
+					caducafecha = "";
+				} else {
+					caduca = "Caduca";
+					caducafecha = dataFi.toString();
+				}
+
+				String notes = "";
+
+				log.info("Norma Legal:" + normaLegal);
+
+				SolicitudServeiJPA ss = new SolicitudServeiJPA();
+
+				ss.setArticles(articles);
+				ss.setCaduca(caduca);
+				ss.setEnllazNormaLegal(enllazNormaLegal);
+				ss.setEstatSolicitudServeiID(estatSolicitudServeiID);
+				ss.setFechaCaduca(caducafecha);
+				ss.setNormaLegal(normaLegal);
+				ss.setNotes(notes);
+				ss.setServeiID(serveiID);
+				ss.setServei(servei);
+				
+				ss.setSolicitudID(soliID);
+
+				// Gestio consentiment
+				{
+					String tipusConsentiment = J.getConsentimentadjunt();
+					String consentiment = J.getConsentiment();
+					String enllazConsentiment = J.getUrlconsentiment();
+
+					// XXX CONSENT: Esborrar
+					ss.setConsentiment(consentiment);
+					ss.setEnllazConsentiment(enllazConsentiment);
+					ss.setTipusConsentiment(tipusConsentiment);
+				}
+
+				log.info("Norma Legal:" + ss.getNormaLegal());
+
+				SolicitudServeiJPA solicitudServei = (SolicitudServeiJPA) solicitudServeiLogicaEjb.create(ss);
+				serveisDeLaSolicitud.add(solicitudServei);
+				log.info("Afegit servei a la solicitud: " + solicitudServei.getId());
+			}
+		}
+		return serveisDeLaSolicitud;
+	}
 
     private void eventSolicitudCreada(String creador, Long solicitudID) {
         // Afegir event de creació de la solicitud.
@@ -551,6 +606,113 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         }
     }
     
+    
+    
+
+	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
+
+		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
+		while (organGestor.getDir3pare() != null) {
+			List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
+			if (organ.size() == 1) {
+				organGestor = organ.get(0);
+			}
+		}
+
+		if (organGestor.getCif().equals("S0711001H")) {
+	        String dir3Dgtic = "A04027005";
+	        List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+	        if (organ.size() == 1) {
+	            Organ dgtic = organ.get(0);
+	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+	        }
+	    }
+
+		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
+		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
+
+		File plantilla = new File(Configuracio.getTemplateFormulari());
+
+		ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
+
+		{
+			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(), "application/pdf",
+					"");
+
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
+			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (PDF)", tipus, solicitudID);
+
+			FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
+		}
+
+		{
+			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
+					"application/vnd.oasis.opendocument.text", "");
+
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+			FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
+			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (ODT)", tipus, solicitudID);
+		}
+	}
+
+    public void generarExcelDeServeis(SolicitudJPA soli) throws Exception, I18NException {
+
+        Long solicitudID = soli.getSolicitudID();
+        log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
+
+        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+        byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli);
+
+        String nom = SDF.format(new Date()) + plantillaXLSX.getName();
+        FitxerJPA fitxer = new FitxerJPA(nom, data.length, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
+        fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+        FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxer.getFitxerID());
+
+        Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+    	afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
+    }
+
+    private Long generarDocumentSolicitudAmbXML(String codiProc, Properties prop) throws Exception {
+
+        String fileName = "Datos_de_la_solicitud_" + codiProc + ".pdf";
+
+        com.lowagie.text.Document documento = new com.lowagie.text.Document();
+        FileOutputStream ficheroPdf = new FileOutputStream(fileName);
+
+        PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
+
+        documento.open();
+        Set<Entry<Object, Object>> set = prop.entrySet();
+        for (Entry<Object, Object> entry : set) {
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+
+            documento.add(new Paragraph(key + ": " + value));
+        }
+        documento.add(new Paragraph("Esto es el primer párrafo, normalito"));
+
+        documento.close();
+
+        File file = new File(fileName);
+        long size = file.length();
+        String mime = "application/pdf";
+        String desc = "";
+
+        FitxerJPA fitxer = new FitxerJPA(fileName, size, mime, desc);
+        fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+        FileSystemManager.crearFitxer(file, fitxer.getFitxerID());
+
+        return fitxer.getFitxerID();
+    }
+
     
     @Override
     public Long[] getPartsTramitIDs(Long tramitID ) throws I18NException {

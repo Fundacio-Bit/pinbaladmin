@@ -1,4 +1,4 @@
-package org.fundaciobit.pinbaladmin.back.utils;
+package org.fundaciobit.pinbaladmin.logic.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
