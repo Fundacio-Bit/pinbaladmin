@@ -38,6 +38,7 @@ form table td label {
 .tab_container {
 	max-width: 50rem;
 	min-width: 35rem;
+	margin-right: 2rem;
 }
 
 #wizard {
@@ -114,6 +115,17 @@ select.form-control {
 	margin-bottom: 4px;
 }
 
+#anotacions {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	margin-left: 2rem;
+	
+	font-style: italic;
+	border: 1px solid darkgray;
+	border-radius: 5px;
+	padding: 6px;
+	background-color: #d3d3d336;
+}
 </style>
 
 <div id="titol-tramit">Sol·litud d'autorització</div>
@@ -133,12 +145,24 @@ select.form-control {
 	</c:forEach>
 </div>
 
+<c:if test="${not empty anotacions}">
+	<div id="anotacions">
+		Nota: <c:out value="${anotacions}" />
+	</div>
+</c:if>
 
 <script type="text/javascript">
 
 	$(".module_content").append($("#wizard"));
 	$(".module_content").append($(".tab_container"));
 	$("#titol-tramit").insertBefore($("form"))
+
+	$("#anotacions").insertAfter($(".lead"))
+
+	var w2 = $("#wizard").width();
+	var w1 = $(".tab_container").width();
+	$("#anotacions").width(w1 + w2- 16);
+	
 
 	$("#dot${tramitActual}").addClass("actual");
 
@@ -163,27 +187,22 @@ select.form-control {
 		} else {
 			if (i == lastTramit) {
 				var url = context + "/new?tramitid=" + uuid;
-	            if (letra == "i") {
-	                url = context + "/list/1?tramitid=" + uuid;
-	            }
+				if (letra == "i") {
+					url = context + "/list/1?tramitid=" + uuid;
+				}
 
 				step.href = url;
 			}
 		}
 	}
-	
-	
+
 	//setTitolSteps();
-	function setTitolSteps(){
-	    var titols = [
-	    	"Persona Autenticada", 
-            "Dades Solicitud", 
-            "Dades Cesionari" 
-	    ];		
-	    
-	    for (var i = 0; i < titols.length; i++) {
+	function setTitolSteps() {
+		var titols = [ "Persona Autenticada", "Dades Solicitud",
+				"Dades Cesionari" ];
+
+		for (var i = 0; i < titols.length; i++) {
 			$("#step" + i).html(titols[i]);
 		}
 	}
-	
 </script>

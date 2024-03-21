@@ -123,6 +123,9 @@ public class TramitEOperadorController extends TramitECteAudController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
+        	String anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
+            request.setAttribute("anotacions", anotacions);
+
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
