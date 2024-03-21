@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +15,10 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitDCteAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitECteAudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitDCteAut;
+import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitECteAudFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitECteAudJPA;
@@ -44,6 +49,10 @@ public class TramitEOperadorController extends TramitECteAudController {
     @EJB(mappedName = TramitECteAudLogicaService.JNDI_NAME)
     protected TramitECteAudLogicaService tramitECteAudLogicEjb;
 
+    @EJB(mappedName = TramitDCteAutLogicaService.JNDI_NAME)
+    protected TramitDCteAutLogicaService tramitDcteAutLogicEjb;
+    
+    
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
@@ -123,6 +132,12 @@ public class TramitEOperadorController extends TramitECteAudController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
+        	
+        	List<TramitDCteAut> llistatTramitD = tramitDcteAutLogicEjb.select(TramitDCteAutFields.TRAMITID.equal(tramitID));
+        	if (llistatTramitD.size() == 1) {
+        		request.setAttribute("tramitD", llistatTramitD.get(0));
+        	}
+        	
         	String anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
             request.setAttribute("anotacions", anotacions);
 

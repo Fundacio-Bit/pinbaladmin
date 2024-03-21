@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +15,11 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitDCteAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitFCteTecLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitDCteAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
+import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitFCteTecFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA;
@@ -44,6 +49,9 @@ public class TramitFOperadorController extends TramitFCteTecController {
     
     @EJB(mappedName = TramitFCteTecLogicaService.JNDI_NAME)
     protected TramitFCteTecLogicaService tramitFCteTecLogicEjb;
+
+    @EJB(mappedName = TramitDCteAutLogicaService.JNDI_NAME)
+    protected TramitDCteAutLogicaService tramitDcteAutLogicEjb;
 
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
@@ -125,6 +133,12 @@ public class TramitFOperadorController extends TramitFCteTecController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
         {
+        	
+        	List<TramitDCteAut> llistatTramitD = tramitDcteAutLogicEjb.select(TramitDCteAutFields.TRAMITID.equal(tramitID));
+        	if (llistatTramitD.size() == 1) {
+        		request.setAttribute("tramitD", llistatTramitD.get(0));
+        	}
+
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
