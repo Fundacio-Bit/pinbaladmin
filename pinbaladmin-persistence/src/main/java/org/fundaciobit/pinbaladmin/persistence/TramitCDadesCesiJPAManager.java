@@ -55,8 +55,8 @@ public class TramitCDadesCesiJPAManager
         return list.toArray(new TramitCDadesCesi[list.size()]);
     };
 
-    public TramitCDadesCesi create( long _tramitid_, java.lang.String _denominacio_, java.lang.String _nif_, java.lang.String _responsable_, java.lang.String _dir3responsable_, java.lang.String _dir3arrel_, java.lang.String _direccio_, java.lang.String _codipostal_, java.lang.String _municipi_) throws I18NException {
-        TramitCDadesCesiJPA __bean =  new TramitCDadesCesiJPA(_tramitid_,_denominacio_,_nif_,_responsable_,_dir3responsable_,_dir3arrel_,_direccio_,_codipostal_,_municipi_);
+    public TramitCDadesCesi create( long _tramitid_, java.lang.Long _organID_, java.lang.Long _organArrelID_, java.lang.String _denominacio_, java.lang.String _nif_, java.lang.String _responsable_, java.lang.String _dir3responsable_, java.lang.String _dir3arrel_, java.lang.String _direccio_, java.lang.String _codipostal_, java.lang.String _municipi_) throws I18NException {
+        TramitCDadesCesiJPA __bean =  new TramitCDadesCesiJPA(_tramitid_,_organID_,_organArrelID_,_denominacio_,_nif_,_responsable_,_dir3responsable_,_dir3arrel_,_direccio_,_codipostal_,_municipi_);
         return create(__bean);
     }
 

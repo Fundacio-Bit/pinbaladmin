@@ -18,6 +18,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.TRAMITID)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitCDadesCesiFields.TRAMITID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.ORGANID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitCDadesCesiFields.ORGANID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.ORGANARRELID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitCDadesCesiFields.ORGANARRELID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.DENOMINACIO)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitCDadesCesiFields.DENOMINACIO)}</th>
         </c:if>

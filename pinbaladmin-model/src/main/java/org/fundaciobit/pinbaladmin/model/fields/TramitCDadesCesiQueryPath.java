@@ -19,6 +19,14 @@ public class TramitCDadesCesiQueryPath extends org.fundaciobit.genapp.common.que
     return new LongField(getQueryPath(), TramitCDadesCesiFields.TRAMITID);
   }
 
+  public LongField ORGANID() {
+    return new LongField(getQueryPath(), TramitCDadesCesiFields.ORGANID);
+  }
+
+  public LongField ORGANARRELID() {
+    return new LongField(getQueryPath(), TramitCDadesCesiFields.ORGANARRELID);
+  }
+
   public StringField DENOMINACIO() {
     return new StringField(getQueryPath(), TramitCDadesCesiFields.DENOMINACIO);
   }
@@ -64,6 +72,22 @@ public class TramitCDadesCesiQueryPath extends org.fundaciobit.genapp.common.que
     return new TramitAPersAutQueryPath(new QueryPath() {
       public String getQueryPath() {
           return TramitCDadesCesiQueryPath.this.getQueryPath() + "tramitAPersAut" + ".";
+      }
+    });
+  }
+
+  public OrganQueryPath ORGAN() {
+    return new OrganQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return TramitCDadesCesiQueryPath.this.getQueryPath() + "organ" + ".";
+      }
+    });
+  }
+
+  public OrganQueryPath ORGANARREL() {
+    return new OrganQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return TramitCDadesCesiQueryPath.this.getQueryPath() + "organArrel" + ".";
       }
     });
   }

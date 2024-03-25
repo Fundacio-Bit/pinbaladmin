@@ -10,6 +10,8 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
 
 	long dadescesiid;// PK
 	long tramitid;
+	java.lang.Long organID;
+	java.lang.Long organArrelID;
 	java.lang.String denominacio;
 	java.lang.String nif;
 	java.lang.String responsable;
@@ -25,9 +27,11 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitCDadesCesiBean(long dadescesiid , long tramitid , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+  public TramitCDadesCesiBean(long dadescesiid , long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
     this.dadescesiid=dadescesiid;
     this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
     this.denominacio=denominacio;
     this.nif=nif;
     this.responsable=responsable;
@@ -38,8 +42,10 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
     this.municipi=municipi;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitCDadesCesiBean(long tramitid , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+  public TramitCDadesCesiBean(long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
     this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
     this.denominacio=denominacio;
     this.nif=nif;
     this.responsable=responsable;
@@ -49,9 +55,21 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
     this.codipostal=codipostal;
     this.municipi=municipi;
 }
+  /** Constructor dels valors Not Null */
+  public TramitCDadesCesiBean(long dadescesiid , long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+    this.dadescesiid=dadescesiid;
+    this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
+    this.direccio=direccio;
+    this.codipostal=codipostal;
+    this.municipi=municipi;
+}
   public TramitCDadesCesiBean(TramitCDadesCesi __bean) {
     this.setDadescesiid(__bean.getDadescesiid());
     this.setTramitid(__bean.getTramitid());
+    this.setOrganID(__bean.getOrganID());
+    this.setOrganArrelID(__bean.getOrganArrelID());
     this.setDenominacio(__bean.getDenominacio());
     this.setNif(__bean.getNif());
     this.setResponsable(__bean.getResponsable());
@@ -74,6 +92,20 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
 	};
 	public void setTramitid(long _tramitid_) {
 		this.tramitid = _tramitid_;
+	};
+
+	public java.lang.Long getOrganID() {
+		return(organID);
+	};
+	public void setOrganID(java.lang.Long _organID_) {
+		this.organID = _organID_;
+	};
+
+	public java.lang.Long getOrganArrelID() {
+		return(organArrelID);
+	};
+	public void setOrganArrelID(java.lang.Long _organArrelID_) {
+		this.organArrelID = _organArrelID_;
 	};
 
 	public java.lang.String getDenominacio() {
@@ -141,6 +173,8 @@ public class TramitCDadesCesiBean implements TramitCDadesCesi {
     TramitCDadesCesiBean __tmp = new TramitCDadesCesiBean();
     __tmp.setDadescesiid(__bean.getDadescesiid());
     __tmp.setTramitid(__bean.getTramitid());
+    __tmp.setOrganID(__bean.getOrganID());
+    __tmp.setOrganArrelID(__bean.getOrganArrelID());
     __tmp.setDenominacio(__bean.getDenominacio());
     __tmp.setNif(__bean.getNif());
     __tmp.setResponsable(__bean.getResponsable());

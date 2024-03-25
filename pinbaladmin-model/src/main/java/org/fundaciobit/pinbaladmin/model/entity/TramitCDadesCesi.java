@@ -8,6 +8,12 @@ public interface TramitCDadesCesi extends org.fundaciobit.genapp.common.IGenAppE
 	public long getTramitid();
 	public void setTramitid(long _tramitid_);
 
+	public java.lang.Long getOrganID();
+	public void setOrganID(java.lang.Long _organID_);
+
+	public java.lang.Long getOrganArrelID();
+	public void setOrganArrelID(java.lang.Long _organArrelID_);
+
 	public java.lang.String getDenominacio();
 	public void setDenominacio(java.lang.String _denominacio_);
 

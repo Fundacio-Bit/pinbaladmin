@@ -17,6 +17,8 @@ public class TramitCDadesCesiBeanValidator
 
 
   // EJB's
+  protected final org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager;
+
   protected final org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager __tramitAPersAutManager;
 
   protected final org.fundaciobit.pinbaladmin.model.dao.ITramitCDadesCesiManager __tramitCDadesCesiManager;
@@ -25,16 +27,20 @@ public class TramitCDadesCesiBeanValidator
   public final TramitCDadesCesiValidator<TramitCDadesCesiJPA> _validator;
 
 
-  public TramitCDadesCesiBeanValidator(org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager __tramitAPersAutManager,
+  public TramitCDadesCesiBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager,
+     org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager __tramitAPersAutManager,
      org.fundaciobit.pinbaladmin.model.dao.ITramitCDadesCesiManager __tramitCDadesCesiManager) { 
+    this.__organManager = __organManager;
     this.__tramitAPersAutManager = __tramitAPersAutManager;
     this.__tramitCDadesCesiManager = __tramitCDadesCesiManager;
     _validator = new TramitCDadesCesiValidator<TramitCDadesCesiJPA>();
   }
 
   public TramitCDadesCesiBeanValidator(TramitCDadesCesiValidator<TramitCDadesCesiJPA> _validator,
+     org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager,
      org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager __tramitAPersAutManager,
      org.fundaciobit.pinbaladmin.model.dao.ITramitCDadesCesiManager __tramitCDadesCesiManager) {
+    this.__organManager = __organManager;
     this.__tramitAPersAutManager = __tramitAPersAutManager;
     this.__tramitCDadesCesiManager = __tramitCDadesCesiManager;
     this._validator = _validator;
@@ -43,7 +49,7 @@ public class TramitCDadesCesiBeanValidator
   @Override
   public List<I18NFieldError> validate(TramitCDadesCesiJPA target, boolean isNou) throws I18NException {
     BeanValidatorResult<TramitCDadesCesiJPA> _bvr_ = new BeanValidatorResult<TramitCDadesCesiJPA>();
-    _validator.validate(_bvr_, target, isNou, __tramitAPersAutManager, __tramitCDadesCesiManager);
+    _validator.validate(_bvr_, target, isNou, __organManager, __tramitAPersAutManager, __tramitCDadesCesiManager);
     return _bvr_.getErrors();
   }
 }

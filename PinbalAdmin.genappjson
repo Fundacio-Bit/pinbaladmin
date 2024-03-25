@@ -3655,6 +3655,18 @@
               "table": "pad_solicitud",
               "field": "organid",
               "type": 0
+            },
+            {
+              "name": "pad_tramitc_organ_fk",
+              "table": "pad_tramit_c_dades_cesi",
+              "field": "organid",
+              "type": 0
+            },
+            {
+              "name": "pad_tramitc_organ_resp_fk",
+              "table": "pad_tramit_c_dades_cesi",
+              "field": "organresponsableid",
+              "type": 0
             }
           ]
         },
@@ -6693,12 +6705,90 @@
           ]
         },
         {
+          "index": "pad_tramitc_organid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "organid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Organ Gestor",
+            "es": "Órgano Gestor"
+          },
+          "javaName": "organID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitc_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitc_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_tramitc_organ_resp_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "organresponsableid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Organ Arrel",
+            "es": "Órgano Raíz"
+          },
+          "javaName": "organArrelID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitc_organresp_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramitc_organ_resp_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          ]
+        },
+        {
           "isAutoIncrement": false,
           "sqlName": "denominacio",
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Denominació",
             "es": "Denominación"
@@ -6724,7 +6814,7 @@
           "sqlType": 12,
           "size": 30,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "NIF",
             "es": "NIF"
@@ -6749,7 +6839,7 @@
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Unitat responsable",
             "es": "Unidad responsable"
@@ -6774,7 +6864,7 @@
           "sqlType": 12,
           "size": 30,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Codi DIR3 de la Unitat Responsable",
             "es": "Código DIR3 de la Unidad Responsable"
@@ -6799,7 +6889,7 @@
           "sqlType": 12,
           "size": 30,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Codi DIR3 de l\u0027Organisme Arrel",
             "es": "Código DIR3 del Organismo Raiz"

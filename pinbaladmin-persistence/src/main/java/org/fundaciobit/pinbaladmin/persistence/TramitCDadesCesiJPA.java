@@ -18,7 +18,9 @@ import javax.persistence.Id;
 @Entity(name = "TramitCDadesCesiJPA")
 @Table(name = "pad_tramit_c_dades_cesi" , indexes = { 
         @Index(name="pad_tramit_c_dades_cesi_pk_i", columnList = "dadescesiid"),
-        @Index(name="pad_tramitc_tramitid_fk_i", columnList = "tramitid")})
+        @Index(name="pad_tramitc_tramitid_fk_i", columnList = "tramitid"),
+        @Index(name="pad_tramitc_organid_fk_i", columnList = "organid"),
+        @Index(name="pad_tramitc_organ_resp_fk_i", columnList = "organresponsableid")})
 @SequenceGenerator(name="TRAMITCDADESCESI_SEQ", sequenceName="pad_tramit_c_dades_cesi_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
 public class TramitCDadesCesiJPA implements TramitCDadesCesi {
@@ -31,19 +33,25 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     @Column(name="tramitid",nullable = false,length = 19)
     long tramitid;
 
-    @Column(name="denominacio",nullable = false,length = 240)
+    @Column(name="organid",nullable = false,length = 19)
+    java.lang.Long organID;
+
+    @Column(name="organresponsableid",nullable = false,length = 19)
+    java.lang.Long organArrelID;
+
+    @Column(name="denominacio",length = 240)
     java.lang.String denominacio;
 
-    @Column(name="nif",nullable = false,length = 30)
+    @Column(name="nif",length = 30)
     java.lang.String nif;
 
-    @Column(name="responsable",nullable = false,length = 240)
+    @Column(name="responsable",length = 240)
     java.lang.String responsable;
 
-    @Column(name="dir3responsable",nullable = false,length = 30)
+    @Column(name="dir3responsable",length = 30)
     java.lang.String dir3responsable;
 
-    @Column(name="dir3arrel",nullable = false,length = 30)
+    @Column(name="dir3arrel",length = 30)
     java.lang.String dir3arrel;
 
     @Column(name="direccio",nullable = false,length = 240)
@@ -62,9 +70,11 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitCDadesCesiJPA(long dadescesiid , long tramitid , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+  public TramitCDadesCesiJPA(long dadescesiid , long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
     this.dadescesiid=dadescesiid;
     this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
     this.denominacio=denominacio;
     this.nif=nif;
     this.responsable=responsable;
@@ -75,8 +85,10 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     this.municipi=municipi;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitCDadesCesiJPA(long tramitid , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+  public TramitCDadesCesiJPA(long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String denominacio , java.lang.String nif , java.lang.String responsable , java.lang.String dir3responsable , java.lang.String dir3arrel , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
     this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
     this.denominacio=denominacio;
     this.nif=nif;
     this.responsable=responsable;
@@ -86,9 +98,21 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     this.codipostal=codipostal;
     this.municipi=municipi;
 }
+  /** Constructor dels valors Not Null */
+  public TramitCDadesCesiJPA(long dadescesiid , long tramitid , java.lang.Long organID , java.lang.Long organArrelID , java.lang.String direccio , java.lang.String codipostal , java.lang.String municipi) {
+    this.dadescesiid=dadescesiid;
+    this.tramitid=tramitid;
+    this.organID=organID;
+    this.organArrelID=organArrelID;
+    this.direccio=direccio;
+    this.codipostal=codipostal;
+    this.municipi=municipi;
+}
   public TramitCDadesCesiJPA(TramitCDadesCesi __bean) {
     this.setDadescesiid(__bean.getDadescesiid());
     this.setTramitid(__bean.getTramitid());
+    this.setOrganID(__bean.getOrganID());
+    this.setOrganArrelID(__bean.getOrganArrelID());
     this.setDenominacio(__bean.getDenominacio());
     this.setNif(__bean.getNif());
     this.setResponsable(__bean.getResponsable());
@@ -111,6 +135,20 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
 	};
 	public void setTramitid(long _tramitid_) {
 		this.tramitid = _tramitid_;
+	};
+
+	public java.lang.Long getOrganID() {
+		return(organID);
+	};
+	public void setOrganID(java.lang.Long _organID_) {
+		this.organID = _organID_;
+	};
+
+	public java.lang.Long getOrganArrelID() {
+		return(organArrelID);
+	};
+	public void setOrganArrelID(java.lang.Long _organArrelID_) {
+		this.organArrelID = _organArrelID_;
 	};
 
 	public java.lang.String getDenominacio() {
@@ -198,6 +236,34 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     this.tramitAPersAut = tramitAPersAut;
   }
 
+// IMP Field:organid | Table: pad_organ | Type: 1  
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organid", referencedColumnName ="organid", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_tramitc_organ_fk"))
+    private OrganJPA organ;
+
+    public OrganJPA getOrgan() {
+    return this.organ;
+  }
+
+    public  void setOrgan(OrganJPA organ) {
+    this.organ = organ;
+  }
+
+// IMP Field:organid | Table: pad_organ | Type: 1  
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organresponsableid", referencedColumnName ="organid", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_tramitc_organ_resp_fk"))
+    private OrganJPA organArrel;
+
+    public OrganJPA getOrganArrel() {
+    return this.organArrel;
+  }
+
+    public  void setOrganArrel(OrganJPA organArrel) {
+    this.organArrel = organArrel;
+  }
+
 
  // ---------------  STATIC METHODS ------------------
   public static TramitCDadesCesiJPA toJPA(TramitCDadesCesi __bean) {
@@ -205,6 +271,8 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     TramitCDadesCesiJPA __tmp = new TramitCDadesCesiJPA();
     __tmp.setDadescesiid(__bean.getDadescesiid());
     __tmp.setTramitid(__bean.getTramitid());
+    __tmp.setOrganID(__bean.getOrganID());
+    __tmp.setOrganArrelID(__bean.getOrganArrelID());
     __tmp.setDenominacio(__bean.getDenominacio());
     __tmp.setNif(__bean.getNif());
     __tmp.setResponsable(__bean.getResponsable());
@@ -243,6 +311,14 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     // Copia de beans complexes (IMP)
+    if(!"OrganJPA".equals(origenJPA) && 
+       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organ) || org.hibernate.Hibernate.isInitialized(__jpa.getOrgan()) ) ) {
+      __tmp.setOrgan(OrganJPA.copyJPA(__jpa.getOrgan(), __alreadyCopied,"TramitCDadesCesiJPA"));
+    }
+    if(!"OrganJPA".equals(origenJPA) && 
+       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organArrel) || org.hibernate.Hibernate.isInitialized(__jpa.getOrganArrel()) ) ) {
+      __tmp.setOrganArrel(OrganJPA.copyJPA(__jpa.getOrganArrel(), __alreadyCopied,"TramitCDadesCesiJPA"));
+    }
     if(!"TramitAPersAutJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitAPersAut) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitAPersAut()) ) ) {
       __tmp.setTramitAPersAut(TramitAPersAutJPA.copyJPA(__jpa.getTramitAPersAut(), __alreadyCopied,"TramitCDadesCesiJPA"));

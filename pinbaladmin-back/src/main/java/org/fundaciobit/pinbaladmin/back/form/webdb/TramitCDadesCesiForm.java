@@ -20,6 +20,8 @@ public class TramitCDadesCesiForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.tramitCDadesCesi = __toClone.tramitCDadesCesi;
     this.listOfTramitAPersAutForTramitid = __toClone.listOfTramitAPersAutForTramitid;
+    this.listOfOrganForOrganID = __toClone.listOfOrganForOrganID;
+    this.listOfOrganForOrganArrelID = __toClone.listOfOrganForOrganArrelID;
     this.listOfValuesForDenominacio = __toClone.listOfValuesForDenominacio;
     this.listOfValuesForMunicipi = __toClone.listOfValuesForMunicipi;
   }
@@ -45,6 +47,30 @@ public class TramitCDadesCesiForm extends PinbalAdminBaseForm {
 
   public void setListOfTramitAPersAutForTramitid(List<StringKeyValue> listOfTramitAPersAutForTramitid) {
     this.listOfTramitAPersAutForTramitid = listOfTramitAPersAutForTramitid;
+  }
+
+
+
+  private List<StringKeyValue> listOfOrganForOrganID;
+
+  public List<StringKeyValue> getListOfOrganForOrganID() {
+    return this.listOfOrganForOrganID;
+  }
+
+  public void setListOfOrganForOrganID(List<StringKeyValue> listOfOrganForOrganID) {
+    this.listOfOrganForOrganID = listOfOrganForOrganID;
+  }
+
+
+
+  private List<StringKeyValue> listOfOrganForOrganArrelID;
+
+  public List<StringKeyValue> getListOfOrganForOrganArrelID() {
+    return this.listOfOrganForOrganArrelID;
+  }
+
+  public void setListOfOrganForOrganArrelID(List<StringKeyValue> listOfOrganForOrganArrelID) {
+    this.listOfOrganForOrganArrelID = listOfOrganForOrganArrelID;
   }
 
 

@@ -33,11 +33,73 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitCDadesCesiFields.ORGANID)}">
+        <tr id="tramitCDadesCesi_organID_rowid">
+          <td id="tramitCDadesCesi_organID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.ORGANID])?'tramitCDadesCesi.organID':__theForm.labels[TramitCDadesCesiFields.ORGANID]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.ORGANID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.ORGANID]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitCDadesCesi_organID_columnvalueid">
+          <form:errors path="tramitCDadesCesi.organID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)}" >
+          <form:hidden path="tramitCDadesCesi.organID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitCDadesCesi.organID,__theForm.listOfOrganForOrganID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="tramitCDadesCesi_organID"  onchange="if(typeof onChangeOrganID == 'function') {  onChangeOrganID(this); };"  cssClass="form-control col-md-9-optional" path="tramitCDadesCesi.organID">
+            <c:forEach items="${__theForm.listOfOrganForOrganID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitCDadesCesiFields.ORGANARRELID)}">
+        <tr id="tramitCDadesCesi_organArrelID_rowid">
+          <td id="tramitCDadesCesi_organArrelID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.ORGANARRELID])?'tramitCDadesCesi.organArrelID':__theForm.labels[TramitCDadesCesiFields.ORGANARRELID]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.ORGANARRELID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.ORGANARRELID]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitCDadesCesi_organArrelID_columnvalueid">
+          <form:errors path="tramitCDadesCesi.organArrelID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)}" >
+          <form:hidden path="tramitCDadesCesi.organArrelID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitCDadesCesi.organArrelID,__theForm.listOfOrganForOrganArrelID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="tramitCDadesCesi_organArrelID"  onchange="if(typeof onChangeOrganArrelID == 'function') {  onChangeOrganArrelID(this); };"  cssClass="form-control col-md-9-optional" path="tramitCDadesCesi.organArrelID">
+            <c:forEach items="${__theForm.listOfOrganForOrganArrelID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitCDadesCesiFields.DENOMINACIO)}">
         <tr id="tramitCDadesCesi_denominacio_rowid">
           <td id="tramitCDadesCesi_denominacio_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DENOMINACIO])?'tramitCDadesCesi.denominacio':__theForm.labels[TramitCDadesCesiFields.DENOMINACIO]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DENOMINACIO])?'tramitCDadesCesi.denominacio':__theForm.labels[TramitCDadesCesiFields.DENOMINACIO]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.DENOMINACIO]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.DENOMINACIO]}" ></i>
@@ -58,6 +120,15 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.tramitCDadesCesi.denominacio }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.tramitCDadesCesi.denominacio }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
           </form:select>
           </c:if>
            </td>
@@ -68,7 +139,7 @@
         <tr id="tramitCDadesCesi_nif_rowid">
           <td id="tramitCDadesCesi_nif_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.NIF])?'tramitCDadesCesi.nif':__theForm.labels[TramitCDadesCesiFields.NIF]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.NIF])?'tramitCDadesCesi.nif':__theForm.labels[TramitCDadesCesiFields.NIF]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.NIF]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.NIF]}" ></i>
@@ -86,7 +157,7 @@
         <tr id="tramitCDadesCesi_responsable_rowid">
           <td id="tramitCDadesCesi_responsable_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.RESPONSABLE])?'tramitCDadesCesi.responsable':__theForm.labels[TramitCDadesCesiFields.RESPONSABLE]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.RESPONSABLE])?'tramitCDadesCesi.responsable':__theForm.labels[TramitCDadesCesiFields.RESPONSABLE]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.RESPONSABLE]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.RESPONSABLE]}" ></i>
@@ -104,7 +175,7 @@
         <tr id="tramitCDadesCesi_dir3responsable_rowid">
           <td id="tramitCDadesCesi_dir3responsable_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DIR3RESPONSABLE])?'tramitCDadesCesi.dir3responsable':__theForm.labels[TramitCDadesCesiFields.DIR3RESPONSABLE]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DIR3RESPONSABLE])?'tramitCDadesCesi.dir3responsable':__theForm.labels[TramitCDadesCesiFields.DIR3RESPONSABLE]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.DIR3RESPONSABLE]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.DIR3RESPONSABLE]}" ></i>
@@ -122,7 +193,7 @@
         <tr id="tramitCDadesCesi_dir3arrel_rowid">
           <td id="tramitCDadesCesi_dir3arrel_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DIR3ARREL])?'tramitCDadesCesi.dir3arrel':__theForm.labels[TramitCDadesCesiFields.DIR3ARREL]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitCDadesCesiFields.DIR3ARREL])?'tramitCDadesCesi.dir3arrel':__theForm.labels[TramitCDadesCesiFields.DIR3ARREL]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitCDadesCesiFields.DIR3ARREL]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitCDadesCesiFields.DIR3ARREL]}" ></i>

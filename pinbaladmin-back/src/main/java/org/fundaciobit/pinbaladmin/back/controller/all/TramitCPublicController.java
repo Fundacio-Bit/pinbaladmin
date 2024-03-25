@@ -54,16 +54,22 @@ public class TramitCPublicController extends TramitCOperadorController {
 
         tramitForm.addHiddenField(TRAMITID);
 
+        tramitForm.addHiddenField(DENOMINACIO);
+        tramitForm.addHiddenField(NIF);
+        tramitForm.addHiddenField(RESPONSABLE);
+        tramitForm.addHiddenField(DIR3RESPONSABLE);
+        tramitForm.addHiddenField(DIR3ARREL);
+        //tramitForm.addReadOnlyField(ORGANARRELID);
+        
         if (tramitForm.isNou()) {
             TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
 
-            
-            tramitC.setDenominacio("Q0700733I");
-            tramitC.setNif("Q0700733I");
+//            tramitC.setDenominacio("Q0700733I");
+//            tramitC.setNif("Q0700733I");
 
-            tramitC.setResponsable("Dirección General de Primera Infancia, Innovación y Comunidad Educativa");
-            tramitC.setDir3responsable("A04026925");
-            tramitC.setDir3arrel("A04026923");
+//            tramitC.setResponsable("Dirección General de Primera Infancia, Innovación y Comunidad Educativa");
+//            tramitC.setDir3responsable("A04026925");
+//            tramitC.setDir3arrel("A04026923");
             tramitC.setDireccio("Carrer de la direcció");
             tramitC.setCodipostal("07003");
             tramitC.setMunicipi("9");

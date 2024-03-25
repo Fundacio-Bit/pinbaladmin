@@ -65,6 +65,7 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
@@ -223,8 +224,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String personaContacte = null;
         String personaContacteEmail = null;
         String denominacio = null;
-        String dir3 = null;
-        String nif = null;
+        String dir3arrel = null;
+        String nifArrel = null;
         boolean produccio = true;
         List<TramitIServ> listaTramitsI = null;
         
@@ -281,14 +282,21 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     case "C":
                         TramitCDadesCesi C = (TramitCDadesCesi) obj;
 
-                        dir3 = C.getDir3responsable();
-                        organid = organLogicaEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3));
+                        OrganJPA organGestor = organLogicaEjb.findByPrimaryKey(C.getOrganID());
+                        organid = organGestor.getOrganid();
+                        map.put("dir3Organ", organGestor.getDir3());
+                        map.put("nomOrgan", organGestor.getNom());
 
-                        nif = C.getNif();
-
-                        denominacio = tramitCEjb.getDenominacioValue(C.getDenominacio());
-                        map.put("denominacioNom", denominacio);
-
+                        OrganJPA organArrel = organLogicaEjb.findByPrimaryKey(C.getOrganArrelID());
+                        dir3arrel = organArrel.getDir3();
+                        nifArrel = organArrel.getCif();
+                        denominacio = organArrel.getNom();
+                        
+                        map.put("nomArrel", denominacio);
+                        map.put("dir3arrel", dir3arrel);
+                        map.put("nifArrel", nifArrel);
+                        
+                        
                         String municipiNom = tramitCEjb.getMunicipiValue(C.getMunicipi());
                         map.put("municipiNom", municipiNom);
 
@@ -409,8 +417,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setFirmatDocSolicitud(firmatDocSolicitud);
         soli.setProduccio(produccio);
         soli.setDenominacio(denominacio);
-        soli.setDir3(dir3);
-        soli.setNif(nif);
+        soli.setDir3(dir3arrel);
+        soli.setNif(nifArrel);
         soli.setCreador(creador);
         soli.setOperador(operador);
         soli.setEstatpinbal(estatpinbal);

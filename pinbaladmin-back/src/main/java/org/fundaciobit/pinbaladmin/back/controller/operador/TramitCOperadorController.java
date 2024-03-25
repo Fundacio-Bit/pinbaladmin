@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -14,10 +15,19 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitCDadesCesiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
+import org.fundaciobit.pinbaladmin.ejb.EntitatService;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
+import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Entitat;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
+import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
+import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
+import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
 import org.springframework.stereotype.Controller;
@@ -46,6 +56,12 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 
     @EJB(mappedName = TramitCDadesCesiLogicaService.JNDI_NAME)
     protected TramitCDadesCesiLogicaService tramitCDadesCesiLogicEjb;
+
+    @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+    protected OrganLogicaService organLogicaEjb;
+    
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicaEjb;
 
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
@@ -127,7 +143,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         	String anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";
             request.setAttribute("anotacions", anotacions);
 
-            
+			request.setAttribute("desplegableOrgans", true);
+
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
@@ -164,6 +181,51 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         return tramitCDadesCesiLogicEjb.getReferenceListForMunicipi();
     }
     
+    @Override
+    public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        
+        List<Organ> organs = organLogicaEjb.select(where);
+        for (Organ organ : organs) {
+            String dades = "(" + organ.getDir3() + ") " + organ.getNom();
+            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), dades ));
+        }
+
+        return __tmp;
+    }
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+        List<Organ> organs = organLogicaEjb.select(where);
+		for (Organ organ : organs) {
+			Entitat entitat = entitatLogicaEjb.findByPrimaryKey(organ.getEntitatid());
+			// (A04003003 - S0711001H) Govern de les Illes Balears
+			if (entitat != null) {
+				String arrel = "(" + organ.getDir3() + " - " + entitat.getCIF() + ") " + entitat.getNom();
+				__tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), arrel));
+			}
+
+//		    // Guardar la entitat a la que pertany un organ		
+//			List<Entitat> entitats = entitatEjb.select(EntitatFields.DIR3.equal(aux.getDir3()));
+//			if (entitats.size() == 0) {
+//				log.error("No s'ha trobat cap entitat amb dir3 = " + aux.getDir3());
+//				continue;
+//			}
+//			
+//			Entitat entitat = entitats.get(0);
+//			Long entitatID = entitat.getEntitatID();
+//			organLogicaEjb.update(OrganFields.ENTITATID, entitatID, OrganFields.ORGANID.equal(organ.getOrganid()));
+			
+		}
+        return __tmp;
+    }
+
     //===========================================================================================================================
 
     //Si estamos en D, cuando le damos a /next, E comprueba si existe o no, y le saca el new o el edit.
@@ -211,6 +273,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             log.info("tramitID: " + tramitID);
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
+
+			request.setAttribute("desplegableOrgans", true);
 
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
@@ -260,6 +324,7 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
+			request.setAttribute("desplegableOrgans", true);
 
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitCDadesCesiForm.setAttachedAdditionalJspCode(true);

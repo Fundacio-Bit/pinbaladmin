@@ -14,6 +14,8 @@ public interface TramitCDadesCesiFields extends java.io.Serializable {
 
 	 public static final LongField DADESCESIID = new LongField(_TABLE_MODEL, "dadescesiid", "dadescesiid");  // PK
 	 public static final LongField TRAMITID = new LongField(_TABLE_MODEL, "tramitid", "tramitid");
+	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organID", "organid");
+	 public static final LongField ORGANARRELID = new LongField(_TABLE_MODEL, "organArrelID", "organresponsableid");
 	 public static final StringField DENOMINACIO = new StringField(_TABLE_MODEL, "denominacio", "denominacio");
 	 public static final StringField NIF = new StringField(_TABLE_MODEL, "nif", "nif");
 	 public static final StringField RESPONSABLE = new StringField(_TABLE_MODEL, "responsable", "responsable");
@@ -27,6 +29,8 @@ public interface TramitCDadesCesiFields extends java.io.Serializable {
   public static final Field<?>[] ALL_TRAMITCDADESCESI_FIELDS = {
     DADESCESIID,
     TRAMITID,
+    ORGANID,
+    ORGANARRELID,
     DENOMINACIO,
     NIF,
     RESPONSABLE,
