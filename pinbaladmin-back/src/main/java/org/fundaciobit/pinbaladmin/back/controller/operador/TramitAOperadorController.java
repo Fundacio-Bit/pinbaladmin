@@ -147,6 +147,19 @@ public class TramitAOperadorController extends TramitAPersAutController {
             tramitID = tramitForm.getTramitAPersAut().getTramitid();
         }
         
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
+
+        tramitForm.setCancelButtonVisible(false);
+        tramitForm.setDeleteButtonVisible(false);
+        tramitForm.setSaveButtonVisible(false);
+
+		tramitForm.addAdditionalButton(
+				new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", "btn-primary"));
+
+		tramitForm.addAdditionalButton(
+				new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+        
+
         TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
         tramitForm.setAttachedAdditionalJspCode(true);
 

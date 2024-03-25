@@ -86,12 +86,17 @@ form table td label {
 	background-color: #198fd1;
 }
 
-.actual {
+.dot.actual {
 	box-shadow: 0 0 0 4px rgba(25, 143, 209, 0.2);
 	background-color: #198fd1 !important;
 	width: 12px;
 	height: 12px;
 	margin-left: -7px;
+}
+
+.step.actual {
+	color: #198fd1;
+	font-weight: bold;
 }
 
 #titol-tramit {
@@ -119,7 +124,6 @@ select.form-control {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	margin-left: 2rem;
-	
 	font-style: italic;
 	border: 1px solid darkgray;
 	border-radius: 5px;
@@ -165,6 +169,7 @@ select.form-control {
 	
 
 	$("#dot${tramitActual}").addClass("actual");
+	$("#step${tramitActual}").addClass("actual");
 
 	var steps = $(".step-container");
 	var uuid = "${uuid}";

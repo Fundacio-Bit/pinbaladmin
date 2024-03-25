@@ -75,6 +75,10 @@ form .lead {
 		form.append(footer);
 
 		$("#tramitIServ_pagination").hide();
+
+		$(".btn-sm").css("margin", "0rem 0.1rem");
+		$(".btn-sm").removeClass("btn-sm");		
+		
 	</script>
 
 

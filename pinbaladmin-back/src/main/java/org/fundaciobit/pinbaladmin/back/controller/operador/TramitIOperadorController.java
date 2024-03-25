@@ -207,22 +207,22 @@ public class TramitIOperadorController extends TramitIServController {
 
             tramitIServFilterForm.getAdditionalButtons().clear();
 
-            tramitIServFilterForm.addAdditionalButton(
-                    new AdditionalButton("", "tramit.sistra.cancelar.tramit", getContextWeb() + "/delete/" + uuid, "btn-secondary"));
-
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
-                    getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
+            		getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
+            
+            tramitIServFilterForm.addAdditionalButton(
+                    new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
-            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left",
+            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("",
                     "genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, "btn-info"));
-
+            
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
-            log.info("serveisAfegits: " + serveisAfegits);
-
 			if (serveisAfegits > 0) {
-				tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle",
-						"tramitJConsent.tramitJConsent", getContextWebNext() + "/next/" + uuid, "btn-primary"));
+				tramitIServFilterForm.addAdditionalButton(new AdditionalButton("", "genapp.continue",
+						getContextWebNext() + "/next/" + uuid, "btn-primary"));
 			}
+			
+			
             {
                 TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
                 tramitIServFilterForm.setAttachedAdditionalJspCode(true);

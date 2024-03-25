@@ -129,11 +129,16 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             tramitID = tramitForm.getTramitCDadesCesi().getTramitid();
         }
         
+        String uuid = HibernateFileUtil.encryptFileID(tramitID);
+        
         tramitForm.setCancelButtonVisible(false);
         tramitForm.setDeleteButtonVisible(false);
+        tramitForm.setSaveButtonVisible(false);
 
-        String uuid = HibernateFileUtil.encryptFileID(tramitID);
-        tramitForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "genapp.pagination.anterior",
+		tramitForm.addAdditionalButton(
+				new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", "btn-primary"));
+
+        tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.pagination.anterior",
                 getContextWebPrev() + "/back/" + uuid, "btn-info"));
 
         tramitForm.addAdditionalButton(
