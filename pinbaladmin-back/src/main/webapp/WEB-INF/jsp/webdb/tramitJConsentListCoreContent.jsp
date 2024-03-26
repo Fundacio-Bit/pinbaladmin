@@ -37,18 +37,19 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
-          <td>
-            <c:if test="${not empty tramitJConsent.adjunt}">
-              <a target="_blank" href="<c:url value="${pad:fileUrl(tramitJConsent.adjunt)}"/>">${tramitJConsent.adjunt.nom}</a>
-            </c:if>
-           </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENT)}">
           <td>
           <c:set var="tmp">${tramitJConsent.consentiment}</c:set>
           <c:if test="${not empty tmp}">
           ${__theFilterForm.mapOfValuesForConsentiment[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+          <td>
+          <c:set var="tmp">${tramitJConsent.consentimentadjunt}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForConsentimentadjunt[tmp]}
           </c:if>
           </td>
         </c:if>
@@ -60,13 +61,12 @@
 
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
           <td>
-          <c:set var="tmp">${tramitJConsent.consentimentadjunt}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForConsentimentadjunt[tmp]}
-          </c:if>
-          </td>
+            <c:if test="${not empty tramitJConsent.adjunt}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(tramitJConsent.adjunt)}"/>">${tramitJConsent.adjunt.nom}</a>
+            </c:if>
+           </td>
         </c:if>
 
 

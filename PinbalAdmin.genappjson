@@ -8646,51 +8646,12 @@
           ]
         },
         {
-          "index": "pad_tramitj_adjuntid_fk_i",
-          "isAutoIncrement": false,
-          "sqlName": "adjuntid",
-          "sqlType": -5,
-          "size": 19,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "ca": "Fitxer consentiment",
-            "es": "Fichero consentimiento"
-          },
-          "javaName": "adjuntID",
-          "javaType": "java.lang.Long",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_tramitj_fitxer_adj_fk",
-              "table": "pad_fitxer",
-              "field": "fitxerid",
-              "type": 1
-            }
-          },
-          "foreignKeys": [
-            {
-              "name": "pad_tramitj_fitxer_adj_fk",
-              "table": "pad_fitxer",
-              "field": "fitxerid",
-              "type": 1
-            }
-          ]
-        },
-        {
           "isAutoIncrement": false,
           "sqlName": "consentiment",
           "sqlType": 12,
           "size": 80,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "ca": "Consentiment",
             "es": "Consentimiento"
@@ -8702,6 +8663,32 @@
           "showInReferenceList": false,
           "transientField": false,
           "minAllowedValue": "si,llei,noop",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentimentadjunt",
+          "sqlType": 12,
+          "size": 200,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Consentiment Adj o Pub",
+            "es": "Consentimiento Adj o Pub"
+          },
+          "javaName": "consentimentadjunt",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "adjunt,publicat",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
@@ -8736,30 +8723,43 @@
           "foreignKeys": []
         },
         {
+          "index": "pad_tramitj_adjuntid_fk_i",
           "isAutoIncrement": false,
-          "sqlName": "consentimentadjunt",
-          "sqlType": 12,
-          "size": 200,
+          "sqlName": "adjuntid",
+          "sqlType": -5,
+          "size": 19,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "Consentiment Adj o Pub",
-            "es": "Consentimiento Adj o Pub"
+            "ca": "Fitxer consentiment",
+            "es": "Fichero consentimiento"
           },
-          "javaName": "consentimentadjunt",
-          "javaType": "java.lang.String",
+          "javaName": "adjuntID",
+          "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "minAllowedValue": "adjunt,publicat",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 16
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramitj_fitxer_adj_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
           },
-          "foreignKeys": []
+          "foreignKeys": [
+            {
+              "name": "pad_tramitj_fitxer_adj_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
         }
       ]
     }

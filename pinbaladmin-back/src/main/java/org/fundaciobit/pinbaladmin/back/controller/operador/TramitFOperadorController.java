@@ -143,7 +143,9 @@ public class TramitFOperadorController extends TramitFCteTecController {
         		request.setAttribute("tramitD", llistatTramitD.get(0));
         	}
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -213,8 +215,10 @@ public class TramitFOperadorController extends TramitFCteTecController {
             log.info("tramitID: " + tramitID);
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
+            
+        	String anotacions = null;
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -270,8 +274,9 @@ public class TramitFOperadorController extends TramitFCteTecController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
+        	String anotacions = null;
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitFCteTecForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

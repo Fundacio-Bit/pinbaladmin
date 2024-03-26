@@ -10,10 +10,10 @@ public class TramitJConsentBean implements TramitJConsent {
 
 	long consentid;// PK
 	long tramitid;
-	java.lang.Long adjuntID;
 	java.lang.String consentiment;
-	java.lang.String urlconsentiment;
 	java.lang.String consentimentadjunt;
+	java.lang.String urlconsentiment;
+	java.lang.Long adjuntID;
 
 
   /** Constructor Buit */
@@ -21,35 +21,35 @@ public class TramitJConsentBean implements TramitJConsent {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitJConsentBean(long consentid , long tramitid , java.lang.Long adjuntID , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
+  public TramitJConsentBean(long consentid , long tramitid , java.lang.String consentiment , java.lang.String consentimentadjunt , java.lang.String urlconsentiment , java.lang.Long adjuntID) {
     this.consentid=consentid;
     this.tramitid=tramitid;
-    this.adjuntID=adjuntID;
     this.consentiment=consentiment;
-    this.urlconsentiment=urlconsentiment;
     this.consentimentadjunt=consentimentadjunt;
+    this.urlconsentiment=urlconsentiment;
+    this.adjuntID=adjuntID;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitJConsentBean(long tramitid , java.lang.Long adjuntID , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
+  public TramitJConsentBean(long tramitid , java.lang.String consentiment , java.lang.String consentimentadjunt , java.lang.String urlconsentiment , java.lang.Long adjuntID) {
     this.tramitid=tramitid;
-    this.adjuntID=adjuntID;
     this.consentiment=consentiment;
-    this.urlconsentiment=urlconsentiment;
     this.consentimentadjunt=consentimentadjunt;
+    this.urlconsentiment=urlconsentiment;
+    this.adjuntID=adjuntID;
 }
   /** Constructor dels valors Not Null */
-  public TramitJConsentBean(long consentid , long tramitid , java.lang.Long adjuntID) {
+  public TramitJConsentBean(long consentid , long tramitid , java.lang.String consentiment) {
     this.consentid=consentid;
     this.tramitid=tramitid;
-    this.adjuntID=adjuntID;
+    this.consentiment=consentiment;
 }
   public TramitJConsentBean(TramitJConsent __bean) {
     this.setConsentid(__bean.getConsentid());
     this.setTramitid(__bean.getTramitid());
-    this.setAdjuntID(__bean.getAdjuntID());
     this.setConsentiment(__bean.getConsentiment());
-    this.setUrlconsentiment(__bean.getUrlconsentiment());
     this.setConsentimentadjunt(__bean.getConsentimentadjunt());
+    this.setUrlconsentiment(__bean.getUrlconsentiment());
+    this.setAdjuntID(__bean.getAdjuntID());
     // Fitxer
     this.setAdjunt(FitxerBean.toBean(__bean.getAdjunt()));
 	}
@@ -68,18 +68,18 @@ public class TramitJConsentBean implements TramitJConsent {
 		this.tramitid = _tramitid_;
 	};
 
-	public java.lang.Long getAdjuntID() {
-		return(adjuntID);
-	};
-	public void setAdjuntID(java.lang.Long _adjuntID_) {
-		this.adjuntID = _adjuntID_;
-	};
-
 	public java.lang.String getConsentiment() {
 		return(consentiment);
 	};
 	public void setConsentiment(java.lang.String _consentiment_) {
 		this.consentiment = _consentiment_;
+	};
+
+	public java.lang.String getConsentimentadjunt() {
+		return(consentimentadjunt);
+	};
+	public void setConsentimentadjunt(java.lang.String _consentimentadjunt_) {
+		this.consentimentadjunt = _consentimentadjunt_;
 	};
 
 	public java.lang.String getUrlconsentiment() {
@@ -89,11 +89,11 @@ public class TramitJConsentBean implements TramitJConsent {
 		this.urlconsentiment = _urlconsentiment_;
 	};
 
-	public java.lang.String getConsentimentadjunt() {
-		return(consentimentadjunt);
+	public java.lang.Long getAdjuntID() {
+		return(adjuntID);
 	};
-	public void setConsentimentadjunt(java.lang.String _consentimentadjunt_) {
-		this.consentimentadjunt = _consentimentadjunt_;
+	public void setAdjuntID(java.lang.Long _adjuntID_) {
+		this.adjuntID = _adjuntID_;
 	};
 
 
@@ -105,10 +105,10 @@ public class TramitJConsentBean implements TramitJConsent {
     TramitJConsentBean __tmp = new TramitJConsentBean();
     __tmp.setConsentid(__bean.getConsentid());
     __tmp.setTramitid(__bean.getTramitid());
-    __tmp.setAdjuntID(__bean.getAdjuntID());
     __tmp.setConsentiment(__bean.getConsentiment());
-    __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
     __tmp.setConsentimentadjunt(__bean.getConsentimentadjunt());
+    __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
+    __tmp.setAdjuntID(__bean.getAdjuntID());
     // Fitxer
     __tmp.setAdjunt(FitxerBean.toBean(__bean.getAdjunt()));
 		return __tmp;

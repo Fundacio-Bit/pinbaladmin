@@ -2,6 +2,8 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -641,61 +643,67 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		final String PINBAL_CONSENTIMENT_SI = "Si";
 		final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
 
-		String tipo = null;
-		String enlace = null;
-
 		String consentiment = soli.getConsentiment(); // si, llei, noop
 
-		if (consentiment != null) {
-			if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-				cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
-				log.info("CONS: " + PINBAL_CONSENTIMENT_LLEI);
-				return cons;
-			} else {
-				tipo = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? PINBAL_CONSENTIMENT_SI
-						: PINBAL_CONSENTIMENT_NOOP;
-				enlace = soli.getUrlconsentiment();
-
-				if (enlace != null && enlace.trim().length() != 0) {
-					cons.setEnlace(enlace);
-					cons.setTipo(tipo);
-					log.info("CONS: " + tipo + ". Enlace: ]" + enlace + "[");
-					return cons;
-				} else {
-					// Afegir el consentiment com a fitxer
-					if (fitxerConsentiment != null) {
-						try {
-							es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
-
-							Long consentimentID = fitxerConsentiment.getFitxerID();
-
-							String nom = fitxerConsentiment.getNom();
-							String descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
-
-							File fileConsentiment = FileSystemManager.getFile(consentimentID);
-							byte[] contingut = FileUtils.readFromFile(fileConsentiment);
-
-							log.info("CONS: " + nom + " : " + contingut.length + " bytes");
-							doc.setNombre(nom);
-							doc.setDescripcion(descripcio);
-							doc.setContenido(contingut);
-
-							cons.setTipo(tipo);
-							cons.setDocumento(doc);
-							return cons;
-						} catch (Exception e) {
-							String msg = "CONS: Error llegint amb FileUtils.readFromFile()";
-							log.error(msg);
-							throw new Exception(msg);
-						}
-					}
-				}
-			}
-		} else {
+		switch (consentiment) {
+		case Constants.CONSENTIMENT_TIPUS_LLEI:
+			cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+			return cons;
+		case Constants.CONSENTIMENT_TIPUS_SI:
+			cons.setTipo(PINBAL_CONSENTIMENT_SI);
+			break;
+		case Constants.CONSENTIMENT_TIPUS_NOOP:
+			cons.setTipo(PINBAL_CONSENTIMENT_NOOP);
+			break;
+		default:
 			log.info("CONS: No tenim fitxer de consentiment.");
 			return null;
 		}
 
+		//Si esta aqui es perque el consentiment es de tipus SI o NOOP, i per tant necessita un fitxer
+		es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento doc = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento.Documento();
+
+		String nom = null;
+		String descripcio = null;
+		byte[] contingut = null;
+
+		try {
+			if (soli.getConsentimentadjunt().equals(Constants.CONSENTIMENT_PUBLICAT)) {
+				String enlace = soli.getUrlconsentiment();
+				if (enlace != null && enlace.trim().length() != 0) {
+					cons.setEnlace(enlace);
+
+					FileInfo fileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, false);
+
+					nom = fileInfo.getFileName();
+					descripcio = "Fitxer de consentiment. Enllaç: " + enlace;
+					contingut = fileInfo.getContent();
+				}
+
+			} else if (soli.getConsentimentadjunt().equals(Constants.CONSENTIMENT_ADJUNT)) {
+				if (fitxerConsentiment != null) {
+					Long consentimentID = fitxerConsentiment.getFitxerID();
+
+					nom = fitxerConsentiment.getNom();
+					descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID;
+
+					File fileConsentiment = FileSystemManager.getFile(consentimentID);
+					contingut = FileUtils.readFromFile(fileConsentiment);
+				}
+			}
+		} catch (Exception e) {
+			String msg = "CONS: Error obtenint el PDF de Consentiment: " + e.getMessage();
+			log.error(msg);
+			throw new Exception(msg);
+		}
+
+		log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+
+		doc.setNombre(nom);
+		doc.setDescripcion(descripcio);
+		doc.setContenido(contingut);
+
+		cons.setDocumento(doc);
 		return cons;
 	}
 

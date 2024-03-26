@@ -76,17 +76,6 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
   }
 
 
-  private java.lang.String urlconsentiment;
-
-  public java.lang.String getUrlconsentiment() {
-    return this.urlconsentiment;
-  }
-
-  public void setUrlconsentiment(java.lang.String urlconsentiment) {
-    this.urlconsentiment = urlconsentiment;
-  }
-
-
   private java.lang.String consentimentadjunt;
 
   public java.lang.String getConsentimentadjunt() {
@@ -95,6 +84,17 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
 
   public void setConsentimentadjunt(java.lang.String consentimentadjunt) {
     this.consentimentadjunt = consentimentadjunt;
+  }
+
+
+  private java.lang.String urlconsentiment;
+
+  public java.lang.String getUrlconsentiment() {
+    return this.urlconsentiment;
+  }
+
+  public void setUrlconsentiment(java.lang.String urlconsentiment) {
+    this.urlconsentiment = urlconsentiment;
   }
 
 
@@ -108,8 +108,8 @@ public class TramitJConsentFilterForm extends PinbalAdminBaseFilterForm implemen
     this.tramitidDesde = __toClone.tramitidDesde;
     this.tramitidFins = __toClone.tramitidFins;
     this.consentiment = __toClone.consentiment;
-    this.urlconsentiment = __toClone.urlconsentiment;
     this.consentimentadjunt = __toClone.consentimentadjunt;
+    this.urlconsentiment = __toClone.urlconsentiment;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
     this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
     this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;

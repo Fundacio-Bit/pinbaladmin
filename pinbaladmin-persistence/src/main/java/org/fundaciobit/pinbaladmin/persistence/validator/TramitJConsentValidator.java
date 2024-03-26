@@ -36,20 +36,16 @@ public class TramitJConsentValidator<I extends TramitJConsent>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TRAMITID)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,CONSENTIMENT, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)));
+
     // Check size
     if (__vr.getFieldErrorCount(CONSENTIMENT) == 0) {
       java.lang.String __consentiment = __target__.getConsentiment();
       if (__consentiment!= null && __consentiment.length() > 80) {
         __vr.rejectValue(CONSENTIMENT, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(80)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(URLCONSENTIMENT) == 0) {
-      java.lang.String __urlconsentiment = __target__.getUrlconsentiment();
-      if (__urlconsentiment!= null && __urlconsentiment.length() > 255) {
-        __vr.rejectValue(URLCONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
@@ -61,17 +57,17 @@ public class TramitJConsentValidator<I extends TramitJConsent>
       }
     }
 
-    if (__isNou__) { // Creació
-      // ================ CREATION
-      // Fitxers 
-    if (__vr.getFieldErrorCount(ADJUNTID) == 0) { // FITXER
-      Object __value = __vr.getFieldValue(__target__,ADJUNTID);
-      if (__value == null || String.valueOf(__value).trim().length() == 0 || String.valueOf(__value).trim().equals("0") ) {
-          __vr.rejectValue(ADJUNTID, "genapp.validation.required",
-             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ADJUNTID)));
+    if (__vr.getFieldErrorCount(URLCONSENTIMENT) == 0) {
+      java.lang.String __urlconsentiment = __target__.getUrlconsentiment();
+      if (__urlconsentiment!= null && __urlconsentiment.length() > 255) {
+        __vr.rejectValue(URLCONSENTIMENT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
+    if (__isNou__) { // Creació
+      // ================ CREATION
+      // Fitxers 
       // ====== Check Unique MULTIPLES - NOU =======
 
       // Check Unique - no PK

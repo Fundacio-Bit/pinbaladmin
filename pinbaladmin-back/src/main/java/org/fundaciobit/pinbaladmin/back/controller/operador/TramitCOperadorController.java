@@ -146,11 +146,10 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 
         {
         	String anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";
-            request.setAttribute("anotacions", anotacions);
 
 			request.setAttribute("desplegableOrgans", true);
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -281,7 +280,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 
 			request.setAttribute("desplegableOrgans", true);
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+			String anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -331,7 +331,8 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
             
 			request.setAttribute("desplegableOrgans", true);
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+			String anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitCDadesCesiForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

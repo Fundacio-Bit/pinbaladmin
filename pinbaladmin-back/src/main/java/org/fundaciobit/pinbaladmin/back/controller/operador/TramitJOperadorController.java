@@ -1,5 +1,9 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,12 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitJConsentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
@@ -23,6 +29,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
@@ -37,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.itextpdf.text.pdf.PdfReader;
 
 /**
  * 
@@ -133,7 +142,9 @@ public class TramitJOperadorController extends TramitJConsentController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
+            
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -236,7 +247,8 @@ public class TramitJOperadorController extends TramitJConsentController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -280,9 +292,58 @@ public class TramitJOperadorController extends TramitJConsentController {
         if (result.hasErrors()) {
             Long tramitID = tramitJConsentForm.getTramitJConsent().getTramitid();
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitJConsentForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
     }
+    
+    @Override
+    public void postValidate(HttpServletRequest request, TramitJConsentForm tramitJConsentForm, BindingResult result)
+			throws I18NException {
+		super.postValidate(request, tramitJConsentForm, result);
+
+		// Comprovació de si el consentiment es correcte.
+		TramitJConsent tramitJ = tramitJConsentForm.getTramitJConsent();
+
+		String consentiment = tramitJ.getConsentiment();
+		switch (consentiment) {
+		case Constants.CONSENTIMENT_TIPUS_LLEI:
+			// Continuar sense fer res
+			break;
+		case Constants.CONSENTIMENT_TIPUS_NOOP:
+		case Constants.CONSENTIMENT_TIPUS_SI:
+			String consentimentadjunt = tramitJ.getConsentimentadjunt();
+			if (consentimentadjunt == null) {
+				rejectValue(result, CONSENTIMENTADJUNT);
+			} else {
+				if (consentimentadjunt.equals(Constants.CONSENTIMENT_PUBLICAT)) {
+					if (tramitJ.getUrlconsentiment() == null) {
+						rejectValue(result, URLCONSENTIMENT);
+//					} else { //XXX XYZ: Asegurar que la URL es de un PDF
+//						// Validació de que la url es d'un PDF
+//						String url = tramitJ.getUrlconsentiment();
+//						if (!url.toLowerCase().endsWith(".pdf")) {
+//							rejectValue(result, URLCONSENTIMENT);
+//						}
+					}
+				} else if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
+					if (tramitJ.getAdjuntID() == null) {
+						rejectValue(result, ADJUNTID);
+					}
+				}
+			}
+			break;
+		default:
+			rejectValue(result, CONSENTIMENT);
+			break;
+		}
+	}
+    
+	private void rejectValue(BindingResult result, Field<?> field) {
+		result.rejectValue(get(field), "genapp.validation.required",
+				new String[] { I18NUtils.tradueix(field.fullName) }, null);
+
+	}
 }

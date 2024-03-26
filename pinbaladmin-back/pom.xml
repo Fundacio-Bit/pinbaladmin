@@ -359,6 +359,13 @@
             <scope>test</scope>
         </dependency>
         -->
+		<!-- Per comprovar si un document es PDF-->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.4.3</version>
+        </dependency>
+
 
 
         <!-- OPENSAGRES XDOCREPORT (to merge odt,docx with Java model and convert to PDF) -->

@@ -11,6 +11,7 @@ import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorContr
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitJOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -62,11 +63,12 @@ public class TramitJPublicController extends TramitJOperadorController {
         TramitJConsentForm tramitForm = super.getTramitJConsentForm(_jpa, __isView, request, mav);
 
         tramitForm.addHiddenField(TRAMITID);
+        tramitForm.addHiddenField(URLCONSENTIMENT);
+        tramitForm.addHiddenField(CONSENTIMENTADJUNT);
 
         if (tramitForm.isNou()) {
             TramitJConsentJPA tramitJ = tramitForm.getTramitJConsent();
-            
-            
+            tramitJ.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
         }
        return tramitForm;
     }

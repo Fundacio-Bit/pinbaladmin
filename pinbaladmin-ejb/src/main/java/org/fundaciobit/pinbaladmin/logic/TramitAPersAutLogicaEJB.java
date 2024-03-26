@@ -63,6 +63,7 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
@@ -117,6 +118,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     protected DocumentLogicaService documentLogicaEjb;
     @EJB(mappedName = OrganLogicaService.JNDI_NAME)
     protected OrganLogicaService organLogicaEjb;
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicaEjb;
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
 
@@ -287,10 +290,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         map.put("dir3Organ", organGestor.getDir3());
                         map.put("nomOrgan", organGestor.getNom());
 
-                        OrganJPA organArrel = organLogicaEjb.findByPrimaryKey(C.getOrganArrelID());
-                        dir3arrel = organArrel.getDir3();
-                        nifArrel = organArrel.getCif();
-                        denominacio = organArrel.getNom();
+                        EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
+                        dir3arrel = entitatArrel.getDir3();
+                        nifArrel = entitatArrel.getCIF();
+                        denominacio = entitatArrel.getNom();
                         
                         map.put("nomArrel", denominacio);
                         map.put("dir3arrel", dir3arrel);
@@ -479,18 +482,18 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         if (fitxerConsentimentID != null) {
 
         	FitxerJPA cons = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerConsentimentID);
+        	File consFile = FileSystemManager.getFile(cons.getFitxerID());
+        	
+        	// Copiar fitxer de consentiment
         	FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(), cons.getDescripcio());
         	fitxerCopia = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxerCopia);
+        	
+        	File consFilePdf = FileSystemManager.getFile(fitxerCopia.getFitxerID());
+        	FileSystemManager.copy(consFile, consFilePdf);
         	
         	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
         	String nom = "Document Consentiment";
         	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
-//            Document doc = documentLogicaEjb.create(nom, fitxerCopia.getFitxerID(), null, null, tipus);
-//
-//            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
-//
-//            documentSolicitudLogicEjb.create(ds);
-//            log.info("Afegit document de Consentiment");
         }
 
     }

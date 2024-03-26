@@ -33,63 +33,11 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
-        <tr id="tramitJConsent_adjuntID_rowid">
-          <td id="tramitJConsent_adjuntID_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.ADJUNTID])?'tramitJConsent.adjuntID':__theForm.labels[TramitJConsentFields.ADJUNTID]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[TramitJConsentFields.ADJUNTID]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.ADJUNTID]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitJConsent_adjuntID_columnvalueid">
-              <form:errors path="tramitJConsent.adjuntID" cssClass="errorField alert alert-danger" />
-            <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)}" >
-              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitJConsent.adjunt)}"/>">${__theForm.tramitJConsent.adjunt.nom}</a>
-            </c:if>
-            <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)}" >
-              <div class="input-group col-md-9-optional" style="padding: 0px">
-                <div class="custom-file">
-                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)? ' uneditable-input' : ''}"   path="adjuntID" type="file" />
-                  <label class="custom-file-label" for="adjuntID">
-                  </label>
-                </div>
-                <c:choose>
-                <c:when test="${not empty __theForm.tramitJConsent.adjunt}">
-                <div class="input-group-append">
-                  <span class="input-group-text" id="">
-                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitJConsent.adjunt)}"/>">${__theForm.tramitJConsent.adjunt.nom}</a>
-</small>
-                  </span>
-                </div>
-                </c:when>
-                <c:otherwise>
-                <div class="input-group-append input-group-append-file">
-                  <span class="input-group-text" id="adjuntID-custom-file-label" style="display:none">
-                  <small></small>
-                  </span>
-                </div>
-                <script type="text/javascript">
-					$('#adjuntID').on('change', function(){
-						var ruta = $('#adjuntID').val(); 
-						var rutaArray = ruta.split('\\');
-						$('#adjuntID-custom-file-label').css('display','block');
-						$('#adjuntID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
-					});
-				</script>                </c:otherwise>
-                </c:choose>
-              </div>
-            </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.CONSENTIMENT)}">
         <tr id="tramitJConsent_consentiment_rowid">
           <td id="tramitJConsent_consentiment_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.CONSENTIMENT])?'tramitJConsent.consentiment':__theForm.labels[TramitJConsentFields.CONSENTIMENT]}" />
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.CONSENTIMENT])?'tramitJConsent.consentiment':__theForm.labels[TramitJConsentFields.CONSENTIMENT]}" /> &nbsp;(*)
              </label>
               <c:if test="${not empty __theForm.help[TramitJConsentFields.CONSENTIMENT]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.CONSENTIMENT]}" ></i>
@@ -110,47 +58,8 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
-            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
-            <c:if test="${not containEmptyValue}">
-              <c:if test="${empty __theForm.tramitJConsent.consentiment }">
-                  <form:option value="" selected="true" ></form:option>
-              </c:if>
-              <c:if test="${not empty __theForm.tramitJConsent.consentiment }">
-                  <form:option value="" ></form:option>
-              </c:if>
-            </c:if>
           </form:select>
           </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.URLCONSENTIMENT)}">
-        <tr id="tramitJConsent_urlconsentiment_rowid">
-          <td id="tramitJConsent_urlconsentiment_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.URLCONSENTIMENT])?'tramitJConsent.urlconsentiment':__theForm.labels[TramitJConsentFields.URLCONSENTIMENT]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[TramitJConsentFields.URLCONSENTIMENT]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.URLCONSENTIMENT]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitJConsent_urlconsentiment_columnvalueid">
-           <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)}">
-
-             <c:if test="${ not empty __theForm.tramitJConsent.urlconsentiment}">
-               <a href="${__theForm.tramitJConsent.urlconsentiment}" target="_blank">${__theForm.tramitJConsent.urlconsentiment}</a>
-
-             </c:if>
-           </c:if>
-
-           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT))}">
-
-            <form:errors path="tramitJConsent.urlconsentiment" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="tramitJConsent.urlconsentiment"   />
-
-           </c:if>
-
            </td>
         </tr>
         </c:if>
@@ -191,6 +100,92 @@
             </c:if>
           </form:select>
           </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.URLCONSENTIMENT)}">
+        <tr id="tramitJConsent_urlconsentiment_rowid">
+          <td id="tramitJConsent_urlconsentiment_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.URLCONSENTIMENT])?'tramitJConsent.urlconsentiment':__theForm.labels[TramitJConsentFields.URLCONSENTIMENT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitJConsentFields.URLCONSENTIMENT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.URLCONSENTIMENT]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitJConsent_urlconsentiment_columnvalueid">
+           <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)}">
+
+             <c:if test="${ not empty __theForm.tramitJConsent.urlconsentiment}">
+               <a href="${__theForm.tramitJConsent.urlconsentiment}" target="_blank">${__theForm.tramitJConsent.urlconsentiment}</a>
+
+             </c:if>
+           </c:if>
+
+           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT))}">
+
+            <form:errors path="tramitJConsent.urlconsentiment" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.URLCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="tramitJConsent.urlconsentiment"   />
+
+           </c:if>
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
+        <tr id="tramitJConsent_adjuntID_rowid">
+          <td id="tramitJConsent_adjuntID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitJConsentFields.ADJUNTID])?'tramitJConsent.adjuntID':__theForm.labels[TramitJConsentFields.ADJUNTID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitJConsentFields.ADJUNTID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitJConsentFields.ADJUNTID]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitJConsent_adjuntID_columnvalueid">
+              <form:errors path="tramitJConsent.adjuntID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitJConsent.adjunt)}"/>">${__theForm.tramitJConsent.adjunt.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,TramitJConsentFields.ADJUNTID)? ' uneditable-input' : ''}"   path="adjuntID" type="file" />
+                  <label class="custom-file-label" for="adjuntID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.tramitJConsent.adjunt}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitJConsent.adjunt)}"/>">${__theForm.tramitJConsent.adjunt.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="adjuntIDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="adjuntID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#adjuntID').on('change', function(){
+						var ruta = $('#adjuntID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#adjuntID-custom-file-label').css('display','block');
+						$('#adjuntID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
            </td>
         </tr>
         </c:if>

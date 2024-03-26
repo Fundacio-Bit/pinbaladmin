@@ -137,7 +137,9 @@ public class TramitHOperadorController extends TramitHProcController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
         {
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -274,7 +276,9 @@ public class TramitHOperadorController extends TramitHProcController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -328,7 +332,9 @@ public class TramitHOperadorController extends TramitHProcController {
         if (result.hasErrors()) {
             Long tramitID = tramitHProcForm.getTramitHProc().getTramitid();
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitHProcForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

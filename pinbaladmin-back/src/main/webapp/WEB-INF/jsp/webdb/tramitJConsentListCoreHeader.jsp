@@ -18,17 +18,17 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.TRAMITID)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.TRAMITID)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.ADJUNTID)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENT)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.CONSENTIMENT)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.CONSENTIMENTADJUNT)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.URLCONSENTIMENT)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.URLCONSENTIMENT)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.CONSENTIMENTADJUNT)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.CONSENTIMENTADJUNT)}</th>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitJConsentFields.ADJUNTID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitJConsentFields.ADJUNTID)}</th>
         </c:if>
 
 

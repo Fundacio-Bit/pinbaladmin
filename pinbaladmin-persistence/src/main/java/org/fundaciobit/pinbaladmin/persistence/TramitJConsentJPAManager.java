@@ -55,8 +55,8 @@ public class TramitJConsentJPAManager
         return list.toArray(new TramitJConsent[list.size()]);
     };
 
-    public TramitJConsent create( long _tramitid_, java.lang.Long _adjuntID_, java.lang.String _consentiment_, java.lang.String _urlconsentiment_, java.lang.String _consentimentadjunt_) throws I18NException {
-        TramitJConsentJPA __bean =  new TramitJConsentJPA(_tramitid_,_adjuntID_,_consentiment_,_urlconsentiment_,_consentimentadjunt_);
+    public TramitJConsent create( long _tramitid_, java.lang.String _consentiment_, java.lang.String _consentimentadjunt_, java.lang.String _urlconsentiment_, java.lang.Long _adjuntID_) throws I18NException {
+        TramitJConsentJPA __bean =  new TramitJConsentJPA(_tramitid_,_consentiment_,_consentimentadjunt_,_urlconsentiment_,_adjuntID_);
         return create(__bean);
     }
 

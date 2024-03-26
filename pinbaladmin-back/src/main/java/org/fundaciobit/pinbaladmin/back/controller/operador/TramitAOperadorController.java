@@ -159,8 +159,8 @@ public class TramitAOperadorController extends TramitAPersAutController {
 		tramitForm.addAdditionalButton(
 				new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
-
-        TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+		String anotacions = null;
+        TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
         tramitForm.setAttachedAdditionalJspCode(true);
 
         return tramitForm;
@@ -327,7 +327,9 @@ public class TramitAOperadorController extends TramitAPersAutController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+    		String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -370,12 +372,13 @@ public class TramitAOperadorController extends TramitAPersAutController {
         }
     }
 
-    public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb) throws I18NException {
+    public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb, String anotacions) throws I18NException {
         
         
         Long[] identificadorsTramit = tramitAEjb.getPartsTramitIDs(tramitID);
         request.setAttribute("identificadorsTramit", identificadorsTramit);
         request.setAttribute("tramitActual", actual);
+        request.setAttribute("anotacions", anotacions);
         
         String uuid = HibernateFileUtil.encryptFileID(tramitID);
         request.setAttribute("uuid", uuid);
@@ -410,7 +413,8 @@ public class TramitAOperadorController extends TramitAPersAutController {
         if (result.hasErrors()) {
             Long tramitID = tramitAPersAutForm.getTramitAPersAut().getTramitid();
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+            String anotacions = null;
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitAPersAutForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

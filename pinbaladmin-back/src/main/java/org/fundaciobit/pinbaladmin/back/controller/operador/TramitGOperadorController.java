@@ -128,7 +128,9 @@ public class TramitGOperadorController extends TramitGDadesTitController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -200,7 +202,9 @@ public class TramitGOperadorController extends TramitGDadesTitController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -253,7 +257,9 @@ public class TramitGOperadorController extends TramitGDadesTitController {
         if (result.hasErrors()) {
             Long tramitID = tramitGDadesTitForm.getTramitGDadesTit().getTramitid();
 
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
+        	String anotacions = null;
+
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
             tramitGDadesTitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

@@ -17,7 +17,6 @@ import org.fundaciobit.pinbaladmin.persistence.validator.TramitJConsentValidator
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
 import org.fundaciobit.genapp.common.web.validation.AbstractWebValidator;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 
 /**
@@ -93,15 +92,6 @@ public class TramitJConsentWebValidator extends AbstractWebValidator<TramitJCons
     if (isNou) { // Creacio
       // ================ CREATION
       // Fitxers 
-        if (!errors.hasFieldErrors(get(ADJUNTID))){
-            CommonsMultipartFile adjuntID = ((TramitJConsentForm)__form).getAdjuntID();
-            if (adjuntID == null || adjuntID.isEmpty()) {
-                errors.rejectValue(get(ADJUNTID), "genapp.validation.required",
-                new String[]{ org.fundaciobit.genapp.common.web.i18n.I18NUtils.tradueix(get(ADJUNTID)) },
-                null);
-            }
-        }
-
     }
 
   } // Final de metode
