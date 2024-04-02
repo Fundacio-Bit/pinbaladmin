@@ -135,11 +135,11 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         tramitForm.setDeleteButtonVisible(false);
         tramitForm.setSaveButtonVisible(false);
 
-		tramitForm.addAdditionalButton(
-				new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", "btn-primary"));
-
         tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.pagination.anterior",
                 getContextWebPrev() + "/back/" + uuid, "btn-info"));
+        
+        tramitForm.addAdditionalButton(
+        		new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", "btn-primary"));
 
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));

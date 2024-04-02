@@ -225,14 +225,14 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.addAdditionalButton(
                     new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
 
-            tramitIServFilterForm.addAdditionalButton(new AdditionalButton("",
-                    "genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, "btn-info"));
-            
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
 			if (serveisAfegits > 0) {
 				tramitIServFilterForm.addAdditionalButton(new AdditionalButton("", "genapp.continue",
 						getContextWebNext() + "/next/" + uuid, "btn-primary"));
 			}
+			
+			tramitIServFilterForm.addAdditionalButton(new AdditionalButton("",
+					"genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, "btn-info"));
 			
 			
             {
