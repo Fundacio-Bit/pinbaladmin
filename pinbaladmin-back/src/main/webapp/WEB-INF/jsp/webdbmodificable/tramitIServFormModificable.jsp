@@ -91,6 +91,15 @@
 			$("#servei").val(value);
 		}
 
+		testServei();
+		function testServei(){
+			var v = document.getElementById("tramitIServ.nom").value;
+			if (v != "") {
+				$("#servei").val(v);
+            }else {
+				$("#servei").val("");
+			}
+		}
 
 		$(document).click(function(event) {
 			const $target = $(event.target);
@@ -98,12 +107,7 @@
 			if ($target.closest("#autocomplete-serveis").length === 0) {
 				
 				$("#autocomplete-serveis").empty();
-				var v = document.getElementById("tramitIServ.nom").value;
-				if (v != "") {
-					$("#servei").val(v);
-                }else {
-					$("#servei").val("");
-				}
+				testServei();
 			}
 		});
 

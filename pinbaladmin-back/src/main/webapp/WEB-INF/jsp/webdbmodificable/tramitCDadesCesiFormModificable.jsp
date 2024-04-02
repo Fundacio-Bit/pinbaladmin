@@ -1,10 +1,145 @@
 
+<%@page import="org.fundaciobit.pinbaladmin.back.controller.all.TramitCPublicController"%>
 <c:if test="${isPublic == 'true'}">
 	<%@ include file="/WEB-INF/jsp/all/tramitSistraPublic.jsp"%>
 </c:if>
 
+<!-- CERCADOR AUTOCOMPLETAR ORGAN GESTOR -->
+
+<input id="organ" type="text" autocomplete="off"
+	class="w-100 form-control" placeholder="Minim 2 caracters...">
+<div id="autocomplete-organ"></div>
+<input id="entitat" type="text" autocomplete="off"
+	class="w-100 form-control">
 
 
+
+<script>
+	$(document).ready(function() {
+		
+		var $organGestor = document.getElementById("tramitCDadesCesi.organID"); 
+		$organGestor.style.display = "none";
+		
+		var $organArrel = document.getElementById("tramitCDadesCesi.organArrelID");
+		$organArrel.style.display = "none";
+		
+		var $organ = document.getElementById("organ");
+		var $dir3respo = document.getElementById("tramitCDadesCesi.dir3responsable");
+		var $entitat = document.getElementById("entitat");
+		$entitat.readOnly = "readOnly";
+
+		$("#tramitCDadesCesi_organID_columnvalueid").append($($organ));
+		$("#tramitCDadesCesi_organID_columnvalueid").append($("#autocomplete-organ"));
+		
+		$("#tramitCDadesCesi_organArrelID_columnvalueid").append($($entitat));
+
+		$("#organ").on("input", function() {
+			var organ = $(this).val();
+			console.log(organ);
+			if (organ.length < 2) {
+				$("#autocomplete-organ").empty();
+				return;
+			}
+			$.ajax({
+				url : "<%= request.getContextPath() + TramitCPublicController.CONTEXT_WEB %>/jsonOrganList",
+				type : "GET",
+				data : {
+					query : organ
+				},
+				success : function(data) {
+					$("#autocomplete-organ").empty();
+					data.forEach(function(organ) {
+						afegirOrgan(organ);
+					});
+				}
+			});
+		});
+
+		function afegirOrgan(organ) {
+			var organDiv = document.createElement("div");
+			organDiv.classList.add("organ-item");
+			organDiv.innerHTML = organ.nom;
+			organDiv.onclick = function() {
+				elegirOrgan(organ.id);
+			};
+
+			$("#autocomplete-organ").append(organDiv);
+		}
+		
+		function elegirOrgan(organid) {
+			
+			$.ajax({
+				url : "<%= request.getContextPath() + TramitCPublicController.CONTEXT_WEB %>/jsonOrganGestor",
+				type : "GET",
+				data : {
+					organid: organid 
+				},
+				success : function(data) {
+					console.log(data);
+
+					let cadena = "(" + data.dir3 + ") " + data.nom;
+					$organGestor.value = data.id;
+					$organ.value = cadena;
+					
+					let cadenaEntitat = "(" + data.entitatCif + ") " + data.entitatNom;
+					$organArrel.value = data.entitatID;
+
+					$entitat.readOnly = "";
+					$entitat.value = cadenaEntitat;
+					$entitat.readOnly = "readOnly";
+					
+					$("#autocomplete-organ").empty();
+				}
+			});
+		}
+		
+		testOrgan();
+		function testOrgan(){
+			var v = $organGestor.value;
+			if (v != "") {
+				elegirOrgan(v)
+            }else {
+				$organ.value = "";
+			}
+		}
+ 
+		//Fer que quan es faci focusout de l'input, es buidi el desplegable, pero si es fa click a sobre del desplegable, faci lo que toca
+		$(document).click(function(event) {
+            const $target = $(event.target);
+            if (!$target.is($organ) && $target.closest("#autocomplete-organ").length === 0) {
+                $("#autocomplete-organ").empty();
+	            testOrgan();
+            }
+        });
+	});
+</script>
+
+
+<style>
+.organ-item {
+	cursor: pointer;
+	padding: 6px;
+	background-color: #fff;
+}
+
+.organ-item:hover {
+	background-color: #f1f1f1;
+}
+
+#autocomplete-organ{
+	display: block;
+	position: absolute;
+	z-index: 1;
+	background-color: #f9f9f9;
+	border: 1px solid #e9e9e9;
+	max-height: 170px;
+	overflow-y: auto;
+}
+</style>
+
+
+
+<%-- 
 <script type="text/javascript">
 	var selectElement = document
 			.querySelector('[name="tramitCDadesCesi.denominacio"]');
@@ -18,11 +153,6 @@
 		nif.readOnly = "readOnly";
 	});
 </script>
-
-
-
-
-
 
 <c:if test="${desplegableOrgans == 'true'}">
 	<script>
@@ -214,4 +344,4 @@
 		var w1 = $(".tab_container").width();
 		$("#anotacions").width(w1 + w2 - 16);
 	});
-</script>
+</script> --%>

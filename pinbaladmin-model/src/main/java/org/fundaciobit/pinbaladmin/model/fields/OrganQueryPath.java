@@ -58,34 +58,6 @@ public class OrganQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
   }
 */
 
-/* L'ús d'aquest camp (OneToMany) llança una exception:
- [Illegal attempt to dereference a collection]
-
- // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
-
-  public TramitCDadesCesiQueryPath TRAMITCDADESCESI_ORGANIDS() {
-    return new TramitCDadesCesiQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return OrganQueryPath.this.getQueryPath() + "tramitCDadesCesi_organids" + ".";
-      }
-    });
-  }
-*/
-
-/* L'ús d'aquest camp (OneToMany) llança una exception:
- [Illegal attempt to dereference a collection]
-
- // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
-
-  public TramitCDadesCesiQueryPath TRAMITCDADESCESI_ORGANRESPONSABLEIDS() {
-    return new TramitCDadesCesiQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return OrganQueryPath.this.getQueryPath() + "tramitCDadesCesi_organresponsableids" + ".";
-      }
-    });
-  }
-*/
-
   public EntitatQueryPath ENTITAT() {
     return new EntitatQueryPath(new QueryPath() {
       public String getQueryPath() {

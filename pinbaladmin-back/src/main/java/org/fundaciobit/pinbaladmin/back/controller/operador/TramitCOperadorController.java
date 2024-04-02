@@ -1,6 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.util.ArrayList;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -15,7 +15,6 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitCDadesCesiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
-import org.fundaciobit.pinbaladmin.ejb.EntitatService;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
@@ -23,12 +22,8 @@ import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Entitat;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
-import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
-import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
-import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
-import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 /**
  * 
@@ -185,50 +182,50 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         return tramitCDadesCesiLogicEjb.getReferenceListForMunicipi();
     }
     
-    @Override
-    public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request, ModelAndView mav, Where where)
-            throws I18NException {
-
-        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        
-        List<Organ> organs = organLogicaEjb.select(where);
-        for (Organ organ : organs) {
-            String dades = "(" + organ.getDir3() + ") " + organ.getNom();
-            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), dades ));
-        }
-
-        return __tmp;
-    }
+//    @Override
+//    public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request, ModelAndView mav, Where where)
+//            throws I18NException {
+//
+//        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+//        
+//        List<Organ> organs = organLogicaEjb.select(where);
+//        for (Organ organ : organs) {
+//            String dades = "(" + organ.getDir3() + ") " + organ.getNom();
+//            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), dades ));
+//        }
+//
+//        return __tmp;
+//    }
     
-    @Override
-    public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request, ModelAndView mav, Where where)
-            throws I18NException {
-
-        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-
-        List<Organ> organs = organLogicaEjb.select(where);
-		for (Organ organ : organs) {
-			Entitat entitat = entitatLogicaEjb.findByPrimaryKey(organ.getEntitatid());
-			// (A04003003 - S0711001H) Govern de les Illes Balears
-			if (entitat != null) {
-				String arrel = "(" + organ.getDir3() + " - " + entitat.getCIF() + ") " + entitat.getNom();
-				__tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), arrel));
-			}
-
-//		    // Guardar la entitat a la que pertany un organ		
-//			List<Entitat> entitats = entitatEjb.select(EntitatFields.DIR3.equal(aux.getDir3()));
-//			if (entitats.size() == 0) {
-//				log.error("No s'ha trobat cap entitat amb dir3 = " + aux.getDir3());
-//				continue;
+//    @Override
+//    public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request, ModelAndView mav, Where where)
+//            throws I18NException {
+//
+//        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+//
+//        List<Organ> organs = organLogicaEjb.select(where);
+//		for (Organ organ : organs) {
+//			Entitat entitat = entitatLogicaEjb.findByPrimaryKey(organ.getEntitatid());
+//			// (A04003003 - S0711001H) Govern de les Illes Balears
+//			if (entitat != null) {
+//				String arrel = "(" + organ.getDir3() + " - " + entitat.getCIF() + ") " + entitat.getNom();
+//				__tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), arrel));
 //			}
+//
+////		    // Guardar la entitat a la que pertany un organ		
+////			List<Entitat> entitats = entitatEjb.select(EntitatFields.DIR3.equal(aux.getDir3()));
+////			if (entitats.size() == 0) {
+////				log.error("No s'ha trobat cap entitat amb dir3 = " + aux.getDir3());
+////				continue;
+////			}
+////			
+////			Entitat entitat = entitats.get(0);
+////			Long entitatID = entitat.getEntitatID();
+////			organLogicaEjb.update(OrganFields.ENTITATID, entitatID, OrganFields.ORGANID.equal(organ.getOrganid()));
 //			
-//			Entitat entitat = entitats.get(0);
-//			Long entitatID = entitat.getEntitatID();
-//			organLogicaEjb.update(OrganFields.ENTITATID, entitatID, OrganFields.ORGANID.equal(organ.getOrganid()));
-			
-		}
-        return __tmp;
-    }
+//		}
+//        return __tmp;
+//    }
 
     //===========================================================================================================================
 
@@ -337,4 +334,102 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
         }
         return ret;
     }
+    
+	public class OrganItem {
+		private Long id;
+		private String nom;
+
+		public OrganItem(Long id, String nom) {
+			this.id = id;
+			this.nom = nom;
+		}
+	}
+	
+	@RequestMapping(value = "/jsonOrganList", method = RequestMethod.GET)
+	public void llistatOrgans(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		// Ha de tornar un JSON amb els serveis. Un exmeple:
+		String param = (String) request.getParameter("query");
+		log.info("param: ]" + param + "[");
+
+		List<Organ> organs = organLogicaEjb
+				.select(Where.OR(OrganFields.NOM.like("%" + param + "%"), OrganFields.DIR3.like("%" + param + "%")));
+		
+		//XXX XYZ: Controlar que no haga distincion por acentos (ejemplo: "a" == "á").
+		
+		
+		List<OrganItem> OrganItems = new java.util.ArrayList<OrganItem>();
+
+		log.info("organs: " + organs.size());
+
+		for (Organ organ : organs) {
+			Long id = organ.getOrganid();
+			String cadena = "(" + organ.getDir3() + ") " + organ.getNom();
+
+			OrganItem OrganItem = new OrganItem(id, cadena);
+			OrganItems.add(OrganItem);
+		}
+
+		Gson g = new Gson();
+		String json = g.toJson(OrganItems);
+
+		log.info(json);
+
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(json);
+		out.flush();
+	}
+	
+    
+	public class OrganInfo{
+		private Long id;
+		private String dir3;
+		private String nom;
+		private Long entitatID;
+		private String entitatNom;
+		private String entitatCif;
+		
+		public OrganInfo(Long id, String dir3, String nom, Long entitatid, String entitatNom, String entitatCif) {
+			this.id = id;
+			this.dir3 = dir3;
+			this.nom = nom;
+			this.entitatID = entitatid;
+			this.entitatNom = entitatNom;
+			this.entitatCif = entitatCif;
+		}
+	}
+	
+	@RequestMapping(value = "/jsonOrganGestor", method = RequestMethod.GET)
+	public void dadesOrgans(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		String organid = (String) request.getParameter("organid");
+		log.info("organid: ]" + organid + "[");
+		
+		Organ organ =  organLogicaEjb.findByPrimaryKey(Long.parseLong(organid));
+        Long id = organ.getOrganid();
+        String dir3= organ.getDir3();
+        String nom = organ.getNom();
+        Long entitat = organ.getEntitatid();
+        
+        Entitat ent = entitatLogicaEjb.findByPrimaryKey(entitat);
+        String entitatNom = ent.getNom();
+        String entitatCif = ent.getCIF();
+        
+		OrganInfo organInfo = new OrganInfo(id, dir3, nom, entitat, entitatNom, entitatCif);
+
+		Gson g = new Gson();
+		String json = g.toJson(organInfo);
+
+		log.info(json);
+
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(json);
+		out.flush();
+	}
 }

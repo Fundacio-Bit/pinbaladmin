@@ -32,9 +32,6 @@ public class TramitCDadesCesiWebValidator extends AbstractWebValidator<TramitCDa
   protected TramitCDadesCesiValidator<TramitCDadesCesi> validator = new TramitCDadesCesiValidator<TramitCDadesCesi>();
 
   // EJB's
-  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OrganService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.OrganService organEjb;
-
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.TramitAPersAutService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.TramitAPersAutService tramitAPersAutEjb;
 
@@ -83,7 +80,7 @@ public class TramitCDadesCesiWebValidator extends AbstractWebValidator<TramitCDa
 
     BeanValidatorResult<TramitCDadesCesi> __vr = new BeanValidatorResult<TramitCDadesCesi>();
     validator.validate(__vr, __bean,
-      isNou, organEjb, tramitAPersAutEjb, tramitCDadesCesiEjb);
+      isNou, tramitAPersAutEjb, tramitCDadesCesiEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();

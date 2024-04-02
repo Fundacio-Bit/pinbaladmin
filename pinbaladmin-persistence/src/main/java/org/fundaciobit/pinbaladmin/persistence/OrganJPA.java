@@ -154,32 +154,6 @@ public class OrganJPA implements Organ {
     }
 
 
-// EXP  Field:organid | Table: pad_tramit_c_dades_cesi | Type: 0  
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organID")
-    private Set<TramitCDadesCesiJPA> tramitCDadesCesi_organids = new HashSet<TramitCDadesCesiJPA>(0);
-    public  Set<TramitCDadesCesiJPA> getTramitCDadesCesi_organids() {
-    return this.tramitCDadesCesi_organids;
-  }
-
-    public void setTramitCDadesCesi_organids(Set<TramitCDadesCesiJPA> tramitCDadesCesi_organids) {
-      this.tramitCDadesCesi_organids = tramitCDadesCesi_organids;
-    }
-
-
-// EXP  Field:organresponsableid | Table: pad_tramit_c_dades_cesi | Type: 0  
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organArrelID")
-    private Set<TramitCDadesCesiJPA> tramitCDadesCesi_organresponsableids = new HashSet<TramitCDadesCesiJPA>(0);
-    public  Set<TramitCDadesCesiJPA> getTramitCDadesCesi_organresponsableids() {
-    return this.tramitCDadesCesi_organresponsableids;
-  }
-
-    public void setTramitCDadesCesi_organresponsableids(Set<TramitCDadesCesiJPA> tramitCDadesCesi_organresponsableids) {
-      this.tramitCDadesCesi_organresponsableids = tramitCDadesCesi_organresponsableids;
-    }
-
-
 // IMP Field:entitatid | Table: pad_entitat | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -234,14 +208,6 @@ public class OrganJPA implements Organ {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
-    if(!"TramitCDadesCesiJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitCDadesCesi_organresponsableids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitCDadesCesi_organresponsableids())) ) {
-      __tmp.setTramitCDadesCesi_organresponsableids(TramitCDadesCesiJPA.copyJPA(__jpa.getTramitCDadesCesi_organresponsableids(), __alreadyCopied,"OrganJPA"));
-    }
-    if(!"TramitCDadesCesiJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitCDadesCesi_organids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitCDadesCesi_organids())) ) {
-      __tmp.setTramitCDadesCesi_organids(TramitCDadesCesiJPA.copyJPA(__jpa.getTramitCDadesCesi_organids(), __alreadyCopied,"OrganJPA"));
-    }
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
       __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"OrganJPA"));

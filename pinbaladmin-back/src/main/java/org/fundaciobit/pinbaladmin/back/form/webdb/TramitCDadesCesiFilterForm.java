@@ -219,8 +219,6 @@ public class TramitCDadesCesiFilterForm extends PinbalAdminBaseFilterForm implem
     this.codipostal = __toClone.codipostal;
     this.municipi = __toClone.municipi;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
-    this.mapOfOrganForOrganID = __toClone.mapOfOrganForOrganID;
-    this.mapOfOrganForOrganArrelID = __toClone.mapOfOrganForOrganArrelID;
     this.mapOfValuesForDenominacio = __toClone.mapOfValuesForDenominacio;
     this.mapOfValuesForMunicipi = __toClone.mapOfValuesForMunicipi;
   }
@@ -265,30 +263,6 @@ public class TramitCDadesCesiFilterForm extends PinbalAdminBaseFilterForm implem
 
   public void setMapOfTramitAPersAutForTramitid(Map<String, String> mapOfTramitAPersAutForTramitid) {
     this.mapOfTramitAPersAutForTramitid = mapOfTramitAPersAutForTramitid;
-  }
-
-
-
-  private Map<String, String> mapOfOrganForOrganID;
-
-  public Map<String, String> getMapOfOrganForOrganID() {
-    return this.mapOfOrganForOrganID;
-  }
-
-  public void setMapOfOrganForOrganID(Map<String, String> mapOfOrganForOrganID) {
-    this.mapOfOrganForOrganID = mapOfOrganForOrganID;
-  }
-
-
-
-  private Map<String, String> mapOfOrganForOrganArrelID;
-
-  public Map<String, String> getMapOfOrganForOrganArrelID() {
-    return this.mapOfOrganForOrganArrelID;
-  }
-
-  public void setMapOfOrganForOrganArrelID(Map<String, String> mapOfOrganForOrganArrelID) {
-    this.mapOfOrganForOrganArrelID = mapOfOrganForOrganArrelID;
   }
 
 

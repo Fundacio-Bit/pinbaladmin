@@ -39,18 +39,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.ORGANID)}">
           <td>
-          <c:set var="tmp">${tramitCDadesCesi.organID}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfOrganForOrganID[tmp]}
-          </c:if>
+          ${tramitCDadesCesi.organID}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.ORGANARRELID)}">
           <td>
-          <c:set var="tmp">${tramitCDadesCesi.organArrelID}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfOrganForOrganArrelID[tmp]}
-          </c:if>
+          ${tramitCDadesCesi.organArrelID}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitCDadesCesiFields.DENOMINACIO)}">

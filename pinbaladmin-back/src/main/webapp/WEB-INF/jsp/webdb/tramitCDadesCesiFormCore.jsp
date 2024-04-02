@@ -44,22 +44,9 @@
               </c:if>
             </td>
           <td id="tramitCDadesCesi_organID_columnvalueid">
-          <form:errors path="tramitCDadesCesi.organID" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)}" >
-          <form:hidden path="tramitCDadesCesi.organID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitCDadesCesi.organID,__theForm.listOfOrganForOrganID)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="tramitCDadesCesi_organID"  onchange="if(typeof onChangeOrganID == 'function') {  onChangeOrganID(this); };"  cssClass="form-control col-md-9-optional" path="tramitCDadesCesi.organID">
-            <c:forEach items="${__theForm.listOfOrganForOrganID}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
+            <form:errors path="tramitCDadesCesi.organID" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)? 'true' : 'false'}" cssClass="w-25 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANID)? ' uneditable-input' : ''}"  style=""  path="tramitCDadesCesi.organID"   />
+
            </td>
         </tr>
         </c:if>
@@ -75,22 +62,9 @@
               </c:if>
             </td>
           <td id="tramitCDadesCesi_organArrelID_columnvalueid">
-          <form:errors path="tramitCDadesCesi.organArrelID" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)}" >
-          <form:hidden path="tramitCDadesCesi.organArrelID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitCDadesCesi.organArrelID,__theForm.listOfOrganForOrganArrelID)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="tramitCDadesCesi_organArrelID"  onchange="if(typeof onChangeOrganArrelID == 'function') {  onChangeOrganArrelID(this); };"  cssClass="form-control col-md-9-optional" path="tramitCDadesCesi.organArrelID">
-            <c:forEach items="${__theForm.listOfOrganForOrganArrelID}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
+            <form:errors path="tramitCDadesCesi.organArrelID" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)? 'true' : 'false'}" cssClass="w-25 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitCDadesCesiFields.ORGANARRELID)? ' uneditable-input' : ''}"  style=""  path="tramitCDadesCesi.organArrelID"   />
+
            </td>
         </tr>
         </c:if>

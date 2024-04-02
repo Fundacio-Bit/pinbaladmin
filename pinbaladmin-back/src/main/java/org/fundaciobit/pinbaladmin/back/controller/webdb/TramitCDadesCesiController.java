@@ -62,10 +62,6 @@ public class TramitCDadesCesiController
   @Autowired
   protected TramitAPersAutRefList tramitAPersAutRefList;
 
-  // References 
-  @Autowired
-  protected OrganRefList organRefList;
-
   /**
    * Llistat de totes TramitCDadesCesi
    */
@@ -196,26 +192,6 @@ public class TramitCDadesCesiController
       };
     }
 
-    // Field organID
-    {
-      _listSKV = getReferenceListForOrganID(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfOrganForOrganID(_tmp);
-      if (filterForm.getGroupByFields().contains(ORGANID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANID, false);
-      };
-    }
-
-    // Field organArrelID
-    {
-      _listSKV = getReferenceListForOrganArrelID(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfOrganForOrganArrelID(_tmp);
-      if (filterForm.getGroupByFields().contains(ORGANARRELID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANARRELID, false);
-      };
-    }
-
     // Field denominacio
     {
       _listSKV = getReferenceListForDenominacio(request, mav, filterForm, list, groupByItemsMap, null);
@@ -252,8 +228,6 @@ public class TramitCDadesCesiController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(TRAMITID, filterForm.getMapOfTramitAPersAutForTramitid());
-    __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganID());
-    __mapping.put(ORGANARRELID, filterForm.getMapOfOrganForOrganArrelID());
     __mapping.put(DENOMINACIO, filterForm.getMapOfValuesForDenominacio());
     __mapping.put(MUNICIPI, filterForm.getMapOfValuesForMunicipi());
     exportData(request, response, dataExporterID, filterForm,
@@ -311,24 +285,6 @@ public class TramitCDadesCesiController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       tramitCDadesCesiForm.setListOfTramitAPersAutForTramitid(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (tramitCDadesCesiForm.getListOfOrganForOrganID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForOrganID(request, mav, tramitCDadesCesiForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      tramitCDadesCesiForm.setListOfOrganForOrganID(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (tramitCDadesCesiForm.getListOfOrganForOrganArrelID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForOrganArrelID(request, mav, tramitCDadesCesiForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      tramitCDadesCesiForm.setListOfOrganForOrganArrelID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (tramitCDadesCesiForm.getListOfValuesForDenominacio() == null) {
@@ -687,84 +643,6 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForTramitid(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return tramitAPersAutRefList.getReferenceList(TramitAPersAutFields.TRAMITID, where );
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request,
-       ModelAndView mav, TramitCDadesCesiForm tramitCDadesCesiForm, Where where)  throws I18NException {
-    if (tramitCDadesCesiForm.isHiddenField(ORGANID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _where = null;
-    if (tramitCDadesCesiForm.isReadOnlyField(ORGANID)) {
-      _where = OrganFields.ORGANID.equal(tramitCDadesCesiForm.getTramitCDadesCesi().getOrganID());
-    }
-    return getReferenceListForOrganID(request, mav, Where.AND(where, _where));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request,
-       ModelAndView mav, TramitCDadesCesiFilterForm tramitCDadesCesiFilterForm,
-       List<TramitCDadesCesi> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (tramitCDadesCesiFilterForm.isHiddenField(ORGANID)
-       && !tramitCDadesCesiFilterForm.isGroupByField(ORGANID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    if (!_groupByItemsMap.containsKey(ORGANID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (TramitCDadesCesi _item : list) {
-        _pkList.add(_item.getOrganID());
-        }
-        _w = OrganFields.ORGANID.in(_pkList);
-      }
-    return getReferenceListForOrganID(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    return organRefList.getReferenceList(OrganFields.ORGANID, where );
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request,
-       ModelAndView mav, TramitCDadesCesiForm tramitCDadesCesiForm, Where where)  throws I18NException {
-    if (tramitCDadesCesiForm.isHiddenField(ORGANARRELID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _where = null;
-    if (tramitCDadesCesiForm.isReadOnlyField(ORGANARRELID)) {
-      _where = OrganFields.ORGANID.equal(tramitCDadesCesiForm.getTramitCDadesCesi().getOrganArrelID());
-    }
-    return getReferenceListForOrganArrelID(request, mav, Where.AND(where, _where));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request,
-       ModelAndView mav, TramitCDadesCesiFilterForm tramitCDadesCesiFilterForm,
-       List<TramitCDadesCesi> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (tramitCDadesCesiFilterForm.isHiddenField(ORGANARRELID)
-       && !tramitCDadesCesiFilterForm.isGroupByField(ORGANARRELID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    if (!_groupByItemsMap.containsKey(ORGANARRELID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (TramitCDadesCesi _item : list) {
-        _pkList.add(_item.getOrganArrelID());
-        }
-        _w = OrganFields.ORGANID.in(_pkList);
-      }
-    return getReferenceListForOrganArrelID(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForOrganArrelID(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    return organRefList.getReferenceList(OrganFields.ORGANID, where );
   }
 
 

@@ -236,34 +236,6 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     this.tramitAPersAut = tramitAPersAut;
   }
 
-// IMP Field:organid | Table: pad_organ | Type: 1  
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organid", referencedColumnName ="organid", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_tramitc_organ_fk"))
-    private OrganJPA organ;
-
-    public OrganJPA getOrgan() {
-    return this.organ;
-  }
-
-    public  void setOrgan(OrganJPA organ) {
-    this.organ = organ;
-  }
-
-// IMP Field:organid | Table: pad_organ | Type: 1  
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organresponsableid", referencedColumnName ="organid", nullable = false, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_tramitc_organ_resp_fk"))
-    private OrganJPA organArrel;
-
-    public OrganJPA getOrganArrel() {
-    return this.organArrel;
-  }
-
-    public  void setOrganArrel(OrganJPA organArrel) {
-    this.organArrel = organArrel;
-  }
-
 
  // ---------------  STATIC METHODS ------------------
   public static TramitCDadesCesiJPA toJPA(TramitCDadesCesi __bean) {
@@ -311,14 +283,6 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     // Copia de beans complexes (IMP)
-    if(!"OrganJPA".equals(origenJPA) && 
-       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organ) || org.hibernate.Hibernate.isInitialized(__jpa.getOrgan()) ) ) {
-      __tmp.setOrgan(OrganJPA.copyJPA(__jpa.getOrgan(), __alreadyCopied,"TramitCDadesCesiJPA"));
-    }
-    if(!"OrganJPA".equals(origenJPA) && 
-       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organArrel) || org.hibernate.Hibernate.isInitialized(__jpa.getOrganArrel()) ) ) {
-      __tmp.setOrganArrel(OrganJPA.copyJPA(__jpa.getOrganArrel(), __alreadyCopied,"TramitCDadesCesiJPA"));
-    }
     if(!"TramitAPersAutJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitAPersAut) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitAPersAut()) ) ) {
       __tmp.setTramitAPersAut(TramitAPersAutJPA.copyJPA(__jpa.getTramitAPersAut(), __alreadyCopied,"TramitCDadesCesiJPA"));

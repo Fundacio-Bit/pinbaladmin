@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
-import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
@@ -29,7 +28,6 @@ public class TramitCDadesCesiValidator<I extends TramitCDadesCesi>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
-    ,org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager
     ,org.fundaciobit.pinbaladmin.model.dao.ITramitAPersAutManager __tramitAPersAutManager
     ,org.fundaciobit.pinbaladmin.model.dao.ITramitCDadesCesiManager __tramitCDadesCesiManager) {
 
@@ -148,30 +146,6 @@ public class TramitCDadesCesiValidator<I extends TramitCDadesCesi>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("tramitAPersAut.tramitAPersAut"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("tramitAPersAut.tramitid"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__tramitid)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(ORGANID) == 0) {
-      java.lang.Long __organid = __target__.getOrganID();
-      Long __count_ = null;
-      try { __count_ = __organManager.count(OrganFields.ORGANID.equal(__organid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
-      if (__count_ == null || __count_ == 0) {        
-        __vr.rejectValue(ORGANID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organ"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organid"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__organid)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(ORGANARRELID) == 0) {
-      java.lang.Long __organarrelid = __target__.getOrganArrelID();
-      Long __count_ = null;
-      try { __count_ = __organManager.count(OrganFields.ORGANID.equal(__organarrelid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
-      if (__count_ == null || __count_ == 0) {        
-        __vr.rejectValue(ORGANARRELID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organ"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organid"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__organarrelid)));
       }
     }
 

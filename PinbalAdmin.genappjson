@@ -3655,18 +3655,6 @@
               "table": "pad_solicitud",
               "field": "organid",
               "type": 0
-            },
-            {
-              "name": "pad_tramitc_organ_fk",
-              "table": "pad_tramit_c_dades_cesi",
-              "field": "organid",
-              "type": 0
-            },
-            {
-              "name": "pad_tramitc_organ_resp_fk",
-              "table": "pad_tramit_c_dades_cesi",
-              "field": "organresponsableid",
-              "type": 0
             }
           ]
         },
@@ -6726,22 +6714,9 @@
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_tramitc_organ_fk",
-              "table": "pad_organ",
-              "field": "organid",
-              "type": 1
-            }
+            "webtype": 14
           },
-          "foreignKeys": [
-            {
-              "name": "pad_tramitc_organ_fk",
-              "table": "pad_organ",
-              "field": "organid",
-              "type": 1
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "index": "pad_tramitc_organ_resp_fk_i",
@@ -6752,8 +6727,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Organ Arrel",
-            "es": "Órgano Raíz"
+            "ca": "Entitat Arrel",
+            "es": "Entidad Raíz"
           },
           "javaName": "organArrelID",
           "javaType": "java.lang.Long",
@@ -6765,22 +6740,9 @@
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_tramitc_organresp_fk",
-              "table": "pad_organ",
-              "field": "organid",
-              "type": 1
-            }
+            "webtype": 14
           },
-          "foreignKeys": [
-            {
-              "name": "pad_tramitc_organ_resp_fk",
-              "table": "pad_organ",
-              "field": "organid",
-              "type": 1
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,

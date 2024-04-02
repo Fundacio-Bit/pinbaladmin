@@ -76,20 +76,4 @@ public class TramitCDadesCesiQueryPath extends org.fundaciobit.genapp.common.que
     });
   }
 
-  public OrganQueryPath ORGAN() {
-    return new OrganQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return TramitCDadesCesiQueryPath.this.getQueryPath() + "organ" + ".";
-      }
-    });
-  }
-
-  public OrganQueryPath ORGANARREL() {
-    return new OrganQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return TramitCDadesCesiQueryPath.this.getQueryPath() + "organArrel" + ".";
-      }
-    });
-  }
-
 }
