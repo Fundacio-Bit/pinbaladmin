@@ -14,7 +14,7 @@
 </style>
 
 <c:if test="${not empty tramitD}">
-	<input type="button" id="copiar" value="Copiar datos" />
+	<input type="button" id="copiar" value="Copiar dades de contacte" />
 </c:if>
 
 <script>

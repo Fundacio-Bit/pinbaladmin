@@ -39,10 +39,7 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NOM)}">
           <td>
-          <c:set var="tmp">${tramitIServ.nom}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForNom[tmp]}
-          </c:if>
+          ${tramitIServ.nom}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.CODI)}">

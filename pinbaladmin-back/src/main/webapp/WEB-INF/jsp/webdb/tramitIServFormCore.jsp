@@ -44,22 +44,9 @@
               </c:if>
             </td>
           <td id="tramitIServ_nom_columnvalueid">
-          <form:errors path="tramitIServ.nom" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitIServFields.NOM)}" >
-          <form:hidden path="tramitIServ.nom"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitIServ.nom,__theForm.listOfValuesForNom)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitIServFields.NOM)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="tramitIServ_nom"  onchange="if(typeof onChangeNom == 'function') {  onChangeNom(this); };"  cssClass="form-control col-md-9-optional" path="tramitIServ.nom">
-            <c:forEach items="${__theForm.listOfValuesForNom}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
+            <form:errors path="tramitIServ.nom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.NOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.NOM)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.nom"   />
+
            </td>
         </tr>
         </c:if>

@@ -344,6 +344,5 @@ public class TramitJOperadorController extends TramitJConsentController {
 	private void rejectValue(BindingResult result, Field<?> field) {
 		result.rejectValue(get(field), "genapp.validation.required",
 				new String[] { I18NUtils.tradueix(field.fullName) }, null);
-
 	}
 }

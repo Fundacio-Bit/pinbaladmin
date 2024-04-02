@@ -8449,12 +8449,11 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "minAllowedValue": "Procediment1,Procediment2",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 16
+            "webtype": 1
           },
           "foreignKeys": []
         },

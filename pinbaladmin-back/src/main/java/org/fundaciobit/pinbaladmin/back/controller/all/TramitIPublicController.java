@@ -61,6 +61,8 @@ public class TramitIPublicController extends TramitIOperadorController {
         TramitIServForm tramitForm = super.getTramitIServForm(_jpa, __isView, request, mav);
 
         tramitForm.addHiddenField(TRAMITID);
+//        tramitForm.addHiddenField(NOM);
+//        tramitForm.addHiddenField(CODI);
 
         if (tramitForm.isNou()) {
             TramitIServJPA tramitI = tramitForm.getTramitIServ();

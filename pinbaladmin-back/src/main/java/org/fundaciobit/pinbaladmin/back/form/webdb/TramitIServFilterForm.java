@@ -135,7 +135,6 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
     this.urlnorma = __toClone.urlnorma;
     this.articles = __toClone.articles;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
-    this.mapOfValuesForNom = __toClone.mapOfValuesForNom;
   }
   
   /* ========= UTILS ========== */
@@ -178,18 +177,6 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
 
   public void setMapOfTramitAPersAutForTramitid(Map<String, String> mapOfTramitAPersAutForTramitid) {
     this.mapOfTramitAPersAutForTramitid = mapOfTramitAPersAutForTramitid;
-  }
-
-
-
-  private Map<String, String> mapOfValuesForNom;
-
-  public Map<String, String> getMapOfValuesForNom() {
-    return this.mapOfValuesForNom;
-  }
-
-  public void setMapOfValuesForNom(Map<String, String> mapOfValuesForNom) {
-    this.mapOfValuesForNom = mapOfValuesForNom;
   }
 
 

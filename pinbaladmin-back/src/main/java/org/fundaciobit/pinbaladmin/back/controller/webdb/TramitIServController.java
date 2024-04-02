@@ -192,16 +192,6 @@ public class TramitIServController
       };
     }
 
-    // Field nom
-    {
-      _listSKV = getReferenceListForNom(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfValuesForNom(_tmp);
-      if (filterForm.getGroupByFields().contains(NOM)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, NOM, false);
-      };
-    }
-
 
     return groupByItemsMap;
   }
@@ -218,7 +208,6 @@ public class TramitIServController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(TRAMITID, filterForm.getMapOfTramitAPersAutForTramitid());
-    __mapping.put(NOM, filterForm.getMapOfValuesForNom());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -274,15 +263,6 @@ public class TramitIServController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       tramitIServForm.setListOfTramitAPersAutForTramitid(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (tramitIServForm.getListOfValuesForNom() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForNom(request, mav, tramitIServForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      tramitIServForm.setListOfValuesForNom(_listSKV);
     }
     
   }
@@ -623,37 +603,6 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForTramitid(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return tramitAPersAutRefList.getReferenceList(TramitAPersAutFields.TRAMITID, where );
-  }
-
-
-  public List<StringKeyValue> getReferenceListForNom(HttpServletRequest request,
-       ModelAndView mav, TramitIServForm tramitIServForm, Where where)  throws I18NException {
-    if (tramitIServForm.isHiddenField(NOM)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    return getReferenceListForNom(request, mav, where);
-  }
-
-
-  public List<StringKeyValue> getReferenceListForNom(HttpServletRequest request,
-       ModelAndView mav, TramitIServFilterForm tramitIServFilterForm,
-       List<TramitIServ> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (tramitIServFilterForm.isHiddenField(NOM)
-       && !tramitIServFilterForm.isGroupByField(NOM)
-       && !tramitIServFilterForm.isFilterByField(NOM)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    return getReferenceListForNom(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForNom(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue("Procediment1" , "Procediment1"));
-    __tmp.add(new StringKeyValue("Procediment2" , "Procediment2"));
-    return __tmp;
   }
 
 

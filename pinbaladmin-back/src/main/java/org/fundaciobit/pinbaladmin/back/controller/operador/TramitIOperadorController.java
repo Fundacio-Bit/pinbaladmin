@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,12 +26,15 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitIServLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
+import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.springframework.stereotype.Controller;
@@ -41,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 /**
  * 
@@ -65,6 +72,9 @@ public class TramitIOperadorController extends TramitIServController {
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
 
+    @EJB(mappedName = ServeiService .JNDI_NAME)
+    protected ServeiService serveiEjb;
+    
     public boolean isPublic() {
         return false;
     }
@@ -335,4 +345,54 @@ public class TramitIOperadorController extends TramitIServController {
 		}
 		return ret;
 	}
+	
+//	http://ptrias:8080/pinbaladmin/public/tramiti/jsonServeis?query=s
+		
+	public class Item {
+		private String key;
+		private String value;
+
+		public Item(String key, String value) {
+			this.key = key;
+			this.value = value;
+		}
+	}
+	
+	@RequestMapping(value = "/jsonServeis", method = RequestMethod.GET)
+	public void dadesCesi(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		// Ha de tornar un JSON amb els serveis. Un exmeple:
+		String param = (String) request.getParameter("query");
+		log.info("param: ]" + param + "[");
+
+//		Long firstResult = 0L;
+//		Long maxResults = 10L;
+//		List<Servei> serveis = serveiEjb.select(ServeiFields.NOM.like("%" + param + "%"), firstResult, maxResults, null);
+		
+		List<Servei> serveis = serveiEjb.select(Where.OR(ServeiFields.NOM.like("%" + param + "%"), ServeiFields.CODI.like("%" + param + "%")));
+		List<Item> items = new java.util.ArrayList<Item>();
+
+		log.info("serveis: " + serveis.size());
+
+		for (Servei servei : serveis) {
+			String key = servei.getCodi();
+			String value = servei.getNom();
+
+			Item item = new Item(key, value);
+			items.add(item);
+		}
+
+		Gson g = new Gson();
+		String employeeJsonString = g.toJson(items);
+
+		log.info(employeeJsonString);
+
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(employeeJsonString);
+		out.flush();
+	}
+	
 }

@@ -20,7 +20,6 @@ public class TramitIServForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.tramitIServ = __toClone.tramitIServ;
     this.listOfTramitAPersAutForTramitid = __toClone.listOfTramitAPersAutForTramitid;
-    this.listOfValuesForNom = __toClone.listOfValuesForNom;
   }
   
   public TramitIServForm(TramitIServJPA tramitIServ, boolean nou) {
@@ -44,18 +43,6 @@ public class TramitIServForm extends PinbalAdminBaseForm {
 
   public void setListOfTramitAPersAutForTramitid(List<StringKeyValue> listOfTramitAPersAutForTramitid) {
     this.listOfTramitAPersAutForTramitid = listOfTramitAPersAutForTramitid;
-  }
-
-
-
-  private List<StringKeyValue> listOfValuesForNom;
-
-  public List<StringKeyValue> getListOfValuesForNom() {
-    return this.listOfValuesForNom;
-  }
-
-  public void setListOfValuesForNom(List<StringKeyValue> listOfValuesForNom) {
-    this.listOfValuesForNom = listOfValuesForNom;
   }
 
 
