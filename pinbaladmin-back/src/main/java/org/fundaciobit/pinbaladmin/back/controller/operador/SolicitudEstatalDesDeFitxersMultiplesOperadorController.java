@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -287,10 +288,26 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                     HtmlUtils.saveMessageWarning(request, msg);
                     continue;
                 }
+                log.info("Servei: " + servei.getNom());
+                
+                //servei.getNom = Consulta de datos de discapacidad # SVDSCDDWS01.
+                String[] parts = servei.getNom().split(" # ");
+                Long id = null;
+				for (String part : parts) {
+					log.info("Part: " + part);
+					
+					id = serveiEjb.executeQueryOne(ServeiFields.SERVEIID, Where.OR(
+							ServeiFields.CODI.equal(part),
+							ServeiFields.NOM.equal(part), 
+							ServeiFields.DESCRIPCIO.like("%" + part.trim() + "%")
+							));
+					
+					if (id != null) {
+						break;
+					}
 
-                Long id = serveiEjb.executeQueryOne(ServeiFields.SERVEIID,
-                        Where.OR(ServeiFields.NOM.equal(servei.getNom()),
-                                ServeiFields.DESCRIPCIO.like("%" + servei.getNom().trim() + "%")));
+				}
+                
 
                 if (id == null) {
                     serveisNoTrobats.add("|" + servei.getNom() + "|");
