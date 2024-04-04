@@ -293,7 +293,8 @@ public class TramitIOperadorController extends TramitIServController {
     @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
-        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+//        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    	return "redirect:" + TramitAPublicController.CONTEXT_WEB + "/cancelarTramit/" + uuid;
     }
     
 	// Per al Wizard

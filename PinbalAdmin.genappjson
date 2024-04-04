@@ -4906,8 +4906,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "consentiment",
-            "es": "consentiment"
+            "ca": "Consentiment",
+            "es": "Consentimiento"
           },
           "javaName": "consentiment",
           "javaType": "java.lang.String",
@@ -4932,8 +4932,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "urlconsentiment",
-            "es": "urlconsentiment"
+            "ca": "URL Consentiment",
+            "es": "URL Consentimiento"
           },
           "javaName": "urlconsentiment",
           "javaType": "java.lang.String",
@@ -4957,8 +4957,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "consentimentadjunt",
-            "es": "consentimentadjunt"
+            "ca": "Adjunt Publicat",
+            "es": "Adjunto Publicado"
           },
           "javaName": "consentimentadjunt",
           "javaType": "java.lang.String",

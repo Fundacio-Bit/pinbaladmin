@@ -12,6 +12,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitCDadesCesiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
@@ -311,7 +312,9 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
     @RequestMapping(value = "/delete/{uuid}", method = RequestMethod.GET)
     public String deleteFromUuid(HttpServletRequest request, @PathVariable String uuid)
             throws I18NException, I18NValidationException {
-        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+//        return TramitAOperadorController.getRedirectWhenDeleted(request, uuid, tramitAPersAutLogicEjb);
+    	return "redirect:" + TramitAPublicController.CONTEXT_WEB + "/cancelarTramit/" + uuid;
+
     }
     
     @Override
@@ -353,8 +356,11 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 		String param = (String) request.getParameter("query");
 		log.info("param: ]" + param + "[");
 
-		List<Organ> organs = organLogicaEjb
-				.select(Where.OR(OrganFields.NOM.like("%" + param + "%"), OrganFields.DIR3.like("%" + param + "%")));
+		Where where = Where.OR(OrganFields.NOM.like("%" + param + "%"), OrganFields.DIR3.like("%" + param + "%"));
+		Where hasEntitat = OrganFields.ENTITATID.isNotNull();
+		where = Where.AND(where, hasEntitat);
+		
+		List<Organ> organs = organLogicaEjb.select(where);
 		
 		//XXX XYZ: Controlar que no haga distincion por acentos (ejemplo: "a" == "á").
 		

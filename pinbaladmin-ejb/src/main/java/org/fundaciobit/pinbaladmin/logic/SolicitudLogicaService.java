@@ -64,6 +64,6 @@ public interface SolicitudLogicaService extends SolicitudService {
 
     public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception;
 
-    public Solicitud getSolicitudFromTramitID(String ticketGFE) throws Exception;
+    public List<Solicitud> getSolicitudFromTramitID(String ticketGFE);
 
 }

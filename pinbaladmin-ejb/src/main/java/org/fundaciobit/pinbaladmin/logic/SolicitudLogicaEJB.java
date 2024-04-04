@@ -1307,7 +1307,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     }
 
     @Override
-    public Solicitud getSolicitudFromTramitID(String ticketGFE) throws Exception {
+    public List<Solicitud> getSolicitudFromTramitID(String ticketGFE) {
         
         Long tramitID = HibernateFileUtil.decryptFileID(ticketGFE);
         
@@ -1317,16 +1317,25 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         log.info("Where: "  + w.toSQL());
         
-        List<Solicitud> llistat = this.select(w);
-        int size = llistat.size();
         
-        if (size == 1) {
-            return llistat.get(0);
-        }else if (size == 0) {
-            throw new Exception("No s'ha trobat la solicitud [" + tramitID + "]a la BBDD");
-        } else {
-            throw new Exception("Hi ha mes d'una solicitud amb aquest codi tramit");
-        }
+        
+        List<Solicitud> llistat;
+		try {
+			llistat = this.select(w);
+			return llistat;
+		} catch (I18NException e) {
+			return null;
+		}
+        
+//        int size = llistat.size();
+//        
+//        if (size == 1) {
+//            return llistat.get(0);
+//        }else if (size == 0) {
+//            throw new Exception("No s'ha trobat la solicitud [" + tramitID + "]a la BBDD");
+//        } else {
+//            throw new Exception("Hi ha mes d'una solicitud amb tramitID " + tramitID + " a la BBDD");
+//        }
     }
 //    
 //    /**

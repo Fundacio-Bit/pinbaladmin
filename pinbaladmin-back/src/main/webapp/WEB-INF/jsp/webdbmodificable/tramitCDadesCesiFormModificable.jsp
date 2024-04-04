@@ -130,10 +130,13 @@
 	display: block;
 	position: absolute;
 	z-index: 1;
-	background-color: #f9f9f9;
-	border: 1px solid #e9e9e9;
-	max-height: 170px;
+	background-color: #d7d7d7;
+	
+	max-height: 220px;
 	overflow-y: auto;
+	
+	border: 1px solid darkgray;
+	border-bottom-left-radius: 5px;
 }
 </style>
 

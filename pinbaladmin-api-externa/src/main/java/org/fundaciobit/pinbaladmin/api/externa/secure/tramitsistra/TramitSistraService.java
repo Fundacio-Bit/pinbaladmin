@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Base64;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.security.RolesAllowed;
@@ -89,74 +90,78 @@ public class TramitSistraService {
 
     public String getUrlFormulari(
             @RequestBody(description = "Dades de la petició", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(name = "requestTransaction", required = true, implementation = TramitSistraPojo.class))) TramitSistraPojo parametrosFormulario,
-            @Parameter(hidden = true) @Context HttpServletRequest request) throws RestException {
+			@Parameter(hidden = true) @Context HttpServletRequest request) throws RestException {
 
-        final String methodName = "getUrlFormulari";
-        final String language = parametrosFormulario.getIdioma();
+		final String methodName = "getUrlFormulari";
+		final String language = parametrosFormulario.getIdioma();
 
-        try {
-            Timestamp datatramit = new Timestamp(System.currentTimeMillis());
+		try {
+			Timestamp datatramit = new Timestamp(System.currentTimeMillis());
 
-            Usuario u =parametrosFormulario.getUsuario();
+			Usuario u = parametrosFormulario.getUsuario();
 
-            String nif = u.getNif();
-            String nom = u.getNombre();
-            String llinatge1 = u.getApellido1();
-            String llinatge2 = u.getApellido2();
+			String nif = u.getNif();
+			String nom = u.getNombre();
+			String llinatge1 = u.getApellido1();
+			String llinatge2 = u.getApellido2();
 
-            
-            TramitAPersAutJPA tramitA = new TramitAPersAutJPA(); 
-            
-            tramitA.setNif(nif);
-            tramitA.setNom(nom);
-            tramitA.setLlinatge1(llinatge1);
-            tramitA.setLlinatge2(llinatge2);
-            
-            log.info("CallBack URL: " + parametrosFormulario.getUrlCallback());
-            request.getSession().setAttribute("urlCallbackSistra", parametrosFormulario.getUrlCallback());
-            
-            log.info("IdSesionFormulario: " + parametrosFormulario.getIdSesionFormulario());
-            log.info("XML Actuales: " + parametrosFormulario.getXmlDatosActuales());
+			TramitAPersAutJPA tramitA = new TramitAPersAutJPA();
 
-            String callbackUrl = parametrosFormulario.getUrlCallback();
-            String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
+			tramitA.setNif(nif);
+			tramitA.setNom(nom);
+			tramitA.setLlinatge1(llinatge1);
+			tramitA.setLlinatge2(llinatge2);
 
-            tramitA.setUrlsistra(callbackUrl);
-            tramitA.setIdsesionformulario(idSesionFormulario );
-            
-            tramitA.setDatatramit(datatramit);
-            
-            
-            tramitAEjb.create(tramitA);
-            
-            String uuid =  HibernateFileUtil.encryptFileID(tramitA.getTramitid());
-            
-            //Amb les dades d'entrada, crear un TramitA, obtenir el tramitID, i retornar la URL amb el tramitB i parametre TramitID.
-            
-            //Crear un métode per saber si el TramitB que es vol crear ja existeix o no.
-            
-            //Cada vegada que es faci una cridada a aquest métode rest, tornarà una URL distinta perque es crea un TramitA i tramitID nous.
-            
-            //Mostrar durante el tramite la información de la persona autenticada, que estará en TramitA
-            
-            //Cuando acabe el tramite, crear solicitud i devolver control a sistra. Luego sistra llamará al método /resultado para obtener los datos que necesita.
-            
-            
-            //S'hauria de canviar el tramitid de un Long a un uuid. Per a que ningú pugui modificar la URL. perque a la url, si canvies el tramitid, pots accedir a altres tramits, creats o no.
-            //Així nomes el que te la url original pot fer canvis al tramit.
-            
-            //I si es perd el tramit o es deixa a mitges, serà recuperamble amb la URL amb  uuid.
-            
-            String toReturn = Configuracio.getUrlFormulariToSistra() + uuid;
-            Gson gson = new GsonBuilder().create();
+			log.info("CallBack URL: " + parametrosFormulario.getUrlCallback());
+			request.getSession().setAttribute("urlCallbackSistra", parametrosFormulario.getUrlCallback());
+
+			log.info("IdSesionFormulario: " + parametrosFormulario.getIdSesionFormulario());
+			log.info("XML Actuales: " + parametrosFormulario.getXmlDatosActuales());
+
+			String callbackUrl = parametrosFormulario.getUrlCallback();
+			String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
+
+			tramitA.setUrlsistra(callbackUrl);
+			tramitA.setIdsesionformulario(idSesionFormulario);
+
+			tramitA.setDatatramit(datatramit);
+
+			tramitAEjb.create(tramitA);
+
+			String uuid = HibernateFileUtil.encryptFileID(tramitA.getTramitid());
+
+			// Amb les dades d'entrada, crear un TramitA, obtenir el tramitID, i retornar la
+			// URL amb el tramitB i parametre TramitID.
+
+			// Crear un métode per saber si el TramitB que es vol crear ja existeix o no.
+
+			// Cada vegada que es faci una cridada a aquest métode rest, tornarà una URL
+			// distinta perque es crea un TramitA i tramitID nous.
+
+			// Mostrar durante el tramite la información de la persona autenticada, que
+			// estará en TramitA
+
+			// Cuando acabe el tramite, crear solicitud i devolver control a sistra. Luego
+			// sistra llamará al método /resultado para obtener los datos que necesita.
+
+			// S'hauria de canviar el tramitid de un Long a un uuid. Per a que ningú pugui
+			// modificar la URL. perque a la url, si canvies el tramitid, pots accedir a
+			// altres tramits, creats o no.
+			// Així nomes el que te la url original pot fer canvis al tramit.
+
+			// I si es perd el tramit o es deixa a mitges, serà recuperamble amb la URL amb
+			// uuid.
+
+			String toReturn = Configuracio.getUrlFormulariToSistra() + uuid;
+			Gson gson = new GsonBuilder().create();
 
 //            return gson.toJson(toReturn);
-            return toReturn;
-        } catch (Throwable th) {
-            return processException(methodName, language, th);
-        }
+			return toReturn;
+		} catch (Throwable th) {
+			return processException(methodName, language, th);
+		}
 
-    }
+	}
 
     @Path("/resultado/{ticket}")
     @RolesAllowed({ Constants.PAD_WS })
@@ -179,29 +184,84 @@ public class TramitSistraService {
             @ApiResponse(responseCode = "510", description = "Només s'utilitza per crear fitxer de constants...", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Resultado.class)) }) })
 
-    public Resultado getDatosFormularioFromTicket(
-            @Parameter(in = ParameterIn.PATH, name = "ticket", description = "Ticket del fomulario", allowReserved = true, required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA==", schema = @Schema(implementation = String.class)) @PathParam("ticket") String ticket)
-            throws RestException {
+	public Resultado getDatosFormularioFromTicket(
+			@Parameter(in = ParameterIn.PATH, name = "ticket", description = "Ticket del fomulario", allowReserved = true, required = true, example = "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA==", schema = @Schema(implementation = String.class)) @PathParam("ticket") String ticket)
+			throws RestException {
 
-        final String methodName = "getDatosFormularioFromTicket";
-        final String language = "ca";
+		final String methodName = "getDatosFormularioFromTicket";
+		final String language = "ca";
 
-        try {
-            
-            log.info("Metode REST: " + methodName);
-            log.info("ticket: " +  ticket);
-            String[] splitTicket = ticket.split(":");
+		log.info("Metode REST: " + methodName);
+		log.info("ticket: " + ticket);
+		String[] splitTicket = ticket.split(":");
 
-            String idSesionFormulario = splitTicket[0];
-            String ticketGFE = splitTicket[1];//tramitid
-            
-            log.info("ticketGFE: " + ticketGFE);
+		String idSesionFormulario = splitTicket[0];
+		String ticketGFE = splitTicket[1];// uuid
 
-            Solicitud soli = solicitudLogicaEjb.getSolicitudFromTramitID(ticketGFE);
+		log.info("ticketGFE: " + ticketGFE);
 
-            // Si no troba cap solicitud, s'hauria de veure si el tramit està a mitges i indicar cancelado = true, o veure que fer
-                        
-            String XMLTest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+		String id = idSesionFormulario;
+		Boolean cancelado = true;
+		String pdf = "";
+		String xml = "";
+
+		// Si no troba cap solicitud, es perque no s'ha cancelat el tramit.
+		List<Solicitud> llista = solicitudLogicaEjb.getSolicitudFromTramitID(ticketGFE);
+		if (llista != null) {
+			if (llista.size() == 1) {
+				Solicitud soli = llista.get(0);
+
+				try {
+					pdf = fileToBase64(soli.getDocumentSolicitudID());
+					xml = fileToBase64(soli.getSolicitudXmlID());
+
+					cancelado = false;
+				} catch (Exception e) {
+					log.error("Error obtenint els fitxers de la solicitud: " + e.getMessage(), e);
+				}
+			} else {
+				log.error("Error: S'han trobat " + llista.size() + " solicituds");
+			}
+		} else {
+			log.error("Error obtenint llistat de solicituds amb uuid " + ticketGFE);
+		}
+
+		Resultado resultado = new Resultado();
+		resultado.setCancelado(cancelado);
+		resultado.setIdSesionFormulario(id);
+		resultado.setPdf(pdf);
+		resultado.setXml(xml);
+
+		return resultado;
+	}
+
+	protected <T> T processException(final String methodName, String language, Throwable th) throws RestException {
+		RestException oae;
+		String msg;
+		if (th instanceof RestException) {
+			oae = (RestException) th;
+			msg = th.getMessage();
+		} else {
+			if (th instanceof I18NException) {
+				msg = I18NLogicUtils.getMessage((I18NException) th, new Locale(language));
+			} else {
+				msg = th.getMessage();
+			}
+			oae = new RestException(msg, th, Status.INTERNAL_SERVER_ERROR);
+		}
+
+		log.error("Error en " + methodName + ": " + msg, th);
+		throw oae;
+	}
+
+	protected String fileToBase64(Long fileID) throws FileNotFoundException, IOException {
+		byte[] solicitudXML = FileSystemManager.getFileContent(fileID);
+		String base64 = Base64.getEncoder().encodeToString(solicitudXML);
+		return base64;
+	}
+    
+    /*
+                  String XMLTest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
                     + "<FORMULARIO xmlns=\"urn:es:caib:sistra2:xml:formulario:v1:model\" accion=\"submit\">\r\n"
                     + "    <CAMPO id=\"DATOS_REGISTRO\" tipo=\"compuesto\" xmlns=\"\">\r\n"
                     + "        <VALOR codigo=\"NIF\">45186147W</VALOR>\r\n"
@@ -275,54 +335,5 @@ public class TramitSistraService {
                     + "        <VALOR codigo=\"VALIDAELEMREPT\"></VALOR>\r\n"
                     + "    </CAMPO>\r\n"
                     + "</FORMULARIO>\r\n";
-            
-            
-            
-            String id = idSesionFormulario;
-            String pdf = fileToBase64(soli.getDocumentSolicitudID());
-            //String xml = fileToBase64(soli.getSolicitudXmlID());
-            
-            String xml = Base64.getEncoder().encodeToString(XMLTest.getBytes());
-            Boolean cancelado = false;
-            
-//            XmlValidation.validateXMLSchema(xml, xsd);
-            
-            Resultado resultado = new Resultado();
-            resultado.setCancelado(cancelado);
-            resultado.setIdSesionFormulario(id);
-            resultado.setPdf(pdf);
-            resultado.setXml(xml);
-
-            return resultado;
-
-        } catch (Throwable th) {
-            return processException(methodName, language, th);
-        }
-
-    }
-
-    protected <T> T processException(final String methodName, String language, Throwable th) throws RestException {
-        RestException oae;
-        String msg;
-        if (th instanceof RestException) {
-            oae = (RestException) th;
-            msg = th.getMessage();
-        } else {
-            if (th instanceof I18NException) {
-                msg = I18NLogicUtils.getMessage((I18NException) th, new Locale(language));
-            } else {
-                msg = th.getMessage();
-            }
-            oae = new RestException(msg, th, Status.INTERNAL_SERVER_ERROR);
-        }
-
-        log.error("Error en " + methodName + ": " + msg, th);
-        throw oae;
-    }
-
-    protected String fileToBase64(Long fileID) throws FileNotFoundException, IOException {
-        byte[] solicitudXML = FileSystemManager.getFileContent(fileID);
-        String base64 = Base64.getEncoder().encodeToString(solicitudXML);
-        return base64;
-    }
+     */
 }
