@@ -10,9 +10,9 @@ public class TramitHProcBean implements TramitHProc {
 
 	long procid;// PK
 	long tramitid;
-	java.lang.String tipus;
 	java.lang.String nom;
 	java.lang.String codi;
+	java.lang.String tipus;
 	java.lang.String urlseu;
 	boolean caducitat;
 	java.sql.Timestamp caducitatdata;
@@ -28,12 +28,12 @@ public class TramitHProcBean implements TramitHProc {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitHProcBean(long procid , long tramitid , java.lang.String tipus , java.lang.String nom , java.lang.String codi , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcBean(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.procid=procid;
     this.tramitid=tramitid;
-    this.tipus=tipus;
     this.nom=nom;
     this.codi=codi;
+    this.tipus=tipus;
     this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
@@ -44,11 +44,11 @@ public class TramitHProcBean implements TramitHProc {
     this.automatizado=automatizado;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitHProcBean(long tramitid , java.lang.String tipus , java.lang.String nom , java.lang.String codi , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcBean(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.tramitid=tramitid;
-    this.tipus=tipus;
     this.nom=nom;
     this.codi=codi;
+    this.tipus=tipus;
     this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
@@ -61,9 +61,9 @@ public class TramitHProcBean implements TramitHProc {
   public TramitHProcBean(TramitHProc __bean) {
     this.setProcid(__bean.getProcid());
     this.setTramitid(__bean.getTramitid());
-    this.setTipus(__bean.getTipus());
     this.setNom(__bean.getNom());
     this.setCodi(__bean.getCodi());
+    this.setTipus(__bean.getTipus());
     this.setUrlseu(__bean.getUrlseu());
     this.setCaducitat(__bean.isCaducitat());
     this.setCaducitatdata(__bean.getCaducitatdata());
@@ -88,13 +88,6 @@ public class TramitHProcBean implements TramitHProc {
 		this.tramitid = _tramitid_;
 	};
 
-	public java.lang.String getTipus() {
-		return(tipus);
-	};
-	public void setTipus(java.lang.String _tipus_) {
-		this.tipus = _tipus_;
-	};
-
 	public java.lang.String getNom() {
 		return(nom);
 	};
@@ -107,6 +100,13 @@ public class TramitHProcBean implements TramitHProc {
 	};
 	public void setCodi(java.lang.String _codi_) {
 		this.codi = _codi_;
+	};
+
+	public java.lang.String getTipus() {
+		return(tipus);
+	};
+	public void setTipus(java.lang.String _tipus_) {
+		this.tipus = _tipus_;
 	};
 
 	public java.lang.String getUrlseu() {
@@ -174,9 +174,9 @@ public class TramitHProcBean implements TramitHProc {
     TramitHProcBean __tmp = new TramitHProcBean();
     __tmp.setProcid(__bean.getProcid());
     __tmp.setTramitid(__bean.getTramitid());
-    __tmp.setTipus(__bean.getTipus());
     __tmp.setNom(__bean.getNom());
     __tmp.setCodi(__bean.getCodi());
+    __tmp.setTipus(__bean.getTipus());
     __tmp.setUrlseu(__bean.getUrlseu());
     __tmp.setCaducitat(__bean.isCaducitat());
     __tmp.setCaducitatdata(__bean.getCaducitatdata());

@@ -86,19 +86,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitHProcFields.TIPUS)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="tramitHProc.tipus" var="tipus" />
-              <fmt:message key="genapp.form.searchby" var="cercapertipus" >                
-                 <fmt:param value="${tipus}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${tipus}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapertipus}" path="tipus" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitHProcFields.NOM)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -121,6 +108,19 @@
               </fmt:message>
               <span class="add-on"><c:out value="${codi}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercapercodi}" path="codi" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitHProcFields.TIPUS)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitHProc.tipus" var="tipus" />
+              <fmt:message key="genapp.form.searchby" var="cercapertipus" >                
+                 <fmt:param value="${tipus}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${tipus}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapertipus}" path="tipus" />
             </div>
 
 

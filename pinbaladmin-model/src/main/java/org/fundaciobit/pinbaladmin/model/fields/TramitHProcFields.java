@@ -14,9 +14,9 @@ public interface TramitHProcFields extends java.io.Serializable {
 
 	 public static final LongField PROCID = new LongField(_TABLE_MODEL, "procid", "procid");  // PK
 	 public static final LongField TRAMITID = new LongField(_TABLE_MODEL, "tramitid", "tramitid");
-	 public static final StringField TIPUS = new StringField(_TABLE_MODEL, "tipus", "tipus");
 	 public static final StringField NOM = new StringField(_TABLE_MODEL, "nom", "nom");
 	 public static final StringField CODI = new StringField(_TABLE_MODEL, "codi", "codi");
+	 public static final StringField TIPUS = new StringField(_TABLE_MODEL, "tipus", "tipus");
 	 public static final StringField URLSEU = new StringField(_TABLE_MODEL, "urlseu", "urlseu");
 	 public static final BooleanField CADUCITAT = new BooleanField(_TABLE_MODEL, "caducitat", "caducitat");
 	 public static final TimestampField CADUCITATDATA = new TimestampField(_TABLE_MODEL, "caducitatdata", "caducitatdata");
@@ -30,9 +30,9 @@ public interface TramitHProcFields extends java.io.Serializable {
   public static final Field<?>[] ALL_TRAMITHPROC_FIELDS = {
     PROCID,
     TRAMITID,
-    TIPUS,
     NOM,
     CODI,
+    TIPUS,
     URLSEU,
     CADUCITAT,
     CADUCITATDATA,

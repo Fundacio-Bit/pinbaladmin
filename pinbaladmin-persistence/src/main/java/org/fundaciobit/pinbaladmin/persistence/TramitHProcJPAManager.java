@@ -55,8 +55,8 @@ public class TramitHProcJPAManager
         return list.toArray(new TramitHProc[list.size()]);
     };
 
-    public TramitHProc create( long _tramitid_, java.lang.String _tipus_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _urlseu_, boolean _caducitat_, java.sql.Timestamp _caducitatdata_, java.lang.String _descripcio_, long _peticionsaldia_, long _peticionsalmes_, boolean _periodico_, boolean _automatizado_) throws I18NException {
-        TramitHProcJPA __bean =  new TramitHProcJPA(_tramitid_,_tipus_,_nom_,_codi_,_urlseu_,_caducitat_,_caducitatdata_,_descripcio_,_peticionsaldia_,_peticionsalmes_,_periodico_,_automatizado_);
+    public TramitHProc create( long _tramitid_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _tipus_, java.lang.String _urlseu_, boolean _caducitat_, java.sql.Timestamp _caducitatdata_, java.lang.String _descripcio_, long _peticionsaldia_, long _peticionsalmes_, boolean _periodico_, boolean _automatizado_) throws I18NException {
+        TramitHProcJPA __bean =  new TramitHProcJPA(_tramitid_,_nom_,_codi_,_tipus_,_urlseu_,_caducitat_,_caducitatdata_,_descripcio_,_peticionsaldia_,_peticionsalmes_,_periodico_,_automatizado_);
         return create(__bean);
     }
 

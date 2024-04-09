@@ -330,7 +330,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
         if (af == null || af.trim().length() == 0) {
-            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
+//            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
             return null;
         } else {
 
@@ -365,7 +365,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
                         IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2b));
             }
 
-            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
+//            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
             return w;
         }

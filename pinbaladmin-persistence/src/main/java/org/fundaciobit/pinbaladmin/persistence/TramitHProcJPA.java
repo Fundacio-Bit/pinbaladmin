@@ -31,14 +31,14 @@ public class TramitHProcJPA implements TramitHProc {
     @Column(name="tramitid",nullable = false,length = 19)
     long tramitid;
 
-    @Column(name="tipus",nullable = false,length = 240)
-    java.lang.String tipus;
-
     @Column(name="nom",nullable = false,length = 240)
     java.lang.String nom;
 
     @Column(name="codi",nullable = false,length = 30)
     java.lang.String codi;
+
+    @Column(name="tipus",nullable = false,length = 240)
+    java.lang.String tipus;
 
     @Column(name="urlseu",nullable = false,length = 240)
     java.lang.String urlseu;
@@ -71,12 +71,12 @@ public class TramitHProcJPA implements TramitHProc {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitHProcJPA(long procid , long tramitid , java.lang.String tipus , java.lang.String nom , java.lang.String codi , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcJPA(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.procid=procid;
     this.tramitid=tramitid;
-    this.tipus=tipus;
     this.nom=nom;
     this.codi=codi;
+    this.tipus=tipus;
     this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
@@ -87,11 +87,11 @@ public class TramitHProcJPA implements TramitHProc {
     this.automatizado=automatizado;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitHProcJPA(long tramitid , java.lang.String tipus , java.lang.String nom , java.lang.String codi , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcJPA(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.tramitid=tramitid;
-    this.tipus=tipus;
     this.nom=nom;
     this.codi=codi;
+    this.tipus=tipus;
     this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
@@ -104,9 +104,9 @@ public class TramitHProcJPA implements TramitHProc {
   public TramitHProcJPA(TramitHProc __bean) {
     this.setProcid(__bean.getProcid());
     this.setTramitid(__bean.getTramitid());
-    this.setTipus(__bean.getTipus());
     this.setNom(__bean.getNom());
     this.setCodi(__bean.getCodi());
+    this.setTipus(__bean.getTipus());
     this.setUrlseu(__bean.getUrlseu());
     this.setCaducitat(__bean.isCaducitat());
     this.setCaducitatdata(__bean.getCaducitatdata());
@@ -131,13 +131,6 @@ public class TramitHProcJPA implements TramitHProc {
 		this.tramitid = _tramitid_;
 	};
 
-	public java.lang.String getTipus() {
-		return(tipus);
-	};
-	public void setTipus(java.lang.String _tipus_) {
-		this.tipus = _tipus_;
-	};
-
 	public java.lang.String getNom() {
 		return(nom);
 	};
@@ -150,6 +143,13 @@ public class TramitHProcJPA implements TramitHProc {
 	};
 	public void setCodi(java.lang.String _codi_) {
 		this.codi = _codi_;
+	};
+
+	public java.lang.String getTipus() {
+		return(tipus);
+	};
+	public void setTipus(java.lang.String _tipus_) {
+		this.tipus = _tipus_;
 	};
 
 	public java.lang.String getUrlseu() {
@@ -244,9 +244,9 @@ public class TramitHProcJPA implements TramitHProc {
     TramitHProcJPA __tmp = new TramitHProcJPA();
     __tmp.setProcid(__bean.getProcid());
     __tmp.setTramitid(__bean.getTramitid());
-    __tmp.setTipus(__bean.getTipus());
     __tmp.setNom(__bean.getNom());
     __tmp.setCodi(__bean.getCodi());
+    __tmp.setTipus(__bean.getTipus());
     __tmp.setUrlseu(__bean.getUrlseu());
     __tmp.setCaducitat(__bean.isCaducitat());
     __tmp.setCaducitatdata(__bean.getCaducitatdata());

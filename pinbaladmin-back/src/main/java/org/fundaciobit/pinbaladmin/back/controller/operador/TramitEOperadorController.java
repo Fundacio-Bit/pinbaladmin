@@ -143,9 +143,7 @@ public class TramitEOperadorController extends TramitECteAudController {
         		request.setAttribute("tramitD", llistatTramitD.get(0));
         	}
         	
-        	String anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -216,8 +214,7 @@ public class TramitEOperadorController extends TramitECteAudController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-            String anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -275,9 +272,7 @@ public class TramitEOperadorController extends TramitECteAudController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
-            String anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitECteAudForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

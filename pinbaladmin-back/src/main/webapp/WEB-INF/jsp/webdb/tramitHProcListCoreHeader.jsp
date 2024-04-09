@@ -18,14 +18,14 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TRAMITID)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.TRAMITID)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TIPUS)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.TIPUS)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.NOM)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.NOM)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.CODI)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.CODI)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TIPUS)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.TIPUS)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.URLSEU)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.URLSEU)}</th>

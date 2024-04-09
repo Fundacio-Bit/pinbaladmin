@@ -130,6 +130,14 @@ select.form-control {
 	padding: 6px;
 	background-color: #d3d3d336;
 }
+
+.table td {
+  vertical-align: middle;
+}
+
+input[type="checkbox"]{
+	  margin: 0.25rem;
+}
 </style>
 
 <div id="titol-tramit">Sol·litud d'autorització</div>

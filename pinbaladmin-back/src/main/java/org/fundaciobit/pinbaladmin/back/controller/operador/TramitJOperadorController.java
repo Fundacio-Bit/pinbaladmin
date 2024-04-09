@@ -142,9 +142,7 @@ public class TramitJOperadorController extends TramitJConsentController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
-        	String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
-            
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -247,8 +245,7 @@ public class TramitJOperadorController extends TramitJConsentController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-            String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -294,8 +291,7 @@ public class TramitJOperadorController extends TramitJConsentController {
         if (result.hasErrors()) {
             Long tramitID = tramitJConsentForm.getTramitJConsent().getTramitid();
 
-            String anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitJConsentForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

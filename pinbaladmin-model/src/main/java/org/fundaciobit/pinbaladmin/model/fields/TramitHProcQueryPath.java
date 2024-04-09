@@ -19,16 +19,16 @@ public class TramitHProcQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new LongField(getQueryPath(), TramitHProcFields.TRAMITID);
   }
 
-  public StringField TIPUS() {
-    return new StringField(getQueryPath(), TramitHProcFields.TIPUS);
-  }
-
   public StringField NOM() {
     return new StringField(getQueryPath(), TramitHProcFields.NOM);
   }
 
   public StringField CODI() {
     return new StringField(getQueryPath(), TramitHProcFields.CODI);
+  }
+
+  public StringField TIPUS() {
+    return new StringField(getQueryPath(), TramitHProcFields.TIPUS);
   }
 
   public StringField URLSEU() {

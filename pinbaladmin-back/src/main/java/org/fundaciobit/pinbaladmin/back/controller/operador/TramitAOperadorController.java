@@ -160,8 +160,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
 		tramitForm.addAdditionalButton(
 				new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
-		String anotacions = null;
-        TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+        TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
         tramitForm.setAttachedAdditionalJspCode(true);
 
         return tramitForm;
@@ -328,9 +327,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
-    		String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -373,12 +370,26 @@ public class TramitAOperadorController extends TramitAPersAutController {
         }
     }
 
-    public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb, String anotacions) throws I18NException {
+    public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb) throws I18NException {
         
         
         Long[] identificadorsTramit = tramitAEjb.getPartsTramitIDs(tramitID);
         request.setAttribute("identificadorsTramit", identificadorsTramit);
         request.setAttribute("tramitActual", actual);
+        
+		String anotacions = null;
+		switch ((int) actual) {
+		case 2: // C
+			anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";			
+			break;
+		case 4: // E
+			anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
+			break;
+		case 9: // J
+        	anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
+			break;
+		}
+
         request.setAttribute("anotacions", anotacions);
         
         String uuid = HibernateFileUtil.encryptFileID(tramitID);
@@ -414,8 +425,7 @@ public class TramitAOperadorController extends TramitAPersAutController {
         if (result.hasErrors()) {
             Long tramitID = tramitAPersAutForm.getTramitAPersAut().getTramitid();
 
-            String anotacions = null;
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitAPersAutForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

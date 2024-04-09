@@ -182,9 +182,7 @@ public class TramitIOperadorController extends TramitIServController {
          request.getSession().setAttribute("tramitid", tramitID);
          
         {
-        	String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -236,9 +234,7 @@ public class TramitIOperadorController extends TramitIServController {
 			
 			
             {
-            	String anotacions = null;
-
-                TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+                TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
                 tramitIServFilterForm.setAttachedAdditionalJspCode(true);
             }
         }
@@ -314,9 +310,7 @@ public class TramitIOperadorController extends TramitIServController {
         if (result.hasErrors()) {
             Long tramitID = tramitIServForm.getTramitIServ().getTramitid();
 
-        	String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitIServForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -339,9 +333,7 @@ public class TramitIOperadorController extends TramitIServController {
 		String ret = super.crearTramitIServPost(tramitIServForm, result, request, response);
 
 		if (result.hasErrors()) {
-        	String anotacions = null;
-
-			TramitAOperadorController.dadesWizard(request, tramitid, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+			TramitAOperadorController.dadesWizard(request, tramitid, actual(), isPublic(), tramitAPersAutLogicEjb);
 			tramitIServForm.setAttachedAdditionalJspCode(true);
 		}
 		return ret;

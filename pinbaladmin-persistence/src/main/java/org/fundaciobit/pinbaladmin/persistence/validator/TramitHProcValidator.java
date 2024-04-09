@@ -36,10 +36,6 @@ public class TramitHProcValidator<I extends TramitHProc>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TRAMITID)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,TIPUS, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
-
     __vr.rejectIfEmptyOrWhitespace(__target__,NOM, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOM)));
@@ -47,6 +43,10 @@ public class TramitHProcValidator<I extends TramitHProc>
     __vr.rejectIfEmptyOrWhitespace(__target__,CODI, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CODI)));
+
+    __vr.rejectIfEmptyOrWhitespace(__target__,TIPUS, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
 
     __vr.rejectIfEmptyOrWhitespace(__target__,URLSEU, 
         "genapp.validation.required",
@@ -77,14 +77,6 @@ public class TramitHProcValidator<I extends TramitHProc>
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(AUTOMATIZADO)));
 
     // Check size
-    if (__vr.getFieldErrorCount(TIPUS) == 0) {
-      java.lang.String __tipus = __target__.getTipus();
-      if (__tipus!= null && __tipus.length() > 240) {
-        __vr.rejectValue(TIPUS, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(NOM) == 0) {
       java.lang.String __nom = __target__.getNom();
       if (__nom!= null && __nom.length() > 240) {
@@ -98,6 +90,14 @@ public class TramitHProcValidator<I extends TramitHProc>
       if (__codi!= null && __codi.length() > 30) {
         __vr.rejectValue(CODI, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CODI)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(30)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(TIPUS) == 0) {
+      java.lang.String __tipus = __target__.getTipus();
+      if (__tipus!= null && __tipus.length() > 240) {
+        __vr.rejectValue(TIPUS, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
       }
     }
 

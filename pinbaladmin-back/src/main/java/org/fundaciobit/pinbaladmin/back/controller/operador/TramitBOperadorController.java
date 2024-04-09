@@ -132,9 +132,7 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
 				new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
-            String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -258,9 +256,7 @@ public class TramitBOperadorController extends TramitBDadesSoliController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
-            String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitBDadesSoliForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

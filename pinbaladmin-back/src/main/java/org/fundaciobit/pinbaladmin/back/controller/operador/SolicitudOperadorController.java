@@ -1182,7 +1182,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
         if (af == null || af.trim().length() == 0) {
-            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
+//            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
             return null;
         } else {
 
@@ -1218,7 +1218,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a), SolicitudFields.SOLICITUDID.in(subquery2b));
             }
 
-            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
+//            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
             return w;
         }
@@ -1464,9 +1464,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
         
-        log.info("where: " + where);
         if (where != null) {
-            log.info("where.toSQL: " + where.toSQL());
         }
         
         List<Organ> organs = organEjb.select(where);

@@ -151,7 +151,7 @@ public class TramitAPublicController extends TramitAOperadorController {
 		try {
 			Long tramitID = HibernateFileUtil.decryptFileID(uuid);
 			request.getSession().removeAttribute("tramitid");
-			tramitAPersAutLogicEjb.deleteFull(tramitID);
+			//tramitAPersAutLogicEjb.deleteFull(tramitID);
 		} catch (Exception e) {
 			log.error(e);
 			HtmlUtils.saveMessageError(request, "Error cancelant incidencia amb tramit Sistra: " + e.getMessage());

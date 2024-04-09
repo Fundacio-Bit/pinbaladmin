@@ -37,14 +37,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TIPUS)}">
-          <td>
-          <c:set var="tmp">${tramitHProc.tipus}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForTipus[tmp]}
-          </c:if>
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.NOM)}">
           <td>
           ${tramitHProc.nom}
@@ -55,9 +47,20 @@
           ${tramitHProc.codi}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TIPUS)}">
+          <td>
+          <c:set var="tmp">${tramitHProc.tipus}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForTipus[tmp]}
+          </c:if>
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.URLSEU)}">
           <td>
-          ${tramitHProc.urlseu}
+                       <c:if test="${ not empty tramitHProc.urlseu}">
+               <a href="${tramitHProc.urlseu}" target="_blank">${tramitHProc.urlseu}</a>
+             </c:if>
+
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.CADUCITAT)}">

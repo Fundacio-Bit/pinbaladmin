@@ -8,14 +8,14 @@ public interface TramitHProc extends org.fundaciobit.genapp.common.IGenAppEntity
 	public long getTramitid();
 	public void setTramitid(long _tramitid_);
 
-	public java.lang.String getTipus();
-	public void setTipus(java.lang.String _tipus_);
-
 	public java.lang.String getNom();
 	public void setNom(java.lang.String _nom_);
 
 	public java.lang.String getCodi();
 	public void setCodi(java.lang.String _codi_);
+
+	public java.lang.String getTipus();
+	public void setTipus(java.lang.String _tipus_);
 
 	public java.lang.String getUrlseu();
 	public void setUrlseu(java.lang.String _urlseu_);

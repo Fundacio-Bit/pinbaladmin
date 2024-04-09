@@ -33,37 +33,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.TIPUS)}">
-        <tr id="tramitHProc_tipus_rowid">
-          <td id="tramitHProc_tipus_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitHProcFields.TIPUS])?'tramitHProc.tipus':__theForm.labels[TramitHProcFields.TIPUS]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[TramitHProcFields.TIPUS]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitHProcFields.TIPUS]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitHProc_tipus_columnvalueid">
-          <form:errors path="tramitHProc.tipus" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.TIPUS)}" >
-          <form:hidden path="tramitHProc.tipus"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitHProc.tipus,__theForm.listOfValuesForTipus)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitHProcFields.TIPUS)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="tramitHProc_tipus"  onchange="if(typeof onChangeTipus == 'function') {  onChangeTipus(this); };"  cssClass="form-control col-md-9-optional" path="tramitHProc.tipus">
-            <c:forEach items="${__theForm.listOfValuesForTipus}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.NOM)}">
         <tr id="tramitHProc_nom_rowid">
           <td id="tramitHProc_nom_columnlabelid">
@@ -100,6 +69,37 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.TIPUS)}">
+        <tr id="tramitHProc_tipus_rowid">
+          <td id="tramitHProc_tipus_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitHProcFields.TIPUS])?'tramitHProc.tipus':__theForm.labels[TramitHProcFields.TIPUS]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[TramitHProcFields.TIPUS]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitHProcFields.TIPUS]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitHProc_tipus_columnvalueid">
+          <form:errors path="tramitHProc.tipus" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.TIPUS)}" >
+          <form:hidden path="tramitHProc.tipus"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.tramitHProc.tipus,__theForm.listOfValuesForTipus)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitHProcFields.TIPUS)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="tramitHProc_tipus"  onchange="if(typeof onChangeTipus == 'function') {  onChangeTipus(this); };"  cssClass="form-control col-md-9-optional" path="tramitHProc.tipus">
+            <c:forEach items="${__theForm.listOfValuesForTipus}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.URLSEU)}">
         <tr id="tramitHProc_urlseu_rowid">
           <td id="tramitHProc_urlseu_columnlabelid">
@@ -111,8 +111,20 @@
               </c:if>
             </td>
           <td id="tramitHProc_urlseu_columnvalueid">
+           <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)}">
+
+             <c:if test="${ not empty __theForm.tramitHProc.urlseu}">
+               <a href="${__theForm.tramitHProc.urlseu}" target="_blank">${__theForm.tramitHProc.urlseu}</a>
+
+             </c:if>
+           </c:if>
+
+           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU))}">
+
             <form:errors path="tramitHProc.urlseu" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitHProc.urlseu"   />
+
+           </c:if>
 
            </td>
         </tr>

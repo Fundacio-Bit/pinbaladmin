@@ -128,8 +128,7 @@ public class TramitDOperadorController extends TramitDCteAutController {
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
         
         {
-        	String anotacions = null;
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
 
@@ -203,9 +202,7 @@ public class TramitDOperadorController extends TramitDCteAutController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
 
-        	String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitForm.setAttachedAdditionalJspCode(true);
         }
         return ret;
@@ -262,9 +259,7 @@ public class TramitDOperadorController extends TramitDCteAutController {
             log.info("actual: " + actual());
             log.info("isPublic: " + isPublic());
             
-        	String anotacions = null;
-
-            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb, anotacions);
+            TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitDCteAutForm.setAttachedAdditionalJspCode(true);
         }
         return ret;

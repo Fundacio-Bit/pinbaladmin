@@ -7041,8 +7041,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "NIF/NIE",
-            "es": "NIF/NIE"
+            "ca": "DNI/NIE",
+            "es": "DNI/NIE"
           },
           "javaName": "nif",
           "javaType": "java.lang.String",
@@ -7303,8 +7303,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "NIF/NIE",
-            "es": "NIF/NIE"
+            "ca": "DNI/NIE",
+            "es": "DNI/NIE"
           },
           "javaName": "nif",
           "javaType": "java.lang.String",
@@ -7565,8 +7565,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "NIF/NIE",
-            "es": "NIF/NIE"
+            "ca": "DNI/NIE",
+            "es": "DNI/NIE"
           },
           "javaName": "nif",
           "javaType": "java.lang.String",
@@ -7827,8 +7827,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "NIF/NIE",
-            "es": "NIF/NIE"
+            "ca": "DNI/NIE",
+            "es": "DNI/NIE"
           },
           "javaName": "nif",
           "javaType": "java.lang.String",
@@ -8033,40 +8033,14 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "tipus",
-          "sqlType": 12,
-          "size": 240,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "ca": "Tipus de procediment",
-            "es": "Tipo de procedimiento"
-          },
-          "javaName": "tipus",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "minAllowedValue": "1,2,3,4",
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "nom",
           "sqlType": 12,
           "size": 240,
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Nom del procediment",
-            "es": "Nombre de procedimiento"
+            "ca": "Nom",
+            "es": "Nombre"
           },
           "javaName": "nom",
           "javaType": "java.lang.String",
@@ -8090,8 +8064,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Codi del procediment",
-            "es": "Código del procedimiento"
+            "ca": "Codi",
+            "es": "Código"
           },
           "javaName": "codi",
           "javaType": "java.lang.String",
@@ -8109,14 +8083,40 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "tipus",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Tipus",
+            "es": "Tipo"
+          },
+          "javaName": "tipus",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3,4",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "urlseu",
           "sqlType": 12,
           "size": 240,
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Adreça fitxa Seu Electrònica",
-            "es": "Dirección ficha Seu Electrónica"
+            "ca": "URL Seu Electrònica",
+            "es": "URL Sede Electrónica"
           },
           "javaName": "urlseu",
           "javaType": "java.lang.String",
@@ -8128,7 +8128,7 @@
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 1
+            "webtype": 13
           },
           "foreignKeys": []
         },
@@ -8165,8 +8165,8 @@
           "digits": 6,
           "isNotNullable": false,
           "labels": {
-            "ca": "Data de caducitat",
-            "es": "Fecha de caducidad"
+            "ca": "Data caducitat",
+            "es": "Fecha caducidad"
           },
           "javaName": "caducitatdata",
           "javaType": "java.sql.Timestamp",
@@ -8215,8 +8215,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Peticions estimades al dia",
-            "es": "Peticiones estimadas al día"
+            "ca": "Peticions al dia",
+            "es": "Peticiones al día"
           },
           "javaName": "peticionsaldia",
           "javaType": "long",
@@ -8240,8 +8240,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Volum estimat de peticions al mes",
-            "es": "Volumen estimado de peticiones al mes"
+            "ca": "Peticions al mes",
+            "es": "Peticiones al mes"
           },
           "javaName": "peticionsalmes",
           "javaType": "long",
@@ -8477,8 +8477,8 @@
           "digits": 0,
           "isNotNullable": true,
           "labels": {
-            "ca": "Enllaç norma legal",
-            "es": "Enlace norma legal"
+            "ca": "URL norma legal",
+            "es": "URL norma legal"
           },
           "javaName": "urlnorma",
           "javaType": "java.lang.String",
@@ -8692,8 +8692,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "Fitxer consentiment",
-            "es": "Fichero consentimiento"
+            "ca": "Fitxer",
+            "es": "Fichero"
           },
           "javaName": "adjuntID",
           "javaType": "java.lang.Long",

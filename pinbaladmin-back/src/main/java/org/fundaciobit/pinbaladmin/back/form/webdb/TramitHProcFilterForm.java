@@ -65,17 +65,6 @@ public class TramitHProcFilterForm extends PinbalAdminBaseFilterForm implements 
   }
 
 
-  private java.lang.String tipus;
-
-  public java.lang.String getTipus() {
-    return this.tipus;
-  }
-
-  public void setTipus(java.lang.String tipus) {
-    this.tipus = tipus;
-  }
-
-
   private java.lang.String nom;
 
   public java.lang.String getNom() {
@@ -95,6 +84,17 @@ public class TramitHProcFilterForm extends PinbalAdminBaseFilterForm implements 
 
   public void setCodi(java.lang.String codi) {
     this.codi = codi;
+  }
+
+
+  private java.lang.String tipus;
+
+  public java.lang.String getTipus() {
+    return this.tipus;
+  }
+
+  public void setTipus(java.lang.String tipus) {
+    this.tipus = tipus;
   }
 
 
@@ -195,9 +195,9 @@ public class TramitHProcFilterForm extends PinbalAdminBaseFilterForm implements 
     this.procidFins = __toClone.procidFins;
     this.tramitidDesde = __toClone.tramitidDesde;
     this.tramitidFins = __toClone.tramitidFins;
-    this.tipus = __toClone.tipus;
     this.nom = __toClone.nom;
     this.codi = __toClone.codi;
+    this.tipus = __toClone.tipus;
     this.urlseu = __toClone.urlseu;
     this.caducitatdataDesde = __toClone.caducitatdataDesde;
     this.caducitatdataFins = __toClone.caducitatdataFins;
