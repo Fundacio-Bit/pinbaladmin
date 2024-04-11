@@ -46,7 +46,7 @@ public class TramitFOperadorController extends TramitFCteTecController {
 
     public static final String CONTEXT_WEB_PREV = TramitEOperadorController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/operador/tramitf";
-    public static final String CONTEXT_WEB_NEXT = TramitGOperadorController.CONTEXT_WEB;
+    public static final String CONTEXT_WEB_NEXT = TramitHOperadorController.CONTEXT_WEB;
     
     @EJB(mappedName = TramitFCteTecLogicaService.JNDI_NAME)
     protected TramitFCteTecLogicaService tramitFCteTecLogicEjb;

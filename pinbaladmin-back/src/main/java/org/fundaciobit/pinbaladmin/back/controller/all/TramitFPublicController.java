@@ -27,7 +27,7 @@ public class TramitFPublicController extends TramitFOperadorController {
 
     public static final String CONTEXT_WEB_PREV = TramitEPublicController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/public/tramitf";
-    public static final String CONTEXT_WEB_NEXT = TramitGPublicController.CONTEXT_WEB;;
+    public static final String CONTEXT_WEB_NEXT = TramitHPublicController.CONTEXT_WEB;;
 
     @Override
     public boolean isPublic() {

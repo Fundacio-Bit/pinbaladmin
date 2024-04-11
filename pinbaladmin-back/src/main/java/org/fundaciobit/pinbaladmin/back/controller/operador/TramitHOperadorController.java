@@ -47,7 +47,7 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes(types = { TramitHProcForm.class, TramitHProcFilterForm.class })
 public class TramitHOperadorController extends TramitHProcController {
 
-    public static final String CONTEXT_WEB_PREV = TramitGOperadorController.CONTEXT_WEB;
+    public static final String CONTEXT_WEB_PREV = TramitFOperadorController.CONTEXT_WEB;
     public static final String CONTEXT_WEB = "/operador/tramith";
     public static final String CONTEXT_WEB_NEXT = TramitIOperadorController.CONTEXT_WEB;
 

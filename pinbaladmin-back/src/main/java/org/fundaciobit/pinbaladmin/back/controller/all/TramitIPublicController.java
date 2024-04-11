@@ -1,14 +1,19 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
+import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.genapp.common.web.form.Section;
+import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitIOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.springframework.stereotype.Controller;
@@ -30,6 +35,14 @@ public class TramitIPublicController extends TramitIOperadorController {
     public static final String CONTEXT_WEB = "/public/tramiti";
     public static final String CONTEXT_WEB_NEXT = TramitJPublicController.CONTEXT_WEB;
    
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+
+    @Override
+    protected FilesFormManager<Fitxer> getFilesFormManager() {
+        return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
+    }
+
     @Override
     public boolean isPublic() {
         return true;

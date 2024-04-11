@@ -146,14 +146,17 @@ input[type="checkbox"]{
 	<c:forEach var="tramit" items="${identificadorsTramit}"
 		varStatus="status">
 
-		<a id="tramitPart${status.index}"
-			class="step-container<c:if test="${not empty tramit}"> created</c:if>"
-			<c:if test="${status.last}"> style="border-color: transparent;"</c:if>>
+        <c:if test="${status.index != 6}">
+			<a id="tramitPart${status.index}"
+				class="step-container<c:if test="${not empty tramit}"> created</c:if>"
+				<c:if test="${status.last}"> style="border-color: transparent;"</c:if>>
 
-			<div id="dot${status.index}" class="dot"></div>
-			<div id="step${status.index}" class="step"><fmt:message key="tramit.wizard.step.${status.index}"/></div>
-		</a>
-
+				<div id="dot${status.index}" class="dot"></div>
+				<div id="step${status.index}" class="step">
+					<fmt:message key="tramit.wizard.step.${status.index}" />
+				</div>
+			</a>
+		</c:if>
 	</c:forEach>
 </div>
 
@@ -182,11 +185,12 @@ input[type="checkbox"]{
 	var steps = $(".step-container");
 	var uuid = "${uuid}";
 
-	var letras = "abcdefghij";
+	var letras = "abcdefhij";
 
 	var lastTramit = 0;
 	for (var i = 0; i < steps.length; i++) {
 		var letra = letras.charAt(i);
+		
 		var step = steps[i];
 
 		var context = "/pinbaladmin/public/tramit" + letra;
