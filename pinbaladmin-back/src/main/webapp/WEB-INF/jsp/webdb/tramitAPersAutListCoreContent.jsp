@@ -77,6 +77,11 @@
           ${tramitAPersAut.idsesionformulario}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.IDSESIONTRAMITE)}">
+          <td>
+          ${tramitAPersAut.idsesiontramite}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

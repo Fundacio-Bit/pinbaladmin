@@ -200,3 +200,42 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitAPersAutFields.IDSESIONTRAMITE)}">
+        <tr id="tramitAPersAut_idsesiontramite_rowid">
+          <td id="tramitAPersAut_idsesiontramite_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitAPersAutFields.IDSESIONTRAMITE])?'tramitAPersAut.idsesiontramite':__theForm.labels[TramitAPersAutFields.IDSESIONTRAMITE]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitAPersAutFields.IDSESIONTRAMITE]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitAPersAutFields.IDSESIONTRAMITE]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitAPersAut_idsesiontramite_columnvalueid">
+              <form:errors path="tramitAPersAut.idsesiontramite" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,TramitAPersAutFields.IDSESIONTRAMITE)? 'true' : 'false'}" path="tramitAPersAut.idsesiontramite"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_idsesiontramite" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_idsesiontramite" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('tramitAPersAut.idsesiontramite'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('tramitAPersAut.idsesiontramite'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('tramitAPersAut.idsesiontramite'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_idsesiontramite').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_idsesiontramite').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_idsesiontramite').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        

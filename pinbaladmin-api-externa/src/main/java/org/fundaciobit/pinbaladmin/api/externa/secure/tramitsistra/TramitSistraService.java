@@ -30,6 +30,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
 import org.fundaciobit.pluginsib.utils.rest.RestExceptionInfo;
@@ -96,8 +97,30 @@ public class TramitSistraService {
 		final String language = parametrosFormulario.getIdioma();
 
 		try {
-			Timestamp datatramit = new Timestamp(System.currentTimeMillis());
 
+			//Comprobar si es un tramite ya iniciado viendo los datos actuales. 
+
+			String idSesionTram = null;
+			for (ParametrosApertura param : parametrosFormulario.getParametrosApertura()) {
+				log.info("Parametro: " + param.getCodigo() + " - " + param.getValor());
+				if (param.getCodigo().equals("idSesionTram")) {
+					idSesionTram = param.getValor();
+				}
+            }
+			
+			String ticket = buscarTicket(idSesionTram);
+			if (ticket != null) {
+				String url = Configuracio.getUrlFormulariToSistra() + ticket;
+                return url;
+			}
+
+			//Si no encuentra ticket, crea tramitA y devuelve la URL con el uuid. Si lo encuentra, devolver la URL con el ticket
+			TramitAPersAutJPA tramitA = new TramitAPersAutJPA();
+			tramitA.setIdsesiontramite(idSesionTram);
+			
+			Timestamp datatramit = new Timestamp(System.currentTimeMillis());
+			tramitA.setDatatramit(datatramit);
+			
 			Usuario u = parametrosFormulario.getUsuario();
 
 			String nif = u.getNif();
@@ -105,27 +128,18 @@ public class TramitSistraService {
 			String llinatge1 = u.getApellido1();
 			String llinatge2 = u.getApellido2();
 
-			TramitAPersAutJPA tramitA = new TramitAPersAutJPA();
-
 			tramitA.setNif(nif);
 			tramitA.setNom(nom);
 			tramitA.setLlinatge1(llinatge1);
 			tramitA.setLlinatge2(llinatge2);
 
-			log.info("CallBack URL: " + parametrosFormulario.getUrlCallback());
-			request.getSession().setAttribute("urlCallbackSistra", parametrosFormulario.getUrlCallback());
-
-			log.info("IdSesionFormulario: " + parametrosFormulario.getIdSesionFormulario());
-			log.info("XML Actuales: " + parametrosFormulario.getXmlDatosActuales());
-
+			
 			String callbackUrl = parametrosFormulario.getUrlCallback();
-			String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
-
 			tramitA.setUrlsistra(callbackUrl);
+			
+			String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
 			tramitA.setIdsesionformulario(idSesionFormulario);
-
-			tramitA.setDatatramit(datatramit);
-
+			
 			tramitAEjb.create(tramitA);
 
 			String uuid = HibernateFileUtil.encryptFileID(tramitA.getTramitid());
@@ -163,7 +177,22 @@ public class TramitSistraService {
 
 	}
 
-    @Path("/resultado/{ticket}")
+	private String buscarTicket(String idSesionTram) {
+		try {
+			List<Long> tramitID = tramitAEjb.executeQuery(TramitAPersAutFields.TRAMITID,
+					TramitAPersAutFields.IDSESIONTRAMITE.equal(idSesionTram));
+			if (tramitID.size() == 1) {
+				Long tramitid = tramitID.get(0);
+				return HibernateFileUtil.encryptFileID(tramitid);
+			} else {
+				return null;
+			}
+		} catch (I18NException e) {
+			return null;
+		}
+	}
+
+	@Path("/resultado/{ticket}")
     @RolesAllowed({ Constants.PAD_WS })
     @SecurityRequirement(name = SEC)
     @GET
@@ -204,7 +233,7 @@ public class TramitSistraService {
 		Boolean cancelado = true;
 		String pdf = "";
 		String xml = "";
-
+		
 		// Si no troba cap solicitud, es perque no s'ha cancelat el tramit.
 		List<Solicitud> llista = solicitudLogicaEjb.getSolicitudFromTramitID(ticketGFE);
 		if (llista != null) {
@@ -226,6 +255,19 @@ public class TramitSistraService {
 			log.error("Error obtenint llistat de solicituds amb uuid " + ticketGFE);
 		}
 
+		if (cancelado) {
+			xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+					+ "<FORMULARIO xmlns=\"urn:es:caib:sistra2:xml:formulario:v1:model\" accion=\"submit\">\r\n"
+					+ "    <CAMPO id=\"DATOS_ACTUALES\" tipo=\"compuesto\" xmlns=\"\">\r\n"
+					+ "        <VALOR codigo=\"TICKET\">" + ticketGFE + "</VALOR>\r\n"
+					+ "    </CAMPO>\r\n"
+					+ "</FORMULARIO>";
+
+			xml = Base64.getEncoder().encodeToString(xml.getBytes());
+		}
+		
+		log.info(xml);
+		
 		Resultado resultado = new Resultado();
 		resultado.setCancelado(cancelado);
 		resultado.setIdSesionFormulario(id);

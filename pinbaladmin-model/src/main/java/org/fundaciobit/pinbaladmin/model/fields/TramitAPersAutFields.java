@@ -23,6 +23,7 @@ public interface TramitAPersAutFields extends java.io.Serializable {
 	 public static final StringField LLINATGE2 = new StringField(_TABLE_MODEL, "llinatge2", "llinatge2");
 	 public static final StringField URLSISTRA = new StringField(_TABLE_MODEL, "urlsistra", "urlsistra");
 	 public static final StringField IDSESIONFORMULARIO = new StringField(_TABLE_MODEL, "idsesionformulario", "idsesionformulario");
+	 public static final StringField IDSESIONTRAMITE = new StringField(_TABLE_MODEL, "idsesiontramite", "idsesiontramite");
 
 
   public static final Field<?>[] ALL_TRAMITAPERSAUT_FIELDS = {
@@ -36,7 +37,8 @@ public interface TramitAPersAutFields extends java.io.Serializable {
     LLINATGE1,
     LLINATGE2,
     URLSISTRA,
-    IDSESIONFORMULARIO
+    IDSESIONFORMULARIO,
+    IDSESIONTRAMITE
   };
 
 

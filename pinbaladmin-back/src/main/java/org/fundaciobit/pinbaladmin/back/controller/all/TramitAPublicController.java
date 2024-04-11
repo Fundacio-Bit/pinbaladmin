@@ -87,6 +87,7 @@ public class TramitAPublicController extends TramitAOperadorController {
         tramitForm.addHiddenField(URLSISTRA);
         tramitForm.addHiddenField(IDSESIONFORMULARIO);
         tramitForm.addHiddenField(DATATRAMIT);
+        tramitForm.addHiddenField(IDSESIONTRAMITE);
 
         TramitAPersAutJPA tramitA = tramitForm.getTramitAPersAut();
         

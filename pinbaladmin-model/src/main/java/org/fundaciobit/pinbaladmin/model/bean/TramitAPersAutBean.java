@@ -19,6 +19,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
 	java.lang.String llinatge2;
 	java.lang.String urlsistra;
 	java.lang.String idsesionformulario;
+	java.lang.String idsesiontramite;
 
 
   /** Constructor Buit */
@@ -26,7 +27,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitAPersAutBean(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario) {
+  public TramitAPersAutBean(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario , java.lang.String idsesiontramite) {
     this.persautid=persautid;
     this.tramitid=tramitid;
     this.datatramit=datatramit;
@@ -38,9 +39,10 @@ public class TramitAPersAutBean implements TramitAPersAut {
     this.llinatge2=llinatge2;
     this.urlsistra=urlsistra;
     this.idsesionformulario=idsesionformulario;
+    this.idsesiontramite=idsesiontramite;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitAPersAutBean(long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario) {
+  public TramitAPersAutBean(long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String urlsistra , java.lang.String idsesionformulario , java.lang.String idsesiontramite) {
     this.tramitid=tramitid;
     this.datatramit=datatramit;
     this.nif=nif;
@@ -51,6 +53,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
     this.llinatge2=llinatge2;
     this.urlsistra=urlsistra;
     this.idsesionformulario=idsesionformulario;
+    this.idsesiontramite=idsesiontramite;
 }
   /** Constructor dels valors Not Null */
   public TramitAPersAutBean(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1) {
@@ -75,6 +78,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
     this.setLlinatge2(__bean.getLlinatge2());
     this.setUrlsistra(__bean.getUrlsistra());
     this.setIdsesionformulario(__bean.getIdsesionformulario());
+    this.setIdsesiontramite(__bean.getIdsesiontramite());
 	}
 
 	public long getPersautid() {
@@ -154,6 +158,13 @@ public class TramitAPersAutBean implements TramitAPersAut {
 		this.idsesionformulario = _idsesionformulario_;
 	};
 
+	public java.lang.String getIdsesiontramite() {
+		return(idsesiontramite);
+	};
+	public void setIdsesiontramite(java.lang.String _idsesiontramite_) {
+		this.idsesiontramite = _idsesiontramite_;
+	};
+
 
 
   // ======================================
@@ -172,6 +183,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
     __tmp.setLlinatge2(__bean.getLlinatge2());
     __tmp.setUrlsistra(__bean.getUrlsistra());
     __tmp.setIdsesionformulario(__bean.getIdsesionformulario());
+    __tmp.setIdsesiontramite(__bean.getIdsesiontramite());
 		return __tmp;
 	}
 

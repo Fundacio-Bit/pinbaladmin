@@ -55,6 +55,10 @@ public class TramitAPersAutQueryPath extends org.fundaciobit.genapp.common.query
     return new StringField(getQueryPath(), TramitAPersAutFields.IDSESIONFORMULARIO);
   }
 
+  public StringField IDSESIONTRAMITE() {
+    return new StringField(getQueryPath(), TramitAPersAutFields.IDSESIONTRAMITE);
+  }
+
 
 
   @Override

@@ -174,6 +174,17 @@ public class TramitAPersAutFilterForm extends PinbalAdminBaseFilterForm implemen
   }
 
 
+  private java.lang.String idsesiontramite;
+
+  public java.lang.String getIdsesiontramite() {
+    return this.idsesiontramite;
+  }
+
+  public void setIdsesiontramite(java.lang.String idsesiontramite) {
+    this.idsesiontramite = idsesiontramite;
+  }
+
+
   public TramitAPersAutFilterForm() {
   }
   
@@ -193,6 +204,7 @@ public class TramitAPersAutFilterForm extends PinbalAdminBaseFilterForm implemen
     this.llinatge2 = __toClone.llinatge2;
     this.urlsistra = __toClone.urlsistra;
     this.idsesionformulario = __toClone.idsesionformulario;
+    this.idsesiontramite = __toClone.idsesiontramite;
   }
   
   /* ========= UTILS ========== */

@@ -123,6 +123,14 @@ public class TramitAPersAutValidator<I extends TramitAPersAut>
       }
     }
 
+    if (__vr.getFieldErrorCount(IDSESIONTRAMITE) == 0) {
+      java.lang.String __idsesiontramite = __target__.getIdsesiontramite();
+      if (__idsesiontramite!= null && __idsesiontramite.length() > 255) {
+        __vr.rejectValue(IDSESIONTRAMITE, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(IDSESIONTRAMITE)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

@@ -35,6 +35,9 @@ public interface TramitAPersAut extends org.fundaciobit.genapp.common.IGenAppEnt
 	public java.lang.String getIdsesionformulario();
 	public void setIdsesionformulario(java.lang.String _idsesionformulario_);
 
+	public java.lang.String getIdsesiontramite();
+	public void setIdsesiontramite(java.lang.String _idsesiontramite_);
+
 
 
   // ======================================

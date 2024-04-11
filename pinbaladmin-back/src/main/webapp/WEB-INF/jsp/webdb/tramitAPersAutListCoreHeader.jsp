@@ -45,6 +45,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.IDSESIONFORMULARIO)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitAPersAutFields.IDSESIONFORMULARIO)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitAPersAutFields.IDSESIONTRAMITE)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitAPersAutFields.IDSESIONTRAMITE)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
