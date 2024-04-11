@@ -12,6 +12,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitHProcForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -78,4 +79,24 @@ public class TramitHPublicController extends TramitHOperadorController {
         }
        return tramitForm;
     }
+    
+    
+    
+    @Override
+    	public void postValidate(HttpServletRequest request, TramitHProcForm tramitHProcForm, BindingResult result)
+				throws I18NException {
+			super.postValidate(request, tramitHProcForm, result);
+
+			TramitHProcJPA tramitH = tramitHProcForm.getTramitHProc();
+			if (tramitH.getNom().length() > 100) {
+				result.rejectValue(get(NOM), "genapp.validation.sizeexceeds",
+						new String[] { I18NUtils.tradueix(NOM.fullName), "100" }, null);
+			}
+
+			if (tramitH.getDescripcio().length() > 200) {
+				result.rejectValue(get(DESCRIPCIO), "genapp.validation.sizeexceeds",
+						new String[] { I18NUtils.tradueix(DESCRIPCIO.fullName), "200" }, null);
+			}
+
+		}
 }
