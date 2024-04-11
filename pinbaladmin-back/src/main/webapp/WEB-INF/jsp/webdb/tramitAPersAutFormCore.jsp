@@ -150,7 +150,7 @@
         <tr id="tramitAPersAut_llinatge2_rowid">
           <td id="tramitAPersAut_llinatge2_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitAPersAutFields.LLINATGE2])?'tramitAPersAut.llinatge2':__theForm.labels[TramitAPersAutFields.LLINATGE2]}" />
+              <fmt:message key="${(empty __theForm.labels[TramitAPersAutFields.LLINATGE2])?'tramitAPersAut.llinatge2':__theForm.labels[TramitAPersAutFields.LLINATGE2]}" /> &nbsp;(*)
              </label>
               <c:if test="${not empty __theForm.help[TramitAPersAutFields.LLINATGE2]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitAPersAutFields.LLINATGE2]}" ></i>

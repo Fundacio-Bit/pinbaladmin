@@ -56,7 +56,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
     this.idsesiontramite=idsesiontramite;
 }
   /** Constructor dels valors Not Null */
-  public TramitAPersAutBean(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1) {
+  public TramitAPersAutBean(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
     this.persautid=persautid;
     this.tramitid=tramitid;
     this.datatramit=datatramit;
@@ -65,6 +65,7 @@ public class TramitAPersAutBean implements TramitAPersAut {
     this.telefon=telefon;
     this.nom=nom;
     this.llinatge1=llinatge1;
+    this.llinatge2=llinatge2;
 }
   public TramitAPersAutBean(TramitAPersAut __bean) {
     this.setPersautid(__bean.getPersautid());

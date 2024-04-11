@@ -47,12 +47,13 @@ public class TramitFCteTecBean implements TramitFCteTec {
     this.mail=mail;
 }
   /** Constructor dels valors Not Null */
-  public TramitFCteTecBean(long ctetecid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1) {
+  public TramitFCteTecBean(long ctetecid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
     this.ctetecid=ctetecid;
     this.tramitid=tramitid;
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
+    this.llinatge2=llinatge2;
 }
   public TramitFCteTecBean(TramitFCteTec __bean) {
     this.setCtetecid(__bean.getCtetecid());

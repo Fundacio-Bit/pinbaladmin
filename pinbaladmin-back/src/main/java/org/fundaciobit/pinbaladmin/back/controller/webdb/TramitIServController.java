@@ -33,6 +33,9 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 
 import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitIServWebValidator;
 
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
 import org.fundaciobit.pinbaladmin.model.fields.*;
@@ -47,7 +50,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
 @RequestMapping(value = "/webdb/tramitIServ")
 @SessionAttributes(types = { TramitIServForm.class, TramitIServFilterForm.class })
 public class TramitIServController
-    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitIServ, java.lang.Long> implements TramitIServFields {
+    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<TramitIServ, java.lang.Long, TramitIServForm> implements TramitIServFields {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.TramitIServService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.TramitIServService tramitIServEjb;
@@ -281,21 +284,27 @@ public class TramitIServController
 
     TramitIServJPA tramitIServ = tramitIServForm.getTramitIServ();
 
+    FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
+
     try {
+      this.setFilesFormToEntity(afm, tramitIServ, tramitIServForm); // FILE
       preValidate(request, tramitIServForm, result);
       getWebValidator().validate(tramitIServForm, result);
       postValidate(request,tramitIServForm, result);
 
       if (result.hasErrors()) {
+        afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
         tramitIServ = create(request, tramitIServ);
+        afm.postPersistFiles(); // FILE
         createMessageSuccess(request, "success.creation", tramitIServ.getServid());
         tramitIServForm.setTramitIServ(tramitIServ);
         return getRedirectWhenCreated(request, tramitIServForm);
       }
     } catch (Throwable __e) {
+      afm.processErrorFilesWithoutThrowException(); // FILE
       if (__e instanceof I18NValidationException) {
         ValidationWebUtils.addFieldErrorsToBindingResult(result, (I18NValidationException)__e);
         return getTileForm();
@@ -376,21 +385,26 @@ public class TramitIServController
     }
     TramitIServJPA tramitIServ = tramitIServForm.getTramitIServ();
 
+    FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
     try {
+      this.setFilesFormToEntity(afm, tramitIServ, tramitIServForm); // FILE
       preValidate(request, tramitIServForm, result);
       getWebValidator().validate(tramitIServForm, result);
       postValidate(request, tramitIServForm, result);
 
       if (result.hasErrors()) {
+        afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
         tramitIServ = update(request, tramitIServ);
+        afm.postPersistFiles(); // FILE
         createMessageSuccess(request, "success.modification", tramitIServ.getServid());
         status.setComplete();
         return getRedirectWhenModified(request, tramitIServForm, null);
       }
     } catch (Throwable __e) {
+      afm.processErrorFilesWithoutThrowException(); // FILE
       if (__e instanceof I18NValidationException) {
         ValidationWebUtils.addFieldErrorsToBindingResult(result, (I18NValidationException)__e);
         return getTileForm();
@@ -540,6 +554,39 @@ public java.lang.Long stringToPK(String value) {
     return _TABLE_MODEL;
   }
 
+  // FILE
+  @Override
+  public void setFilesFormToEntity(FilesFormManager<Fitxer> afm, TramitIServ tramitIServ,
+      TramitIServForm form) throws I18NException {
+
+    FitxerJPA f;
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernormaID(), form.isFitxernormaIDDelete(),
+        form.isNou()? null : tramitIServ.getFitxernorma());
+    ((TramitIServJPA)tramitIServ).setFitxernorma(f);
+    if (f != null) { 
+      tramitIServ.setFitxernormaID(f.getFitxerID());
+    } else {
+      tramitIServ.setFitxernormaID(null);
+    }
+
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernorma2ID(), form.isFitxernorma2IDDelete(),
+        form.isNou()? null : tramitIServ.getFitxernorma2());
+    ((TramitIServJPA)tramitIServ).setFitxernorma2(f);
+    if (f != null) { 
+      tramitIServ.setFitxernorma2ID(f.getFitxerID());
+    } else {
+      tramitIServ.setFitxernorma2ID(null);
+    }
+
+
+  }
+
+  // FILE
+  @Override
+  public void deleteFiles(TramitIServ tramitIServ) {
+    deleteFile(tramitIServ.getFitxernormaID());
+    deleteFile(tramitIServ.getFitxernorma2ID());
+  }
   // Mètodes a sobreescriure 
 
   public boolean isActiveList() {

@@ -58,6 +58,20 @@ public class TramitHProcBean implements TramitHProc {
     this.periodico=periodico;
     this.automatizado=automatizado;
 }
+  /** Constructor dels valors Not Null */
+  public TramitHProcBean(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , boolean caducitat , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+    this.procid=procid;
+    this.tramitid=tramitid;
+    this.nom=nom;
+    this.codi=codi;
+    this.tipus=tipus;
+    this.caducitat=caducitat;
+    this.descripcio=descripcio;
+    this.peticionsaldia=peticionsaldia;
+    this.peticionsalmes=peticionsalmes;
+    this.periodico=periodico;
+    this.automatizado=automatizado;
+}
   public TramitHProcBean(TramitHProc __bean) {
     this.setProcid(__bean.getProcid());
     this.setTramitid(__bean.getTramitid());

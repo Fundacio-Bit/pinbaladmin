@@ -62,6 +62,35 @@
           ${tramitIServ.articles}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NORMA2)}">
+          <td>
+          ${tramitIServ.norma2}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA2)}">
+          <td>
+          ${tramitIServ.urlnorma2}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES2)}">
+          <td>
+          ${tramitIServ.articles2}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMAID)}">
+          <td>
+            <c:if test="${not empty tramitIServ.fitxernorma}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(tramitIServ.fitxernorma)}"/>">${tramitIServ.fitxernorma.nom}</a>
+            </c:if>
+           </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMA2ID)}">
+          <td>
+            <c:if test="${not empty tramitIServ.fitxernorma2}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(tramitIServ.fitxernorma2)}"/>">${tramitIServ.fitxernorma2.nom}</a>
+            </c:if>
+           </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

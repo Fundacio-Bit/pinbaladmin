@@ -48,6 +48,10 @@ public class TramitDCteAutValidator<I extends TramitDCteAut>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(LLINATGE1)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,LLINATGE2, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(LLINATGE2)));
+
     __vr.rejectIfEmptyOrWhitespace(__target__,CARREC, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CARREC)));

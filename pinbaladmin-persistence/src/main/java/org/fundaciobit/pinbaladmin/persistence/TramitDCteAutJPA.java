@@ -40,7 +40,7 @@ public class TramitDCteAutJPA implements TramitDCteAut {
     @Column(name="llinatge1",nullable = false,length = 40)
     java.lang.String llinatge1;
 
-    @Column(name="llinatge2",length = 40)
+    @Column(name="llinatge2",nullable = false,length = 40)
     java.lang.String llinatge2;
 
     @Column(name="carrec",nullable = false,length = 100)

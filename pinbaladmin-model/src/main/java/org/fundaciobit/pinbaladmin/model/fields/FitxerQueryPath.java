@@ -185,6 +185,34 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
+  public TramitIServQueryPath TRAMITISERV_FITXERNORMA2IDS() {
+    return new TramitIServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "tramitIServ_fitxernorma2ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public TramitIServQueryPath TRAMITISERV_FITXERNORMAIDS() {
+    return new TramitIServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "tramitIServ_fitxernormaids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
   public TramitJConsentQueryPath TRAMITJCONSENTS() {
     return new TramitJConsentQueryPath(new QueryPath() {
       public String getQueryPath() {

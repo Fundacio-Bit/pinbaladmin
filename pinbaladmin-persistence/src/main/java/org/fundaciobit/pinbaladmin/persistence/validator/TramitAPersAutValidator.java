@@ -58,6 +58,10 @@ public class TramitAPersAutValidator<I extends TramitAPersAut>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(LLINATGE1)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,LLINATGE2, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(LLINATGE2)));
+
     // Check size
     if (__vr.getFieldErrorCount(NIF) == 0) {
       java.lang.String __nif = __target__.getNif();

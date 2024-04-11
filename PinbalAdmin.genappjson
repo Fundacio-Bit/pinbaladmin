@@ -2429,6 +2429,18 @@
               "type": 0
             },
             {
+              "name": "pad_tramiti_fitxer_norma2_fk",
+              "table": "pad_tramit_i_serv",
+              "field": "fitxernorma2id",
+              "type": 0
+            },
+            {
+              "name": "pad_tramiti_fitxer_norma_fk",
+              "table": "pad_tramit_i_serv",
+              "field": "fitxernormaid",
+              "type": 0
+            },
+            {
               "name": "pad_tramitj_fitxer_adj_fk",
               "table": "pad_tramit_j_consent",
               "field": "adjuntid",
@@ -6396,7 +6408,7 @@
           "sqlType": 12,
           "size": 40,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "ca": "Segon Llinatge",
             "es": "Segundo Apellido"
@@ -7139,7 +7151,7 @@
           "sqlType": 12,
           "size": 40,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "ca": "Segon Llinatge",
             "es": "Segundo Apellido"
@@ -7401,7 +7413,7 @@
           "sqlType": 12,
           "size": 40,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "ca": "Segon Llinatge",
             "es": "Segundo Apellido"
@@ -7663,7 +7675,7 @@
           "sqlType": 12,
           "size": 40,
           "digits": 0,
-          "isNotNullable": false,
+          "isNotNullable": true,
           "labels": {
             "ca": "Segon Llinatge",
             "es": "Segundo Apellido"
@@ -8138,7 +8150,7 @@
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "URL Seu Electrònica",
             "es": "URL Sede Electrónica"
@@ -8543,6 +8555,159 @@
             "webtype": 1
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "norma2",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "norma2",
+            "es": "norma2"
+          },
+          "javaName": "norma2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "urlnorma2",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "urlnorma2",
+            "es": "urlnorma2"
+          },
+          "javaName": "urlnorma2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles2",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Articles 2",
+            "es": "Articulos 2"
+          },
+          "javaName": "articles2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_tramiti_fitxernormaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxernormaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Fitxer norma 2",
+            "es": "Fichero Norma 2"
+          },
+          "javaName": "fitxernormaID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramiti_fitxer_norma_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramiti_fitxer_norma_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_tramiti_fitxer2id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxernorma2id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Norma 2",
+            "es": "Fichero Norma 2"
+          },
+          "javaName": "fitxernorma2ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_tramiti_fitxer_norma2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_tramiti_fitxer_norma2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
         }
       ]
     },

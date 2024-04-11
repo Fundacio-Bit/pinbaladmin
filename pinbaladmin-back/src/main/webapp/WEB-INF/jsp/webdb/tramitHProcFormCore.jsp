@@ -104,7 +104,7 @@
         <tr id="tramitHProc_urlseu_rowid">
           <td id="tramitHProc_urlseu_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitHProcFields.URLSEU])?'tramitHProc.urlseu':__theForm.labels[TramitHProcFields.URLSEU]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[TramitHProcFields.URLSEU])?'tramitHProc.urlseu':__theForm.labels[TramitHProcFields.URLSEU]}" />
              </label>
               <c:if test="${not empty __theForm.help[TramitHProcFields.URLSEU]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitHProcFields.URLSEU]}" ></i>

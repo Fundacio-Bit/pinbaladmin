@@ -91,7 +91,7 @@
         <tr id="tramitDCteAut_llinatge2_rowid">
           <td id="tramitDCteAut_llinatge2_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[TramitDCteAutFields.LLINATGE2])?'tramitDCteAut.llinatge2':__theForm.labels[TramitDCteAutFields.LLINATGE2]}" />
+              <fmt:message key="${(empty __theForm.labels[TramitDCteAutFields.LLINATGE2])?'tramitDCteAut.llinatge2':__theForm.labels[TramitDCteAutFields.LLINATGE2]}" /> &nbsp;(*)
              </label>
               <c:if test="${not empty __theForm.help[TramitDCteAutFields.LLINATGE2]}">
               <i class="fas fa-info-circle" title="${__theForm.help[TramitDCteAutFields.LLINATGE2]}" ></i>

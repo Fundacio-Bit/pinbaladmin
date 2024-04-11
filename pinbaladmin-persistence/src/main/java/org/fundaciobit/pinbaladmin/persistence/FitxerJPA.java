@@ -252,6 +252,32 @@ public class FitxerJPA implements Fitxer {
     }
 
 
+// EXP  Field:fitxernorma2id | Table: pad_tramit_i_serv | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernorma2ID")
+    private Set<TramitIServJPA> tramitIServ_fitxernorma2ids = new HashSet<TramitIServJPA>(0);
+    public  Set<TramitIServJPA> getTramitIServ_fitxernorma2ids() {
+    return this.tramitIServ_fitxernorma2ids;
+  }
+
+    public void setTramitIServ_fitxernorma2ids(Set<TramitIServJPA> tramitIServ_fitxernorma2ids) {
+      this.tramitIServ_fitxernorma2ids = tramitIServ_fitxernorma2ids;
+    }
+
+
+// EXP  Field:fitxernormaid | Table: pad_tramit_i_serv | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernormaID")
+    private Set<TramitIServJPA> tramitIServ_fitxernormaids = new HashSet<TramitIServJPA>(0);
+    public  Set<TramitIServJPA> getTramitIServ_fitxernormaids() {
+    return this.tramitIServ_fitxernormaids;
+  }
+
+    public void setTramitIServ_fitxernormaids(Set<TramitIServJPA> tramitIServ_fitxernormaids) {
+      this.tramitIServ_fitxernormaids = tramitIServ_fitxernormaids;
+    }
+
+
 // EXP  Field:adjuntid | Table: pad_tramit_j_consent | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "adjuntID")
@@ -350,9 +376,9 @@ public class FitxerJPA implements Fitxer {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
-    if(!"DocumentJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.document_fitxerfirmatids) || org.hibernate.Hibernate.isInitialized(__jpa.getDocument_fitxerfirmatids())) ) {
-      __tmp.setDocument_fitxerfirmatids(DocumentJPA.copyJPA(__jpa.getDocument_fitxerfirmatids(), __alreadyCopied,"FitxerJPA"));
+    if(!"TramitIServJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitIServ_fitxernormaids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitIServ_fitxernormaids())) ) {
+      __tmp.setTramitIServ_fitxernormaids(TramitIServJPA.copyJPA(__jpa.getTramitIServ_fitxernormaids(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"DocumentEntitatJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentEntitats) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentEntitats())) ) {
@@ -363,24 +389,8 @@ public class FitxerJPA implements Fitxer {
       __tmp.setFormularis(FormulariJPA.copyJPA(__jpa.getFormularis(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"SolicitudJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_documentsolicitudids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_documentsolicitudids())) ) {
-      __tmp.setSolicitud_documentsolicitudids(SolicitudJPA.copyJPA(__jpa.getSolicitud_documentsolicitudids(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"EventJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
-      __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_solicitudxmlids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_solicitudxmlids())) ) {
       __tmp.setSolicitud_solicitudxmlids(SolicitudJPA.copyJPA(__jpa.getSolicitud_solicitudxmlids(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"TiquetJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt1ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt1ids())) ) {
-      __tmp.setTiquet_adjunt1ids(TiquetJPA.copyJPA(__jpa.getTiquet_adjunt1ids(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"TiquetJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt2ids())) ) {
-      __tmp.setTiquet_adjunt2ids(TiquetJPA.copyJPA(__jpa.getTiquet_adjunt2ids(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"DocumentCedentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentCedents) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentCedents())) ) {
@@ -393,6 +403,30 @@ public class FitxerJPA implements Fitxer {
     if(!"TramitJConsentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitJConsents) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitJConsents())) ) {
       __tmp.setTramitJConsents(TramitJConsentJPA.copyJPA(__jpa.getTramitJConsents(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"DocumentJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.document_fitxerfirmatids) || org.hibernate.Hibernate.isInitialized(__jpa.getDocument_fitxerfirmatids())) ) {
+      __tmp.setDocument_fitxerfirmatids(DocumentJPA.copyJPA(__jpa.getDocument_fitxerfirmatids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"TramitIServJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitIServ_fitxernorma2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitIServ_fitxernorma2ids())) ) {
+      __tmp.setTramitIServ_fitxernorma2ids(TramitIServJPA.copyJPA(__jpa.getTramitIServ_fitxernorma2ids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_documentsolicitudids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_documentsolicitudids())) ) {
+      __tmp.setSolicitud_documentsolicitudids(SolicitudJPA.copyJPA(__jpa.getSolicitud_documentsolicitudids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"EventJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
+      __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"TiquetJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt1ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt1ids())) ) {
+      __tmp.setTiquet_adjunt1ids(TiquetJPA.copyJPA(__jpa.getTiquet_adjunt1ids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"TiquetJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt2ids())) ) {
+      __tmp.setTiquet_adjunt2ids(TiquetJPA.copyJPA(__jpa.getTiquet_adjunt2ids(), __alreadyCopied,"FitxerJPA"));
     }
     // Copia de beans complexes (IMP)
 

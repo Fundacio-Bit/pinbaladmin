@@ -120,6 +120,39 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
   }
 
 
+  private java.lang.String norma2;
+
+  public java.lang.String getNorma2() {
+    return this.norma2;
+  }
+
+  public void setNorma2(java.lang.String norma2) {
+    this.norma2 = norma2;
+  }
+
+
+  private java.lang.String urlnorma2;
+
+  public java.lang.String getUrlnorma2() {
+    return this.urlnorma2;
+  }
+
+  public void setUrlnorma2(java.lang.String urlnorma2) {
+    this.urlnorma2 = urlnorma2;
+  }
+
+
+  private java.lang.String articles2;
+
+  public java.lang.String getArticles2() {
+    return this.articles2;
+  }
+
+  public void setArticles2(java.lang.String articles2) {
+    this.articles2 = articles2;
+  }
+
+
   public TramitIServFilterForm() {
   }
   
@@ -134,6 +167,9 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
     this.norma = __toClone.norma;
     this.urlnorma = __toClone.urlnorma;
     this.articles = __toClone.articles;
+    this.norma2 = __toClone.norma2;
+    this.urlnorma2 = __toClone.urlnorma2;
+    this.articles2 = __toClone.articles2;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
   }
   

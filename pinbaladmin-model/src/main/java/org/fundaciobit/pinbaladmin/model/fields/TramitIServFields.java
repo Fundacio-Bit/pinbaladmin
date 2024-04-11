@@ -19,6 +19,11 @@ public interface TramitIServFields extends java.io.Serializable {
 	 public static final StringField NORMA = new StringField(_TABLE_MODEL, "norma", "norma");
 	 public static final StringField URLNORMA = new StringField(_TABLE_MODEL, "urlnorma", "urlnorma");
 	 public static final StringField ARTICLES = new StringField(_TABLE_MODEL, "articles", "articles");
+	 public static final StringField NORMA2 = new StringField(_TABLE_MODEL, "norma2", "norma2");
+	 public static final StringField URLNORMA2 = new StringField(_TABLE_MODEL, "urlnorma2", "urlnorma2");
+	 public static final StringField ARTICLES2 = new StringField(_TABLE_MODEL, "articles2", "articles2");
+	 public static final LongField FITXERNORMAID = new LongField(_TABLE_MODEL, "fitxernormaID", "fitxernormaid");
+	 public static final LongField FITXERNORMA2ID = new LongField(_TABLE_MODEL, "fitxernorma2ID", "fitxernorma2id");
 
 
   public static final Field<?>[] ALL_TRAMITISERV_FIELDS = {
@@ -28,7 +33,12 @@ public interface TramitIServFields extends java.io.Serializable {
     CODI,
     NORMA,
     URLNORMA,
-    ARTICLES
+    ARTICLES,
+    NORMA2,
+    URLNORMA2,
+    ARTICLES2,
+    FITXERNORMAID,
+    FITXERNORMA2ID
   };
 
 

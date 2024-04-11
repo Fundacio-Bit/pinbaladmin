@@ -17,6 +17,7 @@ import org.fundaciobit.pinbaladmin.persistence.validator.TramitIServValidator;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitIServForm;
 import org.fundaciobit.genapp.common.web.validation.AbstractWebValidator;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 
 /**
@@ -89,6 +90,19 @@ public class TramitIServWebValidator extends AbstractWebValidator<TramitIServFor
         }
     }
 
+    if (isNou) { // Creacio
+      // ================ CREATION
+      // Fitxers 
+        if (!errors.hasFieldErrors(get(FITXERNORMAID))){
+            CommonsMultipartFile fitxernormaID = ((TramitIServForm)__form).getFitxernormaID();
+            if (fitxernormaID == null || fitxernormaID.isEmpty()) {
+                errors.rejectValue(get(FITXERNORMAID), "genapp.validation.required",
+                new String[]{ org.fundaciobit.genapp.common.web.i18n.I18NUtils.tradueix(get(FITXERNORMAID)) },
+                null);
+            }
+        }
+
+    }
 
   } // Final de metode
 

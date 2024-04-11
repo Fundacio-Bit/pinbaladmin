@@ -97,9 +97,41 @@ public class TramitIServValidator<I extends TramitIServ>
       }
     }
 
+    if (__vr.getFieldErrorCount(NORMA2) == 0) {
+      java.lang.String __norma2 = __target__.getNorma2();
+      if (__norma2!= null && __norma2.length() > 240) {
+        __vr.rejectValue(NORMA2, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMA2)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(URLNORMA2) == 0) {
+      java.lang.String __urlnorma2 = __target__.getUrlnorma2();
+      if (__urlnorma2!= null && __urlnorma2.length() > 240) {
+        __vr.rejectValue(URLNORMA2, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLNORMA2)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(ARTICLES2) == 0) {
+      java.lang.String __articles2 = __target__.getArticles2();
+      if (__articles2!= null && __articles2.length() > 60) {
+        __vr.rejectValue(ARTICLES2, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES2)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(60)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 
+    if (__vr.getFieldErrorCount(FITXERNORMAID) == 0) { // FITXER
+      Object __value = __vr.getFieldValue(__target__,FITXERNORMAID);
+      if (__value == null || String.valueOf(__value).trim().length() == 0 || String.valueOf(__value).trim().equals("0") ) {
+          __vr.rejectValue(FITXERNORMAID, "genapp.validation.required",
+             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(FITXERNORMAID)));
+      }
+    }
+
       // ====== Check Unique MULTIPLES - NOU =======
 
       // Check Unique - no PK

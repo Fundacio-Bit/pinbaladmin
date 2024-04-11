@@ -40,7 +40,7 @@ public class TramitHProcJPA implements TramitHProc {
     @Column(name="tipus",nullable = false,length = 240)
     java.lang.String tipus;
 
-    @Column(name="urlseu",nullable = false,length = 240)
+    @Column(name="urlseu",length = 240)
     java.lang.String urlseu;
 
     @Column(name="caducitat",nullable = false,length = 1)
@@ -95,6 +95,20 @@ public class TramitHProcJPA implements TramitHProc {
     this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
+    this.descripcio=descripcio;
+    this.peticionsaldia=peticionsaldia;
+    this.peticionsalmes=peticionsalmes;
+    this.periodico=periodico;
+    this.automatizado=automatizado;
+}
+  /** Constructor dels valors Not Null */
+  public TramitHProcJPA(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , boolean caducitat , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+    this.procid=procid;
+    this.tramitid=tramitid;
+    this.nom=nom;
+    this.codi=codi;
+    this.tipus=tipus;
+    this.caducitat=caducitat;
     this.descripcio=descripcio;
     this.peticionsaldia=peticionsaldia;
     this.peticionsalmes=peticionsalmes;

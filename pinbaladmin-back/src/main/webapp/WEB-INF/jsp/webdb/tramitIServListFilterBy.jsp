@@ -151,6 +151,45 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.NORMA2)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitIServ.norma2" var="norma2" />
+              <fmt:message key="genapp.form.searchby" var="cercapernorma2" >                
+                 <fmt:param value="${norma2}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${norma2}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernorma2}" path="norma2" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.URLNORMA2)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitIServ.urlnorma2" var="urlnorma2" />
+              <fmt:message key="genapp.form.searchby" var="cercaperurlnorma2" >                
+                 <fmt:param value="${urlnorma2}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${urlnorma2}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlnorma2}" path="urlnorma2" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitIServFields.ARTICLES2)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitIServ.articles2" var="articles2" />
+              <fmt:message key="genapp.form.searchby" var="cercaperarticles2" >                
+                 <fmt:param value="${articles2}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${articles2}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperarticles2}" path="articles2" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

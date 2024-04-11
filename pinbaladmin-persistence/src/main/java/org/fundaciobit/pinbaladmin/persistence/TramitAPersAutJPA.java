@@ -50,7 +50,7 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     @Column(name="llinatge1",nullable = false,length = 40)
     java.lang.String llinatge1;
 
-    @Column(name="llinatge2",length = 40)
+    @Column(name="llinatge2",nullable = false,length = 40)
     java.lang.String llinatge2;
 
     @Column(name="urlsistra",length = 2147483647)
@@ -100,7 +100,7 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     this.idsesiontramite=idsesiontramite;
 }
   /** Constructor dels valors Not Null */
-  public TramitAPersAutJPA(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1) {
+  public TramitAPersAutJPA(long persautid , long tramitid , java.sql.Timestamp datatramit , java.lang.String nif , java.lang.String mail , java.lang.String telefon , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
     this.persautid=persautid;
     this.tramitid=tramitid;
     this.datatramit=datatramit;
@@ -109,6 +109,7 @@ public class TramitAPersAutJPA implements TramitAPersAut {
     this.telefon=telefon;
     this.nom=nom;
     this.llinatge1=llinatge1;
+    this.llinatge2=llinatge2;
 }
   public TramitAPersAutJPA(TramitAPersAut __bean) {
     this.setPersautid(__bean.getPersautid());

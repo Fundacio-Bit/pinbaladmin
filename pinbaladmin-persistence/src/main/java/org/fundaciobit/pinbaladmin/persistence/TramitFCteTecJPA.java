@@ -40,7 +40,7 @@ public class TramitFCteTecJPA implements TramitFCteTec {
     @Column(name="llinatge1",nullable = false,length = 40)
     java.lang.String llinatge1;
 
-    @Column(name="llinatge2",length = 40)
+    @Column(name="llinatge2",nullable = false,length = 40)
     java.lang.String llinatge2;
 
     @Column(name="carrec",length = 100)
@@ -82,12 +82,13 @@ public class TramitFCteTecJPA implements TramitFCteTec {
     this.mail=mail;
 }
   /** Constructor dels valors Not Null */
-  public TramitFCteTecJPA(long ctetecid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1) {
+  public TramitFCteTecJPA(long ctetecid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2) {
     this.ctetecid=ctetecid;
     this.tramitid=tramitid;
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
+    this.llinatge2=llinatge2;
 }
   public TramitFCteTecJPA(TramitFCteTec __bean) {
     this.setCtetecid(__bean.getCtetecid());

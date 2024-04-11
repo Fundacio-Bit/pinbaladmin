@@ -48,10 +48,6 @@ public class TramitHProcValidator<I extends TramitHProc>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUS)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,URLSEU, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLSEU)));
-
     __vr.rejectIfEmptyOrWhitespace(__target__,CADUCITAT, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CADUCITAT)));
