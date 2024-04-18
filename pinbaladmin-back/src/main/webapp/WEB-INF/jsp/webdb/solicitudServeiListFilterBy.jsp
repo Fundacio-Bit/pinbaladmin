@@ -131,19 +131,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.NORMALEGAL)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitudServei.normaLegal" var="normaLegal" />
-              <fmt:message key="genapp.form.searchby" var="cercapernormaLegal" >                
-                 <fmt:param value="${normaLegal}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${normaLegal}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapernormaLegal}" path="normaLegal" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -153,19 +140,6 @@
               </fmt:message>
               <span class="add-on"><c:out value="${enllazNormaLegal}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperenllazNormaLegal}" path="enllazNormaLegal" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.ARTICLES)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitudServei.articles" var="articles" />
-              <fmt:message key="genapp.form.searchby" var="cercaperarticles" >                
-                 <fmt:param value="${articles}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${articles}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperarticles}" path="articles" />
             </div>
 
 
@@ -244,6 +218,84 @@
               </fmt:message>
               <span class="add-on"><c:out value="${fechaCaduca}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperfechaCaduca}" path="fechaCaduca" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.NORMALEGAL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.normaLegal" var="normaLegal" />
+              <fmt:message key="genapp.form.searchby" var="cercapernormaLegal" >                
+                 <fmt:param value="${normaLegal}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${normaLegal}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernormaLegal}" path="normaLegal" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.ARTICLES)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.articles" var="articles" />
+              <fmt:message key="genapp.form.searchby" var="cercaperarticles" >                
+                 <fmt:param value="${articles}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${articles}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperarticles}" path="articles" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.NORMA2)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.norma2" var="norma2" />
+              <fmt:message key="genapp.form.searchby" var="cercapernorma2" >                
+                 <fmt:param value="${norma2}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${norma2}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernorma2}" path="norma2" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.ARTICLES2)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.articles2" var="articles2" />
+              <fmt:message key="genapp.form.searchby" var="cercaperarticles2" >                
+                 <fmt:param value="${articles2}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${articles2}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperarticles2}" path="articles2" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.NORMA3)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.norma3" var="norma3" />
+              <fmt:message key="genapp.form.searchby" var="cercapernorma3" >                
+                 <fmt:param value="${norma3}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${norma3}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernorma3}" path="norma3" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudServeiFields.ARTICLES3)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitudServei.articles3" var="articles3" />
+              <fmt:message key="genapp.form.searchby" var="cercaperarticles3" >                
+                 <fmt:param value="${articles3}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${articles3}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperarticles3}" path="articles3" />
             </div>
 
 

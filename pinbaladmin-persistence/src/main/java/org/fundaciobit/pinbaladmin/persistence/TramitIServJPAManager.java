@@ -55,8 +55,8 @@ public class TramitIServJPAManager
         return list.toArray(new TramitIServ[list.size()]);
     };
 
-    public TramitIServ create( long _tramitid_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _norma_, java.lang.String _urlnorma_, java.lang.String _articles_, java.lang.String _norma2_, java.lang.String _urlnorma2_, java.lang.String _articles2_, java.lang.Long _fitxernormaID_, java.lang.Long _fitxernorma2ID_) throws I18NException {
-        TramitIServJPA __bean =  new TramitIServJPA(_tramitid_,_nom_,_codi_,_norma_,_urlnorma_,_articles_,_norma2_,_urlnorma2_,_articles2_,_fitxernormaID_,_fitxernorma2ID_);
+    public TramitIServ create( long _tramitid_, java.lang.String _nom_, java.lang.String _codi_, java.lang.String _norma_, java.lang.Long _fitxernormaID_, java.lang.String _urlnorma_, java.lang.String _articles_, java.lang.String _norma2_, java.lang.Long _fitxernorma2ID_, java.lang.String _articles2_, java.lang.String _norma3_, java.lang.Long _fitxernorma3ID_, java.lang.String _articles3_) throws I18NException {
+        TramitIServJPA __bean =  new TramitIServJPA(_tramitid_,_nom_,_codi_,_norma_,_fitxernormaID_,_urlnorma_,_articles_,_norma2_,_fitxernorma2ID_,_articles2_,_norma3_,_fitxernorma3ID_,_articles3_);
         return create(__bean);
     }
 

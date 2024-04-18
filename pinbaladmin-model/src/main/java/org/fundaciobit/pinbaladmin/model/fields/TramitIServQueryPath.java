@@ -31,6 +31,10 @@ public class TramitIServQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new StringField(getQueryPath(), TramitIServFields.NORMA);
   }
 
+  public LongField FITXERNORMAID() {
+    return new LongField(getQueryPath(), TramitIServFields.FITXERNORMAID);
+  }
+
   public StringField URLNORMA() {
     return new StringField(getQueryPath(), TramitIServFields.URLNORMA);
   }
@@ -43,20 +47,24 @@ public class TramitIServQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new StringField(getQueryPath(), TramitIServFields.NORMA2);
   }
 
-  public StringField URLNORMA2() {
-    return new StringField(getQueryPath(), TramitIServFields.URLNORMA2);
+  public LongField FITXERNORMA2ID() {
+    return new LongField(getQueryPath(), TramitIServFields.FITXERNORMA2ID);
   }
 
   public StringField ARTICLES2() {
     return new StringField(getQueryPath(), TramitIServFields.ARTICLES2);
   }
 
-  public LongField FITXERNORMAID() {
-    return new LongField(getQueryPath(), TramitIServFields.FITXERNORMAID);
+  public StringField NORMA3() {
+    return new StringField(getQueryPath(), TramitIServFields.NORMA3);
   }
 
-  public LongField FITXERNORMA2ID() {
-    return new LongField(getQueryPath(), TramitIServFields.FITXERNORMA2ID);
+  public LongField FITXERNORMA3ID() {
+    return new LongField(getQueryPath(), TramitIServFields.FITXERNORMA3ID);
+  }
+
+  public StringField ARTICLES3() {
+    return new StringField(getQueryPath(), TramitIServFields.ARTICLES3);
   }
 
 
@@ -88,6 +96,14 @@ public class TramitIServQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
           return TramitIServQueryPath.this.getQueryPath() + "fitxernorma2" + ".";
+      }
+    });
+  }
+
+  public FitxerQueryPath FITXERNORMA3() {
+    return new FitxerQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return TramitIServQueryPath.this.getQueryPath() + "fitxernorma3" + ".";
       }
     });
   }

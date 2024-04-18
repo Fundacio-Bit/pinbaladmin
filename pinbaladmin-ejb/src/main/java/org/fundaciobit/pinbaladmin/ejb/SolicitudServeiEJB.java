@@ -14,6 +14,9 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 @Stateless
 public class SolicitudServeiEJB extends SolicitudServeiJPAManager implements SolicitudServeiService {
 
+    @javax.annotation.Resource
+    protected javax.transaction.TransactionSynchronizationRegistry __tsRegistry;
+
     @Override
     @RolesAllowed({Constants.ROLE_EJB_FULL_ACCESS, Constants.ROLE_EJB_BASIC_ACCESS, Constants.ROLE_EJB_WS_ACCESS})
     public void delete(SolicitudServei instance) {
@@ -37,7 +40,25 @@ public class SolicitudServeiEJB extends SolicitudServeiJPAManager implements Sol
     public void deleteIncludingFiles(SolicitudServei instance,  FitxerService fitxerEjb)
             throws I18NException {
 
+        java.util.ArrayList<Long> fitxers = new java.util.ArrayList<Long>();
+        fitxers.add(instance.getFitxernormaID());
+        fitxers.add(instance.getFitxernorma2ID());
+        fitxers.add(instance.getFitxernorma3ID());
+
         this.delete(instance);
+
+        java.util.Set<Long> fitxersEsborrar = new java.util.HashSet<Long>();
+
+        // Borram fitxers a BD
+        for (Long f : fitxers) {
+            if (f != null) {
+                fitxerEjb.delete(f);
+                fitxersEsborrar.add(f);
+            }
+        }
+
+        // Borram fitxers fisic
+        __tsRegistry.registerInterposedSynchronization(new org.fundaciobit.pinbaladmin.ejb.utils.CleanFilesSynchronization(fitxersEsborrar));
     }
 
     @Override

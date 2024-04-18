@@ -20,7 +20,8 @@ import javax.persistence.Id;
         @Index(name="pad_tramit_i_serv_pk_i", columnList = "servid"),
         @Index(name="pad_tramiti_tramitid_fk_i", columnList = "tramitid"),
         @Index(name="pad_tramiti_fitxernormaid_fk_i", columnList = "fitxernormaid"),
-        @Index(name="pad_tramiti_fitxer2id_fk_i", columnList = "fitxernorma2id")})
+        @Index(name="pad_tramiti_fitxer2id_fk_i", columnList = "fitxernorma2id"),
+        @Index(name="pad_tramiti_fitxer3id_fk_i", columnList = "fitxernorma3id")})
 @SequenceGenerator(name="TRAMITISERV_SEQ", sequenceName="pad_tramit_i_serv_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
 public class TramitIServJPA implements TramitIServ {
@@ -42,7 +43,10 @@ public class TramitIServJPA implements TramitIServ {
     @Column(name="norma",nullable = false,length = 240)
     java.lang.String norma;
 
-    @Column(name="urlnorma",nullable = false,length = 240)
+    @Column(name="fitxernormaid",nullable = false,length = 19)
+    java.lang.Long fitxernormaID;
+
+    @Column(name="urlnorma",length = 240)
     java.lang.String urlnorma;
 
     @Column(name="articles",nullable = false,length = 60)
@@ -51,17 +55,20 @@ public class TramitIServJPA implements TramitIServ {
     @Column(name="norma2",length = 240)
     java.lang.String norma2;
 
-    @Column(name="urlnorma2",length = 240)
-    java.lang.String urlnorma2;
+    @Column(name="fitxernorma2id",length = 19)
+    java.lang.Long fitxernorma2ID;
 
     @Column(name="articles2",length = 60)
     java.lang.String articles2;
 
-    @Column(name="fitxernormaid",nullable = false,length = 19)
-    java.lang.Long fitxernormaID;
+    @Column(name="norma3",length = 240)
+    java.lang.String norma3;
 
-    @Column(name="fitxernorma2id",length = 19)
-    java.lang.Long fitxernorma2ID;
+    @Column(name="fitxernorma3id",length = 19)
+    java.lang.Long fitxernorma3ID;
+
+    @Column(name="articles3",length = 60)
+    java.lang.String articles3;
 
 
 
@@ -70,44 +77,47 @@ public class TramitIServJPA implements TramitIServ {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitIServJPA(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String norma2 , java.lang.String urlnorma2 , java.lang.String articles2 , java.lang.Long fitxernormaID , java.lang.Long fitxernorma2ID) {
+  public TramitIServJPA(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.Long fitxernormaID , java.lang.String urlnorma , java.lang.String articles , java.lang.String norma2 , java.lang.Long fitxernorma2ID , java.lang.String articles2 , java.lang.String norma3 , java.lang.Long fitxernorma3ID , java.lang.String articles3) {
     this.servid=servid;
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
+    this.fitxernormaID=fitxernormaID;
     this.urlnorma=urlnorma;
     this.articles=articles;
     this.norma2=norma2;
-    this.urlnorma2=urlnorma2;
-    this.articles2=articles2;
-    this.fitxernormaID=fitxernormaID;
     this.fitxernorma2ID=fitxernorma2ID;
+    this.articles2=articles2;
+    this.norma3=norma3;
+    this.fitxernorma3ID=fitxernorma3ID;
+    this.articles3=articles3;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitIServJPA(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.String norma2 , java.lang.String urlnorma2 , java.lang.String articles2 , java.lang.Long fitxernormaID , java.lang.Long fitxernorma2ID) {
+  public TramitIServJPA(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.Long fitxernormaID , java.lang.String urlnorma , java.lang.String articles , java.lang.String norma2 , java.lang.Long fitxernorma2ID , java.lang.String articles2 , java.lang.String norma3 , java.lang.Long fitxernorma3ID , java.lang.String articles3) {
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
+    this.fitxernormaID=fitxernormaID;
     this.urlnorma=urlnorma;
     this.articles=articles;
     this.norma2=norma2;
-    this.urlnorma2=urlnorma2;
-    this.articles2=articles2;
-    this.fitxernormaID=fitxernormaID;
     this.fitxernorma2ID=fitxernorma2ID;
+    this.articles2=articles2;
+    this.norma3=norma3;
+    this.fitxernorma3ID=fitxernorma3ID;
+    this.articles3=articles3;
 }
   /** Constructor dels valors Not Null */
-  public TramitIServJPA(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.String urlnorma , java.lang.String articles , java.lang.Long fitxernormaID) {
+  public TramitIServJPA(long servid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String norma , java.lang.Long fitxernormaID , java.lang.String articles) {
     this.servid=servid;
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.norma=norma;
-    this.urlnorma=urlnorma;
-    this.articles=articles;
     this.fitxernormaID=fitxernormaID;
+    this.articles=articles;
 }
   public TramitIServJPA(TramitIServ __bean) {
     this.setServid(__bean.getServid());
@@ -115,17 +125,21 @@ public class TramitIServJPA implements TramitIServ {
     this.setNom(__bean.getNom());
     this.setCodi(__bean.getCodi());
     this.setNorma(__bean.getNorma());
+    this.setFitxernormaID(__bean.getFitxernormaID());
     this.setUrlnorma(__bean.getUrlnorma());
     this.setArticles(__bean.getArticles());
     this.setNorma2(__bean.getNorma2());
-    this.setUrlnorma2(__bean.getUrlnorma2());
-    this.setArticles2(__bean.getArticles2());
-    this.setFitxernormaID(__bean.getFitxernormaID());
     this.setFitxernorma2ID(__bean.getFitxernorma2ID());
+    this.setArticles2(__bean.getArticles2());
+    this.setNorma3(__bean.getNorma3());
+    this.setFitxernorma3ID(__bean.getFitxernorma3ID());
+    this.setArticles3(__bean.getArticles3());
     // Fitxer
     this.setFitxernorma(FitxerJPA.toJPA(__bean.getFitxernorma()));
     // Fitxer
     this.setFitxernorma2(FitxerJPA.toJPA(__bean.getFitxernorma2()));
+    // Fitxer
+    this.setFitxernorma3(FitxerJPA.toJPA(__bean.getFitxernorma3()));
 	}
 
 	public long getServid() {
@@ -163,6 +177,13 @@ public class TramitIServJPA implements TramitIServ {
 		this.norma = _norma_;
 	};
 
+	public java.lang.Long getFitxernormaID() {
+		return(fitxernormaID);
+	};
+	public void setFitxernormaID(java.lang.Long _fitxernormaID_) {
+		this.fitxernormaID = _fitxernormaID_;
+	};
+
 	public java.lang.String getUrlnorma() {
 		return(urlnorma);
 	};
@@ -184,11 +205,11 @@ public class TramitIServJPA implements TramitIServ {
 		this.norma2 = _norma2_;
 	};
 
-	public java.lang.String getUrlnorma2() {
-		return(urlnorma2);
+	public java.lang.Long getFitxernorma2ID() {
+		return(fitxernorma2ID);
 	};
-	public void setUrlnorma2(java.lang.String _urlnorma2_) {
-		this.urlnorma2 = _urlnorma2_;
+	public void setFitxernorma2ID(java.lang.Long _fitxernorma2ID_) {
+		this.fitxernorma2ID = _fitxernorma2ID_;
 	};
 
 	public java.lang.String getArticles2() {
@@ -198,18 +219,25 @@ public class TramitIServJPA implements TramitIServ {
 		this.articles2 = _articles2_;
 	};
 
-	public java.lang.Long getFitxernormaID() {
-		return(fitxernormaID);
+	public java.lang.String getNorma3() {
+		return(norma3);
 	};
-	public void setFitxernormaID(java.lang.Long _fitxernormaID_) {
-		this.fitxernormaID = _fitxernormaID_;
+	public void setNorma3(java.lang.String _norma3_) {
+		this.norma3 = _norma3_;
 	};
 
-	public java.lang.Long getFitxernorma2ID() {
-		return(fitxernorma2ID);
+	public java.lang.Long getFitxernorma3ID() {
+		return(fitxernorma3ID);
 	};
-	public void setFitxernorma2ID(java.lang.Long _fitxernorma2ID_) {
-		this.fitxernorma2ID = _fitxernorma2ID_;
+	public void setFitxernorma3ID(java.lang.Long _fitxernorma3ID_) {
+		this.fitxernorma3ID = _fitxernorma3ID_;
+	};
+
+	public java.lang.String getArticles3() {
+		return(articles3);
+	};
+	public void setArticles3(java.lang.String _articles3_) {
+		this.articles3 = _articles3_;
 	};
 
 
@@ -269,6 +297,20 @@ public class TramitIServJPA implements TramitIServ {
     this.fitxernorma2 = fitxernorma2;
   }
 
+// IMP Field:fitxerid | Table: pad_fitxer | Type: 1  
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fitxernorma3id", referencedColumnName ="fitxerID", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_tramiti_fitxer_norma3_fk"))
+    private FitxerJPA fitxernorma3;
+
+    public FitxerJPA getFitxernorma3() {
+    return this.fitxernorma3;
+  }
+
+    public  void setFitxernorma3(FitxerJPA fitxernorma3) {
+    this.fitxernorma3 = fitxernorma3;
+  }
+
 
  // ---------------  STATIC METHODS ------------------
   public static TramitIServJPA toJPA(TramitIServ __bean) {
@@ -279,17 +321,21 @@ public class TramitIServJPA implements TramitIServ {
     __tmp.setNom(__bean.getNom());
     __tmp.setCodi(__bean.getCodi());
     __tmp.setNorma(__bean.getNorma());
+    __tmp.setFitxernormaID(__bean.getFitxernormaID());
     __tmp.setUrlnorma(__bean.getUrlnorma());
     __tmp.setArticles(__bean.getArticles());
     __tmp.setNorma2(__bean.getNorma2());
-    __tmp.setUrlnorma2(__bean.getUrlnorma2());
-    __tmp.setArticles2(__bean.getArticles2());
-    __tmp.setFitxernormaID(__bean.getFitxernormaID());
     __tmp.setFitxernorma2ID(__bean.getFitxernorma2ID());
+    __tmp.setArticles2(__bean.getArticles2());
+    __tmp.setNorma3(__bean.getNorma3());
+    __tmp.setFitxernorma3ID(__bean.getFitxernorma3ID());
+    __tmp.setArticles3(__bean.getArticles3());
     // Fitxer
     __tmp.setFitxernorma(FitxerJPA.toJPA(__bean.getFitxernorma()));
     // Fitxer
     __tmp.setFitxernorma2(FitxerJPA.toJPA(__bean.getFitxernorma2()));
+    // Fitxer
+    __tmp.setFitxernorma3(FitxerJPA.toJPA(__bean.getFitxernorma3()));
 		return __tmp;
 	}
 

@@ -2565,4 +2565,72 @@ SET consentiment =
         ELSE consentiment
     END;
 
+--UPDATE ACTUALITZAR CONSENTIMENT
+UPDATE pad_solicitud
+SET consentiment = subquery.consentiment,
+    urlconsentiment = subquery.enllazconsentiment,
+    consentimentadjunt = subquery.tipusconsentiment
+FROM (
+        SELECT t1.solicitudid,
+            CASE
+                WHEN max(t1.n) = 100 THEN 'llei'
+                ELSE max(t1.consentiment)
+            END consentiment,
+            CASE
+                WHEN max(t1.n) = 50 THEN max(t1.enllazconsentiment)
+                WHEN max(t1.n) = 10 THEN CASE
+                    WHEN max(t1.enllazconsentiment) = '' THEN NULL
+                    ELSE max(t1.enllazconsentiment)
+                END
+                ELSE NULL
+            END enllazconsentiment,
+            CASE
+                WHEN max(t1.n) = 50 THEN 'publicat'
+                WHEN max(t1.n) = 10 THEN 'adjunt'
+                ELSE NULL
+            END tipusconsentiment
+        FROM (
+                SELECT ss.solicitudid,
+                    ss.consentiment,
+                    ss.enllazconsentiment,
+                    ss.tipusconsentiment,
+                    CASE
+                        WHEN (
+                            SELECT COUNT(*)
+                            FROM pad_solicitudservei AS ss
+                            WHERE ss.solicitudid = s.solicitudid
+                                AND ss.consentiment = 'llei'
+                        ) > 0 THEN 100
+                        WHEN (
+                            SELECT COUNT(*)
+                            FROM pad_solicitudservei AS ss
+                            WHERE ss.solicitudid = s.solicitudid
+                                AND ss.enllazconsentiment ~* '^(https?://)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([/?].*)?$'
+                        ) > 0 THEN 50
+                        WHEN (
+                            SELECT COUNT(*)
+                            FROM pad_solicitudservei AS ss
+                            WHERE ss.solicitudid = s.solicitudid
+                                AND ss.consentiment IS NOT NULL
+                        ) > 0 THEN 10
+                        ELSE 0
+                    END n
+                FROM pad_solicitud s
+                    join pad_solicitudservei ss ON (s.solicitudid = ss.solicitudid)
+                WHERE s.entitatestatal is null
+            ) as t1
+        GROUP BY t1.solicitudid
+        ORDER BY t1.solicitudid
+    ) AS subquery
+WHERE pad_solicitud.solicitudid = subquery.solicitudid;
 
+--La relacion dir3 con dir3pare es que para cada organo tiene un dir3 y un dir3pare. Ahora hay que poner el dir3pare en organresponsableid en la tabla pad_tramit_c_dades_cesi:
+UPDATE pad_tramit_c_dades_cesi
+SET organresponsableid = subquery.organid
+FROM (
+        SELECT tcd.dadescesiid,
+            o.organid
+        FROM pad_tramit_c_dades_cesi tcd
+            JOIN pad_organ o ON (tcd.dir3responsable = o.dir3)
+    ) AS subquery
+WHERE pad_tramit_c_dades_cesi.dadescesiid = subquery.dadescesiid;

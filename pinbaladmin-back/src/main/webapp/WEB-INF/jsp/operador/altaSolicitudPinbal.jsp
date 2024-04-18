@@ -229,29 +229,23 @@ table.solicitud.servicio.item {
 							<td>
 								<!-- Span two columns for nested content -->
 								<table>
+<%--  									<tr>
+										<th>Servicio</th>
+										<td class="solicitud servicio norma item">${norma.documento.descripcion}</td>
+									</tr> --%>
 									<tr>
 										<th>Norma Legal</th>
 										<td class="solicitud servicio norma item">${norma.normaLegal}</td>
 									</tr>
 									<tr>
-										<th>Nombre documento</th>
+										<th>Documento</th>
 										<td class="solicitud servicio norma item">${norma.documento.nombre}</td>
-									</tr>
-									<tr>
-										<th>Descripción</th>
-										<td class="solicitud servicio norma item">${norma.documento.descripcion}</td>
 									</tr>
 									<tr>
 										<th>Contenido</th>
 										<td class="solicitud servicio norma item contenido">${fn:length(norma.documento.contenido)}</td>
 									</tr>
-									<tr>
-										<th>Enlace</th>
-										<td class="solicitud servicio norma item"><a
-											href="${norma.documento.enlace}">${norma.documento.enlace}</a>
-										</td>
-									</tr>
-									<tr>
+ 									<tr>
 										<th>Articulos</th>
 										<td class="solicitud servicio norma item"><c:forEach
 												var="articulo" items="${norma.articulos.articulo}"

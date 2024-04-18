@@ -171,15 +171,25 @@ public class TramitIOperadorController extends TramitIServController {
 
         TramitIServJPA tramitI = tramitForm.getTramitIServ();
         Long tramitID;
+        Long normesAfegides = 1L;
         if (tramitForm.isNou()) {
             tramitID = TramitAOperadorController.getTramitIDFromRequest(request);
             tramitI.setTramitid(tramitID);
-
         } else {
             tramitID = tramitI.getTramitid();
+            
+			if (tramitI.getFitxernormaID() != null) {
+				if (tramitI.getFitxernorma2ID() != null) {
+					normesAfegides++;
+					if (tramitI.getFitxernorma3ID() != null) {
+						normesAfegides++;
+					}
+				}
+			}
         }
         
-         request.getSession().setAttribute("tramitid", tramitID);
+		request.setAttribute("normesAfegides", normesAfegides);
+		request.getSession().setAttribute("tramitid", tramitID);
          
         {
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
@@ -234,6 +244,7 @@ public class TramitIOperadorController extends TramitIServController {
 			
 			
             {
+            	
                 TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
                 tramitIServFilterForm.setAttachedAdditionalJspCode(true);
             }
@@ -302,13 +313,101 @@ public class TramitIOperadorController extends TramitIServController {
 		request.getSession().setAttribute("tramitI", list);
 	}
 
+	
+	@Override
+	public void postValidate(HttpServletRequest request, TramitIServForm tramitIServForm, BindingResult result)
+			throws I18NException {
+		super.postValidate(request, tramitIServForm, result);
+
+		TramitIServJPA tramitI = tramitIServForm.getTramitIServ();
+
+		// Si alguno de los campos de una norma es distinto de null, todos los campos de
+		// la norma deben tener valor.
+
+		if (tramitI.getFitxernorma() != null || tramitI.getNorma() != null || tramitI.getArticles() != null) {
+			if (tramitI.getFitxernorma() == null || tramitI.getNorma() == null || tramitI.getArticles() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				tramitI.setFitxernormaID(null);
+				tramitI.setFitxernorma(null);
+				tramitI.setNorma(null);
+				tramitI.setArticles(null);
+
+				result.rejectValue(get(NORMA), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMA.fullName) }, null);
+			}
+		}
+
+		if (tramitI.getFitxernorma2ID() != null || tramitI.getNorma2() != null || tramitI.getArticles2() != null) {
+			if (tramitI.getFitxernorma2ID() == null || tramitI.getNorma2() == null || tramitI.getArticles2() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				tramitI.setFitxernorma2ID(null);
+				tramitI.setFitxernorma2(null);
+				tramitI.setNorma2(null);
+				tramitI.setArticles2(null);
+
+				result.rejectValue(get(NORMA2), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMA2.fullName) }, null);
+				
+			}
+		}
+
+		if (tramitI.getFitxernorma3ID() != null || tramitI.getNorma3() != null || tramitI.getArticles3() != null) {
+			if (tramitI.getFitxernorma3ID() == null || tramitI.getNorma3() == null || tramitI.getArticles3() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				tramitI.setFitxernorma3ID(null);
+				tramitI.setFitxernorma3(null);
+				tramitI.setNorma3(null);
+				tramitI.setArticles3(null);
+
+				result.rejectValue(get(NORMA3), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMA3.fullName) }, null);
+			}
+		}
+	}
+	
+	@Override
+	public void preValidate(HttpServletRequest request, TramitIServForm tramitIServForm, BindingResult result)
+			throws I18NException {
+		super.preValidate(request, tramitIServForm, result);
+		
+		TramitIServJPA tramitI = tramitIServForm.getTramitIServ();
+		
+		// Si el campo norma vale "none", poner sus campos a null y no marcar error
+		if (tramitI.getNorma2() != null && tramitI.getNorma2().equals("none")) {
+			tramitI.setFitxernorma2ID(null);
+			tramitI.setFitxernorma2(null);
+			tramitI.setNorma2(null);
+			tramitI.setArticles2(null);
+		}
+		
+		if (tramitI.getNorma3() != null && tramitI.getNorma3().equals("none")) {
+			tramitI.setFitxernorma3ID(null);
+			tramitI.setFitxernorma3(null);
+			tramitI.setNorma3(null);
+			tramitI.setArticles3(null);
+		}
+	}
+	
     @Override
     public String editarTramitIServPost(TramitIServForm tramitIServForm, BindingResult result, SessionStatus status,
             HttpServletRequest request, HttpServletResponse response) throws I18NException {
 
         String ret =  super.editarTramitIServPost(tramitIServForm, result, status, request, response);
         if (result.hasErrors()) {
-            Long tramitID = tramitIServForm.getTramitIServ().getTramitid();
+        	
+        	TramitIServJPA tramitI = tramitIServForm.getTramitIServ();
+            Long tramitID = tramitI.getTramitid();
+            
+            Long normesAfegides = 1L;
+			if (tramitI.getFitxernormaID() != null) {
+				if (tramitI.getFitxernorma2ID() != null) {
+					normesAfegides++;
+					if (tramitI.getFitxernorma3ID() != null) {
+						normesAfegides++;
+					}
+				}
+			}
+	        request.setAttribute("normesAfegides", normesAfegides);
 
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
             tramitIServForm.setAttachedAdditionalJspCode(true);
@@ -333,6 +432,18 @@ public class TramitIOperadorController extends TramitIServController {
 		String ret = super.crearTramitIServPost(tramitIServForm, result, request, response);
 
 		if (result.hasErrors()) {
+			
+            Long normesAfegides = 1L;
+			if (I.getFitxernormaID() != null) {
+				if (I.getFitxernorma2ID() != null) {
+					normesAfegides++;
+					if (I.getFitxernorma3ID() != null) {
+						normesAfegides++;
+					}
+				}
+			}
+	        request.setAttribute("normesAfegides", normesAfegides);
+	        
 			TramitAOperadorController.dadesWizard(request, tramitid, actual(), isPublic(), tramitAPersAutLogicEjb);
 			tramitIServForm.setAttachedAdditionalJspCode(true);
 		}

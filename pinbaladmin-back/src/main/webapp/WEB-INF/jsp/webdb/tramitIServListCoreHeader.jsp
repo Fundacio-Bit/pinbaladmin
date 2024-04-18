@@ -27,6 +27,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NORMA)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.NORMA)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMAID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.FITXERNORMAID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.URLNORMA)}</th>
         </c:if>
@@ -36,17 +39,20 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NORMA2)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.NORMA2)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.URLNORMA2)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.URLNORMA2)}</th>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMA2ID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.FITXERNORMA2ID)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES2)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.ARTICLES2)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMAID)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.FITXERNORMAID)}</th>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.NORMA3)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.NORMA3)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMA2ID)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.FITXERNORMA2ID)}</th>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.FITXERNORMA3ID)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.FITXERNORMA3ID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitIServFields.ARTICLES3)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitIServFields.ARTICLES3)}</th>
         </c:if>
 
 

@@ -579,6 +579,16 @@ public java.lang.Long stringToPK(String value) {
     }
 
 
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernorma3ID(), form.isFitxernorma3IDDelete(),
+        form.isNou()? null : tramitIServ.getFitxernorma3());
+    ((TramitIServJPA)tramitIServ).setFitxernorma3(f);
+    if (f != null) { 
+      tramitIServ.setFitxernorma3ID(f.getFitxerID());
+    } else {
+      tramitIServ.setFitxernorma3ID(null);
+    }
+
+
   }
 
   // FILE
@@ -586,6 +596,7 @@ public java.lang.Long stringToPK(String value) {
   public void deleteFiles(TramitIServ tramitIServ) {
     deleteFile(tramitIServ.getFitxernormaID());
     deleteFile(tramitIServ.getFitxernorma2ID());
+    deleteFile(tramitIServ.getFitxernorma3ID());
   }
   // Mètodes a sobreescriure 
 

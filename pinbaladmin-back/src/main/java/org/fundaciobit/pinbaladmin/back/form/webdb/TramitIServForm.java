@@ -22,6 +22,10 @@ public class TramitIServForm extends PinbalAdminBaseForm {
   private CommonsMultipartFile fitxernorma2ID;
   private boolean fitxernorma2IDDelete;
   
+  
+  private CommonsMultipartFile fitxernorma3ID;
+  private boolean fitxernorma3IDDelete;
+  
   public TramitIServForm() {
   }
   
@@ -71,6 +75,20 @@ public class TramitIServForm extends PinbalAdminBaseForm {
   
   public void setFitxernorma2IDDelete(boolean fitxernorma2IDDelete) {
     this.fitxernorma2IDDelete = fitxernorma2IDDelete;
+   }
+  public CommonsMultipartFile getFitxernorma3ID() {
+    return fitxernorma3ID;
+  }
+  
+   public void setFitxernorma3ID(CommonsMultipartFile fitxernorma3ID) {
+    this.fitxernorma3ID = fitxernorma3ID;
+  }
+  public boolean isFitxernorma3IDDelete() {
+    return fitxernorma3IDDelete;
+  }
+  
+  public void setFitxernorma3IDDelete(boolean fitxernorma3IDDelete) {
+    this.fitxernorma3IDDelete = fitxernorma3IDDelete;
    }
   private List<StringKeyValue> listOfTramitAPersAutForTramitid;
 

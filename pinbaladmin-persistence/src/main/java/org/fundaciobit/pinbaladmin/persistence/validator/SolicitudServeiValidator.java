@@ -51,27 +51,11 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)));
 
     // Check size
-    if (__vr.getFieldErrorCount(NORMALEGAL) == 0) {
-      java.lang.String __normalegal = __target__.getNormaLegal();
-      if (__normalegal!= null && __normalegal.length() > 3000) {
-        __vr.rejectValue(NORMALEGAL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMALEGAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(3000)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(ENLLAZNORMALEGAL) == 0) {
       java.lang.String __enllaznormalegal = __target__.getEnllazNormaLegal();
       if (__enllaznormalegal!= null && __enllaznormalegal.length() > 255) {
         __vr.rejectValue(ENLLAZNORMALEGAL, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENLLAZNORMALEGAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(ARTICLES) == 0) {
-      java.lang.String __articles = __target__.getArticles();
-      if (__articles!= null && __articles.length() > 255) {
-        __vr.rejectValue(ARTICLES, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
@@ -120,6 +104,54 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
       if (__fechacaduca!= null && __fechacaduca.length() > 255) {
         __vr.rejectValue(FECHACADUCA, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(FECHACADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(NORMALEGAL) == 0) {
+      java.lang.String __normalegal = __target__.getNormaLegal();
+      if (__normalegal!= null && __normalegal.length() > 3000) {
+        __vr.rejectValue(NORMALEGAL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMALEGAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(3000)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(ARTICLES) == 0) {
+      java.lang.String __articles = __target__.getArticles();
+      if (__articles!= null && __articles.length() > 255) {
+        __vr.rejectValue(ARTICLES, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(NORMA2) == 0) {
+      java.lang.String __norma2 = __target__.getNorma2();
+      if (__norma2!= null && __norma2.length() > 240) {
+        __vr.rejectValue(NORMA2, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMA2)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(ARTICLES2) == 0) {
+      java.lang.String __articles2 = __target__.getArticles2();
+      if (__articles2!= null && __articles2.length() > 60) {
+        __vr.rejectValue(ARTICLES2, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES2)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(60)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(NORMA3) == 0) {
+      java.lang.String __norma3 = __target__.getNorma3();
+      if (__norma3!= null && __norma3.length() > 240) {
+        __vr.rejectValue(NORMA3, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NORMA3)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(ARTICLES3) == 0) {
+      java.lang.String __articles3 = __target__.getArticles3();
+      if (__articles3!= null && __articles3.length() > 60) {
+        __vr.rejectValue(ARTICLES3, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES3)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(60)));
       }
     }
 

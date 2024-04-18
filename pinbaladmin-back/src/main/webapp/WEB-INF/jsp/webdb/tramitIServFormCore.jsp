@@ -87,96 +87,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.URLNORMA)}">
-        <tr id="tramitIServ_urlnorma_rowid">
-          <td id="tramitIServ_urlnorma_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLNORMA])?'tramitIServ.urlnorma':__theForm.labels[TramitIServFields.URLNORMA]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.URLNORMA]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLNORMA]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_urlnorma_columnvalueid">
-            <form:errors path="tramitIServ.urlnorma" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.urlnorma"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES)}">
-        <tr id="tramitIServ_articles_rowid">
-          <td id="tramitIServ_articles_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.ARTICLES])?'tramitIServ.articles':__theForm.labels[TramitIServFields.ARTICLES]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.ARTICLES]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.ARTICLES]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_articles_columnvalueid">
-            <form:errors path="tramitIServ.articles" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="60" path="tramitIServ.articles"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.NORMA2)}">
-        <tr id="tramitIServ_norma2_rowid">
-          <td id="tramitIServ_norma2_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.NORMA2])?'tramitIServ.norma2':__theForm.labels[TramitIServFields.NORMA2]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.NORMA2]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.NORMA2]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_norma2_columnvalueid">
-            <form:errors path="tramitIServ.norma2" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA2)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA2)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.norma2"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.URLNORMA2)}">
-        <tr id="tramitIServ_urlnorma2_rowid">
-          <td id="tramitIServ_urlnorma2_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLNORMA2])?'tramitIServ.urlnorma2':__theForm.labels[TramitIServFields.URLNORMA2]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.URLNORMA2]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLNORMA2]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_urlnorma2_columnvalueid">
-            <form:errors path="tramitIServ.urlnorma2" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA2)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA2)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.urlnorma2"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES2)}">
-        <tr id="tramitIServ_articles2_rowid">
-          <td id="tramitIServ_articles2_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitIServFields.ARTICLES2])?'tramitIServ.articles2':__theForm.labels[TramitIServFields.ARTICLES2]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[TramitIServFields.ARTICLES2]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.ARTICLES2]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitIServ_articles2_columnvalueid">
-            <form:errors path="tramitIServ.articles2" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES2)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES2)? ' uneditable-input' : ''}"  style="" maxlength="60" path="tramitIServ.articles2"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.FITXERNORMAID)}">
         <tr id="tramitIServ_fitxernormaID_rowid">
           <td id="tramitIServ_fitxernormaID_columnlabelid">
@@ -225,6 +135,60 @@
                 </c:choose>
               </div>
             </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.URLNORMA)}">
+        <tr id="tramitIServ_urlnorma_rowid">
+          <td id="tramitIServ_urlnorma_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.URLNORMA])?'tramitIServ.urlnorma':__theForm.labels[TramitIServFields.URLNORMA]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.URLNORMA]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.URLNORMA]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_urlnorma_columnvalueid">
+            <form:errors path="tramitIServ.urlnorma" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.URLNORMA)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.urlnorma"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES)}">
+        <tr id="tramitIServ_articles_rowid">
+          <td id="tramitIServ_articles_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.ARTICLES])?'tramitIServ.articles':__theForm.labels[TramitIServFields.ARTICLES]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.ARTICLES]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.ARTICLES]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_articles_columnvalueid">
+            <form:errors path="tramitIServ.articles" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="60" path="tramitIServ.articles"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.NORMA2)}">
+        <tr id="tramitIServ_norma2_rowid">
+          <td id="tramitIServ_norma2_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.NORMA2])?'tramitIServ.norma2':__theForm.labels[TramitIServFields.NORMA2]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.NORMA2]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.NORMA2]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_norma2_columnvalueid">
+            <form:errors path="tramitIServ.norma2" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA2)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA2)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.norma2"   />
+
            </td>
         </tr>
         </c:if>
@@ -281,6 +245,116 @@
                 </c:choose>
               </div>
             </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES2)}">
+        <tr id="tramitIServ_articles2_rowid">
+          <td id="tramitIServ_articles2_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.ARTICLES2])?'tramitIServ.articles2':__theForm.labels[TramitIServFields.ARTICLES2]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.ARTICLES2]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.ARTICLES2]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_articles2_columnvalueid">
+            <form:errors path="tramitIServ.articles2" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES2)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES2)? ' uneditable-input' : ''}"  style="" maxlength="60" path="tramitIServ.articles2"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.NORMA3)}">
+        <tr id="tramitIServ_norma3_rowid">
+          <td id="tramitIServ_norma3_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.NORMA3])?'tramitIServ.norma3':__theForm.labels[TramitIServFields.NORMA3]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.NORMA3]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.NORMA3]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_norma3_columnvalueid">
+            <form:errors path="tramitIServ.norma3" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA3)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.NORMA3)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitIServ.norma3"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.FITXERNORMA3ID)}">
+        <tr id="tramitIServ_fitxernorma3ID_rowid">
+          <td id="tramitIServ_fitxernorma3ID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.FITXERNORMA3ID])?'tramitIServ.fitxernorma3ID':__theForm.labels[TramitIServFields.FITXERNORMA3ID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.FITXERNORMA3ID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.FITXERNORMA3ID]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_fitxernorma3ID_columnvalueid">
+              <form:errors path="tramitIServ.fitxernorma3ID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitIServFields.FITXERNORMA3ID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitIServ.fitxernorma3)}"/>">${__theForm.tramitIServ.fitxernorma3.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,TramitIServFields.FITXERNORMA3ID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.FITXERNORMA3ID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.FITXERNORMA3ID)? ' uneditable-input' : ''}"   path="fitxernorma3ID" type="file" />
+                  <label class="custom-file-label" for="fitxernorma3ID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.tramitIServ.fitxernorma3}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.tramitIServ.fitxernorma3)}"/>">${__theForm.tramitIServ.fitxernorma3.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="fitxernorma3IDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="fitxernorma3ID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#fitxernorma3ID').on('change', function(){
+						var ruta = $('#fitxernorma3ID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#fitxernorma3ID-custom-file-label').css('display','block');
+						$('#fitxernorma3ID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitIServFields.ARTICLES3)}">
+        <tr id="tramitIServ_articles3_rowid">
+          <td id="tramitIServ_articles3_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitIServFields.ARTICLES3])?'tramitIServ.articles3':__theForm.labels[TramitIServFields.ARTICLES3]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitIServFields.ARTICLES3]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitIServFields.ARTICLES3]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitIServ_articles3_columnvalueid">
+            <form:errors path="tramitIServ.articles3" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES3)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitIServFields.ARTICLES3)? ' uneditable-input' : ''}"  style="" maxlength="60" path="tramitIServ.articles3"   />
+
            </td>
         </tr>
         </c:if>

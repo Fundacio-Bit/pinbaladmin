@@ -357,6 +357,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                             TramitIServ I = (TramitIServ) lista.get(j);
                             codis[j] = I.getCodi();
                             noms[j] = tramitIEjb.getServeiValue(I.getNom());
+                            if (I.getNorma2() == null) I.setNorma2("");
+                            if (I.getArticles2() == null) I.setArticles2("");
+                            if (I.getNorma3() == null) I.setNorma3("");
+                            if (I.getArticles3() == null) I.setArticles3("");
+                            
                         }
                         String codisServeisString = String.join(",", codis);
                         map.put("codisServeisString", codisServeisString);
@@ -525,10 +530,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 				Long estatSolicitudServeiID = 40L; // ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
 
-				String normaLegal = I.getNorma();
-				String enllazNormaLegal = I.getUrlnorma();
-				String articles = I.getArticles();
-
 				String caduca;
 				String caducafecha;
 				if (dataFi == null) {
@@ -541,21 +542,51 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 				String notes = "";
 
-				log.info("Norma Legal:" + normaLegal);
-
 				SolicitudServeiJPA ss = new SolicitudServeiJPA();
 
-				ss.setArticles(articles);
 				ss.setCaduca(caduca);
-				ss.setEnllazNormaLegal(enllazNormaLegal);
 				ss.setEstatSolicitudServeiID(estatSolicitudServeiID);
 				ss.setFechaCaduca(caducafecha);
-				ss.setNormaLegal(normaLegal);
 				ss.setNotes(notes);
 				ss.setServeiID(serveiID);
 				ss.setServei(servei);
 				
 				ss.setSolicitudID(soliID);
+				
+				//Gestió de normes legals
+				{
+					String norma1 = I.getNorma();
+					Long fitxer1Id = I.getFitxernormaID();
+					FitxerJPA fitxer1 = fitxerPublicLogicaEjb.findByPrimaryKey(fitxer1Id);
+					String articles = I.getArticles();
+
+					ss.setArticles(articles);
+					ss.setFitxernormaID(fitxer1Id);
+					ss.setFitxernorma(fitxer1);
+					ss.setNormaLegal(norma1);
+
+					String norma2 = I.getNorma2();
+					Long fitxer2Id = I.getFitxernorma2ID();
+					FitxerJPA fitxer2 = fitxerPublicLogicaEjb.findByPrimaryKey(fitxer2Id);
+					String articles2 = I.getArticles2();
+					
+					ss.setNorma2(norma2);
+					ss.setFitxernorma2ID(fitxer2Id);
+					ss.setFitxernorma2(fitxer2);
+					ss.setArticles2(articles2);
+					
+					String norma3 = I.getNorma3();
+					Long fitxer3Id = I.getFitxernorma3ID();
+					FitxerJPA fitxer3 = fitxerPublicLogicaEjb.findByPrimaryKey(fitxer3Id);
+					String articles3 = I.getArticles3();
+					
+					ss.setNorma3(norma3);
+					ss.setFitxernorma3ID(fitxer3Id);
+					ss.setFitxernorma3(fitxer3);
+					ss.setArticles3(articles3);
+				}
+				
+				
 
 				// Gestio consentiment
 				{

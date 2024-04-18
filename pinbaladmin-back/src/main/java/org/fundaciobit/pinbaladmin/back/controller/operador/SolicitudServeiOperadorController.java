@@ -19,6 +19,7 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudServeiController;
@@ -38,6 +39,7 @@ import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.springframework.stereotype.Controller;
@@ -106,7 +108,22 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
     public SolicitudServeiForm getSolicitudServeiForm(SolicitudServeiJPA _jpa, boolean __isView,
             HttpServletRequest request, ModelAndView mav) throws I18NException {
         SolicitudServeiForm solicitudServeiForm = super.getSolicitudServeiForm(_jpa, __isView, request, mav);
-
+        
+		Section consentiment = new Section("consentiment", "solicitudServei.consentiment", SolicitudServeiFields.CONSENTIMENT, SolicitudServeiFields.ENLLAZCONSENTIMENT, SolicitudServeiFields.TIPUSCONSENTIMENT);
+		solicitudServeiForm.addSection(consentiment);
+		
+		if (solicitudServeiForm.getSolicitudServei().getEnllazConsentiment() == null
+				|| solicitudServeiForm.getSolicitudServei().getEnllazConsentiment().trim().length() == 0) {
+			solicitudServeiForm.addHiddenField(SolicitudServeiFields.ENLLAZCONSENTIMENT);
+		}
+		
+		Section norma1 = new Section("norma1", "tramitIServ.normalegal.1", SolicitudServeiFields.NORMALEGAL, SolicitudServeiFields.ENLLAZNORMALEGAL, SolicitudServeiFields.FITXERNORMAID, SolicitudServeiFields.ARTICLES);
+		Section norma2 = new Section("norma2", "tramitIServ.normalegal.2", SolicitudServeiFields.NORMA2, SolicitudServeiFields.FITXERNORMA2ID, SolicitudServeiFields.ARTICLES2);
+		Section norma3 = new Section("norma3", "tramitIServ.normalegal.3", SolicitudServeiFields.NORMA3, SolicitudServeiFields.FITXERNORMA3ID, SolicitudServeiFields.ARTICLES3);
+		solicitudServeiForm.addSection(norma1);
+		solicitudServeiForm.addSection(norma2);
+		solicitudServeiForm.addSection(norma3);
+		
         if (solicitudServeiForm.isNou()) {
             Long soli = getSolicitudID(request);
 
@@ -185,7 +202,18 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
                 // }
 
                 solicitudServeiFilterForm.addHiddenField(SOLICITUDID);
+
                 solicitudServeiFilterForm.addHiddenField(NORMALEGAL);
+                solicitudServeiFilterForm.addHiddenField(FITXERNORMAID);
+                solicitudServeiFilterForm.addHiddenField(ARTICLES);
+
+                solicitudServeiFilterForm.addHiddenField(NORMA2);
+                solicitudServeiFilterForm.addHiddenField(FITXERNORMA2ID);
+                solicitudServeiFilterForm.addHiddenField(ARTICLES2);
+
+                solicitudServeiFilterForm.addHiddenField(NORMA3);
+                solicitudServeiFilterForm.addHiddenField(FITXERNORMA3ID);
+                solicitudServeiFilterForm.addHiddenField(ARTICLES3);
 
                 solicitudServeiFilterForm.setVisibleMultipleSelection(false);
 

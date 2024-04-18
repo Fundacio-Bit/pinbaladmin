@@ -33,6 +33,9 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 
 import org.fundaciobit.pinbaladmin.back.validator.webdb.SolicitudServeiWebValidator;
 
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.*;
@@ -47,7 +50,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
 @RequestMapping(value = "/webdb/solicitudServei")
 @SessionAttributes(types = { SolicitudServeiForm.class, SolicitudServeiFilterForm.class })
 public class SolicitudServeiController
-    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<SolicitudServei, java.lang.Long> implements SolicitudServeiFields {
+    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<SolicitudServei, java.lang.Long, SolicitudServeiForm> implements SolicitudServeiFields {
 
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService solicitudServeiEjb;
@@ -365,21 +368,27 @@ public class SolicitudServeiController
 
     SolicitudServeiJPA solicitudServei = solicitudServeiForm.getSolicitudServei();
 
+    FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
+
     try {
+      this.setFilesFormToEntity(afm, solicitudServei, solicitudServeiForm); // FILE
       preValidate(request, solicitudServeiForm, result);
       getWebValidator().validate(solicitudServeiForm, result);
       postValidate(request,solicitudServeiForm, result);
 
       if (result.hasErrors()) {
+        afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
         solicitudServei = create(request, solicitudServei);
+        afm.postPersistFiles(); // FILE
         createMessageSuccess(request, "success.creation", solicitudServei.getId());
         solicitudServeiForm.setSolicitudServei(solicitudServei);
         return getRedirectWhenCreated(request, solicitudServeiForm);
       }
     } catch (Throwable __e) {
+      afm.processErrorFilesWithoutThrowException(); // FILE
       if (__e instanceof I18NValidationException) {
         ValidationWebUtils.addFieldErrorsToBindingResult(result, (I18NValidationException)__e);
         return getTileForm();
@@ -460,21 +469,26 @@ public class SolicitudServeiController
     }
     SolicitudServeiJPA solicitudServei = solicitudServeiForm.getSolicitudServei();
 
+    FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
     try {
+      this.setFilesFormToEntity(afm, solicitudServei, solicitudServeiForm); // FILE
       preValidate(request, solicitudServeiForm, result);
       getWebValidator().validate(solicitudServeiForm, result);
       postValidate(request, solicitudServeiForm, result);
 
       if (result.hasErrors()) {
+        afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
         solicitudServei = update(request, solicitudServei);
+        afm.postPersistFiles(); // FILE
         createMessageSuccess(request, "success.modification", solicitudServei.getId());
         status.setComplete();
         return getRedirectWhenModified(request, solicitudServeiForm, null);
       }
     } catch (Throwable __e) {
+      afm.processErrorFilesWithoutThrowException(); // FILE
       if (__e instanceof I18NValidationException) {
         ValidationWebUtils.addFieldErrorsToBindingResult(result, (I18NValidationException)__e);
         return getTileForm();
@@ -624,6 +638,51 @@ public java.lang.Long stringToPK(String value) {
     return _TABLE_MODEL;
   }
 
+  // FILE
+  @Override
+  public void setFilesFormToEntity(FilesFormManager<Fitxer> afm, SolicitudServei solicitudServei,
+      SolicitudServeiForm form) throws I18NException {
+
+    FitxerJPA f;
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernormaID(), form.isFitxernormaIDDelete(),
+        form.isNou()? null : solicitudServei.getFitxernorma());
+    ((SolicitudServeiJPA)solicitudServei).setFitxernorma(f);
+    if (f != null) { 
+      solicitudServei.setFitxernormaID(f.getFitxerID());
+    } else {
+      solicitudServei.setFitxernormaID(null);
+    }
+
+
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernorma2ID(), form.isFitxernorma2IDDelete(),
+        form.isNou()? null : solicitudServei.getFitxernorma2());
+    ((SolicitudServeiJPA)solicitudServei).setFitxernorma2(f);
+    if (f != null) { 
+      solicitudServei.setFitxernorma2ID(f.getFitxerID());
+    } else {
+      solicitudServei.setFitxernorma2ID(null);
+    }
+
+
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxernorma3ID(), form.isFitxernorma3IDDelete(),
+        form.isNou()? null : solicitudServei.getFitxernorma3());
+    ((SolicitudServeiJPA)solicitudServei).setFitxernorma3(f);
+    if (f != null) { 
+      solicitudServei.setFitxernorma3ID(f.getFitxerID());
+    } else {
+      solicitudServei.setFitxernorma3ID(null);
+    }
+
+
+  }
+
+  // FILE
+  @Override
+  public void deleteFiles(SolicitudServei solicitudServei) {
+    deleteFile(solicitudServei.getFitxernormaID());
+    deleteFile(solicitudServei.getFitxernorma2ID());
+    deleteFile(solicitudServei.getFitxernorma3ID());
+  }
   // Mètodes a sobreescriure 
 
   public boolean isActiveList() {

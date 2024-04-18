@@ -24,14 +24,8 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ESTATSOLICITUDSERVEIID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ESTATSOLICITUDSERVEIID)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NORMALEGAL)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.NORMALEGAL)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ENLLAZNORMALEGAL)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ENLLAZNORMALEGAL)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ARTICLES)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ARTICLES)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.TIPUSCONSENTIMENT)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.TIPUSCONSENTIMENT)}</th>
@@ -50,6 +44,33 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.FECHACADUCA)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NORMALEGAL)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.NORMALEGAL)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FITXERNORMAID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.FITXERNORMAID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ARTICLES)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ARTICLES)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NORMA2)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.NORMA2)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FITXERNORMA2ID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.FITXERNORMA2ID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ARTICLES2)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ARTICLES2)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.NORMA3)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.NORMA3)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FITXERNORMA3ID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.FITXERNORMA3ID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.ARTICLES3)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudServeiFields.ARTICLES3)}</th>
         </c:if>
 
 

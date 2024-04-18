@@ -17,13 +17,15 @@ public interface TramitIServFields extends java.io.Serializable {
 	 public static final StringField NOM = new StringField(_TABLE_MODEL, "nom", "nom");
 	 public static final StringField CODI = new StringField(_TABLE_MODEL, "codi", "codi");
 	 public static final StringField NORMA = new StringField(_TABLE_MODEL, "norma", "norma");
+	 public static final LongField FITXERNORMAID = new LongField(_TABLE_MODEL, "fitxernormaID", "fitxernormaid");
 	 public static final StringField URLNORMA = new StringField(_TABLE_MODEL, "urlnorma", "urlnorma");
 	 public static final StringField ARTICLES = new StringField(_TABLE_MODEL, "articles", "articles");
 	 public static final StringField NORMA2 = new StringField(_TABLE_MODEL, "norma2", "norma2");
-	 public static final StringField URLNORMA2 = new StringField(_TABLE_MODEL, "urlnorma2", "urlnorma2");
-	 public static final StringField ARTICLES2 = new StringField(_TABLE_MODEL, "articles2", "articles2");
-	 public static final LongField FITXERNORMAID = new LongField(_TABLE_MODEL, "fitxernormaID", "fitxernormaid");
 	 public static final LongField FITXERNORMA2ID = new LongField(_TABLE_MODEL, "fitxernorma2ID", "fitxernorma2id");
+	 public static final StringField ARTICLES2 = new StringField(_TABLE_MODEL, "articles2", "articles2");
+	 public static final StringField NORMA3 = new StringField(_TABLE_MODEL, "norma3", "norma3");
+	 public static final LongField FITXERNORMA3ID = new LongField(_TABLE_MODEL, "fitxernorma3ID", "fitxernorma3id");
+	 public static final StringField ARTICLES3 = new StringField(_TABLE_MODEL, "articles3", "articles3");
 
 
   public static final Field<?>[] ALL_TRAMITISERV_FIELDS = {
@@ -32,13 +34,15 @@ public interface TramitIServFields extends java.io.Serializable {
     NOM,
     CODI,
     NORMA,
+    FITXERNORMAID,
     URLNORMA,
     ARTICLES,
     NORMA2,
-    URLNORMA2,
+    FITXERNORMA2ID,
     ARTICLES2,
-    FITXERNORMAID,
-    FITXERNORMA2ID
+    NORMA3,
+    FITXERNORMA3ID,
+    ARTICLES3
   };
 
 

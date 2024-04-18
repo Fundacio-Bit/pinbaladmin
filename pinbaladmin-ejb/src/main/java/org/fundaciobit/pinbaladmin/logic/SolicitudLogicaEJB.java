@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -813,56 +814,108 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios servicios = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios();
         Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
+        int MAX_NORMES_SERVEI = 3;
+        
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
             boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+            estatPendentMadrid |= ss.getEstatSolicitudServeiID() == 10L; //ESTATS_SOLICITUD_SERVEI: 10L -> Rebut
             
             if (!balear && estatPendentMadrid) {
 
                 es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio();
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas normas = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas();
+                
+                for (int i = 0; i < MAX_NORMES_SERVEI; i++) {
+                	String normaLegal = null;
+                	String articulosNorma = null;
+                	Long fitxerNormaID = null;
+                	String enlace = null;
+                	
+					switch (i) {
+					case 0:
+						normaLegal = ss.getNormaLegal();
+						articulosNorma = ss.getArticles();
+						fitxerNormaID = ss.getFitxernormaID();
+	                    enlace = ss.getEnllazNormaLegal();
 
-                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma norma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma();
-                {
-                    String normaLegal = ss.getNormaLegal();
+						break;
+					case 1:
+						normaLegal = ss.getNorma2();
+						articulosNorma = ss.getArticles2();
+						fitxerNormaID = ss.getFitxernorma2ID();
+						break;
+					case 2:
+						normaLegal = ss.getNorma3();
+						articulosNorma = ss.getArticles3();
+						fitxerNormaID = ss.getFitxernorma3ID();
+						break;
+					}
+					
+					//Si no hay normaLegal, o no enlace, no se añade la norma
+					if (normaLegal == null || normaLegal.trim().length() == 0) {
+						if (enlace == null || enlace.trim().length() == 0) {
+							log.info("No hi ha norma legal ni enllaç. No s'afegirà la norma.");
+							continue;
+						}
+					}
+					
+					
+					es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma norma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma();
+					es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento();
 
-                    es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento docNorma = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Norma.Documento();
-                    String enlace = ss.getEnllazNormaLegal();
+					String nom = null;
+					String descripcio = null;
+					byte[] contingut = null;
+					
+					log.info("NORMA - " + normaLegal + ": " + fitxerNormaID + " - " + enlace);
+					if (fitxerNormaID != null) {
+		                File normaFile = FileSystemManager.getFile(fitxerNormaID);
+		                FitxerJPA fitxer = fitxerEjb.findByPrimaryKey(fitxerNormaID);
+		                
+                        nom = fitxer.getNom();
+                        contingut = FileUtils.readFromFile(normaFile);
 
-                    boolean debug = false;
-                    FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
+					}else if (enlace != null && enlace.trim().length() > 0){
+	                    boolean debug = false;
+	                    FileInfo normaFileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, debug);
 
-                    if (normaFileInfo != null) {
-                        String nom = normaFileInfo.getFileName();
-                        String descripcio = "Norma del servicio: " + ss.getServei().getNom();
-                        byte[] contingut = normaFileInfo.getContent();
-
-                        log.info("NORMA - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
-
-                        docNorma.setNombre(nom);
-                        docNorma.setDescripcion(descripcio);
-                        docNorma.setContenido(contingut);
-                        docNorma.setEnlace(enlace);
-                    } else {
-                        docNorma = null;
+						if (normaFileInfo != null) {
+							nom = normaFileInfo.getFileName();
+							contingut = normaFileInfo.getContent();
+	                    }
                     }
+					
+					if (contingut == null) {
+						log.info("No s'ha pogut obtenir el fitxer de la norma. No s'afegirà la norma.");
+						continue;
+					}
+					
+                    log.info("NORMA - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
+                    descripcio = "Norma Legal " + i  + " - " + ss.getServei().getNom();
+                    // descripcio = "Norma del servicio: " + ss.getServei().getNom();
+                    
+                    docNorma.setNombre(nom);
+                    docNorma.setDescripcion(descripcio);
+                    docNorma.setContenido(contingut);
+                    docNorma.setEnlace(enlace);
+
+                    String[] articulosArray = articulosNorma.split(",");
 
                     es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos articulos = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos();
-                    String articulosString = ss.getArticles();
-                    String[] articulosArray = articulosString.split(",");
 
                     for (String articulo : articulosArray) {
                         articulos.getArticulo().add(articulo);
                     }
-
+                    
                     norma.setNormaLegal(normaLegal);
                     norma.setDocumento(docNorma);
                     norma.setArticulos(articulos);
-                }
-
+                    
+                    normas.getNorma().add(norma);
+				}
+                
                 String codigoCertificado = ss.getServei().getCodi();
-
-                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas normas = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Normas();
-                normas.getNorma().add(norma);
 
                 servicio.setCodigoCertificado(codigoCertificado);
                 servicio.setNormas(normas);

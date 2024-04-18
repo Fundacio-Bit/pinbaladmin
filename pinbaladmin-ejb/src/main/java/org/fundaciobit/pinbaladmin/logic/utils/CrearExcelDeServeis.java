@@ -143,7 +143,7 @@ public class CrearExcelDeServeis {
       // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
       dades[9] = ss.getArticles(); // values.get(base + "ARTICULOS");
       // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
-      dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      dades[10] = "Adjunto"; //ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
       // L 11 L'Enllaç de Consentiment
       {
         String ec = ss.getEnllazConsentiment();

@@ -27,16 +27,8 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
     return new LongField(getQueryPath(), SolicitudServeiFields.ESTATSOLICITUDSERVEIID);
   }
 
-  public StringField NORMALEGAL() {
-    return new StringField(getQueryPath(), SolicitudServeiFields.NORMALEGAL);
-  }
-
   public StringField ENLLAZNORMALEGAL() {
     return new StringField(getQueryPath(), SolicitudServeiFields.ENLLAZNORMALEGAL);
-  }
-
-  public StringField ARTICLES() {
-    return new StringField(getQueryPath(), SolicitudServeiFields.ARTICLES);
   }
 
   public StringField TIPUSCONSENTIMENT() {
@@ -61,6 +53,42 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
 
   public StringField FECHACADUCA() {
     return new StringField(getQueryPath(), SolicitudServeiFields.FECHACADUCA);
+  }
+
+  public StringField NORMALEGAL() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.NORMALEGAL);
+  }
+
+  public LongField FITXERNORMAID() {
+    return new LongField(getQueryPath(), SolicitudServeiFields.FITXERNORMAID);
+  }
+
+  public StringField ARTICLES() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.ARTICLES);
+  }
+
+  public StringField NORMA2() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.NORMA2);
+  }
+
+  public LongField FITXERNORMA2ID() {
+    return new LongField(getQueryPath(), SolicitudServeiFields.FITXERNORMA2ID);
+  }
+
+  public StringField ARTICLES2() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.ARTICLES2);
+  }
+
+  public StringField NORMA3() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.NORMA3);
+  }
+
+  public LongField FITXERNORMA3ID() {
+    return new LongField(getQueryPath(), SolicitudServeiFields.FITXERNORMA3ID);
+  }
+
+  public StringField ARTICLES3() {
+    return new StringField(getQueryPath(), SolicitudServeiFields.ARTICLES3);
   }
 
 
@@ -98,6 +126,30 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
     return new ServeiQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudServeiQueryPath.this.getQueryPath() + "servei" + ".";
+      }
+    });
+  }
+
+  public FitxerQueryPath FITXERNORMA() {
+    return new FitxerQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudServeiQueryPath.this.getQueryPath() + "fitxernorma" + ".";
+      }
+    });
+  }
+
+  public FitxerQueryPath FITXERNORMA2() {
+    return new FitxerQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudServeiQueryPath.this.getQueryPath() + "fitxernorma2" + ".";
+      }
+    });
+  }
+
+  public FitxerQueryPath FITXERNORMA3() {
+    return new FitxerQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudServeiQueryPath.this.getQueryPath() + "fitxernorma3" + ".";
       }
     });
   }

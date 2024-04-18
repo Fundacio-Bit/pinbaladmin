@@ -43,6 +43,7 @@ public class TramitIServEJB extends TramitIServJPAManager implements TramitIServ
         java.util.ArrayList<Long> fitxers = new java.util.ArrayList<Long>();
         fitxers.add(instance.getFitxernormaID());
         fitxers.add(instance.getFitxernorma2ID());
+        fitxers.add(instance.getFitxernorma3ID());
 
         this.delete(instance);
 

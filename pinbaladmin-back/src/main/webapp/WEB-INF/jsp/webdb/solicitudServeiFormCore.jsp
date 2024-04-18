@@ -95,45 +95,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.NORMALEGAL)}">
-        <tr id="solicitudServei_normaLegal_rowid">
-          <td id="solicitudServei_normaLegal_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.NORMALEGAL])?'solicitudServei.normaLegal':__theForm.labels[SolicitudServeiFields.NORMALEGAL]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudServeiFields.NORMALEGAL]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.NORMALEGAL]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitudServei_normaLegal_columnvalueid">
-              <form:errors path="solicitudServei.normaLegal" cssClass="errorField alert alert-danger" />
-  <table style="width:100%">
-  <tr>
-  <td>
-       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMALEGAL)? 'true' : 'false'}" path="solicitudServei.normaLegal"  />
-   </td>
-   <td style="width:40px">
-      <div id="dropdownMenuButton_normaLegal" style="vertical-align:top;display:inline;position:relative;">
-        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
-        <div id="dropdownMenuContainer_normaLegal" class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='off';" >No Wrap</a>
-          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='soft';">Soft Wrap</a>
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='hard';">Hard Wrap</a>
-        </div>
-      </div>
-      <script type="text/javascript">
-			$('#dropdownMenuButton_normaLegal').on('click', function(){
-					var valor = ($('#dropdownMenuContainer_normaLegal').css('display') != 'none') ? 'none' : 'block';
-                 $('#dropdownMenuContainer_normaLegal').css('display', valor);
-                 return false;
-				});
-      </script>   </td>
-   </tr>
-   </table>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.ENLLAZNORMALEGAL)}">
         <tr id="solicitudServei_enllazNormaLegal_rowid">
           <td id="solicitudServei_enllazNormaLegal_columnlabelid">
@@ -159,24 +120,6 @@
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.enllazNormaLegal"   />
 
            </c:if>
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.ARTICLES)}">
-        <tr id="solicitudServei_articles_rowid">
-          <td id="solicitudServei_articles_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.ARTICLES])?'solicitudServei.articles':__theForm.labels[SolicitudServeiFields.ARTICLES]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudServeiFields.ARTICLES]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.ARTICLES]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitudServei_articles_columnvalueid">
-            <form:errors path="solicitudServei.articles" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.articles"   />
 
            </td>
         </tr>
@@ -353,6 +296,303 @@
           <td id="solicitudServei_fechaCaduca_columnvalueid">
             <form:errors path="solicitudServei.fechaCaduca" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.fechaCaduca"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.NORMALEGAL)}">
+        <tr id="solicitudServei_normaLegal_rowid">
+          <td id="solicitudServei_normaLegal_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.NORMALEGAL])?'solicitudServei.normaLegal':__theForm.labels[SolicitudServeiFields.NORMALEGAL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.NORMALEGAL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.NORMALEGAL]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_normaLegal_columnvalueid">
+              <form:errors path="solicitudServei.normaLegal" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMALEGAL)? 'true' : 'false'}" path="solicitudServei.normaLegal"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_normaLegal" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_normaLegal" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitudServei.normaLegal'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_normaLegal').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_normaLegal').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_normaLegal').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.FITXERNORMAID)}">
+        <tr id="solicitudServei_fitxernormaID_rowid">
+          <td id="solicitudServei_fitxernormaID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.FITXERNORMAID])?'solicitudServei.fitxernormaID':__theForm.labels[SolicitudServeiFields.FITXERNORMAID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.FITXERNORMAID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.FITXERNORMAID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_fitxernormaID_columnvalueid">
+              <form:errors path="solicitudServei.fitxernormaID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMAID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma)}"/>">${__theForm.solicitudServei.fitxernorma.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMAID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMAID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMAID)? ' uneditable-input' : ''}"   path="fitxernormaID" type="file" />
+                  <label class="custom-file-label" for="fitxernormaID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.solicitudServei.fitxernorma}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma)}"/>">${__theForm.solicitudServei.fitxernorma.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="fitxernormaIDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="fitxernormaID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#fitxernormaID').on('change', function(){
+						var ruta = $('#fitxernormaID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#fitxernormaID-custom-file-label').css('display','block');
+						$('#fitxernormaID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.ARTICLES)}">
+        <tr id="solicitudServei_articles_rowid">
+          <td id="solicitudServei_articles_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.ARTICLES])?'solicitudServei.articles':__theForm.labels[SolicitudServeiFields.ARTICLES]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.ARTICLES]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.ARTICLES]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_articles_columnvalueid">
+            <form:errors path="solicitudServei.articles" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.articles"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.NORMA2)}">
+        <tr id="solicitudServei_norma2_rowid">
+          <td id="solicitudServei_norma2_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.NORMA2])?'solicitudServei.norma2':__theForm.labels[SolicitudServeiFields.NORMA2]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.NORMA2]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.NORMA2]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_norma2_columnvalueid">
+            <form:errors path="solicitudServei.norma2" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMA2)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMA2)? ' uneditable-input' : ''}"  style="" maxlength="240" path="solicitudServei.norma2"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.FITXERNORMA2ID)}">
+        <tr id="solicitudServei_fitxernorma2ID_rowid">
+          <td id="solicitudServei_fitxernorma2ID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.FITXERNORMA2ID])?'solicitudServei.fitxernorma2ID':__theForm.labels[SolicitudServeiFields.FITXERNORMA2ID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.FITXERNORMA2ID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.FITXERNORMA2ID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_fitxernorma2ID_columnvalueid">
+              <form:errors path="solicitudServei.fitxernorma2ID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA2ID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma2)}"/>">${__theForm.solicitudServei.fitxernorma2.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA2ID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA2ID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA2ID)? ' uneditable-input' : ''}"   path="fitxernorma2ID" type="file" />
+                  <label class="custom-file-label" for="fitxernorma2ID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.solicitudServei.fitxernorma2}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma2)}"/>">${__theForm.solicitudServei.fitxernorma2.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="fitxernorma2IDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="fitxernorma2ID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#fitxernorma2ID').on('change', function(){
+						var ruta = $('#fitxernorma2ID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#fitxernorma2ID-custom-file-label').css('display','block');
+						$('#fitxernorma2ID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.ARTICLES2)}">
+        <tr id="solicitudServei_articles2_rowid">
+          <td id="solicitudServei_articles2_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.ARTICLES2])?'solicitudServei.articles2':__theForm.labels[SolicitudServeiFields.ARTICLES2]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.ARTICLES2]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.ARTICLES2]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_articles2_columnvalueid">
+            <form:errors path="solicitudServei.articles2" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES2)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES2)? ' uneditable-input' : ''}"  style="" maxlength="60" path="solicitudServei.articles2"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.NORMA3)}">
+        <tr id="solicitudServei_norma3_rowid">
+          <td id="solicitudServei_norma3_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.NORMA3])?'solicitudServei.norma3':__theForm.labels[SolicitudServeiFields.NORMA3]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.NORMA3]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.NORMA3]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_norma3_columnvalueid">
+            <form:errors path="solicitudServei.norma3" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMA3)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.NORMA3)? ' uneditable-input' : ''}"  style="" maxlength="240" path="solicitudServei.norma3"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.FITXERNORMA3ID)}">
+        <tr id="solicitudServei_fitxernorma3ID_rowid">
+          <td id="solicitudServei_fitxernorma3ID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.FITXERNORMA3ID])?'solicitudServei.fitxernorma3ID':__theForm.labels[SolicitudServeiFields.FITXERNORMA3ID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.FITXERNORMA3ID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.FITXERNORMA3ID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_fitxernorma3ID_columnvalueid">
+              <form:errors path="solicitudServei.fitxernorma3ID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA3ID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma3)}"/>">${__theForm.solicitudServei.fitxernorma3.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA3ID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA3ID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FITXERNORMA3ID)? ' uneditable-input' : ''}"   path="fitxernorma3ID" type="file" />
+                  <label class="custom-file-label" for="fitxernorma3ID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.solicitudServei.fitxernorma3}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitudServei.fitxernorma3)}"/>">${__theForm.solicitudServei.fitxernorma3.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="fitxernorma3IDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="fitxernorma3ID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#fitxernorma3ID').on('change', function(){
+						var ruta = $('#fitxernorma3ID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#fitxernorma3ID-custom-file-label').css('display','block');
+						$('#fitxernorma3ID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudServeiFields.ARTICLES3)}">
+        <tr id="solicitudServei_articles3_rowid">
+          <td id="solicitudServei_articles3_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudServeiFields.ARTICLES3])?'solicitudServei.articles3':__theForm.labels[SolicitudServeiFields.ARTICLES3]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudServeiFields.ARTICLES3]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudServeiFields.ARTICLES3]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitudServei_articles3_columnvalueid">
+            <form:errors path="solicitudServei.articles3" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES3)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES3)? ' uneditable-input' : ''}"  style="" maxlength="60" path="solicitudServei.articles3"   />
 
            </td>
         </tr>

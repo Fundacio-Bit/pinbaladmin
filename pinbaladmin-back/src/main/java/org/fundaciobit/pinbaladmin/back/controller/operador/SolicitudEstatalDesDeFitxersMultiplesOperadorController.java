@@ -375,9 +375,22 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 }
                 log.info("Consentiment despues: " + consentiment);
                 
-                SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
-                        normaLegal, enllazNormaLegal, articles, tipusConsentiment, consentiment, enllazConsentiment,
-                        notes, caduca, fechaCaduca);
+				
+				Long fitxerIDNorma= null;
+				
+				String norma2 = null;
+				String articles2 = null;
+				Long fitxerIDNorma2= null;
+				
+				String norma3 = null;
+				String articles3 = null;
+				Long fitxerIDNorma3= null;
+				
+				
+				SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
+						enllazNormaLegal, tipusConsentiment, consentiment, enllazConsentiment, notes, caduca,
+						fechaCaduca, normaLegal, fitxerIDNorma, articles, norma2, fitxerIDNorma2, articles2, norma3,
+						fitxerIDNorma3, articles3);
 
                 ssList.add(ss);
             }

@@ -98,17 +98,6 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
   }
 
 
-  private java.lang.String normaLegal;
-
-  public java.lang.String getNormaLegal() {
-    return this.normaLegal;
-  }
-
-  public void setNormaLegal(java.lang.String normaLegal) {
-    this.normaLegal = normaLegal;
-  }
-
-
   private java.lang.String enllazNormaLegal;
 
   public java.lang.String getEnllazNormaLegal() {
@@ -117,17 +106,6 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
 
   public void setEnllazNormaLegal(java.lang.String enllazNormaLegal) {
     this.enllazNormaLegal = enllazNormaLegal;
-  }
-
-
-  private java.lang.String articles;
-
-  public java.lang.String getArticles() {
-    return this.articles;
-  }
-
-  public void setArticles(java.lang.String articles) {
-    this.articles = articles;
   }
 
 
@@ -197,6 +175,72 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
   }
 
 
+  private java.lang.String normaLegal;
+
+  public java.lang.String getNormaLegal() {
+    return this.normaLegal;
+  }
+
+  public void setNormaLegal(java.lang.String normaLegal) {
+    this.normaLegal = normaLegal;
+  }
+
+
+  private java.lang.String articles;
+
+  public java.lang.String getArticles() {
+    return this.articles;
+  }
+
+  public void setArticles(java.lang.String articles) {
+    this.articles = articles;
+  }
+
+
+  private java.lang.String norma2;
+
+  public java.lang.String getNorma2() {
+    return this.norma2;
+  }
+
+  public void setNorma2(java.lang.String norma2) {
+    this.norma2 = norma2;
+  }
+
+
+  private java.lang.String articles2;
+
+  public java.lang.String getArticles2() {
+    return this.articles2;
+  }
+
+  public void setArticles2(java.lang.String articles2) {
+    this.articles2 = articles2;
+  }
+
+
+  private java.lang.String norma3;
+
+  public java.lang.String getNorma3() {
+    return this.norma3;
+  }
+
+  public void setNorma3(java.lang.String norma3) {
+    this.norma3 = norma3;
+  }
+
+
+  private java.lang.String articles3;
+
+  public java.lang.String getArticles3() {
+    return this.articles3;
+  }
+
+  public void setArticles3(java.lang.String articles3) {
+    this.articles3 = articles3;
+  }
+
+
   public SolicitudServeiFilterForm() {
   }
   
@@ -209,15 +253,19 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
     this.serveiIDDesde = __toClone.serveiIDDesde;
     this.serveiIDFins = __toClone.serveiIDFins;
     this.estatSolicitudServeiIDSelect = __toClone.estatSolicitudServeiIDSelect;
-    this.normaLegal = __toClone.normaLegal;
     this.enllazNormaLegal = __toClone.enllazNormaLegal;
-    this.articles = __toClone.articles;
     this.tipusConsentiment = __toClone.tipusConsentiment;
     this.consentiment = __toClone.consentiment;
     this.enllazConsentiment = __toClone.enllazConsentiment;
     this.notes = __toClone.notes;
     this.caduca = __toClone.caduca;
     this.fechaCaduca = __toClone.fechaCaduca;
+    this.normaLegal = __toClone.normaLegal;
+    this.articles = __toClone.articles;
+    this.norma2 = __toClone.norma2;
+    this.articles2 = __toClone.articles2;
+    this.norma3 = __toClone.norma3;
+    this.articles3 = __toClone.articles3;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfServeiForServeiID = __toClone.mapOfServeiForServeiID;
     this.mapOfValuesForEstatSolicitudServeiID = __toClone.mapOfValuesForEstatSolicitudServeiID;
@@ -229,7 +277,7 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTATSOLICITUDSERVEIID ,NORMALEGAL ,NOTES }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTATSOLICITUDSERVEIID ,NOTES ,NORMALEGAL }));
   }
 
   @Override

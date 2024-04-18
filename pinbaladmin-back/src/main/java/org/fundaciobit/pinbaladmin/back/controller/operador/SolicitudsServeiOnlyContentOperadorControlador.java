@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -12,6 +13,7 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Select;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -19,9 +21,12 @@ import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.EntitatServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -160,5 +165,146 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             mapCodiServei.put(SolSerID, codiServei);
             mapNomServei.put(SolSerID, nomServei);
         }
+    }
+    
+    @Override
+    public SolicitudServeiForm getSolicitudServeiForm(SolicitudServeiJPA _jpa, boolean __isView,
+			HttpServletRequest request, ModelAndView mav) throws I18NException {
+
+		SolicitudServeiForm solicitudServeiForm = super.getSolicitudServeiForm(_jpa, __isView, request, mav);
+
+		SolicitudServei solicitudServei = solicitudServeiForm.getSolicitudServei();
+
+		Long normesAfegides = 1L;
+		if (solicitudServei.getFitxernormaID() != null) {
+			if (solicitudServei.getFitxernorma2ID() != null) {
+				normesAfegides++;
+				if (solicitudServei.getFitxernorma3ID() != null) {
+					normesAfegides++;
+				}
+			}
+		}
+		request.setAttribute("normesAfegides", normesAfegides);
+		solicitudServeiForm.setAttachedAdditionalJspCode(true);
+		
+		return solicitudServeiForm;
+	}
+    
+    @Override
+    public String crearSolicitudServeiPost(SolicitudServeiForm solicitudServeiForm, BindingResult result,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		SolicitudServei solSer = solicitudServeiForm.getSolicitudServei();
+		String ret = super.crearSolicitudServeiPost(solicitudServeiForm, result, request, response);
+
+		if (result.hasErrors()) {
+			Long normesAfegides = 1L;
+			if (solSer.getFitxernormaID() != null) {
+				if (solSer.getFitxernorma2ID() != null) {
+					normesAfegides++;
+					if (solSer.getFitxernorma3ID() != null) {
+						normesAfegides++;
+					}
+				}
+			}
+			request.setAttribute("normesAfegides", normesAfegides);
+		}
+		return ret;
+	}
+    
+    @Override
+    public String editarSolicitudServeiPost(SolicitudServeiForm solicitudServeiForm, BindingResult result,
+    		SessionStatus status, HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+		SolicitudServei solSer = solicitudServeiForm.getSolicitudServei();
+		String ret = super.editarSolicitudServeiPost(solicitudServeiForm, result, status, request, response);
+
+		if (result.hasErrors()) {
+			Long normesAfegides = 1L;
+			if (solSer.getFitxernormaID() != null) {
+				if (solSer.getFitxernorma2ID() != null) {
+					normesAfegides++;
+					if (solSer.getFitxernorma3ID() != null) {
+						normesAfegides++;
+					}
+				}
+			}
+			request.setAttribute("normesAfegides", normesAfegides);
+		}
+		return ret;
+    }
+    
+    @Override
+    public void preValidate(HttpServletRequest request, SolicitudServeiForm solicitudServeiForm, BindingResult result)
+    		throws I18NException {
+    	super.preValidate(request, solicitudServeiForm, result);
+    	
+		SolicitudServeiJPA solSer = solicitudServeiForm.getSolicitudServei();
+		
+		// Si el campo norma vale "none", poner sus campos a null y no marcar error
+		if (solSer.getNorma2() != null && solSer.getNorma2().equals("none")) {
+			solSer.setFitxernorma2ID(null);
+			solSer.setFitxernorma2(null);
+			solSer.setNorma2(null);
+			solSer.setArticles2(null);
+		}
+		
+		if (solSer.getNorma3() != null && solSer.getNorma3().equals("none")) {
+			solSer.setFitxernorma3ID(null);
+			solSer.setFitxernorma3(null);
+			solSer.setNorma3(null);
+			solSer.setArticles3(null);
+		}
+    }
+    
+    
+    @Override
+    public void postValidate(HttpServletRequest request, SolicitudServeiForm solicitudServeiForm, BindingResult result)
+    		throws I18NException {
+    	super.postValidate(request, solicitudServeiForm, result);
+    	
+		SolicitudServeiJPA solSer = solicitudServeiForm.getSolicitudServei();
+
+		if (solSer.getFitxernorma() != null || solSer.getNormaLegal() != null || solSer.getArticles() != null) {
+			if (solSer.getFitxernorma() == null || solSer.getNormaLegal() == null || solSer.getArticles() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				solSer.setFitxernormaID(null);
+				solSer.setFitxernorma(null);
+				solSer.setNormaLegal(null);
+				solSer.setArticles(null);
+
+				result.rejectValue(get(NORMALEGAL), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMALEGAL.fullName) }, null);
+			}
+		}
+
+		if (solSer.getFitxernorma2ID() != null || solSer.getNorma2() != null || solSer.getArticles2() != null) {
+			if (solSer.getFitxernorma2ID() == null || solSer.getNorma2() == null || solSer.getArticles2() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				solSer.setFitxernorma2ID(null);
+				solSer.setFitxernorma2(null);
+				solSer.setNorma2(null);
+				solSer.setArticles2(null);
+
+				result.rejectValue(get(NORMA2), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMA2.fullName) }, null);
+				
+			}
+		}
+
+		if (solSer.getFitxernorma3ID() != null || solSer.getNorma3() != null || solSer.getArticles3() != null) {
+			if (solSer.getFitxernorma3ID() == null || solSer.getNorma3() == null || solSer.getArticles3() == null) {
+				// Marcamos error y dejamos nulos todos los campos de la norma
+				solSer.setFitxernorma3ID(null);
+				solSer.setFitxernorma3(null);
+				solSer.setNorma3(null);
+				solSer.setArticles3(null);
+
+				result.rejectValue(get(NORMA3), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(NORMA3.fullName) }, null);
+			}
+		}
+    	
+    	
     }
 }

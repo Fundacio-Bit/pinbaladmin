@@ -2,6 +2,7 @@ package org.fundaciobit.pinbaladmin.back.form.webdb;
 
 import java.util.List;
 import org.fundaciobit.genapp.common.StringKeyValue;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.fundaciobit.pinbaladmin.back.form.PinbalAdminBaseForm;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 
@@ -12,6 +13,18 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 public class SolicitudServeiForm extends PinbalAdminBaseForm {
   
   private SolicitudServeiJPA solicitudServei;
+  
+  
+  private CommonsMultipartFile fitxernormaID;
+  private boolean fitxernormaIDDelete;
+  
+  
+  private CommonsMultipartFile fitxernorma2ID;
+  private boolean fitxernorma2IDDelete;
+  
+  
+  private CommonsMultipartFile fitxernorma3ID;
+  private boolean fitxernorma3IDDelete;
   
   public SolicitudServeiForm() {
   }
@@ -39,6 +52,48 @@ public class SolicitudServeiForm extends PinbalAdminBaseForm {
   }
   
   
+  public CommonsMultipartFile getFitxernormaID() {
+    return fitxernormaID;
+  }
+  
+   public void setFitxernormaID(CommonsMultipartFile fitxernormaID) {
+    this.fitxernormaID = fitxernormaID;
+  }
+  public boolean isFitxernormaIDDelete() {
+    return fitxernormaIDDelete;
+  }
+  
+  public void setFitxernormaIDDelete(boolean fitxernormaIDDelete) {
+    this.fitxernormaIDDelete = fitxernormaIDDelete;
+   }
+  public CommonsMultipartFile getFitxernorma2ID() {
+    return fitxernorma2ID;
+  }
+  
+   public void setFitxernorma2ID(CommonsMultipartFile fitxernorma2ID) {
+    this.fitxernorma2ID = fitxernorma2ID;
+  }
+  public boolean isFitxernorma2IDDelete() {
+    return fitxernorma2IDDelete;
+  }
+  
+  public void setFitxernorma2IDDelete(boolean fitxernorma2IDDelete) {
+    this.fitxernorma2IDDelete = fitxernorma2IDDelete;
+   }
+  public CommonsMultipartFile getFitxernorma3ID() {
+    return fitxernorma3ID;
+  }
+  
+   public void setFitxernorma3ID(CommonsMultipartFile fitxernorma3ID) {
+    this.fitxernorma3ID = fitxernorma3ID;
+  }
+  public boolean isFitxernorma3IDDelete() {
+    return fitxernorma3IDDelete;
+  }
+  
+  public void setFitxernorma3IDDelete(boolean fitxernorma3IDDelete) {
+    this.fitxernorma3IDDelete = fitxernorma3IDDelete;
+   }
   private List<StringKeyValue> listOfSolicitudForSolicitudID;
 
   public List<StringKeyValue> getListOfSolicitudForSolicitudID() {

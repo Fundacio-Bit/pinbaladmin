@@ -157,6 +157,48 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
+  public SolicitudServeiQueryPath SOLICITUDSERVEI_FITXERNORMAIDS() {
+    return new SolicitudServeiQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "solicitudServei_fitxernormaids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudServeiQueryPath SOLICITUDSERVEI_FITXERNORMA2IDS() {
+    return new SolicitudServeiQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "solicitudServei_fitxernorma2ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudServeiQueryPath SOLICITUDSERVEI_FITXERNORMA3IDS() {
+    return new SolicitudServeiQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "solicitudServei_fitxernorma3ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
   public TiquetQueryPath TIQUET_ADJUNT1IDS() {
     return new TiquetQueryPath(new QueryPath() {
       public String getQueryPath() {
@@ -189,6 +231,20 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
     return new TramitIServQueryPath(new QueryPath() {
       public String getQueryPath() {
           return FitxerQueryPath.this.getQueryPath() + "tramitIServ_fitxernorma2ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public TramitIServQueryPath TRAMITISERV_FITXERNORMA3IDS() {
+    return new TramitIServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "tramitIServ_fitxernorma3ids" + ".";
       }
     });
   }

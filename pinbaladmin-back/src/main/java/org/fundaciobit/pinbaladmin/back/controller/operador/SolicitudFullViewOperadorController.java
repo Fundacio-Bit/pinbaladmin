@@ -665,13 +665,25 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
 			if (count == 0) {
-
-				SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID, estatSolicitudServeiID, normaLegal,
-						enllazNormaLegal, articles, consAdj, consentiment, consUrl, notes, caduca, caducafecha);
+				
+				Long fitxerIDNorma= null;
+				
+				String norma2 = null;
+				String articles2 = null;
+				Long fitxerIDNorma2= null;
+				
+				String norma3 = null;
+				String articles3 = null;
+				Long fitxerIDNorma3= null;
+				
+				
+				SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID, estatSolicitudServeiID,
+						enllazNormaLegal, consAdj, consentiment, consUrl, notes, caduca, caducafecha, normaLegal,
+						fitxerIDNorma, articles, norma2, fitxerIDNorma2, articles2, norma3, fitxerIDNorma3, articles3);
 
 				solicitudServeiEjb.create(ss);
 
-			} else {
+			} else { 
 
 				HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
 

@@ -92,6 +92,10 @@ public class SolicitudServeiWebValidator extends AbstractWebValidator<SolicitudS
         }
     }
 
+    if (isNou) { // Creacio
+      // ================ CREATION
+      // Fitxers 
+    }
 
   } // Final de metode
 

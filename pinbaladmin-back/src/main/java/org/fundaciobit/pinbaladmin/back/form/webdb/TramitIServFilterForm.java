@@ -131,17 +131,6 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
   }
 
 
-  private java.lang.String urlnorma2;
-
-  public java.lang.String getUrlnorma2() {
-    return this.urlnorma2;
-  }
-
-  public void setUrlnorma2(java.lang.String urlnorma2) {
-    this.urlnorma2 = urlnorma2;
-  }
-
-
   private java.lang.String articles2;
 
   public java.lang.String getArticles2() {
@@ -150,6 +139,28 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
 
   public void setArticles2(java.lang.String articles2) {
     this.articles2 = articles2;
+  }
+
+
+  private java.lang.String norma3;
+
+  public java.lang.String getNorma3() {
+    return this.norma3;
+  }
+
+  public void setNorma3(java.lang.String norma3) {
+    this.norma3 = norma3;
+  }
+
+
+  private java.lang.String articles3;
+
+  public java.lang.String getArticles3() {
+    return this.articles3;
+  }
+
+  public void setArticles3(java.lang.String articles3) {
+    this.articles3 = articles3;
   }
 
 
@@ -168,8 +179,9 @@ public class TramitIServFilterForm extends PinbalAdminBaseFilterForm implements 
     this.urlnorma = __toClone.urlnorma;
     this.articles = __toClone.articles;
     this.norma2 = __toClone.norma2;
-    this.urlnorma2 = __toClone.urlnorma2;
     this.articles2 = __toClone.articles2;
+    this.norma3 = __toClone.norma3;
+    this.articles3 = __toClone.articles3;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
   }
   

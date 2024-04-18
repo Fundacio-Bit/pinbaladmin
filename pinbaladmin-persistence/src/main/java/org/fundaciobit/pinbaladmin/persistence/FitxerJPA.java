@@ -226,6 +226,45 @@ public class FitxerJPA implements Fitxer {
     }
 
 
+// EXP  Field:fitxernormaid | Table: pad_solicitudservei | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernormaID")
+    private Set<SolicitudServeiJPA> solicitudServei_fitxernormaids = new HashSet<SolicitudServeiJPA>(0);
+    public  Set<SolicitudServeiJPA> getSolicitudServei_fitxernormaids() {
+    return this.solicitudServei_fitxernormaids;
+  }
+
+    public void setSolicitudServei_fitxernormaids(Set<SolicitudServeiJPA> solicitudServei_fitxernormaids) {
+      this.solicitudServei_fitxernormaids = solicitudServei_fitxernormaids;
+    }
+
+
+// EXP  Field:fitxernorma2id | Table: pad_solicitudservei | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernorma2ID")
+    private Set<SolicitudServeiJPA> solicitudServei_fitxernorma2ids = new HashSet<SolicitudServeiJPA>(0);
+    public  Set<SolicitudServeiJPA> getSolicitudServei_fitxernorma2ids() {
+    return this.solicitudServei_fitxernorma2ids;
+  }
+
+    public void setSolicitudServei_fitxernorma2ids(Set<SolicitudServeiJPA> solicitudServei_fitxernorma2ids) {
+      this.solicitudServei_fitxernorma2ids = solicitudServei_fitxernorma2ids;
+    }
+
+
+// EXP  Field:fitxernorma3id | Table: pad_solicitudservei | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernorma3ID")
+    private Set<SolicitudServeiJPA> solicitudServei_fitxernorma3ids = new HashSet<SolicitudServeiJPA>(0);
+    public  Set<SolicitudServeiJPA> getSolicitudServei_fitxernorma3ids() {
+    return this.solicitudServei_fitxernorma3ids;
+  }
+
+    public void setSolicitudServei_fitxernorma3ids(Set<SolicitudServeiJPA> solicitudServei_fitxernorma3ids) {
+      this.solicitudServei_fitxernorma3ids = solicitudServei_fitxernorma3ids;
+    }
+
+
 // EXP  Field:adjunt1id | Table: pad_tiquet | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "adjunt1ID")
@@ -262,6 +301,19 @@ public class FitxerJPA implements Fitxer {
 
     public void setTramitIServ_fitxernorma2ids(Set<TramitIServJPA> tramitIServ_fitxernorma2ids) {
       this.tramitIServ_fitxernorma2ids = tramitIServ_fitxernorma2ids;
+    }
+
+
+// EXP  Field:fitxernorma3id | Table: pad_tramit_i_serv | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxernorma3ID")
+    private Set<TramitIServJPA> tramitIServ_fitxernorma3ids = new HashSet<TramitIServJPA>(0);
+    public  Set<TramitIServJPA> getTramitIServ_fitxernorma3ids() {
+    return this.tramitIServ_fitxernorma3ids;
+  }
+
+    public void setTramitIServ_fitxernorma3ids(Set<TramitIServJPA> tramitIServ_fitxernorma3ids) {
+      this.tramitIServ_fitxernorma3ids = tramitIServ_fitxernorma3ids;
     }
 
 
@@ -392,6 +444,14 @@ public class FitxerJPA implements Fitxer {
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_solicitudxmlids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_solicitudxmlids())) ) {
       __tmp.setSolicitud_solicitudxmlids(SolicitudJPA.copyJPA(__jpa.getSolicitud_solicitudxmlids(), __alreadyCopied,"FitxerJPA"));
     }
+    if(!"SolicitudServeiJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServei_fitxernorma2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServei_fitxernorma2ids())) ) {
+      __tmp.setSolicitudServei_fitxernorma2ids(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServei_fitxernorma2ids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"SolicitudServeiJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServei_fitxernorma3ids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServei_fitxernorma3ids())) ) {
+      __tmp.setSolicitudServei_fitxernorma3ids(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServei_fitxernorma3ids(), __alreadyCopied,"FitxerJPA"));
+    }
     if(!"DocumentCedentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentCedents) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentCedents())) ) {
       __tmp.setDocumentCedents(DocumentCedentJPA.copyJPA(__jpa.getDocumentCedents(), __alreadyCopied,"FitxerJPA"));
@@ -404,6 +464,10 @@ public class FitxerJPA implements Fitxer {
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitJConsents) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitJConsents())) ) {
       __tmp.setTramitJConsents(TramitJConsentJPA.copyJPA(__jpa.getTramitJConsents(), __alreadyCopied,"FitxerJPA"));
     }
+    if(!"SolicitudServeiJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServei_fitxernormaids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServei_fitxernormaids())) ) {
+      __tmp.setSolicitudServei_fitxernormaids(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServei_fitxernormaids(), __alreadyCopied,"FitxerJPA"));
+    }
     if(!"DocumentJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.document_fitxerfirmatids) || org.hibernate.Hibernate.isInitialized(__jpa.getDocument_fitxerfirmatids())) ) {
       __tmp.setDocument_fitxerfirmatids(DocumentJPA.copyJPA(__jpa.getDocument_fitxerfirmatids(), __alreadyCopied,"FitxerJPA"));
@@ -411,6 +475,10 @@ public class FitxerJPA implements Fitxer {
     if(!"TramitIServJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitIServ_fitxernorma2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitIServ_fitxernorma2ids())) ) {
       __tmp.setTramitIServ_fitxernorma2ids(TramitIServJPA.copyJPA(__jpa.getTramitIServ_fitxernorma2ids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"TramitIServJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tramitIServ_fitxernorma3ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTramitIServ_fitxernorma3ids())) ) {
+      __tmp.setTramitIServ_fitxernorma3ids(TramitIServJPA.copyJPA(__jpa.getTramitIServ_fitxernorma3ids(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_documentsolicitudids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_documentsolicitudids())) ) {

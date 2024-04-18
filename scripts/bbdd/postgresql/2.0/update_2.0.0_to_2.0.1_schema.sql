@@ -793,3 +793,165 @@ ALTER TABLE pad_solicitud ADD COLUMN expedientpid character varying(50);
 UPDATE pad_solicitud
 SET expedientpid = substring(estat from 'Identificador de Consulta: (\d+)')
 WHERE entitatestatal IS NOT NULL
+
+
+--Afegir camp a TramitA per guardar informació de callback de sistra #180
+ALTER TABLE pad_tramit_a_pers_aut ADD COLUMN urlsistra character varying;
+ALTER TABLE pad_tramit_a_pers_aut ADD COLUMN idsesionformulario character varying(100);
+
+ALTER TABLE pad_tramit_a_pers_aut ALTER COLUMN telefon DROP NOT NULL;
+ALTER TABLE pad_tramit_a_pers_aut ALTER COLUMN mail DROP NOT NULL;
+
+--Fer que no es pugui afegir el mateix servei a un llistat de serveis
+ALTER TABLE pad_tramit_i_serv ADD CONSTRAINT pad_tramiti_MULTIPLE_uk UNIQUE (tramitid,codi);
+
+--Obtenir el consentiment des-de tramitJ enlloc de tramitI
+ALTER TABLE pad_tramit_j_consent ADD COLUMN consentiment character varying(80);
+ALTER TABLE pad_tramit_j_consent ADD COLUMN urlconsentiment character varying(255);
+ALTER TABLE pad_tramit_j_consent ADD COLUMN consentimentadjunt character varying(200);
+
+ALTER TABLE pad_tramit_i_serv DROP COLUMN consentiment;
+ALTER TABLE pad_tramit_i_serv DROP COLUMN consentimentpublicat;
+ALTER TABLE pad_tramit_i_serv DROP COLUMN urlconsentiment;
+
+--Afegir informació de consentiment a solicitud i llevar-lo de solicitud-servei
+ALTER TABLE pad_solicitud ADD COLUMN consentiment character varying(80);
+ALTER TABLE pad_solicitud ADD COLUMN urlconsentiment character varying(255);
+ALTER TABLE pad_solicitud ADD COLUMN consentimentadjunt character varying(200);
+
+-- Fer que el cercador de dir3 sigui un cercador por nom #185
+ALTER TABLE pad_tramit_c_dades_cesi ADD COLUMN organid bigint;
+ALTER TABLE pad_tramit_c_dades_cesi ADD COLUMN organresponsableid bigint;
+
+ALTER TABLE pad_tramit_c_dades_cesi
+  ADD CONSTRAINT pad_tramitc_organ_fk FOREIGN KEY (organid)
+      REFERENCES pad_organ (organid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE pad_tramit_c_dades_cesi
+  ADD CONSTRAINT pad_tramitc_organ_resp_fk FOREIGN KEY (organresponsableid)
+      REFERENCES pad_organ (organid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+ create index pad_tramitc_organid_fk_i on pad_tramit_c_dades_cesi (organid);
+ create index pad_tramitc_organ_resp_fk_i on pad_tramit_c_dades_cesi (organresponsableid);
+
+
+-- Pasar dades de l'organ responsable de dir3responsable a organid. En la tabla pad_organ tenemos la relacion entre un dir3 y su organid. Hay que hacer un update para pasar la informacion de dir3responsable a organid en la tabla pad_tramit_c_dades_cesi:
+UPDATE pad_tramit_c_dades_cesi
+SET organid = subquery.organid
+FROM (
+        SELECT tcd.dadescesiid,
+            o.organid
+        FROM pad_tramit_c_dades_cesi tcd
+            JOIN pad_organ o ON (tcd.dir3responsable = o.dir3)
+    ) AS subquery
+WHERE pad_tramit_c_dades_cesi.dadescesiid = subquery.dadescesiid;
+
+--Borrar los registros que no tiene organid
+DELETE FROM pad_tramit_c_dades_cesi WHERE organid IS NULL;
+
+--Eliminar el NotNull de los campos denominacio, nif,responsable, dir3responsable, dir3arrel
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN denominacio DROP NOT NULL;
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN nif DROP NOT NULL;
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN responsable DROP NOT NULL;
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN dir3responsable DROP NOT NULL;
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN dir3arrel DROP NOT NULL;
+
+-- Poner los campos organid y organresponsableid como NotNull
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN organid SET NOT NULL;
+ALTER TABLE pad_tramit_c_dades_cesi ALTER COLUMN organresponsableid SET NOT NULL;
+
+-- Adaptar el nou consentiment al tramit sistra i a la integració amb Pinbal (PDF si no es tipus llei) #188
+ALTER TABLE pad_tramit_j_consent ALTER COLUMN adjuntid DROP NOT NULL;
+ALTER TABLE pad_tramit_j_consent ALTER COLUMN consentiment SET NOT NULL;
+
+
+-- Adaptar la taula tramit_c al nou autocompletar de dir3 #191
+ALTER TABLE pad_tramit_c_dades_cesi DROP CONSTRAINT pad_tramitc_organ_fk;
+ALTER TABLE pad_tramit_c_dades_cesi DROP CONSTRAINT pad_tramitc_organ_resp_fk;
+
+
+-- Permetre reprendre el tramit a PinbalAdmin desde sistra #195
+ALTER TABLE pad_tramit_a_pers_aut ADD COLUMN idsesiontramite character varying(255);
+
+-- Millores al formulari del tramit (disseny, noms de camps, etc) #194
+    -- Gestió de segon llinatge
+UPDATE pad_tramit_a_pers_aut SET llinatge2 = '---' WHERE llinatge2 IS NULL;
+UPDATE pad_tramit_d_cte_aut  SET llinatge2 = '---' WHERE llinatge2 IS NULL;
+UPDATE pad_tramit_e_cte_aud  SET llinatge2 = '---' WHERE llinatge2 IS NULL;
+UPDATE pad_tramit_f_cte_tec  SET llinatge2 = '---' WHERE llinatge2 IS NULL;
+
+ALTER TABLE pad_tramit_a_pers_aut ALTER COLUMN llinatge2 SET NOT NULL;
+ALTER TABLE pad_tramit_d_cte_aut ALTER COLUMN llinatge2 SET NOT NULL;
+ALTER TABLE pad_tramit_e_cte_aud ALTER COLUMN llinatge2 SET NOT NULL;
+ALTER TABLE pad_tramit_f_cte_tec ALTER COLUMN llinatge2 SET NOT NULL;
+
+    -- Llevar camps obligatoris
+ALTER TABLE pad_tramit_h_proc ALTER COLUMN urlseu DROP NOT NULL;
+
+
+    -- Canviar afegir gestió de norma2 a serveis
+ALTER TABLE pad_tramit_i_serv ADD COLUMN fitxernormaid bigint;
+
+ALTER TABLE pad_tramit_i_serv
+  ADD CONSTRAINT pad_tramiti_fitxer_norma_fk FOREIGN KEY (fitxernormaid)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE pad_tramit_i_serv ADD COLUMN norma2 character varying(240);
+ALTER TABLE pad_tramit_i_serv ADD COLUMN fitxernorma2id bigint;
+ALTER TABLE pad_tramit_i_serv ADD COLUMN articles2 character varying(60);
+
+ALTER TABLE pad_tramit_i_serv
+    ADD CONSTRAINT pad_tramiti_fitxer_norma2_fk FOREIGN KEY (fitxernorma2id)
+        REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE pad_tramit_i_serv ADD COLUMN norma3 character varying(240);
+ALTER TABLE pad_tramit_i_serv ADD COLUMN fitxernorma3id bigint;
+ALTER TABLE pad_tramit_i_serv ADD COLUMN articles3 character varying(60);
+
+ALTER TABLE pad_tramit_i_serv
+  ADD CONSTRAINT pad_tramiti_fitxer_norma3_fk FOREIGN KEY (fitxernorma3id)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+create index pad_tramiti_fitxernormaid_fk_i on pad_tramit_i_serv (fitxernormaid);
+create index pad_tramiti_fitxer2id_fk_i on pad_tramit_i_serv (fitxernorma2id);
+create index pad_tramiti_fitxer3id_fk_i on pad_tramit_i_serv (fitxernorma3id);
+
+ALTER TABLE pad_tramit_i_serv ALTER COLUMN urlnorma DROP NOT NULL;
+
+-- Afegir camps de normes a la taula de solicitud-servei
+ALTER TABLE pad_solicitudservei ADD COLUMN fitxernormaid bigint;
+
+ALTER TABLE pad_solicitudservei ADD COLUMN norma2 character varying(240);
+ALTER TABLE pad_solicitudservei ADD COLUMN fitxernorma2id bigint;
+ALTER TABLE pad_solicitudservei ADD COLUMN articles2 character varying(60);
+
+ALTER TABLE pad_solicitudservei ADD COLUMN norma3 character varying(240);
+ALTER TABLE pad_solicitudservei ADD COLUMN fitxernorma3id bigint;
+ALTER TABLE pad_solicitudservei ADD COLUMN articles3 character varying(60);
+
+ALTER TABLE pad_solicitudservei
+  ADD CONSTRAINT pad_soliservei_fitxer_n1_fk FOREIGN KEY (fitxernormaid)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+create index pad_soliservei_fitxer_n1_fk_i on pad_solicitudservei (fitxernormaid);
+
+ALTER TABLE pad_solicitudservei
+  ADD CONSTRAINT pad_soliservei_fitxer_n2_fk FOREIGN KEY (fitxernorma2id)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+create index pad_soliservei_fitxer_n2_fk_i on pad_solicitudservei (fitxernorma2id);
+
+ALTER TABLE pad_solicitudservei
+  ADD CONSTRAINT pad_soliservei_fitxer_n3_fk FOREIGN KEY (fitxernorma3id)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+create index pad_soliservei_fitxer_n3_fk_i on pad_solicitudservei (fitxernorma3id);
