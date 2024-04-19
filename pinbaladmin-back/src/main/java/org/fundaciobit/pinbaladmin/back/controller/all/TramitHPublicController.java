@@ -59,23 +59,17 @@ public class TramitHPublicController extends TramitHOperadorController {
 
         tramitForm.addHiddenField(TRAMITID);
 
-        String ajudaNom = I18NUtils.tradueix("tramitHProc.nom.help");
-        tramitForm.addHelpToField(NOM, ajudaNom);
-        
-        String ajudaDesc = I18NUtils.tradueix("tramitHProc.desc.help");
-        tramitForm.addHelpToField(DESCRIPCIO, ajudaDesc);
-        
         if (tramitForm.isNou()) {
             TramitHProcJPA tramitH = tramitForm.getTramitHProc();
 
-            tramitH.setTipus("1");
-            tramitH.setNom("Subvencions que m'acab d'inventar");
-            tramitH.setCodi("2874870");
-            tramitH.setUrlseu("https://www.google.es");
-            tramitH.setDescripcio("Proceso ayudas para Asociaciones de Famílias de Alumnos");
-            tramitH.setPeticionsaldia(12);
-            tramitH.setPeticionsalmes(450);
-            tramitH.setAutomatizado(true);
+//            tramitH.setTipus("1");
+//            tramitH.setNom("Subvencions que m'acab d'inventar");
+//            tramitH.setCodi("2874870");
+//            tramitH.setUrlseu("https://www.google.es");
+//            tramitH.setDescripcio("Proceso ayudas para Asociaciones de Famílias de Alumnos");
+//            tramitH.setPeticionsaldia(12);
+//            tramitH.setPeticionsalmes(450);
+//            tramitH.setAutomatizado(true);
         }
        return tramitForm;
     }

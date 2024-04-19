@@ -1,4 +1,4 @@
-
+<!--  Formulari -->
 <style>
 form {
 	margin: auto;
@@ -132,11 +132,11 @@ select.form-control {
 }
 
 .table td {
-  vertical-align: middle;
+	vertical-align: middle;
 }
 
-input[type="checkbox"]{
-	  margin: 0.25rem;
+input[type="checkbox"] {
+	margin: 0.25rem;
 }
 </style>
 
@@ -160,10 +160,18 @@ input[type="checkbox"]{
 	</c:forEach>
 </div>
 
-<c:if test="${not empty anotacions}">
-	<div id="anotacions">
-		Nota: <c:out value="${anotacions}" />
-	</div>
+<c:if test="${not empty anotacions && empty llistat}">
+	<div id="anotacions"></div>
+	<script>
+		var anotacions = "<c:out value='${anotacions}' />";
+		console.log(anotacions);
+		anotacions = anotacions.replaceAll("&lt;br&gt;", '<br>');
+		anotacions = anotacions.replaceAll("&amp;emsp;", '&emsp;');
+		
+		console.log(anotacions);
+
+		$("#anotacions").html("Nota: " + anotacions);
+	</script>
 </c:if>
 
 <script type="text/javascript">
@@ -176,8 +184,7 @@ input[type="checkbox"]{
 
 	var w2 = $("#wizard").width();
 	var w1 = $(".tab_container").width();
-	$("#anotacions").width(w1 + w2- 16);
-	
+	$("#anotacions").width(w1 + w2 - 16);
 
 	$("#dot${tramitActual}").addClass("actual");
 	$("#step${tramitActual}").addClass("actual");
@@ -190,7 +197,7 @@ input[type="checkbox"]{
 	var lastTramit = 0;
 	for (var i = 0; i < steps.length; i++) {
 		var letra = letras.charAt(i);
-		
+
 		var step = steps[i];
 
 		var context = "/pinbaladmin/public/tramit" + letra;

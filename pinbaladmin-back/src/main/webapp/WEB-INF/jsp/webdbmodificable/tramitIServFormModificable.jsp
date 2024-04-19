@@ -109,6 +109,8 @@
 				testServei();
 			}
 		});
+		
+		document.getElementById("tramitIServ.norma").placeholder="<fmt:message key='tramitIServ.norma.placeholder' />";
 
 	});
 </script>
@@ -157,8 +159,6 @@
 		
 		console.log(normesAfegides);
 		testNormes();
-
-		
 		
 		function testNormes() {
 			console.log("añadriermos " + normesAfegides + " normas");
@@ -199,26 +199,9 @@
 			testNormes();
 		});
 		
-		
-		
 		//onsubmit, poner vacios los campos de normas que no esten visibles
 		$("form").submit(function() {
 			console.log("submit");
-			
-			//Si hay n normas, pero solo se han rellenado m, marcar error en las n-m normas.
-			// Para saber si estan los datos rellenados, se comprueba si los campos de texto tienen texto, y si el campo file tiene un fichero.
-			
-/* 			for (var i = 1; i <= normesAfegides; i++) {
-                var norma = document.getElementById("tramitIServ.norma" + i).value;
-                var fitxer = document.getElementById("fitxernorma" + i + "ID").value;
-                var article = document.getElementById("tramitIServ.articles" + i).value;
-                
-                if (norma == "" || fitxer == "" || article == "") {
-                    alert("Cal omplir tots els camps de la norma " + i + " per poder continuar.");
-                    return false;
-                }
-            }
- */			
 			for (var i = normesAfegides+1; i <= totalNormes; i++) {
 				document.getElementById("tramitIServ.norma" + i).value = "none";
 			}

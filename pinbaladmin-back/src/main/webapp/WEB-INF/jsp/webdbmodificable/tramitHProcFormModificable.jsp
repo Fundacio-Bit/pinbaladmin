@@ -30,4 +30,8 @@
 			dataCad.readOnly = "readOnly";
 		}
 	}
+	
+	document.getElementById("tramitHProc.nom").placeholder="<fmt:message key='tramitHProc.nom.placeholder'/>";
+	document.getElementById("tramitHProc.codi").placeholder="<fmt:message key='tramitHProc.codi.placeholder'/>";
+	document.getElementById("tramitHProc.descripcio").placeholder="<fmt:message key='tramitHProc.descripcio.placeholder'/>";
 </script>

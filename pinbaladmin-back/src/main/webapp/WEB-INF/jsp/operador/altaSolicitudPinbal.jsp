@@ -86,8 +86,7 @@ table.solicitud.servicio.item {
 				<b>Asunto: </b>${solicitud.asunto}</div>
 			<div class="solicitud item">
 				<b>Consulta:</b> <br>
-				<textarea id="consulta" name="consulta" rows="6" cols="50">Consulta TEST</textarea>
-
+				<textarea id="consulta" name="consulta" rows="6" cols="50"></textarea>
 			</div>
 		</div>
 	</div>
@@ -275,6 +274,10 @@ table.solicitud.servicio.item {
 		elem.innerHTML = value == "N" ? "No" : "Si";
 	}
 
+	$("#consulta").html("Buenos días,\nEnviamos solicitud para dar servicios de alta en el procedimiento ${solicitud.procedimiento.codigo}\n\nQuedamos a la espera de su respuesta.\nUn saludo.");
+	
+	
+	
 	customConsentimiento();
 	function customConsentimiento() {
 		var tipo = document.getElementById("consentimiento-tipo");

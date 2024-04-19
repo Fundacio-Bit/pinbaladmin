@@ -244,7 +244,7 @@ public class TramitIOperadorController extends TramitIServController {
 			
 			
             {
-            	
+            	request.setAttribute("llistat", true);
                 TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);
                 tramitIServFilterForm.setAttachedAdditionalJspCode(true);
             }

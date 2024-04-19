@@ -4,7 +4,7 @@
 <c:if test="${isPublic == 'true'}">
 	<%@ include file="/WEB-INF/jsp/all/tramitSistraPublic.jsp"%>
 
-	<style>
+<style>
 form .lead {
 	display: flex;
 	flex-direction: row-reverse;
@@ -80,7 +80,16 @@ form .lead {
 		$(".btn-sm").removeClass("btn-sm");		
 		
 	</script>
+<!-- 
 
+	Modificar anotacions quan es el llistat
+	<div id="anotacions"></div>
+	
+	<script>
+		var anotacio = "<fmt:message key="tramit.sistra.anotacions.serveis.list" />";
+		console.log(anotacio);
 
-
+		$("#anotacions").html("Nota: " + anotacio);
+	</script>
+ -->
 </c:if>

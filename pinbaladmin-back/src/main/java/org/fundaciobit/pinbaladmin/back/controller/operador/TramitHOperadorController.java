@@ -181,8 +181,9 @@ public class TramitHOperadorController extends TramitHProcController {
                 val = tipusProcediment.catala;
             }
             __tmp.add(new StringKeyValue(key, val));
-
         }
+        __tmp.add(new StringKeyValue("", I18NUtils.tradueix("tramitHProc.tipus.seleccionar")));
+        
         return __tmp;
     }
 

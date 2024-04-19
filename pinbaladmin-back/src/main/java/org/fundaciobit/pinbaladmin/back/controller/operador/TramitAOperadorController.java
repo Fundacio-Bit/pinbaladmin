@@ -21,6 +21,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitAPersAutController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
@@ -372,24 +373,14 @@ public class TramitAOperadorController extends TramitAPersAutController {
 
     public static void dadesWizard(HttpServletRequest request, Long tramitID, long actual, Boolean isPublic, TramitAPersAutLogicaService tramitAEjb) throws I18NException {
         
-        
         Long[] identificadorsTramit = tramitAEjb.getPartsTramitIDs(tramitID);
         request.setAttribute("identificadorsTramit", identificadorsTramit);
         request.setAttribute("tramitActual", actual);
         
-		String anotacions = null;
-		switch ((int) actual) {
-		case 2: // C
-			anotacions = "Per fer la sol·licitud de cessió de dades, cal que ompliu el formulari següent amb les dades de la persona o entitat que cedeix les dades. Important: cal que adjunteu la documentació necessària per acreditar la cessió de dades.";			
-			break;
-		case 4: // E
-			anotacions = "Per aquest tramit, s'ha de tenir en compte que ara s'ha de fer una auditoria de seguretat de la informació";
-			break;
-		case 9: // J
-        	anotacions = "Si el consentiment és de tipus 'Llei', no cal adjuntar cap document. Si el consentiment és de tipus 'No oposició' o 'Si', cal adjuntar el document corresponent. Si adjunta una URL, ha de ser a un document PDF.";
-			break;
+		String anotacions = I18NUtils.tradueix("tramit.sistra.anotacions." + actual);
+		if (anotacions.trim().length() == 0) {
+			anotacions = null;
 		}
-
         request.setAttribute("anotacions", anotacions);
         
         String uuid = HibernateFileUtil.encryptFileID(tramitID);
