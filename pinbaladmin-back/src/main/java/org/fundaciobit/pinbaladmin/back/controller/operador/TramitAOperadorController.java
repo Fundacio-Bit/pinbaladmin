@@ -376,6 +376,9 @@ public class TramitAOperadorController extends TramitAPersAutController {
         Long[] identificadorsTramit = tramitAEjb.getPartsTramitIDs(tramitID);
         request.setAttribute("identificadorsTramit", identificadorsTramit);
         request.setAttribute("tramitActual", actual);
+        //Guardar el tramitA
+        TramitAPersAut tramitA = tramitAEjb.findByPrimaryKey(tramitID);
+        request.getSession().setAttribute("tramitA", tramitA);
         
 		String anotacions = I18NUtils.tradueix("tramit.sistra.anotacions." + actual);
 		if (anotacions.trim().length() == 0) {

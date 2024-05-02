@@ -137,6 +137,9 @@
 	
 	border: 1px solid darkgray;
 	border-bottom-left-radius: 5px;
+	
+	width: fit-content;
+	max-width: 40rem;
 }
 </style>
 

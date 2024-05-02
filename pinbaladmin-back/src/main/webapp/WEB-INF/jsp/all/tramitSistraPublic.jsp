@@ -1,13 +1,107 @@
+<!--  Capçalera i peu -->
+<div id="header">
+	<div id="logo-caib" class="third">
+		<img alt="logo-caib"
+			src="https://se.caib.es/sistramitfront/resources/1/O1S9IEZ4-ZJLRBRT8-T8SVCTKJ.png"
+			width="50px">
+		<div id="user-info">
+			<div id="user-name">
+				<strong>Usuari: </strong>${tramitA.llinatge1}&nbsp;${tramitA.llinatge2},&nbsp;${tramitA.nom}
+			</div>
+			<div id="user-nif">
+				<strong>DNI: </strong>${tramitA.nif}
+			</div>
+		</div>
+	</div>
+
+	<div id="titol-tramit" class="third">Sol·litud d'autorització</div>
+	<div id="button-menu" class="third">
+		<a href="https://se.caib.es/sistramitfront/asistente/iniciarTramite.html?tramite=CAIB.MODERNITZACIO.TEST_PINBALADMIN&version=1&idioma=ca&servicioCatalogo=false&idTramiteCatalogo=3261202">Tornar a Sistra</a>
+	</div>
+</div>
+
+<div id="footer">
+	<p>© 2024 - Fundacio BIT</p>
+</div>
+
+<script>
+	$(document).ready(function() {
+		var body = document.body;
+		var header = document.getElementById("header");
+	    var footer = document.getElementById("footer");
+	    
+		body.insertBefore(header, body.firstElementChild);
+		body.appendChild(footer);
+	});
+</script>
+
+<style>
+#header {
+	padding: 1rem 4rem;
+	text-align: center;
+	background-color: #4DBA79;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
+
+#titol-tramit {
+	font-size: 35px;
+	font-weight: lighter;
+}
+
+#logo-caib {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#user-info {
+	text-align: left;
+}
+
+#button-menu {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+#button-menu a {
+	background-color: #265d3c;
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 5px;
+	font-weight: lighter;
+	text-decoration: none;
+}
+
+#button-menu a:hover {
+	background-color: #000;
+}
+
+.third {
+	flex: 1;
+}
+
+#footer {
+	padding: 1rem;
+	text-align: center;
+	background-color: #white;
+	color: black;
+}
+</style>
+
 <!--  Formulari -->
 <style>
 form {
-	margin: auto;
+	margin: 1rem 5rem;
 	border: 2px solid black;
 	padding: 1rem 1.5rem 1rem;
 	border-radius: 5px;
-	/* 	display: flex;
- */
-	width: fit-content;
+	/* width: fit-content; */
 }
 
 .module_content {
@@ -35,10 +129,16 @@ form table td label {
 	margin: 0.5rem;
 }
 
+form table td:first-child {
+  width: min-content;
+}
+
 .tab_container {
-	max-width: 50rem;
+	/* 	max-width: 50rem;
+	margin-left: 2rem;
 	min-width: 35rem;
-	margin-right: 2rem;
+ */
+	flex: 4;
 }
 
 #wizard {
@@ -48,6 +148,8 @@ form table td label {
 	flex-direction: column;
 	margin-left: 2rem;
 	width: fit-content;
+	
+	flex: 1;
 }
 
 .step-container {
@@ -79,7 +181,7 @@ form table td label {
 
 .created.step-container {
 	cursor: pointer;
-	border-left-color: green;
+	border-left-color: #4DBA79;
 }
 
 .created .dot {
@@ -97,13 +199,6 @@ form table td label {
 .step.actual {
 	color: #198fd1;
 	font-weight: bold;
-}
-
-#titol-tramit {
-	font-size: 35px;
-	text-align: center;
-	margin: 1rem;
-	font-weight: lighter;
 }
 
 select.form-control {
@@ -129,6 +224,9 @@ select.form-control {
 	border-radius: 5px;
 	padding: 6px;
 	background-color: #d3d3d336;
+	
+	width: fit-content;
+	margin: 1rem auto;
 }
 
 .table td {
@@ -140,7 +238,6 @@ input[type="checkbox"] {
 }
 </style>
 
-<div id="titol-tramit">Sol·litud d'autorització</div>
 
 <div id="wizard">
 	<c:forEach var="tramit" items="${identificadorsTramit}"
@@ -176,57 +273,56 @@ input[type="checkbox"] {
 
 <script type="text/javascript">
 
-	$(".module_content").append($("#wizard"));
-	$(".module_content").append($(".tab_container"));
-	$("#titol-tramit").insertBefore($("form"))
+		$(".module_content").append($("#wizard"));
+		$(".module_content").append($(".tab_container"));
 
-	$("#anotacions").insertAfter($(".lead"))
+		$("#anotacions").insertAfter($(".lead"))
 
-	var w2 = $("#wizard").width();
-	var w1 = $(".tab_container").width();
-	$("#anotacions").width(w1 + w2 - 16);
+		var w2 = $("#wizard").width();
+		var w1 = $(".tab_container").width();
+		//$("#anotacions").width(w1 + w2 - 16);
 
-	$("#dot${tramitActual}").addClass("actual");
-	$("#step${tramitActual}").addClass("actual");
+		$("#dot${tramitActual}").addClass("actual");
+		$("#step${tramitActual}").addClass("actual");
 
-	var steps = $(".step-container");
-	var uuid = "${uuid}";
+		var steps = $(".step-container");
+		var uuid = "${uuid}";
 
-	var letras = "abcdefhij";
+		var letras = "abcdefhij";
 
-	var lastTramit = 0;
-	for (var i = 0; i < steps.length; i++) {
-		var letra = letras.charAt(i);
+		var lastTramit = 0;
+		for (var i = 0; i < steps.length; i++) {
+			var letra = letras.charAt(i);
 
-		var step = steps[i];
+			var step = steps[i];
 
-		var context = "/pinbaladmin/public/tramit" + letra;
-		if (step.classList.contains("created")) {
-			var url = context + "/edit/" + uuid;
-			if (letra == "i") {
-				url = context + "/list/1?tramitid=" + uuid;
-			}
-			step.href = url;
-			lastTramit++;
-		} else {
-			if (i == lastTramit) {
-				var url = context + "/new?tramitid=" + uuid;
+			var context = "/pinbaladmin/public/tramit" + letra;
+			if (step.classList.contains("created")) {
+				var url = context + "/edit/" + uuid;
 				if (letra == "i") {
 					url = context + "/list/1?tramitid=" + uuid;
 				}
-
 				step.href = url;
+				lastTramit++;
+			} else {
+				if (i == lastTramit) {
+					var url = context + "/new?tramitid=" + uuid;
+					if (letra == "i") {
+						url = context + "/list/1?tramitid=" + uuid;
+					}
+
+					step.href = url;
+				}
 			}
 		}
-	}
 
-	//setTitolSteps();
-	function setTitolSteps() {
-		var titols = [ "Persona Autenticada", "Dades Solicitud",
-				"Dades Cesionari" ];
+		//setTitolSteps();
+		function setTitolSteps() {
+			var titols = [ "Persona Autenticada", "Dades Solicitud",
+					"Dades Cesionari" ];
 
-		for (var i = 0; i < titols.length; i++) {
-			$("#step" + i).html(titols[i]);
+			for (var i = 0; i < titols.length; i++) {
+				$("#step" + i).html(titols[i]);
+			}
 		}
-	}
-</script>
+	</script>
