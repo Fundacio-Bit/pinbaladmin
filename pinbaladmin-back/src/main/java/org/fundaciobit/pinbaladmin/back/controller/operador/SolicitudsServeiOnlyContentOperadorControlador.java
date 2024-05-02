@@ -267,14 +267,21 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 
 		if (solSer.getFitxernorma() != null || solSer.getNormaLegal() != null || solSer.getArticles() != null) {
 			if (solSer.getFitxernorma() == null || solSer.getNormaLegal() == null || solSer.getArticles() == null) {
-				// Marcamos error y dejamos nulos todos los campos de la norma
-				solSer.setFitxernormaID(null);
-				solSer.setFitxernorma(null);
-				solSer.setNormaLegal(null);
-				solSer.setArticles(null);
+				// Comprobar si el problema es que no tenemos fichero pero si tenemos URL.
+				if (solSer.getFitxernorma() == null && solSer.getEnllazNormaLegal() != null) {
+					// No hay error.
+					// XYZ ZZZ: Comprobamos que la URL sea válida
 
-				result.rejectValue(get(NORMALEGAL), "genapp.validation.malformed",
-						new String[] { I18NUtils.tradueix(NORMALEGAL.fullName) }, null);
+				} else {
+					// Marcamos error y dejamos nulos todos los campos de la norma
+					solSer.setFitxernormaID(null);
+					solSer.setFitxernorma(null);
+					solSer.setNormaLegal(null);
+					solSer.setArticles(null);
+
+					result.rejectValue(get(NORMALEGAL), "genapp.validation.malformed",
+							new String[] { I18NUtils.tradueix(NORMALEGAL.fullName) }, null);
+				}
 			}
 		}
 
@@ -288,7 +295,6 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 
 				result.rejectValue(get(NORMA2), "genapp.validation.malformed",
 						new String[] { I18NUtils.tradueix(NORMA2.fullName) }, null);
-				
 			}
 		}
 
@@ -304,7 +310,5 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 						new String[] { I18NUtils.tradueix(NORMA3.fullName) }, null);
 			}
 		}
-    	
-    	
     }
 }
