@@ -20,12 +20,15 @@ import java.util.regex.Pattern;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
+import javax.ejb.Schedules;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.SelectDistinct;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
@@ -43,6 +46,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
@@ -53,10 +57,13 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.utils.FileUtils;
 import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 import org.hibernate.Hibernate;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 /**
@@ -1390,83 +1397,98 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //            throw new Exception("Hi ha mes d'una solicitud amb tramitID " + tramitID + " a la BBDD");
 //        }
     }
-//    
-//    /**
-//     * Funció que s'executa cada vespre a les 5:00 i actualitza l'estat de les solicituds a pinbal
-//     */
-//    @TransactionTimeout(value = TRANSACTION_TIMEOUT_IN_SEC)
-//    @Schedule(hour = "14", minute = "56",  persistent = false)
-//    protected void eliminarFitxersSignatsDeLocal() {
-//        log.info("Comença eliminarFitxersSignatsDeLocal()");
-//
-//        long startTime = System.currentTimeMillis();
-//        try {
-//            //Llistat de solicituds: 
-//            ScspFuncionario funcionario = new ScspFuncionario();
-//
-//            funcionario.setNifFuncionario("45186147W");
-//            funcionario.setNombreCompletoFuncionario("Juan Pablo Trias Segura");
-//            
-//            ScspTitular titular = new ScspTitular();
-//
-//            ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-//            titular.setTipoDocumentacion(tipoDocumentacion);
-//            titular.setDocumentacion("45186147W");
-//            titular.setNombre("Juan Pablo");
-//            titular.setApellido1("Trias");
-//            titular.setApellido2("Segura");
-//            titular.setNombreCompleto("Juan Pablo Trias Segura");
-//
-//            
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTimeInMillis(System.currentTimeMillis());
-//            cal.add(Calendar.MONTH, -5);
-//            
-//            List<Solicitud> solicituds = this.select(Where.AND(
-//                SolicitudFields.DATAINICI.greaterThan(new Timestamp(cal.getTimeInMillis()))),
-//                SolicitudFields.ORGANID.isNotNull()
-//            );
-//            
-//            log.info("Solicituds a procesasr: " + solicituds.size());
-//            for (Solicitud solicitud : solicituds) {
-//                Consulta consulta = new Consulta();
-//                consulta.setCodigoProcedimiento(solicitud.getProcedimentCodi());
-//                
-//                try {
-//                    Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, consulta);
-//                    if (retorno.getEstado().getCodigoEstado().equals("2")) {
-//                        log.info("estado procedimiento " + solicitud.getProcedimentCodi() + ": "
-//                                + Constants.ESTAT_PINBAL_NO_SOLICITAT + " - " + "no solicitat");
-//                        solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
-//                    } else if (retorno.getEstado().getCodigoEstado().equals("0")) {
-//                        EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
-//                        log.info("estado procedimiento " + solicitud.getProcedimentCodi() + ": " + estado.getEstado()
-//                                + " - " + estado.getDescripcion());
-//
-//                        solicitud.setEstatpinbal(estado.getEstado());
-//                    }
-//                } catch (Exception e) {
-//                    // TODO Auto-generated catch block
-//                    log.warn("Error solicitud " + solicitud.getProcedimentCodi() + ": " + e.getMessage());
-//                    solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
-//                }
-//                
-//                this.update(solicitud);
-//                
-//                //El Timeout son 3 minuts. Si el CRON s'executa durant 2 min, surt del for i acaba la funció.
-//                if ((System.currentTimeMillis() - startTime) > TRANSACTION_EXIT_IN_MILI) {
-//                    log.warn("Timeout.");
-//                    break;
-//                }
-//            }
-//
-//        } catch (I18NException e) {
-//            final String msg = "Error";
-//            log.error(msg, e);
-//        }
-//
-//        long endTime = System.currentTimeMillis();
-//        log.info("Total time: " + (endTime - startTime));
-//        log.info("Acaba eliminarFitxersSignatsDeLocal()");
-//    }
+
+    /**
+     * Funció que s'executa cada vespre a les 5:00 i actualitza l'estat de les solicituds a pinbal
+     */
+    @TransactionTimeout(value = TRANSACTION_TIMEOUT_IN_SEC)
+	@Schedules({ 
+		@Schedule(hour = "07", minute = "00", persistent = false),
+		@Schedule(hour = "10", minute = "00", persistent = false),
+		@Schedule(hour = "13", minute = "00", persistent = false)
+	})
+	protected void obtenirEstatsSolicitudsPinbal() {
+		log.info("Comença obtenirEstatsSolicitudsPinbal()");
+
+		long startTime = System.currentTimeMillis();
+		try {
+			ScspFuncionario funcionario = new ScspFuncionario();
+			funcionario.setNifFuncionario("45186147W");
+			funcionario.setNombreCompletoFuncionario("Juan Pablo Trias Segura");
+
+			ScspTitular titular = new ScspTitular();
+			titular.setTipoDocumentacion(ScspTipoDocumentacion.NIF);
+			titular.setDocumentacion("45186147W");
+			titular.setNombre("Juan Pablo");
+			titular.setApellido1("Trias");
+			titular.setApellido2("Segura");
+			titular.setNombreCompleto("Juan Pablo Trias Segura");
+
+			Where wSolicitudLocals = SolicitudFields.ORGANID.isNotNull();
+			Where wEstatsPinbal = SolicitudFields.ESTATPINBAL.greaterThan(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+			List<Solicitud> solicituds = this.select(Where.AND(wEstatsPinbal, wSolicitudLocals));
+			log.info("Solicituds a procesasr: " + solicituds.size());
+
+			final String SOLICITUD_TROBADA = "0";
+//			final String TICKET_NO_TROBAT = "1";
+			final String PROCEDIMENT_NO_TROBAT = "2";
+//			final String SOLICITANT_SENSE_SOLICITUTS = "3";
+				
+			List<String> solicitudConsultades = new ArrayList<String>();
+			
+			for (Solicitud solicitud : solicituds) {
+				
+				String codi = solicitud.getProcedimentCodi();
+				if (solicitudConsultades.contains(codi)) {
+					log.info("Solicitud " + codi + " ja consultada.");
+					continue;
+				} else {
+					solicitudConsultades.add(codi);
+				}
+				
+				Consulta consulta = new Consulta();
+				consulta.setCodigoProcedimiento(codi);
+
+				try {
+					String msg = null;
+					
+					Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, consulta);
+					String codigoEstado = retorno.getEstado().getCodigoEstado();
+					switch (codigoEstado) {
+					case SOLICITUD_TROBADA:
+						EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
+						
+						msg = "Solicitud " + codi + ": (" + estado.getEstado() + ") " + estado.getDescripcion();
+						solicitud.setEstatpinbal(estado.getEstado());
+						break;
+					case PROCEDIMENT_NO_TROBAT:
+						msg = "No s'ha trobat la solicitud " + codi + "a pinbal";
+						solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+						break;
+					}
+					log.info(msg);
+					
+				} catch (Exception e) {
+					log.warn("Error solicitud " + codi + ": " + e.getMessage());
+					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+				}
+				
+				this.update(solicitud);
+				
+				// Si el CRON s'executa durant 2 min, surt del for i acaba la funció.
+				if ((System.currentTimeMillis() - startTime) > TRANSACTION_EXIT_IN_MILI) {
+					log.warn("Timeout.");
+					break;
+				}
+			}
+
+		} catch (I18NException e) {
+			final String msg = "Error al cron obtenirEstatsSolicitudsPinbal():: " + e.getMessage();
+			log.error(msg, e);
+		}
+
+		long endTime = System.currentTimeMillis();
+		log.info("Total time: " + (endTime - startTime));
+		log.info("Acaba obtenirEstatsSolicitudsPinbal()");
+	}
 }
