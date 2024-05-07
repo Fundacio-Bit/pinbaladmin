@@ -519,6 +519,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     
                     filterList.add(ORGANID);
                     groupList.add(ORGANID);
+                    groupList.add(ESTATPINBAL);
                     
                     solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_SEARCH, "filtre.organ",
                             "javascript:openFiltreOrgans();", "btn-warning"));
