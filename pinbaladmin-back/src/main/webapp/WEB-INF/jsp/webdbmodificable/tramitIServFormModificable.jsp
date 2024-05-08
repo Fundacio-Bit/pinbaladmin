@@ -143,9 +143,11 @@
 
 <script type="text/javascript">
 
-	$(document).ready(function() {
+	var normesAfegides = ${normesAfegides};
+	var totalNormes = 3;
 	
-		var totalNormes = 3;
+	$(document).ready(function() {
+
 		
 		$(".tab_container").append($("#botones-normas"));
 		
@@ -154,8 +156,6 @@
 		$("#seccio_norma3").hide();
 
 		$("#eliminarNorma").hide();
-		
-		var normesAfegides = ${normesAfegides};
 		
 		console.log(normesAfegides);
 		testNormes();
@@ -200,15 +200,100 @@
 		});
 		
 		//onsubmit, poner vacios los campos de normas que no esten visibles
-		$("form").submit(function() {
-			console.log("submit");
-			for (var i = normesAfegides+1; i <= totalNormes; i++) {
-				document.getElementById("tramitIServ.norma" + i).value = "none";
-			}
+/* 		$("#tramitIServForm").submit(function() {
+			alert("submit2");
+
 		});
+ */	
     });
 	
 	
+	
+	function submitForm() {
+		var form = document.getElementById('tramitIServForm');
+		if (validacioFormulario()) {
+			for (var i = normesAfegides + 1; i <= totalNormes; i++) {
+				document.getElementById("tramitIServ.norma" + i).value = "none";
+			}
+			form.submit();
+		}else{
+			crearMissatgeError(form, "Revisi els errors de formulari");
+		}
+	}
+
+	function validacioFormulario() {
+		var validacio = true;
+		$(".errorField").remove();
+
+		var codi = document.getElementById("tramitIServ.codi");
+		if (codi.value === "") {
+			var table = document.getElementById("tramitIServ_tableid");
+			crearMissatgeError(table, "El servei es obligatori.");
+			validacio &= false;
+		}
+
+		validacio &= testCampsNorma("", true);
+		if (normesAfegides > 1) {
+			validacio &= testCampsNorma("2", false);
+		}
+		if (normesAfegides > 2) {
+			validacio &= testCampsNorma("3", false);
+		}
+
+		return validacio;
+	}
+
+	function testCampsNorma(n, obligatoria) {
+		var validacio = true;
+
+		var normaLegal = document.getElementById("tramitIServ.norma" + n);
+		var fitxerNorma = document.getElementById("fitxernorma" + n + "ID");
+		var articles = document.getElementById("tramitIServ.articles" + n);
+
+		console.log("normaLegal: " + normaLegal.value + " fitxerNorma: " + fitxerNorma.files.length + " articles: " + articles.value);
+
+		if (obligatoria || (normaLegal.value !== "" || testFile(fitxerNorma) || articles.value !== "")) {
+			if (normaLegal.value === "") {
+				crearMissatgeError(normaLegal, "La norma legal es obligatoria.");
+				validacio &= false;
+			} 
+			if (!testFile(fitxerNorma)) {
+				crearMissatgeError(fitxerNorma, "El fitxer de la norma es obligatori.");
+				validacio &= false;
+			}
+			if (articles.value === "") {
+				crearMissatgeError(articles, "Els articles de la norma son obligatoris.");
+				validacio &= false;
+			}
+		}
+
+		return validacio;
+	}
+
+	function testFile(fitxerNorma){
+		if (fitxerNorma.files.length > 0) {
+			return true;
+		}
+		
+		var div_file = fitxerNorma.parentElement.nextElementSibling.children[0];
+		if(div_file.style.display != "none"){
+            return true;
+		}
+		
+		return false;
+	}
+	
+	function crearMissatgeError(element, missatge) {
+		var span = document.createElement("span");
+		span.id = element.id + ".errors";
+		span.classList = "errorField alert alert-danger";
+		span.innerHTML = missatge;
+		if (element.type == "file") {
+			element.parentElement.parentElement.prepend(span);
+		} else {
+			element.parentElement.prepend(span);
+		}
+	}
 </script>
 
 

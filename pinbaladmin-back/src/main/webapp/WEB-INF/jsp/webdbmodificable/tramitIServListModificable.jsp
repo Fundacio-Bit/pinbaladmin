@@ -22,6 +22,10 @@ form .lead {
 .row {
 	margin: 0px;
 }
+
+form table td:first-child {
+  width: auto;
+}
 </style>
 
 	<script type="text/javascript">

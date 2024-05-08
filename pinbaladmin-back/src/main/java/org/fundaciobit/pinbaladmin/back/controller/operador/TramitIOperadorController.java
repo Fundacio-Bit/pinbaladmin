@@ -188,6 +188,10 @@ public class TramitIOperadorController extends TramitIServController {
 			}
         }
         
+        
+        tramitForm.setSaveButtonVisible(false);
+		tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.save", "javascript:submitForm();", "btn-primary"));
+        
 		request.setAttribute("normesAfegides", normesAfegides);
 		request.getSession().setAttribute("tramitid", tramitID);
          
@@ -199,6 +203,8 @@ public class TramitIOperadorController extends TramitIServController {
         return tramitForm;
     }
 
+    
+    
     @Override
     public TramitIServFilterForm getTramitIServFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
             throws I18NException {
@@ -462,11 +468,17 @@ public class TramitIOperadorController extends TramitIServController {
 		}
 	}
 	
-	@RequestMapping(value = "/jsonServeis", method = RequestMethod.GET)
-	public void dadesCesi(HttpServletRequest request,
+	
+//	@RequestMapping(value = "/{servid}/jsonServeis", method = RequestMethod.GET)
+//	public void obtenirJsonServeis(HttpServletRequest request, HttpServletResponse response,
+//			@PathVariable("servid") java.lang.Long servid) throws Exception {
+//		obtenirJsonServeis(request, response);
+//	}
+	
+	@RequestMapping(value = {"/jsonServeis", "/{servid}/jsonServeis"}, method = RequestMethod.GET)
+	public void obtenirJsonServeis(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// Ha de tornar un JSON amb els serveis. Un exmeple:
 		String param = (String) request.getParameter("query");
 		log.info("param: ]" + param + "[");
 
