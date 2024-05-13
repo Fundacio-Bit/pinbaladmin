@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -29,11 +29,11 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
-import org.fundaciobit.pinbaladmin.ejb.OrganService;
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -72,7 +72,6 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
-import org.hibernate.Hibernate;
 
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
@@ -446,7 +445,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         try {
 			eventSolicitudCreada(creador, soliID);
-			
+			enviarMailSolicitant(solicitud);
 			generarDocumentsSolicitud(soliID, organid, prop);
 			
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
@@ -653,7 +652,110 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     }
     
     
+	private void enviarMailSolicitant(SolicitudJPA solicitud) {
+		// Afegir event de creació de la solicitud.
+
+		try {
+			java.lang.Long _solicitudID_ = solicitud.getSolicitudID();
+			java.lang.String _comentari_ = "Bon dia, desde PinbalAdmin l'informam que hem rebut la seva sol·licitud amb el número "
+					+ solicitud.getSolicitudID();
+			java.lang.String _destinatari_ = solicitud.getPersonaContacte();
+			java.lang.String _destinatariMail_ = solicitud.getPersonaContacteEmail();
+
+			String tipus = "solicitud";
+
+			final String subject = "PINBAL [" + _solicitudID_ + "] - SOLICITUD REGISTRADA AL SISTEMA ";
+
+			final String from = Configuracio.getAppEmail();
+
+//			final String message = getCapCorreu(tipus, _solicitudID_) + "<div style=\"background-color:#f6f6f6;\">"
+//					+ _comentari_.replace("\n", "<br/>") + "</div><br/>"
+//					+ "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
+//					+ getLinkPublic(_solicitudID_) + "\" > Accedir a " + tipus + "</a><br/><br/>" + getPeuCorreu();
+
+			final String message = getMissatgeCorreu(solicitud);
+			final boolean isHtml = true;
+			FitxerJPA adjunt = null;
+
+			log.info("CORREU PER ENVIAR");
+			EmailUtil.postMail(subject, message, isHtml, from, adjunt, _destinatariMail_);
+			log.info("CORREU ENVIAT");
+
+		} catch (Throwable th) {
+			log.error("Error enviant correu al Solicitant: " + th.getMessage(), th);
+		}
+	}
     
+	private String getMissatgeCorreu(SolicitudJPA soli) {
+		
+		return "\r\n"
+				+ "Bon dia,<br />\r\n"
+				+ "<div id=\"titol\">Nova solicitud rebuda: " + soli.getSolicitudID() +  "</div>\r\n"
+				+ "\r\n"
+				+ "<div id=\"missatge\">\r\n"
+				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />\r\n"
+				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />\r\n"
+				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />\r\n"
+				+ "</div>\r\n"
+				+ "\r\n"
+				+ "<div id=\"reObrir\">\r\n"
+				+ "    Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a\r\n"
+				+ "        href=\"" + getLinkPublic(soli.getSolicitudID())  + "\"> Accedir a solicitud</a><br />\r\n"
+				+ "</div>\r\n"
+				+ "\r\n"
+				+ "<div id=\"firma\">\r\n"
+				+ "    Salutacions<br />\r\n"
+				+ "    <i>Àrea de Govern Digital - Fundació BIT</i><br />\r\n"
+				+ "</div>\r\n"
+				+ "<div id=\"noContestar\">\r\n"
+				+ "    Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç\r\n"
+				+ "    aportat en aquest correu.<br />\r\n"
+				+ "</div>\r\n"
+				+ "\r\n"
+				+ "<style>\r\n"
+				+ "    div{\r\n"
+				+ "        padding: 10px;\r\n"
+				+ "        margin-top: 10px;\r\n"
+				+ "    }\r\n"
+				+ "\r\n"
+				+ "    #missatge {\r\n"
+				+ "        background-color: #f0f0f0;\r\n"
+				+ "    }\r\n"
+				+ "\r\n"
+				+ "    #titol{\r\n"
+				+ "        font-size: 20px;\r\n"
+				+ "        text-align: center;\r\n"
+				+ "        font-weight: bold;\r\n"
+				+ "    }\r\n"
+				+ "    #noContestar {\r\n"
+				+ "        color: #868686;\r\n"
+				+ "        border: 4px double #868686;\r\n"
+				+ "        border-left: none;\r\n"
+				+ "        border-right: none;\r\n"
+				+ "    }\r\n"
+				+ "</style>";
+		
+		
+	}
+	
+	protected String getCapCorreu(String tipus, Long itemID) {
+		return "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>";
+	}
+
+	protected String getPeuCorreu() {
+		return "        Salutacions<br/><br/>" + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
+				+ "<div style=\"color:#868686\">"
+				+ "=================================================================<br/>"
+				+ "Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta<br/>"
+				+ "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
+				+ "=================================================================" + "</div>";
+	}
+
+	private String getLinkPublic(Long itemID) {
+		String url = Configuracio.getAppUrl() + "/public/eventsolicitud" + "/veureevents/"
+				+ HibernateFileUtil.encryptFileID(itemID);
+		return url;
+	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
 
