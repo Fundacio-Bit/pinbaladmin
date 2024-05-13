@@ -239,6 +239,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs) throws I18NException {
 
+    	log.info("Creant Solicituds");
         for (SolicitudJPA soli : solicituds) {
 
             // Desvincular Serveis
@@ -248,18 +249,33 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             soli.setSolicitudServeis(null);
 
             // Crear Fitxer XLSX i afegir-ho a solicitud
+            log.info("Creant fitxer XLSX");
             Fitxer xlsxFile = createFile(fitxerEjb, xlsx.getFileName(), xlsx.getContentType(), null, xlsx.getData());
             soli.setSolicitudXmlID(xlsxFile.getFitxerID());
-
+            log.info("Fitxer XLSX creat");
+            
             // Crear Solicitud
+            log.info("Creant Solicitud");
             this.create(soli);
-
+            log.info("Solicitud Creada: " + soli.getSolicitudID());
+            
             Long soliID = soli.getSolicitudID();
 
             // Afegir Serveis a la Solicitud
+            log.info("Afegint Serveis a la Solicitud");
             for (SolicitudServeiJPA ss : ssSet) {
+            	//articles, consentiment, enllazConsentiment, enllazNormaLegal, tipusconsentiment, caduca, fechacaduca
+            	ss.setArticles(reduceString255(ss.getArticles()));
+            	ss.setConsentiment(reduceString255(ss.getConsentiment()));
+            	ss.setEnllazNormaLegal(reduceString255(ss.getEnllazNormaLegal()));
+            	ss.setEnllazConsentiment(reduceString255(ss.getEnllazConsentiment()));
+            	ss.setTipusConsentiment(reduceString255(ss.getTipusConsentiment()));
+            	ss.setCaduca(reduceString255(ss.getCaduca()));
+            	ss.setFechaCaduca(reduceString255(ss.getFechaCaduca()));
+            	
                 ss.setSolicitudID(soliID);
                 solicitudServeiLogicaEJB.create(ss);
+                log.info("Servei Afegit a la Solicitud: " + ss.getServeiID());
             }
 
             //Afegim event de Solicitud Creada
@@ -281,42 +297,69 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.String _destinatari_ = soli.getPersonaContacte();
             java.lang.String _destinatariEmail_ = soli.getPersonaContacteEmail();
 
+            log.info("Afegint event de Solicitud Creada");
             eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
                     _destinatariEmail_, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
                     _caidNumeroSeguiment_);
-
+            log.info("Event de Solicitud Creada afegit");
+            
             // Afegir Documents per cada Solicitud
+            log.info("Afegint Documents a la Solicitud");
             for (EmailAttachmentInfo attach : attachs) {
 
-                if (attach != xlsx) {
-
-                    Fitxer attachFile = createFile(fitxerEjb, attach.getFileName(), attach.getContentType(), null,
+            	if (attach != xlsx ) {
+            		log.info("Afegint fitxer: " + attach.getFileName());
+            		//Si el  nombre es mayor a 255 chars, reducir a 255.
+            		String newFileName = attach.getFileName();
+            		if (newFileName.length() > 255) {
+            			newFileName = newFileName.substring(0, 255);
+            		}
+            		
+            		
+                    Fitxer attachFile = createFile(fitxerEjb, newFileName, attach.getContentType(), null,
                             attach.getData());
                     Long tipus = Constants.DOCUMENT_SOLICITUD_ALTRES;
+                    log.info("Fitxer creat: " + attachFile.getFitxerID());
 
-                    DocumentJPA doc = new DocumentJPA(attach.getFileName(), attachFile.getFitxerID(), null, null,
+                    log.info("Creant Document");
+                    DocumentJPA doc = new DocumentJPA(newFileName, attachFile.getFitxerID(), null, null,
                             tipus);
+                    log.info("Document creat: " + doc.getDocumentID());
 
                     documentLogicaEjb.create(doc);
-
+                    log.info("Document creat a BBDD: " + doc.getDocumentID());
+                    
+                    log.info("Afegint Document a la Solicitud");
                     DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
-
+                    log.info("Document afegit a la Solicitud: " + ds.getDocumentSolicitudID());
                     documentSolicitudLogicaEjb.create(ds);
-
+                    log.info("Document afegit a la BBDD: " + ds.getDocumentSolicitudID());
+                    
                     java.lang.String _comentari_ = "Afegit fitxer";
 
+                    log.info("Afegint event de Document Afegit");
                     eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
                             _destinatari_, _destinatariEmail_, _comentari_, attachFile.getFitxerID(), _noLlegit_,
                             _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
+                    log.info("Event de Document Afegit afegit");
                 }
             }
         }
+        log.info("Solicituds creades");
     }
     
 
     public enum TipusCridada{
         ALTA, CONSULTA, MODIFICACIO,
     }
+    
+	private String reduceString255(String string) {
+		if (string.length() > 255) {
+			return string.substring(0, 255);
+		}
+		return string;
+	}
+	
     protected PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus) throws Exception {
 
         PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
