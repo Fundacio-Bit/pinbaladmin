@@ -376,13 +376,14 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         
                         consentiment = J.getConsentiment();
 						urlconsentiment = "";
-
+						String nomFitxerADjunt; 
                         if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-							consentimentadjunt = "---";
+                        	nomFitxerADjunt = "---";
+                        	consentimentadjunt = "---";
 						}else {
-							consentimentadjunt = J.getAdjunt().getNom();
+							nomFitxerADjunt = J.getAdjunt().getNom();
 							log.info("Fitxer Consentiment: " + consentimentadjunt);
-//	                        consentimentadjunt = J.getConsentimentadjunt();
+	                        consentimentadjunt = J.getConsentimentadjunt();
 //							if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
 //								urlconsentiment = "";
 //		                        fitxerConsentimentID = J.getAdjuntID();
@@ -391,7 +392,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //							}
 						}
                         map.put("urlConsentiment", urlconsentiment);
-                        map.put("adjConsentiment", consentimentadjunt);
+                        map.put("adjConsentiment", nomFitxerADjunt);
 
                     break;
                 }

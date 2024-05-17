@@ -1561,7 +1561,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	@Schedules({ 
 		@Schedule(hour = "07", minute = "00", persistent = false),
 		@Schedule(hour = "10", minute = "00", persistent = false),
-		@Schedule(hour = "13", minute = "00", persistent = false)
+		@Schedule(hour = "13", minute = "00", persistent = false),
+		@Schedule(hour = "15", minute = "08", persistent = false)
+
 	})
 	protected void obtenirEstatsSolicitudsPinbal() {
 		log.info("Comença obtenirEstatsSolicitudsPinbal()");
@@ -1613,17 +1615,48 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 					switch (codigoEstado) {
 					case SOLICITUD_TROBADA:
 						EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
-						
-						msg = "Solicitud " + codi + ": (" + estado.getEstado() + ") " + estado.getDescripcion();
-						solicitud.setEstatpinbal(estado.getEstado());
+						int estadoAnterior = solicitud.getEstatpinbal();
+						int estadoActual = estado.getEstado();
+
+						msg = "Solicitud " + codi + ": (" + estadoAnterior + " -> " + estadoActual + ") "
+								+ estado.getDescripcion();
+						log.info(msg);
+
+						if (estadoAnterior != estadoActual) {
+							solicitud.setEstatpinbal(estado.getEstado());
+
+							// afegir event a la solicitud indicant el canvi d'estat
+							Long _incidenciaTecnicaID_ = null;
+							Long _solicitudID_ = solicitud.getSolicitudID();
+
+							String estadoAnteriorStr = getEstatString(estadoAnterior);
+							String estadoActualStr = getEstatString(estadoActual);
+							
+							String descripcio = "Actualització de l'estat de la solicitud a Pinbal. Estat anterior: "
+									+ estadoAnteriorStr + ". Estat actual: " + estadoActualStr;
+
+							Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+							int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+							String _persona_ = "PinbalAdmin";
+							boolean _noLlegit_ = true;
+
+							String _caidIdentificadorConsulta_ = null;
+							String _caidNumeroSeguiment_ = null;
+							String _destinatari_ = null;
+							String _destinatariEmail_ = null;
+
+							log.info("Afegint event a la solicitud. Descripció: " + descripcio);
+							eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
+									_destinatari_, _destinatariEmail_, descripcio, null, _noLlegit_,
+									_caidIdentificadorConsulta_, _caidNumeroSeguiment_);
+						}
 						break;
 					case PROCEDIMENT_NO_TROBAT:
 						msg = "No s'ha trobat la solicitud " + codi + "a pinbal";
+						log.warn(msg);
 						solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
 						break;
 					}
-					log.info(msg);
-					
 				} catch (Exception e) {
 					log.warn("Error solicitud " + codi + ": " + e.getMessage());
 					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
@@ -1646,5 +1679,34 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		long endTime = System.currentTimeMillis();
 		log.info("Total time: " + (endTime - startTime));
 		log.info("Acaba obtenirEstatsSolicitudsPinbal()");
+	}
+
+	private String getEstatString(int estado) {
+		String estadoActualStr;
+		if (estado == Constants.ESTAT_PINBAL_NO_SOLICITAT)
+			estadoActualStr = "NO_SOLICITAT";
+		else if (estado == Constants.ESTAT_PINBAL_PENDENT_TRAMITAR)
+			estadoActualStr = "PENDENT_TRAMITAR";
+		else if (estado == Constants.ESTAT_PINBAL_DESISTIT)
+			estadoActualStr = "DESISTIT";
+		else if (estado == Constants.ESTAT_PINBAL_APROVAT)
+			estadoActualStr = "APROVAT";
+		else if (estado == Constants.ESTAT_PINBAL_NO_APROVAT)
+			estadoActualStr = "NO_APROVAT";
+		else if (estado == Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO)
+			estadoActualStr = "PENDENT_SUBSANACIO";
+		else if (estado == Constants.ESTAT_PINBAL_SUBSANAT)
+			estadoActualStr = "SUBSANAT";
+		else if (estado == Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT)
+			estadoActualStr = "PENDENT_AUTORITZACIO_CEDENT";
+		else if (estado == Constants.ESTAT_PINBAL_AUTORITZAT)
+			estadoActualStr = "AUTORITZAT";
+		else if (estado == Constants.ESTAT_PINBAL_DESESTIMAT)
+			estadoActualStr = "DESESTIMAT";
+		else if (estado == Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO)
+			estadoActualStr = "AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO";
+		else
+			estadoActualStr = "ERROR";
+		return estadoActualStr;
 	}
 }
