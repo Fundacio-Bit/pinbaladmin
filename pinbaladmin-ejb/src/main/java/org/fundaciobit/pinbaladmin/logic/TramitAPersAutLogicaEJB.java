@@ -375,18 +375,20 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         tramitJ = J;
                         
                         consentiment = J.getConsentiment();
-                        
+						urlconsentiment = "";
+
                         if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-							urlconsentiment = "";
-							consentimentadjunt = "";
+							consentimentadjunt = "---";
 						}else {
-	                        consentimentadjunt = J.getConsentimentadjunt();
-							if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
-								urlconsentiment = "";
-		                        fitxerConsentimentID = J.getAdjuntID();
-							} else {
-								urlconsentiment = J.getUrlconsentiment();
-							}
+							consentimentadjunt = J.getAdjunt().getNom();
+							log.info("Fitxer Consentiment: " + consentimentadjunt);
+//	                        consentimentadjunt = J.getConsentimentadjunt();
+//							if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
+//								urlconsentiment = "";
+//		                        fitxerConsentimentID = J.getAdjuntID();
+//							} else {
+//								urlconsentiment = J.getUrlconsentiment();
+//							}
 						}
                         map.put("urlConsentiment", urlconsentiment);
                         map.put("adjConsentiment", consentimentadjunt);
@@ -401,7 +403,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		try {
 			Long solicitudXmlID = generarXMLFromMap(map);
 			prop = ParserFormulariXML.getPropertiesFromFormulario(solicitudXmlID);
-			Long docSoliID = generarDocumentSolicitudAmbXML(procedimentCodi, prop);
+			Long docSoliID = generarDocumentSolicitudAmbXML(procedimentCodi, prop, listaTramitsI);
 			
 			soli.setSolicitudXmlID(solicitudXmlID);
 	        soli.setDocumentSolicitudID(docSoliID);
@@ -827,39 +829,65 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     	afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
     }
 
-    private Long generarDocumentSolicitudAmbXML(String codiProc, Properties prop) throws Exception {
+	private Long generarDocumentSolicitudAmbXML(String codiProc, Properties props,List<TramitIServ> listaTramitsI) throws Exception {
 
-        String fileName = "Datos_de_la_solicitud_" + codiProc + ".pdf";
+		String fileName = "Datos_de_la_solicitud_" + codiProc + ".pdf";
+		File outputPDF = File.createTempFile("pinbaladmin_formulari_tramit", ".pdf");
+		FileOutputStream fosPDF = new FileOutputStream(outputPDF);
 
-        com.lowagie.text.Document documento = new com.lowagie.text.Document();
-        FileOutputStream ficheroPdf = new FileOutputStream(fileName);
+		File plantilla = new File(Configuracio.getTemplateFormulariTramit());
+		byte[] template = FileUtils.readFileToByteArray(plantilla);
 
-        PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("props", props);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String dataStr = sdf.format(new Date());
+		data.put("data", dataStr);
+		
+		Long tipus = Long.parseLong(props.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO"));
+		String procedimentTipus = getTipusProcediment(tipus);
+		data.put("tipusProcedimentNom", procedimentTipus);
+		
+		data.put("servicios", listaTramitsI);
+		
+		String tipusConsentiment= props.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");
+		String tipusConsentimentNom = "";
+		switch (tipusConsentiment) {
+		case Constants.CONSENTIMENT_TIPUS_NOOP:
+			tipusConsentimentNom = "No Oposición";
+			break;
+		case Constants.CONSENTIMENT_TIPUS_LLEI:
+			tipusConsentimentNom = "Ley";
+			break;
+		case Constants.CONSENTIMENT_TIPUS_SI:
+			tipusConsentimentNom = "Sí";
+			break;
+		}
+		data.put("tipusConsentimentNom", tipusConsentimentNom);
 
-        documento.open();
-        Set<Entry<Object, Object>> set = prop.entrySet();
-        for (Entry<Object, Object> entry : set) {
-            String key = (String) entry.getKey();
-            String value = (String) entry.getValue();
+		try {
+			ParserFormulariXML.createPdf(new ByteArrayInputStream(template), fosPDF, data);
+			
+			long size = outputPDF.length();
+			String mime = "application/pdf";
+			String desc = "";
 
-            documento.add(new Paragraph(key + ": " + value));
-        }
-        documento.add(new Paragraph("Esto es el primer párrafo, normalito"));
+			FitxerJPA fitxer = new FitxerJPA(fileName, size, mime, desc);
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
 
-        documento.close();
+			FileSystemManager.crearFitxer(outputPDF, fitxer.getFitxerID());
 
-        File file = new File(fileName);
-        long size = file.length();
-        String mime = "application/pdf";
-        String desc = "";
+			return fitxer.getFitxerID();
 
-        FitxerJPA fitxer = new FitxerJPA(fileName, size, mime, desc);
-        fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-        FileSystemManager.crearFitxer(file, fitxer.getFitxerID());
-
-        return fitxer.getFitxerID();
-    }
+		} finally {
+			try {
+				fosPDF.flush();
+				fosPDF.close();
+			} catch (Exception e) {
+				System.err.println("Error creant Documents de Solicitud" + e.getMessage());
+			}
+		}
+	}
 
     
     @Override

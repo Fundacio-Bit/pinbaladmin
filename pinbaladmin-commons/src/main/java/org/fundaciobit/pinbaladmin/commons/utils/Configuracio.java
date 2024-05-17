@@ -200,6 +200,10 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "template_formulari");
     }
 
+    public static String getTemplateFormulariTramit() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "template_tramit_sistra_pdf");
+    }
+
     public static String getTemplateServeisExcel() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
     }
