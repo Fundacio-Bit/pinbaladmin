@@ -447,17 +447,24 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         log.info("SolicitudID de la solicitud creada: " + soliID);
 
         try {
+        	log.info("Enviem event de creació de la sol·licitud");
 			eventSolicitudCreada(creador, soliID);
+			log.info("Enviem mail al sol·licitant");
 			enviarMailSolicitant(solicitud);
+			log.info("Generem documents de la sol·licitud");
 			generarDocumentsSolicitud(soliID, organid, prop);
+			log.info("Afegim serveis a la sol·licitud");
 			
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
 			soli.setSolicitudServeis(solicitudServeis);
+			log.info("Generem Excel de Serveis");
 			generarExcelDeServeis(solicitud);
 			
+			log.info("Afegim document de consentiment");
 			afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 			
-		} catch (Exception e) {
+			log.info("S'ha creat la sol·licitud: " + soliID);
+        } catch (Exception e) {
 			String msg = "Error generant documents de la sol·licitud: " + e.getMessage();
 			log.error(msg, e);
 			throw new I18NException(msg);
@@ -739,19 +746,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 				+ "</style>";
 		
 		
-	}
-	
-	protected String getCapCorreu(String tipus, Long itemID) {
-		return "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>";
-	}
-
-	protected String getPeuCorreu() {
-		return "        Salutacions<br/><br/>" + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
-				+ "<div style=\"color:#868686\">"
-				+ "=================================================================<br/>"
-				+ "Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta<br/>"
-				+ "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
-				+ "=================================================================" + "</div>";
 	}
 
 	private String getLinkPublic(Long itemID) {

@@ -174,7 +174,6 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         }
 
         if (xlsx == null) {
-
             String msg = "El document enviat " + emi.getSubject() + " no conté cap fitxer .xlsx";
             log.error(msg);
             throw new Exception(msg);
@@ -182,10 +181,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         List<SolicitudJPA> solicituds;
         try {
-            log.info("processSolicitud  start ");
             solicituds = processSolicitud(request, emi, xlsx, operador, log, serveiEjb);
-
-            log.info("processSolicitud  end " + solicituds.size());
         } catch (Throwable e) {
             String msg = "Error processant solicitud o serveis del fitxer " + emi.getSubject() + ": " + e.getMessage();
             log.error(msg, e);
@@ -215,6 +211,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         InputStream xlsxIS = new ByteArrayInputStream(xlsx.getData());
 
         final boolean debug = true;
+        //Aquesta funció extreu la informació del fitxer excel
         SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
         
         String expedientID = getPIDFromSubject(emi.getSubject());
@@ -241,7 +238,6 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
             SolicitudJPA solicitud = new SolicitudJPA();
 
-            // String procedimentCodi = null;
             solicitud.setProcedimentCodi(proc.getCodi());
 
             solicitud.setPersonaContacte(nomContacte );
@@ -258,22 +254,21 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
             solicitud.setEntitatEstatal(info.getEntitat());
             solicitud.setExpedientPid(info.getExpedientPID());
 
-            String tpOrig = proc.getTipusProcediment();
+			{
+				String tpOrig = proc.getTipusProcediment();
+				if (tpOrig != null) {
+					tpOrig = tpOrig.trim().replace("  ", " ");
+				}
+				String tp = TipusProcediments.getTipusProcedimentByLabel(tpOrig);
 
-            // XYZ ZZZ
-            // log.info("\n\n XXXXXXXXXXXXXXXXX\n ESTATAL TP ORIGINAL => ]" + tp +
-            // "[\nZZZZZZZZZZZZZZZZZZ\n\n" );
-
-            String tp = TipusProcediments
-                    .getTipusProcedimentByLabel(tpOrig == null ? tpOrig : tpOrig.trim().replace("  ", " "));
-
-            if (tp == null) {
-                HtmlUtils.saveMessageError(request, "No he trobat el Tipus de Procediment per l'etiqueta ]" + tpOrig
-                        + "[, Revisi si l'ha de posar en la descripció com un àlies.");
-            } else {
-                solicitud.setProcedimentTipus(tp);
-            }
-
+				if (tp == null) {
+					HtmlUtils.saveMessageError(request, "No he trobat el Tipus de Procediment per l'etiqueta ]" + tpOrig
+							+ "[, Revisi si l'ha de posar en la descripció com un àlies.");
+				} else {
+					solicitud.setProcedimentTipus(tp);
+				}
+			}
+			
             // Serveis
             Set<SolicitudServeiJPA> ssList = new HashSet<SolicitudServeiJPA>();
 
@@ -319,19 +314,39 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 long serveiID = id;
                 java.lang.Long estatSolicitudServeiID = 20L; // Produccio
 
-                java.lang.String normaLegal = "";
-                java.lang.String enllazNormaLegal = "";
-                java.lang.String articles = "";
-
-                final String SEP = "\n-------\n";
+                String normaLegal = null;
+                String articles = null;
+                String enllazNormaLegal = null;
+                
+                String norma2 = null;
+                String articles2 = null;
+                
+                String norma3 = null;
+                String articles3 = null;
 
                 List<NormativaInfo> normes = servei.getNormatives();
-                for (NormativaInfo norma : normes) {
-                    normaLegal = normaLegal + norma.getNormaLegal() + SEP;
-                    enllazNormaLegal = enllazNormaLegal + norma.getEnllaz() + SEP;
-                    articles = articles + norma.getArticles() + SEP;
-                }
+                
+				for (int i = 0; i < normes.size(); i++) {
+					NormativaInfo norma = normes.get(i);
+					if (i == 0) {
+						normaLegal = norma.getNormaLegal();
+						articles = norma.getArticles();
+						enllazNormaLegal = norma.getEnllaz();
+					} else if (i == 1) {
+						norma2 = norma.getNormaLegal();
+						articles2 = norma.getArticles();
+					} else if (i == 2) {
+						norma3 = norma.getNormaLegal();
+						articles3 = norma.getArticles();
+					}
+				}
+                
+				Long fitxerIDNorma= null;
+				Long fitxerIDNorma2= null;
+				Long fitxerIDNorma3= null;
+                
 
+                // Truncate a 250 chars
                 normaLegal = Utils.crop(normaLegal);
                 enllazNormaLegal = Utils.crop(enllazNormaLegal);
                 articles = Utils.crop(articles);
@@ -354,16 +369,22 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
                     case "nooposicio":
                     case "nooposicion":
+                    case "nooposició":
+                    case "nooposición":
                     case "noop":
                     case "noopo":
 
                     case "no oposicio":
                     case "no oposicion":
+                    case "no oposició":
+                    case "no oposición":
                     case "no op":
                     case "no opo":
 
                     case "no_oposicio":
                     case "no_oposicion":
+                    case "no_oposició":
+                    case "no_oposición":
                     case "no_op":
                     case "no_opo":
                         consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
@@ -372,20 +393,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                     case "ley":
                         consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
                         break;
-                }
+                }  
                 log.info("Consentiment despues: " + consentiment);
-                
-				
-				Long fitxerIDNorma= null;
-				
-				String norma2 = null;
-				String articles2 = null;
-				Long fitxerIDNorma2= null;
-				
-				String norma3 = null;
-				String articles3 = null;
-				Long fitxerIDNorma3= null;
-				
 				
 				SolicitudServeiJPA ss = new SolicitudServeiJPA(solicitudID, serveiID, estatSolicitudServeiID,
 						enllazNormaLegal, tipusConsentiment, consentiment, enllazConsentiment, notes, caduca,
