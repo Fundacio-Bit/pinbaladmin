@@ -755,16 +755,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
-
 		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
-		while (organGestor.getDir3pare() != null) {
-			List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
-			if (organ.size() == 1) {
-				organGestor = organ.get(0);
-			}
-		}
+        EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
+        String nifArrel = entitatArrel.getCIF();
 
-		if (organGestor.getCif().equals("S0711001H")) {
+		if (nifArrel.equals("S0711001H")) {
 	        String dir3Dgtic = "A04027005";
 	        List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
 	        if (organ.size() == 1) {
