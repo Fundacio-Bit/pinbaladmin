@@ -1,6 +1,10 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -154,25 +160,66 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         EmailAttachmentInfo xlsx = null;
 
-        for (EmailAttachmentInfo eai : attachs) {
+		for (EmailAttachmentInfo eai : attachs) {
 
-            if (XLSX_MIME.equalsIgnoreCase(eai.getContentType())) {
-                log.info("trobat: " + eai.getFileName());
-                xlsx = eai;
-                break;
-            }
+			if (XLSX_MIME.equalsIgnoreCase(eai.getContentType())) {
+				log.info("trobat: " + eai.getFileName());
+				xlsx = eai;
+				break;
+			}
 
-            String ext = Utils.getExtension(eai.getFileName());
+			String ext = Utils.getExtension(eai.getFileName());
 
-            log.info("Cercant Extensio: " + ext);
+			log.info("Cercant Extensio: " + ext);
 
-            if (".xlsx".equalsIgnoreCase(ext)) {
-                xlsx = eai;
-                break;
-            }
+			if (".xlsx".equalsIgnoreCase(ext)) {
+				xlsx = eai;
+				break;
+			}
 
-        }
+			if (".zip".equalsIgnoreCase(ext)) {
+				// Descomprimir, i afegir tots els fitxers a la llista d'attachs
+				
+				log.info("Cercam .xlsx al ZIP: " + eai.getFileName());
 
+				String fileZip = eai.getFileName();
+				ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
+				ZipEntry zipEntry = zis.getNextEntry();
+				
+				while (zipEntry != null) {
+					if (!zipEntry.isDirectory()) {
+						String zipEntryExt = Utils.getExtension(zipEntry.getName());
+						if (!".xlsx".equalsIgnoreCase(zipEntryExt)) {
+							log.info("No es un fitxer .xlsx, no el processem: " + zipEntry.getName());
+						} else {
+							log.info("Fitxer .xlsx trobat: " + zipEntry.getName());
+							// Hem d'assignar a xlsx el fitxer .xlsx
+
+							String fileName = zipEntry.getName();
+							String contentType = XLSX_MIME;
+							byte[] data = zis.readAllBytes();
+
+							EmailAttachmentInfo fitxerExcel = new EmailAttachmentInfo(fileName, contentType, data);
+
+							xlsx = fitxerExcel;
+							break;
+						}
+					} else {
+						log.info("Directori: " + zipEntry.getName());
+						File destDir = new File("/uncompressed/" + System.currentTimeMillis() + "/");
+						File newFile = newFile(destDir, zipEntry);
+						if (!newFile.isDirectory() && !newFile.mkdirs()) {
+							throw new IOException("Failed to create directory " + newFile);
+						}
+					}
+					zipEntry = zis.getNextEntry();
+				}
+				zis.closeEntry();
+				zis.close();
+
+			}
+		}
+        
         if (xlsx == null) {
             String msg = "El document enviat " + emi.getSubject() + " no conté cap fitxer .xlsx";
             log.error(msg);
@@ -205,6 +252,19 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
     }
 
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
+    }
+    
     protected static List<SolicitudJPA> processSolicitud(HttpServletRequest request, EmailMessageInfo emi,
             EmailAttachmentInfo xlsx, String operador, Logger log, ServeiService serveiEjb) throws Exception, I18NException {
 

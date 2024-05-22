@@ -271,7 +271,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             	ss.setEnllazConsentiment(reduceString255(ss.getEnllazConsentiment()));
             	ss.setTipusConsentiment(reduceString255(ss.getTipusConsentiment()));
             	ss.setCaduca(reduceString255(ss.getCaduca()));
-            	ss.setFechaCaduca(reduceString255(ss.getFechaCaduca()));
+            	ss.setFechaCaduca(ss.getFechaCaduca());
             	
                 ss.setSolicitudID(soliID);
                 solicitudServeiLogicaEJB.create(ss);
@@ -354,6 +354,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     }
     
 	private String reduceString255(String string) {
+		if (string == null) {
+			return null;
+		}
+		
 		if (string.length() > 255) {
 			return string.substring(0, 255);
 		}
