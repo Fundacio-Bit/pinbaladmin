@@ -2,21 +2,16 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -28,14 +23,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.SelectDistinct;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
-import org.fundaciobit.pinbaladmin.ejb.DocumentService;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
@@ -46,7 +39,6 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
@@ -155,7 +147,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             for (Long ss : list) {
                 files.addAll(solicitudServeiLogicaEJB.deleteFull(ss, solicitudId, false));
             }
-
         }
 
         // Borram Documents de Solicitud
@@ -166,7 +157,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             for (Long ds : documentsIds) {
                 files.addAll(documentSolicitudLogicaEjb.deleteFull(ds, solicitudId, false));
             }
-
         }
 
         // Borram solicitud
@@ -210,7 +200,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         }
 
         return s;
-
     }
 
 //    @Override
@@ -243,26 +232,20 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         for (SolicitudJPA soli : solicituds) {
 
             // Desvincular Serveis
-
             Set<SolicitudServeiJPA> ssSet = soli.getSolicitudServeis();
 
             soli.setSolicitudServeis(null);
 
             // Crear Fitxer XLSX i afegir-ho a solicitud
-            log.info("Creant fitxer XLSX");
             Fitxer xlsxFile = createFile(fitxerEjb, xlsx.getFileName(), xlsx.getContentType(), null, xlsx.getData());
             soli.setSolicitudXmlID(xlsxFile.getFitxerID());
-            log.info("Fitxer XLSX creat");
             
             // Crear Solicitud
-            log.info("Creant Solicitud");
             this.create(soli);
-            log.info("Solicitud Creada: " + soli.getSolicitudID());
             
             Long soliID = soli.getSolicitudID();
 
             // Afegir Serveis a la Solicitud
-            log.info("Afegint Serveis a la Solicitud");
             for (SolicitudServeiJPA ss : ssSet) {
             	//articles, consentiment, enllazConsentiment, enllazNormaLegal, tipusconsentiment, caduca, fechacaduca
             	ss.setArticles(reduceString255(ss.getArticles()));
@@ -275,7 +258,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             	
                 ss.setSolicitudID(soliID);
                 solicitudServeiLogicaEJB.create(ss);
-                log.info("Servei Afegit a la Solicitud: " + ss.getServeiID());
             }
 
             //Afegim event de Solicitud Creada
@@ -283,7 +265,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.Long _solicitudID_ = soliID;
 
             boolean isEstatal = soli.getEntitatEstatal() != null;
-
             String descripcio = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
 
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
@@ -297,18 +278,14 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.String _destinatari_ = soli.getPersonaContacte();
             java.lang.String _destinatariEmail_ = soli.getPersonaContacteEmail();
 
-            log.info("Afegint event de Solicitud Creada");
             eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
                     _destinatariEmail_, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
                     _caidNumeroSeguiment_);
-            log.info("Event de Solicitud Creada afegit");
             
             // Afegir Documents per cada Solicitud
-            log.info("Afegint Documents a la Solicitud");
             for (EmailAttachmentInfo attach : attachs) {
 
             	if (attach != xlsx ) {
-            		log.info("Afegint fitxer: " + attach.getFileName());
             		//Si el  nombre es mayor a 255 chars, reducir a 255.
             		String newFileName = attach.getFileName();
             		if (newFileName.length() > 255) {
@@ -319,29 +296,18 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     Fitxer attachFile = createFile(fitxerEjb, newFileName, attach.getContentType(), null,
                             attach.getData());
                     Long tipus = Constants.DOCUMENT_SOLICITUD_ALTRES;
-                    log.info("Fitxer creat: " + attachFile.getFitxerID());
-
-                    log.info("Creant Document");
                     DocumentJPA doc = new DocumentJPA(newFileName, attachFile.getFitxerID(), null, null,
                             tipus);
-                    log.info("Document creat: " + doc.getDocumentID());
 
                     documentLogicaEjb.create(doc);
-                    log.info("Document creat a BBDD: " + doc.getDocumentID());
-                    
-                    log.info("Afegint Document a la Solicitud");
+
                     DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
-                    log.info("Document afegit a la Solicitud: " + ds.getDocumentSolicitudID());
                     documentSolicitudLogicaEjb.create(ds);
-                    log.info("Document afegit a la BBDD: " + ds.getDocumentSolicitudID());
                     
                     java.lang.String _comentari_ = "Afegit fitxer";
-
-                    log.info("Afegint event de Document Afegit");
                     eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
                             _destinatari_, _destinatariEmail_, _comentari_, attachFile.getFitxerID(), _noLlegit_,
                             _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
-                    log.info("Event de Document Afegit afegit");
                 }
             }
         }

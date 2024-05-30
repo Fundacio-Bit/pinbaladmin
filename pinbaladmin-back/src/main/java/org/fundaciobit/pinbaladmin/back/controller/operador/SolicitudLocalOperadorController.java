@@ -127,15 +127,12 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
                 return Where.AND(w1, w2);
             }
         }
-
     }
 
     @Override
     public SolicitudFilterForm getSolicitudFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
             throws I18NException {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
-
-        
         request.setAttribute("desplegableOrgans", true);
 
         List<Organ> organs = organEjb.select();
@@ -149,29 +146,17 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
             log.info(selected.getNom());
             mav.addObject("organSelected", organID);
         }
-        
-        
 
 //        1. afegir llistat de organs
-        
 //        2. Afegir organ acutal (quan toqui) a mav.addObject('organid-selected');
-        
         
         if (solicitudFilterForm.isNou()) {
 //            solicitudFilterForm.getHiddenFields().remove(ORGANID);
-            
-            
-            
-            
-            
-            
-            
 
             if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
                 //solicitudFilterForm.setEstatIDDesde(-1L);
                 //solicitudFilterForm.setEstatIDFins(50L);
             } else {
-
                 if (getVistaIncidencia() == VistaIncidencia.NOLLEGITSMEUS) {
                     solicitudFilterForm.getGroupByFields().remove(CREADOR);
                     solicitudFilterForm.getGroupByFields().remove(OPERADOR);

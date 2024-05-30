@@ -126,115 +126,101 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     mav.addObject("isView", __isView);
     
     if (__isView) {
+    	final boolean isEstatal = (solicitud.getDepartamentID() == null && solicitud.getOrganid() == null);
+    	
       // Canviam el cancel·lar per un tornar.....
       solicitudForm.setCancelButtonVisible(false);
-      Long soliID = + solicitud.getSolicitudID();
+      Long soliID = solicitud.getSolicitudID();
       String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
       
       solicitudForm.addAdditionalButton(
           new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, "btn-info"));
 
-      solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EDIT, "solicitud.edit",
-          "/operador/solicitud" + ((_jpa.getDepartamentID() == null && _jpa.getOrganid() == null) ? "estatal" : "local") + "/"
-              + soliID + "/edit",
+		solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EDIT, "solicitud.edit",
+				"/operador/solicitud" + (isEstatal ? "estatal" : "local") + "/" + soliID + "/edit",
           "btn-warning"));
 
       String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/"
-              + solicitud.getSolicitudID() + (isEstatal() == null ? "" : ("/" + isEstatal()));
+              + soliID + (isEstatal() == null ? "" : ("/" + isEstatal));
 
       solicitudForm.addAdditionalButton(
               new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
       
-      if (_jpa.getEntitatEstatal() == null) {
+		if (!isEstatal) {
+			// Si és local
+			solicitudForm.addAdditionalButton(
+					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
+							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
 
-          if (!isFirmatPelDirector(solicitud)) {
-              solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
-                      getContextWeb() + "/afegirFormulariFirmat/" + soliID,
-                      "btn-warning btn-api-pinbal"));
-          }else {
-              log.info("Estat PBL: " + solicitud.getEstatpinbal());
-    
-              AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-                      "/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
-    
-              AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-                      "/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
-    
-              AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-                      "/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
-    
-              if (solicitud.getEstatpinbal() == null) {
-                  solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
-              }
-    
-              int estatPinbal = solicitud.getEstatpinbal();
-    
-              if (estatPinbal >= 0) {
-                  solicitudForm.addAdditionalButton(consulta);
-    
-              }
-    
-              switch (solicitud.getEstatpinbal()) {
-                  case Constants.ESTAT_PINBAL_ERROR:
-                  case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-                  case Constants.ESTAT_PINBAL_NO_APROVAT:
-                  case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-                  case Constants.ESTAT_PINBAL_DESESTIMAT:
-                      solicitudForm.addAdditionalButton(alta);
-                  break;
-    
-                  case Constants.ESTAT_PINBAL_APROVAT:
-                  case Constants.ESTAT_PINBAL_SUBSANAT:
-                      solicitudForm.addAdditionalButton(modificacio);
-                  break;
-    
-                  case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-                  case Constants.ESTAT_PINBAL_DESISTIT:
-                  case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-                  case Constants.ESTAT_PINBAL_AUTORITZAT:
-                  case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-                  break;
-    
-                  default:
-                  break;
-              }
-          }
-      }
+			if (!isFirmatPelDirector(solicitud)) {
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
+						getContextWeb() + "/afegirFormulariFirmat/" + soliID, "btn-warning btn-api-pinbal"));
+			} else {
+				log.info("Estat PBL: " + solicitud.getEstatpinbal());
+
+				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+						"/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
+
+				AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+						"/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
+
+				AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
+
+				if (solicitud.getEstatpinbal() == null) {
+					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+				}
+
+				if (solicitud.getEstatpinbal() >= 0) {
+					solicitudForm.addAdditionalButton(consulta);
+				}
+
+				switch (solicitud.getEstatpinbal()) {
+				case Constants.ESTAT_PINBAL_ERROR:
+				case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+				case Constants.ESTAT_PINBAL_NO_APROVAT:
+				case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+				case Constants.ESTAT_PINBAL_DESESTIMAT:
+					solicitudForm.addAdditionalButton(alta);
+					break;
+
+				case Constants.ESTAT_PINBAL_APROVAT:
+				case Constants.ESTAT_PINBAL_SUBSANAT:
+					solicitudForm.addAdditionalButton(modificacio);
+					break;
+
+				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+				case Constants.ESTAT_PINBAL_DESISTIT:
+				case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+				case Constants.ESTAT_PINBAL_AUTORITZAT:
+				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+					break;
+
+				default:
+					break;
+				}
+			}
+		} else {
+			// Si és estatal
+			
+			//Boto per enviar correus als cedents
+			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
+					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, "btn-warning btn-correu-cedents"));
+		}
+      
+      
       
       solicitudForm.setAttachedAdditionalJspCode(true);
-      
-      if (solicitud.getEntitatEstatal() == null) {
-        solicitudForm.addAdditionalButton(
-            new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
-                getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
-
-//        if (solicitud.getTicketNumeroSeguiment() == null) {
-//          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
-//              "solicitud.caid", getContextWeb() + "/formularicaidfitxers/"
-//                  + solicitud.getSolicitudID(),
-//              "btn-info"));
-//        } else {
-//
-//          String url = Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumConsulta?"
-//              + "email=gd.pinbal@fundaciobit.org" + "&incidencia="
-//              + solicitud.getTicketAssociat() + "&seguimiento="
-//              + solicitud.getTicketNumeroSeguiment();
-//
-//          solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_ENVELOPE,
-//              "consulta.caid", "javascript:window.open('" + url + "', '_blank')", "btn-info"));
-//        }
-
-      }
     }
 
     HttpSession sessio = request.getSession();
-    Long id = _jpa.getSolicitudID();
+    Long id = solicitud.getSolicitudID();
     sessio.setAttribute(SolicitudDocumentOperadorController.SESSIO_SOLIID_MANAGE_DOCUMENTS,
         id);
     sessio.setAttribute(SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS, id);
 
     log.info("Set attibute [" + SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS
-        + "] = " + _jpa.getSolicitudID());
+        + "] = " + solicitud.getSolicitudID());
 
     return solicitudForm;
   }
@@ -549,51 +535,11 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
   protected void generarServeis(HttpServletRequest request, Long soliID, Properties prop)
 			throws I18NException {
-
-		// XXX CONSENT: Modificar metode per obtenir el consentiment amb el nou xml
-//		String consentiment = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");
-//		String consAdj = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSADJ");
-//		String consUrl = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSURL");
-//
-//		String consentimentAux = normalize(consentiment).replaceAll("\\p{M}", "");
-//		log.info("consentiment: ]" + consentiment + "[ Normalitzam: ]" + consentimentAux + "[ toLowerCase: ]"
-//				+ consentimentAux.toLowerCase() + "[");
-//		switch (consentimentAux.toLowerCase()) {
-//			case "sí":
-//			case "si":
-//				consentiment = Constants.CONSENTIMENT_TIPUS_SI;
-//				break;
-//	
-//			case "nooposicio":
-//			case "nooposicion":
-//			case "noop":
-//			case "noopo":
-//	
-//			case "no oposicio":
-//			case "no oposicion":
-//			case "no op":
-//			case "no opo":
-//	
-//			case "no_oposicio":
-//			case "no_oposicion":
-//			case "no_op":
-//			case "no_opo":
-//				consentiment = Constants.CONSENTIMENT_TIPUS_NOOP;
-//				break;
-//			case "llei":
-//			case "ley":
-//				consentiment = Constants.CONSENTIMENT_TIPUS_LLEI;
-//				break;
-//		}
-//		log.info("Consentiment despues: " + consentiment);
-
 		int x = 1;
 
 		while (true) {
 			String codi = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CODISERV");
-
 			log.info(" CODI PER [" + x + "]  => " + codi);
-
 			if (codi == null) {
 				break;
 			}
@@ -603,17 +549,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 			// XYZ ZZZ
 			java.lang.Long estatSolicitudServeiID = 10L;
-			// StringBuffer str = new StringBuffer();
-			// for (Object k : prop.keySet()) {
-			// String kk = (String) k;
-			//
-			// if (kk.startsWith("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x +
-			// ".")) {
-			// str.append(kk + "=" + prop.getProperty(kk) + "\r\n");
-			// }
-			//
-			// }
-
 			java.lang.String notes = ""; // str.toString();
 
 			String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
@@ -665,25 +600,24 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
 			if (count == 0) {
-				
-				Long fitxerIDNorma= null;
-				
+
+				Long fitxerIDNorma = null;
+
 				String norma2 = null;
 				String articles2 = null;
-				Long fitxerIDNorma2= null;
-				
+				Long fitxerIDNorma2 = null;
+
 				String norma3 = null;
 				String articles3 = null;
-				Long fitxerIDNorma3= null;
-				
-				
+				Long fitxerIDNorma3 = null;
+
 				SolicitudServeiJPA ss = new SolicitudServeiJPA(soliID, serveiID, estatSolicitudServeiID,
 						enllazNormaLegal, consAdj, consentiment, consUrl, notes, caduca, caducafecha, normaLegal,
 						fitxerIDNorma, articles, norma2, fitxerIDNorma2, articles2, norma3, fitxerIDNorma3, articles3);
 
 				solicitudServeiEjb.create(ss);
 
-			} else { 
+			} else {
 
 				HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
 
@@ -694,9 +628,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		}
 	}
 
-  public static String normalize(String input) {
-      return input == null ? null : Normalizer.normalize(input, Normalizer.Form.NFKD);
-  }
+	public static String normalize(String input) {
+		return input == null ? null : Normalizer.normalize(input, Normalizer.Form.NFKD);
+	}
   
   
   @Override
@@ -794,4 +728,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       }
       return null;
   }
+  
+  
+  
 }
