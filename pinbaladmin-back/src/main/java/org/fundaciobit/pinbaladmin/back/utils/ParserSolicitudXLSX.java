@@ -8,9 +8,11 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 
 /**
  * 
@@ -45,6 +47,9 @@ public class ParserSolicitudXLSX {
             my_xlsx_workbook = new XSSFWorkbook(input_document);
 
             // Read excel sheet that needs to be updated
+			if (my_xlsx_workbook.getNumberOfSheets() < 2) {
+				throw new Exception("El formato del excel no es correcto, solo hay una hoja. Devolver pidiendo que utilicen la plantilla correcta");
+			}
             XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
 
             final FormulaEvaluator evaluator = my_xlsx_workbook.getCreationHelper().createFormulaEvaluator();
@@ -62,18 +67,24 @@ public class ParserSolicitudXLSX {
             // =============== DEPURACIO VOLCAT DE XLSX ===========================
             // ==========================================================
 
-            String entitat = my_worksheet.getRow(1).getCell(0).getStringCellValue();
+            XSSFCell cellEntitat = my_worksheet.getRow(1).getCell(0);
+            
+            if (cellEntitat == null || cellEntitat.getCellTypeEnum() == CellType.BLANK) {
+                throw new I18NException("A l'excel no surt l'Organ Solicitant (cel·la A2)");
+            }
+				
+            String entitat = cellEntitat.getStringCellValue();
             
             SolicitudInfo info = new SolicitudInfo(entitat);
             String [] filaExcel;
             
             Cell cell;
             for (int row = 0; row < MAX_FILES; row++) {
-                
                 filaExcel = new String[MAX_COLUMNES];
 
                 XSSFRow therow = my_worksheet.getRow(row);
-
+                log.info("Processam row: " + row + " " + therow);
+                
                 if (therow == null) {
                     filaExcel = null;
                     continue;
@@ -145,7 +156,10 @@ public class ParserSolicitudXLSX {
             }
             
             return info;
-
+		} catch (Exception e) {
+			String msg = "Error al llegir el fitxer excel: " + e.getMessage();
+			log.error(msg, e);
+			throw new Exception(msg, e);
         } finally {
             if (my_xlsx_workbook != null) {
                 try {
