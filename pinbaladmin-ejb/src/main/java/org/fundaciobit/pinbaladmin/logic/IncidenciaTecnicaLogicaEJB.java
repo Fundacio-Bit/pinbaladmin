@@ -101,8 +101,19 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
             
+            log.info("attachements " + emi.getAttachments() + " " + emi.getAttachments().size());
             for (EmailAttachmentInfo ads : emi.getAttachments()) {
-
+            	log.info("attachement " + ads);
+            	log.info("getFileName " + ads.getFileName());
+            	log.info("getData " + ads.getData());
+            	log.info("getContentType " + ads.getContentType());
+            	
+            	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
+            		continue;
+				}
+            	
+            	log.info("Hello There!");
+            	
                 FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
                 fitxerEjb.create(fitxer);
                 FileSystemManager.crearFitxer(new ByteArrayInputStream(ads.getData()), fitxer.getFitxerID());

@@ -137,70 +137,62 @@ public class LlistaCorreusOperadorController extends EmailController {
             // Afegir boto per Solicitud
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
                     "solicitud.convertir", "javascript:crearSolicitud({0})", "btn-success")); // getContextWeb() + \"/solicitud/{0}\"
-
-            {
-                AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
-                adfield4.setCodeName(EmailFields.MESSAGE.fullName);
-                adfield4.setPosition(MISSATGE22);
-                // Els valors s'ompliran al mètode postList()
-                adfield4.setValueMap(new HashMap<Long, String>());
-                adfield4.setEscapeXml(false);
-
-                emailFilterForm.addAdditionalField(adfield4);
-            }
-
-            {
-                AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
-                adfield4.setCodeName("arxiu");
-                adfield4.setPosition(ATTACHMENTS);
-                // Els valors s'ompliran al mètode postList()
-                adfield4.setValueMap(new HashMap<Long, String>());
-                adfield4.setEscapeXml(false);
-
-                emailFilterForm.addAdditionalField(adfield4);
-            }
-
         }
 
         // Tramitadors
         {
-
             SelectMultipleStringKeyValue smskv;
             smskv = new SelectMultipleStringKeyValue(OperadorFields.USERNAME.select, OperadorFields.NOM.select);
 
             List<StringKeyValue> operadors = operadorEjb.executeQuery(smskv);
-
             mav.addObject("operadors", operadors);
         }
 
-        // Tipus d'Incidencies
         {
-
+        	// Tipus d'Incidencies
             List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
 
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-            tipusIncidencies
-                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-            tipusIncidencies.add(
-                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+			int[] tipus = { Constants.INCIDENCIA_TIPUS_TECNICA, Constants.INCIDENCIA_TIPUS_CONSULTA,
+					Constants.INCIDENCIA_TIPUS_INTEGRACIONS, Constants.INCIDENCIA_TIPUS_ROLEPERMISOS };
+			String[] tipusNames = { "Tècnica", "Consulta", "Integracions", "Roles de permisos" };
+			
+			for (int i = 0; i < tipus.length; i++) {
+				tipusIncidencies.add(new StringKeyValue(String.valueOf(tipus[i]), tipusNames[i]));
+			}
+            
+//            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+//            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+//            tipusIncidencies
+//                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+//            tipusIncidencies.add(
+//                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
 
             mav.addObject("tipusIncidencies", tipusIncidencies);
         }
         
-        // Tipus de Solicituds
         {
-
+        	// Tipus de Solicituds
             List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
 
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
+			long[] estats = { Constants.SOLICITUD_ESTAT_SENSE_ESTAT, Constants.SOLICITUD_ESTAT_PENDENT,
+					Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
+					Constants.SOLICITUD_ESTAT_ESMENES, Constants.SOLICITUD_ESTAT_AUTORITZAT,
+					Constants.SOLICITUD_ESTAT_PENDENT_PINFO, Constants.SOLICITUD_ESTAT_TANCAT };
+			
+			String[] estatsNames = { "Sense Estat", "Pendent", "Pendent Firma Director", "Pendent d'autoritzar", "Esmenes", "Autoritzat", "Pendent pinfo", "Tancat" };
+            
+			for (int i = 0; i < estats.length; i++) {
+				estatSolicituds.add(new StringKeyValue(String.valueOf(estats[i]), estatsNames[i]));
+			}
+			
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
+//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
 
             mav.addObject("estatSolicituds", estatSolicituds);
         }
@@ -213,12 +205,38 @@ public class LlistaCorreusOperadorController extends EmailController {
         }
 
         emailFilterForm.getAdditionalButtons().clear();
-        if (mostrarMissatgeArxiu) {
-            emailFilterForm.addAdditionalButton(new AdditionalButton("fas fa-eye-slash", "amagarmissatgearxiu",
-                    getContextWeb() + "/amagarmissatgearxiu", "btn-info"));
-        } else {
+		if (mostrarMissatgeArxiu) {
+			emailFilterForm.addAdditionalButton(new AdditionalButton("fas fa-eye-slash", "amagarmissatgearxiu",
+					getContextWeb() + "/amagarmissatgearxiu", "btn-info"));
+
+			{
+				AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+				adfield4.setCodeName(EmailFields.MESSAGE.fullName);
+				adfield4.setPosition(MISSATGE22);
+				// Els valors s'ompliran al mètode postList()
+				adfield4.setValueMap(new HashMap<Long, String>());
+				adfield4.setEscapeXml(false);
+
+				emailFilterForm.addAdditionalField(adfield4);
+			}
+
+			{
+				AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
+				adfield4.setCodeName("arxiu");
+				adfield4.setPosition(ATTACHMENTS);
+				// Els valors s'ompliran al mètode postList()
+				adfield4.setValueMap(new HashMap<Long, String>());
+				adfield4.setEscapeXml(false);
+
+				emailFilterForm.addAdditionalField(adfield4);
+			}
+		} else {
             emailFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EYE, "mostrarmissatgearxiu",
                     getContextWeb() + "/mostrarmissatgearxiu", "btn-info"));
+            
+            emailFilterForm.getAdditionalFields().remove(ATTACHMENTS);
+            emailFilterForm.getAdditionalFields().remove(MISSATGE22);
+            
         }
 
         return emailFilterForm;
@@ -245,60 +263,72 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     @Override
     public void postList(HttpServletRequest request, ModelAndView mav, EmailFilterForm filterForm, List<Email> list)
-            throws I18NException {
+			throws I18NException {
 
-        Map<Long, String> map;
-        map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGE22).getValueMap();
-        map.clear();
+		Boolean mostrarMissatgeArxiu = (Boolean) request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
-        Map<Long, String> mapAttach;
-        mapAttach = (Map<Long, String>) filterForm.getAdditionalField(ATTACHMENTS).getValueMap();
-        mapAttach.clear();
+		log.info("XYZ ZZZ postList(" + mostrarMissatgeArxiu + ")");
+		if (mostrarMissatgeArxiu == null || !mostrarMissatgeArxiu) {
+			log.info("No mostrar missatge arxiu");
+		} else {
+			log.info("Mostrar missatge arxiu");
 
-        Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
-                .getAttribute(CACHE_DE_EMAILS_LLEGITS);
+			Map<Long, String> map;
+			map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGE22).getValueMap();
+			map.clear();
 
-        for (Email email : list) {
+			Map<Long, String> mapAttach;
+			mapAttach = (Map<Long, String>) filterForm.getAdditionalField(ATTACHMENTS).getValueMap();
+			mapAttach.clear();
 
-            if (email.getMessage() != null) {
-                String msg = email.getMessage().trim();
+			Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
+					.getAttribute(CACHE_DE_EMAILS_LLEGITS);
 
-                if ((msg.startsWith("<") && msg.endsWith(">")) || msg.endsWith("</html>")) {
-                    // map.put(email.getEmailID(), "<div
-                    // style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
-                    // + "</div>");
-                    map.put(email.getEmailID(),
-                            "<iframe border=\"2\" width=\"500px\" height=\"350px\" src=\"" + request.getContextPath()
-                                    + getContextWeb() + "/message/" + email.getEmailID() + "\"></iframe>");
-                } else {
-                    map.put(email.getEmailID(),
-                            "<textarea readonly  style=\"width:auto;max-width:500px;max-height:350px;\""
-                                    + computeRowsCols(msg) + ">" + msg + "</textarea>");
-                }
-            }
+			for (Email email : list) {
+				Long emailID = email.getEmailID();
+				
+				
+				if (email.getMessage() != null) {
+				//	String msg = email.getMessage().trim();
 
-            EmailMessageInfo emi = cache.get(email.getEmailID());
+					//if ((msg.startsWith("<") && msg.endsWith(">")) || msg.endsWith("</html>")) {
+						// map.put(email.getEmailID(), "<div
+						// style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
+						// + "</div>");
+						// width=\"500px\" height=\"350px\"
 
-            if (emi.getAttachments() != null) {
-                StringBuffer str = new StringBuffer();
+						log.info("afegim iframe per missatge HTML");
+						map.put(emailID, "<iframe src=\"" + request.getContextPath()
+								+ getContextWeb() + "/message/" + emailID + "\"></iframe>");
+				//	} else {
+				//		log.info("afegim textarea per missatge TEXT");
+				//		map.put(emailID,
+				//				"<textarea readonly" + computeRowsCols(msg) + ">" + msg + "</textarea>");
+				//	}
+				}
 
-                for (EmailAttachmentInfo ads : emi.getAttachments()) {
+				EmailMessageInfo emi = cache.get(email.getEmailID());
 
-                    str.append("<div style=\"border-style: solid;border-width:1px;\">");
-                    str.append("<small>-Nom: " + ads.getFileName() + "<br/>" + "-Mida: " + ads.getData().length
-                            + " bytes<br/>" + "-Tipus: " + ads.getContentType());
-                    str.append("</small></div><br/>");
-                }
+				if (emi.getAttachments() != null) {
+					StringBuffer str = new StringBuffer();
 
-                mapAttach.put(email.getEmailID(), str.toString());
+					str.append("<div class=\"adjuntsContainer\">");
 
-            }
+					for (EmailAttachmentInfo ads : emi.getAttachments()) {
 
-        }
+						str.append("<div class=\"adjuntDiv\" style=\"border-style: solid;border-width:1px;\">");
+						str.append("<small>-Nom: " + ads.getFileName() + "<br/>" + "-Mida: " + ads.getData().length
+								+ " bytes<br/>" + "-Tipus: " + ads.getContentType());
+						str.append("</small></div><br/>");
+					}
+					str.append("</div>");
 
-        filterForm.setSubTitleCode("=Tens " + cachesize(request) + " correus sense processar ...");
-
-    }
+					mapAttach.put(email.getEmailID(), str.toString());
+				}
+			}
+		}
+		filterForm.setSubTitleCode("=Tens " + cachesize(request) + " correus sense processar ...");
+	}
 
     protected String computeRowsCols(String msg) {
         int rows = 1;
@@ -418,15 +448,15 @@ public class LlistaCorreusOperadorController extends EmailController {
             log.error(msg, e);
             HtmlUtils.saveMessageError(request, msg);
         }
-
         return "redirect:" + getContextWeb() + "/list";
-
     }
 
     @Override
     public List<Email> executeSelect(ITableManager<Email, Long> ejb, Where where, final OrderBy[] orderBy,
             Integer itemsPerPage, final int inici) throws I18NException {
 
+    	log.info("XYZ ZZZ executeSelect(" + itemsPerPage + ", " + inici + ")");
+    	
         List<Email> list = new ArrayList<Email>();
 
         Map<Long, EmailMessageInfo> cache = new HashMap<Long, EmailMessageInfo>();
@@ -454,8 +484,9 @@ public class LlistaCorreusOperadorController extends EmailController {
             List<EmailMessageInfo> emails = er.list(start, end, includeAttachments);
 
             for (EmailMessageInfo emi : emails) {
-
+            	log.info("XYZ ZZZ email: " + emi.getDisplayFrom());
                 EmailJPA e = message2email(emi);
+            	log.info("XYZ ZZZ email: " + e.getEnviador());
 
                 list.add(e);
 
@@ -490,7 +521,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         request.getSession().setAttribute(CACHE_DE_EMAILS_LLEGITS, cache);
         request.getSession().setAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS, size);
         return list;
-
     }
 
     /**
@@ -521,11 +551,12 @@ public class LlistaCorreusOperadorController extends EmailController {
         EmailJPA e;
         long emailID = emi.getNumber();
         java.sql.Timestamp dataEnviament = new Timestamp(emi.getSentDate().getTime());
-        java.lang.String enviador = emi.getDisplayFrom();
+//        java.lang.String enviador = emi.getDisplayFrom();
+        java.lang.String origen = emi.getNameFrom();// + " (" + emi.getDisplayFrom() + ")";
         java.lang.String destinataris = emi.getDisplayTo();
         java.lang.String subject = emi.getSubject();
         java.lang.String message = emi.getBody();
-        e = new EmailJPA(emailID, dataEnviament, enviador, destinataris, subject, message);
+        e = new EmailJPA(emailID, dataEnviament, origen, destinataris, subject, message);
         return e;
     }
 
@@ -533,17 +564,24 @@ public class LlistaCorreusOperadorController extends EmailController {
     public void getMessageEmail(HttpServletRequest request, HttpServletResponse response,
             @PathVariable("emailID") java.lang.Long emailID) {
 
-        EmailJPA email;
         try {
-            email = this.findByPrimaryKey(request, emailID);
+//        	log.info("XYZ ZZZ getMessageEmail(" + emailID + ")");
+        	//Si tenim el missatge a la cache, no el cercam.
+			Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
+					.getAttribute(CACHE_DE_EMAILS_LLEGITS);
+			
+			EmailMessageInfo emi = cache.get(emailID);
+			String msg = emi.getBody();
+//        	log.info("msg length =  " + msg.length() );
+			
+//            email = this.findByPrimaryKey(request, emailID);
 
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
 
             PrintWriter os = response.getWriter();
-
             os.print("<html><body>");
-            os.print(email.getMessage());
+            os.print(msg);
             os.print("</body></html>");
             os.flush();
             os.close();

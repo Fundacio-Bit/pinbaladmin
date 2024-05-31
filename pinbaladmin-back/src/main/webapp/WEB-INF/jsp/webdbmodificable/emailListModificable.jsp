@@ -149,3 +149,62 @@
 	font-size: 1.15rem;
 }
 </style>
+
+
+<!-- VISTA DEL LLISTAT DE CORREUS -->
+<style>
+table {
+	margin-right: 2rem;
+	width: 100% !important;
+}
+#infoNumRegistres {
+	display: none;
+}
+</style>
+
+<c:if test="${__mostrarMissatgeArxiu__ == 'true'}">
+	<style>
+
+td:nth-child(-n+3) {
+	width: 0px;
+}
+td:nth-child(-n+3) {
+	width: 0px;
+}
+
+td:nth-child(4) {
+	width: min-content;
+	max-width: 500px;
+}
+
+td:nth-child(5) {
+	width: 0px;
+}
+td:nth-child(6) {
+	width: 0px;
+}
+iframe {
+	border: 1px solid;
+	width: 400px;
+	height: 320px;
+/* 	max-width: 400px; */
+}
+
+textarea {
+	max-width: 400px;
+	max-height: 350px;
+}
+
+.adjuntDiv {
+	max-width: 230px;
+	overflow: auto;
+}
+.adjuntsContainer {
+  width: fit-content;
+}
+td:last-child {
+	width: 0px;
+}
+</style>
+</c:if>
+
