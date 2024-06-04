@@ -22,18 +22,24 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudEstatalOperadorController.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudServeiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
+import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
@@ -79,6 +85,9 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
     @EJB(mappedName = SolicitudServeiLogicaService.JNDI_NAME)
     protected SolicitudServeiLogicaService solicitudServeiLogicaEjb;
 
+    @EJB(mappedName = EventLogicaService.JNDI_NAME)
+    protected EventLogicaService eventLogicaEjb;
+    
     @Override
     public String getTileForm() {
         return "solicitudServeiFormWebDB_operador";
@@ -345,6 +354,58 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         return getRedirectWhen(soliSer.getSolicitudID());
     }
 
+    @RequestMapping(value = "/enviarcorreucedent/{solicitudserveiid}", method = RequestMethod.GET)
+    public String enviarCorreuCedent(HttpServletRequest request,
+			@PathVariable("solicitudserveiid") Long solicitudserveiid) throws Exception {
+    	
+		SolicitudServeiJPA soliSer = solicitudServeiLogicaEjb.findByPrimaryKey(solicitudserveiid);
+
+		try {
+			Servei servei = serveiEjb.findByPrimaryKey(soliSer.getServeiID());
+
+			MailCedentInfo mail = null;
+			
+			switch (servei.getCodi()) {
+			case "SVDSCTFNWS01":
+				mail = new MailCedentInfo("FAM_NOMBROSA");
+				break;
+			case "SVDSCDDWS01":
+				mail = new MailCedentInfo("DISCAPACITAT");
+				break;
+			case "SVDCCAACPCWS01":
+			case "SVDCCAACPASWS01":
+				mail = new MailCedentInfo("INTERVENCIO");
+				break;
+			case "SCDCPAJU":
+				mail = new MailCedentInfo("PADRO");
+				break;
+			}
+			
+			if (mail != null) {
+				mail.afegirServei(servei);
+
+				Long soliID = soliSer.getSolicitudID();
+				SolicitudJPA soli = (SolicitudJPA) solicitudLogicaEjb.findByPrimaryKey(soliID);
+				Long excelID = soli.getSolicitudXmlID();
+				FitxerJPA excel = fitxerEjb.findByPrimaryKey(excelID);
+
+				mail.sendMail(soli, excel);
+				mail.crearEvent(soliID, excel, eventLogicaEjb);
+				mail.actualitzarEstatServei(soliID, solicitudServeiEjb);
+				String missatge = "Correu enviat a " + mail.getId();
+				log.info(missatge);
+				HtmlUtils.saveMessageSuccess(request, missatge);
+			}
+			
+		} catch (Exception e) {
+			String missatge = "Error al enviar correu";
+			log.error(missatge, e);
+			HtmlUtils.saveMessageError(request, missatge);
+		}
+		return getRedirectWhen(soliSer.getSolicitudID());
+	}
+
+    
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
@@ -378,14 +439,17 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
                             new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
                                     "solicitudservei.autoritzarservei",
                                     getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), "btn-primary"));
+                    
+                    filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
+                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_ENVELOPE),
+                                    "solicitudservei.envaircorreucedent",
+                                    getContextWeb() + "/enviarcorreucedent/" + solicitudServei.getId(), "btn-success"));
                 }
             }
         }
-
         if (error) {
             HtmlUtils.saveMessageError(request, "Hi ha serveis associats a les sol·licituds amb estat incorrecte");
         }
-
     }
 
     @Override
