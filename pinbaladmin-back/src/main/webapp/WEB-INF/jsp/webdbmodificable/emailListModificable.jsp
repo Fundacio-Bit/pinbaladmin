@@ -162,16 +162,17 @@ table {
 }
 </style>
 
+<style>
+td:nth-child(-n+2) {
+	width: 0px;
+}
+td:last-child {
+	width: 0px;
+}
+</style>
+
 <c:if test="${__mostrarMissatgeArxiu__ == 'true'}">
 	<style>
-
-td:nth-child(-n+3) {
-	width: 0px;
-}
-td:nth-child(-n+3) {
-	width: 0px;
-}
-
 td:nth-child(4) {
 	width: min-content;
 	max-width: 500px;
@@ -180,14 +181,16 @@ td:nth-child(4) {
 td:nth-child(5) {
 	width: 0px;
 }
+
 td:nth-child(6) {
 	width: 0px;
 }
+
 iframe {
 	border: 1px solid;
 	width: 400px;
 	height: 320px;
-/* 	max-width: 400px; */
+	/* 	max-width: 400px; */
 }
 
 textarea {
@@ -199,11 +202,9 @@ textarea {
 	max-width: 230px;
 	overflow: auto;
 }
+
 .adjuntsContainer {
-  width: fit-content;
-}
-td:last-child {
-	width: 0px;
+	width: fit-content;
 }
 </style>
 </c:if>
