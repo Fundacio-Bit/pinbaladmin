@@ -299,6 +299,11 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/modificacioSolicitudPinbal.jsp" />
     </definition>
 
+    <definition name="infocorreuscedents" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/infoCorreusCedents.jsp" />
+    </definition>
+
+
     <!-- =====   TRAMIT SISTRA OPERADOR ===== -->
     <definition name="tramitSistraListOperador" extends="operador_base">
         <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
