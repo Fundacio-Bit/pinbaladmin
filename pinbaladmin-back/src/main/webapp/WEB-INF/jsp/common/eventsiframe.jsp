@@ -1271,7 +1271,12 @@ textarea.event {
 					<td>
                        Estat: <strong class="label-custom">${estat}</strong><br /> 
 					   Nom Contacte: <strong>${personaContacte}</strong><br />
-					   Email Contacte: <strong>${personaContacteEmail}</strong>
+					   Email Contacte: <strong>${personaContacteEmail}</strong> <br />
+
+						<c:if test="${isSolicitud}">
+						   Codi Procediment: <strong>${procedimentCodi}</strong>
+						</c:if>
+
 					</td>
 				</tr>
 			</tbody>

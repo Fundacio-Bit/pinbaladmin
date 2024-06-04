@@ -3,15 +3,18 @@ package org.fundaciobit.pinbaladmin.back.controller.common;
 import java.sql.Timestamp;
 
 import javax.ejb.EJB;
+import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudOperadorController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 
@@ -114,5 +117,9 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
     public String getEstat(Solicitud item) throws I18NException {
         return SolicitudOperadorController.ESTATS_SOLICITUD.get(item.getEstatID());
     }
-
+    
+    @Override
+    public String getCodiProc(Solicitud item) {
+        return item.getProcedimentCodi();
+    }
 }

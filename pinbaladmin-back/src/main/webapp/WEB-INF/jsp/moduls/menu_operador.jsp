@@ -78,6 +78,11 @@
 					Serveis</span>
 		</a></li>
 
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/correucedents/list"/>"> <span
+				style="${(fn:contains(url, '/operador/correucedents'))? "font-weight:bold;" : ""}">Correus cedents</span>
+		</a></li>
+
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a

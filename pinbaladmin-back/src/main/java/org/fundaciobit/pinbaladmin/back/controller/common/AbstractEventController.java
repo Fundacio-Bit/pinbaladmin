@@ -307,6 +307,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract String getTitol(T item);
 
+    public abstract String getCodiProc(T item);
+
     public abstract boolean isClosed(T item);
 
     @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
@@ -730,7 +732,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         mav.addObject("isPublic", isPublic());
 
         mav.addObject("isSolicitud", isSolicitud());
-
+        mav.addObject("procedimentCodi", getCodiProc(item));
+        
         mav.addObject("contextweb", getContextWeb());
 
         String estat = getEstat(item);
