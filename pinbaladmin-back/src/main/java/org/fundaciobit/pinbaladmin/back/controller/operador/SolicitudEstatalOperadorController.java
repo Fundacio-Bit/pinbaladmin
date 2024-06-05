@@ -84,15 +84,18 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		return "redirect:" + getContextWeb() + "/list/" + pagina;
 	}
 
-	private static List<String> getDestinatarisDefault() {
-        List<String> dests = new ArrayList<String>();
-		dests.add("ptrias@fundaciobit.org");
-		
-		
-		 dests.add("joanpau@triassegura.com");
-//		 dests.add("atrobat@fundaciobit.org");
-		// dests.add("pautrias2@gmail.com");
-//		 dests.add("pvico@fundaciobit.org");
+	private static List<String> getDestinatarisDefault(List<String> dests) {
+
+		String correus = Configuracio.getCorreusCedentsDefault();
+		if (correus == null || correus.trim().length()== 0) {
+			return dests;
+		}
+		String[] mails = correus.split(";");
+		dests = new ArrayList<String>();
+		for (int i = 0; i < mails.length; i++) {
+			System.out.println("Afegint correu cedent per defecte: " + mails[i]);
+			dests.add(mails[i]);
+		}
 		return dests;
 	}	
 	
@@ -124,56 +127,65 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
 		public MailCedentInfo(String id) {
 			this.id = id;
-			this.dests = new ArrayList<String>();
 			this.serveis = new ArrayList<Servei>();
+			
+			List <String> dests = new ArrayList<String>();
 
-			String msg = "<div id=\"correu_cedent\">Bon dia,<br><br>Us enviam els formularis que ens han fet arribar des de <b>#ENTITAT#</b> per donar d'alta el següent servei:<br><b>#SERVEIS#</b><br>Esperam la vostra resposta.</div><style> #correu_cedent {margin: .5rem;} </style> ";
+			String msg = ""
+					+ "<div class=\"correu_cedent\" style=\"margin: .5rem;\">"
+					+ "		Bon dia,<br>"
+					+ "		<br>"
+					+ "		Us enviam els formularis que ens han fet arribar des de <b>#ENTITAT#</b> per donar d'alta el següent servei:"
+					+ "</div>"
+					
+					+ "<div class=\"serveis\"  style=\"margin: .5rem;\">"
+					+ "		<b>#SERVEIS#</b>"
+					+ "</div>";
+			
 			switch (id) {
 			case "DISCAPACITAT":
 				this.subject = "Discapacitat - Cedent";
 				this.message = msg;
-				this.dests.add("amalorda@dgad.caib.es");
-
-				this.dests = getDestinatarisDefault();
+				dests.add("amalorda@dgad.caib.es");
 				break;
+				
 			case "FAM_NOMBROSA":
 				this.subject = "Família Numerosa - Cedent";
 				this.message = msg;
-				this.dests.add("etid@imas.conselldemallorca.net");
-				this.dests.add("cmp.sac@cime.es");
-
-				this.dests = getDestinatarisDefault();
+				dests.add("etid@imas.conselldemallorca.net");
+				dests.add("cmp.sac@cime.es");
 				break;
+				
 			case "INTERVENCIO":
 				this.subject = "Intervenció CAIB - Cedent";
 				this.message = msg;
-				this.dests.add("cjimenez@interven.caib.es");
-
-				this.dests = getDestinatarisDefault();
+				dests.add("cjimenez@interven.caib.es");
 				break;
+				
 			case "PADRO":
 				this.subject = "Padró - Cedent";
-				this.message = "<div id=\"correu_padro\">" + "Benvolgut/da,<br>"
-						+ "<br>A la comissió de seguiment del Conveni d'Interoperabilitat de dia 16 de juny de 2016 es va aprovar la modificació\r\n"
-						+ "    del <a href=\"https://www.caib.es/sites/interoperabilitat/ca/archivopub.do?ctrl=MCRST12306ZI359290&id=359290\"\r\n"
-						+ "        target=\"_blank\" rel=\"noreferrer\">protocol d'adhesió a un servei propi</a> per incorporar el següent canvi:<br>"
+				this.message = "<div id=\"correu_padro\"  style=\"margin: .5rem;\" >" 
+						
+						+ "Benvolgut/da,<br>"
+						+ "<br>"
+						+ "A la comissió de seguiment del Conveni d'Interoperabilitat de dia 16 de juny de 2016 es va aprovar la modificació"
+						+ "del <a href=\"https://www.caib.es/sites/interoperabilitat/ca/archivopub.do?ctrl=MCRST12306ZI359290&id=359290\""
+						+ "target=\"_blank\" rel=\"noreferrer\">protocol d'adhesió a un servei propi</a> per incorporar el següent canvi:<br>"
 
-						+ "<br>Quan es demani accés a un servei propi (en aquest cas a un servei de padró):<em> \"Després de comprovar la\r\n"
-						+ "        sol·licitud d'adhesió, la DGTIC enviarà la sol·licitud a la persona designada de cada entitat cedent de dades\r\n"
-						+ "        del servei sol·licitat.&nbsp; S'assignaran els permisos a consultar segons la resolució de cada cedent. En el\r\n"
-						+ "        cas que no hi hagi resposta per part d'algun o tots el cedents s'acceptarà la sol·licitud passat el termini de 7\r\n"
+						+ "<br>Quan es demani accés a un servei propi (en aquest cas a un servei de padró):<em> \"Després de comprovar la"
+						+ "        sol·licitud d'adhesió, la DGTIC enviarà la sol·licitud a la persona designada de cada entitat cedent de dades"
+						+ "        del servei sol·licitat.&nbsp; S'assignaran els permisos a consultar segons la resolució de cada cedent. En el"
+						+ "        cas que no hi hagi resposta per part d'algun o tots el cedents s'acceptarà la sol·licitud passat el termini de 7"
 						+ "        dies naturals”.</em><br>"
 
-						+ "<br>Li escrivim aquest correu on podrà veure la petició feta pel cessionari (entitat que vol accedir a la informació) i\r\n"
+						+ "<br>Li escrivim aquest correu on podrà veure la petició feta pel cessionari (entitat que vol accedir a la informació) i"
 						+ "    el motiu de la consulta.<br>"
 
-						+ "<br>Per això, li demanam que ens notifiqui si accedeix a que <b>#ENTITAT#</b>, si escau, accedeixi a\r\n"
-						+ "    les seves dades de padró (sempre amb el consentiment exprés del ciutadà) pel Servei de consulta de dades\r\n"
+						+ "<br>Per això, li demanam que ens notifiqui si accedeix a que <b>#ENTITAT#</b>, si escau, accedeixi a"
+						+ "    les seves dades de padró (sempre amb el consentiment exprés del ciutadà) pel Servei de consulta de dades"
 						+ "    històriques sobre els padrons municipals per la tramitació del seu procediment: <b>#PROCEDIMENT#</b>.<br>"
 
-						+ "<br>Així com marca el protocol després de 7 dies naturals sense resposta s'acceptarà la sol·licitud.</div>"
-
-						+ "<style> #correu_padro {margin: .5rem;} </style>";
+						+ "<br>Així com marca el protocol després de 7 dies naturals sense resposta s'acceptarà la sol·licitud.</div>";
 
 				dests.add("secretaria@ajferreries.org");
 				dests.add("alcaldia@aj-alaior.org");
@@ -192,10 +204,10 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 				dests.add("secretaria@ajsineu.net");
 				dests.add("xisca@valldemossa.es");
 				dests.add("imurillo@ajlloseta.net");
-
-				dests = getDestinatarisDefault();
 				break;
 			}
+
+			this.dests = getDestinatarisDefault(dests);
 		}
 
 		public void afegirServei(Servei servei) {
@@ -204,36 +216,33 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
 		public void sendMail(SolicitudJPA soli, FitxerJPA excel) throws Exception {
 			try {
-//				log.info("CORREU PER ENVIAR");
-
 				String subject = this.subject;
 				boolean html = true;
 				String from = Configuracio.getAppEmail();
 				String[] dests = this.dests.toArray(new String[this.dests.size()]);
-				String msg = null;
+				String msg = this.message;
 
 				if (subject.equals("Padró - Cedent")) {
 					String procediment = soli.getProcedimentNom();
-					msg = this.message.replaceAll("#PROCEDIMENT#", procediment);
+					msg = msg.replaceAll("#PROCEDIMENT#", procediment);
 				} else {
 					String cadenaServeis = "<ul>";
 					for (Servei servei : this.serveis) {
 						cadenaServeis += "<li>" + "(CCAA) " + servei.getCodi() + ": " + servei.getNom() + "</li>";
 					}
 					cadenaServeis += "</ul>";
-
-//					log.info("Serveis: \n" + cadenaServeis);
-					msg = this.message.replaceAll("#SERVEIS#", cadenaServeis);
+					
+					msg = msg.replaceAll("#SERVEIS#", cadenaServeis);
 				}
 
 				String entitat = soli.getEntitatEstatal();
 				msg = msg.replaceAll("#ENTITAT#", entitat);
 
 				msg += getPeuCorreu(soli.getSolicitudID());
+				
 				this.message = msg;
 
 				EmailUtil.postMail(subject, msg, html, from, excel, dests);
-//				log.info("CORREU ENVIAT");
 			} catch (Exception e) {
 				throw new Exception("Error al enviar correu", e);
 			}
@@ -297,40 +306,36 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 	}
 
 	private static String getPeuCorreu(Long soliID) {
+		
+		String url = Configuracio.getAppUrl() + "/public/eventsolicitud" + "/veureevents/"
+				+ HibernateFileUtil.encryptFileID(soliID);
+		
 		String msg = "<div id=\"peu_correu\">"
 				
-				+ "<div id=\"reObrir\">"
-				+ "    Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a"
-				+ "        href=\"" + getLinkPublic(soliID) + "\"> Accedir a solicitud</a>"
-				+ "</div>"
+				+ "  <div id=\"reObrir\">"
+				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
+				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
+				+ "  </div>"
 
-				+ "<div id=\"firma\">"
-				+ "    Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
-				+ "</div>"
+				+ "  <div id=\"firma\">"
+				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
+				+ "  </div>"
 
-				+ "<div id=\"noContestar\">"
-				+ "    Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
-				+ "    aportat en aquest correu."
-				+ "</div>" 
+				+ "  <div id=\"noContestar\">"
+				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
+				+ "		aportat en aquest correu."
+				+ "  </div>" 
 				
 				+ "  <style>" 
-				+ "      #peu_correu {margin: .5rem;}"
-				+ "      #peu_correu div {padding: .5rem 0;}"
-				+ "      #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
+				+ "     #peu_correu {margin: .5rem;}"
+				+ "     #peu_correu div {padding: .5rem 0;}"
+				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
 				+ "  </style>"
 				
 				+ "</div>";
 
 		return msg;
 	}
-
-	private static String getLinkPublic(Long itemID) {
-		String url = Configuracio.getAppUrl() + "/public/eventsolicitud" + "/veureevents/"
-				+ HibernateFileUtil.encryptFileID(itemID);
-		return url;
-	}
-
-	
 	
 	@RequestMapping(value = "/enviarcorreucedents/{soliID}", method = RequestMethod.GET)
 	public String enviarcorreucedents(HttpServletRequest request, @PathVariable Long soliID) throws Exception {

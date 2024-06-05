@@ -1284,7 +1284,7 @@ textarea.event {
 	</div>
 
 	<div class="fondodiv2">
-		<table style="padding: 0px;" border="0" cellpadding="0"
+		<table style="padding: 0px;margin: auto;" border="0" cellpadding="0"
 			cellspacing="0">
 
 			<c:forEach var="event" items="${eventItems}">

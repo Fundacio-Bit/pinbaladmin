@@ -117,3 +117,8 @@ hs_err_pid*
 /pinbaladmin-back/datosEspecificos.xml
 /pinbaladmin-back/datosEspecificosMarshal.xml
 /pinbaladmin-ear/pom-old.xml
+/mixed.bat
+/scripts/linux/java.sh
+/scripts/linux/jboss.sh
+/scripts/linux/jboss7
+/genapp/genapp.log.1

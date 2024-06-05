@@ -256,4 +256,8 @@ public class Configuracio implements Constants {
     public static String getUrlRetornSistra() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "sistra.returnurl");
     }
+
+	public static String getCorreusCedentsDefault() {
+		return getProperty(PINBALADMIN_PROPERTY_BASE + "correuscedents.default");
+	}
 }
