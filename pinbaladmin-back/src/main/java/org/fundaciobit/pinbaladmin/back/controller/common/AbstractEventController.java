@@ -261,18 +261,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
             nom = eventForm.getEvent().getDestinatari();
         }
         
-        if (email == null || email.trim().length() == 0) {
-
-            Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
-            if (!Boolean.TRUE.equals(isEstatal)) {
-
-                String itemNom = isSolicitud() ? "solicitud" : "incidència";
-                String errorMsg = "No s'ha definit el email de la persona de contacte dins de la " + itemNom;
-                HtmlUtils.saveMessageError(request, errorMsg);
-                mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
-                return eventForm;
-            }
-        }
+//        if (email == null || email.trim().length() == 0) {
+//
+//            Boolean isEstatal = (Boolean) request.getSession().getAttribute(SESSION_EVENT_IS_ESTATAL);
+//            if (!Boolean.TRUE.equals(isEstatal)) {
+//
+//                String itemNom = isSolicitud() ? "solicitud" : "incidència";
+//                String errorMsg = "No s'ha definit el email de la persona de contacte dins de la " + itemNom;
+//                HtmlUtils.saveMessageError(request, errorMsg);
+//                mav.setView(new RedirectView(getRedirectWhenCancel(request, itemID).replace("redirect:", ""), true));
+//                return eventForm;
+//            }
+//        }
 
         mav.addObject("persona_contacte", nom);
         request.getSession().setAttribute("persona_contacte", nom);
@@ -547,7 +547,6 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                     
                     /*
-                     * 
                      * "Enllaç a la " + itemNom + " titulada '" + titol + "'",
                      * "Bones:\n\n" +
                      * "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"

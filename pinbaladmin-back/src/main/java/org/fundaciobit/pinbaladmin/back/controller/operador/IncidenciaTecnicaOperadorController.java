@@ -38,6 +38,7 @@ import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -251,6 +252,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
                     incidenciaTecnicaFilterForm.getHiddenFields().add(IncidenciaTecnicaFields.DATAFI);
                     break;
             }
+            
+            incidenciaTecnicaFilterForm.setAttachedAdditionalJspCode(true);
         }
 
         return incidenciaTecnicaFilterForm;
@@ -617,7 +620,31 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         } catch (Throwable th) {
             log.error("Error afegint event a la incidència tecnica: " + th.getMessage(), th);
         }
-        
     }
 
+    
+    //A la página d'edició s'arriba desde el llistat d'incidencies i desde la pàgina d'events.
+    @Override
+    public String getRedirectWhenModified(HttpServletRequest request, IncidenciaTecnicaForm incidenciaTecnicaForm,
+    		Throwable __e) {
+    	Long incidenciaTecnicaID = incidenciaTecnicaForm.getIncidenciaTecnica().getIncidenciaTecnicaID();
+        return redirectToLlistaEvents(incidenciaTecnicaID);
+    }
+    
+    @Override
+    public String getRedirectWhenCancel(HttpServletRequest request, Long incidenciaTecnicaID) {
+    	// TODO Auto-generated method stub
+    	return redirectToLlistaEvents(incidenciaTecnicaID);
+    }
+    
+    @Override
+    public String getRedirectWhenCreated(HttpServletRequest request, IncidenciaTecnicaForm incidenciaTecnicaForm) {
+    	
+    	Long indicendiaID = incidenciaTecnicaForm.getIncidenciaTecnica().getIncidenciaTecnicaID();
+        return redirectToLlistaEvents(indicendiaID);
+    }
+    
+	public String redirectToLlistaEvents(Long incidenciaTecnicaID) {
+		return "redirect:/operador/eventincidenciatecnica/veureevents/" + incidenciaTecnicaID;
+	}
 }

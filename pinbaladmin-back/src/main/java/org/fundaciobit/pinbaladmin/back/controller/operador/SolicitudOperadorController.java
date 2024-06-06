@@ -873,27 +873,26 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     }
 
+	public String redirectToSolicitud(Long solicitudID) {
+        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
+	}
+    
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, SolicitudForm solicitudForm) {
-        // return "redirect:" + getContextWeb() + "/list/1";
-        return "redirect:/operador/solicitudfullview/view/" + solicitudForm.getSolicitud().getSolicitudID();
+    	Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
+        return redirectToSolicitud(solicitudID);
     }
 
     @Override
-    public String getRedirectWhenModified(HttpServletRequest request, SolicitudForm solicitudForm, Throwable __e) {
-        return getRedirectWhenCreated(request, solicitudForm);
-        
-//        if (__e == null) {
-//          return "redirect:" + getContextWeb() + "/list";
-//        } else {
-//          return  getTileForm();
-//        }
-      }
+	public String getRedirectWhenModified(HttpServletRequest request, SolicitudForm solicitudForm, Throwable __e) {
+		Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
+		return redirectToSolicitud(solicitudID);
+	}
+    
     @Override
-    public String getRedirectWhenCancel(HttpServletRequest request, Long solicitudID) {
-
-        return "redirect:" + getContextWeb() + "/list";
-    }
+	public String getRedirectWhenCancel(HttpServletRequest request, Long solicitudID) {
+		return redirectToSolicitud(solicitudID);
+	}
 
     @Override
     public Map<Field<?>, GroupByItem> fillReferencesForList(SolicitudFilterForm filterForm, HttpServletRequest request,
