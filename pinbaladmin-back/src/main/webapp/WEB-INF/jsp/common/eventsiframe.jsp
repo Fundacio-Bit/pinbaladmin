@@ -1217,10 +1217,11 @@ textarea.event {
 									<i class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus} (FULL)
 								</a>
 							</c:if>
+							
 							<c:if test="${!isSolicitud}">
 								<a class="btn btn-info btn-sm" role="button"
 									href="<c:url value="${urlToEditItem}"/>"> <i
-									class="<%=IconUtils.ICON_EYE%>"></i> Veure ${tipus}
+									class="<%=IconUtils.ICON_EYE%>"></i> Editar ${tipus}
 								</a>
 							</c:if>
 
@@ -1282,6 +1283,23 @@ textarea.event {
 			</tbody>
 		</table>
 	</div>
+
+<style>
+.line {
+	height: 7rem;
+	width: 3px;
+	background-color: #CCCCCC;
+	border-radius: 5px;
+	margin-left: -17px;
+}
+
+.circle {
+bo
+									style="border: 4px solid ${border}; height: 32px; z-index: 2;"
+}
+</style>
+
+
 
 	<div class="fondodiv2">
 		<table style="padding: 0px;margin: auto;" border="0" cellpadding="0"
@@ -1347,14 +1365,12 @@ textarea.event {
 						<c:set var="title" value="Cedent" />
 					</c:if>
 					<tr>
-
 						<td align="right" width="45%"><c:if
 								test="${mostrarMissatgeDreta}">
 								<div style="margin-right: 20px">
-									${event.dataEvent}<br> 
-									<span style="font-weight: bold; font-size: 10pt">
-                                    De ${event.persona}
-									</span>
+									${event.dataEvent}<br> <span
+										style="font-weight: bold; font-size: 10pt"> De
+										${event.persona} </span>
 								</div>
 							</c:if> <c:if test="${!mostrarMissatgeDreta}">
 								<div style="margin: 10px 10px 24px 10px">
@@ -1365,6 +1381,15 @@ textarea.event {
 							</c:if></td>
 						<td>
 							<!--  =============  CERCLE ===============   -->
+							<div style="display: flex; align-items: center;">
+								<div class="cercle" style="border-color: ${border}; z-index: 2;"
+									title="${title}"></div>
+								<div class="line" title="${title}"></div>
+							</div>
+						</td>
+						<!--  ============================   -->
+
+						<%-- <td>
 							<table style="padding: 0px; min-height: 100px" border="0">
 								<tr>
 									<td>&nbsp;</td>
@@ -1382,9 +1407,17 @@ textarea.event {
 									<td style="width: 3px; background-color: #CCCCCC" width="3px"></td>
 									<td>&nbsp;</td>
 								</tr>
-							</table> <!--  ============================   -->
+							</table>
+						</td> --%>
+							<!--  ============================   -->
+							
+							
+							
+							
+							
+							
+							
 
-						</td>
 						<td width="45%">
 							<div style="margin-left: 20px">
 

@@ -5,10 +5,9 @@
 <tiles:importAttribute name="contingut" />
 
 
-<div class="row">
+<div class="">
 
-	<!--  INICI MENU col-3 -->
-	<div id="principal" class="mainMenu col-3" style="padding-left: 17px;">
+	<div id="principal" class="mainMenu">
 		<div id="mostrarMenu" class="upper-left-corner no-disponible">
 			<a id="mostrar" href="#" data-toggle="tooltip" title="Mostrar Menu">
 				<i class="fas fa-expand-alt"></i>
@@ -25,9 +24,7 @@
 		</div>
 	</div>
 
-	<!--  CONTINGUT col-9 -->
-	<div id="contingut" class="col-9">
-
+	<div id="contingut" style="width: 100%;">
 		<!--  Missatges  -->
 		<jsp:include page="/WEB-INF/jsp/moduls/missatges.jsp" />
 
@@ -43,21 +40,31 @@
 </div>
 
 <script>
+var well = document.getElementsByClassName("well well-white")[0]
+well.firstElementChild.className = "";
+well.firstElementChild.style.display = "flex";
+
+/* var t = document.getElementsByTagName("table")[0];
+t.parentElement.classList.remove("row"); */
+
+$("#principal").removeClass("col-3");
+$("#contingut").removeClass("col-9");
+
 	$('#ocultar').click(function() {
-		$('#principal').removeClass('col-3');
+/* 		$('#principal').removeClass('col-3');
 		$('#contingut').removeClass('col-9');
 		$('#contingut').addClass('col-12');
-		show('#mostrarMenu');
+ */		show('#mostrarMenu');
 		hide('#ocultarMenu');
 		hide('#thumbnailmenu');
 		return false;
 	});
 
 	$('#mostrar').click(function() {
-		$('#principal').addClass('col-3');
+/* 		$('#principal').addClass('col-3');
 		$('#contingut').removeClass('col-12');
 		$('#contingut').addClass('col-9');
-		hide('#mostrarMenu');
+ */		hide('#mostrarMenu');
 		show('#ocultarMenu');
 		show('#thumbnailmenu');
 		return false;
@@ -102,6 +109,25 @@
 	border-radius: 4px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
 	transition: all 0.2s ease-in-out;
+}
+
+
+#thumbnailmenu {
+	width: max-content;
+	padding: 5px 10px;
+}
+
+table {
+	width: 100%;
+	margin-right: 1rem;
+}
+
+#principal {
+	padding: 0 1rem;
+}
+
+.wellgroupfilter {
+	margin-right: 1rem !important;
 }
 </style>
 
