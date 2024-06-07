@@ -114,13 +114,8 @@ public class EmailUtil {
         // Configuramos el asunto
         msg.setSubject(subject, "UTF-8");
         msg.setSentDate(new Date());
-
-        
-        
         
         // Configuramos el contenido
-        
-        
         if (isHtml) {
             msg.setHeader("Content-Type", "text/html;charset=utf-8");
 
@@ -157,7 +152,5 @@ public class EmailUtil {
             log.error("Error amb correu: " + th.getMessage(), th);
             throw th;
         }
-
     }
-
 }

@@ -201,10 +201,12 @@ textarea {
 .adjuntDiv {
 	max-width: 230px;
 	overflow: auto;
+	margin-top: 10px;
 }
 
 .adjuntsContainer {
 	width: fit-content;
+	margin-bottom: 10px;
 }
 </style>
 </c:if>

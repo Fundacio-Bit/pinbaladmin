@@ -319,7 +319,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 						str.append("<div class=\"adjuntDiv\" style=\"border-style: solid;border-width:1px;\">");
 						str.append("<small>-Nom: " + ads.getFileName() + "<br/>" + "-Mida: " + ads.getData().length
 								+ " bytes<br/>" + "-Tipus: " + ads.getContentType());
-						str.append("</small></div><br/>");
+						str.append("</small></div>");
 					}
 					str.append("</div>");
 
@@ -552,7 +552,7 @@ public class LlistaCorreusOperadorController extends EmailController {
         long emailID = emi.getNumber();
         java.sql.Timestamp dataEnviament = new Timestamp(emi.getSentDate().getTime());
 //        java.lang.String enviador = emi.getDisplayFrom();
-        java.lang.String origen = emi.getNameFrom();// + " (" + emi.getDisplayFrom() + ")";
+        java.lang.String origen = emi.getNameFrom() + " (" + emi.getDisplayFrom() + ")";
         java.lang.String destinataris = emi.getDisplayTo();
         java.lang.String subject = emi.getSubject();
         java.lang.String message = emi.getBody();

@@ -50,20 +50,24 @@ public class EmailEmlFormatParser {
 		log.info("parseEml: " + msg.getMessageNumber());
 		emi.setNumber(msg.getMessageNumber());
 
-		// información del remitente
 		// Este hace referencia a la columna Origen (message2email()),i a correo de contacto en Incidencia, y Solicitud
-//		emi.setDisplayFrom(getRecipients(msg.getFrom())); 
 		String replyTo = getRecipients(msg.getReplyTo());
-		emi.setDisplayFrom(replyTo); 
-		
 		// Este hace referencia a nombre de persona de contacto en Incidencia,y Solicitud
-//		emi.setNameFrom(getNames(msg.getFrom())); 
-		String replyToName = getNames(msg.getReplyTo());
+		String replyToName;
+		
+		log.info("UEP replyTo: " + replyTo);
+		if (replyTo == null || replyTo.equals("null") || replyTo.trim().equals("")) {
+			replyTo = getRecipients(msg.getFrom());
+			replyToName = getNames(msg.getFrom());
+		}else {
+			replyToName = getNames(msg.getReplyTo());
+			if (replyToName == null || replyToName.equals("null") || replyToName.trim().equals("")) {
+				replyToName = getNames(msg.getFrom());
+			}
+		}
+		emi.setDisplayFrom(replyTo); 
 		emi.setNameFrom(replyToName); 
-
-//		log.info("replyTo => " + replyTo + " replyToName => " + replyToName);
-//    emi.set
-
+		
 		// Informacion de los destinatarios
 		emi.setDisplayTo(getRecipients(msg.getRecipients(RecipientType.TO)));
 		emi.setDisplayCC(getRecipients(msg.getRecipients(RecipientType.CC)));
@@ -215,11 +219,14 @@ public class EmailEmlFormatParser {
 			attachments.add(attachment);
 			return;
 		} else {
-			// Un caso como este es de un correo con lleva adjnutos dentro del cuerpo del correo, como imagenes, logos, etc
+			// Un caso como este es de un correo con lleva adjnutos dentro del cuerpo del
+			// correo, como imagenes, logos, etc
 			log.info("rePart: Adjunto interno, no tratamos. " + part.getContentType());
-//			if (part.getContentType().startsWith("text/plain") || part.getContentType().startsWith("text/html")){
-//				emi.setBody(part.getContent().toString());
-//			}
+			if (part.getContentType().startsWith("text/plain") || part.getContentType().startsWith("text/html")) {
+				if (emi.getBody() == null || emi.getBody().trim().equals("")) {
+					emi.setBody(part.getContent().toString());
+				}
+			}
 			return;
 		}
 		

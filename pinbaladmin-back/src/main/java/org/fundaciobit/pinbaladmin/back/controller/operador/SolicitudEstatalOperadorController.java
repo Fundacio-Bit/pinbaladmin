@@ -238,7 +238,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 				String entitat = soli.getEntitatEstatal();
 				msg = msg.replaceAll("#ENTITAT#", entitat);
 
-				msg += getPeuCorreu(soli.getSolicitudID());
+				msg += getPeuCorreu(soli.getSolicitudID(), "solicitud");
 				
 				this.message = msg;
 
@@ -305,9 +305,10 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		}
 	}
 
-	private static String getPeuCorreu(Long soliID) {
-		
-		String url = Configuracio.getAppUrl() + "/public/eventsolicitud" + "/veureevents/"
+	
+	public static String getPeuCorreu(Long soliID, String tipus) {
+		//tipus pot ser "solicitud" o "incidencia"
+		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
 				+ HibernateFileUtil.encryptFileID(soliID);
 		
 		String msg = "<div id=\"peu_correu\">"
@@ -322,8 +323,8 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 				+ "  </div>"
 
 				+ "  <div id=\"noContestar\">"
-				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
-				+ "		aportat en aquest correu."
+				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
+				+ " accediu a l'enllaç aportat en aquest correu."
 				+ "  </div>" 
 				
 				+ "  <style>" 

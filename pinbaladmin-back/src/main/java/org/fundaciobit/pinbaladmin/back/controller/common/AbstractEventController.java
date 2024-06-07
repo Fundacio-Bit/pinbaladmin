@@ -17,6 +17,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudEstatalOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
@@ -358,69 +359,72 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         log.info("Entra a getRedirectWhenCreated ... Princial => " + request.getUserPrincipal());
 
-        if (request.getUserPrincipal() != null) {
-            // Accés loguejat
-            EventJPA ev = eventForm.getEvent();
-
-            if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
-
-                Long itemID;
-                String tipus;
-                if (isSolicitud()) {
-
-                    itemID = ev.getSolicitudID();
-                    tipus = "sol·licitud";
-                } else {
-
-                    itemID = ev.getIncidenciaTecnicaID();
-                    tipus = "incidència";
-                }
-                try {
-                    final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
-                            + getTitolItem(itemID);
-                    
-                    final String from = Configuracio.getAppEmail();
-                    
-                    final String message = getCapCorreu(tipus, itemID) + "<div style=\"background-color:#f6f6f6;\">"
-                            + eventForm.getEvent().getComentari().replace("\n", "<br/>")
-                            + (eventForm.getEvent().getFitxerID() == null ? ""
-                                    : "<br/><br/><b>S'han adjuntat fitxers.</b>")
-                            + "</div><br/>"
-                            + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
-                            + getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>" + getPeuCorreu();
-
-                    final boolean isHtml = true;
-
-                    //eventForm.getEvent().getDestinatarimail();
-                    
-                    String email = eventForm.getEvent().getDestinatarimail();
-                    ev.setDestinatarimail(email);
-                    
-                    String persona = eventForm.getEvent().getDestinatari();
-                    ev.setDestinatari(persona);
-                    
-                    FitxerJPA adjunt = ev.getFitxer();
-
-                    eventLogicaEjb.update(ev);
-                    
-                    log.info("CORREU PER ENVIAR");
-                    EmailUtil.postMail(subject, message, isHtml, from, adjunt, email);
-                    log.info("CORREU ENVIAT");
-                    
-                } catch (I18NException e) {
-                    String msg;
-                    msg = I18NUtils.getMessage(e);
-
-                    HtmlUtils.saveMessageError(request, "Error I18N enviant correu: " + msg);
-                } catch (Throwable th) {
-
-                    String msg;
-                    msg = th.getMessage();
-                    HtmlUtils.saveMessageError(request, "Error enviant correu: " + msg);
-                }
-            }
-
-        }
+//        if (request.getUserPrincipal() != null) {
+//            // Accés loguejat
+//            EventJPA ev = eventForm.getEvent();
+//
+//            if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
+//
+//                Long itemID;
+//                String tipus;
+//                if (isSolicitud()) {
+//
+//                    itemID = ev.getSolicitudID();
+//                    tipus = "sol·licitud";
+//                } else {
+//
+//                    itemID = ev.getIncidenciaTecnicaID();
+//                    tipus = "incidència";
+//                }
+//                try {
+//                    final String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
+//                            + getTitolItem(itemID);
+//                    
+//                    final String from = Configuracio.getAppEmail();
+//                    
+//					final String message = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b>"
+//							+ "<br/><br/>"
+//							+ "<div style=\"background-color:#f6f6f6;\">"
+//                            + eventForm.getEvent().getComentari().replace("\n", "<br/>")
+//                            + (eventForm.getEvent().getFitxerID() == null ? ""
+//                                    : "<br/><br/><b>S'han adjuntat fitxers.</b>")
+//                            + "</div>"
+//                            
+//                            + SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+////                            + "Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a href=\""
+////                            +  getLinkPublic(itemID) + "\" > Accedir a " + tipus + "</a><br/><br/>" + getPeuCorreu();
+//
+//                    final boolean isHtml = true;
+//
+//                    //eventForm.getEvent().getDestinatarimail();
+//                    
+//                    String email = eventForm.getEvent().getDestinatarimail();
+//                    ev.setDestinatarimail(email);
+//                    
+//                    String persona = eventForm.getEvent().getDestinatari();
+//                    ev.setDestinatari(persona);
+//                    
+//                    FitxerJPA adjunt = ev.getFitxer();
+//
+//                    eventLogicaEjb.update(ev);
+//                    
+//                    log.info("CORREU PER ENVIAR");
+//                    EmailUtil.postMail(subject, message, isHtml, from, adjunt, email);
+//                    log.info("CORREU ENVIAT");
+//                    
+//                } catch (I18NException e) {
+//                    String msg;
+//                    msg = I18NUtils.getMessage(e);
+//
+//                    HtmlUtils.saveMessageError(request, "Error I18N enviant correu: " + msg);
+//                } catch (Throwable th) {
+//
+//                    String msg;
+//                    msg = th.getMessage();
+//                    HtmlUtils.saveMessageError(request, "Error enviant correu: " + msg);
+//                }
+//            }
+//        }
 
 //        return getRedirectWhenCancel(request, eventForm.getEvent().getEventID());
         return "redirect:" + getContextWeb() + "/postcreateiframe";
@@ -468,17 +472,21 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         Long solicitudID = null;
         Long incidenciaTecnicaID = itemID;
-        String tipusItem = "Incidència";
+        String tipusItem = "incidencia";
 
         boolean isHtml = true;
         FitxerJPA adjunt = null;
         String subject = "PINBAL [" + itemID + "] - ALTA " + tipusItem.toUpperCase() + " - " + titol;
 
-        String msg = getCapCorreu(tipusItem, itemID) + "    Des de la Fundació Bit l'informam que s'ha creat la "
-                + tipusItem + " titulada '" + titol + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-                + "    Per fer el seguiment de la " + tipusItem + " ho podrà fer utilitzant el següent enllaç: "
-                + "<a href=\"" + getLinkPublic(itemID) + "\" > Accedir a " + tipusItem + "</a>" + "<br/><br/>"
-                + getPeuCorreu();
+		String msg = "Bon dia;<br/><br/><b>Número " + tipusItem + ": " + itemID + "</b><br/><br/>"
+				+ "    Des de la Fundació Bit l'informam que s'ha creat la " + tipusItem + " titulada '" + titol
+				+ "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+
+				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipusItem);
+
+//                + "    Per fer el seguiment de la " + tipusItem + " ho podrà fer utilitzant el següent enllaç: "
+//                + "<a href=\"" + getLinkPublic(itemID) + "\" > Accedir a " + tipusItem + "</a>" + "<br/><br/>"
+//                + getPeuCorreu();
 
         try {
             log.info("Enviam CORREU");
@@ -525,25 +533,24 @@ public abstract class AbstractEventController<T> extends EventController impleme
                 String[] emails = { email };
                 log.error("Dest: " + Arrays.toString(emails));
 
+                final boolean isHtml = true;
+                FitxerJPA adjunt = null;
+
                 final String titol = getTitolItem(itemID);
 
-                final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
-
-                final boolean isHtml = true;
-
-                FitxerJPA adjunt = null;
-                
+                final String tipus = isSolicitud() ? "solicitud" : "incidencia";
                 for (String address : emails) {
+                	
+					final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
 
-                    String url = getLinkPublic(itemID);
-                    final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+					String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+							+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada '" + titol
+							+ "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+							+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
 
-                    String msg = getCapCorreu(tipus, itemID) + "    Des de la Fundació Bit l'informam que la seva "
-                            + tipus + " titulada '" + titol
-                            + "' ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-                            + "    Per fer el seguiment de la " + tipus
-                            + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\"" + getLinkPublic(itemID)
-                            + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>" + getPeuCorreu();
+//                            + "    Per fer el seguiment de la " + tipus
+//                            + " ho podrà fer utilitzant el següent enllaç: " + "<a href=\"" + getLinkPublic(itemID)
+//                            + "\" > Accedir a " + tipus + "</a>" + "<br/><br/>" + getPeuCorreu();
 
                     
                     /*
@@ -560,7 +567,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                         EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
                         HtmlUtils.saveMessageSuccess(request,
-                                "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
+                                "S'ha enviat un correu a " + address + " amb l'enllaç per veure la " + tipus);
                         
                         if (titol.indexOf("CAI-") > 0) {
                             enviarCorreuASuport(request, itemID, titol);
@@ -584,18 +591,18 @@ public abstract class AbstractEventController<T> extends EventController impleme
         return "redirect:" + getContextWeb() + "/veureevents/" + itemID;
     }
 
-    protected String getCapCorreu(String tipus, Long itemID) {
-        return "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>";
-    }
+//    protected String getCapCorreu(String tipus, Long itemID) {
+//        return "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>";
+//    }
 
-    protected String getPeuCorreu() {
-        return "        Salutacions<br/><br/>" + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
-                + "<div style=\"color:#868686\">"
-                + "=================================================================<br/>"
-                + "Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta<br/>"
-                + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
-                + "=================================================================" + "</div>";
-    }
+//    protected String getPeuCorreu() {
+//        return "        Salutacions<br/><br/>" + "        <i>Àrea de Govern Digital - Fundació BIT</i><br/>"
+//                + "<div style=\"color:#868686\">"
+//                + "=================================================================<br/>"
+//                + "Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta<br/>"
+//                + "sobre la incidència accediu a l'enllaç aportat en aquest correu.<br/>"
+//                + "=================================================================" + "</div>";
+//    }
 
     private String getTitolItem(Long itemID) throws I18NException {
         T item = findItemByPrimaryKey(itemID);
@@ -631,17 +638,22 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                 String titol = getTitolItem(itemID);
 
-                String url = getLinkPublic(itemID);
+//                String url = getLinkPublic(itemID);
 
-                String msg = "Bon dia:\n"
-                        + " En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
-                        + titol + "' i també podrà afegir informació addicional a la seva " + itemNom + ": " + url
-                        + "\n\n" + getPeuCorreu().replace("<br/>", "\n").replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+//                String msg = "Bon dia:\n"
+//                        + "En el següent enllaç trobarà les accions que s'estan duent a terme en la seva petició titulada: '"
+//                        + titol + "' i també podrà afegir informació addicional a la seva " + itemNom + ": " + url
+//                        + "\n\n" + getPeuCorreu().replace("<br/>", "\n").replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+//                
+
+                String tipus = isSolicitud() ? "solicitud" : "incidencia";
+                
+				String msg = "Bon dia:\n" + "Desde la Fundació BIT el volem informar que \n\n\n\n"
+						+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
 
                 request.getSession().setAttribute(SESSION_ENVIARCORREU_MISSATGE, msg);
                 request.getSession().setAttribute(SESSION_ENVIARCORREU_ASSUMPTE,
                         "PINBAL [#" + itemNom + ": " + itemID + "] - NOVETATS - " + titol);
-
             }
 
             {
@@ -668,11 +680,11 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     }
 
-    private String getLinkPublic(Long itemID) {
-        String url = Configuracio.getAppUrl() + getPublicContextPath() + "/veureevents/"
-                + HibernateFileUtil.encryptFileID(itemID);
-        return url;
-    }
+//    private String getLinkPublic(Long itemID) {
+//        String url = Configuracio.getAppUrl() + getPublicContextPath() + "/veureevents/"
+//                + HibernateFileUtil.encryptFileID(itemID);
+//        return url;
+//    }
 
     public abstract String getPublicContextPath();
 
@@ -883,53 +895,53 @@ public abstract class AbstractEventController<T> extends EventController impleme
     public EventJPA create(HttpServletRequest request, EventJPA event) throws I18NException, I18NValidationException {
 
         EventJPA ev = (EventJPA) eventLogicaEjb.create(event);
-
-        log.info("create: tipus => " + ev.getTipus() + "(tipus cedent == " + EVENT_TIPUS_CONSULTA_A_CEDENT + ")");
-
-        if (ev.getTipus() == EVENT_TIPUS_CONSULTA_A_CEDENT) {
-
-            Long itemID = ev.getSolicitudID();
-            if (itemID == null) {
-                itemID = ev.getIncidenciaTecnicaID();
-            }
-
-            String address = getPersonaContacteEmailByItemID(itemID);
-
-            String url;
-            try {
-                url = getLinkPublic(itemID) + "?cedent=" + HibernateFileUtil.getEncrypter().encrypt(address);
-            } catch (Exception e1) {
-                final String msg = "Error encriptant: " + e1.getMessage();
-                log.error(msg, e1);
-                throw new I18NException("comodi", msg);
-            }
-
-            final String titol = getTitolItem(itemID);
-
-            final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
-
-            final boolean isHtml = true;
-
-            FitxerJPA adjunt = event.getFitxer();;
-            
-            final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO " + tipus.toUpperCase() + " - "
-                    + titol;
-
-            String msg = getCapCorreu(tipus, itemID)
-                    + "    Des del departament de Govern Digital de la Fundació Bit li volem fer la següent consulta/petició:<br/>"
-                    + "<hr/>" + ev.getComentari().replace("\n", "<br/>") + "<hr/>"
-                    + "Podrà contestar la consulta/petició utilitzant el següent enllaç: " + "<a href=\"" + url
-                    + "\">CONTESTAR</a>" + "<br/><br/>" + getPeuCorreu();
-            try {
-
-                EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
-                HtmlUtils.saveMessageSuccess(request, "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
-            } catch (Exception e) {
-                msg = "Error enviant correu: " + e.getMessage();
-                log.error(msg, e);
-                HtmlUtils.saveMessageError(request, msg);
-            }
-        }
+//
+//        log.info("create: tipus => " + ev.getTipus() + "(tipus cedent == " + EVENT_TIPUS_CONSULTA_A_CEDENT + ")");
+//
+//        if (ev.getTipus() == EVENT_TIPUS_CONSULTA_A_CEDENT) {
+//
+//            Long itemID = ev.getSolicitudID();
+//            if (itemID == null) {
+//                itemID = ev.getIncidenciaTecnicaID();
+//            }
+//
+//            String address = getPersonaContacteEmailByItemID(itemID);
+//
+//            String url;
+//            try {
+//                url = getLinkPublic(itemID) + "?cedent=" + HibernateFileUtil.getEncrypter().encrypt(address);
+//            } catch (Exception e1) {
+//                final String msg = "Error encriptant: " + e1.getMessage();
+//                log.error(msg, e1);
+//                throw new I18NException("comodi", msg);
+//            }
+//
+//            final String titol = getTitolItem(itemID);
+//
+//            final String tipus = isSolicitud() ? "Sol·licitud" : "Incidència";
+//
+//            final boolean isHtml = true;
+//
+//            FitxerJPA adjunt = event.getFitxer();;
+//            
+//            final String subject = "PINBAL [" + itemID + "] - CONSULTA/PETICIO " + tipus.toUpperCase() + " - "
+//                    + titol;
+//
+//            String msg = getCapCorreu(tipus, itemID)
+//                    + "    Des del departament de Govern Digital de la Fundació Bit li volem fer la següent consulta/petició:<br/>"
+//                    + "<hr/>" + ev.getComentari().replace("\n", "<br/>") + "<hr/>"
+//                    + "Podrà contestar la consulta/petició utilitzant el següent enllaç: " + "<a href=\"" + url
+//                    + "\">CONTESTAR</a>" + "<br/><br/>" + getPeuCorreu();
+//            try {
+//
+//                EmailUtil.postMail(subject, msg, isHtml, Configuracio.getAppEmail(), adjunt, address);
+//                HtmlUtils.saveMessageSuccess(request, "S'ha enviat un correu a " + address + " amb l'enllaç " + url);
+//            } catch (Exception e) {
+//                msg = "Error enviant correu: " + e.getMessage();
+//                log.error(msg, e);
+//                HtmlUtils.saveMessageError(request, msg);
+//            }
+//        }
 
         return ev;
     }
@@ -1000,31 +1012,31 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     @Override
     public void postList(HttpServletRequest request, ModelAndView mav, EventFilterForm filterForm, List<Event> list)
-            throws I18NException {
+			throws I18NException {
 
-        if (list.size() > 0) {
-            int noLlegits = 0;
-            for (Event event : list) {
-                if (event.isNoLlegit()) {
-                    noLlegits++;
-                }
-            }
+		if (list.size() > 0) {
+			int noLlegits = 0;
+			for (Event event : list) {
+				if (event.isNoLlegit()) {
+					noLlegits++;
+				}
+			}
 
-            long itemID;
+			long itemID;
 
-            if (isSolicitud()) {
-                itemID = list.get(0).getSolicitudID();
-            } else {
-                itemID = list.get(0).getIncidenciaTecnicaID();
-            }
+			if (isSolicitud()) {
+				itemID = list.get(0).getSolicitudID();
+			} else {
+				itemID = list.get(0).getIncidenciaTecnicaID();
+			}
 
-            if (noLlegits == 0) {
-                mav.addObject("urlMarcarComNoLlegides",
-                        request.getContextPath() + getContextWeb() + "/marcarcomnollegida/" + itemID);
-            } else {
-                mav.addObject("urlMarcarComLlegides",
-                        request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
-            }
-        }
-    }
+			if (noLlegits == 0) {
+				mav.addObject("urlMarcarComNoLlegides",
+						request.getContextPath() + getContextWeb() + "/marcarcomnollegida/" + itemID);
+			} else {
+				mav.addObject("urlMarcarComLlegides",
+						request.getContextPath() + getContextWeb() + "/marcarcomllegida/" + itemID);
+			}
+		}
+	}
 }
