@@ -23,11 +23,11 @@
 		style="color: white" onclick="" title="Modificar">
 		<i class="<%=IconUtils.ICON_EDIT%>"></i>Editar
 	</button>
-	<c:if test="${event.noLlegit}">
+	<%-- <c:if test="${event.noLlegit}">
 		<span
 			style='font-size: 40px; color: red; float: right; -webkit-text-fill-color: red;'>&#8859;</span>
-	</c:if>
-	<br />
+	</c:if> 
+	<br />--%>
 
 </c:if>
 

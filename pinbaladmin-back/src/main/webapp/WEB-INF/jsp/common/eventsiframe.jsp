@@ -1293,9 +1293,12 @@ textarea.event {
 	margin-left: -17px;
 }
 
-.circle {
-bo
-									style="border: 4px solid ${border}; height: 32px; z-index: 2;"
+.entrada {
+	border-radius: 4px;
+}
+
+.entrada.noLlegit {
+	border: 3px solid #c40000;
 }
 </style>
 
@@ -1391,7 +1394,7 @@ bo
 								</div>
 							</c:if> <c:if test="${!mostrarMissatgeDreta}">
 								<div style="margin: 10px 10px 24px 10px">
-									<div class="entrada">
+									<div class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
 										<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
 									</div>
 								</div>
@@ -1428,7 +1431,7 @@ bo
 
 								<c:if test="${mostrarMissatgeDreta}">
 									<div style="margin: 10px 10px 24px 10px">
-										<div class="entrada">
+										<div class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
 											<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
 										</div>
 									</div>
