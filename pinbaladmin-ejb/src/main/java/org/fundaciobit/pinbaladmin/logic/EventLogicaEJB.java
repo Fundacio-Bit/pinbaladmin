@@ -15,6 +15,7 @@ import org.fundaciobit.pinbaladmin.ejb.EventEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 /**
  * 
@@ -34,13 +35,22 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 	public Event create(Event bean) throws I18NException {
 		Event ev = super.create(bean);
 
+		int tipus = ev.getTipus();
 		log.info("EventLogicaEJB.create: tipus: " + ev.getTipus());
-		if (ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC || ev.getTipus() == Constants.EVENT_TIPUS_COMENTARI_SUPORT || ev.getTipus() == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT ) {
+		if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC || tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT || tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT ) {
 			int idx = ev.getComentari().indexOf("|");
 
 			String subject = ev.getComentari().substring(0, idx);
 			String message = ev.getComentari().substring(idx + 1);
 
+			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
+				SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
+				if (soli.getExpedientPid() != null) {
+					subject = "PID [" + soli.getExpedientPid() + "] - " + subject;
+				}
+			}
+			
+			
 			final String from = Configuracio.getAppEmail();
 			final boolean isHtml = true;
 			String email = ev.getDestinatarimail();
