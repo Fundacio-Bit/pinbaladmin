@@ -61,6 +61,7 @@ public class EmailOperatorController extends EmailController {
         String[] emails = email.getDestinataris().split(";");
         log.error("Dest: " + Arrays.toString(emails));
 
+        //Actualmente, solo se llega aqui si se crea un objeto EmailJPA desde WebDB
         for (String address : emails) {
             try {
                 EmailUtil.postMail(email.getSubject(), email.getMessage(), isHtml,  Configuracio.getAppEmail(), adjunt, address);

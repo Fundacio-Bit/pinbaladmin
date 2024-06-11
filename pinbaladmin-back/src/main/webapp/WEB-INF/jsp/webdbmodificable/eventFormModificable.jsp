@@ -1,65 +1,53 @@
 
+<%@page import="org.fundaciobit.pinbaladmin.commons.utils.Constants"%>
 <script>
 	
 <%--
-
-  public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT - TRAMITADOR
-  public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1;  // PUBLIC - TRAMITADOR
-  public static final int EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC - CONTACTE
-  public static final int EVENT_TIPUS_TIQUET_MINHAP = -2; // PRIVAT - TRAMITADOR
+	public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT_TRAMITADOR
+	public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1; // PUBLIC_TRAMITADOR
+	public static final int EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC_CONTACTE
+	public static final int EVENT_TIPUS_COMENTARI_SUPORT = -2; // COMENTARI A SUPORT
+	public static final int EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
+	public static final int EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
 --%>
 	function onChangeTipus(select) {
 
 		if (select === null) {
-			//document.getElementById("event_fitxerID_rowid").style.display = "";
-			//tinymce.get("event.comentari").setContent("");
-
-			document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "none";
-			document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "none";
-
 			return;
 		}
+		
+		document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "none";
+		document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "none";
 
+
+		//Si es un comentari de contacte, la persona es el contacte (qui fa la consulta), sino, l'operador
 		if (select.value == 2) {
-			<c:if test="${empty persona_contacte}">
-		    	alert("Persona de Contacte Buida");
-		    	select.value = -1;
-			</c:if>
-			
-			<c:if test="${not empty persona_contacte}">
-		    	document.getElementById("event.persona").value = "${persona_contacte}";
-			</c:if>
+			$("#event_persona_columnlabelid")[0].children[0].innerHTML = "Persona *";
+	    	document.getElementById("event.persona").value = "${persona_contacte}";
 		} else {
+			$("#event_persona_columnlabelid")[0].children[0].innerHTML = "Operador *";
 			document.getElementById("event.persona").value = "${persona_operador}";
 		}
 
+		// Si es una consulta a suport, el destinatari es suport, sino, el contacte
         if (select.value == -2) {
-            document.getElementById("event_fitxerID_rowid").style.display = "none";
-
-            document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "";
-            document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "";
-
-        } else {
-            document.getElementById("event_fitxerID_rowid").style.display = "";
-
-            document.getElementById("event_caidIdentificadorConsulta_rowid").style.display = "none";
-            document.getElementById("event_caidNumeroSeguiment_rowid").style.display = "none";
+    	    document.getElementById("event.destinatari").value = "Suport DGSMAD";
+    		document.getElementById("event.destinatarimail").value = "pautrias2@gmail.com";
+        } else if (select.value == 1 || select.value == -3) {
+            document.getElementById("event.destinatari").value = "${persona_contacte}";
+			document.getElementById("event.destinatarimail").value = "${persona_contacte_mail}";
+        }else{
+            document.getElementById("event.destinatari").value = null;
+			document.getElementById("event.destinatarimail").value = null;
         }
 
-
-	    document.getElementById("event.destinatari").value = "${persona_contacte}";
-		document.getElementById("event.destinatarimail").value = "${persona_contacte_mail}";
-
-		if (select.value == 1) {
+		// Si no s'envia cap correu, amagar els camps de destinatari
+		if (select.value == 1 || select.value == -2) {
 			document.getElementById("event_destinatari_rowid").style.display = "";
 			document.getElementById("event_destinatarimail_rowid").style.display = "";
-			
-//			document.getElementsByTagName("iframe")[0].height="560px";
 		} else {
 			document.getElementById("event_destinatari_rowid").style.display = "none";
 			document.getElementById("event_destinatarimail_rowid").style.display = "none";
-
-//            document.getElementsByTagName("iframe")[0].height="475px";
 		}
 	}
 

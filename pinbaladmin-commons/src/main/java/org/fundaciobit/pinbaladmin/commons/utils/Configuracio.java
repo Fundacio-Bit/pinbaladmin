@@ -182,7 +182,7 @@ public class Configuracio implements Constants {
             default:
             case EVENT_TIPUS_COMENTARI_CONTACTE: // PUBLIC - CONTACTE
                 return false;
-            case EVENT_TIPUS_TIQUET_MINHAP: // PRIVAT - TRAMITADOR
+            case EVENT_TIPUS_COMENTARI_SUPORT: // PRIVAT - TRAMITADOR
                 return true;
             case EVENT_TIPUS_CEDENT_RESPOSTA:
                 return false;

@@ -214,12 +214,65 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 			serveis.add(servei);
 		}
 
-		public void sendMail(SolicitudJPA soli, FitxerJPA excel) throws Exception {
+//		public void sendMail(SolicitudJPA soli, FitxerJPA excel) throws Exception {
+//			try {
+//				String subject = this.subject;
+//				boolean html = true;
+//				String from = Configuracio.getAppEmail();
+//				String[] dests = this.dests.toArray(new String[this.dests.size()]);
+//				String msg = this.message;
+//
+//				if (subject.equals("Padró - Cedent")) {
+//					String procediment = soli.getProcedimentNom();
+//					msg = msg.replaceAll("#PROCEDIMENT#", procediment);
+//				} else {
+//					String cadenaServeis = "<ul>";
+//					for (Servei servei : this.serveis) {
+//						cadenaServeis += "<li>" + "(CCAA) " + servei.getCodi() + ": " + servei.getNom() + "</li>";
+//					}
+//					cadenaServeis += "</ul>";
+//					
+//					msg = msg.replaceAll("#SERVEIS#", cadenaServeis);
+//				}
+//
+//				String entitat = soli.getEntitatEstatal();
+//				msg = msg.replaceAll("#ENTITAT#", entitat);
+//
+//				msg += getPeuCorreu(soli.getSolicitudID(), "solicitud");
+//				
+//				this.message = msg;
+//
+//				EmailUtil.postMail(subject, msg, html, from, excel, dests);
+//			} catch (Exception e) {
+//				throw new Exception("Error al enviar correu", e);
+//			}
+//		}
+
+		public void crearEvent(SolicitudJPA soli, FitxerJPA excel, EventLogicaService eventLogicaEjb ) throws Exception {
 			try {
+				Timestamp data = new Timestamp(System.currentTimeMillis());
+				int tipus = Constants.EVENT_TIPUS_CONSULTA_A_CEDENT;
+				String cedent = this.id;
+
+				EventJPA evt = new EventJPA();
+				evt.setSolicitudID(soli.getSolicitudID());
+				evt.setDataEvent(data);
+				evt.setTipus(tipus);
+				evt.setPersona(cedent);
+				evt.setNoLlegit(false);
+
+				// Camps per enviar el correu
+				
 				String subject = this.subject;
-				boolean html = true;
-				String from = Configuracio.getAppEmail();
-				String[] dests = this.dests.toArray(new String[this.dests.size()]);
+//				String[] dests = this.dests.toArray(new String[this.dests.size()]);
+				
+				String destinataris = ""; // = String.join(";", dests);
+				for (String dest : this.dests) {
+					destinataris += dest + ";";
+				}				
+				
+				System.out.println("Enviat correu a: " + destinataris);
+				
 				String msg = this.message;
 
 				if (subject.equals("Padró - Cedent")) {
@@ -240,36 +293,9 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
 				msg += getPeuCorreu(soli.getSolicitudID(), "solicitud");
 				
-				this.message = msg;
-
-				EmailUtil.postMail(subject, msg, html, from, excel, dests);
-			} catch (Exception e) {
-				throw new Exception("Error al enviar correu", e);
-			}
-		}
-
-		public void crearEvent(Long soliID, FitxerJPA excel, EventLogicaService eventLogicaEjb ) throws Exception {
-			try {
-
-				// Afegir events de correu enviat
-				Timestamp data = new Timestamp(System.currentTimeMillis());
-				int tipus = Constants.EVENT_TIPUS_CONSULTA_A_CEDENT;
-				String cedent = this.id;
-
-				EventJPA evt = new EventJPA();
-				evt.setSolicitudID(soliID);
-				evt.setDataEvent(data);
-				evt.setTipus(tipus);
-				evt.setPersona(cedent);
-
-				String msg = this.message;// .replaceAll("<br>", "\n");
-				evt.setComentari(msg);
-
-				evt.setNoLlegit(false);
-				evt.setDestinatari(this.dests.toString());
-				evt.setDestinatarimail(this.dests.toString());
-
+				evt.setComentari(subject + "|" + msg);
 				evt.setFitxer(excel);
+				evt.setDestinatarimail(destinataris);
 
 				eventLogicaEjb.create(evt);
 			} catch (Exception e) {
@@ -381,8 +407,8 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		for (MailCedentInfo mail : mails) {
 			if (mail.serveis.size() > 0) {
 				try {
-					mail.sendMail(soli, excel);
-					mail.crearEvent(soliID, excel, eventLogicaEjb);
+//					mail.sendMail(soli, excel);
+					mail.crearEvent(soli, excel, eventLogicaEjb);
 					mail.actualitzarEstatServei(soliID, solicitudServeiEjb);
 					String missatge = "Correu enviat a " + mail.id;
 					log.info(missatge);

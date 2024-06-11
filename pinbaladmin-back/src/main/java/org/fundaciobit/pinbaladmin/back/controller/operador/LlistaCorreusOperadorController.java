@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -31,10 +32,16 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
@@ -79,6 +86,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
+
+    @EJB(mappedName = EventLogicaService.JNDI_NAME)
+    protected EventLogicaService eventLogicaEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
@@ -346,7 +356,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         }
 
         return " rows=\"" + Math.min(rows, 70) + "\" cols=\"" + cols + "\" ";
-
     }
 
     @RequestMapping(value = "/incidencia/{emailID}/{operador}/{tipusIncidencia}", method = RequestMethod.GET)
@@ -370,9 +379,12 @@ public class LlistaCorreusOperadorController extends EmailController {
                 IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.createFromEmail(emi, creador, operador, tipusIncidencia);
                 er.deleteMessage((int) (long) emailID);
 
-                // Redireccionam a Enviar Correu al Contacte
-                return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH
-                        + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
+                enviarCorreusIncidencia(it);
+                
+        		return "redirect:/operador/eventincidenciatecnica/veureevents/" + it.getIncidenciaTecnicaID();
+
+//                return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH
+//                        + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
 
                 // return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT +
                 // "/"
@@ -393,10 +405,9 @@ public class LlistaCorreusOperadorController extends EmailController {
         }
 
         return "redirect:" + getContextWeb() + "/list";
-
     }
 
-    public int cachesize(HttpServletRequest request) {
+	public int cachesize(HttpServletRequest request) {
         Integer i = (Integer) request.getSession().getAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS);
 
         if (i == null) {
@@ -423,17 +434,17 @@ public class LlistaCorreusOperadorController extends EmailController {
             if (er.getCountMessages() == cachesize(request)) {
                 EmailMessageInfo emi = er.getMessage((int) (long) emailID);
 
-                SolicitudEstatalDesDeFitxersMultiplesOperadorController.crearSolicitudsDesDeEmail(request, emi,
+                List<SolicitudJPA> solicituds = SolicitudEstatalDesDeFitxersMultiplesOperadorController.crearSolicitudsDesDeEmail(request, emi,
                         operador, log, serveiEjb, solicitudLogicaEjb);
 
                 er.deleteMessage((int) (long) emailID);
 
                 long end = System.currentTimeMillis();
 
-                // XYZ ZZZ
-                // S'ha de reenviar a ENVIAR CORREU A CONTACTE. Revisar mètode
-                // incidencia ????
-
+				for (SolicitudJPA soli : solicituds) {
+	                enviarCorreusSolicituds(soli);
+				}
+                
                 return "redirect:/operador/solicitudestatal/list/" + start + "/" + end;
 
             } else {
@@ -451,7 +462,8 @@ public class LlistaCorreusOperadorController extends EmailController {
         return "redirect:" + getContextWeb() + "/list";
     }
 
-    @Override
+
+	@Override
     public List<Email> executeSelect(ITableManager<Email, Long> ejb, Where where, final OrderBy[] orderBy,
             Integer itemsPerPage, final int inici) throws I18NException {
 
@@ -685,4 +697,180 @@ public class LlistaCorreusOperadorController extends EmailController {
         return getRedirectWhenDelete(request, null, null);
     }
 
+	private void enviarCorreusSolicituds(SolicitudJPA soli) throws I18NException {
+		
+		final Long solicitudID = soli.getSolicitudID();
+		final Long incidenciaTecnicaID = null;
+		final String tipus = "solicitud";
+		
+		Long itemID = solicitudID;
+		String titol = soli.getProcedimentNom();
+		
+		String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+
+		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
+				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+		
+		
+		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+		
+		enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+	}
+	
+	private void enviarCorreusIncidencia(IncidenciaTecnica it) throws I18NException {
+		
+		final Long solicitudID = null;
+		final Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
+		final String tipus = "incidencia";
+
+		Long itemID = incidenciaTecnicaID;
+		String titol = it.getTitol();
+
+		final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+
+		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
+				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+
+		enviarCorreu(it.getContacteEmail(), it.getContacteNom(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+
+//		if (titol.indexOf("CAI-") > 0) {
+			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID,Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+//		}
+		
+
+	}
+	
+//	private void enviarSolicitudContacte(SolicitudJPA soli) throws I18NException {
+//		String mail = soli.getPersonaContacteEmail();
+//		String contacte = soli.getPersonaContacte();
+//
+//		final Long solicitudID = soli.getSolicitudID();
+//		final Long incidenciaTecnicaID = null;
+//
+//		// --------------------------------------------------------
+//		Long itemID = solicitudID;
+//		final String tipus = "solicitud";
+//		String titol = soli.getProcedimentNom();
+//
+//		String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+//
+//		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+//				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
+//				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+//				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+//
+//		enviarCorreu(mail, contacte, subject, msg, solicitudID, incidenciaTecnicaID);
+//	}
+
+//	private void enviarIncidenciaContacte(IncidenciaTecnica it) throws I18NException {
+//		String mail = it.getContacteEmail();
+//		String contacte = it.getContacteNom();
+//
+//		final Long solicitudID = null;
+//		final Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
+//		// --------------------------------------------------------
+//
+//		Long itemID = incidenciaTecnicaID;
+//		String titol = it.getTitol();
+//
+//		final String tipus = "incidencia";
+//		final String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+//
+//		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+//				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
+//				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+//				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+//
+//		enviarCorreu(mail, contacte, subject, msg, solicitudID, incidenciaTecnicaID);
+//	}
+
+//	private void enviarSolicitudSuport(SolicitudJPA soli) throws I18NException {
+//		String mail = MAIL_SUPORT;
+//		String contacte = "Suport";
+//
+//		final Long solicitudID = soli.getSolicitudID();
+//		final Long incidenciaTecnicaID = null;
+//
+//		// --------------------------------------------------------
+//
+//		Long itemID = solicitudID;
+//		String tipusItem = "solicitud";
+//		String titol = soli.getProcedimentNom();
+//
+//		String subject = "PINBAL [" + itemID + "] - ALTA " + tipusItem.toUpperCase() + " - " + titol;
+//
+//		String msg = "Bon dia;<br/><br/><b>Número " + tipusItem + ": " + itemID + "</b><br/><br/>"
+//				+ "    Des de la Fundació Bit l'informam que s'ha creat la " + tipusItem + " titulada <br><b>'" + titol
+//				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+//
+//				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipusItem);
+//
+//		enviarCorreu(mail, contacte, subject, msg, solicitudID, incidenciaTecnicaID);
+//	}
+
+//	private void enviarIncidenciaSuport(IncidenciaTecnica it) throws I18NException {
+//		String mail = MAIL_SUPORT;
+//		String contacte = "Suport";
+//
+//		final Long solicitudID = null;
+//		final Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
+//		// --------------------------------------------------------
+//
+//		Long itemID = incidenciaTecnicaID;
+//		String tipusItem = "incidncia";
+//		String titol = it.getTitol();
+//
+//		String subject = "PINBAL [" + itemID + "] - ALTA " + tipusItem.toUpperCase() + " - " + titol;
+//
+//		String msg = "Bon dia;<br/><br/><b>Número " + tipusItem + ": " + itemID + "</b><br/><br/>"
+//				+ "    Des de la Fundació Bit l'informam que s'ha creat la " + tipusItem + " titulada <br><b>'" + titol
+//				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
+//
+//				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipusItem);
+//
+//		enviarCorreu(mail, contacte, subject, msg, solicitudID, incidenciaTecnicaID);
+//	}
+
+	private void crearEventPerCorreu(String mail, String destinatariNom, String msg, Long solicitudID,
+			Long incidenciaTecnicaID, int tipus) throws I18NException {
+
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		final String caidIdentificadorConsulta = null;
+		final String caidNumeroSeguiment = null;
+
+		String _persona_ = "PinbalAdmin"; // Quien envia el mensaje
+
+		Long _fitxerID_ = null;
+		boolean _noLlegit_ = false;
+
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(solicitudID);
+		event.setIncidenciaTecnicaID(incidenciaTecnicaID);
+		event.setDataEvent(data);
+		event.setTipus(tipus);
+		event.setPersona(_persona_);
+		event.setDestinatari(destinatariNom);
+		event.setDestinatarimail(mail);
+		event.setComentari(msg);
+		event.setFitxerID(_fitxerID_);
+		event.setNoLlegit(_noLlegit_);
+		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
+		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
+
+		eventLogicaEjb.create(event);
+	}
+
+	private void enviarCorreu(String mail, String destinatari, String subject, String msg, Long soliID, Long incidenciaID, int tipus)
+			throws I18NException {
+
+		log.info("Cream Event Public i enviam un correu a " + destinatari + " <" + mail + ">");
+		
+		msg = subject + "|" + "<div>" + msg + "</div>";
+
+		crearEventPerCorreu(mail, destinatari, msg, soliID, incidenciaID, tipus);
+	}
 }

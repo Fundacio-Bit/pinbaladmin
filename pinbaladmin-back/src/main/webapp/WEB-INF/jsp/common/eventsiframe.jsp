@@ -1199,14 +1199,14 @@ textarea.event {
 						</c:if>
 
 						<c:if test="${!isPublic}">
-
+<%-- 
 							<a class="btn btn-sm btn-warning" role="button"
 								href="<c:url value="${contextweb}/enviarcorreu/${ID}"/>"> <i
 								class="<%=IconUtils.ICON_ENVELOPE%>"></i> Enviar Correu al
 								Contacte
 							</a>
-
-							<a class="btn btn-sm btn-success" role="button"
+ --%>
+							<a class="btn btn-sm btn-warning" role="button"
 								href="<c:url value="javascript:changeOperador()"/>"> <i
 								class="<%=IconUtils.ICON_RELOAD%>"></i> Canviar l'operador
 							</a>
@@ -1307,11 +1307,21 @@ bo
 
 			<c:forEach var="event" items="${eventItems}">
 
-				<c:set var="isPublicEvent"
-					value="${(event.tipus > 0) && (event.tipus != 3)}" />
+<!--
+    EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
+    EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT_TRAMITADOR
+
+    EVENT_TIPUS_COMENTARI_SUPORT = -2; // PUBLIC SUPORT
+    
+    EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1; // PUBLIC_TRAMITADOR
+    EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC_CONTACTE
+    EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
+ -->
+
+				<c:set var="isPublicEvent" value="${(event.tipus != -3) && (event.tipus != -1) && (event.tipus != 3)}" />
 				<c:set var="isContacte" value="${event.tipus == 2}" />
-				<c:set var="isCedent"
-					value="${(event.tipus==3) || (event.tipus==-3)}" />
+				<c:set var="isCedent" value="${(event.tipus==3) || (event.tipus==-3)}" />
+				<c:set var="isSuport" value="${event.tipus == -2}" />
 
 				<c:set var="show" value="${true}" />
 
@@ -1341,29 +1351,36 @@ bo
 					<c:set var="background" value="#cce6ff" />
 					<c:set var="border" value="#F0E68C" />
 
-					<c:if test="${!isPublic}">
+					<c:if test="${!isPublic}"> <!-- Comentari privat -->
 						<c:set var="background" value="#ffb3b3" />
-						<c:set var="border" value="#ff0000" />
+						<c:set var="border" value="#ff0000" /> <!-- VERMELL -->
 						<c:set var="title" value="Privat" />
 					</c:if>
 
-					<c:if test="${isContacte}">
-						<c:set var="background" value="#ccffcc" />
-						<c:set var="border" value="#9ACD32" />
-						<c:set var="title" value="Public" />
-					</c:if>
-
-					<c:if test="${event.tipus == 1}">
+					<c:if test="${isPublicEvent}"> <!-- Tramitador Public -->
 						<c:set var="background" value="#0000FF" />
-						<c:set var="border" value="#0000FF" />
+						<c:set var="border" value="#0000FF" /> <!-- BLAU -->
 						<c:set var="title" value="Compartit" />
 					</c:if>
 
-					<c:if test="${isCedent}">
-						<c:set var="border" value="#FF8C00" />
-						<c:set var="background" value="#FF8C00" />
+					<c:if test="${isContacte}"> <!-- Comentari Contacte -->
+						<c:set var="background" value="#ccffcc" />
+						<c:set var="border" value="#9ACD32" /> <!-- VERD -->
+						<c:set var="title" value="Public" />
+					</c:if>
+
+					<c:if test="${isCedent}"> <!-- Comentari Cedent -->
+						<c:set var="border" value="#FF8C00" /> 
+						<c:set var="background" value="#FF8C00" /><!-- TARONJA -->
 						<c:set var="title" value="Cedent" />
 					</c:if>
+
+					<c:if test="${isSuport}"> <!-- Comentari Suport -->
+						<c:set var="border" value="#B44CD9" />
+						<c:set var="background" value="#FF8C00" /> <!-- LILA -->
+						<c:set var="title" value="Suport" />
+					</c:if>
+
 					<tr>
 						<td align="right" width="45%"><c:if
 								test="${mostrarMissatgeDreta}">
@@ -1378,7 +1395,8 @@ bo
 										<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
 									</div>
 								</div>
-							</c:if></td>
+							</c:if>
+						</td>
 						<td>
 							<!--  =============  CERCLE ===============   -->
 							<div style="display: flex; align-items: center;">
@@ -1387,37 +1405,6 @@ bo
 								<div class="line" title="${title}"></div>
 							</div>
 						</td>
-						<!--  ============================   -->
-
-						<%-- <td>
-							<table style="padding: 0px; min-height: 100px" border="0">
-								<tr>
-									<td>&nbsp;</td>
-									<td style="width: 3px; background-color: #CCCCCC" width="3px"></td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="3" height="32px" style="height: 32px;">
-										<div class="cercle" style="border: 4px solid ${border};"
-											title="${title}"></div>
-									</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td style="width: 3px; background-color: #CCCCCC" width="3px"></td>
-									<td>&nbsp;</td>
-								</tr>
-							</table>
-						</td> --%>
-							<!--  ============================   -->
-							
-							
-							
-							
-							
-							
-							
-
 						<td width="45%">
 							<div style="margin-left: 20px">
 
@@ -1425,11 +1412,11 @@ bo
                                      ${event.dataEvent}<br />
 									<span style="font-weight: bold; font-size: 10pt">
 										<c:if test="${(event.tipus==-3)}">
-	                                       De ${operador}  enviat a ${event.persona}
+	                                       De ${operador} enviat a ${event.persona}
 	                                    </c:if> 
 	                                    <c:if test="${(event.tipus!=-3)}">
 	                                       De ${event.persona} 
-		                                   <c:if test="${(not empty event.destinatari && event.tipus == 1)}">
+		                                   <c:if test="${(not empty event.destinatari)}">
 		                                      a ${event.destinatari} 
 		                                      <c:if test="${(not empty event.destinatarimail)}">
                                                 (${event.destinatarimail})
@@ -1438,12 +1425,6 @@ bo
                                     </c:if>
 									</span>
 								</c:if>
-
-
-
-
-
-
 
 								<c:if test="${mostrarMissatgeDreta}">
 									<div style="margin: 10px 10px 24px 10px">

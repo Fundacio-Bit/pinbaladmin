@@ -389,8 +389,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 				Long excelID = soli.getSolicitudXmlID();
 				FitxerJPA excel = fitxerEjb.findByPrimaryKey(excelID);
 
-				mail.sendMail(soli, excel);
-				mail.crearEvent(soliID, excel, eventLogicaEjb);
+//				mail.sendMail(soli, excel);
+				mail.crearEvent(soli, excel, eventLogicaEjb);
 				mail.actualitzarEstatServei(soliID, solicitudServeiEjb);
 				String missatge = "Correu enviat a " + mail.getId();
 				log.info(missatge);

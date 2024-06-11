@@ -96,7 +96,7 @@
                 style="${(fn:contains(url, 'organ'))? "font-weight:bold;" : ""}"><fmt:message
                         key="organ.organ.plural" /></span>
         </a></li>
-
+<%-- 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/area/list"/>"> <span
 				style="text-decoration:line-through;${(fn:contains(url, 'area'))? "font-weight:bold;" : ""} "><fmt:message
@@ -108,7 +108,7 @@
 				style="text-decoration:line-through;${(fn:contains(url, 'departament'))? "font-weight:bold;" : ""}"><fmt:message
 						key="departament.departament.plural" />(Deprecat)</span>
 		</a></li>
-
+ --%>
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
@@ -122,13 +122,12 @@
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
-
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/incidencia/list"/>"> <span
 				style="${(fn:contains(url, '/incidencia'))? "font-weight:bold;" : ""}">
 					<fmt:message key="incidenciaTecnica.incidenciaTecnica.plural" />
-			</span>
-		</a> <c:if test="${incidenciesNoMeves ne 0}">
+			</span>	</a> 
+			<c:if test="${incidenciesNoMeves ne 0}">
 				<a href="<c:url value="/operador/incidencianollegitnomeu/list"/>">
 					<span class="badge badge-warning">${incidenciesNoMeves}</span>
 				</a>
@@ -136,16 +135,17 @@
 				<a href="<c:url value="/operador/incidencianollegitmeu/list"/>">
 					<span class="badge badge-danger">${incidenciesMeves}</span>
 				</a>
-			</c:if></li>
+			</c:if>
+		</li>
 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
+<%-- 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/tiquet/list"/>"> <span
 				style="text-decoration:line-through;${(fn:contains(url, '/tiquet/'))? "font-weight:bold;" : ""}"><fmt:message
 						key="tiquet.tiquet.plural" />(Deprecat)</span>
 		</a></li>
 
-
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+ --%>
+<%-- 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
@@ -154,8 +154,8 @@
 					de Correus</span>
 		</a></li>
 
-
-
+ --%>
+<%-- 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 
@@ -165,7 +165,7 @@
 					Cedent de Grup</span>
 		</a></li>
 
-
+ --%>
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 
@@ -176,13 +176,13 @@
 
 
 
-        <hr style="margin-top: 6px; margin-bottom: 6px;" />
+<%--         <hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 
         <li style="list-style-type: disc; list-style-position: inside;"><a
             href="<c:url value="/operador/tramita/list"/>"> <span
                 style="${(fn:contains(url, '/operador/tramit'))? "font-weight:bold;" : ""}">Tramit Sistra</span>
-        </a></li>
+        </a></li> --%>
 
 
 

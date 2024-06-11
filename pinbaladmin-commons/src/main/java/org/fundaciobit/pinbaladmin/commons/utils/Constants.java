@@ -49,10 +49,14 @@ public interface Constants {
     public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT_TRAMITADOR
     public static final int EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1; // PUBLIC_TRAMITADOR
     public static final int EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC_CONTACTE
-    public static final int EVENT_TIPUS_TIQUET_MINHAP = -2; // PRIVAT_TRAMITADOR
+    public static final int EVENT_TIPUS_COMENTARI_SUPORT = -2; // PUBLIC SUPORT
     public static final int EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
     public static final int EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
 
+    //Mail Suport 
+    public static final String MAIL_SUPORT_CAIB = "ptrias@fundaciobit.org";
+    
+    
     /**
      * Estat de Incidències Tecniques
      */

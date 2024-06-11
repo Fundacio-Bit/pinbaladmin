@@ -41,6 +41,10 @@
 	</c:otherwise>
 </c:choose>
 
+
+<%-- Aquest codi afegia a les incidencies de tipus Tiket la possibilitat de fer un seguiment a traves del CAID 
+
+
 <c:if test="${event.tipus == -2 }">
 
 	<form id="form_${event}" style="margin: 0 0 0 0"
@@ -67,7 +71,7 @@
 		</table>
 
 	</form>
-	<%--
+	
     <form id="form${event.eventID}" target="_blank"
         action="https://ssweb.seap.minhap.es/ayuda/seguimiento" method="post">
         <a class="minibutton1 btn btn-sm btn-warning" href="javascript:;"
@@ -78,10 +82,10 @@
             value="939027" id="data_incidencia"> <input type="hidden"
             name="data[seguimiento]" value="58604420212105" id="data_seguimiento">
     </form>
-     --%>
+    
 
 </c:if>
-
+ --%>
 <c:if test="${not empty event.fitxer}">
 
 	<br />

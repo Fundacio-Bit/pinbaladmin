@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
@@ -33,7 +32,6 @@ import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -64,7 +62,6 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitIServFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
-import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
@@ -72,9 +69,6 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
-
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -447,8 +441,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         log.info("SolicitudID de la solicitud creada: " + soliID);
 
         try {
-        	log.info("Enviem event de creació de la sol·licitud");
-			eventSolicitudCreada(creador, soliID);
+//        	log.info("Enviem event de creació de la sol·licitud");
+//			eventSolicitudCreada(creador, soliID);
 			log.info("Enviem mail al sol·licitant");
 			enviarMailSolicitant(solicitud);
 			log.info("Generem documents de la sol·licitud");
@@ -623,110 +617,152 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		return serveisDeLaSolicitud;
 	}
 
-    private void eventSolicitudCreada(String creador, Long solicitudID) {
+//    private void eventSolicitudCreada(String creador, Long solicitudID) {
+//        // Afegir event de creació de la solicitud.
+//
+//        try {
+//            java.lang.Long _solicitudID_ = solicitudID;
+//            java.lang.Long _incidenciaTecnicaID_ = null;
+//            java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+//            java.lang.String _persona_ = creador;
+//            
+//            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+//            java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir del formulari Sistra de PinbalAdmin";
+//            
+//            java.lang.Long _fitxerID_ = null;
+//            boolean _noLlegit_ = true;
+//            java.lang.String _destinatari_ = null;
+//            java.lang.String _destinatariMail_ = null;
+//            java.lang.String _caidConsulta_ = null;
+//            java.lang.String _caidSeguiment_ = null;
+//            
+//			eventLogicEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+//					_destinatariMail_, _comentari_, _fitxerID_, _noLlegit_, _caidConsulta_, _caidSeguiment_);            
+//        } catch (Throwable th) {
+//            log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
+//        }
+//    }
+//    
+    
+	private void enviarMailSolicitant(SolicitudJPA solicitud) {
         // Afegir event de creació de la solicitud.
-
         try {
-            java.lang.Long _solicitudID_ = solicitudID;
+            java.lang.Long _solicitudID_ = solicitud.getSolicitudID();
             java.lang.Long _incidenciaTecnicaID_ = null;
             java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-            java.lang.String _persona_ = creador;
+            java.lang.String _persona_ = solicitud.getCreador();
             
-            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-            java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir del formulari Sistra de PinbalAdmin";
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
+
+            java.lang.String missatge = getMissatgeCorreu(solicitud);
+            java.lang.String subject = "PINBAL [" + _solicitudID_ + "] - SOLICITUD REGISTRADA AL SISTEMA ";
+
+            java.lang.String _comentari_ = subject + "|" + "<div>" + missatge + "</div>";
             
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = true;
-            java.lang.String _destinatari_ = null;
-            java.lang.String _destinatariMail_ = null;
+            
+            java.lang.String _destinatari_ = solicitud.getPersonaContacte();
+            java.lang.String _destinatariMail_ = solicitud.getPersonaContacteEmail();
             java.lang.String _caidConsulta_ = null;
             java.lang.String _caidSeguiment_ = null;
             
 			eventLogicEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
 					_destinatariMail_, _comentari_, _fitxerID_, _noLlegit_, _caidConsulta_, _caidSeguiment_);            
         } catch (Throwable th) {
-            log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
-        }
-    }
-    
-    
-	private void enviarMailSolicitant(SolicitudJPA solicitud) {
-		// Afegir event de creació de la solicitud.
-
-		try {
-			java.lang.String dest = solicitud.getPersonaContacteEmail();
-			final String from = Configuracio.getAppEmail();
-			final boolean isHtml = true;
-			FitxerJPA adjunt = null;
-
-			java.lang.Long _solicitudID_ = solicitud.getSolicitudID();
-			final String subject = "PINBAL [" + _solicitudID_ + "] - SOLICITUD REGISTRADA AL SISTEMA ";
-
-			final String message = getMissatgeCorreu(solicitud);
-
-			log.info("CORREU PER ENVIAR");
-			EmailUtil.postMail(subject, message, isHtml, from, adjunt, dest);
-			log.info("CORREU ENVIAT");
-
-		} catch (Throwable th) {
 			log.error("Error enviant correu al Solicitant: " + th.getMessage(), th);
-		}
+        }
 	}
     
 	private String getMissatgeCorreu(SolicitudJPA soli) {
-		
-		return 	"Bon dia,<br />"
-				+ "<div id=\"titol\">Nova solicitud rebuda: " + soli.getSolicitudID() +  "</div>"
-
-				+ "<div id=\"missatge\">"
+		Long itemID = soli.getSolicitudID();
+		String msg = ""
+				+ "<div id=\"missatge\" style=\"margin: .5rem;\">"
+				+ "    Bon dia,<br />"
 				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
 				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />"
 				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
 				+ "</div>"
-				+ ""
-				+ "<div id=\"reObrir\">"
-				+ "    Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a"
-				+ "        href=\"" + getLinkPublic(soli.getSolicitudID())  + "\"> Accedir a solicitud</a><br />"
-				+ "</div>"
-
-				+ "<div id=\"firma\">"
-				+ "    Salutacions<br />"
-				+ "    <i>Àrea de Govern Digital - Fundació BIT</i><br />"
-				+ "</div>"
-				
-				+ "<div id=\"noContestar\">"
-				+ "    Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
-				+ "    aportat en aquest correu.<br />"
-				+ "</div>"
-
-				+ "<style>"
-				+ "    div{"
-				+ "        padding: 10px;"
-				+ "        margin-top: 10px;"
-				+ "    }"
-				+ ""
-				+ "    #missatge {"
-				+ "        background-color: #f0f0f0;"
-				+ "    }"
-				+ ""
-				+ "    #titol{"
-				+ "        font-size: 20px;"
-				+ "        text-align: center;"
-				+ "        font-weight: bold;"
-				+ "    }"
-				+ "    #noContestar {"
-				+ "        color: #868686;"
-				+ "        border: 4px double #868686;"
-				+ "        border-left: none;"
-				+ "        border-right: none;"
-				+ "    }"
-				+ "</style>";
+				+ getPeuCorreu(itemID);
+		
+		return msg;
+//		return 	"Bon dia,<br />"
+//				+ "<div id=\"titol\">Nova solicitud rebuda: " + soli.getSolicitudID() +  "</div>"
+//
+//				+ "<div id=\"missatge\">"
+//				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
+//				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />"
+//				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
+//				+ "</div>"
+//				+ ""
+//				+ "<div id=\"reObrir\">"
+//				+ "    Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a"
+//				+ "        href=\"" + getLinkPublic(soli.getSolicitudID())  + "\"> Accedir a solicitud</a><br />"
+//				+ "</div>"
+//
+//				+ "<div id=\"firma\">"
+//				+ "    Salutacions<br />"
+//				+ "    <i>Àrea de Govern Digital - Fundació BIT</i><br />"
+//				+ "</div>"
+//				
+//				+ "<div id=\"noContestar\">"
+//				+ "    Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
+//				+ "    aportat en aquest correu.<br />"
+//				+ "</div>"
+//
+//				+ "<style>"
+//				+ "    div{"
+//				+ "        padding: 10px;"
+//				+ "        margin-top: 10px;"
+//				+ "    }"
+//				+ ""
+//				+ "    #missatge {"
+//				+ "        background-color: #f0f0f0;"
+//				+ "    }"
+//				+ ""
+//				+ "    #titol{"
+//				+ "        font-size: 20px;"
+//				+ "        text-align: center;"
+//				+ "        font-weight: bold;"
+//				+ "    }"
+//				+ "    #noContestar {"
+//				+ "        color: #868686;"
+//				+ "        border: 4px double #868686;"
+//				+ "        border-left: none;"
+//				+ "        border-right: none;"
+//				+ "    }"
+//				+ "</style>";
 	}
+	
+	public static String getPeuCorreu(Long soliID) {
+		String tipus = "soicitud";
+		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
+				+ HibernateFileUtil.encryptFileID(soliID);
+		
+		String msg = ""
+				+ "<div id=\"peu_correu\" style=\"margin: .5rem;\">"
+				
+				+ "  <div id=\"reObrir\">"
+				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
+				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
+				+ "  </div>"
 
-	private String getLinkPublic(Long itemID) {
-		String url = Configuracio.getAppUrl() + "/public/eventsolicitud" + "/veureevents/"
-				+ HibernateFileUtil.encryptFileID(itemID);
-		return url;
+				+ "  <div id=\"firma\">"
+				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
+				+ "  </div>"
+
+				+ "  <div id=\"noContestar\">"
+				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
+				+ " accediu a l'enllaç aportat en aquest correu."
+				+ "  </div>" 
+				
+				+ "  <style>" 
+				+ "     #peu_correu div {padding: .5rem 0;}"
+				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
+				+ "  </style>"
+				
+				+ "</div>";
+		return msg;
 	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
