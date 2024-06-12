@@ -737,11 +737,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		enviarCorreu(it.getContacteEmail(), it.getContacteNom(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
-//		if (titol.indexOf("CAI-") > 0) {
-			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID,Constants.EVENT_TIPUS_COMENTARI_SUPORT);
-//		}
-		
-
+		if (titol.indexOf("CAI-") > 0) {
+			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+		}
 	}
 	
 //	private void enviarSolicitudContacte(SolicitudJPA soli) throws I18NException {
