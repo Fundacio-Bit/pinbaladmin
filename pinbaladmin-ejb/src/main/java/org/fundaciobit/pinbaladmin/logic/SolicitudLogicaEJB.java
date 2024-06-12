@@ -266,6 +266,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
             boolean isEstatal = soli.getEntitatEstatal() != null;
             String descripcio = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
+            String asumpte = "Solicitud creada";
 
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
@@ -279,7 +280,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.String _destinatariEmail_ = soli.getPersonaContacteEmail();
 
             eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-                    _destinatariEmail_, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
+                    _destinatariEmail_, asumpte, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
                     _caidNumeroSeguiment_);
             
             // Afegir Documents per cada Solicitud
@@ -305,8 +306,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                     documentSolicitudLogicaEjb.create(ds);
                     
                     java.lang.String _comentari_ = "Afegit fitxer";
+                    java.lang.String _asumpte_ = "Afegit fitxer";
+                    
                     eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
-                            _destinatari_, _destinatariEmail_, _comentari_, attachFile.getFitxerID(), _noLlegit_,
+                            _destinatari_, _destinatariEmail_, _asumpte_, _comentari_, attachFile.getFitxerID(), _noLlegit_,
                             _caidIdentificadorConsulta_, _caidNumeroSeguiment_);
                 }
             }
@@ -1605,6 +1608,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 							String descripcio = "Actualització de l'estat de la solicitud a Pinbal. Estat anterior: "
 									+ estadoAnteriorStr + ". Estat actual: " + estadoActualStr;
 
+							String asumpte = "Actualització de l'estat de la solicitud a Pinbal";
+							
 							Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
 							int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
 							String _persona_ = "PinbalAdmin";
@@ -1617,7 +1622,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 							log.info("Afegint event a la solicitud. Descripció: " + descripcio);
 							eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
-									_destinatari_, _destinatariEmail_, descripcio, null, _noLlegit_,
+									_destinatari_, _destinatariEmail_, asumpte, descripcio, null, _noLlegit_,
 									_caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 						}
 						break;

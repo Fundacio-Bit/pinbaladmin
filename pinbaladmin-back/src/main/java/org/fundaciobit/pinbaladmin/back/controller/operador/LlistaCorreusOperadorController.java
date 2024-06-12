@@ -715,8 +715,11 @@ public class LlistaCorreusOperadorController extends EmailController {
 		
 		
 		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
-		
-		enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+
+		boolean condition = false;
+		if (condition) {
+			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+		}
 	}
 	
 	private void enviarCorreusIncidencia(IncidenciaTecnica it) throws I18NException {
@@ -833,7 +836,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 //		enviarCorreu(mail, contacte, subject, msg, solicitudID, incidenciaTecnicaID);
 //	}
 
-	private void crearEventPerCorreu(String mail, String destinatariNom, String msg, Long solicitudID,
+	private void crearEventPerCorreu(String mail, String destinatariNom, String subject, String msg, Long solicitudID,
 			Long incidenciaTecnicaID, int tipus) throws I18NException {
 
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
@@ -853,6 +856,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		event.setPersona(_persona_);
 		event.setDestinatari(destinatariNom);
 		event.setDestinatarimail(mail);
+		event.setAsumpte(subject);
 		event.setComentari(msg);
 		event.setFitxerID(_fitxerID_);
 		event.setNoLlegit(_noLlegit_);
@@ -867,8 +871,8 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		log.info("Cream Event Public i enviam un correu a " + destinatari + " <" + mail + ">");
 		
-		msg = subject + "|" + "<div>" + msg + "</div>";
+		msg = "<div>" + msg + "</div>";
 
-		crearEventPerCorreu(mail, destinatari, msg, soliID, incidenciaID, tipus);
+		crearEventPerCorreu(mail, destinatari, subject, msg, soliID, incidenciaID, tipus);
 	}
 }

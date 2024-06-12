@@ -75,6 +75,14 @@ public class EventValidator<I extends Event>
       }
     }
 
+    if (__vr.getFieldErrorCount(ASUMPTE) == 0) {
+      java.lang.String __asumpte = __target__.getAsumpte();
+      if (__asumpte!= null && __asumpte.length() > 255) {
+        __vr.rejectValue(ASUMPTE, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ASUMPTE)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(COMENTARI) == 0) {
       java.lang.String __comentari = __target__.getComentari();
       if (__comentari!= null && __comentari.length() > 2147483647) {

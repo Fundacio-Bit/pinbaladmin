@@ -610,12 +610,14 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
             java.lang.String _persona_ = username;
             java.lang.String _comentari_ = msg;
+            java.lang.String _asumpte_ = "Actualització Incidencia " + incidenciaID;
+            
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = noLlegit;
             java.lang.String _destinatari_ = null;
             java.lang.String _destinatariMail_ = null;
 
-            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _asumpte_, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error afegint event a la incidència tecnica: " + th.getMessage(), th);

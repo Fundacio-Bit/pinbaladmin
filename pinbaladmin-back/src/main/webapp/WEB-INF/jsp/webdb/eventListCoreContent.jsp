@@ -71,6 +71,11 @@
           ${event.destinatarimail}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.ASUMPTE)}">
+          <td>
+          ${event.asumpte}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EventFields.COMENTARI)}">
           <td>
           ${event.comentari}

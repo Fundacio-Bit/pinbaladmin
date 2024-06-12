@@ -16,6 +16,7 @@ public class EventBean implements Event {
 	java.lang.String persona;
 	java.lang.String destinatari;
 	java.lang.String destinatarimail;
+	java.lang.String asumpte;
 	java.lang.String comentari;
 	java.lang.Long fitxerID;
 	boolean noLlegit;
@@ -28,7 +29,7 @@ public class EventBean implements Event {
   }
 
   /** Constructor amb tots els camps  */
-  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String destinatari , java.lang.String destinatarimail , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public EventBean(long eventID , java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String destinatari , java.lang.String destinatarimail , java.lang.String asumpte , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.eventID=eventID;
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
@@ -37,6 +38,7 @@ public class EventBean implements Event {
     this.persona=persona;
     this.destinatari=destinatari;
     this.destinatarimail=destinatarimail;
+    this.asumpte=asumpte;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
@@ -44,7 +46,7 @@ public class EventBean implements Event {
     this.caidNumeroSeguiment=caidNumeroSeguiment;
 }
   /** Constructor sense valors autoincrementals */
-  public EventBean(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String destinatari , java.lang.String destinatarimail , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
+  public EventBean(java.lang.Long solicitudID , java.lang.Long incidenciaTecnicaID , java.sql.Timestamp dataEvent , int tipus , java.lang.String persona , java.lang.String destinatari , java.lang.String destinatarimail , java.lang.String asumpte , java.lang.String comentari , java.lang.Long fitxerID , boolean noLlegit , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment) {
     this.solicitudID=solicitudID;
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.dataEvent=dataEvent;
@@ -52,6 +54,7 @@ public class EventBean implements Event {
     this.persona=persona;
     this.destinatari=destinatari;
     this.destinatarimail=destinatarimail;
+    this.asumpte=asumpte;
     this.comentari=comentari;
     this.fitxerID=fitxerID;
     this.noLlegit=noLlegit;
@@ -75,6 +78,7 @@ public class EventBean implements Event {
     this.setPersona(__bean.getPersona());
     this.setDestinatari(__bean.getDestinatari());
     this.setDestinatarimail(__bean.getDestinatarimail());
+    this.setAsumpte(__bean.getAsumpte());
     this.setComentari(__bean.getComentari());
     this.setFitxerID(__bean.getFitxerID());
     this.setNoLlegit(__bean.isNoLlegit());
@@ -140,6 +144,13 @@ public class EventBean implements Event {
 		this.destinatarimail = _destinatarimail_;
 	};
 
+	public java.lang.String getAsumpte() {
+		return(asumpte);
+	};
+	public void setAsumpte(java.lang.String _asumpte_) {
+		this.asumpte = _asumpte_;
+	};
+
 	public java.lang.String getComentari() {
 		return(comentari);
 	};
@@ -190,6 +201,7 @@ public class EventBean implements Event {
     __tmp.setPersona(__bean.getPersona());
     __tmp.setDestinatari(__bean.getDestinatari());
     __tmp.setDestinatarimail(__bean.getDestinatarimail());
+    __tmp.setAsumpte(__bean.getAsumpte());
     __tmp.setComentari(__bean.getComentari());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setNoLlegit(__bean.isNoLlegit());

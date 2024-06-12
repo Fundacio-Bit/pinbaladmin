@@ -203,6 +203,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.ASUMPTE)}">
+        <tr id="event_asumpte_rowid">
+          <td id="event_asumpte_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EventFields.ASUMPTE])?'event.asumpte':__theForm.labels[EventFields.ASUMPTE]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[EventFields.ASUMPTE]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[EventFields.ASUMPTE]}" ></i>
+              </c:if>
+            </td>
+          <td id="event_asumpte_columnvalueid">
+            <form:errors path="event.asumpte" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,EventFields.ASUMPTE)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,EventFields.ASUMPTE)? ' uneditable-input' : ''}"  style="" maxlength="255" path="event.asumpte"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,EventFields.COMENTARI)}">
         <tr id="event_comentari_rowid">
           <td id="event_comentari_columnlabelid">

@@ -2183,6 +2183,31 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "asumpte",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Assumpte",
+            "es": "Asunto"
+          },
+          "javaName": "asumpte",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "comentari",
           "sqlType": 12,
           "size": 2147483647,

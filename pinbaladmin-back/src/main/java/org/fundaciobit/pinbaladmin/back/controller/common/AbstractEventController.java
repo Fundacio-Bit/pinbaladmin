@@ -903,7 +903,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>"
 					+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
 			
-			msg = subject + "|" + "<div>" + msg + "</div>";
+			msg = "<div>" + msg + "</div>";
+			event.setAsumpte(subject);
 			event.setComentari(msg);
 		}
 		
@@ -920,7 +921,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>"
 					+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
 			
-			msg = subject + "|" + "<div>" + msg + "</div>";
+			msg = "<div>" + msg + "</div>";
+			event.setAsumpte(subject);
 			event.setComentari(msg);
 		}
     }

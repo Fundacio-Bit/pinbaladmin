@@ -38,11 +38,14 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 		int tipus = ev.getTipus();
 		log.info("EventLogicaEJB.create: tipus: " + ev.getTipus());
 		if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC || tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT || tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT ) {
-			int idx = ev.getComentari().indexOf("|");
+//			int idx = ev.getComentari().indexOf("|");
+//
+//			String subject = ev.getComentari().substring(0, idx);
+//			String message = ev.getComentari().substring(idx + 1);
 
-			String subject = ev.getComentari().substring(0, idx);
-			String message = ev.getComentari().substring(idx + 1);
-
+			String subject = ev.getAsumpte();
+			String message = ev.getComentari();
+			
 			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
 				SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
 				if (soli.getExpedientPid() != null) {

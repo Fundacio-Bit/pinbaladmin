@@ -99,7 +99,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
-    protected EventLogicaService eventLogicEjb;
+    protected EventLogicaService eventLogicaEjb;
     @EJB(mappedName = SolicitudServeiLogicaService.JNDI_NAME)
     protected SolicitudServeiLogicaService solicitudServeiLogicaEjb;
     @EJB(mappedName = ServeiService.JNDI_NAME)
@@ -655,9 +655,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
 
             java.lang.String missatge = getMissatgeCorreu(solicitud);
-            java.lang.String subject = "PINBAL [" + _solicitudID_ + "] - SOLICITUD REGISTRADA AL SISTEMA ";
+            java.lang.String asumpte = "PINBAL [" + _solicitudID_ + "] - SOLICITUD REGISTRADA AL SISTEMA ";
 
-            java.lang.String _comentari_ = subject + "|" + "<div>" + missatge + "</div>";
+            java.lang.String _comentari_ = "<div>" + missatge + "</div>";
             
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = true;
@@ -667,8 +667,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             java.lang.String _caidConsulta_ = null;
             java.lang.String _caidSeguiment_ = null;
             
-			eventLogicEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-					_destinatariMail_, _comentari_, _fitxerID_, _noLlegit_, _caidConsulta_, _caidSeguiment_);            
+			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+					_destinatariMail_, asumpte, _comentari_, _fitxerID_, _noLlegit_, _caidConsulta_, _caidSeguiment_);            
         } catch (Throwable th) {
 			log.error("Error enviant correu al Solicitant: " + th.getMessage(), th);
         }

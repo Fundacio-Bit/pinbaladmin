@@ -91,13 +91,17 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
                 missatge = "<div>" + missatge + "</div>";
             }
 
+            String asumpte = "Incidència tècnica " + incidenciaTecnicaID + " creada";
+            
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
-                    destinatariEmail, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
         }
 
         // Afgegir fitxers
         {
             java.lang.String _missatge_ = "Afegit fitxer";
+            java.lang.String _asumpte_ = "Afegit fitxer";
+            
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
             
@@ -121,7 +125,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
                 java.lang.Long _fitxerID_ = fitxer.getFitxerID();
 
                 eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
-                        destinatariEmail, _missatge_, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                        destinatariEmail, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
                         caidNumeroSeguiment);
             }
         }

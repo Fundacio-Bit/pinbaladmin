@@ -1361,12 +1361,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             String comentari = I18NUtils.tradueix("missatge.canvi.operador", "solicitud", operador, nom_operador,
                     operador_old, nom_operador_old);
 
+            String asumpte = "Canvi Operador Sol·licitud " + solicitudID;
+            
             EventJPA evt = new EventJPA();
             evt.setSolicitudID(solicitudID);
             evt.setDataEvent(data);
             evt.setTipus(tipus);
             evt.setPersona(persona);
             evt.setComentari(comentari);
+            evt.setAsumpte(asumpte);
             evt.setNoLlegit(true);
 
             eventLogicaEjb.create(evt);

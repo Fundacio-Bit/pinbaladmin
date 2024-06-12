@@ -153,6 +153,17 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
   }
 
 
+  private java.lang.String asumpte;
+
+  public java.lang.String getAsumpte() {
+    return this.asumpte;
+  }
+
+  public void setAsumpte(java.lang.String asumpte) {
+    this.asumpte = asumpte;
+  }
+
+
   private java.lang.String comentari;
 
   public java.lang.String getComentari() {
@@ -203,6 +214,7 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
     this.persona = __toClone.persona;
     this.destinatari = __toClone.destinatari;
     this.destinatarimail = __toClone.destinatarimail;
+    this.asumpte = __toClone.asumpte;
     this.comentari = __toClone.comentari;
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;
     this.caidNumeroSeguiment = __toClone.caidNumeroSeguiment;

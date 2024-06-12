@@ -44,9 +44,6 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
 
     public static final String NOMES_FITXERS = "NOMES_FITXERS_ESTATAL";
 
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.EventService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.EventService eventEjb;
-
     @RequestMapping(value = "/nou", method = RequestMethod.GET)
     public String nou(HttpServletRequest request) throws Exception {
         request.getSession().removeAttribute(NOMES_FITXERS);
@@ -214,12 +211,13 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
             java.lang.String _persona_ = request.getUserPrincipal().getName();
             java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir de fitxer XLSX";
+            java.lang.String _asumpte_ = "Sol·licitud Estatal " + _solicitudID_ + "creada";
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = false;
             java.lang.String _destinatari_ = null;
             java.lang.String _destinatariMail_ = null;
 
-            eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _comentari_,
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_, _destinatariMail_, _asumpte_, _comentari_,
                     _fitxerID_, _noLlegit_, null, null);
         } catch (Throwable th) {
             log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);

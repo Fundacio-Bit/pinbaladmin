@@ -220,6 +220,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.ASUMPTE)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="event.asumpte" var="asumpte" />
+              <fmt:message key="genapp.form.searchby" var="cercaperasumpte" >                
+                 <fmt:param value="${asumpte}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${asumpte}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperasumpte}" path="asumpte" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,EventFields.COMENTARI)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">

@@ -293,9 +293,10 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
 				msg += getPeuCorreu(soli.getSolicitudID(), "solicitud");
 				
-				evt.setComentari(subject + "|" + msg);
+				evt.setComentari(msg);
 				evt.setFitxer(excel);
 				evt.setDestinatarimail(destinataris);
+				evt.setAsumpte(subject);
 
 				eventLogicaEjb.create(evt);
 			} catch (Exception e) {
