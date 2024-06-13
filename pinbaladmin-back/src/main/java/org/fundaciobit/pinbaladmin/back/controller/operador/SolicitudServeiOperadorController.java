@@ -22,7 +22,6 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudEstatalOperadorController.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudServeiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
@@ -36,6 +35,7 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -391,7 +391,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
 //				mail.sendMail(soli, excel);
 				mail.crearEvent(soli, excel, eventLogicaEjb);
-				mail.actualitzarEstatServei(soliID, solicitudServeiEjb);
+				mail.actualitzarEstatServei(soliID, solicitudServeiLogicaEjb);
 				String missatge = "Correu enviat a " + mail.getId();
 				log.info(missatge);
 				HtmlUtils.saveMessageSuccess(request, missatge);

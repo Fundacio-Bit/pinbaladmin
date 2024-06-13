@@ -61,5 +61,4 @@ public class SolicitudServeiLogicaEJB extends SolicitudServeiEJB implements Soli
 
         return files;
     }
-
 }

@@ -1,4 +1,5 @@
 
+<%@page import="org.fundaciobit.pinbaladmin.commons.utils.Configuracio"%>
 <%@page import="org.fundaciobit.pinbaladmin.commons.utils.Constants"%>
 <script>
 	
@@ -31,8 +32,8 @@
 
 		// Si es una consulta a suport, el destinatari es suport, sino, el contacte
         if (select.value == -2) {
-    	    document.getElementById("event.destinatari").value = "Suport DGSMAD";
-    		document.getElementById("event.destinatarimail").value = "pautrias2@gmail.com";
+    	    document.getElementById("event.destinatari").value = "Suport CAIB";
+    		document.getElementById("event.destinatarimail").value = "<%=Configuracio.getCorreuSuport()%>";
         } else if (select.value == 1 || select.value == -3) {
             document.getElementById("event.destinatari").value = "${persona_contacte}";
 			document.getElementById("event.destinatarimail").value = "${persona_contacte_mail}";

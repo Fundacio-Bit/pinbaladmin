@@ -32,6 +32,7 @@ import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -675,17 +676,16 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 	}
     
 	private String getMissatgeCorreu(SolicitudJPA soli) {
-		Long itemID = soli.getSolicitudID();
+		Long soliID = soli.getSolicitudID();
 		String msg = ""
 				+ "<div id=\"missatge\" style=\"margin: .5rem;\">"
 				+ "    Bon dia,<br />"
 				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
 				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />"
 				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
-				+ "</div>"
-				+ getPeuCorreu(itemID);
-		
+				+ "</div>";
 		return msg;
+		
 //		return 	"Bon dia,<br />"
 //				+ "<div id=\"titol\">Nova solicitud rebuda: " + soli.getSolicitudID() +  "</div>"
 //
@@ -733,37 +733,37 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //				+ "    }"
 //				+ "</style>";
 	}
-	
-	public static String getPeuCorreu(Long soliID) {
-		String tipus = "soicitud";
-		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
-				+ HibernateFileUtil.encryptFileID(soliID);
-		
-		String msg = ""
-				+ "<div id=\"peu_correu\" style=\"margin: .5rem;\">"
-				
-				+ "  <div id=\"reObrir\">"
-				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
-				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
-				+ "  </div>"
-
-				+ "  <div id=\"firma\">"
-				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
-				+ "  </div>"
-
-				+ "  <div id=\"noContestar\">"
-				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
-				+ " accediu a l'enllaç aportat en aquest correu."
-				+ "  </div>" 
-				
-				+ "  <style>" 
-				+ "     #peu_correu div {padding: .5rem 0;}"
-				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
-				+ "  </style>"
-				
-				+ "</div>";
-		return msg;
-	}
+//	
+//	public static String getPeuCorreu(Long soliID) {
+//		String tipus = "soicitud";
+//		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
+//				+ HibernateFileUtil.encryptFileID(soliID);
+//		
+//		String msg = ""
+//				+ "<div id=\"peu_correu\" style=\"margin: .5rem;\">"
+//				
+//				+ "  <div id=\"reObrir\">"
+//				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
+//				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
+//				+ "  </div>"
+//
+//				+ "  <div id=\"firma\">"
+//				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
+//				+ "  </div>"
+//
+//				+ "  <div id=\"noContestar\">"
+//				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
+//				+ " accediu a l'enllaç aportat en aquest correu."
+//				+ "  </div>" 
+//				
+//				+ "  <style>" 
+//				+ "     #peu_correu div {padding: .5rem 0;}"
+//				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
+//				+ "  </style>"
+//				
+//				+ "</div>";
+//		return msg;
+//	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
 		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);

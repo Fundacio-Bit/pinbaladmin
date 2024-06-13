@@ -28,11 +28,13 @@ import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 
 //import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 //import org.fundaciobit.genapp.common.i18n.I18NException;
 
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 /**
@@ -153,4 +155,36 @@ public class EmailUtil {
             throw th;
         }
     }
+    
+    public static String getPeuCorreu(Long soliID, String tipus) {
+		//tipus pot ser "solicitud" o "incidencia"
+		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
+				+ HibernateFileUtil.encryptFileID(soliID);
+		
+		String msg = "<div id=\"peu_correu\">"
+				
+				+ "  <div id=\"reObrir\">"
+				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
+				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
+				+ "  </div>"
+
+				+ "  <div id=\"firma\">"
+				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
+				+ "  </div>"
+
+				+ "  <div id=\"noContestar\">"
+				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
+				+ " accediu a l'enllaç aportat en aquest correu."
+				+ "  </div>" 
+				
+				+ "  <style>" 
+				+ "     #peu_correu {margin: .5rem;}"
+				+ "     #peu_correu div {padding: .5rem 0;}"
+				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
+				+ "  </style>"
+				
+				+ "</div>";
+
+		return msg;
+	}
 }

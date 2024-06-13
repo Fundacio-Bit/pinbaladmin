@@ -3,7 +3,6 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,6 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.common.AbstractEventController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
@@ -34,20 +32,20 @@ import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
-import org.fundaciobit.pinbaladmin.persistence.EventJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
+import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -710,15 +708,14 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
 				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
-				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>";
 		
 		
 		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
 		boolean condition = false;
 		if (condition) {
-			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+			enviarCorreu(Configuracio.getCorreuSuport(), "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 	
@@ -735,13 +732,12 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
 				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
-				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>"
-				+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>";
 
 		enviarCorreu(it.getContacteEmail(), it.getContacteNom(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
 		if (titol.indexOf("CAI-") > 0) {
-			enviarCorreu(Constants.MAIL_SUPORT_CAIB, "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+			enviarCorreu(Configuracio.getCorreuSuport(), "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 	
@@ -870,9 +866,13 @@ public class LlistaCorreusOperadorController extends EmailController {
 			throws I18NException {
 
 		log.info("Cream Event Public i enviam un correu a " + destinatari + " <" + mail + ">");
-		
 		msg = "<div>" + msg + "</div>";
 
+		if (mail.equals("pinbal@fundaciobit.org")) {
+			log.error("No enviam correu a " + destinatari);
+			return;
+		}
+		
 		crearEventPerCorreu(mail, destinatari, subject, msg, soliID, incidenciaID, tipus);
 	}
 }

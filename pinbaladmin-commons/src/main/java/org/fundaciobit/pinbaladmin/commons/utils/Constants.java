@@ -53,10 +53,6 @@ public interface Constants {
     public static final int EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
     public static final int EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
 
-    //Mail Suport 
-    public static final String MAIL_SUPORT_CAIB = "ptrias@fundaciobit.org";
-    
-    
     /**
      * Estat de Incidències Tecniques
      */

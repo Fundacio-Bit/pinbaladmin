@@ -37,14 +37,26 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 
 		int tipus = ev.getTipus();
 		log.info("EventLogicaEJB.create: tipus: " + ev.getTipus());
-		if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC || tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT || tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT ) {
-//			int idx = ev.getComentari().indexOf("|");
-//
-//			String subject = ev.getComentari().substring(0, idx);
-//			String message = ev.getComentari().substring(idx + 1);
+		if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC
+				|| tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT
+				|| tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
 
+			String email = ev.getDestinatarimail();
+			String[] destinataris = email.split(";");
+			
+			final String from = Configuracio.getAppEmail();
+			final boolean isHtml = true;
+			
+			
 			String subject = ev.getAsumpte();
 			String message = ev.getComentari();
+			
+			if (ev.getSolicitudID() != null) {
+				message += EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud");
+			} else {
+				message += EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidencia");
+			}
+			
 			
 			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
 				SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
@@ -53,21 +65,12 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 				}
 			}
 			
-			
-			final String from = Configuracio.getAppEmail();
-			final boolean isHtml = true;
-			String email = ev.getDestinatarimail();
-			String[] emails = email.split(";");
-			
 			FitxerJPA adjunt = ev.getFitxer();
 
 			try {
 				log.info("CORREU PER ENVIAR");
-				EmailUtil.postMail(subject, message, isHtml, from, adjunt, emails);
+				EmailUtil.postMail(subject, message, isHtml, from, adjunt, destinataris);
 				log.info("CORREU ENVIAT");
-
-				ev.setComentari(message);
-				this.update(ev);
 			} catch (Throwable th) {
 				log.error("Error enviant correu: " + th.getMessage());
 				throw new I18NException("Error enviant correu: " + th.getMessage());

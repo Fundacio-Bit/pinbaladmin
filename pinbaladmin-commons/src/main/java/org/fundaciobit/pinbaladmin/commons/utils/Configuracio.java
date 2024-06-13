@@ -260,4 +260,9 @@ public class Configuracio implements Constants {
 	public static String getCorreusCedentsDefault() {
 		return getProperty(PINBALADMIN_PROPERTY_BASE + "correuscedents.default");
 	}
+	
+	public static String getCorreuSuport() {
+		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport");
+	}
+
 }

@@ -2,7 +2,6 @@ package org.fundaciobit.pinbaladmin.back.controller.common;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -16,23 +15,20 @@ import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.operador.EnviarCorreuContacteOperadorController;
-import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudEstatalOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -900,8 +896,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
 			String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b>" + "<br/><br/>"
 					+ "<div style=\"background-color:#f6f6f6;\">" + event.getComentari().replace("\n", "<br/>")
-					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>"
-					+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>";
 			
 			msg = "<div>" + msg + "</div>";
 			event.setAsumpte(subject);
@@ -918,8 +913,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
 			String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b>" + "<br/><br/>"
 					+ "<div style=\"background-color:#f6f6f6;\">" + event.getComentari().replace("\n", "<br/>")
-					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>"
-					+ SolicitudEstatalOperadorController.getPeuCorreu(itemID, tipus);
+					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>";
 			
 			msg = "<div>" + msg + "</div>";
 			event.setAsumpte(subject);
