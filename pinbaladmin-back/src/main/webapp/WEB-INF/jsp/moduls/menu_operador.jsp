@@ -29,8 +29,8 @@
 					Local des de Fitxer</span>
 		</a></li>
 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/solicitudlocal/list"/>"> <span
+		<li style="list-style-type: disc; list-style-position: inside;">
+		<a href="<c:url value="/operador/solicitudlocal/list"/>"> <span
 				style="${(fn:contains(url, '/solicitudlocal/'))? "font-weight:bold;" : ""}">
 					<fmt:message key="solicitud.local.plural" />
 			</span>
@@ -46,13 +46,7 @@
 			</c:if></li>
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-		<!-- 
-        <li style="list-style-type: disc; list-style-position: inside;"><a
-            href="<c:url value="/operador/solicitudestataldesdefitxerxlsx/nou"/>"> <span
-                style="${(fn:contains(url, '/solicitudestataldesdefitxerxlsx/'))? "font-weight:bold;" : ""}">Sol·licitud
-                    Estatal des de Fitxer XLSX</span>
-        </a></li>
- -->
+		
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/solicitudestataldesdefitxers/nou"/>">
 				<span
@@ -60,12 +54,52 @@
 					Estatal des de Fitxer</span>
 		</a></li>
 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/solicitudestatal/list"/>"> <span
+		<li style="list-style-type: disc; list-style-position: inside;">
+		<a href="<c:url value="/operador/solicitudestatal/list"/>"> <span
 				style="${(fn:contains(url, '/solicitudestatal/'))? "font-weight:bold;" : ""}"><fmt:message
 						key="solicitud.estatal.plural" /></span>
-		</a></li>
+		</a> <c:if test="${solicitudsEstatalNoMeves ne 0}">
+				<a
+					href="<c:url value="/operador/solicitudestatalnollegitnomeu/list"/>">
+					<span class="badge badge-warning">${solicitudsEstatalNoMeves}</span>
+				</a>
+			</c:if> <c:if test="${solicitudsEstatalMeves ne 0}">
+				<a href="<c:url value="/operador/solicitudestatalnollegitmeu/list"/>">
+					<span class="badge badge-danger">${solicitudsEstatalMeves}</span>
+				</a>
+			</c:if></li>
+
+
+
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/incidencia/list"/>"> <span
+				style="${(fn:contains(url, '/incidencia'))? "font-weight:bold;" : ""}">
+					<fmt:message key="incidenciaTecnica.incidenciaTecnica.plural" />
+			</span>	</a> 
+			<c:if test="${incidenciesNoMeves ne 0}">
+				<a href="<c:url value="/operador/incidencianollegitnomeu/list"/>">
+					<span class="badge badge-warning">${incidenciesNoMeves}</span>
+				</a>
+			</c:if> <c:if test="${incidenciesMeves ne 0}">
+				<a href="<c:url value="/operador/incidencianollegitmeu/list"/>">
+					<span class="badge badge-danger">${incidenciesMeves}</span>
+				</a>
+			</c:if>
+		</li>
+
+		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/queesticfent/list"/>"> <span
+				style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
+		</a></li>
+
+		
+		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+	
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/servei/list"/>"> <span
 				style="${(fn:contains(url, '/servei/'))? "font-weight:bold;" : ""}"><fmt:message
@@ -120,24 +154,6 @@
 		</a></li>
 
 
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/incidencia/list"/>"> <span
-				style="${(fn:contains(url, '/incidencia'))? "font-weight:bold;" : ""}">
-					<fmt:message key="incidenciaTecnica.incidenciaTecnica.plural" />
-			</span>	</a> 
-			<c:if test="${incidenciesNoMeves ne 0}">
-				<a href="<c:url value="/operador/incidencianollegitnomeu/list"/>">
-					<span class="badge badge-warning">${incidenciesNoMeves}</span>
-				</a>
-			</c:if> <c:if test="${incidenciesMeves ne 0}">
-				<a href="<c:url value="/operador/incidencianollegitmeu/list"/>">
-					<span class="badge badge-danger">${incidenciesMeves}</span>
-				</a>
-			</c:if>
-		</li>
-
 <%-- 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/tiquet/list"/>"> <span
 				style="text-decoration:line-through;${(fn:contains(url, '/tiquet/'))? "font-weight:bold;" : ""}"><fmt:message
@@ -166,15 +182,7 @@
 		</a></li>
 
  --%>
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/queesticfent/list"/>"> <span
-				style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
-		</a></li>
-
-
+	
 
 <%--         <hr style="margin-top: 6px; margin-bottom: 6px;" />
 

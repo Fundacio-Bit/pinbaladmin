@@ -10,6 +10,7 @@ import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.query.LongField;
 import org.apache.tiles.Attribute;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.preparer.PreparerException;
@@ -17,7 +18,12 @@ import org.apache.tiles.preparer.ViewPreparer;
 import org.apache.tiles.request.Request;
 import org.fundaciobit.pinbaladmin.ejb.IdiomaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
+import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Idioma;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IdiomaFields;
@@ -28,8 +34,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SelectCount;
 import org.fundaciobit.genapp.common.query.SelectDistinct;
+import org.fundaciobit.genapp.common.query.SelectGroupBy;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.query.selectcolumn.Select2Columns;
+import org.fundaciobit.genapp.common.query.selectcolumn.Select2Values;
+import org.fundaciobit.genapp.common.query.selectcolumn.Select3Columns;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -132,6 +142,11 @@ public class BasePreparer implements ViewPreparer, Constants {
     protected final Logger log = Logger.getLogger(getClass());
 
     protected static EventLogicaService eventLogicaEjb;
+    
+    protected static SolicitudLogicaService solicitudLogicaEjb;
+    
+    protected static IncidenciaTecnicaLogicaService incidenciaTecnicaLogicaEjb;
+    
 
     @Override
     public void execute(Request tilesRequest, AttributeContext attributeContext) throws PreparerException {
@@ -220,6 +235,16 @@ public class BasePreparer implements ViewPreparer, Constants {
                 if (eventLogicaEjb == null) {
                     eventLogicaEjb = (EventLogicaService) new InitialContext().lookup(EventLogicaService.JNDI_NAME);
                 }
+                
+//				if (solicitudLogicaEjb == null) {
+//					solicitudLogicaEjb = (SolicitudLogicaService) new InitialContext()
+//							.lookup(SolicitudLogicaService.JNDI_NAME);
+//				}
+//				
+//				if (incidenciaTecnicaLogicaEjb == null) {
+//					incidenciaTecnicaLogicaEjb = (IncidenciaTecnicaLogicaService) new InitialContext()
+//							.lookup(IncidenciaTecnicaLogicaService.JNDI_NAME);
+//				}
 
                 String user = httpRequest.getRemoteUser();
 
@@ -227,21 +252,86 @@ public class BasePreparer implements ViewPreparer, Constants {
 //                log.info("BasePreparer => httpRequest.getRemoteUser():  " + user);
 //                log.info("BasePreparer => eventLogicaEjb:  " + eventLogicaEjb);
 
+//                
+//                
+//                //CONTADOR DE NO LLEGITS
+//                Where wNoLlegit = EventFields.NOLLEGIT.equal(Boolean.TRUE);
+//                List<Event> eventsNoLlegits = eventLogicaEjb.select(wNoLlegit);
+//                
+//                SelectDistinct<Long> sd_soli = new SelectDistinct<Long>(EventFields.SOLICITUDID);
+//                List<Long> solicituds_list = eventLogicaEjb.executeQuery(sd_soli, wNoLlegit);
+//                
+//                //CONTADORS
+//                int idx_locals_meves = 0;
+//                int idx_locals_no_meves = 0;
+//                int idx_estatals_meves = 0;
+//                int idx_estatals_no_meves = 0;
+//                int idx_incidencies_meves = 0;
+//                int idx_incidencies_no_meves = 0;
+//                
+//				for (Long soliID: solicituds_list) {
+//					Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+//					if (soli.getEntitatEstatal() != null && soli.getEntitatEstatal().trim().length() > 0) {
+//						if (soli.getOperador().equals(user)) {
+//							idx_estatals_meves++;
+//						} else {
+//							idx_estatals_no_meves++;
+//						}
+//					} else {
+//						if (soli.getOperador().equals(user)) {
+//							idx_locals_meves++;
+//						} else {
+//							idx_locals_no_meves++;
+//						}
+//					}
+//				}
+//
+//				SelectDistinct<Long> sd_inc = new SelectDistinct<Long>(EventFields.SOLICITUDID);
+//				List<Long> incidencies_list = eventLogicaEjb.executeQuery(sd_inc, wNoLlegit);
+//				
+//				for (Long inciID : incidencies_list) {
+//					IncidenciaTecnica inci = incidenciaTecnicaLogicaEjb.findByPrimaryKey(inciID);
+//					if (inci.getOperador().equals(user)) {
+//						idx_incidencies_meves++;
+//					} else {
+//						idx_incidencies_no_meves++;
+//					}
+//				}
+//				
+//	                
+//				request.put("solicitudsLocalsMeves", idx_locals_meves);
+//				request.put("solicitudsLocalsNoMeves", idx_locals_no_meves);
+//				request.put("solicitudsEstatalMeves", idx_estatals_meves);
+//				request.put("solicitudsEstatalNoMeves", idx_estatals_no_meves);
+//				request.put("incidenciesMeves", idx_incidencies_meves);
+//				request.put("incidenciesNoMeves", idx_incidencies_no_meves);
+//                
+//                
+                
                 Where wNoLlegit = EventFields.NOLLEGIT.equal(Boolean.TRUE);
                 
-                //SOLICITUDS
+                //SOLICITUDS LOCALS
                 {
                     StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
+                    StringField estatal = new EventQueryPath().SOLICITUD().ENTITATESTATAL();
+                    
                     Where wComu = Where.AND(wNoLlegit, EventFields.SOLICITUDID.isNotNull());
                     SelectDistinct<Long> sd = new SelectDistinct<Long>(EventFields.SOLICITUDID);
+                    
                     SelectCount sc = new SelectCount(sd);
 
-                    // solicituds locals meves i no meves
-                    Long solicitudsLocalsMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.equal(user)));
-                    Long solicitudsLocalsNoMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.notEqual(user)));
+                    // solicituds locals i estatals, meves i no meves
+                    Long solicitudsLocalsMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.equal(user), estatal.isNull()));
+                    Long solicitudsLocalsNoMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.notEqual(user), estatal.isNull()));
+                    
+                    Long solicitudsEstatalMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.equal(user), estatal.isNotNull()));
+                    Long solicitudsEstatalNoMeves = eventLogicaEjb.executeQueryOne(sc, Where.AND(wComu, operador.notEqual(user), estatal.isNotNull()));
 
                     request.put("solicitudsLocalsMeves", solicitudsLocalsMeves);
                     request.put("solicitudsLocalsNoMeves", solicitudsLocalsNoMeves);
+
+                    request.put("solicitudsEstatalMeves", solicitudsEstatalMeves);
+                    request.put("solicitudsEstatalNoMeves", solicitudsEstatalNoMeves);
                 }
 
                 //INCIDENCIES

@@ -1497,7 +1497,7 @@ textarea.event {
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Crear nova incidencia</h4>
+				<h4 class="modal-title">Canviar operador</h4>
 				<button type="button" class="close"
 					style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
 			</div>

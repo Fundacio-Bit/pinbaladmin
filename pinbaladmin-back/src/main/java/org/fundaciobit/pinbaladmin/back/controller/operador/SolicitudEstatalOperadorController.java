@@ -7,13 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.SubQuery;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController.VistaIncidencia;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
+import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -142,5 +147,114 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 			HtmlUtils.saveMessageSuccess(request, "Correus enviats correctament");
 		}
 		return "redirect:" + "/operador/solicitudfullview" + "/view/" + soliID;
+	}
+	
+	@Override
+    public String getEntityNameCode() {
+        switch (getVistaIncidencia()) {
+            default:
+            case NORMAL:
+                return "solicitud.estatal";
+            case NOLLEGITSMEUS:
+                return "solicitud.estatal.nollegitsmeus";
+            case NOLLEGITSNOMEUS:
+                return "solicitud.estatal.nollegitsnomeus";
+        }
+    }
+
+    @Override
+    public String getSessionAttributeFilterForm() {
+
+        switch (getVistaIncidencia()) {
+            default:
+            case NORMAL:
+                return super.getSessionAttributeFilterForm();
+            case NOLLEGITSMEUS:
+                return "solicitud.estatal.nollegitsmeus" + super.getSessionAttributeFilterForm();
+            case NOLLEGITSNOMEUS:
+                return "solicitud.estatal.nollegitsnomeus" + super.getSessionAttributeFilterForm();
+        }
+
+    }
+
+    public enum VistaIncidencia {
+        NORMAL, NOLLEGITSMEUS, NOLLEGITSNOMEUS,
+    }
+
+    public VistaIncidencia getVistaIncidencia() {
+        return VistaIncidencia.NORMAL;
+    }
+
+    @Override
+    public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
+        Where w1;
+
+        switch (getVistaIncidencia()) {
+            default:
+            case NORMAL: {
+                w1 = null;
+            }
+            break;
+            case NOLLEGITSMEUS: {
+                // incidencies meves
+                SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
+                        Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull()));
+                
+                w1 = Where.AND(OPERADOR.equal(request.getRemoteUser()), SOLICITUDID.in(subQuery), ENTITATESTATAL.isNotNull());
+            }
+            break;
+            case NOLLEGITSNOMEUS: {
+                // incidencies No Meves
+                SubQuery<Event, Long> subQuery = eventLogicaEjb.getSubQuery(EventFields.SOLICITUDID,
+                        Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE), EventFields.SOLICITUDID.isNotNull()));
+                
+                w1 = Where.AND(OPERADOR.notEqual(request.getRemoteUser()), SOLICITUDID.in(subQuery), ENTITATESTATAL.isNotNull());
+            }
+            break;
+
+        }
+
+        log.info("\n\n SQL W1 = " + ((w1 == null) ? "NULL" : w1.toSQL()));
+
+        Where w2 = super.getAdditionalCondition(request);
+        log.info("\n\n SQL W2 = " + ((w2 == null) ? "NULL" : w2.toSQL()));
+
+        if (w1 == null) {
+            if (w2 == null) {
+                return null;
+            } else {
+                return w2;
+            }
+        } else {
+            if (w2 == null) {
+                return w1;
+            } else {
+                return Where.AND(w1, w2);
+            }
+        }
+    }
+    
+	@Override
+	public SolicitudFilterForm getSolicitudFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
+			throws I18NException {
+
+		SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
+
+		if (solicitudFilterForm.isNou()) {
+//          solicitudFilterForm.getHiddenFields().remove(ORGANID);
+
+			if (getVistaIncidencia() == VistaIncidencia.NORMAL) {
+				// solicitudFilterForm.setEstatIDDesde(-1L);
+				// solicitudFilterForm.setEstatIDFins(50L);
+			} else {
+				if (getVistaIncidencia() == VistaIncidencia.NOLLEGITSMEUS) {
+					solicitudFilterForm.getGroupByFields().remove(CREADOR);
+					solicitudFilterForm.getGroupByFields().remove(OPERADOR);
+				}
+				solicitudFilterForm.setAddButtonVisible(false);
+			}
+		}
+		return solicitudFilterForm;
+
 	}
 }
