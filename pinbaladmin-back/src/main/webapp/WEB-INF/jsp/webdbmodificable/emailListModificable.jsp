@@ -1,7 +1,7 @@
 
 <script>
 
-    var itemIDCache;
+    var emailIDCache;
     var tipus; // 1 incidencia     0 solucitud
 
     function myFunction() {
@@ -9,79 +9,139 @@
         var root = "<%=request.getContextPath()%>${contexte}";
 
         var returnUrl = root;
-        if (tipus == 1) {
-            var tipusIncidencia = document.getElementById("tipusIncidencia").value;
-            returnUrl += "/incidencia/" + itemIDCache + "/" + operador + "/" + tipusIncidencia
-		}else{
-            var estatSoli = document.getElementById("estatSolicitud").value;
-			returnUrl += "/solicitud/" + itemIDCache + "/" + operador + "/" + estatSoli;
+        
+		var checkBox = document.getElementById("checkNewItem");
+		var itemJaExistent = checkBox.checked == true;
+		
+        if (itemJaExistent) {
+        	//Update
+			if (tipus == 1) {
+	            var incidenciaID = document.getElementById("incidenciaID").value;
+	            returnUrl += "/incidenciaExistent/" + emailIDCache + "/" + incidenciaID;
+			} else {
+				var solicitudID = document.getElementById("solicitudID").value;
+				returnUrl += "/solicitudExistent/" + emailIDCache + "/" + solicitudID;
+			}
+        } else {
+			//Create 
+	        if (tipus == 1) {
+	            var tipusIncidencia = document.getElementById("tipusIncidencia").value;
+	            returnUrl += "/incidencia/" + emailIDCache + "/" + operador + "/" + tipusIncidencia;
+			}else{
+	            var estatSoli = document.getElementById("estatSolicitud").value;
+				returnUrl += "/solicitud/" + emailIDCache + "/" + operador + "/" + estatSoli;
+			}
 		}
+        
         window.location.href = returnUrl;
     }
 
-    function crearIncidencia(itemID) {
-        itemIDCache = itemID;
+    function crearIncidencia(emailID) {
+        emailIDCache = emailID;
         tipus = 1;
         
-        $("#incidencia-info").show();
-        $("#solicitud-info").hide();
+        $(".incidencia-info").show();
+        $(".solicitud-info").hide();
         
+        $(".modal-title").html("Crear incidencia");
+        $("#label-checkNewItem").html("Incidencia existent");
+
+        testExist();
         $("#modelSeleccioTramitador").modal();
     }
 
-    function crearSolicitud(itemID) {
-        itemIDCache = itemID;
+    function crearSolicitud(emailID) {
+        emailIDCache = emailID;
         tipus = 0;
 
-        $("#incidencia-info").hide();
-        $("#solicitud-info").show();
+        $(".incidencia-info").hide();
+        $(".solicitud-info").show();
 
+        $(".modal-title").html("Crear solicitud");
+        $("#label-checkNewItem").html("Solicitud existent");
+
+        testExist();
         $("#modelSeleccioTramitador").modal();
     }
+    
+    
+    
+	function testExist() {
+		var checkBox = document.getElementById("checkNewItem");
+		if (checkBox.checked == true) {
+			$("#nou_element").hide();
+			$("#existent_element").show();
+		} else {
+			$("#nou_element").show();
+			$("#existent_element").hide();
+		}
+	}
 </script>
 
 
 <!-- Modal -->
+<% request.setAttribute("currentuser", request.getRemoteUser()); %>
+
 <div class="modal fade" id="modelSeleccioTramitador" role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Crear nova incidencia</h4>
+				<h4 id="modal-title" class="modal-title"></h4>
 				<button type="button" class="close"
 					style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
 			</div>
+			
+			
+			
 			<div class="modal-body">
-				<%  request.setAttribute("currentuser", request.getRemoteUser()); %>
 
-				<label id="label_operador" for="operador"> Selecciona operador: </label> 
-				<select id="operador" class="my_select">
-					<c:forEach items="${operadors}" var="operador">
-						<option value="${operador.key}"
-							${(currentuser eq operador.key)?'selected':''}>${operador.value}</option>
-					</c:forEach>
-				</select> 
-
+<!-- 				<label id="label-checkNewItem" for="checkNewItem"></label> 
+				<input type="checkbox" id="checkNewItem" onclick="testExist()">		
 				<br>
-				<div id="incidencia-info">
-					<label id="label_tipusIncidencia" for="tipusIncidencia">Tipus d'incidencia:</label> 
-					<select id="tipusIncidencia" class="my_select">
-						<c:forEach items="${tipusIncidencies}" var="tipusIncidencia">
-							<option value="${tipusIncidencia.key}">${tipusIncidencia.value}</option>
+ -->
+				<div id="nou_element">
+					<label id="label_operador" for="operador"> Selecciona operador: </label> 
+					<select id="operador" class="my_select">
+						<c:forEach items="${operadors}" var="operador">
+							<option value="${operador.key}"
+								${(currentuser eq operador.key)?'selected':''}>${operador.value}</option>
 						</c:forEach>
-					</select>
+					</select> 
+	
+					<br>
+					<div class="incidencia-info">
+						<label id="label_tipusIncidencia" for="tipusIncidencia">Tipus d'incidencia:</label> 
+						<select id="tipusIncidencia" class="my_select">
+							<c:forEach items="${tipusIncidencies}" var="tipusIncidencia">
+								<option value="${tipusIncidencia.key}">${tipusIncidencia.value}</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="solicitud-info">
+						<label id="label_estatSolicitud" for="estatSolicitud">Estats Solicitud </label> 
+						<select id="estatSolicitud" class="my_select">
+							<c:forEach items="${estatSolicituds}" var="estatSolicitud">
+								<option value="${estatSolicitud.key}">${estatSolicitud.value}</option>
+							</c:forEach>
+						</select>
+					</div>
 				</div>
-				<div id="solicitud-info">
-					<label id="label_estatSolicitud" for="estatSolicitud">Estats Solicitud </label> 
-					<select id="estatSolicitud" class="my_select">
-						<c:forEach items="${estatSolicituds}" var="estatSolicitud">
-							<option value="${estatSolicitud.key}">${estatSolicitud.value}</option>
-						</c:forEach>
-					</select>
+				<div id="existent_element">
+					<p>Indica la existent</p>
+
+					<div class="incidencia-info">
+						<label for="incidenciaid">Incidencia ID:</label>
+						<input type="text" id="incidenciaID" />
+					</div>
+					<div class="solicitud-info">
+						<label for="solicitudid">Solicitud ID:</label> 
+						<input type="text" id="solicitudID" />
+					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
+
+				<div class="modal-footer">
 				<button type="button" class="btn btn-default" onClick="myFunction()"
 					data-dismiss="modal">Ok</button>
 			</div>

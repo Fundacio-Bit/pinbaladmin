@@ -24,6 +24,8 @@ public interface IncidenciaTecnicaLogicaService extends IncidenciaTecnicaService
 
     public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, String operador, int tipus) throws I18NException;
 
+    public IncidenciaTecnica afegirMailAIncidencia(EmailMessageInfo emi, Long incidenciaID) throws I18NException;
+
     public void deleteFull(Long _ID) throws I18NException;
 
 }

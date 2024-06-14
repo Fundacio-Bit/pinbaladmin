@@ -405,6 +405,42 @@ public class LlistaCorreusOperadorController extends EmailController {
         return "redirect:" + getContextWeb() + "/list";
     }
 
+	@RequestMapping(value = "/incidenciaExistent/{emailID}/{incidenciaID}", method = RequestMethod.GET)
+	public String incidenciaExistent(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("emailID") Long emailID, @PathVariable("incidenciaID") Long incidenciaID) {
+
+        try {
+            final boolean enableCertificationCheck = false;
+            EmailReader er = new EmailReader(enableCertificationCheck);
+
+            if (er.getCountMessages() == cachesize(request)) {
+
+                EmailMessageInfo emi = er.getMessage((int) (long) emailID);
+
+                IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.afegirMailAIncidencia(emi, incidenciaID);
+                
+                er.deleteMessage((int) (long) emailID);
+
+//                enviarCorreusIncidencia(it);
+                
+        		return "redirect:/operador/eventincidenciatecnica/veureevents/" + it.getIncidenciaTecnicaID();
+
+            } else {
+                HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
+            }
+        } catch (Exception e) {
+            String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error convertint la incidencia: "  + e.getMessage();
+			}
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+		return "redirect:" + getContextWeb() + "/list";
+	}
+
 	public int cachesize(HttpServletRequest request) {
         Integer i = (Integer) request.getSession().getAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS);
 
@@ -413,7 +449,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         } else {
             return i;
         }
-
     }
 
     @RequestMapping(value = "/solicitud/{emailID}/{operador}/{estatSoli}", method = RequestMethod.GET)
@@ -448,12 +483,13 @@ public class LlistaCorreusOperadorController extends EmailController {
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
-            /*
-             * } catch (I18NException e) { String msg = I18NUtils.getMessage(e);
-             * log.error(msg, e); HtmlUtils.saveMessageError(request, msg);
-             */
         } catch (Exception e) {
-            String msg = "Error convertint a solicitud: " + e.getMessage();
+            String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error convertint a solicitud: " + e.getMessage();
+			}
             log.error(msg, e);
             HtmlUtils.saveMessageError(request, msg);
         }

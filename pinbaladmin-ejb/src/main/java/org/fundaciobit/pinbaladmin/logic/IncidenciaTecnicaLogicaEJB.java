@@ -54,7 +54,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
     @Override
     public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, String operador, int tipus) throws I18NException {
 
-        java.lang.String titol = emi.getSubject();
+        java.lang.String subject = emi.getSubject();
         java.lang.String missatge = emi.getBody(); // TODO limit tamany
         
         java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
@@ -71,11 +71,11 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
 
         log.info(destinatariEmail);
         
-        if (contacteEmail.contains("governdigital.pinbal@fundaciobit.org") && titol.contains("CAI-")) {
+        if (contacteEmail.contains("governdigital.pinbal@fundaciobit.org") && subject.contains("CAI-")) {
             contacteEmail = "suport@caib.es";
         }
         
-        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(titol, missatge, data, dataFi, estat, tipus, nomEntitat,
+        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge, data, dataFi, estat, tipus, nomEntitat,
                 contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
 
         IncidenciaTecnica it = (IncidenciaTecnica) this.create(itJPA);
@@ -91,10 +91,8 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
                 missatge = "<div>" + missatge + "</div>";
             }
 
-            String asumpte = "Incidència tècnica " + incidenciaTecnicaID + " creada";
-            
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
-                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+                    destinatariEmail, subject, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
         }
 
         // Afgegir fitxers
@@ -115,8 +113,6 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
             		continue;
 				}
-            	
-            	log.info("Hello There!");
             	
                 FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
                 fitxerEjb.create(fitxer);
@@ -154,5 +150,70 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         
         return it;
 
+    }
+    
+    
+    @Override
+    public IncidenciaTecnica afegirMailAIncidencia(EmailMessageInfo emi, Long incidenciaID) throws I18NException {
+
+    	java.lang.String asumpte = emi.getSubject();
+        java.lang.String missatge = emi.getBody(); // TODO limit tamany
+
+        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
+        java.lang.String contacteNom = emi.getNameFrom();
+        java.lang.String caidIdentificadorConsulta = null;
+        java.lang.String caidNumeroSeguiment = null;
+        java.lang.String destinatari = null;
+        java.lang.String destinatariEmail = null;
+
+        IncidenciaTecnica it = this.findByPrimaryKey(incidenciaID);
+        
+		if (it == null) {
+			throw new I18NException("Incidencia no trobada");
+		}
+        
+        java.lang.Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
+        java.lang.Long solicitudID = null;
+        
+        // Afegir event de peticio
+        {
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+            boolean _noLlegit_ = true;
+            Long _fitxerID_ = null;
+            if (missatge.startsWith("<") && missatge.endsWith(">")) {
+                missatge = "<div>" + missatge + "</div>";
+            }
+
+            eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
+                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+        }
+
+        // Si el correu te fitxers, afegir-los
+        {
+            java.lang.String _missatge_ = "Afegit fitxer";
+            java.lang.String _asumpte_ = "Afegit fitxer";
+            
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+            boolean _noLlegit_ = true;
+            
+            log.info("attachements " + emi.getAttachments() + " " + emi.getAttachments().size());
+            for (EmailAttachmentInfo ads : emi.getAttachments()) {
+            	
+            	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
+            		continue;
+				}
+            	
+                FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
+                fitxerEjb.create(fitxer);
+                FileSystemManager.crearFitxer(new ByteArrayInputStream(ads.getData()), fitxer.getFitxerID());
+
+                java.lang.Long _fitxerID_ = fitxer.getFitxerID();
+
+                eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
+                        destinatariEmail, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                        caidNumeroSeguiment);
+            }
+        }
+        return it;
     }
 }
