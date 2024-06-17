@@ -41,6 +41,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
@@ -496,7 +497,43 @@ public class LlistaCorreusOperadorController extends EmailController {
         return "redirect:" + getContextWeb() + "/list";
     }
 
+	@RequestMapping(value = "/solicitudExistent/{emailID}/{solicitudID}", method = RequestMethod.GET)
+	public String solicitudExistent(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("emailID") Long emailID, @PathVariable("solicitudID") Long solicitudID) {
 
+        try {
+            final boolean enableCertificationCheck = false;
+            EmailReader er = new EmailReader(enableCertificationCheck);
+
+            if (er.getCountMessages() == cachesize(request)) {
+
+                EmailMessageInfo emi = er.getMessage((int) (long) emailID);
+
+                Solicitud soli = solicitudLogicaEjb.afegirMailASolicitud(emi, solicitudID);
+                
+                er.deleteMessage((int) (long) emailID);
+
+//                enviarCorreusSolicitud(soli);
+                
+        		return "redirect:/operador/eventsolicitud/veureevents/" + soli.getSolicitudID();
+
+            } else {
+                HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
+            }
+        } catch (Exception e) {
+            String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error convertint la incidencia: "  + e.getMessage();
+			}
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+		return "redirect:" + getContextWeb() + "/list";
+	}
+
+	
 	@Override
     public List<Email> executeSelect(ITableManager<Email, Long> ejb, Where where, final OrderBy[] orderBy,
             Integer itemsPerPage, final int inici) throws I18NException {

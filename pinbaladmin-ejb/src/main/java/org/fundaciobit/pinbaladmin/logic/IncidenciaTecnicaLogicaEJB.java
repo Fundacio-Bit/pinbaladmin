@@ -169,7 +169,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         IncidenciaTecnica it = this.findByPrimaryKey(incidenciaID);
         
 		if (it == null) {
-			throw new I18NException("Incidencia no trobada");
+            throw new I18NException("genapp.comodi", "Incidencia " + incidenciaID + " no trobada" );
 		}
         
         java.lang.Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();

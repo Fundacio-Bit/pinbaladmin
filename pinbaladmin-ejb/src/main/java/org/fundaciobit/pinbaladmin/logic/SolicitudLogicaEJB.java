@@ -36,7 +36,9 @@ import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -318,6 +320,69 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     }
     
 
+    @Override
+    public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long soliID) throws I18NException {
+
+    	java.lang.String asumpte = emi.getSubject();
+        java.lang.String missatge = emi.getBody(); // TODO limit tamany
+
+        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
+        java.lang.String contacteNom = emi.getNameFrom();
+        java.lang.String caidIdentificadorConsulta = null;
+        java.lang.String caidNumeroSeguiment = null;
+        java.lang.String destinatari = null;
+        java.lang.String destinatariEmail = null;
+
+        Solicitud soli = this.findByPrimaryKey(soliID);
+        
+		if (soli == null) {
+            throw new I18NException("genapp.comodi", "Solicitud " + soliID + " no trobada" );
+		}
+        
+        java.lang.Long incidenciaTecnicaID = null;
+        java.lang.Long solicitudID = soli.getSolicitudID();
+        
+        // Afegir event de peticio
+        {
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+            boolean _noLlegit_ = true;
+            Long _fitxerID_ = null;
+            if (missatge.startsWith("<") && missatge.endsWith(">")) {
+                missatge = "<div>" + missatge + "</div>";
+            }
+
+            eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
+                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+        }
+
+        // Si el correu te fitxers, afegir-los
+        {
+            java.lang.String _missatge_ = "Afegit fitxer";
+            java.lang.String _asumpte_ = "Afegit fitxer";
+            
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+            boolean _noLlegit_ = true;
+            
+            log.info("attachements " + emi.getAttachments() + " " + emi.getAttachments().size());
+            for (EmailAttachmentInfo ads : emi.getAttachments()) {
+            	
+            	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
+            		continue;
+				}
+            	
+                FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
+                fitxerEjb.create(fitxer);
+                FileSystemManager.crearFitxer(new ByteArrayInputStream(ads.getData()), fitxer.getFitxerID());
+
+                java.lang.Long _fitxerID_ = fitxer.getFitxerID();
+
+                eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
+                        destinatariEmail, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                        caidNumeroSeguiment);
+            }
+        }
+        return soli;
+    }
     public enum TipusCridada{
         ALTA, CONSULTA, MODIFICACIO,
     }

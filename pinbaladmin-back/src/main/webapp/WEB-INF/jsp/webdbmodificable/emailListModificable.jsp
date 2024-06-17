@@ -97,10 +97,10 @@
 			
 			<div class="modal-body">
 
-<!-- 				<label id="label-checkNewItem" for="checkNewItem"></label> 
+ 				<label id="label-checkNewItem" for="checkNewItem"></label> 
 				<input type="checkbox" id="checkNewItem" onclick="testExist()">		
 				<br>
- -->
+				
 				<div id="nou_element">
 					<label id="label_operador" for="operador"> Selecciona operador: </label> 
 					<select id="operador" class="my_select">
@@ -132,11 +132,11 @@
 					<p>Indica la existent</p>
 
 					<div class="incidencia-info">
-						<label for="incidenciaid">Incidencia ID:</label>
+						<label for="incidenciaid" style="font-size: 1.15rem;">Incidencia ID:</label>
 						<input type="text" id="incidenciaID" />
 					</div>
 					<div class="solicitud-info">
-						<label for="solicitudid">Solicitud ID:</label> 
+						<label for="solicitudid" style="font-size: 1.15rem;">Solicitud ID:</label> 
 						<input type="text" id="solicitudID" />
 					</div>
 				</div>

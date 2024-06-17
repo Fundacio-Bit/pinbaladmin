@@ -13,6 +13,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudService;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
@@ -65,5 +66,10 @@ public interface SolicitudLogicaService extends SolicitudService {
     public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception;
 
     public List<Solicitud> getSolicitudFromTramitID(String ticketGFE);
+
+	public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long solicitudID) throws I18NException;
+	
+    
+    
 
 }
