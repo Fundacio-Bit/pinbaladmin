@@ -1302,8 +1302,6 @@ textarea.event {
 }
 </style>
 
-
-
 	<div class="fondodiv2">
 		<table style="padding: 0px;margin: auto;" border="0" cellpadding="0"
 			cellspacing="0">
@@ -1447,7 +1445,7 @@ textarea.event {
 	</div>
 	<center>
 		<iframe id="nou_event_id" style="border: 1px solid #ddd;" width="95%"
-			height="${isPublic?450:560}px" onload="carregatIframe(this)"
+			height="${isPublic?450:590}px" onload="carregatIframe(this)"
 			src="${theurlnew}"></iframe>
 	</center>
 	<br />

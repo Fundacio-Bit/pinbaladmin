@@ -36,7 +36,7 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 		Event ev = super.create(bean);
 
 		int tipus = ev.getTipus();
-		log.info("EventLogicaEJB.create: tipus: " + ev.getTipus());
+		log.info("EventLogicaEJB.create: tipus: " + tipus);
 		if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC
 				|| tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT
 				|| tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
@@ -54,7 +54,7 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 			if (ev.getSolicitudID() != null) {
 				message += EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud");
 			} else {
-				message += EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidencia");
+				message += EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica");
 			}
 			
 			
@@ -70,6 +70,9 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 			try {
 				log.info("CORREU PER ENVIAR");
 				EmailUtil.postMail(subject, message, isHtml, from, adjunt, destinataris);
+				ev.setComentari(message);
+				this.update(ev);
+				
 				log.info("CORREU ENVIAT");
 			} catch (Throwable th) {
 				log.error("Error enviant correu: " + th.getMessage());

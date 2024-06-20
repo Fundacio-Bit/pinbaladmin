@@ -42,13 +42,15 @@
 			document.getElementById("event.destinatarimail").value = null;
         }
 
-		// Si no s'envia cap correu, amagar els camps de destinatari
+		// Si no s'envia cap correu, amagar els camps de destinatari i asumpte
 		if (select.value == 1 || select.value == -2) {
 			document.getElementById("event_destinatari_rowid").style.display = "";
 			document.getElementById("event_destinatarimail_rowid").style.display = "";
+			document.getElementById("event_asumpte_rowid").style.display = "";
 		} else {
 			document.getElementById("event_destinatari_rowid").style.display = "none";
 			document.getElementById("event_destinatarimail_rowid").style.display = "none";
+			document.getElementById("event_asumpte_rowid").style.display = "none";
 		}
 	}
 

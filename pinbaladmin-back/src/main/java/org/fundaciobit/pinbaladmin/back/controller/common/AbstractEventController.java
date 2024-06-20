@@ -171,9 +171,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
         }
 
         T item = findItemByPrimaryKey(itemID);
-
+        
+        String itemNom = isSolicitud() ? "solicitud" : "incidencia";
         if (item == null) {
-            String itemNom = isSolicitud() ? "solicitud" : "incidenciaTecnica";
             HtmlUtils.saveMessageError(request, "S'ha intentat editar o crear un Event però el ID de " + itemNom + " ( "
                     + itemID + ") retorna un element null.");
 
@@ -200,11 +200,14 @@ public abstract class AbstractEventController<T> extends EventController impleme
              * if (isPublic()) { mav.setViewName("eventFormOperadorPublic"); } else {
              * mav.setViewName("eventFormOperador"); }
              */
-            eventForm.getEvent().setDataEvent(new Timestamp(System.currentTimeMillis()));
+            
+            EventJPA ev = eventForm.getEvent();
+            
+            ev.setDataEvent(new Timestamp(System.currentTimeMillis()));
             if (isSolicitud()) {
-                eventForm.getEvent().setSolicitudID(itemID);
+                ev.setSolicitudID(itemID);
             } else {
-                eventForm.getEvent().setIncidenciaTecnicaID(itemID);
+                ev.setIncidenciaTecnicaID(itemID);
             }
 
             if (isPublic()) {
@@ -218,13 +221,13 @@ public abstract class AbstractEventController<T> extends EventController impleme
                         email = getPersonaContacteEmail(item);
                         e.printStackTrace();
                     }
-                    eventForm.getEvent().setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
+                    ev.setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
                 } else {
                     email = getPersonaContacteEmail(item);
-                    eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
+                    ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
                 }
 
-                eventForm.getEvent().setPersona(email);
+                ev.setPersona(email);
 
                 eventForm.addHiddenField(TIPUS);
                 eventForm.addHiddenField(NOLLEGIT);
@@ -232,12 +235,22 @@ public abstract class AbstractEventController<T> extends EventController impleme
                 eventForm.addHiddenField(DESTINATARIMAIL);
                 eventForm.addHiddenField(DATAEVENT);
                 eventForm.addHiddenField(PERSONA);
-                eventForm.getEvent().setNoLlegit(true);
+                eventForm.addHiddenField(ASUMPTE);
+                ev.setNoLlegit(true);
                 
             } else {
-                eventForm.getEvent().setPersona(request.getUserPrincipal().getName());
-                eventForm.getEvent().setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
-                eventForm.getEvent().setNoLlegit(false);
+            	String asumpte = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + itemNom.toUpperCase() + " - " + getTitolItem(itemID);
+				if (isSolicitud()) {
+					Solicitud soli = ((Solicitud) item);
+					if (soli.getExpedientPid() != null) {
+						asumpte = "PID [" + soli.getExpedientPid() + "] - " + asumpte;
+					}
+				}
+				ev.setAsumpte(asumpte);
+
+            	ev.setPersona(request.getUserPrincipal().getName());
+                ev.setTipus(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT);
+                ev.setNoLlegit(false);
                 eventForm.addHiddenField(NOLLEGIT);
             }
         }
@@ -835,17 +848,17 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         // Privat - Tramitador
         __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT),
-                "Comentari Tramitador Privat"));
+                "Tramitador: Comentari Privat"));
 
         // Public - Tramitador
         __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC),
-                "Comentari Tramitador Públic"));
+                "Tramitador: Enviar Correu"));
 
         // Public - Contacte
-        __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_CONTACTE), "Comentari Contacte (Públic)"));
+        __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_CONTACTE), "Contacte (Públic)"));
 
-        // Privat - Tramitador
-        __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_SUPORT), "Comentari a Suport (Public)"));
+        // Public - Tramitador - Suport
+        __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_COMENTARI_SUPORT), "Suport CAIB"));
 
         // PRIVAT_TRAMITADOR CAP A CEDENT
         __tmp.add(new StringKeyValue(String.valueOf(EVENT_TIPUS_CONSULTA_A_CEDENT), "Consulta a Cedent"));
@@ -891,15 +904,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
 			final String tipus = isSolicitud() ? "solicitud" : "incidencia";
 			Long itemID = isSolicitud() ? event.getSolicitudID() : event.getIncidenciaTecnicaID();
 
-			String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
-					+ getTitolItem(itemID);
+//			String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
+//					+ getTitolItem(itemID);
 
 			String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b>" + "<br/><br/>"
 					+ "<div style=\"background-color:#f6f6f6;\">" + event.getComentari().replace("\n", "<br/>")
 					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>";
 			
 			msg = "<div>" + msg + "</div>";
-			event.setAsumpte(subject);
+//			event.setAsumpte(subject);
 			event.setComentari(msg);
 		}
 		
@@ -908,15 +921,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
 			final String tipus = isSolicitud() ? "solicitud" : "incidencia";
 			Long itemID = isSolicitud() ? event.getSolicitudID() : event.getIncidenciaTecnicaID();
 
-			String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
-					+ getTitolItem(itemID);
+//			String subject = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + tipus.toUpperCase() + " - "
+//					+ getTitolItem(itemID);
 
 			String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b>" + "<br/><br/>"
 					+ "<div style=\"background-color:#f6f6f6;\">" + event.getComentari().replace("\n", "<br/>")
 					+ (event.getFitxerID() == null ? "" : "<br/><br/><b>S'han adjuntat fitxers.</b>") + "</div>";
 			
 			msg = "<div>" + msg + "</div>";
-			event.setAsumpte(subject);
+//			event.setAsumpte(subject);
 			event.setComentari(msg);
 		}
     }
