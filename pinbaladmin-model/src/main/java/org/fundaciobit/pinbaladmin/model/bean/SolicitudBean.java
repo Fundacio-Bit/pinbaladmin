@@ -39,6 +39,7 @@ public class SolicitudBean implements Solicitud {
 	java.lang.String consentiment;
 	java.lang.String urlconsentiment;
 	java.lang.String consentimentadjunt;
+	java.lang.Long portafibID;
 
 
   /** Constructor Buit */
@@ -46,7 +47,7 @@ public class SolicitudBean implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -78,9 +79,10 @@ public class SolicitudBean implements Solicitud {
     this.consentiment=consentiment;
     this.urlconsentiment=urlconsentiment;
     this.consentimentadjunt=consentimentadjunt;
+    this.portafibID=portafibID;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt) {
+  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
@@ -111,6 +113,7 @@ public class SolicitudBean implements Solicitud {
     this.consentiment=consentiment;
     this.urlconsentiment=urlconsentiment;
     this.consentimentadjunt=consentimentadjunt;
+    this.portafibID=portafibID;
 }
   /** Constructor dels valors Not Null */
   public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
@@ -156,6 +159,7 @@ public class SolicitudBean implements Solicitud {
     this.setConsentiment(__bean.getConsentiment());
     this.setUrlconsentiment(__bean.getUrlconsentiment());
     this.setConsentimentadjunt(__bean.getConsentimentadjunt());
+    this.setPortafibID(__bean.getPortafibID());
     // Fitxer
     this.setDocumentSolicitud(FitxerBean.toBean(__bean.getDocumentSolicitud()));
     // Fitxer
@@ -379,6 +383,13 @@ public class SolicitudBean implements Solicitud {
 		this.consentimentadjunt = _consentimentadjunt_;
 	};
 
+	public java.lang.Long getPortafibID() {
+		return(portafibID);
+	};
+	public void setPortafibID(java.lang.Long _portafibID_) {
+		this.portafibID = _portafibID_;
+	};
+
 
 
   // ======================================
@@ -417,6 +428,7 @@ public class SolicitudBean implements Solicitud {
     __tmp.setConsentiment(__bean.getConsentiment());
     __tmp.setUrlconsentiment(__bean.getUrlconsentiment());
     __tmp.setConsentimentadjunt(__bean.getConsentimentadjunt());
+    __tmp.setPortafibID(__bean.getPortafibID());
     // Fitxer
     __tmp.setDocumentSolicitud(FitxerBean.toBean(__bean.getDocumentSolicitud()));
     // Fitxer

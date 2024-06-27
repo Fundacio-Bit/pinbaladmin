@@ -43,6 +43,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField CONSENTIMENT = new StringField(_TABLE_MODEL, "consentiment", "consentiment");
 	 public static final StringField URLCONSENTIMENT = new StringField(_TABLE_MODEL, "urlconsentiment", "urlconsentiment");
 	 public static final StringField CONSENTIMENTADJUNT = new StringField(_TABLE_MODEL, "consentimentadjunt", "consentimentadjunt");
+	 public static final LongField PORTAFIBID = new LongField(_TABLE_MODEL, "portafibID", "portafibid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -76,7 +77,8 @@ public interface SolicitudFields extends java.io.Serializable {
     ESTATPINBAL,
     CONSENTIMENT,
     URLCONSENTIMENT,
-    CONSENTIMENTADJUNT
+    CONSENTIMENTADJUNT,
+    PORTAFIBID
   };
 
 

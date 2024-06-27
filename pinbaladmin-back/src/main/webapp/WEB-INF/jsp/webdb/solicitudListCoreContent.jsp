@@ -207,6 +207,11 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PORTAFIBID)}">
+          <td>
+          ${solicitud.portafibID}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

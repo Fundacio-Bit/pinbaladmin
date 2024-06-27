@@ -28,4 +28,10 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
     public Document create(Document instance) throws I18NException {
         return super.create(instance);
     }
+    
+	@PermitAll
+	@Override
+	public Document update(Document instance) throws I18NException {
+		return super.update(instance);
+	}
 }

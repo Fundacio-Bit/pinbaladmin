@@ -135,6 +135,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.CONSENTIMENTADJUNT);
   }
 
+  public LongField PORTAFIBID() {
+    return new LongField(getQueryPath(), SolicitudFields.PORTAFIBID);
+  }
+
 
 
   @Override

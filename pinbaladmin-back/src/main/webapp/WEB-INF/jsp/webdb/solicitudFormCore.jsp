@@ -891,3 +891,21 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PORTAFIBID)}">
+        <tr id="solicitud_portafibID_rowid">
+          <td id="solicitud_portafibID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PORTAFIBID])?'solicitud.portafibID':__theForm.labels[SolicitudFields.PORTAFIBID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.PORTAFIBID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.PORTAFIBID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_portafibID_columnvalueid">
+            <form:errors path="solicitud.portafibID" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PORTAFIBID)? 'true' : 'false'}" cssClass="w-50 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PORTAFIBID)? ' uneditable-input' : ''}"  style=""  path="solicitud.portafibID"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

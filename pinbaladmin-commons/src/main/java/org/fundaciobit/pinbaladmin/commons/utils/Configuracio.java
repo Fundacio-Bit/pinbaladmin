@@ -264,5 +264,20 @@ public class Configuracio implements Constants {
 	public static String getCorreuSuport() {
 		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport");
 	}
+    public static String getPortafibGatewayV2() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.url");
+    }
+
+    public static String getPortafibUsername() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.username");
+    }
+
+    public static String getPortafibPassword() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.password");
+    }
+
+    public static String getPortafibProfile() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.profile.pades");
+    }
 
 }

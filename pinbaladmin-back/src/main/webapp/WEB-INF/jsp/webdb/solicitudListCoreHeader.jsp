@@ -105,6 +105,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONSENTIMENTADJUNT)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONSENTIMENTADJUNT)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PORTAFIBID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.PORTAFIBID)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

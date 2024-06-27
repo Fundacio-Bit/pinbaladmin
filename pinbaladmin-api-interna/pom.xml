@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>pinbaladmin</artifactId>
+        <groupId>org.fundaciobit.pinbaladmin</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <artifactId>pinbaladmin-api-interna</artifactId>
+    <packaging>war</packaging>
+    <name>PinbalAdmin - API Rest - Interna Server</name>
+    <version>1.0</version>
+    <properties>
+        <auth.method>BASIC</auth.method>
+        <client.default.package>org.fundaciobit.pinbaladmin.apiinterna.client</client.default.package>
+    </properties>
+    <dependencies>
+        <!-- Especificacions i llibreries proporcionades per JBoss -->
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-8.0</artifactId>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Altres mòduls del projecte -->
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-commons</artifactId>
+            <version>2.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-persistence</artifactId>
+            <version>2.0.0</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>javax.activation-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <artifactId>portafib-callback-beans</artifactId>
+            <groupId>es.caib.portafib</groupId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-ejb</artifactId>
+            <version>2.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+        </dependency>
+        <!-- Anotacions de documentació de openapi -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.1.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>pluginsib-utils-rest</artifactId>
+            <groupId>org.fundaciobit.pluginsib.utils</groupId>
+            <version>2.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <!-- Esta en LIB de l'EAR -->
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>        
+        <!-- Dependències de test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- Genera el descriptor openapi.json de forma estàtica, després 
+                el posarem l'arrel del WAR -->
+            <!-- https://github.com/swagger-api/swagger-core/tree/master/modules/swagger-maven-plugin -->
+            <plugin>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                        <configuration>
+                            <outputFileName>openapi</outputFileName>
+                            <outputPath>${project.basedir}/openapi/</outputPath>
+                            <outputFormat>JSON</outputFormat>
+                            <resourcePackages>
+                                <package>org.fundaciobit.pinbaladmin.api.interna.config</package>
+                                <package>org.fundaciobit.pinbaladmin.api.interna.secure.dadesobertes</package>
+                            </resourcePackages>
+                            <prettyPrint>TRUE</prettyPrint>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--  NOTA: No generam client ja que la primera API és el CallBack de PortaFIB -->
+            <!--  i l'altra API és DadesObertes (Que no necessita client java ja que accedeixen directament) -->
+
+            <!-- Inclou el openapi.json i el swagger-ui dins el war -->
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <webResources>
+                        <resource>
+                            <directory>${project.basedir}/openapi</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+            
+        </plugins>
+        
+    </build>
+</project>

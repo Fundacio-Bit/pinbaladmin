@@ -1,0 +1,16 @@
+{
+  "openapi" : "3.0.1",
+  "servers" : [ {
+    "url" : "/enviafibapi/interna"
+  }, {
+    "url" : "http://localhost:8080/enviafibapi/interna"
+  }, {
+    "url" : "https://dev.caib.es/enviafibapi/interna"
+  }, {
+    "url" : "https://proves.caib.es/enviafibapi/interna"
+  }, {
+    "url" : "https://se.caib.es/enviafibapi/interna"
+  }, {
+    "url" : "https://www.caib.es/enviafibapi/interna"
+  } ]
+}

@@ -237,6 +237,17 @@
 			<type>war</type>
 		</dependency>
 		<!-- API EXTERNA END -->
+
+		<!-- API INTERNA START -->
+		<!-- http://localhost:8080/pinbaladminapi/interna/index.html -->
+		<dependency>
+			<groupId>org.fundaciobit.pinbaladmin</groupId>
+			<artifactId>pinbaladmin-api-interna</artifactId>
+			<version>1.0</version>
+			<type>war</type>
+		</dependency>
+		<!-- API INTERNA END -->
+		
 	</dependencies>
 
 
@@ -329,6 +340,15 @@
 							<bundleFileName>pinbaladmin-api-externa.war</bundleFileName>
 						</webModule>
 						<!-- API EXTERNA END -->
+
+						<!-- API INTERNA START -->
+						<webModule>
+							<groupId>org.fundaciobit.pinbaladmin</groupId>
+							<artifactId>pinbaladmin-api-interna</artifactId>
+							<contextRoot>/pinbaladminapi/interna</contextRoot>
+							<bundleFileName>pinbaladmin-api-interna.war</bundleFileName>
+						</webModule>
+						<!-- API INTERNA END -->
 					</modules>
 
 				</configuration>

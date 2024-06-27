@@ -373,6 +373,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long portafibIDDesde;
+
+  public java.lang.Long getPortafibIDDesde() {
+    return this.portafibIDDesde;
+  }
+
+  public void setPortafibIDDesde(java.lang.Long portafibIDDesde) {
+    this.portafibIDDesde = portafibIDDesde;
+  }
+
+
+  private java.lang.Long portafibIDFins;
+
+  public java.lang.Long getPortafibIDFins() {
+    return this.portafibIDFins;
+  }
+
+  public void setPortafibIDFins(java.lang.Long portafibIDFins) {
+    this.portafibIDFins = portafibIDFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -410,6 +432,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.consentiment = __toClone.consentiment;
     this.urlconsentiment = __toClone.urlconsentiment;
     this.consentimentadjunt = __toClone.consentimentadjunt;
+    this.portafibIDDesde = __toClone.portafibIDDesde;
+    this.portafibIDFins = __toClone.portafibIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;

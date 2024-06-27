@@ -152,9 +152,13 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
 							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
 
+			
 			if (!isFirmatPelDirector(solicitud)) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, "btn-warning btn-api-pinbal"));
+				
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
+						getContextWeb() + "/enviarAFirmar/" + soliID, "btn-success btn-api-pinbal"));
 			} else {
 				log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
@@ -467,6 +471,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   public void generarFormulari(HttpServletRequest request, Long solicitudID, Properties prop,
       String prefix) throws Exception, I18NException {
 
+	  log.info("Generant formulari per la sol·licitud [" + solicitudID + "]");
+	  
     File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
     File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
@@ -475,7 +481,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
     
     Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
-    while(organGestor.getDir3pare() != null) {
+	while (organGestor.getDir3pare() != null && !organGestor.getDir3pare().equals(organGestor.getDir3())) {
         List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
         if (organ.size() == 1) {
             organGestor = organ.get(0);
@@ -540,7 +546,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		while (true) {
 			String codi = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".CODISERV");
 			log.info(" CODI PER [" + x + "]  => " + codi);
-			if (codi == null) {
+			if (codi == null || codi.trim().isEmpty()) {
+				log.info("No hi ha mes serveis");
 				break;
 			}
 
@@ -618,20 +625,17 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				solicitudServeiEjb.create(ss);
 
 			} else {
-
 				HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
-
 			}
-
+			
+			log.info("Servei [" + x + "][" + +serveiID + "] => " + codi);
 			x++;
-
 		}
 	}
 
 	public static String normalize(String input) {
 		return input == null ? null : Normalizer.normalize(input, Normalizer.Form.NFKD);
 	}
-  
   
   @Override
   protected ModelAndView editAndViewSolicitudGet(Long solicitudID, HttpServletRequest request,
@@ -729,6 +733,24 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       return null;
   }
   
-  
+	@RequestMapping(value = "/enviarAFirmar/{soliID}", method = RequestMethod.GET)
+	public String enviarDocumentAFirmar(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable Long soliID) throws I18NException {
+		
+		try {
+			log.info("Enviem a firmar la sol·licitud [" + soliID + "]");
+			
+	        String nifDestinatari = "45186147W";
+			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soliID, nifDestinatari);
+			
+			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
+			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");
+		} catch (Exception e) {
+			log.error("Error enviant a firmar la sol·licitud [" + soliID + "]", e);
+			HtmlUtils.saveMessageError(request, "Error enviant a firmar la sol·licitud [" + soliID + "]: " + e.getMessage());
+		}
+		return "redirect:" + getContextWeb() + "/view/" + soliID;
+	}
+
   
 }

@@ -52,25 +52,25 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>22</lineNumber>
+          <lineNumber>21</lineNumber>
           <columnNumber>21</columnNumber>
           <source>
-            <modelId>org.fundaciobit.pinbaladmin:pinbaladmin-api-externa:1.0</modelId>
+            <modelId>org.fundaciobit.pinbaladmin:pinbaladmin-api-externa:2.0.0</modelId>
             <location>D:\Projectes\pinbaladmin\pinbaladmin-api-externa\pom.xml</location>
           </source>
         </location>
         <groupIdLocation>
-          <lineNumber>23</lineNumber>
+          <lineNumber>22</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>24</lineNumber>
+          <lineNumber>23</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>320</lineNumber>
+          <lineNumber>321</lineNumber>
           <columnNumber>26</columnNumber>
           <source>
             <modelId>org.fundaciobit.pinbaladmin:pinbaladmin:2.0.0</modelId>
@@ -78,12 +78,12 @@
           </source>
         </versionLocation>
         <typeLocation>
-          <lineNumber>25</lineNumber>
+          <lineNumber>24</lineNumber>
           <columnNumber>19</columnNumber>
           <source reference="../../location/source"/>
         </typeLocation>
         <scopeLocation>
-          <lineNumber>26</lineNumber>
+          <lineNumber>25</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../location/source"/>
         </scopeLocation>
@@ -100,27 +100,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>28</lineNumber>
+          <lineNumber>27</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>29</lineNumber>
+          <lineNumber>28</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>30</lineNumber>
+          <lineNumber>29</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>172</lineNumber>
+          <lineNumber>173</lineNumber>
           <columnNumber>26</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>31</lineNumber>
+          <lineNumber>30</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </scopeLocation>
@@ -137,27 +137,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>34</lineNumber>
+          <lineNumber>33</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>35</lineNumber>
+          <lineNumber>34</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>36</lineNumber>
+          <lineNumber>35</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>37</lineNumber>
+          <lineNumber>36</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>38</lineNumber>
+          <lineNumber>37</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </scopeLocation>
@@ -174,27 +174,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>40</lineNumber>
+          <lineNumber>39</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>41</lineNumber>
+          <lineNumber>40</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>42</lineNumber>
+          <lineNumber>41</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>43</lineNumber>
+          <lineNumber>42</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>44</lineNumber>
+          <lineNumber>43</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </scopeLocation>
@@ -211,27 +211,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>46</lineNumber>
+          <lineNumber>45</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>47</lineNumber>
+          <lineNumber>46</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>48</lineNumber>
+          <lineNumber>47</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>49</lineNumber>
+          <lineNumber>48</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>50</lineNumber>
+          <lineNumber>49</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </scopeLocation>
@@ -248,27 +248,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>54</lineNumber>
+          <lineNumber>53</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>55</lineNumber>
+          <lineNumber>54</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>56</lineNumber>
+          <lineNumber>55</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>212</lineNumber>
+          <lineNumber>213</lineNumber>
           <columnNumber>26</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>58</lineNumber>
+          <lineNumber>57</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </scopeLocation>
@@ -285,27 +285,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>61</lineNumber>
+          <lineNumber>60</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>62</lineNumber>
+          <lineNumber>61</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>63</lineNumber>
+          <lineNumber>62</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>247</lineNumber>
+          <lineNumber>248</lineNumber>
           <columnNumber>26</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>248</lineNumber>
+          <lineNumber>249</lineNumber>
           <columnNumber>24</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </scopeLocation>
@@ -325,39 +325,39 @@
             <groupId>org.fundaciobit.pluginsib.core</groupId>
             <artifactId>pluginsib-core</artifactId>
             <location>
-              <lineNumber>71</lineNumber>
+              <lineNumber>70</lineNumber>
               <columnNumber>28</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </location>
             <groupIdLocation>
-              <lineNumber>73</lineNumber>
+              <lineNumber>72</lineNumber>
               <columnNumber>30</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </groupIdLocation>
             <artifactIdLocation>
-              <lineNumber>74</lineNumber>
+              <lineNumber>73</lineNumber>
               <columnNumber>33</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </artifactIdLocation>
           </org.apache.maven.model.Exclusion>
         </exclusions>
         <location>
-          <lineNumber>66</lineNumber>
+          <lineNumber>65</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>68</lineNumber>
+          <lineNumber>67</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>67</lineNumber>
+          <lineNumber>66</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>69</lineNumber>
+          <lineNumber>68</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
         </versionLocation>
@@ -373,27 +373,27 @@
         <scope>test</scope>
         <exclusions/>
         <location>
-          <lineNumber>59</lineNumber>
+          <lineNumber>60</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>60</lineNumber>
+          <lineNumber>61</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>61</lineNumber>
+          <lineNumber>62</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>62</lineNumber>
+          <lineNumber>63</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>196</lineNumber>
+          <lineNumber>197</lineNumber>
           <columnNumber>24</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </scopeLocation>
@@ -409,27 +409,27 @@
         <scope>provided</scope>
         <exclusions/>
         <location>
-          <lineNumber>64</lineNumber>
+          <lineNumber>65</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>65</lineNumber>
+          <lineNumber>66</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>66</lineNumber>
+          <lineNumber>67</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>67</lineNumber>
+          <lineNumber>68</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </versionLocation>
         <scopeLocation>
-          <lineNumber>68</lineNumber>
+          <lineNumber>69</lineNumber>
           <columnNumber>20</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </scopeLocation>

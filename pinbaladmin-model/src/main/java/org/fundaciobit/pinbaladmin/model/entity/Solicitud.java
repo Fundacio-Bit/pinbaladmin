@@ -95,6 +95,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getConsentimentadjunt();
 	public void setConsentimentadjunt(java.lang.String _consentimentadjunt_);
 
+	public java.lang.Long getPortafibID();
+	public void setPortafibID(java.lang.Long _portafibID_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer
