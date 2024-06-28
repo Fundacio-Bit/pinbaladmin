@@ -740,7 +740,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		try {
 			log.info("Enviem a firmar la sol·licitud [" + soliID + "]");
 			
-	        String nifDestinatari = "45186147W";
+//	        String nifDestinatari = "45186147W";
+	        String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+	        
 			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soliID, nifDestinatari);
 			
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");

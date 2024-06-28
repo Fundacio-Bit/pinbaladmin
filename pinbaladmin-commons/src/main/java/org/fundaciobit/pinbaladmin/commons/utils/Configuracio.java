@@ -280,4 +280,8 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.profile.pades");
     }
 
+	public static String getNIFDirectorGeneral() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.directorgeneral");
+	}
+
 }
