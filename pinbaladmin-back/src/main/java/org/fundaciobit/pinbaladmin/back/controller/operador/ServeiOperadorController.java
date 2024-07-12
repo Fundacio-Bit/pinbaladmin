@@ -5,6 +5,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.ServeiController;
@@ -68,7 +69,7 @@ public class ServeiOperadorController extends ServeiController {
             serveiFilterForm.setAttachedAdditionalJspCode(true);
 
             serveiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
-                    "solicitud.llistat", "javascript:$('#modal_infosoli_{0}').modal('show');", "btn-info"));
+                    "solicitud.llistat", "javascript:$('#modal_infosoli_{0}').modal('show');", AdditionalButtonStyle.INFO));
 
             serveiFilterForm.setVisibleMultipleSelection(false);
         }
@@ -113,7 +114,7 @@ public class ServeiOperadorController extends ServeiController {
             if (servei.getEntitatServeiID() == -1 || servei.getEstatServeiID() == -1) {
                 filterForm.addAdditionalButtonByPK(servei.getServeiID(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "servei.senseestat.plural",
-                                "javascript:alert('revisi estat o cedent')", "btn-danger"));
+                                "javascript:alert('revisi estat o cedent')", AdditionalButtonStyle.DANGER));
                 error = true;
             }
 

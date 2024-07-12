@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.common.AbstractEventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
@@ -61,7 +62,7 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
         emailForm.addHiddenField(ENVIADOR);
 
         emailForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "plantilla",
-                "javascript:document.getElementById('email.message').value = 'prova text plantilla'", "btn-info"));
+                "javascript:document.getElementById('email.message').value = 'prova text plantilla'", AdditionalButtonStyle.INFO));
 
         emailForm.getReadOnlyFields().remove(DESTINATARIS);
 

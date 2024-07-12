@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.OrganController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.OrganFilterForm;
@@ -66,10 +67,10 @@ public class OrganOperadorController extends OrganController {
             organFilterForm.addHiddenField(ENTITATID);
             
             organFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_RELOAD, "actualitzar.dir3",
-                    getContextWeb() + "/updateDir3", "btn-primary"));
+                    getContextWeb() + "/updateDir3", AdditionalButtonStyle.PRIMARY));
 
             organFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-code-branch fa-rotate-90",
-                    "mostrar.jerarquia", "javascript:mostrarJerarquia({0})", "btn-info"));
+                    "mostrar.jerarquia", "javascript:mostrarJerarquia({0})", AdditionalButtonStyle.INFO));
 
             organFilterForm.setAttachedAdditionalJspCode(true);
             organFilterForm.setVisibleFilterBy(true);

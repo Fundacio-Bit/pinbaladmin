@@ -25,6 +25,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.utils.Base64;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumController;
@@ -134,42 +135,42 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
       
       solicitudForm.addAdditionalButton(
-          new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, "btn-info"));
+          new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, AdditionalButtonStyle.INFO));
 
 		solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EDIT, "solicitud.edit",
 				"/operador/solicitud" + (isEstatal ? "estatal" : "local") + "/" + soliID + "/edit",
-          "btn-warning"));
-
+				AdditionalButtonStyle.WARNING));
+		
       String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/"
               + soliID + (isEstatal() == null ? "" : ("/" + isEstatal));
 
       solicitudForm.addAdditionalButton(
-              new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, "btn-success"));
+              new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, AdditionalButtonStyle.SUCCESS));
       
 		if (!isEstatal) {
 			// Si és local
 			solicitudForm.addAdditionalButton(
 					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
-							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, "btn-warning"));
+							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
 
 			
 			if (!isFirmatPelDirector(solicitud)) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
-						getContextWeb() + "/afegirFormulariFirmat/" + soliID, "btn-warning btn-api-pinbal"));
+						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
 				
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
-						getContextWeb() + "/enviarAFirmar/" + soliID, "btn-success btn-api-pinbal"));
+						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.SUCCESS));
 			} else {
 				log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
 				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-						"/operador/altapinbal/vistaprevia/alta/" + soliID, "btn-primary btn-api-pinbal");
+						"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
 
 				AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-						"/operador/altapinbal/consultaestado/" + soliID, "btn-secondary btn-api-pinbal");
+						"/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
 
 				AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, "btn-success btn-api-pinbal");
+						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
 
 				if (solicitud.getEstatpinbal() == null) {
 					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
@@ -209,7 +210,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			
 			//Boto per enviar correus als cedents
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
-					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, "btn-warning btn-correu-cedents"));
+					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
 		}
       
       

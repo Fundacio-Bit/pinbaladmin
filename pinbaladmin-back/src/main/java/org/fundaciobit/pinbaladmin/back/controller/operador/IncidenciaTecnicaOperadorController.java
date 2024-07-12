@@ -20,6 +20,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.utils.Utils;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
@@ -182,7 +183,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             }
 
             incidenciaTecnicaFilterForm.addAdditionalButtonForEachItem(new AdditionalButton("fas fa-bullhorn", "events.titol",
-                    EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}", "btn-success"));
+                    EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/{0}", AdditionalButtonStyle.SUCCESS));
 
 
             // Valors Inicials Filtre

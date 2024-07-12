@@ -18,6 +18,7 @@ import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
@@ -190,7 +191,7 @@ public class TramitIOperadorController extends TramitIServController {
         
         
         tramitForm.setSaveButtonVisible(false);
-		tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.save", "javascript:submitForm();", "btn-primary"));
+		tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.save", "javascript:submitForm();", AdditionalButtonStyle.PRIMARY));
         
 		request.setAttribute("normesAfegides", normesAfegides);
 		request.getSession().setAttribute("tramitid", tramitID);
@@ -234,19 +235,19 @@ public class TramitIOperadorController extends TramitIServController {
             tramitIServFilterForm.getAdditionalButtons().clear();
 
             tramitIServFilterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramit.i.afegir.servei",
-            		getContextWeb() + "/new?tramitid=" + uuid, "btn-info"));
+            		getContextWeb() + "/new?tramitid=" + uuid, AdditionalButtonStyle.INFO));
             
             tramitIServFilterForm.addAdditionalButton(
-                    new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+                    new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, AdditionalButtonStyle.DANGER));
 
             Long serveisAfegits = tramitIServLogicEjb.count(TRAMITID.equal(tramitID));
 			if (serveisAfegits > 0) {
 				tramitIServFilterForm.addAdditionalButton(new AdditionalButton("", "genapp.continue",
-						getContextWebNext() + "/next/" + uuid, "btn-primary"));
+						getContextWebNext() + "/next/" + uuid, AdditionalButtonStyle.PRIMARY));
 			}
 			
 			tramitIServFilterForm.addAdditionalButton(new AdditionalButton("",
-					"genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, "btn-info"));
+					"genapp.pagination.anterior", getContextWebPrev() + "/back/" + uuid, AdditionalButtonStyle.INFO));
 			
 			
             {

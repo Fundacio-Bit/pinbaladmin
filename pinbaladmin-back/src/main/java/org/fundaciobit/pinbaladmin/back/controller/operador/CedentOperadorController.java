@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatServeiController;
@@ -64,8 +65,10 @@ public class CedentOperadorController extends EntitatServeiController {
             entitatServeiFilterForm.setVisibleMultipleSelection(false);
 
             entitatServeiFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_FILE,
-                    "documentscedent", "/operador/cedent/documents/{0}", "btn-info"));
-
+                    "documentscedent", "/operador/cedent/documents/{0}", AdditionalButtonStyle.INFO));
+            
+            new AdditionalButton(_TABLE_TRANSLATION, _TABLE_SQL, _TABLE_MODEL, AdditionalButtonStyle.INFO);
+            
             entitatServeiFilterForm.setItemsPerPage(20);
 
             entitatServeiFilterForm.addLabel(BALEARS, "=Illes");

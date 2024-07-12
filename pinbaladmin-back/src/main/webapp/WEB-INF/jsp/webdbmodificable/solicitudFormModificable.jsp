@@ -2,14 +2,20 @@
 	$(".fa-bullhorn").parent().insertBefore($("#solicitudForm").prev());
 	$(".fa-bullhorn").parent().css("float", "right");
 	
-    $(".btn-api-pinbal").insertBefore($("#solicitudForm").prev());
-    $(".btn-api-pinbal").css("float", "right");
-    $(".btn-api-pinbal").css("margin-right", "1rem");
 
-    $(".btn-correu-cedents").insertBefore($("#solicitudForm").prev());
-    $(".btn-correu-cedents").css("float", "right");
-    $(".btn-correu-cedents").css("margin-right", "1rem");
 
+	var botonsPerPujar = [ "/altapinbal/vistaprevia/alta/",
+			"/altapinbal/consultaestado/",
+			"/altapinbal/vistaprevia/modificacio/", "/enviarAFirmar/",
+			"/afegirFormulariFirmat/", "/solicitudestatal/enviarcorreucedents/" ]
+
+	for (var i = 0; i < botonsPerPujar.length; i++) {
+		var elem = $('a[href*="' + botonsPerPujar[i] + '"]');
+
+		$(elem).insertBefore($("#solicitudForm").prev());
+		$(elem).css("float", "right");
+		$(elem).css("margin-right", "1rem");
+	}
 </script>
 
 <!-- Canvi de tamany de les columnes de la vista d'una sol·licitud -->

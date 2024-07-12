@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DepartamentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentFilterForm;
@@ -48,7 +49,7 @@ public class DepartamentOperadorController extends DepartamentController {
 
             departamentFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE,
                     "genapp.viewtitle", "/operador/solicitudlocal/list/1?departamentIDDesde={0}&departamentIDFins={0}",
-                    "btn-info"));
+                    AdditionalButtonStyle.INFO));
 
             // /pinbaladmin
 

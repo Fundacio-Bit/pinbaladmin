@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })
 public class IncidenciaTecnicaNoLlegitMeuOperadorController extends IncidenciaTecnicaOperadorController {
 
+	
     @Override
     public VistaIncidencia getVistaIncidencia() {
         return VistaIncidencia.NOLLEGITSMEUS;

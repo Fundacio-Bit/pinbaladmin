@@ -12,6 +12,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitHProcController;
@@ -129,13 +130,13 @@ public class TramitHOperadorController extends TramitHProcController {
         tramitForm.setSaveButtonVisible(false);
 
         tramitForm.addAdditionalButton(new AdditionalButton("", "genapp.pagination.anterior",
-                getContextWebPrev() + "/back/" + uuid, "btn-info"));
+                getContextWebPrev() + "/back/" + uuid, AdditionalButtonStyle.INFO));
 
         tramitForm.addAdditionalButton(
-        		new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", "btn-primary"));
+        		new AdditionalButton("", "genapp.continue", "javascript: $('form').submit();", AdditionalButtonStyle.PRIMARY));
         
         tramitForm.addAdditionalButton(
-                new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, "btn-danger"));
+                new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, AdditionalButtonStyle.DANGER));
 
         {
             TramitAOperadorController.dadesWizard(request, tramitID, actual(), isPublic(), tramitAPersAutLogicEjb);

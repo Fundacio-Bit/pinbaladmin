@@ -31,6 +31,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.utils.Utils;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
@@ -522,7 +523,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     groupList.add(ESTATPINBAL);
                     
                     solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_SEARCH, "filtre.organ",
-                            "javascript:openFiltreOrgans();", "btn-warning"));
+                            "javascript:openFiltreOrgans();", AdditionalButtonStyle.WARNING));
                     
                 }
                 
@@ -566,19 +567,19 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             // solicitudFilterForm.setActionsRenderer(2);
 
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
-                    "servei.servei.plural", "javascript:$('#modal_infoservei_{0}').modal('show');", "btn-info"));
+                    "servei.servei.plural", "javascript:$('#modal_infoservei_{0}').modal('show');", AdditionalButtonStyle.INFO));
 
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE,
-                    "solicitud.vistacompleta", "/operador/solicitudfullview/view/{0}", "btn-info"));
+                    "solicitud.vistacompleta", "/operador/solicitudfullview/view/{0}", AdditionalButtonStyle.INFO));
 
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
-                    getContextWeb() + "/fullexport", "btn-info"));
+                    getContextWeb() + "/fullexport", AdditionalButtonStyle.INFO));
 
             solicitudFilterForm
                     .addAdditionalButtonForEachItem(new AdditionalButton(
                             "fas fa-bullhorn", "events.titol", EventSolicitudOperadorController.CONTEXTWEB
                                     + "/veureevents/{0}" + (isestatal == null ? "" : ("/" + isestatal)),
-                            "btn-success"));
+                            AdditionalButtonStyle.SUCCESS));
 
             solicitudFilterForm.setVisibleMultipleSelection(true);
 
@@ -705,7 +706,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 error = true;
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitud.senseestat",
-                                "javascript:alert('Revisi estat o codi de procediment.')", "btn-danger"));
+                                "javascript:alert('Revisi estat o codi de procediment.')", AdditionalButtonStyle.DANGER));
 
             } else {
                 Long count = solicitudServeiEjb
@@ -714,7 +715,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 if (count != 0) {
                     filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                             new AdditionalButton(IconUtils.ICON_WARNING, "solicitudservei.senseestat",
-                                    "javascript:alert('Revisi els estats dels serveis associats.')", "btn-danger"));
+                                    "javascript:alert('Revisi els estats dels serveis associats.')", AdditionalButtonStyle.DANGER));
                     error = true;
                 }
             }

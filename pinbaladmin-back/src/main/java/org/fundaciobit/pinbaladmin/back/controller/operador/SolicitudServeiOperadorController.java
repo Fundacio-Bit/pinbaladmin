@@ -19,6 +19,7 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
@@ -239,7 +240,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             solicitudServeiFilterForm.getAdditionalButtons().clear();
 
             solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
-                    "solicitudservei.afegirservei", getContextWeb() + "/new", "btn-success"));
+                    "solicitudservei.afegirservei", getContextWeb() + "/new", AdditionalButtonStyle.SUCCESS));
 
             String entEstatal = solicitudLogicaEjb.executeQueryOne(SolicitudFields.ENTITATESTATAL,
                     SolicitudFields.SOLICITUDID.equal(soli));
@@ -247,7 +248,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             if (entEstatal == null) {
                 solicitudServeiFilterForm.addAdditionalButton(
                         new AdditionalButton(IconUtils.ICON_RELOAD, "solicitudservei.generarplantillaexcel",
-                                getContextWeb() + "/generaplantillaexcelserveis", "btn-warning"));
+                                getContextWeb() + "/generaplantillaexcelserveis", AdditionalButtonStyle.WARNING));
             }
 
             Long serveisNoAutoritzats = solicitudServeiLogicaEjb
@@ -256,7 +257,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
             if (serveisNoAutoritzats > 0) {
                 solicitudServeiFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
-                        "solicitudservei.autoritzartots", getContextWeb() + "/autoritzartots", "btn-primary"));
+                        "solicitudservei.autoritzartots", getContextWeb() + "/autoritzartots", AdditionalButtonStyle.PRIMARY));
             }
         }
 
@@ -424,26 +425,37 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             List<SolicitudServei> list) throws I18NException {
 
         boolean error = false;
+        
+        Long soliID = getSolicitudID(request);
 
+		String entitatEstatal = solicitudLogicaEjb.executeQueryOne(SolicitudFields.ENTITATESTATAL,
+				SolicitudFields.SOLICITUDID.equal(soliID));
+		boolean estatal = entitatEstatal != null && entitatEstatal.trim().length() > 0;
+        
         filterForm.getAdditionalButtonsByPK().clear();
 
         for (SolicitudServei solicitudServei : list) {
+        	
             if (solicitudServei.getEstatSolicitudServeiID() == -1) {
                 error = true;
                 filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitudservei.senseestat",
-                                "javascript:alert('Revisi estat')", "btn-danger"));
+                                "javascript:alert('Revisi estat')", AdditionalButtonStyle.DANGER));
             } else {
+            	
                 if (solicitudServei.getEstatSolicitudServeiID() != 50) {
                     filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
                             new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
                                     "solicitudservei.autoritzarservei",
-                                    getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), "btn-primary"));
-                    
-                    filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
-                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_ENVELOPE),
-                                    "solicitudservei.envaircorreucedent",
-                                    getContextWeb() + "/enviarcorreucedent/" + solicitudServei.getId(), "btn-success"));
+                                    getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), AdditionalButtonStyle.PRIMARY));
+					
+					if (estatal) {
+						filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
+								new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_ENVELOPE),
+										"solicitudservei.envaircorreucedent",
+										getContextWeb() + "/enviarcorreucedent/" + solicitudServei.getId(),
+										AdditionalButtonStyle.SUCCESS));
+					}
                 }
             }
         }

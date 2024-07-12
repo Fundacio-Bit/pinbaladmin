@@ -11,6 +11,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentCedentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentCedentFilterForm;
@@ -87,7 +88,7 @@ public class DocumentCedentOperatorController extends DocumentCedentController {
             documentCedentFilterForm.setGroupByFields(groupby);
 
             documentCedentFilterForm.addAdditionalButton(
-                    new AdditionalButton(IconUtils.ICON_ARROW_LEFT, "tornar", "/operador/cedent/list", "btn-info"));
+                    new AdditionalButton(IconUtils.ICON_ARROW_LEFT, "tornar", "/operador/cedent/list", AdditionalButtonStyle.INFO));
         }
         return documentCedentFilterForm;
     }

@@ -22,6 +22,7 @@ import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
@@ -141,11 +142,11 @@ public class LlistaCorreusOperadorController extends EmailController {
             emailFilterForm.setActionsRenderer(EmailFilterForm.ACTIONS_RENDERER_DROPDOWN_BUTTON);
 
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_WARNING,
-                    "incidencia.convertir", "javascript:crearIncidencia({0})", "btn-warning")); // getContextWeb() + "/incidencia/{0}"
+                    "incidencia.convertir", "javascript:crearIncidencia({0})", AdditionalButtonStyle.WARNING)); // getContextWeb() + "/incidencia/{0}"
 
             // Afegir boto per Solicitud
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
-                    "solicitud.convertir", "javascript:crearSolicitud({0})", "btn-success")); // getContextWeb() + \"/solicitud/{0}\"
+                    "solicitud.convertir", "javascript:crearSolicitud({0})", AdditionalButtonStyle.SUCCESS)); // getContextWeb() + \"/solicitud/{0}\"
         }
 
         // Tramitadors
@@ -216,7 +217,7 @@ public class LlistaCorreusOperadorController extends EmailController {
         emailFilterForm.getAdditionalButtons().clear();
 		if (mostrarMissatgeArxiu) {
 			emailFilterForm.addAdditionalButton(new AdditionalButton("fas fa-eye-slash", "amagarmissatgearxiu",
-					getContextWeb() + "/amagarmissatgearxiu", "btn-info"));
+					getContextWeb() + "/amagarmissatgearxiu", AdditionalButtonStyle.INFO));
 
 			{
 				AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
@@ -241,7 +242,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 			}
 		} else {
             emailFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EYE, "mostrarmissatgearxiu",
-                    getContextWeb() + "/mostrarmissatgearxiu", "btn-info"));
+                    getContextWeb() + "/mostrarmissatgearxiu", AdditionalButtonStyle.INFO));
             
             emailFilterForm.getAdditionalFields().remove(ATTACHMENTS);
             emailFilterForm.getAdditionalFields().remove(MISSATGE22);

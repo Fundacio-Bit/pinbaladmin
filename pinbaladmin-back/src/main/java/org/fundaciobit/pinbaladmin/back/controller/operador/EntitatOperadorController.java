@@ -12,6 +12,7 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatController;
@@ -81,7 +82,7 @@ public class EntitatOperadorController extends EntitatController {
             entitatFilterForm.setVisibleMultipleSelection(false);
 
             entitatFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
-                    "solicitud.llistat", "javascript:$('#modal_infosoli_{0}').modal('show');", "btn-info"));
+                    "solicitud.llistat", "javascript:$('#modal_infosoli_{0}').modal('show');", AdditionalButtonStyle.INFO));
 
             AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
             adfield4.setCodeName("=Docs.");
@@ -93,7 +94,7 @@ public class EntitatOperadorController extends EntitatController {
 
             // Boto per afegir, editar o modificar documents de l'entitat
             entitatFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_FILE,
-                    "documentsentitatlocal", "/operador/entitat/documents/{0}", "btn-success"));
+                    "documentsentitatlocal", "/operador/entitat/documents/{0}", AdditionalButtonStyle.SUCCESS));
 
             entitatFilterForm.setAttachedAdditionalJspCode(true);
         }

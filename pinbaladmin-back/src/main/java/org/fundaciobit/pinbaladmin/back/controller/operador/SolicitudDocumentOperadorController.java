@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
@@ -102,7 +103,7 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
                 documentFilterForm.setAddButtonVisible(false);
                 documentFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
-                        "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", "btn-warning"));
+                        "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", AdditionalButtonStyle.WARNING));
 
                 documentFilterForm.setVisibleMultipleSelection(false);
 

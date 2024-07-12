@@ -14,6 +14,7 @@ import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
@@ -118,7 +119,7 @@ public class EmailOperatorController extends EmailController {
             emailFilterForm.setVisibleExportList(false);
 
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE, "genapp.viewtitle",
-                    getContextWeb() + "/view/{0}", "btn-info"));
+                    getContextWeb() + "/view/{0}", AdditionalButtonStyle.INFO));
 
         }
 
@@ -150,7 +151,7 @@ public class EmailOperatorController extends EmailController {
             emailForm.setSaveButtonVisible(false);
 
             emailForm.addAdditionalButton(new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_ENVELOPE), "enviar",
-                    "javascript: document.getElementById('emailForm').submit();", "btn-primary"));
+                    "javascript: document.getElementById('emailForm').submit();", AdditionalButtonStyle.PRIMARY));
 
         } else {
             // only view

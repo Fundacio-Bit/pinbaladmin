@@ -15,6 +15,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TiquetController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TiquetFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TiquetForm;
@@ -91,7 +92,7 @@ public class TiquetOperadorController extends TiquetController implements Consta
             switch (estat) {
                 case ESTATTIQUET_PENDENT:
                     tiquetForm.addAdditionalButton(new AdditionalButton("fas fa-hand-point-right", "assignar",
-                            getContextWeb() + "/assignar/" + tiquet.getTiquetID(), "btn-success"));
+                            getContextWeb() + "/assignar/" + tiquet.getTiquetID(), AdditionalButtonStyle.SUCCESS));
                     tiquetForm.addHiddenField(DATAINICI);
                     tiquetForm.addHiddenField(SOLUCIONATPER);
 
@@ -99,7 +100,7 @@ public class TiquetOperadorController extends TiquetController implements Consta
 
                 case ESTATTIQUET_ASSIGNAT:
                     tiquetForm.addAdditionalButton(new AdditionalButton("fas fa-thumbs-up", "arreglar",
-                            getContextWeb() + "/arreglar/" + tiquet.getTiquetID(), "btn-success"));
+                            getContextWeb() + "/arreglar/" + tiquet.getTiquetID(), AdditionalButtonStyle.SUCCESS));
                     tiquetForm.addLabel(SOLUCIONATPER, "assignar");
                     tiquetForm.addReadOnlyField(SOLUCIONATPER);
                     tiquetForm.addReadOnlyField(DATAINICI);
@@ -121,7 +122,7 @@ public class TiquetOperadorController extends TiquetController implements Consta
             if (estat != ESTATTIQUET_ARREGLAT && estat != ESTATTIQUET_NO_ARREGLAT) {
 
                 tiquetForm.addAdditionalButton(new AdditionalButton("fas fa-thumbs-down", "noarreglat",
-                        getContextWeb() + "/noarreglat/" + tiquet.getTiquetID(), "btn-warning"));
+                        getContextWeb() + "/noarreglat/" + tiquet.getTiquetID(), AdditionalButtonStyle.WARNING));
 
                 tiquetForm.addHiddenField(DATAFI);
             }
