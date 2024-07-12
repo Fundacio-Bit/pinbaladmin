@@ -31,7 +31,7 @@ public class FileDownloadController {
 
     protected static final Logger log = Logger.getLogger(FileDownloadController.class);
 
-    protected static final String CONTEXTWEB = "/common/arxiu/";
+    protected static final String CONTEXTWEB = "/public/arxiu/";
 
     /**
      * 
