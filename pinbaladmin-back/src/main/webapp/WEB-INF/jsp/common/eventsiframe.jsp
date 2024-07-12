@@ -1312,14 +1312,14 @@ textarea.event {
     EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
     EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT_TRAMITADOR
 
-    EVENT_TIPUS_COMENTARI_SUPORT = -2; // PUBLIC SUPORT
+    EVENT_TIPUS_COMENTARI_SUPORT = -2; // PRIVAT SUPORT
     
     EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1; // PUBLIC_TRAMITADOR
     EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC_CONTACTE
     EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
  -->
 
-				<c:set var="isPublicEvent" value="${(event.tipus != -3) && (event.tipus != -1) && (event.tipus != 3)}" />
+				<c:set var="isPublicEvent" value="${(event.tipus==1) || (event.tipus==-2)}" />
 				<c:set var="isContacte" value="${event.tipus == 2}" />
 				<c:set var="isCedent" value="${(event.tipus==3) || (event.tipus==-3)}" />
 				<c:set var="isSuport" value="${event.tipus == -2}" />
