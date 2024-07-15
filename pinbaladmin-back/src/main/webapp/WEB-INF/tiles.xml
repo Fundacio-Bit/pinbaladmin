@@ -303,6 +303,13 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/infoCorreusCedents.jsp" />
     </definition>
 
+    <definition name="eventEnviatOperadorForm" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventForm.jsp" />
+    </definition>
+
+    <definition name="eventEnviatOperadorList" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventList.jsp"/>
+    </definition>
 
     <!-- =====   TRAMIT SISTRA OPERADOR ===== -->
     <definition name="tramitSistraListOperador" extends="operador_base">

@@ -11,6 +11,7 @@
 	public static final int EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
 	public static final int EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
 --%>
+	
 	function onChangeTipus(select) {
 
 		if (select === null) {
