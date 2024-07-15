@@ -48,7 +48,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
 	@Override
 	public boolean showAdvancedFilter() {
-		return false;
+		return true;
 	}
 
 	/**

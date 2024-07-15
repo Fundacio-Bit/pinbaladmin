@@ -442,7 +442,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
         
-        log.info("------------------------------------\n\n"
+        log.info("\n------------------------------------\n\n"
          + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") + "|\n"
          + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") + "|\n"
          + "\n"
@@ -456,7 +456,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         if (solicitudFilterForm.isNou()) {
 
             {
-
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
                 adfield4.setCodeName("=Sense Llegir");
                 adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
@@ -465,12 +464,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 adfield4.setValueMap(new HashMap<Long, String>());
 
                 solicitudFilterForm.addAdditionalField(adfield4);
-
             }
 
             Boolean isestatal = isEstatal();
 
-            // ocultam tot
+            // ocultam tot menys els que volem veure
             Set<Field<?>> hiddenFields = new HashSet<Field<?>>(Arrays.asList(SolicitudFields.ALL_SOLICITUD_FIELDS));
 
             hiddenFields.remove(SolicitudFields.PROCEDIMENTCODI);
@@ -479,7 +477,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             hiddenFields.remove(SolicitudFields.DATAINICI);
 
             // hiddenFields.remove(SolicitudFields.AREAID);
-
             if (isestatal == null) {
                 // XYZ ZZZ
                 // solicitudFilterForm.getHiddenFields().remove(ENTITATLOCALID);
@@ -493,17 +490,20 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 adfield4.setEscapeXml(false);
 
                 solicitudFilterForm.addAdditionalField(adfield4);
-
                 solicitudFilterForm.setAddButtonVisible(false);
 
             } else {
                 List<Field<?>> filterList = new ArrayList<Field<?>>(solicitudFilterForm.getDefaultFilterByFields());
                 List<Field<?>> groupList = new ArrayList<Field<?>>(solicitudFilterForm.getDefaultGroupByFields());
+
+                filterList.remove(PINFO);
+                filterList.remove(DATAINICI);
+                filterList.remove(DATAFI);
+                filterList.remove(ESTATID);
+                
                 if (isestatal) {
                     hiddenFields.remove(ENTITATESTATAL);
-                    hiddenFields.add(SolicitudFields.DEPARTAMENTID);
-                    filterList.remove(PINFO);
-//
+//                    hiddenFields.add(SolicitudFields.DEPARTAMENTID);
                 } else {
                     AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
                     adfield.setCodeName("=Organ Gestor");
@@ -513,18 +513,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
                     solicitudFilterForm.addAdditionalField(adfield);
                     
-                    filterList.remove(PINFO);
                     filterList.remove(EXPEDIENTPID);
                     filterList.remove(ENTITATESTATAL);
-                    groupList.remove(ENTITATESTATAL);
-                    
-                    filterList.add(ORGANID);
+
                     groupList.add(ORGANID);
                     groupList.add(ESTATPINBAL);
+                    groupList.remove(ENTITATESTATAL);
                     
                     solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_SEARCH, "filtre.organ",
                             "javascript:openFiltreOrgans();", AdditionalButtonStyle.WARNING));
-                    
                 }
                 
                 solicitudFilterForm.setFilterByFields(filterList);
@@ -1191,14 +1188,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             final boolean isNumber = PinbalAdminUtils.isNumber(af);
 
-            // PInfo, Departament, Area o Entitat
-            Where w = Where.OR(PINFO.like(likeStr), new SolicitudQueryPath().DEPARTAMENT().NOM().like(likeStr),
-                    new SolicitudQueryPath().DEPARTAMENT().AREA().NOM().like(likeStr),
-                    new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().NOM().like(likeStr));
+            // PInfo, Organ Gestor, Entitat
+            Where w = Where.OR(PINFO.like(likeStr), new SolicitudQueryPath().ORGAN().NOM().like(likeStr),
+                    new SolicitudQueryPath().ORGAN().DIR3().like(likeStr),
+                    new SolicitudQueryPath().ORGAN().ENTITAT().NOM().like(likeStr));
 
             // identificador de consulta o numero seguiment de la solicitud
             if (isNumber) {
-                w = Where.OR(w, SolicitudFields.NOTES.like(likeStr));
+                w = Where.OR(w, SolicitudFields.SOLICITUDID.equal(Long.parseLong(af)),  SolicitudFields.NOTES.like(likeStr));
             }
 
             // Procediment: codi i nom

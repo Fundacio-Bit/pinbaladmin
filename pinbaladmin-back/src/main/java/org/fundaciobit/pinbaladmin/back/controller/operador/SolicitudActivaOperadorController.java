@@ -50,7 +50,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
     @Override
     public boolean showAdvancedFilter() {
-        return false;
+        return true;
     }
 
 }
