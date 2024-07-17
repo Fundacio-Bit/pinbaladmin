@@ -243,7 +243,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             solicitudForm.setAttachedAdditionalJspCode(true);
             
-            soli.setEstatID(10L);
+            soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
@@ -699,7 +699,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         for (Solicitud soli : list) {
 
-            if (soli.getEstatID() == -1L || soli.getProcedimentCodi().startsWith("CODI_")) {
+            if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_SENSE_ESTAT || soli.getProcedimentCodi().startsWith("CODI_")) {
                 error = true;
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitud.senseestat",
@@ -1431,15 +1431,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         List<StringKeyValue> __tmp;
         if (estatal) {
             __tmp = new java.util.ArrayList<StringKeyValue>();
-            for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD.entrySet()) {
-                Long key = entry.getKey();
-                if (key == 40L || key == 10L || key == 60L || key == 20L) {
-                    String val = entry.getValue();
-                    __tmp.add(new StringKeyValue(String.valueOf(key), val));
-                }
+            for (long estat : Constants.ESTATS_SOLICITUD) {
+            	if (estat == 40L || estat == 10L || estat == 60L || estat == 20L) {
+            		String key = String.valueOf(estat);
+            		__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
+            	}
             }
         } else {
-            __tmp = super.getReferenceListForEstatID(request, mav, solicitudForm, where);
+            __tmp = getReferenceListForEstatID(request, mav, where);
         }
 
         return __tmp;
@@ -1450,10 +1449,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD.entrySet()) {
-            Long key = entry.getKey();
-            String val = entry.getValue();
-            __tmp.add(new StringKeyValue(String.valueOf(key), val));
+        
+        for (long estat : Constants.ESTATS_SOLICITUD) {
+            String key = String.valueOf(estat);
+            __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
         }
 
         return __tmp;
@@ -1493,19 +1492,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
         //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
     }    
-    
-    public static final Map<Long, String> ESTATS_SOLICITUD = new HashMap<Long, String>();
-
-    static {
-        ESTATS_SOLICITUD.put(-1L, "Sense Estat");
-        ESTATS_SOLICITUD.put(10L, "Pendent");
-        ESTATS_SOLICITUD.put(15L, "Pendent Firma Director");
-        ESTATS_SOLICITUD.put(20L, "Pendent d'autoritzar");
-        ESTATS_SOLICITUD.put(30L, "Esmenes");
-        ESTATS_SOLICITUD.put(40L, "Autoritzat");
-        ESTATS_SOLICITUD.put(50L, "Pendent pinfo");
-        ESTATS_SOLICITUD.put(60L, "Tancat");
-    }
 
     /*
      * 

@@ -53,9 +53,7 @@ public interface Constants {
     public static final int EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
     public static final int EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
 
-    /**
-     * Estat de Incidències Tecniques
-     */
+    // Estat de Incidències Tecniques
     public static final int ESTAT_INCIDENCIA_OBERTA = 0;
     public static final int ESTAT_INCIDENCIA_PENDENT_DE_TERCER = 1;
     public static final int ESTAT_INCIDENCIA_TANCADA = 2;
@@ -65,6 +63,7 @@ public interface Constants {
     public static final int INCIDENCIA_TIPUS_INTEGRACIONS = 3;
     public static final int INCIDENCIA_TIPUS_ROLEPERMISOS = 4;
 
+    // Estats de una solicitud
     public static final long SOLICITUD_ESTAT_SENSE_ESTAT = -1;
     public static final long SOLICITUD_ESTAT_PENDENT = 10;
     public static final long SOLICITUD_ESTAT_PENDENT_Firma_Director = 15;
@@ -74,7 +73,30 @@ public interface Constants {
     public static final long SOLICITUD_ESTAT_PENDENT_PINFO = 50;
     public static final long SOLICITUD_ESTAT_TANCAT = 60;
     
+	public static final long[] ESTATS_SOLICITUD = { SOLICITUD_ESTAT_SENSE_ESTAT, SOLICITUD_ESTAT_PENDENT,
+			SOLICITUD_ESTAT_PENDENT_Firma_Director, SOLICITUD_ESTAT_PENDENT_AUTORITZAR, SOLICITUD_ESTAT_ESMENES,
+			SOLICITUD_ESTAT_AUTORITZAT, SOLICITUD_ESTAT_PENDENT_PINFO, SOLICITUD_ESTAT_TANCAT };
     
+	//Estats Soliciud Servei
+    public static final long ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT = -1L;
+    public static final long ESTAT_SOLICITUD_SERVEI_PENDENT_ESMENES = 1L;
+    public static final long ESTAT_SOLICITUD_SERVEI_REBUT = 10L;
+    public static final long ESTAT_SOLICITUD_SERVEI_PASSAT_A_FIRMA = 20L;
+    public static final long ESTAT_SOLICITUD_SERVEI_FIRMAT = 30L;
+    public static final long ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR = 40L;
+    public static final long ESTAT_SOLICITUD_SERVEI_AUTORITZAT = 50L;
+    public static final long ESTAT_SOLICITUD_SERVEI_DESESTIMAT = 60L;
+    public static final long ESTAT_SOLICITUD_SERVEI_DISCONTINUAT = 80L;
+    public static final long ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE = 90L;
+    
+	public static final long[] ESTATS_SOLICITUD_SERVEI = { ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT,
+			ESTAT_SOLICITUD_SERVEI_PENDENT_ESMENES, ESTAT_SOLICITUD_SERVEI_REBUT,
+			ESTAT_SOLICITUD_SERVEI_PASSAT_A_FIRMA, ESTAT_SOLICITUD_SERVEI_FIRMAT,
+			ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR, ESTAT_SOLICITUD_SERVEI_AUTORITZAT,
+			ESTAT_SOLICITUD_SERVEI_DESESTIMAT, ESTAT_SOLICITUD_SERVEI_DISCONTINUAT,
+			ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE };
+	
+	
     public static final Long DOCUMENT_SOLICITUD_ALTRES = 0L;
     public static final Long DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF = 1L;
     public static final Long DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT = 2L;

@@ -225,7 +225,7 @@ public class MailCedentInfo {
 		try {
 			Where wSoli = SolicitudServeiFields.SOLICITUDID.equal(soliID);
 
-			Long estat = 40L; // ESTATS_SOLICITUD_SERVEI - 40L - Pendent d'autoritzar
+			Long estat = Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 
 			for (Servei servei : this.getServeis()) {
 				Where wServei = ServeiFields.CODI.equal(servei.getCodi());

@@ -18,6 +18,7 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudServeiController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
@@ -216,8 +217,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
             long id = solicitudServei.getId();
 
             // SOLICITUD-SERVEI
-            mapSoliServEstat.put(id,
-                    SolicitudServeiOperadorController.ESTATS_SOLICITUD_SERVEI.get(solicitudServei.getEstatSolicitudServeiID()));
+            mapSoliServEstat.put(id, I18NUtils.tradueix("estat.solicitudservei." + solicitudServei.getEstatSolicitudServeiID()));
 
             // SERVEI
             long serveiID = solicitudServei.getServeiID();
@@ -257,7 +257,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
 
             // mapData.put(id, df.format(solicitud.getDataInici()));
 
-            mapEstatSoli.put(id, SolicitudOperadorController.ESTATS_SOLICITUD.get(solicitud.getEstatID()));
+            mapEstatSoli.put(id, I18NUtils.tradueix("solicitud.estat." + solicitud.getEstatID()));
 
         }
 

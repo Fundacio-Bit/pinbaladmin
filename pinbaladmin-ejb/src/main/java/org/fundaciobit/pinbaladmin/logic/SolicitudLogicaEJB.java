@@ -1270,8 +1270,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
-            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
-            estatPendentMadrid |= ss.getEstatSolicitudServeiID() == 10L; //ESTATS_SOLICITUD_SERVEI: 10L -> Rebut
+            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
+            estatPendentMadrid |= ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_REBUT; 
             
             if (!balear && estatPendentMadrid) {
 
@@ -1713,8 +1713,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
             boolean balear = ss.getServei().getEntitatServei().isBalears();
-            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
-            estatPendentMadrid |= ss.getEstatSolicitudServeiID() == 10L; //ESTATS_SOLICITUD_SERVEI: 10L -> Rebut
+            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
+            estatPendentMadrid |= ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_REBUT;
             
             if (!balear && estatPendentMadrid) {
 
@@ -1825,7 +1825,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //
 //        for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
 //            boolean balear = ss.getServei().getEntitatServei().isBalears();
-//            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == 40L; //ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+//            boolean estatPendentMadrid = ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR; 
 //            
 //            if (!balear && estatPendentMadrid) {
 //                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio servicio = new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Servicio();

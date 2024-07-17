@@ -160,7 +160,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
 
         solicitud.setProcedimentNom(proc.getNom());
 
-        solicitud.setEstatID(10L);
+        solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
         solicitud.setEntitatEstatal(info.getEntitat());
         solicitud.setExpedientPid(info.getExpedientPID());
         

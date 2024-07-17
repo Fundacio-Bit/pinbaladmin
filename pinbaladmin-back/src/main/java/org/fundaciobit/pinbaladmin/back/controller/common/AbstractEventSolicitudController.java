@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudOperadorController;
@@ -117,7 +118,7 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @Override
     public String getEstat(Solicitud item) throws I18NException {
-        return SolicitudOperadorController.ESTATS_SOLICITUD.get(item.getEstatID());
+    	return I18NUtils.tradueix("solicitud.estat." + item.getEstatID());
     }
     
     @Override

@@ -436,14 +436,14 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
         for (SolicitudServei solicitudServei : list) {
         	
-            if (solicitudServei.getEstatSolicitudServeiID() == -1) {
+            if (solicitudServei.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT) {
                 error = true;
                 filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
                         new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitudservei.senseestat",
                                 "javascript:alert('Revisi estat')", AdditionalButtonStyle.DANGER));
             } else {
             	
-                if (solicitudServei.getEstatSolicitudServeiID() != 50) {
+                if (solicitudServei.getEstatSolicitudServeiID() != Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT) {
                     filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
                             new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
                                     "solicitudservei.autoritzarservei",
@@ -536,31 +536,14 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
     public static List<StringKeyValue> getReferenceListForEstatSolicitudServeiIDStatic() throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        for (Map.Entry<Long, String> entry : ESTATS_SOLICITUD_SERVEI.entrySet()) {
-            Long key = entry.getKey();
-            String val = entry.getValue();
-            __tmp.add(new StringKeyValue(String.valueOf(key), val));
+        for (long estat : Constants.ESTATS_SOLICITUD_SERVEI) {
+            String key = String.valueOf(estat);
+            __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("estat.solicitudservei." + key)));
         }
-
 
         return __tmp;
     }
     
-    public static final Map<Long, String> ESTATS_SOLICITUD_SERVEI = new HashMap<Long, String>();
-
-    static {
-        ESTATS_SOLICITUD_SERVEI.put(-1L, "Sense Estat");
-        ESTATS_SOLICITUD_SERVEI.put(1L, "Pendent esmenes");
-        ESTATS_SOLICITUD_SERVEI.put(10L, "Rebut");
-        ESTATS_SOLICITUD_SERVEI.put(20L, "Passat a firma");
-        ESTATS_SOLICITUD_SERVEI.put(30L, "Firmat");
-        ESTATS_SOLICITUD_SERVEI.put(40L, "Pendent d'autoritzar");
-        ESTATS_SOLICITUD_SERVEI.put(50L, "Autoritzat");
-        ESTATS_SOLICITUD_SERVEI.put(60L, "Desestimat");
-        ESTATS_SOLICITUD_SERVEI.put(80L, "Discontinuat");
-        ESTATS_SOLICITUD_SERVEI.put(90L, "No disponible");
-    }
-
     //XXX CONSENT: Esborrar metodes quan s'eliminin els camps
     public List<StringKeyValue> getReferenceListForTipusConsentiment(HttpServletRequest request,
             ModelAndView mav, Where where)  throws I18NException {

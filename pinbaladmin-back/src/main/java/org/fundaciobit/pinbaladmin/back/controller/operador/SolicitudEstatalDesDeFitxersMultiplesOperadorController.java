@@ -310,7 +310,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
             solicitud.setProcedimentNom(proc.getNom());
             solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));
 
-            solicitud.setEstatID(10L);
+            solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
             solicitud.setEntitatEstatal(info.getEntitat());
             solicitud.setExpedientPid(info.getExpedientPID());
 

@@ -536,7 +536,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 			if (count == 0) {
 
-				Long estatSolicitudServeiID = 40L; // ESTATS_SOLICITUD_SERVEI: 40L -> Pendent d'autoritzar
+				Long estatSolicitudServeiID = Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 
 				String caduca;
 				String caducafecha;
