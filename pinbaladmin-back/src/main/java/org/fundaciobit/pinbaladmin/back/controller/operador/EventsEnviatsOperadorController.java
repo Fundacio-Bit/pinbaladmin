@@ -121,7 +121,9 @@ public class EventsEnviatsOperadorController extends EventController implements 
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
 
-    	return EventFields.TIPUS.equal(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+		Integer[] tipus = { Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC,
+				Constants.EVENT_TIPUS_CONSULTA_A_CEDENT };
+		return EventFields.TIPUS.in(tipus);
     }
     
     @Override
