@@ -441,27 +441,26 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     
     //------------ Enviar Solicitud a Firmar -------------------
 	@Override
-	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif) throws I18NException {
+	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif, String remitent) throws I18NException {
 
 		Solicitud soli = this.findByPrimaryKey(soliID);
 
 		FirmaAsyncSimpleFile fitxerAFirmar = getFormulariDirectorGeneralPDF(soliID);
 
 		String titolPeticio = "Solicitud Autorització PINBAL Procediment " + soli.getProcedimentCodi();
-		String operador = soli.getOperador();
 
 		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
 		String reason = "Solitud d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
 
 		Long tipusDocumentalID = 14L; // Elegir un tipus documental: Autorització. 14 - Sol·licitud
 
-		String senderFullName = operador;
-		String senderUsername = operadorEjb.executeQueryOne(OperadorFields.NOM,
-				OperadorFields.USERNAME.equal(operador));
+		String senderUsername  = remitent;
+		String senderFullName = operadorEjb.executeQueryOne(OperadorFields.NOM,
+				OperadorFields.USERNAME.equal(remitent));
 
 		try {
 			Long idPortafib = crearIEnviarPeticioDeFirma(destinatariNif, description, reason, tipusDocumentalID,
-					fitxerAFirmar, titolPeticio, senderUsername, senderFullName);
+					fitxerAFirmar, titolPeticio, senderFullName, senderUsername );
 
 			log.info("Peticio de firma creada: " + idPortafib);
 			soli.setPortafibID(idPortafib);

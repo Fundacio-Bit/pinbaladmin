@@ -69,7 +69,7 @@ public interface SolicitudLogicaService extends SolicitudService {
 
 	public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long solicitudID) throws I18NException;
 
-	public void enviarFormulariDGPortaFIB(Long soliID, String languageUI) throws I18NException;
+	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif, String remitent) throws I18NException;
 
 	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;
 	

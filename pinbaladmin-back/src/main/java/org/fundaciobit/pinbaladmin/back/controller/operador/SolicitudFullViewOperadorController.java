@@ -743,8 +743,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			
 //	        String nifDestinatari = "45186147W";
 	        String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+	        String remitent = request.getRemoteUser();
 	        
-			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soliID, nifDestinatari);
+			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soliID, nifDestinatari, remitent);
 			
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");
