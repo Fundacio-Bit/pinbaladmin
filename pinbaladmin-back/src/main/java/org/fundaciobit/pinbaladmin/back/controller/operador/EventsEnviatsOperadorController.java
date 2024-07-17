@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
+import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
@@ -108,6 +111,10 @@ public class EventsEnviatsOperadorController extends EventController implements 
 
 			filterForm.addAdditionalField(adfield);
 		}
+        
+        mav.addObject("eventsEnviats", true);
+        filterForm.setAttachedAdditionalJspCode(true);
+        
     	return filterForm;
     }
     
@@ -128,6 +135,20 @@ public class EventsEnviatsOperadorController extends EventController implements 
     	
 		for (Event event : list) {
 			map.put(event.getEventID(), event.getDestinatari() + " - " +  event.getDestinatarimail());
+			
+			if (event.getSolicitudID() != null) {
+				
+				filterForm.addAdditionalButtonByPK(event.getEventID(),
+						new AdditionalButton("fas fa-bullhorn", "events.titol",
+			                    EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/" + event.getSolicitudID(), AdditionalButtonStyle.SUCCESS));
+				
+			}else {
+				filterForm.addAdditionalButtonByPK(event.getEventID(),
+						new AdditionalButton("fas fa-bullhorn", "events.titol",
+			                    EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/" + event.getIncidenciaTecnicaID(), AdditionalButtonStyle.SUCCESS));
+			}
+			
+			
 		}
     }
 }
