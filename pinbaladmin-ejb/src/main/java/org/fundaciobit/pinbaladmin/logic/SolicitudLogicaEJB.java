@@ -464,9 +464,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 			log.info("Peticio de firma creada: " + idPortafib);
 			soli.setPortafibID(idPortafib);
+			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director);
 			this.update(soli);
 
-			afegirEventSolicitudEnviada(soli);
+			afegirEventSolicitudEnviada(soli, destinatariNif);
 
 		} catch (Throwable e) {
 			log.error("Error creant peticio de firma: " + e.getMessage(), e);
@@ -609,7 +610,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	}
 	
 
-	private void afegirEventSolicitudEnviada(Solicitud soli) throws I18NException {
+	private void afegirEventSolicitudEnviada(Solicitud soli, String destinatariNif) throws I18NException {
 		log.info("Afegir event de peticio enviada a portafib");
 		// Afegir event de peticio
 		{
@@ -621,7 +622,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
 			boolean _noLlegit_ = false;
 			Long _fitxerID_ = null;
-			String _missatge_ = "Peticio de firma enviada a Portafib";
+			String _missatge_ = "Peticio de firma enviada a Portafib. Destinatari: " + destinatariNif;
 			String _asumpte_ = "Peticio de firma enviada a Portafib";
 			String _persona_ = soli.getOperador();
 			String _destinatari_ = null;
@@ -654,6 +655,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			Long fitxerFirmatID = guardarFitxer(firma);
 			afegirFitxerADocSolicitud(soliID, fitxerFirmatID);
 			crearEventSolcitudFirmada(soliID, "PortaFIB - PinbalAdmin", fitxerFirmatID);
+			
+			Solicitud soli = this.findByPrimaryKey(soliID);
+			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+			this.update(soli);
 		}
 	}
 

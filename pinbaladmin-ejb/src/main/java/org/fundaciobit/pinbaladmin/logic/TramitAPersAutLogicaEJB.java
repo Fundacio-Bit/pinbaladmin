@@ -197,7 +197,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         SolicitudJPA soli = new SolicitudJPA();
 
         //Constants
-        Long estatID = Constants.SOLICITUD_ESTAT_PENDENT;
+        Long estatID = Constants.SOLICITUD_ESTAT_SENSE_ESTAT;
         String notesSoli = "Procediment creat amb Formulari. TramitID[" + tramitID + "]";
         Timestamp dataInici = new Timestamp(System.currentTimeMillis());
         Integer estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;

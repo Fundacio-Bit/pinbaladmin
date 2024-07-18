@@ -152,15 +152,18 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			solicitudForm.addAdditionalButton(
 					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
 							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
-
+			
+			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT) {
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
+						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
+			}
 			
 			if (!isFirmatPelDirector(solicitud)) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
-				
-				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
-						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.SUCCESS));
-			} else {
+			}
+
+			if(solicitud.getEstatID() >= Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR) {
 				log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
 				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",

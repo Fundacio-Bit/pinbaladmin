@@ -12,6 +12,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.stereotype.Controller;
@@ -95,43 +96,55 @@ public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDoc
     }    
     
     @Override
-    public String getRedirectWhenModified(HttpServletRequest request, DocumentForm docForm, Throwable __e) {
-    	
+	public String getRedirectWhenModified(HttpServletRequest request, DocumentForm docForm, Throwable __e) {
+
 		Long tipusDoc = docForm.getDocument().getTipus();
-    	updateConsentiment(request, tipusDoc);
-    	
-        Long fitxerFirmat = docForm.getDocument().getFitxerFirmatID();
-        if (!TENIM_FIRMAT && fitxerFirmat != null && tipusDoc == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-            //Abans no teniem firmat, i ara si. 
+		updateConsentiment(request, tipusDoc);
 
-            try {
-                Long solicitudID = getSolicitudID(request);
-                
-                java.lang.Long _solicitudID_ = solicitudID;
-                java.lang.Long _incidenciaTecnicaID_ = null;
-                java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-                int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-                java.lang.String _persona_ = LoginInfo.getInstance().getUsername();
-                java.lang.String _comentari_ = "S'ha afegit el fitxer firmat per el Director General";
-                java.lang.String _asumpte_ = "Afegit fitxer firmat per el Director General";
-                
-                java.lang.Long _fitxerID_ = docForm.getDocument().getFitxerFirmatID();
-                boolean _noLlegit_ = false;
-                java.lang.String _destinatari_ = null;
-                java.lang.String _destinatariMail_ = null;
+		Long fitxerFirmat = docForm.getDocument().getFitxerFirmatID();
 
-                eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-                        _destinatariMail_, _asumpte_, _comentari_, _fitxerID_, _noLlegit_, null, null);
-            } catch (Throwable th) {
-                log.error("Error creant l'event fitxer firmat afegit a la solicitud: " + th.getMessage(), th);
-            }
-            
-            HtmlUtils.saveMessageInfo(request, "S'ha afegit el fitxer firmat per el Director General");
-        }
+		Long solicitudID = getSolicitudID(request);
+		SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
 
-        
-        return super.getRedirectWhenModified(request, docForm, __e);
-    }    
+		try {
+			if (!TENIM_FIRMAT && fitxerFirmat != null
+					&& tipusDoc == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+				// Abans no teniem firmat, i ara si.
+
+				java.lang.Long _solicitudID_ = solicitudID;
+				java.lang.Long _incidenciaTecnicaID_ = null;
+				java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+				int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+				java.lang.String _persona_ = LoginInfo.getInstance().getUsername();
+				java.lang.String _comentari_ = "S'ha afegit el fitxer firmat per el Director General";
+				java.lang.String _asumpte_ = "Afegit fitxer firmat per el Director General";
+
+				java.lang.Long _fitxerID_ = docForm.getDocument().getFitxerFirmatID();
+				boolean _noLlegit_ = false;
+				java.lang.String _destinatari_ = null;
+				java.lang.String _destinatariMail_ = null;
+
+				eventEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+						_destinatariMail_, _asumpte_, _comentari_, _fitxerID_, _noLlegit_, null, null);
+
+				// Actualitzar la solicitud del docmuent i posar estat PENDENT_AUTORITZACIÓ
+				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+
+				HtmlUtils.saveMessageInfo(request, "S'ha afegit el fitxer firmat per el Director General");
+			}
+			
+			if (fitxerFirmat == null && TENIM_FIRMAT && tipusDoc == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+			}
+
+			solicitudEjb.update(soli);
+			
+		} catch (Throwable th) {
+			log.error("Error creant l'event fitxer firmat afegit a la solicitud: " + th.getMessage(), th);
+		}
+
+		return super.getRedirectWhenModified(request, docForm, __e);
+	}    
 
 
 }
