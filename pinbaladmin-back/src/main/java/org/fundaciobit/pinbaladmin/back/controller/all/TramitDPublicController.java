@@ -59,13 +59,13 @@ public class TramitDPublicController extends TramitDOperadorController {
         if (tramitForm.isNou()) {
             TramitDCteAutJPA tramitD = tramitForm.getTramitDCteAut();
 
-            tramitD.setNif("45186147W");
-            tramitD.setNom("Toni");
-            tramitD.setLlinatge1("Mesquida");
-            tramitD.setLlinatge2("Mestre");
-            tramitD.setCarrec("Gestio: Profesor de Gestió");
-            tramitD.setTelefon("971456789");
-            tramitD.setMail("gestio@fbit.org");            
+//            tramitD.setNif("45186147W");
+//            tramitD.setNom("Toni");
+//            tramitD.setLlinatge1("Mesquida");
+//            tramitD.setLlinatge2("Mestre");
+//            tramitD.setCarrec("Gestio: Profesor de Gestió");
+//            tramitD.setTelefon("971456789");
+//            tramitD.setMail("gestio@fbit.org");            
         }
         
         return tramitForm;

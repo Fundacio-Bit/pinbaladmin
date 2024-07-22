@@ -59,13 +59,13 @@ public class TramitEPublicController extends TramitEOperadorController {
         if (tramitForm.isNou()) {
             TramitECteAudJPA tramitE = tramitForm.getTramitECteAud();
 
-            tramitE.setNif("45186147W");
-            tramitE.setNom("Paco");
-            tramitE.setLlinatge1("Gaita");
-            tramitE.setLlinatge2("Sureda");
-            tramitE.setCarrec("Auditor: Petats Gaita's Leader");
-            tramitE.setTelefon("971213458");
-            tramitE.setMail("auditor@fbit.org");
+//            tramitE.setNif("45186147W");
+//            tramitE.setNom("Paco");
+//            tramitE.setLlinatge1("Gaita");
+//            tramitE.setLlinatge2("Sureda");
+//            tramitE.setCarrec("Auditor: Petats Gaita's Leader");
+//            tramitE.setTelefon("971213458");
+//            tramitE.setMail("auditor@fbit.org");
         }
        return tramitForm;
     }

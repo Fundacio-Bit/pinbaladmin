@@ -100,8 +100,12 @@ public class TramitAPublicController extends TramitAOperadorController {
             tramitA.setLlinatge2("Segura");
             tramitA.setDatatramit(new Timestamp(System.currentTimeMillis()));
         }else {
-            tramitA.setTelefon("telf");
-            tramitA.setMail("mail@fbit.org");
+        	tramitForm.addReadOnlyField(NIF);
+        	tramitForm.addReadOnlyField(NOM);
+        	tramitForm.addReadOnlyField(LLINATGE1);
+        	tramitForm.addReadOnlyField(LLINATGE2);
+//            tramitA.setTelefon("telf");
+//            tramitA.setMail("mail@fbit.org");
         }
         
         return tramitForm;

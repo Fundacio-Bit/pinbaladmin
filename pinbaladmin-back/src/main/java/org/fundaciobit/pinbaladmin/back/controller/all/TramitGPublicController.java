@@ -60,11 +60,11 @@ public class TramitGPublicController extends TramitGOperadorController {
         if (tramitForm.isNou()) {
             TramitGDadesTitJPA tramitG = tramitForm.getTramitGDadesTit();
 
-            tramitG.setNif("45186147W");
-            tramitG.setNom("Isi");
-            tramitG.setLlinatge1("Palazón");
-            tramitG.setLlinatge2("Rayo");
-            tramitG.setCarrec("Titular: Jugador del Rayo titularisimo");            
+//            tramitG.setNif("45186147W");
+//            tramitG.setNom("Isi");
+//            tramitG.setLlinatge1("Palazón");
+//            tramitG.setLlinatge2("Rayo");
+//            tramitG.setCarrec("Titular: Jugador del Rayo titularisimo");            
         }
        
         return tramitForm;

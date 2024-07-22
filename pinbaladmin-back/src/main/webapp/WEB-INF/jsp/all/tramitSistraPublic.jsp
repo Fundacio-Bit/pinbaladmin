@@ -273,56 +273,56 @@ input[type="checkbox"] {
 
 <script type="text/javascript">
 
-		$(".module_content").append($("#wizard"));
-		$(".module_content").append($(".tab_container"));
+	$(".module_content").append($("#wizard"));
+	$(".module_content").append($(".tab_container"));
 
-		$("#anotacions").insertAfter($(".lead"))
+	$("#anotacions").insertAfter($(".lead"))
 
-		var w2 = $("#wizard").width();
-		var w1 = $(".tab_container").width();
-		//$("#anotacions").width(w1 + w2 - 16);
+	var w2 = $("#wizard").width();
+	var w1 = $(".tab_container").width();
+	//$("#anotacions").width(w1 + w2 - 16);
 
-		$("#dot${tramitActual}").addClass("actual");
-		$("#step${tramitActual}").addClass("actual");
+	$("#dot${tramitActual}").addClass("actual");
+	$("#step${tramitActual}").addClass("actual");
 
-		var steps = $(".step-container");
-		var uuid = "${uuid}";
+	var steps = $(".step-container");
+	var uuid = "${uuid}";
 
-		var letras = "abcdefhij";
+	var letras = "abcdefhij";
 
-		var lastTramit = 0;
-		for (var i = 0; i < steps.length; i++) {
-			var letra = letras.charAt(i);
+	var lastTramit = 0;
+	for (var i = 0; i < steps.length; i++) {
+		var letra = letras.charAt(i);
 
-			var step = steps[i];
+		var step = steps[i];
 
-			var context = "/pinbaladmin/public/tramit" + letra;
-			if (step.classList.contains("created")) {
-				var url = context + "/edit/" + uuid;
+		var context = "/pinbaladmin/public/tramit" + letra;
+		if (step.classList.contains("created")) {
+			var url = context + "/edit/" + uuid;
+			if (letra == "i") {
+				url = context + "/list/1?tramitid=" + uuid;
+			}
+			step.href = url;
+			lastTramit++;
+		} else {
+			if (i == lastTramit) {
+				var url = context + "/new?tramitid=" + uuid;
 				if (letra == "i") {
 					url = context + "/list/1?tramitid=" + uuid;
 				}
+
 				step.href = url;
-				lastTramit++;
-			} else {
-				if (i == lastTramit) {
-					var url = context + "/new?tramitid=" + uuid;
-					if (letra == "i") {
-						url = context + "/list/1?tramitid=" + uuid;
-					}
-
-					step.href = url;
-				}
 			}
 		}
+	}
 
-		//setTitolSteps();
-		function setTitolSteps() {
-			var titols = [ "Persona Autenticada", "Dades Solicitud",
-					"Dades Cesionari" ];
+	//setTitolSteps();
+	function setTitolSteps() {
+		var titols = [ "Persona Autenticada", "Dades Solicitud",
+				"Dades Cesionari" ];
 
-			for (var i = 0; i < titols.length; i++) {
-				$("#step" + i).html(titols[i]);
-			}
+		for (var i = 0; i < titols.length; i++) {
+			$("#step" + i).html(titols[i]);
 		}
-	</script>
+	}
+</script>
