@@ -57,14 +57,14 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 				message += EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica");
 			}
 			
-			
-			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
-				SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
-				if (soli.getExpedientPid() != null) {
-					subject = "PID [" + soli.getExpedientPid() + "] - " + subject;
-				}
-			}
-			
+//			
+//			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
+//				SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
+//				if (soli.getExpedientPid() != null) {
+//					subject = "PID [" + soli.getExpedientPid() + "] - " + subject;
+//				}
+//			}
+//			
 			FitxerJPA adjunt = ev.getFitxer();
 
 			try {

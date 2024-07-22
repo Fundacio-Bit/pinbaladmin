@@ -184,7 +184,7 @@ public class MailCedentInfo {
 			evt.setNoLlegit(false);
 
 			// Camps per enviar el correu
-			String subject = this.subject;
+			String subject = this.subject + "PID [" + soli.getExpedientPid() + "]";
 
 			String destinataris = ""; // = String.join(";", dests);
 			for (String dest : this.dests) {

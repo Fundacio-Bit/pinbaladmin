@@ -254,7 +254,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     
     @Override
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
-            List<EmailAttachmentInfo> attachs) throws I18NException {
+            List<EmailAttachmentInfo> attachs, String msg) throws I18NException {
 
     	log.info("Creant Solicituds");
         for (SolicitudJPA soli : solicituds) {
@@ -293,22 +293,22 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.Long _solicitudID_ = soliID;
 
             boolean isEstatal = soli.getEntitatEstatal() != null;
-            String descripcio = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
-            String asumpte = "Solicitud creada";
+            String asumpte = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
+            String missatge = msg;
 
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
-            java.lang.String _persona_ = soli.getCreador();
+            java.lang.String _persona_ = soli.getPersonaContacte();
             boolean _noLlegit_ = false;
 
             java.lang.String _caidIdentificadorConsulta_ = null;
             java.lang.String _caidNumeroSeguiment_ = null;
 
-            java.lang.String _destinatari_ = soli.getPersonaContacte();
-            java.lang.String _destinatariEmail_ = soli.getPersonaContacteEmail();
+            java.lang.String _destinatari_ = null;
+            java.lang.String _destinatariEmail_ = null;
 
             eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-                    _destinatariEmail_, asumpte, descripcio, null, _noLlegit_, _caidIdentificadorConsulta_,
+                    _destinatariEmail_, asumpte, missatge, null, _noLlegit_, _caidIdentificadorConsulta_,
                     _caidNumeroSeguiment_);
             
             // Afegir Documents per cada Solicitud

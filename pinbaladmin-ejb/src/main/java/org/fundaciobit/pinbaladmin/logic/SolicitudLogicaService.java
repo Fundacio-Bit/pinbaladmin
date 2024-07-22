@@ -53,7 +53,7 @@ public interface SolicitudLogicaService extends SolicitudService {
      * @throws I18NException
      */
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
-            List<EmailAttachmentInfo> attachs) throws I18NException;
+            List<EmailAttachmentInfo> attachs, String msg) throws I18NException;
 
     public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
 

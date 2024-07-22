@@ -241,7 +241,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         }
 
         try {
-            solicitudLogicaEjb.crearSolicituds(solicituds, xlsx, attachs);
+            solicitudLogicaEjb.crearSolicituds(solicituds, xlsx, attachs, emi.getBody());
         } catch (I18NException e) {
             String msg = "Error creant Sol·lictuds: " + I18NUtils.getMessage(e);
             log.error(msg, e);

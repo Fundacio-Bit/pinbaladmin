@@ -246,6 +246,9 @@ public abstract class AbstractEventController<T> extends EventController impleme
 						asumpte = "PID [" + soli.getExpedientPid() + "] - " + asumpte;
 					}
 				}
+				if (asumpte.length() > 255) {
+					asumpte = asumpte.substring(0, 255);
+				}
 				ev.setAsumpte(asumpte);
 
             	ev.setPersona(request.getUserPrincipal().getName());

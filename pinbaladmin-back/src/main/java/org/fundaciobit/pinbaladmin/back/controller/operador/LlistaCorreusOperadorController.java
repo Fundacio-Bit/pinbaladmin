@@ -778,18 +778,20 @@ public class LlistaCorreusOperadorController extends EmailController {
 		Long itemID = solicitudID;
 		String titol = soli.getProcedimentNom();
 		
-		String subject = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
-
+		String asumpte = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
+		if (soli.getExpedientPid() != null) {
+			asumpte = "PID [" + soli.getExpedientPid() + "] - " + asumpte;
+		}
 		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
 				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
 				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>";
 		
 		
-		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
-		boolean condition = false;
+		boolean condition = true;
 		if (condition) {
-			enviarCorreu(Configuracio.getCorreuSuport(), "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+			enviarCorreu(Configuracio.getCorreuSuport(), "Suport CAIB", asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 	
@@ -811,7 +813,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		enviarCorreu(it.getContacteEmail(), it.getContacteNom(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
 		if (titol.indexOf("CAI-") > 0) {
-			enviarCorreu(Configuracio.getCorreuSuport(), "Suport", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+			enviarCorreu(Configuracio.getCorreuSuport(), "Suport CAIB", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 	
@@ -936,7 +938,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		eventLogicaEjb.create(event);
 	}
 
-	private void enviarCorreu(String mail, String destinatari, String subject, String msg, Long soliID, Long incidenciaID, int tipus)
+	private void enviarCorreu(String mail, String destinatari, String asumpte, String msg, Long soliID, Long incidenciaID, int tipus)
 			throws I18NException {
 
 		log.info("Cream Event Public i enviam un correu a " + destinatari + " <" + mail + ">");
@@ -946,7 +948,10 @@ public class LlistaCorreusOperadorController extends EmailController {
 			log.error("No enviam correu a " + destinatari);
 			return;
 		}
-		
-		crearEventPerCorreu(mail, destinatari, subject, msg, soliID, incidenciaID, tipus);
+		if (asumpte.length() > 255) {
+			asumpte = asumpte.substring(0, 255);
+		}
+
+		crearEventPerCorreu(mail, destinatari, asumpte, msg, soliID, incidenciaID, tipus);
 	}
 }
