@@ -137,7 +137,7 @@ public class TramitJOperadorController extends TramitJConsentController {
                 getContextWebPrev() + "/back/" + uuid, AdditionalButtonStyle.INFO));
 
         tramitForm.addAdditionalButton(
-        		new AdditionalButton("", "tramit.sistra.finalitzar", "javascript: $('form').submit();", AdditionalButtonStyle.PRIMARY));
+        		new AdditionalButton("", "tramit.sistra.finalitzar", "javascript:submitForm();", AdditionalButtonStyle.PRIMARY));
         
         tramitForm.addAdditionalButton(
                 new AdditionalButton("", "genapp.delete", getContextWeb() + "/delete/" + uuid, AdditionalButtonStyle.DANGER));
