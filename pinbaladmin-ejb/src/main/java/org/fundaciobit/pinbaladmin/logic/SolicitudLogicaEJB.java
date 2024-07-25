@@ -72,7 +72,7 @@ import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
-import org.fundaciobit.pluginsib.core.utils.FileUtils;
+import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 import org.hibernate.Hibernate;
 import org.jboss.ejb3.annotation.TransactionTimeout;

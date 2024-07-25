@@ -166,7 +166,7 @@ public class PdfDownloader {
         byte[] content;
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        org.fundaciobit.pluginsib.core.utils.FileUtils.copy(con.getInputStream(), baos);
+        org.fundaciobit.pluginsib.core.v3.utils.FileUtils.copy(con.getInputStream(), baos);
         content = baos.toByteArray();
         // content = StreamUtils.getBytes(con.getInputStream());
 

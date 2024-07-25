@@ -8,7 +8,7 @@
     </parent>
     <artifactId>pinbaladmin-api-externa</artifactId>
     <packaging>war</packaging>
-    <name>PinbalAdmin - API Rest - Externa</name>
+    <name>PinbalAdmin - API Rest - Externa Server</name>
     <properties>
         <auth.method>BASIC</auth.method>
         <client.default.package>org.fundaciobit.pinbaladmin.apiexterna.client</client.default.package>
