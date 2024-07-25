@@ -9,7 +9,6 @@
     <artifactId>pinbaladmin-api-interna</artifactId>
     <packaging>war</packaging>
     <name>PinbalAdmin - API Rest - Interna Server</name>
-    <version>1.0</version>
     <properties>
         <auth.method>BASIC</auth.method>
         <client.default.package>org.fundaciobit.pinbaladmin.apiinterna.client</client.default.package>
