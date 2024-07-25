@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,30 +81,32 @@ public class EventsEnviatsOperadorController extends EventController implements 
 
     @Override
     public EventFilterForm getEventFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
-    		throws I18NException {
-    	EventFilterForm filterForm = new EventFilterForm();
+			throws I18NException {
+		EventFilterForm filterForm = new EventFilterForm();
 
-        Set<Field<?>> hiddenFields = new HashSet<Field<?>>(Arrays.asList(EventFields.ALL_EVENT_FIELDS));
-        
-        hiddenFields.remove(EventFields.ASUMPTE);
-        hiddenFields.remove(EventFields.COMENTARI);
-        hiddenFields.remove(EventFields.DATAEVENT);
-//        hiddenFields.remove(EventFields.DESTINATARI);
-//        hiddenFields.remove(EventFields.DESTINATARIMAIL);
-        
-        filterForm.setHiddenFields(hiddenFields);
-        
-        filterForm.setOrderBy(EventFields.DATAEVENT.javaName);
-        filterForm.setOrderAsc(false);
-        
-        filterForm.setEditButtonVisible(false);
-        filterForm.setDeleteButtonVisible(false);
-        filterForm.setAddButtonVisible(false);
-        filterForm.setDeleteSelectedButtonVisible(false);
-        
-        {
+		Set<Field<?>> hiddenFields = new HashSet<Field<?>>(Arrays.asList(EventFields.ALL_EVENT_FIELDS));
+
+		hiddenFields.remove(EventFields.ASUMPTE);
+		hiddenFields.remove(EventFields.COMENTARI);
+		hiddenFields.remove(EventFields.DATAEVENT);
+
+		filterForm.setHiddenFields(hiddenFields);
+
+		filterForm.setOrderBy(EventFields.DATAEVENT.javaName);
+		filterForm.setOrderAsc(false);
+
+		filterForm.setEditButtonVisible(false);
+		filterForm.setDeleteButtonVisible(false);
+		filterForm.setAddButtonVisible(false);
+		filterForm.setDeleteSelectedButtonVisible(false);
+
+		List<Field<?>> filterByFields = new ArrayList<Field<?>>(filterForm.getDefaultFilterByFields());
+		filterByFields.add(EventFields.ASUMPTE);
+		filterForm.setFilterByFields(filterByFields);
+
+		{
 			AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
-			adfield.setCodeName(EmailFields.MESSAGE.fullName);
+			adfield.setCodeName(EmailFields.DESTINATARIS.fullName);
 			adfield.setPosition(POS_DESTINATARI);
 			// Els valors s'ompliran al mètode postList()
 			adfield.setValueMap(new HashMap<Long, String>());
@@ -111,12 +114,12 @@ public class EventsEnviatsOperadorController extends EventController implements 
 
 			filterForm.addAdditionalField(adfield);
 		}
-        
-        mav.addObject("eventsEnviats", true);
-        filterForm.setAttachedAdditionalJspCode(true);
-        
-    	return filterForm;
-    }
+
+		mav.addObject("eventsEnviats", true);
+		filterForm.setAttachedAdditionalJspCode(true);
+
+		return filterForm;
+	}
     
     @Override
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
