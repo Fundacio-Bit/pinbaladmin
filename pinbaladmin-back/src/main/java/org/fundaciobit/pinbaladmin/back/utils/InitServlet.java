@@ -101,9 +101,9 @@ public class InitServlet extends HttpServlet {
         try {
             Set<Class<? extends IExportDataPlugin>> plugins;
 
-            String[] classes = new String[] { "org.fundaciobit.plugins.exportdata.cvs.CSVPlugin",
-                    "org.fundaciobit.plugins.exportdata.ods.ODSPlugin",
-                    "org.fundaciobit.plugins.exportdata.excel.ExcelPlugin" };
+            String[] classes = new String[] { "org.fundaciobit.pluginsib.exportdata.cvs.CSVPlugin",
+                    "org.fundaciobit.pluginsib.exportdata.ods.ODSPlugin",
+                    "org.fundaciobit.pluginsib.exportdata.excel.ExcelPlugin" };
             plugins = new HashSet<Class<? extends IExportDataPlugin>>();
             
             for (String str : classes) {
