@@ -42,6 +42,7 @@ import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSigne
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.jersey.ApiFirmaAsyncSimpleJersey;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
@@ -1940,11 +1941,12 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         log.info("Where: "  + w.toSQL());
         
+        OrderBy order = new OrderBy(SolicitudFields.DATAINICI);
         
         
         List<Solicitud> llistat;
 		try {
-			llistat = this.select(w);
+			llistat = this.select(w, order);
 			return llistat;
 		} catch (I18NException e) {
 			return null;

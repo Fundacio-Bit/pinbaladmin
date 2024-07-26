@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -26,10 +27,13 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
+import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.fields.TramitAPersAutFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
@@ -68,6 +72,10 @@ public class TramitSistraService {
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerLogicaEjb;
+
+
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAEjb;
     
@@ -98,6 +106,9 @@ public class TramitSistraService {
 
 		try {
 
+			log.info("Inicia Metode REST: " + methodName);
+			String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
+			log.info("idSesionFormulario: " + idSesionFormulario);
 			//Comprobar si es un tramite ya iniciado viendo los datos actuales. 
 
 			String idSesionTram = null;
@@ -108,14 +119,20 @@ public class TramitSistraService {
 				}
             }
 			
-			String ticket = buscarTicket(idSesionTram);
-			if (ticket != null) {
+			TramitAPersAut tramitA = buscarTramite(idSesionTram);
+			if (tramitA != null) {
+				Long tramitid = tramitA.getTramitid();
+				String ticket = HibernateFileUtil.encryptFileID(tramitid);
 				String url = Configuracio.getUrlFormulariToSistra() + ticket;
+				
+				tramitA.setIdsesionformulario(idSesionFormulario);
+				tramitAEjb.update(tramitA);
+				
                 return url;
 			}
 
 			//Si no encuentra ticket, crea tramitA y devuelve la URL con el uuid. Si lo encuentra, devolver la URL con el ticket
-			TramitAPersAutJPA tramitA = new TramitAPersAutJPA();
+			tramitA = new TramitAPersAutJPA();
 			tramitA.setIdsesiontramite(idSesionTram);
 			
 			Timestamp datatramit = new Timestamp(System.currentTimeMillis());
@@ -133,11 +150,9 @@ public class TramitSistraService {
 			tramitA.setLlinatge1(llinatge1);
 			tramitA.setLlinatge2(llinatge2);
 
-			
 			String callbackUrl = parametrosFormulario.getUrlCallback();
 			tramitA.setUrlsistra(callbackUrl);
 			
-			String idSesionFormulario = parametrosFormulario.getIdSesionFormulario();
 			tramitA.setIdsesionformulario(idSesionFormulario);
 			
 			tramitAEjb.create(tramitA);
@@ -177,13 +192,12 @@ public class TramitSistraService {
 
 	}
 
-	private String buscarTicket(String idSesionTram) {
+	private TramitAPersAut buscarTramite(String idSesionTram) {
 		try {
-			List<Long> tramitID = tramitAEjb.executeQuery(TramitAPersAutFields.TRAMITID,
-					TramitAPersAutFields.IDSESIONTRAMITE.equal(idSesionTram));
-			if (tramitID.size() == 1) {
-				Long tramitid = tramitID.get(0);
-				return HibernateFileUtil.encryptFileID(tramitid);
+			List<TramitAPersAut> tramits = tramitAEjb.select(TramitAPersAutFields.IDSESIONTRAMITE.equal(idSesionTram));
+			if (tramits.size() == 1) {
+				TramitAPersAut tramitA = tramits.get(0);
+				return tramitA;
 			} else {
 				return null;
 			}
@@ -229,14 +243,35 @@ public class TramitSistraService {
 
 		log.info("ticketGFE: " + ticketGFE);
 
-		String id = idSesionFormulario;
 		Boolean cancelado = true;
 		String pdf = "";
 		String xml = "";
-		
+
 		// Si no troba cap solicitud, es perque no s'ha cancelat el tramit.
 		List<Solicitud> llista = solicitudLogicaEjb.getSolicitudFromTramitID(ticketGFE);
-		if (llista != null) {
+		if (llista != null && llista.size() > 0) {
+			// S'ha de veure que fer si ha représ el tramit i ha generat una altra
+			// solicitud.
+			// En aquest cas, haurá mes d'una solicitud. S'ha d'esborrar l'anterior i deixar
+			// la mes recent.
+			while (llista.size() != 1) {
+				log.error("Error: S'han trobat " + llista.size() + " solicituds");
+				Solicitud soli = llista.get(0);
+				try {
+					
+					Set<Long> deleteFiles = solicitudLogicaEjb.deleteFull(soli.getSolicitudID(), true);
+
+			        // Si tot ha anat be llavors borram els fitxers
+			        if (deleteFiles.size() != 0) {
+			            LogicUtils.deleteFiles(deleteFiles, fitxerLogicaEjb);
+			            llista.remove(0);
+			        }
+			        
+				} catch (I18NException e) {
+					log.error("Error Esborrant Solicitud " + soli.getSolicitudID() + " " + e.getMessage(), e);
+				}
+			}
+
 			if (llista.size() == 1) {
 				Solicitud soli = llista.get(0);
 
@@ -248,8 +283,6 @@ public class TramitSistraService {
 				} catch (Exception e) {
 					log.error("Error obtenint els fitxers de la solicitud: " + e.getMessage(), e);
 				}
-			} else {
-				log.error("Error: S'han trobat " + llista.size() + " solicituds");
 			}
 		} else {
 			log.error("Error obtenint llistat de solicituds amb uuid " + ticketGFE);
@@ -270,7 +303,7 @@ public class TramitSistraService {
 		
 		Resultado resultado = new Resultado();
 		resultado.setCancelado(cancelado);
-		resultado.setIdSesionFormulario(id);
+		resultado.setIdSesionFormulario(idSesionFormulario);
 		resultado.setPdf(pdf);
 		resultado.setXml(xml);
 
