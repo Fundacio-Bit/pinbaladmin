@@ -372,6 +372,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
 //            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
+            log.info("Where ]" + w.toSQL() + "[");
             return w;
         }
 

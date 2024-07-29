@@ -227,7 +227,7 @@ public class EventFilterForm extends PinbalAdminBaseFilterForm implements EventF
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] {  }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { DATAEVENT ,DESTINATARI ,ASUMPTE }));
   }
 
   @Override

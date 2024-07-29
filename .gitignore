@@ -122,3 +122,6 @@ hs_err_pid*
 /scripts/linux/jboss.sh
 /scripts/linux/jboss7
 /genapp/genapp.log.1
+/pinbaladmin-api-externa-client/target/apidocs
+/pinbaladmin-api-externa-client/target/javadoc-bundle-options
+/pinbaladmin-api-externa-client/target
