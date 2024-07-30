@@ -51,7 +51,7 @@ public class EventsEnviatsOperadorController extends EventController implements 
     public static final int POS_DESTINATARI = -1;
 
     public static final int FILTRE_AVANZAT_COLUMN = -2;
-    public static final StringField FILTRE_AVANZAT_FIELD = EventFields.CAIDNUMEROSEGUIMENT; // SOIB ALTA EMPLEO
+    public static final StringField FILTRE_AVANZAT_FIELD = EventFields.CAIDNUMEROSEGUIMENT;
     
     @Override
     public boolean isActiveFormEdit() {
@@ -143,13 +143,13 @@ public class EventsEnviatsOperadorController extends EventController implements 
 	}
     
 	protected boolean showAdvancedFilter() {
-		return false;
+		return true;
 	}
     
     @Override
 	public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
 
-		Integer[] tipus = { Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC,
+		final Integer[] tipus = { Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC,
 				Constants.EVENT_TIPUS_CONSULTA_A_CEDENT };
 
 		Where w1 = EventFields.TIPUS.in(tipus);
@@ -174,29 +174,18 @@ public class EventsEnviatsOperadorController extends EventController implements 
 	}
     
 	protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
-
 		String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
 		log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
 		if (af == null || af.trim().length() == 0) {
 			return null;
 		} else {
-			af = "50563";
 			String likeStr = "%" + af + "%";
 			
-			Where w2 = EventFields.ASUMPTE.like(likeStr);
-			return w2;
+			Where w = Where.OR(EventFields.DESTINATARI.like(likeStr), EventFields.DESTINATARIMAIL.like(likeStr),
+					EventFields.ASUMPTE.like(likeStr), EventFields.COMENTARI.like(likeStr));
+			return w;
 		}
-//			final String likeStr = "%" + af + "%";
-//
-//			log.info("likeStr: " + likeStr);
-//			// Destinatari, DestinatariMail, Assumpte, Comentari
-//			Where w = Where.OR(EventFields.DESTINATARI.like(likeStr), EventFields.DESTINATARIMAIL.like(likeStr),
-//					EventFields.ASUMPTE.like(likeStr), EventFields.COMENTARI.like(likeStr));
-//
-//			log.info("Where ]" + w.toSQL() + "[");
-//			return w;
-//		}
 	}
 	
 	@Override
