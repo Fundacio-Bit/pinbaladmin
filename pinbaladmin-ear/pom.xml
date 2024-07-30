@@ -77,7 +77,7 @@
 		<dependency>
 			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
 			<artifactId>pluginsib-userinformation-keycloak</artifactId>
-			<version>${pluginsib.userinformation.impl.version}</version>
+			<version>${pluginsib.userinformation.api.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
 			<artifactId>pluginsib-userinformation-database</artifactId>
-			<version>${pluginsib.userinformation.impl.version}</version>
+			<version>${pluginsib.userinformation.api.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -123,7 +123,7 @@
 		<dependency>
 			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
 			<artifactId>pluginsib-userinformation-ldap</artifactId>
-			<version>${pluginsib.userinformation.impl.version}</version>
+			<version>${pluginsib.userinformation.api.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -140,7 +140,7 @@
       <dependency>
         <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
         <artifactId>pluginsib-exportdata-api</artifactId>
-        <version>2.0.0</version>
+        <version>3.0.0-SNAPSHOT</version>
 		<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -155,12 +155,16 @@
       <dependency>
         <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
         <artifactId>pluginsib-exportdata-excel</artifactId>
-        <version>2.0.0</version>
+        <version>3.0.0-SNAPSHOT</version>
 		<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
 					<artifactId>pluginsib-core</artifactId>
 				</exclusion>
+				<exclusion>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                </exclusion>
 		</exclusions>
       </dependency>
 
@@ -174,7 +178,7 @@
       <dependency>
         <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
         <artifactId>pluginsib-exportdata-ods</artifactId>
-        <version>2.0.0</version>
+        <version>3.0.0-SNAPSHOT</version>
 		<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -186,14 +190,14 @@
       <dependency>
         <groupId>org.jopendocument</groupId>
         <artifactId>jOpenDocument</artifactId>
-        <version>1.3b1</version>
+        <version>1.3</version>
       </dependency>
 
       <!-- CSV Plugin -->
       <dependency>
         <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
         <artifactId>pluginsib-exportdata-csv</artifactId>
-        <version>2.0.0</version>
+        <version>3.0.0-SNAPSHOT</version>
 		<exclusions>
 				<exclusion>
 					<groupId>org.fundaciobit.pluginsib.core</groupId>
@@ -217,11 +221,11 @@
 			</exclusions>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.13.0</version>
-		</dependency>
+		</dependency>-->
 
         <dependency>
             <groupId>org.apache.commons</groupId>
