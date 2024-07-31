@@ -111,6 +111,7 @@ public class InitServlet extends HttpServlet {
                     Class<?> cls = Class.forName(str);
                     plugins.add((Class<? extends IExportDataPlugin>) cls);
                 } catch (Throwable e) {
+					log.error("Error instanciant DataExporter: " + e.getMessage(), e);
                 }
             }
 
