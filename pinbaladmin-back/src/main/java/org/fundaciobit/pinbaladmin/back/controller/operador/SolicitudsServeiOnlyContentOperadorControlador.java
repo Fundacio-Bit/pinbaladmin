@@ -18,7 +18,6 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
-import org.fundaciobit.pinbaladmin.model.fields.EntitatServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;

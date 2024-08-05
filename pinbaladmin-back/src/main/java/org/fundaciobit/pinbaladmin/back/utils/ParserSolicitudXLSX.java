@@ -1,7 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.utils;
 
 import java.io.InputStream;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -187,8 +186,11 @@ public class ParserSolicitudXLSX {
         final int ENLLAZ_CONSENTIMENT_COL_L = 11;
         final int DATA_CADUCITAT_COL_M = 12;
 
+        @SuppressWarnings("unused")
         final int PERODIC_COL_N = 13;
+        @SuppressWarnings("unused")
         final int AUTOMATIZAT_COL_O = 14;
+        @SuppressWarnings("unused")
         final int PETICIONS_ESTIMADES_COL_P = 15;
 
         String codiProc = row[CODI_PROC_COL_A];
@@ -254,7 +256,7 @@ public class ParserSolicitudXLSX {
     }
 
     @SuppressWarnings("deprecation")
-    private static String toString(Cell cell) {
+    protected static String toString(Cell cell) {
         if (cell == null) {
             return null;
         }

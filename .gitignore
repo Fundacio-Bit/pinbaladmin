@@ -125,3 +125,9 @@ hs_err_pid*
 /pinbaladmin-api-externa-client/target/apidocs
 /pinbaladmin-api-externa-client/target/javadoc-bundle-options
 /pinbaladmin-api-externa-client/target
+/pinbaladmin-api-externa/target
+/.project
+/.settings
+/pinbaladmin-ear/.project
+/pinbaladmin-ear/.settings
+/pinbaladmin-ear/target

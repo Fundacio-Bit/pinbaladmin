@@ -9,15 +9,12 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
-import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudOperadorController;
-import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 

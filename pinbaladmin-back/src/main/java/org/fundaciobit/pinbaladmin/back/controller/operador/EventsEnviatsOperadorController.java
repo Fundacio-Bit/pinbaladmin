@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,34 +8,25 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.ITableManager;
 import org.fundaciobit.genapp.common.query.StringField;
-import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
-import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EventController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 

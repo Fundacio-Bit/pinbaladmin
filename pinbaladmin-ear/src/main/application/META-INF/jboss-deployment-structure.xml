@@ -19,6 +19,33 @@
 			<module name="org.keycloak.keycloak-wildfly-adapter" optional="TRUE"/>
 			<module name="org.keycloak.keycloak-wildfly-elytron-oidc-adapter" optional="TRUE"/>
 			<module name="org.keycloak.keycloak-wildfly-subsystem" optional="TRUE"/>
+            
+            
+            <module name="com.sun.xml.bind" export="TRUE"/>
+            <module name="com.sun.xml.txw2" export="TRUE"/>
+            <module name="org.apache.commons.codec" export="TRUE"/>
+            <module name="org.apache.httpcomponents.core" export="TRUE"/>
+            <module name="org.apache.commons.beanutils" export="TRUE"/>
+            <module name="javax.annotation.api" export="TRUE"/>
+            <module name="org.jboss.ejb3" export="TRUE"/>
+            <module name="javax.xml.bind.api" export="TRUE"/>
+            <module name="org.codehaus.jettison" export="TRUE"/>
+            <module name="org.apache.commons.io" export="TRUE"/>
+            <module name="org.apache.velocity" export="TRUE"/>
+            <module name="com.sun.xml.fastinfoset" export="TRUE"/>
+            <module name="org.bouncycastle" export="TRUE"/>
+            <module name="org.apache.commons.lang3" export="TRUE"/>
+            <module name="com.google.code.gson" export="TRUE"/>
+            <module name="javax.activation.api" export="TRUE"/>
+            <module name="com.sun.istack" export="TRUE"/> 
+            
+            <!--  APISIB JERSEY-CORE   -->
+            <module name="org.codehaus.jackson.jackson-core-asl" export="true"/>
+            <module name="org.codehaus.jackson.jackson-mapper-asl" export="true"/>
+            <module name="org.codehaus.jackson.jackson-jaxrs" export="true"/>
+            <module name="org.codehaus.jackson.jackson-xc" export="true"/>
+
+            
         </dependencies>
     </deployment>
 </jboss-deployment-structure>

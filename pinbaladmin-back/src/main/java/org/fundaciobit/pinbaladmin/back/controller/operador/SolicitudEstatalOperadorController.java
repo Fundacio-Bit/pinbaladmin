@@ -10,7 +10,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
-import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController.VistaIncidencia;
+
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;

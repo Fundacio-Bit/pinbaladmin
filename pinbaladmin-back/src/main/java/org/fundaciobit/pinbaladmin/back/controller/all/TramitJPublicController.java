@@ -5,14 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
-import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
-import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitJOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;

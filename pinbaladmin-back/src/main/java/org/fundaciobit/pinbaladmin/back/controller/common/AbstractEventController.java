@@ -21,8 +21,6 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
-import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;

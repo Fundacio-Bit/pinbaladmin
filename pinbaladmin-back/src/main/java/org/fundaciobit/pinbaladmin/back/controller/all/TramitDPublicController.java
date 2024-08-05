@@ -3,12 +3,9 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.web.form.AdditionalButton;
-import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitDOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutForm;
-import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

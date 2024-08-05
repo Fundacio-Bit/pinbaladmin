@@ -1,7 +1,5 @@
 package es.caib.enviafib.api.interna.all.portafibcallback;
 
-import java.util.List;
-import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -13,10 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
-import org.fundaciobit.genapp.common.i18n.I18NCommonUtils;
-import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 
 import es.caib.portafib.callback.beans.v1.PortaFIBEvent;
 import es.caib.portafib.utils.ConstantsV2;

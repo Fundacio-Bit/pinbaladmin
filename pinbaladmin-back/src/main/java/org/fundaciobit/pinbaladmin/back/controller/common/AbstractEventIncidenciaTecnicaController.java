@@ -8,7 +8,6 @@ import org.fundaciobit.pinbaladmin.back.controller.all.EventIncidenciaTecnicaPub
 import org.fundaciobit.pinbaladmin.back.controller.operador.IncidenciaTecnicaOperadorController;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 

@@ -1,10 +1,8 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.Set;
 
 import javax.ejb.Local;
 
-import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.OrganService;
 
 /**

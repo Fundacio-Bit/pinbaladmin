@@ -1,215 +1,212 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.fundaciobit.pinbaladmin</groupId>
-	<artifactId>pinbaladmin-ear</artifactId>
-	<version>2.0.0</version>
-	<packaging>ear</packaging>
+    <artifactId>pinbaladmin-ear</artifactId>
+    <packaging>ear</packaging>
 
-	<parent>
-		<groupId>org.fundaciobit.pinbaladmin</groupId>
-		<artifactId>pinbaladmin</artifactId>
-		<version>2.0.0</version>
-	</parent>
+    <parent>
+        <groupId>org.fundaciobit.pinbaladmin</groupId>
+        <artifactId>pinbaladmin</artifactId>
+        <version>2.0.0</version>
+    </parent>
 
-	<name>PinbalAdmin - Ear</name>
+    <name>PinbalAdmin - Ear</name>
 
-	<properties>
-		<!-- Format del timestamp -->
-		<maven.build.timestamp.format>dd/MM/yyyy HH:mm</maven.build.timestamp.format>
-	</properties>
+    <properties>
+        <!-- Format del timestamp -->
+        <maven.build.timestamp.format>dd/MM/yyyy HH:mm</maven.build.timestamp.format>
+    </properties>
 
-	<dependencies>
+    <dependencies>
 
-		<!-- Internes -->
+        <!-- Internes -->
 
-		<dependency>
-			<groupId>org.fundaciobit.pinbaladmin</groupId>
-			<artifactId>pinbaladmin-persistence</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.fundaciobit.pinbaladmin</groupId>
-			<artifactId>pinbaladmin-ejb</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-io</groupId>
-					<artifactId>commons-io</artifactId>
-				</exclusion>
-			</exclusions>
-			<type>ejb</type>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.fundaciobit.pinbaladmin</groupId>
-			<artifactId>pinbaladmin-back</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-        
-        <dependency>  
-          <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>
-          <groupId>org.fundaciobit.pinbaladmin</groupId>
-          <version>${project.version}</version>
-          <type>ejb</type>
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-persistence</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
-		<!-- Tenir en compte a l'hora de incloure dependències només si és imprescindible 
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-ejb</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
+            <type>ejb</type>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-back</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+
+        <!-- Tenir en compte a l'hora de incloure dependències només si és imprescindible 
 			i no està ja dins un mòdul sobre el que es pugui establir una dependència 
 			als descriptors. https://docs.jboss.org/author/display/AS72/Implicit+module+dependencies+for+deployments -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
 
-		<!-- Externes -->
-		
-		<!-- ====================================== -->
-		<!-- ===== PLUGINS DE USERINFORMATION ===== -->
-		<!-- ====================================== -->
-		<dependency>
-			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
-			<artifactId>pluginsib-userinformation-keycloak</artifactId>
-			<version>${pluginsib.userinformation.api.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.resteasy</groupId>
-					<artifactId>resteasy-client</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.resteasy</groupId>
-					<artifactId>resteasy-multipart-provider</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.resteasy</groupId>
-					<artifactId>resteasy-jaxrs</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.resteasy</groupId>
-					<artifactId>resteasy-jaxb-provider</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.resteasy</groupId>
-					<artifactId>resteasy-jackson2-provider</artifactId>
-				</exclusion>
+        <!-- Externes -->
+
+        <!-- ====================================== -->
+        <!-- ===== PLUGINS DE USERINFORMATION ===== -->
+        <!-- ====================================== -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.userinformation</groupId>
+            <artifactId>pluginsib-userinformation-keycloak</artifactId>
+            <version>${pluginsib.userinformation.api.version}</version>
+            <exclusions>
                 <exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
-			<artifactId>pluginsib-userinformation-database</artifactId>
-			<version>${pluginsib.userinformation.api.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.fundaciobit.pluginsib.userinformation</groupId>
-			<artifactId>pluginsib-userinformation-ldap</artifactId>
-			<version>${pluginsib.userinformation.api.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-multipart-provider</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-jaxrs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-jaxb-provider</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.resteasy</groupId>
+                    <artifactId>resteasy-jackson2-provider</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.userinformation</groupId>
+            <artifactId>pluginsib-userinformation-database</artifactId>
+            <version>${pluginsib.userinformation.api.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.userinformation</groupId>
+            <artifactId>pluginsib-userinformation-ldap</artifactId>
+            <version>${pluginsib.userinformation.api.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-      <!-- ============================================ -->
-      <!-- ========== PLUGINS DE DATAEXPORT =========== -->
-      <!-- ============================================ -->
-      
-      <!-- API -->
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
-        <artifactId>pluginsib-exportdata-api</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-		<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-		</exclusions>
-      </dependency>
+        <!-- ============================================ -->
+        <!-- ========== PLUGINS DE DATAEXPORT =========== -->
+        <!-- ============================================ -->
+
+        <!-- API -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
+            <artifactId>pluginsib-exportdata-api</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
-
-      <!-- Excel Plugin -->
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
-        <artifactId>pluginsib-exportdata-excel</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-		<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-				<exclusion>
+        <!-- Excel Plugin -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
+            <artifactId>pluginsib-exportdata-excel</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.apache.poi</groupId>
                     <artifactId>poi</artifactId>
                 </exclusion>
-		</exclusions>
-      </dependency>
+            </exclusions>
+        </dependency>
 
-      <!-- ODS Plugin -->
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
-        <artifactId>pluginsib-exportdata-ods</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-		<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-		</exclusions>
-      </dependency>
+        <!-- ODS Plugin -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
+            <artifactId>pluginsib-exportdata-ods</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-      <!-- CSV Plugin -->
-      <dependency>
-        <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
-        <artifactId>pluginsib-exportdata-csv</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-		<exclusions>
-				<exclusion>
-					<groupId>org.fundaciobit.pluginsib.core</groupId>
-					<artifactId>pluginsib-core</artifactId>
-				</exclusion>
-		</exclusions>
-      </dependency>
+        <!-- CSV Plugin -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.exportdata</groupId>
+            <artifactId>pluginsib-exportdata-csv</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- Commons Dependencies -->
+        <!-- Commons Dependencies -->
 
 
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3</version>
-			<exclusions>
-			  <exclusion>
-			    <groupId>commons-io</groupId>
-			    <artifactId>commons-io</artifactId>
-			  </exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!--<dependency>
+        <!--<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.13.0</version>
@@ -221,178 +218,170 @@
         </dependency>
 
 
+        <!-- API REST de PinbalAdmin -->
 
-		<!-- API REST de PinbalAdmin -->
+        <!-- API EXTERNA START -->
+        <!-- http://localhost:8080/pinbaladminapi/externa/index.html -->
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-api-externa</artifactId>
+            <version>2.0.0</version>
+            <type>war</type>
+        </dependency>
+        <!-- API EXTERNA END -->
 
-		<!-- API EXTERNA START -->
-		<!-- http://localhost:8080/pinbaladminapi/externa/index.html -->
-		<dependency>
-			<groupId>org.fundaciobit.pinbaladmin</groupId>
-			<artifactId>pinbaladmin-api-externa</artifactId>
-			<version>2.0.0</version>
-			<type>war</type>
-		</dependency>
-		<!-- API EXTERNA END -->
+        <!-- API INTERNA START -->
+        <!-- http://localhost:8080/pinbaladminapi/interna/index.html -->
+        <dependency>
+            <groupId>org.fundaciobit.pinbaladmin</groupId>
+            <artifactId>pinbaladmin-api-interna</artifactId>
+            <version>2.0.0</version>
+            <type>war</type>
+        </dependency>
+        <!-- API INTERNA END -->
 
-		<!-- API INTERNA START -->
-		<!-- http://localhost:8080/pinbaladminapi/interna/index.html -->
-		<dependency>
-			<groupId>org.fundaciobit.pinbaladmin</groupId>
-			<artifactId>pinbaladmin-api-interna</artifactId>
-			<version>2.0.0</version>
-			<type>war</type>
-		</dependency>
-		<!-- API INTERNA END -->
-		
-	</dependencies>
-
+    </dependencies>
 
 
-	<build>
-		<finalName>pinbaladmin</finalName>
+    <build>
+        <finalName>pinbaladmin</finalName>
 
-		<filters>
-			<filter>../config.properties</filter>
-		</filters>
+        <filters>
+            <filter>../config.properties</filter>
+        </filters>
 
-		<plugins>
+        <plugins>
 
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
-				<!-- Aquest bloc força a netejar sempre -->
-				<executions>
-					<execution>
-						<id>auto-clean</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
 
+                <!-- configuring the ear plugin -->
+                <configuration>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-ear-plugin</artifactId>
+                    <displayName>PinbalAdmin</displayName>
+                    <description>PinbalAdmin</description>
 
-				<!-- configuring the ear plugin -->
-				<configuration>
-
-					<displayName>PinbalAdmin</displayName>
-					<description>PinbalAdmin</description>
-
-					<generateApplicationXml>true</generateApplicationXml>
-					<defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <generateApplicationXml>true</generateApplicationXml>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <skinnyWars>true</skinnyWars>
-					<includeLibInApplicationXml>false</includeLibInApplicationXml>
-					<!--suppress UnresolvedMavenProperty -->
-					<!-- Nom mòduls d'acord amb punt 4.2 de l'Estàndard CAIB -->
-					<outputFileNameMapping>@{artifactId}@-@{version}@.@{extension}@</outputFileNameMapping>
-					<version>8</version>
+                    <includeLibInApplicationXml>false</includeLibInApplicationXml>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <!-- Nom mòduls d'acord amb punt 4.2 de l'Estàndard CAIB -->
+                    <outputFileNameMapping>@{artifactId}@-@{version}@.@{extension}@</outputFileNameMapping>
+                    <version>8</version>
 
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<project-version>${project.version}</project-version>
-							<project-buildtime>${maven.build.timestamp}</project-buildtime>
-							<scm-revision>${buildNumber}</scm-revision>
-						</manifestEntries>
-					</archive>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <project-version>${project.version}</project-version>
+                            <project-buildtime>${maven.build.timestamp}</project-buildtime>
+                            <scm-revision>${buildNumber}</scm-revision>
+                        </manifestEntries>
+                    </archive>
 
-					<defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    
+                    <packagingExcludes>
+                        <!-- Requereix afegir mòdul 'com.sun.xml.bind' a jboss-deployment-structure.xml -->
+                         **/jaxb-runtime-*redhat*.jar,
+                         **/jaxb-xjc-*redhat*.jar,
+                         **/jaxb-jxc-*redhat*.jar,
+                         **/codemodel-*redhat*.jar,
+                         **/rngom-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'com.sun.xml.txw2' a jboss-deployment-structure.xml -->
+                         **/txw2-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.commons.codec' a jboss-deployment-structure.xml -->
+                         **/commons-codec-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.httpcomponents.core' a jboss-deployment-structure.xml -->
+                         **/httpclient-*redhat*.jar,
+                         **/httpcore-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'javax.annotation.api' a jboss-deployment-structure.xml -->
+                         **/jboss-annotations-api_1.3_spec-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.jboss.ejb3' a jboss-deployment-structure.xml -->
+                         **/jboss-ejb3-ext-api-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'javax.xml.bind.api' a jboss-deployment-structure.xml -->
+                         **/jboss-jaxb-api_2.3_spec-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.codehaus.jettison' a jboss-deployment-structure.xml -->
+                         **/jettison-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.commons.io' a jboss-deployment-structure.xml -->
+                         **/commons-io-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.velocity' a jboss-deployment-structure.xml -->
+                         **/velocity-engine-core-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'com.sun.xml.fastinfoset' a jboss-deployment-structure.xml -->
+                         **/FastInfoset-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.bouncycastle' a jboss-deployment-structure.xml -->
+                         **/bcprov-jdk15on-*redhat*.jar,
+                         **/bcmail-jdk15on-*redhat*.jar,
+                         **/bcpkix-jdk15on-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.commons.lang3' a jboss-deployment-structure.xml -->
+                         **/commons-lang3-*redhat*.jar,
+                        <!-- Requereix afegir mòdul 'com.google.code.gson' a jboss-deployment-structure.xml -->
+                         **/gson-*redhat*.jar,
+                         <!-- Requereix afegir mòdul 'javax.activation.api' a jboss-deployment-structure.xml -->
+                         **/activation-*redhat*.jar,
+                         
+                        <!-- **/jackson-*.redhat*.jar requreix entrades a jboss-deployment-structure.xml -->
+                        **/jackson-jaxrs-*.redhat*.jar,
+                        **/jackson-core-asl-*.redhat*.jar,
+                        **/jackson-xc-*.redhat*.jar,
+                        **/jackson-mapper-asl-*.redhat*.jar,
+                        
+                        <!-- Requereix afegir mòdul 'com.sun.istack' a jboss-deployment-structure.xml -->
+                        **/istack-commons-runtime-*.redhat*.jar,
+                        
+                    </packagingExcludes>
 
-					<modules>
+                    <modules>
 
-						<webModule>
-							<groupId>org.fundaciobit.pinbaladmin</groupId>
-							<artifactId>pinbaladmin-back</artifactId>
-							<contextRoot>pinbaladmin</contextRoot>
+                        <webModule>
+                            <groupId>org.fundaciobit.pinbaladmin</groupId>
+                            <artifactId>pinbaladmin-back</artifactId>
+                            <contextRoot>pinbaladmin</contextRoot>
                             <bundleFileName>pinbaladmin-back.war</bundleFileName>
-						</webModule>
-                        
-                        
+                        </webModule>
 
-						<ejbModule>
-							<groupId>org.fundaciobit.pinbaladmin</groupId>
-							<artifactId>pinbaladmin-ejb</artifactId>
-							<bundleFileName>pinbaladmin-ejb.jar</bundleFileName>
-						</ejbModule>
-                        
+
                         <ejbModule>
-                          <groupId>org.fundaciobit.pinbaladmin</groupId>
-                          <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>
-                          <bundleFileName>pinbaladmin-ws-domini-sistra-server.jar</bundleFileName>
+                            <groupId>org.fundaciobit.pinbaladmin</groupId>
+                            <artifactId>pinbaladmin-ejb</artifactId>
+                            <bundleFileName>pinbaladmin-ejb.jar</bundleFileName>
                         </ejbModule>
 
-						<!-- API EXTERNA START -->
-						<webModule>
-							<groupId>org.fundaciobit.pinbaladmin</groupId>
-							<artifactId>pinbaladmin-api-externa</artifactId>
-							<contextRoot>/pinbaladminapi/externa</contextRoot>
-							<bundleFileName>pinbaladmin-api-externa.war</bundleFileName>
-						</webModule>
-						<!-- API EXTERNA END -->
+                        <ejbModule>
+                            <groupId>org.fundaciobit.pinbaladmin</groupId>
+                            <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>
+                            <bundleFileName>pinbaladmin-ws-domini-sistra-server.jar</bundleFileName>
+                        </ejbModule>
 
-						<!-- API INTERNA START -->
-						<webModule>
-							<groupId>org.fundaciobit.pinbaladmin</groupId>
-							<artifactId>pinbaladmin-api-interna</artifactId>
-							<contextRoot>/pinbaladminapi/interna</contextRoot>
-							<bundleFileName>pinbaladmin-api-interna.war</bundleFileName>
-						</webModule>
-						<!-- API INTERNA END -->
-					</modules>
+                        <!-- API EXTERNA START -->
+                        <webModule>
+                            <groupId>org.fundaciobit.pinbaladmin</groupId>
+                            <artifactId>pinbaladmin-api-externa</artifactId>
+                            <contextRoot>/pinbaladminapi/externa</contextRoot>
+                            <bundleFileName>pinbaladmin-api-externa.war</bundleFileName>
+                        </webModule>
+                        <!-- API EXTERNA END -->
 
-				</configuration>
-			</plugin>
+                        <!-- API INTERNA START -->
+                        <webModule>
+                            <groupId>org.fundaciobit.pinbaladmin</groupId>
+                            <artifactId>pinbaladmin-api-interna</artifactId>
+                            <contextRoot>/pinbaladminapi/interna</contextRoot>
+                            <bundleFileName>pinbaladmin-api-interna.war</bundleFileName>
+                        </webModule>
+                        <!-- API INTERNA END -->
+                    </modules>
 
-			<!-- Per arrencar/desplegar automàticament l'aplicació. 
-			     Documentació ús: https://codehaus-cargo.github.io/cargo/Maven2+plugin.html 
-				configuració: https://codehaus-cargo.github.io/cargo/Maven2+Plugin+Reference+Guide.html 
-		   -->
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<configuration>
-					<skip>false</skip>
-					<container>
-						<!-- El plugin cargo empra la configuració wildfly13x pel JBoss EAP 
-							7.2 -->
-						<containerId>wildfly13x</containerId>
-						<type>installed</type>
-						<home>${env.JBOSS_HOME}</home>
-					</container>
-					<configuration>
-						<!-- Empra la configuració existent del servidor d'aplicacions. -->
-						<type>existing</type>
-						<home>${env.JBOSS_HOME}/standalone</home>
-						<!-- Si volem arrancar el jboss amb cargo:start i amb una configuració 
-							copiada de l'original, fixar el <type> a standalone i llevar el <home> -->
-						<properties>
-							<cargo.hostname>localhost</cargo.hostname>
-							<cargo.port.offset>0</cargo.port.offset>
-							<cargo.remote.username>admin</cargo.remote.username>
-							<cargo.remote.password>admin</cargo.remote.password>
-						</properties>
-					</configuration>
-					<deployables>
-						<deployable>
-							<properties>
-								<name>${project.build.finalName}</name>
-							</properties>
-						</deployable>
-					</deployables>
-				</configuration>
-			</plugin>
+                </configuration>
+            </plugin>
 
-		</plugins>
-	</build>
-	
-	
+        </plugins>
+    </build>
+
+
     <profiles>
         <!-- Garantir que es fixa la variable d'entorn JBOSS_HOME -->
         <profile>
@@ -407,16 +396,16 @@
             </properties>
         </profile>
         <profile>
-          <id>revisionnumber</id>
-          <build>
-            <plugins>
-                <!-- Defineix la propietat ${buildNumber} que s'empra al filtrat -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>buildnumber-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-          </build>
+            <id>revisionnumber</id>
+            <build>
+                <plugins>
+                    <!-- Defineix la propietat ${buildNumber} que s'empra al filtrat -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>buildnumber-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

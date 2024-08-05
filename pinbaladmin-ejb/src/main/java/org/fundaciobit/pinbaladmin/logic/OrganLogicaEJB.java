@@ -1,19 +1,10 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.OrganEJB;
-import org.fundaciobit.pinbaladmin.ejb.OrganService;
-import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 

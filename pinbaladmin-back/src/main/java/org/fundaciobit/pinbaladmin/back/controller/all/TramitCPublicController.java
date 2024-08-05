@@ -3,7 +3,6 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitCOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;

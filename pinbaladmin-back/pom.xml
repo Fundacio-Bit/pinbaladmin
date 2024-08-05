@@ -16,18 +16,7 @@
 
     <properties>
         <xdocreport.version>2.0.4</xdocreport.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>thirdparty-releases</id>
-            <name>JBoss Thirdparty Releases</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
-        </repository>
-
-    </repositories>
 
     <dependencies>
 
@@ -348,7 +337,20 @@
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>3.10</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!-- Necessari per OpenCSV -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
         <!--
@@ -360,11 +362,13 @@
         </dependency>
         -->
 		<!-- Per comprovar si un document es PDF-->
+		<!--
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.4.3</version>
         </dependency>
+        -->
 
 
 
@@ -475,6 +479,21 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <packagingExcludes>
+                        <!-- Requereix afegir mòdul 'org.apache.commons.beanutils' a jboss-deployment-structure.xml -->
+                        **/commons-beanutils-*.redhat*.jar,
+                        <!-- Requereix afegir mòdul 'org.apache.commons.collections' a jboss-deployment-structure.xml -->
+                        **/commons-collections-*.redhat*.jar,
+                        <!-- Requereix afegir mòdul 'javax.xml.bind.api' a jboss-deployment-structure.xml -->
+                        **/jboss-jaxb-api*-redhat*.jar
+                    </packagingExcludes>
+                </configuration>
             </plugin>
 
         </plugins>

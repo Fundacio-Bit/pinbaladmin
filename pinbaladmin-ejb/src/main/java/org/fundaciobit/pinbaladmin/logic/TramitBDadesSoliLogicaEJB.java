@@ -3,13 +3,11 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.TramitBDadesSoliEJB;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;

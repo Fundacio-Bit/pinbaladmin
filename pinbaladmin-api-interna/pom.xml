@@ -9,7 +9,7 @@
     <artifactId>pinbaladmin-api-interna</artifactId>
     <packaging>war</packaging>
     <name>PinbalAdmin - API Rest - Interna Server</name>
-    <version>2.0.0</version>
+
     <properties>
         <auth.method>BASIC</auth.method>
         <client.default.package>org.fundaciobit.pinbaladmin.apiinterna.client</client.default.package>
@@ -66,11 +66,13 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
         </dependency>
         <!-- Anotacions de documentació de openapi -->
+        
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.1.13</version>
+            <!-- <version>2.1.13</version> -->
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

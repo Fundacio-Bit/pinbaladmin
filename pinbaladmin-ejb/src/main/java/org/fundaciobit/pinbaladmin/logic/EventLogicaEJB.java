@@ -15,7 +15,6 @@ import org.fundaciobit.pinbaladmin.ejb.EventEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 /**
  * 

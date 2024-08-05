@@ -3,17 +3,11 @@ package org.fundaciobit.pinbaladmin.logic.utils.email;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.ejb.EJB;
-
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService;
-import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
-import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
-import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;

@@ -5,6 +5,14 @@
     <artifactId>pinbaladmin</artifactId>
     <packaging>pom</packaging>
     <name>PinbalAdmin</name>
+    
+    <parent>
+        <artifactId>
+            caib-artifacts-github-governib-distribution-with-jdk11-jboss72</artifactId>
+        <groupId>es.caib.maven</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    
     <modules>
         <module>pinbaladmin-model</module>
         <module>pinbaladmin-persistence</module>
@@ -21,47 +29,66 @@
         
     </modules>
     <repositories>
+        <!--
         <repository>
             <id>maven-nuxeo</id>
             <name>Maven Nuxeo Repository</name>
             <url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
             <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
         </repository>
-        <!--<repository>
+        <repository>
             <id>repository.spring.release</id>
             <name>Spring GA Repository</name>
             <url>https://repo.spring.io/release</url>
-        </repository>-->
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
         <repository>
             <id>jboss-releases</id>
             <name>JBoss Releases Repository</name>
             <url>https://maven.repository.redhat.com/ga/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
             <releases>
+                <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
             </releases>
-            <snapshots>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
         </repository>
+        -->
         <repository>
             <id>github_governib_maven</id>
             <name>GitHub GovernIB Maven Repository</name>
             <url>https://governib.github.io/maven/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -78,34 +105,39 @@
     </scm>
     <properties>
         <!-- Versions de JBoss -->
+        <!--
         <jboss-eap.version>7.2.6.GA</jboss-eap.version>
         <jboss-javaee.version>1.0.1.Final-redhat-00003</jboss-javaee.version>
+        -->
         <!-- Propietats que afecten els plugins -->
+        <!--
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        -->
         <!-- No fer els tests per defecte. -->
         <maven.test.skip>true</maven.test.skip>
         <!-- Versions de les llibreries emprades dins els mòduls -->
         <javaee-api.version>8.0.1</javaee-api.version>
-        <activation.version>1.1.1</activation.version>
+        <activation.version>1.1.1.redhat-5</activation.version>
         <mp-openapi.version>1.0.1</mp-openapi.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.30</slf4j.version>
         <keycloak.version>6.0.1</keycloak.version>
-        <cxf.version>3.3.3</cxf.version>
+        <cxf.version>3.2.5.redhat-00001</cxf.version>
         <junit.version>4.13.1</junit.version>
-        <hibernate.version>5.3.15.Final</hibernate.version>
+        <hibernate.version>5.3.15.Final-redhat-00001</hibernate.version>
+        <!--
         <hibernate.annotations.version>5.3.15.Final</hibernate.annotations.version>
-        <resteasy.version>3.6.3.Final</resteasy.version>
+        -->
+        <resteasy.version>3.6.1.SP2-redhat-00001</resteasy.version>
         <jboss-logging.version>3.3.2.Final</jboss-logging.version>
-        <spring.version>4.3.26.RELEASE</spring.version>
-        <springsecurity.version>4.2.14.RELEASE</springsecurity.version>
+        <spring.version>4.3.30.RELEASE</spring.version>
+        <springsecurity.version>4.2.20.RELEASE</springsecurity.version>
         <spring-data-jpa>1.6.6.RELEASE</spring-data-jpa>
         <tiles.version>3.0.8</tiles.version>
         <!-- XYZ ZZZ -->
-        <cxf.version>2.2.12</cxf.version>
         <global.version>${project.version}</global.version>
         <cglib.version>2.2.2</cglib.version>
         <!-- XYZ ZZZ S'ha de fer la substitució -->
@@ -130,6 +162,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
@@ -152,8 +185,7 @@
                 <version>2.2.0.redhat-1</version>
                 <scope>provided</scope>
             </dependency>
-            
-            
+
             <dependency>
               <groupId>jakarta.xml.bind</groupId>
               <artifactId>jakarta.xml.bind-api</artifactId>
@@ -165,9 +197,7 @@
               <version>4.0.0</version>
               <scope>runtime</scope>
             </dependency>
-            
-            
-            
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -301,7 +331,7 @@
 			</dependency>
 
             
-            <!-- ==== JBOSS ========== -->
+            <!-- ==== JBOSS ========== --><!--
             <dependency>
                 <groupId>org.jboss.bom</groupId>
                 <artifactId>eap-runtime-artifacts</artifactId>
@@ -322,6 +352,7 @@
                 <version>${jboss-javaee.version}</version>
                 <type>pom</type>
             </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
     <build>
@@ -341,20 +372,8 @@
                     <version>3.1.0</version>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
-                </plugin>
-                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M4</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M4</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -378,10 +397,6 @@
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.0.0-M1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.8.2</version>
                 </plugin>
                 <!-- Altres plugins generals -->
                 <plugin>
@@ -425,18 +440,6 @@
                         <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                         <!-- Longitut màxima de la revisió -->
                         <shortRevisionLength>8</shortRevisionLength>
-                    </configuration>
-                </plugin>
-                <!-- Plugin per permetre desplegar l'aplicació a un sevidor d'aplicacions 
-                    local -->
-                <plugin>
-                    <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <version>1.7.8</version>
-                    <configuration>
-                        <!-- Només estarà activat als mòduls que volem que es despleguin, com 
-                            l'EAR -->
-                        <skip>true</skip>
                     </configuration>
                 </plugin>
             </plugins>

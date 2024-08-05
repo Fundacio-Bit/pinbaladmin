@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;

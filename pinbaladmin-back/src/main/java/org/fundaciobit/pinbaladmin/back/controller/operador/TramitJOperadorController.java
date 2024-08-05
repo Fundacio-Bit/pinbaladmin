@@ -1,40 +1,29 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.TramitJConsentController;
-import org.fundaciobit.pinbaladmin.back.form.webdb.TramitCDadesCesiForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
-import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
-import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.itextpdf.text.pdf.PdfReader;
 
 /**
  * 

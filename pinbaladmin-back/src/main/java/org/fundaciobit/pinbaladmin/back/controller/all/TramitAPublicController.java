@@ -1,37 +1,17 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitAOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitAPersAutForm;
-import org.fundaciobit.pinbaladmin.back.utils.CrearExcelDeServeis;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
-import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.Document;
-import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
-import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.springframework.stereotype.Controller;
@@ -40,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 

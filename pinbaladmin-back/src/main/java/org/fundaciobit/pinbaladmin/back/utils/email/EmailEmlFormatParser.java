@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.utils.email;
 
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import javax.mail.internet.MimeUtility;
 import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;

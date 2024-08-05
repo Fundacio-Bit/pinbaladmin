@@ -792,7 +792,7 @@ ALTER TABLE pad_tramit_i_serv ALTER COLUMN consentimentpublicat DROP NOT NULL;
 ALTER TABLE pad_solicitud ADD COLUMN expedientpid character varying(50);
 UPDATE pad_solicitud
 SET expedientpid = substring(estat from 'Identificador de Consulta: (\d+)')
-WHERE entitatestatal IS NOT NULL
+WHERE entitatestatal IS NOT NULL;
 
 
 --Afegir camp a TramitA per guardar informació de callback de sistra #180

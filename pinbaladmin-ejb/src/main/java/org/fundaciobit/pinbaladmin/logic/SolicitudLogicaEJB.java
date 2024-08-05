@@ -18,7 +18,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Schedules;
@@ -28,7 +27,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.ApiFirmaAsyncSimple;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleAnnex;
-import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleDocumentTypeInformation;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleFile;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleMetadata;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleReviser;
@@ -60,7 +58,6 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;

@@ -1,1 +1,1 @@
-compile.bat -pl pinbaladmin-back,pinbaladmin-ear -Denforcer.skip=true
+compile.bat -pl pinbaladmin-ear,pinbaladmin-back 

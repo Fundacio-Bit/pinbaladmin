@@ -1,13 +1,10 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.FitxerEJB;
-import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 

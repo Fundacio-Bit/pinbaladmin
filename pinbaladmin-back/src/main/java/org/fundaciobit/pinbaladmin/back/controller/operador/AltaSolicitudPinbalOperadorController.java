@@ -303,7 +303,7 @@ public class AltaSolicitudPinbalOperadorController {
         return rm.value()[0];
     }
 
-    private String obtenerContenidoXml(Long fitxerID) throws Exception {
+    protected String obtenerContenidoXml(Long fitxerID) throws Exception {
         File f = FileSystemManager.getFile(fitxerID);
         byte[] xmlData = FileUtils.readFromFile(f);
         return new String(xmlData, StandardCharsets.UTF_8);

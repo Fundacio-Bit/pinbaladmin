@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
