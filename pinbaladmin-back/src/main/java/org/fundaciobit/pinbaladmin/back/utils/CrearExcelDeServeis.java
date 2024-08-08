@@ -18,6 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.xml.sax.SAXException;
@@ -44,7 +47,7 @@ public class CrearExcelDeServeis {
           "Artículos", //9
           "Enlace http Norma Legal", //10
           "Enlace http Consentimiento ", //11
-          "ENLACENORCaducidad", //12
+          "Caducidad", //12
           "Periódico", //13
           "Automatizado", //14
           "Peticiones al dia" // 15 
@@ -142,8 +145,13 @@ public class CrearExcelDeServeis {
       dades[8] = ss.getNormaLegal(); // values.get(base + "NORMALEGAL");
       // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
       dades[9] = ss.getArticles(); // values.get(base + "ARTICULOS");
+      //dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      
       // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
-      dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      Fitxer fitxerNorma = ss.getFitxernorma();
+      dades[10] = Configuracio.getAppUrl() +  FileDownloadController.fileUrl(fitxerNorma);
+      
+      
       // L 11 L'Enllaç de Consentiment
       {
         String ec = ss.getEnllazConsentiment();
