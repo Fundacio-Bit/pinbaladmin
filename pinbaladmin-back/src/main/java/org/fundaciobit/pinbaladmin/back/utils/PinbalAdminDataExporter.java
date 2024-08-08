@@ -143,20 +143,29 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 		ExportItem[][] items = new ExportItem[len][visibleFields.length + additionalFields.size()];
 
 		column = 0;
-
+		
+		log.info("VisibleFields: " + visibleFields.length);
+		log.info("AdditionalFields: " + additionalFields.size());
+		
 		for (Integer pos : additionalFields.keySet()) {
+			log.info("Pos: " + pos);
 			if (pos >= 0) {
 				break;
 			}
 			AdditionalField<?, ?> adField = additionalFields.get(pos);
+			log.info("AdField: " + adField.getCodeName());
+
 			// TODO Falta Value byField
 			Map<?, String> values = adField.getValueMap();
 
 			for (int j = 0; j < len; j++) {
 				// TODO nomes claus primaries uniques
+				log.info("J: " + j);
 				Object keyValue = Utils.getValueOfJavaField(list.get(j), primaryKeys[0].javaName);
+				log.info(j + " - KeyValue: " + keyValue);
 
 				String str = values.get(keyValue);
+				log.info(j + " - Str: " + str);
 
 				ExportItem item = new ExportItem(str, str);
 
