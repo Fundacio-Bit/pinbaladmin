@@ -69,9 +69,9 @@ public class TramitCPublicController extends TramitCOperadorController {
 //            tramitC.setResponsable("Dirección General de Primera Infancia, Innovación y Comunidad Educativa");
 //            tramitC.setDir3responsable("A04026925");
 //            tramitC.setDir3arrel("A04026923");
-//            tramitC.setDireccio("Carrer de la direcció");
-//            tramitC.setCodipostal("07003");
-//            tramitC.setMunicipi("9");
+            tramitC.setDireccio("Carrer de la direcció");
+            tramitC.setCodipostal("07003");
+            tramitC.setMunicipi("9");
         }
         
         return tramitForm;

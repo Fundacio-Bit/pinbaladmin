@@ -59,14 +59,14 @@ public class TramitHPublicController extends TramitHOperadorController {
         if (tramitForm.isNou()) {
             TramitHProcJPA tramitH = tramitForm.getTramitHProc();
 
-//            tramitH.setTipus("1");
-//            tramitH.setNom("Subvencions que m'acab d'inventar");
-//            tramitH.setCodi("2874870");
+            tramitH.setTipus("1");
+            tramitH.setNom("Subvencions empreses que contracten persones amb discapacitat 2019");
+            tramitH.setCodi("2874870");
 //            tramitH.setUrlseu("https://www.google.es");
-//            tramitH.setDescripcio("Proceso ayudas para Asociaciones de Famílias de Alumnos");
-//            tramitH.setPeticionsaldia(12);
-//            tramitH.setPeticionsalmes(450);
-//            tramitH.setAutomatizado(true);
+            tramitH.setDescripcio("Proceso ayudas para Asociaciones de Famílias de Alumnos");
+            tramitH.setPeticionsaldia(15);
+            tramitH.setPeticionsalmes(450);
+            tramitH.setAutomatizado(true);
         }
        return tramitForm;
     }

@@ -85,10 +85,10 @@ public class TramitIPublicController extends TramitIOperadorController {
 		if (tramitForm.isNou()) {
 			TramitIServJPA tramitI = tramitForm.getTramitIServ();
 //
-//			tramitI.setNorma("Norma Legal inventada");
+			tramitI.setNorma("Norma" + System.currentTimeMillis());
 //			tramitI.setUrlnorma("https://www.boe.es/buscar/act.php?id=BOE-A-2021-9347");
 //			// tramitI.setConsentimentpublicat("1");
-//			tramitI.setArticles("Art1, 2 i Art 5");
+			tramitI.setArticles("Art1, 2 i Art 5");
 		}
 
 		return tramitForm;

@@ -81,8 +81,8 @@ public class TramitAPublicController extends TramitAOperadorController {
         	tramitForm.addReadOnlyField(NOM);
         	tramitForm.addReadOnlyField(LLINATGE1);
         	tramitForm.addReadOnlyField(LLINATGE2);
-//            tramitA.setTelefon("telf");
-//            tramitA.setMail("mail@fbit.org");
+            tramitA.setTelefon("telf");
+            tramitA.setMail("mail@fbit.org");
         }
         
         return tramitForm;

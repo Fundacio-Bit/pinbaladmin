@@ -264,8 +264,8 @@ public class TramitSistraService {
 			        // Si tot ha anat be llavors borram els fitxers
 			        if (deleteFiles.size() != 0) {
 			            LogicUtils.deleteFiles(deleteFiles, fitxerLogicaEjb);
-			            llista.remove(0);
 			        }
+			        llista.remove(0);
 			        
 				} catch (I18NException e) {
 					log.error("Error Esborrant Solicitud " + soli.getSolicitudID() + " " + e.getMessage(), e);
