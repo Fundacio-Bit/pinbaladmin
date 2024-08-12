@@ -392,6 +392,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             }
         }
 
+        String extracte = "Procediment " + procedimentCodi + " - " + procedimentNom;
+        map.put("extracte", extracte);
+        
         //Documents
         Properties prop = null;
 		try {
