@@ -143,7 +143,7 @@ public class TramitJOperadorController extends TramitJConsentController {
 			throws I18NException {
 		super.preValidate(request, tramitJConsentForm, result);
 
-		TramitJConsentJPA J = tramitJConsentForm.getTramitJConsent();
+//		TramitJConsentJPA J = tramitJConsentForm.getTramitJConsent();
 
 	}    
     

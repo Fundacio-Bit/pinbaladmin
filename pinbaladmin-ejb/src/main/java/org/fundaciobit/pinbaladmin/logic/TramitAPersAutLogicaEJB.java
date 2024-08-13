@@ -677,7 +677,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 	}
     
 	private String getMissatgeCorreu(SolicitudJPA soli) {
-		Long soliID = soli.getSolicitudID();
+//		Long soliID = soli.getSolicitudID();
 		String msg = ""
 				+ "<div id=\"missatge\" style=\"margin: .5rem;\">"
 				+ "    Bon dia,<br />"

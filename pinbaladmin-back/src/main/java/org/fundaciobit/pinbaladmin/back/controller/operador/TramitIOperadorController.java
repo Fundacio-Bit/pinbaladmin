@@ -457,7 +457,23 @@ public class TramitIOperadorController extends TramitIServController {
 		private String value;
 
 		public Item(String key, String value) {
+			this.setKey(key);
+			this.setValue(value);
+		}
+
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String key) {
 			this.key = key;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
 			this.value = value;
 		}
 	}
@@ -494,14 +510,14 @@ public class TramitIOperadorController extends TramitIServController {
 		}
 
 		Gson g = new Gson();
-		String employeeJsonString = g.toJson(items);
+		String serveisJsonString = g.toJson(items);
 
-		log.info(employeeJsonString);
+		log.info(serveisJsonString );
 
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		out.print(employeeJsonString);
+		out.print(serveisJsonString );
 		out.flush();
 	}
 	

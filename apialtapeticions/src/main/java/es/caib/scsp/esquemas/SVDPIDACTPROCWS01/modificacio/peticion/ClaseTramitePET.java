@@ -18,11 +18,11 @@ public class ClaseTramitePET
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/peticion", "ClaseTramite");
 
     public ClaseTramitePET(Integer value) {
-        super(NAME, ((Class) Integer.class), null, value);
+        super(NAME, Integer.class, null, value);
     }
 
     public ClaseTramitePET() {
-        super(NAME, ((Class) Integer.class), null, null);
+        super(NAME, Integer.class, null, null);
     }
 
 }

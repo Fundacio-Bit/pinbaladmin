@@ -18,11 +18,11 @@ public class Apellido2RES
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "Apellido2");
 
     public Apellido2RES(String value) {
-        super(NAME, ((Class) String.class), null, value);
+        super(NAME, String.class, null, value);
     }
 
     public Apellido2RES() {
-        super(NAME, ((Class) String.class), null, null);
+        super(NAME, String.class, null, null);
     }
 
 }

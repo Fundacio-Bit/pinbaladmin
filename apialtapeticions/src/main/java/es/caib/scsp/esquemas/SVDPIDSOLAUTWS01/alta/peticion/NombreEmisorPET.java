@@ -18,11 +18,11 @@ public class NombreEmisorPET
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/peticion", "NombreEmisor");
 
     public NombreEmisorPET(String value) {
-        super(NAME, ((Class) String.class), null, value);
+        super(NAME, String.class, null, value);
     }
 
     public NombreEmisorPET() {
-        super(NAME, ((Class) String.class), null, null);
+        super(NAME, String.class, null, null);
     }
 
 }

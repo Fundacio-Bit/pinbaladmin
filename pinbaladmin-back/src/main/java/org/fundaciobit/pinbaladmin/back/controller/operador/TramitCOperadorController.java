@@ -344,6 +344,24 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 			this.id = id;
 			this.nom = nom;
 		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getNom() {
+			return nom;
+		}
+
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+		
+		
 	}
 	
 	@RequestMapping(value = "/jsonOrganList", method = RequestMethod.GET)
@@ -404,6 +422,56 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 			this.entitatNom = entitatNom;
 			this.entitatCif = entitatCif;
 		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getDir3() {
+			return dir3;
+		}
+
+		public void setDir3(String dir3) {
+			this.dir3 = dir3;
+		}
+
+		public String getNom() {
+			return nom;
+		}
+
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+
+		public Long getEntitatID() {
+			return entitatID;
+		}
+
+		public void setEntitatID(Long entitatID) {
+			this.entitatID = entitatID;
+		}
+
+		public String getEntitatNom() {
+			return entitatNom;
+		}
+
+		public void setEntitatNom(String entitatNom) {
+			this.entitatNom = entitatNom;
+		}
+
+		public String getEntitatCif() {
+			return entitatCif;
+		}
+
+		public void setEntitatCif(String entitatCif) {
+			this.entitatCif = entitatCif;
+		}
+		
+		
 	}
 	
 	@RequestMapping(value = "/jsonOrganGestor", method = RequestMethod.GET)

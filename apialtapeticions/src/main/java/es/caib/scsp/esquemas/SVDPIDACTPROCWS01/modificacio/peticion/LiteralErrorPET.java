@@ -18,11 +18,11 @@ public class LiteralErrorPET
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/peticion", "LiteralError");
 
     public LiteralErrorPET(String value) {
-        super(NAME, ((Class) String.class), null, value);
+        super(NAME, String.class, null, value);
     }
 
     public LiteralErrorPET() {
-        super(NAME, ((Class) String.class), null, null);
+        super(NAME, String.class, null, null);
     }
 
 }

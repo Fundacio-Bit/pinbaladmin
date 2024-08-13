@@ -18,11 +18,11 @@ public class AutomatizadoRES
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "Automatizado");
 
     public AutomatizadoRES(String value) {
-        super(NAME, ((Class) String.class), null, value);
+        super(NAME, String.class, null, value);
     }
 
     public AutomatizadoRES() {
-        super(NAME, ((Class) String.class), null, null);
+        super(NAME, String.class, null, null);
     }
 
 }

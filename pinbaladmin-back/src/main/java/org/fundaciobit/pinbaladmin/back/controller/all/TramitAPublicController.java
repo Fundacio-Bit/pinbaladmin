@@ -131,7 +131,7 @@ public class TramitAPublicController extends TramitAOperadorController {
         ModelAndView mav = returnToSistraPost(uuid);
         
 		try {
-			Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+//			Long tramitID = HibernateFileUtil.decryptFileID(uuid);
 			request.getSession().removeAttribute("tramitid");
 			//tramitAPersAutLogicEjb.deleteFull(tramitID);
 		} catch (Exception e) {

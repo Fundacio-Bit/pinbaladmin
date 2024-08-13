@@ -339,10 +339,10 @@ public class AltaSolicitudPinbalOperadorController {
         String nif = "45186147W";
         String fullName = "Juan Pablo Trias Segura";
         
-//        if (ui != null) {
-//            nif = ui.getAdministrationID();
-//            fullName = ui.getFullName();
-//        }
+        if (ui != null) {
+            nif = ui.getAdministrationID();
+            fullName = ui.getFullName();
+        }
 
         funcionario.setNifFuncionario(nif);
         funcionario.setNombreCompletoFuncionario(fullName);

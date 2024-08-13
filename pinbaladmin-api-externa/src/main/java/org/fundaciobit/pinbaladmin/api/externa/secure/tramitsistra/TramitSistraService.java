@@ -39,8 +39,8 @@ import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pluginsib.utils.rest.RestException;
 import org.fundaciobit.pluginsib.utils.rest.RestExceptionInfo;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -182,8 +182,7 @@ public class TramitSistraService {
 			// uuid.
 
 			String toReturn = Configuracio.getUrlFormulariToSistra() + uuid;
-			Gson gson = new GsonBuilder().create();
-
+//			Gson gson = new GsonBuilder().create();
 //            return gson.toJson(toReturn);
 			return toReturn;
 		} catch (Throwable th) {
@@ -232,7 +231,6 @@ public class TramitSistraService {
 			throws RestException {
 
 		final String methodName = "getDatosFormularioFromTicket";
-		final String language = "ca";
 
 		log.info("Metode REST: " + methodName);
 		log.info("ticket: " + ticket);

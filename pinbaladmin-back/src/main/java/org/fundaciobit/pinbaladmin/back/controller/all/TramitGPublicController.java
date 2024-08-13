@@ -55,7 +55,7 @@ public class TramitGPublicController extends TramitGOperadorController {
         tramitForm.addHiddenField(TRAMITID);
 
         if (tramitForm.isNou()) {
-            TramitGDadesTitJPA tramitG = tramitForm.getTramitGDadesTit();
+//            TramitGDadesTitJPA tramitG = tramitForm.getTramitGDadesTit();
 
 //            tramitG.setNif("45186147W");
 //            tramitG.setNom("Isi");

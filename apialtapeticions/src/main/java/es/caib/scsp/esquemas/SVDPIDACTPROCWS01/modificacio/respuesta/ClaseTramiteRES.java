@@ -18,11 +18,11 @@ public class ClaseTramiteRES
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "ClaseTramite");
 
     public ClaseTramiteRES(Integer value) {
-        super(NAME, ((Class) Integer.class), null, value);
+        super(NAME, Integer.class, null, value);
     }
 
     public ClaseTramiteRES() {
-        super(NAME, ((Class) Integer.class), null, null);
+        super(NAME, Integer.class, null, null);
     }
 
 }

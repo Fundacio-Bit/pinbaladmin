@@ -18,11 +18,11 @@ public class CodigoEstadoRES
     protected final static QName NAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "CodigoEstado");
 
     public CodigoEstadoRES(String value) {
-        super(NAME, ((Class) String.class), null, value);
+        super(NAME, String.class, null, value);
     }
 
     public CodigoEstadoRES() {
-        super(NAME, ((Class) String.class), null, null);
+        super(NAME, String.class, null, null);
     }
 
 }

@@ -1501,9 +1501,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
                 }
                 
             } else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
-                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
-                String desc = "Excel de serveis i procediments";
-                String tipo = "EXCEL DE SERVICIOS";
+//                FitxerJPA fitxer = document.getDocument().getFitxerOriginal();
+//                String desc = "Excel de serveis i procediments";
+//                String tipo = "EXCEL DE SERVICIOS";
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
             } else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI || tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {

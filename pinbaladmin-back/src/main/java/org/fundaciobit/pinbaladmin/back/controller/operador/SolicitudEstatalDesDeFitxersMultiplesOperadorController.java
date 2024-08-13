@@ -147,7 +147,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
     }
 
-    public static List<SolicitudJPA> crearSolicitudsDesDeEmail(HttpServletRequest request, EmailMessageInfo emi,
+    @SuppressWarnings("resource")
+	public static List<SolicitudJPA> crearSolicitudsDesDeEmail(HttpServletRequest request, EmailMessageInfo emi,
             String operador, Logger log, ServeiService serveiEjb, SolicitudLogicaService solicitudLogicaEjb)
             throws Exception {
         // Cercar XLSX dins dels attachments
