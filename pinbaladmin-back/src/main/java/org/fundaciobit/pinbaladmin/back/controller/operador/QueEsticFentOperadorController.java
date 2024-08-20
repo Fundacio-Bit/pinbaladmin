@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +40,11 @@ import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.queesticfent.apiexterna.client.api.ModificacionsApi;
+import org.fundaciobit.queesticfent.apiexterna.client.model.AddModificacioRequest;
+import org.fundaciobit.queesticfent.apiexterna.client.services.ApiClient;
+import org.fundaciobit.queesticfent.apiexterna.client.services.ApiException;
+import org.fundaciobit.queesticfent.apiexterna.client.services.auth.HttpBasicAuth;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -225,47 +236,94 @@ public class QueEsticFentOperadorController {
             @PathVariable("msgEnc") String msgEnc) {
 
         try {
-            String login = Configuracio.getQueEsticFentUser();
-            String password = Configuracio.getQueEsticFentPassword();
-            String url = Configuracio.getQueEsticFentBDURL();
+        	
+			final ModificacionsApi api = getApi();
+
+			AddModificacioRequest modificacio = new AddModificacioRequest();
+			
+			String usuariID = usuari;
+			Long projecteID = 1021L; //PINBAL
+			String language = "ca";
+			
+//			Date date;
+//            try {
+//                date = SDF.parse(dateStr);
+//            } catch (Throwable e) {
+//                date = new Date();
+//                dateStr = SDF.format(date);
+//            }
+//            Timestamp data = new Timestamp(date.getTime());
             
-            Connection con = DriverManager.getConnection(url, login, password);
-            String SQL_INSERT = "INSERT INTO qef_modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
+            // 1. Convertir la cadena a LocalDate
+            LocalDate fechaLocal = LocalDate.parse(dateStr);
 
-            PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT);
+            // 2. Convertir LocalDate a LocalDateTime (a medianoche)
+            LocalDateTime fechaLocalDateTime = fechaLocal.atStartOfDay();
 
-            int accioID = -3;
-            String usuariID = usuari;
-            int projecteID = 1021; //PINBAL
-
-            Date date;
-            try {
-                date = SDF.parse(dateStr);
-            } catch (Throwable e) {
-                date = new Date();
-                dateStr = SDF.format(date);
-            }
-            Timestamp data = new Timestamp(date.getTime());
+            // 3. Convertir LocalDateTime a OffsetDateTime, añadiendo el offset (por ejemplo, UTC+0)
+            OffsetDateTime data = fechaLocalDateTime.atOffset(ZoneOffset.UTC);
 
             String dada1 = decode(msgEnc);
-
-            preparedStatement.setInt(1, accioID);
-            preparedStatement.setString(2, usuariID);
-            preparedStatement.setInt(3, projecteID);
-            preparedStatement.setTimestamp(4, data);
-            preparedStatement.setString(5, dada1);
-
-            int row = preparedStatement.executeUpdate();
-            // rows affected
-            if (row == 1) {
-                log.info("Afegit missatge: " + dada1);
-            }
             
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+			modificacio.setUsuariID(usuariID);
+			modificacio.setProjecteID(projecteID);
+			modificacio.setData(data);
+			modificacio.setDada1(dada1);
+			modificacio.setLanguage(language);
+//			modificacio.set
+
+			Long response2 = api.add(modificacio);
+
+			System.out.println("Response2 = " + response2);
+        	
+			if (response2 != null) {
+				log.info("Afegit missatge: " + dada1);
+			}
+			
+//        	
+//        	
+//            String login = Configuracio.getQueEsticFentUser();
+//            String password = Configuracio.getQueEsticFentPassword();
+//            String url = Configuracio.getQueEsticFentBDURL();
+//            
+//            Connection con = DriverManager.getConnection(url, login, password);
+//            String SQL_INSERT = "INSERT INTO qef_modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
+//
+//            PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT);
+//
+//            int accioID = -3;
+//
+//            Date date;
+//            try {
+//                date = SDF.parse(dateStr);
+//            } catch (Throwable e) {
+//                date = new Date();
+//                dateStr = SDF.format(date);
+//            }
+//            Timestamp data = new Timestamp(date.getTime());
+//
+//
+//            preparedStatement.setInt(1, accioID);
+//            preparedStatement.setString(2, usuariID);
+//            preparedStatement.setInt(3, projecteID);
+//            preparedStatement.setTimestamp(4, data);
+//            preparedStatement.setString(5, dada1);
+//
+//            int row = preparedStatement.executeUpdate();
+//            // rows affected
+//            if (row == 1) {
+//                log.info("Afegit missatge: " + dada1);
+//            }
+            
+//        } catch (SQLException e) {
+//            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (ApiException e) {
+        	log.error("Error API al afegir entrada: " + e.getMessage(), e);
+			e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+        	log.error("Error al afegir entrada: " + e.getMessage(), e);
+        	e.printStackTrace();
+		}
     }
 
     public String encode(String originalInput) {
@@ -284,4 +342,27 @@ public class QueEsticFentOperadorController {
         String missatge = new String(decodedBytes);
         return missatge;
     }
+    
+    
+	private ModificacionsApi getApi() {
+
+		String username = Configuracio.getQueEsticFentUser();
+		String password = Configuracio.getQueEsticFentPassword();
+		String host = Configuracio.getQueEsticFentBDURL();
+
+		log.info("host: " + host + ", username: " + username + ", password " + password);
+		
+		ApiClient client = new ApiClient();
+		client.setBasePath(host);
+		client.setUsername(username);
+		client.setPassword(password);
+		
+		HttpBasicAuth basicAuth = (HttpBasicAuth) client.getAuthentication("BasicAuth");
+		basicAuth.setUsername(username);
+		basicAuth.setPassword(password);
+
+		ModificacionsApi api = new ModificacionsApi(client);
+		log.info("api : " + api);
+		return api;
+	}
 }

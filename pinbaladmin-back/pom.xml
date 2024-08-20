@@ -35,9 +35,7 @@
             <scope>provided</scope>
         </dependency>
 
-
         <!-- Externas -->
-
         <dependency>
             <groupId>org.fundaciobit.genapp</groupId>
             <artifactId>genapp-web</artifactId>
@@ -57,6 +55,18 @@
             <version>2.0</version>
             <scope>provided</scope>
         </dependency>
+
+		<dependency>
+			<groupId>org.fundaciobit.queesticfent</groupId>
+			<artifactId>queesticfent-api-externa-client</artifactId>
+			<version>1.0</version>
+			<exclusions>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
+             </exclusions>
+		</dependency>
 
 
         <dependency>
@@ -231,10 +241,10 @@
         <dependency>
             <groupId>org.fundaciobit.pluginsib.core.v3</groupId>
             <artifactId>pluginsib-core</artifactId>
-            <!--<scope>provided</scope>-->
+			<!--<scope>provided</scope>-->
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
-<!--
+		<!--
          Per fer connexions a altres BBDD 
         <dependency>
             <groupId>mysql</groupId>
@@ -242,7 +252,7 @@
             <version>5.1.44</version>
         </dependency>-->
 
-        <!-- CGLib for @Configuration -->
+		<!-- CGLib for @Configuration -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
@@ -293,21 +303,21 @@
             </exclusions>
         </dependency>
 
-        <!-- Externes -->
+		<!-- Externes -->
 
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>4.1.2</version>
-<!--            <scope>provided</scope>-->
+			<!--            <scope>provided</scope>-->
         </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>4.1.2</version>
-<!--            <scope>provided</scope>-->
+			<!--            <scope>provided</scope>-->
             <exclusions>
                 <exclusion>
                     <groupId>stax</groupId>
@@ -320,7 +330,7 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>4.1.2</version>
-<!--            <scope>provided</scope>-->
+			<!--            <scope>provided</scope>-->
         </dependency>
 
         <dependency>
@@ -340,15 +350,15 @@
             </exclusions>
         </dependency>
 
-        <!-- Necessari per OpenCSV -->
+		<!-- Necessari per OpenCSV -->
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
         </dependency>
 
 
-        <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
-        <!--
+		<!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
+		<!--
         <dependency>
             <groupId>javax.xml.parsers</groupId>
             <artifactId>jaxp-api</artifactId>
@@ -366,8 +376,7 @@
         -->
 
 
-
-        <!-- OPENSAGRES XDOCREPORT (to merge odt,docx with Java model and convert to PDF) -->
+		<!-- OPENSAGRES XDOCREPORT (to merge odt,docx with Java model and convert to PDF) -->
         <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.odfdom.converter.core</artifactId>
@@ -394,7 +403,7 @@
             <artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
             <version>${xdocreport.version}</version>
             <exclusions>
-                <!-- This avoids ParseException in template due to unknown built-in: "counter" in freemarker 2.3.20 -->
+				<!-- This avoids ParseException in template due to unknown built-in: "counter" in freemarker 2.3.20 -->
                 <exclusion>
                     <groupId>org.freemarker</groupId>
                     <artifactId>freemarker</artifactId>
@@ -406,11 +415,10 @@
             <artifactId>fr.opensagres.xdocreport.template.velocity</artifactId>
             <version>${xdocreport.version}</version>
         </dependency>
-        <!-- This avoids ParseException in template due to unknown built-in: "counter" in freemarker 2.3.20 -->
+		<!-- This avoids ParseException in template due to unknown built-in: "counter" in freemarker 2.3.20 -->
 
 
-
-        <!-- FreeMaker para formulario xml del tramite Sistra-->
+		<!-- FreeMaker para formulario xml del tramite Sistra-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -429,9 +437,9 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
-        
-        <!-- Api per donar d'alta solicituds de Pinbal a Madrid'
+
+
+		<!-- Api per donar d'alta solicituds de Pinbal a Madrid'
         <dependency>
             <groupId>org.fundaciobit.pinbaladmin</groupId>
             <artifactId>pinbaladmin-altapeticions-api-client</artifactId>
@@ -481,11 +489,11 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <packagingExcludes>
-                        <!-- Requereix afegir mòdul 'org.apache.commons.beanutils' a jboss-deployment-structure.xml -->
+						<!-- Requereix afegir mòdul 'org.apache.commons.beanutils' a jboss-deployment-structure.xml -->
                         **/commons-beanutils-*.redhat*.jar,
-                        <!-- Requereix afegir mòdul 'org.apache.commons.collections' a jboss-deployment-structure.xml -->
+						<!-- Requereix afegir mòdul 'org.apache.commons.collections' a jboss-deployment-structure.xml -->
                         **/commons-collections-*.redhat*.jar,
-                        <!-- Requereix afegir mòdul 'javax.xml.bind.api' a jboss-deployment-structure.xml -->
+						<!-- Requereix afegir mòdul 'javax.xml.bind.api' a jboss-deployment-structure.xml -->
                         **/jboss-jaxb-api*-redhat*.jar
                     </packagingExcludes>
                 </configuration>
