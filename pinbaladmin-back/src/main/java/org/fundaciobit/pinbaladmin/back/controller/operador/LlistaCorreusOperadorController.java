@@ -788,7 +788,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		
 		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
-		boolean condition = true;
+		boolean condition = false;
 		if (condition) {
 			enviarCorreu(Configuracio.getCorreuSuport(), "Suport CAIB", asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}

@@ -71,12 +71,13 @@
 			var div_file = fitxerNorma.parentElement.nextElementSibling;
 			div_file.style.display = "none"
 		}
-		
-		
+				
 		function submitForm() {
 			var form = document.getElementById('tramitJConsentForm');
 			if (validacioFormulario()) {
-				form.submit();
+				if (confirm('Finalitzar tramit?')) {
+					form.submit();
+				}
 			}else{
 				crearMissatgeError(form, "Revisi els errors de formulari");
 			}
