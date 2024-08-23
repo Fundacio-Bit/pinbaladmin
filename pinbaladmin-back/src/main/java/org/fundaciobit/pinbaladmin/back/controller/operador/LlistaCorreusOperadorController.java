@@ -778,7 +778,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 //		String titol = soli.getProcedimentNom();
 		
 		String asumpte = "PINBAL [" + itemID + "] - ALTA " + tipus.toUpperCase() + " - " + titol;
-		if (soli.getExpedientPid() != null) {
+		if (titol.indexOf("PID[") == 0 && soli.getExpedientPid() != null) {
 			asumpte = "PID [" + soli.getExpedientPid() + "] - " + asumpte;
 		}
 		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
