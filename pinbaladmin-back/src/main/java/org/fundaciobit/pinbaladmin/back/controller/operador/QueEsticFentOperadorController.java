@@ -10,11 +10,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,8 @@ import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.queesticfent.apiexterna.client.api.ModificacionsApi;
 import org.fundaciobit.queesticfent.apiexterna.client.model.AddModificacioRequest;
+import org.fundaciobit.queesticfent.apiexterna.client.model.GetModificacionsResponse;
+import org.fundaciobit.queesticfent.apiexterna.client.model.ModificacioRest;
 import org.fundaciobit.queesticfent.apiexterna.client.services.ApiClient;
 import org.fundaciobit.queesticfent.apiexterna.client.services.ApiException;
 import org.fundaciobit.queesticfent.apiexterna.client.services.auth.HttpBasicAuth;
@@ -186,9 +190,48 @@ public class QueEsticFentOperadorController {
             mav.addObject("items", fullevents.values());
             mav.addObject("contexte", getContextWeb());
 
+            //Events ja afegits a queesticfent
+            
+			final ModificacionsApi api = getApi();
+			
+			
+			log.info("username: " + username + ", dateStr: " + dateStr);
+			GetModificacionsResponse responseApi = api.getmodificacions(username, dateStr, "ca");
+			List<ModificacioRest> modificaciones = responseApi.getModificacions();
+
+			//Afegir a un altre llistat els events que ja estan afegits
+			Map<String, String[]> eventsAfegits = new TreeMap<String, String[]>();
+
+			//Cercar la modificacio al llistat fullEvents, i si existeix, afegir-la a eventsAfegits
+			for (ModificacioRest mod : modificaciones) {
+
+				String dada = mod.getDada1();
+				
+				if (mod.getProjecteID() == 1021L && dada.contains(":")) {
+					log.info("dada: " + dada);
+
+					String tipus = dada.split(":")[0].trim();
+					String titol = dada.split(":")[1].trim();
+					String hash = encode(dada);
+
+					String[] missatge = { tipus, titol, hash };
+
+					if (fullevents.containsKey(hash)) {
+						log.info("Ja afegit: " + dada);
+						fullevents.remove(hash);
+						eventsAfegits.put(hash, missatge);
+					}
+				}
+			}
+			log.info("Queesticfent: #eventsAfegits=" + eventsAfegits.size());
+			request.setAttribute("itemsAfegits", eventsAfegits.values());
+
         } catch (I18NException e) {
             HtmlUtils.saveMessageError(request, "Error llegint events: " + I18NUtils.getMessage(e));
-        }
+        } catch (ApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return mav;
     }
 
@@ -227,7 +270,7 @@ public class QueEsticFentOperadorController {
         String hash = encode(tipus + ": " + titol);
 
         String[] missatge = { tipus, titol, hash };
-        fullevents.put(event + id, missatge);
+        fullevents.put(hash, missatge);
     }
 
     @RequestMapping(value = "/afegirEntrada/{usuari}/{dateStr}/{msgEnc}", method = RequestMethod.GET)
@@ -245,22 +288,13 @@ public class QueEsticFentOperadorController {
 			Long projecteID = 1021L; //PINBAL
 			String language = "ca";
 			
-//			Date date;
-//            try {
-//                date = SDF.parse(dateStr);
-//            } catch (Throwable e) {
-//                date = new Date();
-//                dateStr = SDF.format(date);
-//            }
-//            Timestamp data = new Timestamp(date.getTime());
-            
             // 1. Convertir la cadena a LocalDate
-            LocalDate fechaLocal = LocalDate.parse(dateStr);
+			// 2. Convertir LocalDate a LocalDateTime (a la hora actual)
+			// 3. Convertir LocalDateTime a OffsetDateTime, añadiendo el offset (por ejemplo, UTC+0)
 
-            // 2. Convertir LocalDate a LocalDateTime (a medianoche)
-            LocalDateTime fechaLocalDateTime = fechaLocal.atStartOfDay();
-
-            // 3. Convertir LocalDateTime a OffsetDateTime, añadiendo el offset (por ejemplo, UTC+0)
+			LocalDate fechaLocal = LocalDate.parse(dateStr);
+            LocalTime time = LocalTime.now();
+			LocalDateTime fechaLocalDateTime = fechaLocal.atTime(time);
             OffsetDateTime data = fechaLocalDateTime.atOffset(ZoneOffset.UTC);
 
             String dada1 = decode(msgEnc);
@@ -270,7 +304,6 @@ public class QueEsticFentOperadorController {
 			modificacio.setData(data);
 			modificacio.setDada1(dada1);
 			modificacio.setLanguage(language);
-//			modificacio.set
 
 			Long response2 = api.add(modificacio);
 
@@ -279,44 +312,6 @@ public class QueEsticFentOperadorController {
 			if (response2 != null) {
 				log.info("Afegit missatge: " + dada1);
 			}
-			
-//        	
-//        	
-//            String login = Configuracio.getQueEsticFentUser();
-//            String password = Configuracio.getQueEsticFentPassword();
-//            String url = Configuracio.getQueEsticFentBDURL();
-//            
-//            Connection con = DriverManager.getConnection(url, login, password);
-//            String SQL_INSERT = "INSERT INTO qef_modificacionsqueesticfent (accioID, usuariID, projecteID, data, dada1) VALUES (?,?,?,?,?)";
-//
-//            PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT);
-//
-//            int accioID = -3;
-//
-//            Date date;
-//            try {
-//                date = SDF.parse(dateStr);
-//            } catch (Throwable e) {
-//                date = new Date();
-//                dateStr = SDF.format(date);
-//            }
-//            Timestamp data = new Timestamp(date.getTime());
-//
-//
-//            preparedStatement.setInt(1, accioID);
-//            preparedStatement.setString(2, usuariID);
-//            preparedStatement.setInt(3, projecteID);
-//            preparedStatement.setTimestamp(4, data);
-//            preparedStatement.setString(5, dada1);
-//
-//            int row = preparedStatement.executeUpdate();
-//            // rows affected
-//            if (row == 1) {
-//                log.info("Afegit missatge: " + dada1);
-//            }
-            
-//        } catch (SQLException e) {
-//            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (ApiException e) {
         	log.error("Error API al afegir entrada: " + e.getMessage(), e);
 			e.printStackTrace();

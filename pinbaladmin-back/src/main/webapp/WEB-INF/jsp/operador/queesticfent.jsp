@@ -12,7 +12,7 @@
 
 
 <c:if test="${empty items}">
-	<b>NO HI HA ENTRADES !!!!!<b>
+	<b>NO HI HA ENTRADES PER AFEGIR!!!!!</b>
 </c:if>
 
 
@@ -26,7 +26,7 @@
 	width: 6rem;
 }
 
-#taulaEntrades {
+#taulaEntrades, #taulaEntradesAfegides {
 	margin-top: 1rem;
 	width: auto;
 }
@@ -108,7 +108,34 @@ th {
 			</c:forEach>
 		</tbody>
 	</table>
+</c:if>
 
+<br>
+	<c:if test="${not empty itemsAfegits}">
+		<h4>Entrades Afegides</h4>
+		<table id="taulaEntradesAfegides" border="1"
+			class="table table-sm table-bordered table-striped table-genapp">
+
+			<thead>
+				<tr>
+					<th></th>
+					<th>Tipus [ID]</th>
+					<th>Títol</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="afegit" items="${itemsAfegits}">
+					<tr>
+						<td class="itemInfo itemSel"><input type="checkbox"
+							name='checkbox[]' value='${afegit[2]}'></td>
+						<td class="itemInfo itemID">${afegit[0]}</td>
+						<td class="itemInfo itemMsg">${afegit[1]}</td>
+						<td class="itemInfo itemHash">${afegit[2]}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</c:if>
 	<script type="text/javascript">
     	var user = '<%=request.getRemoteUser()%>';
     	var data = $("#inputDate").val();
@@ -172,7 +199,6 @@ th {
 			}
 		}
 	</script>
-</c:if>
 
 </body>
 </html>
