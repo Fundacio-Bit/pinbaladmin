@@ -111,94 +111,91 @@ th {
 </c:if>
 
 <br>
-	<c:if test="${not empty itemsAfegits}">
-		<h4>Entrades Afegides</h4>
-		<table id="taulaEntradesAfegides" border="1"
-			class="table table-sm table-bordered table-striped table-genapp">
+<c:if test="${not empty itemsAfegits}">
+<h4>Entrades Afegides</h4>
+<table id="taulaEntradesAfegides" border="1"
+	class="table table-sm table-bordered table-striped table-genapp">
 
-			<thead>
-				<tr>
-					<th></th>
-					<th>Tipus [ID]</th>
-					<th>Títol</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="afegit" items="${itemsAfegits}">
-					<tr>
-						<td class="itemInfo itemSel"><input type="checkbox"
-							name='checkbox[]' value='${afegit[2]}'></td>
-						<td class="itemInfo itemID">${afegit[0]}</td>
-						<td class="itemInfo itemMsg">${afegit[1]}</td>
-						<td class="itemInfo itemHash">${afegit[2]}</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</c:if>
-	<script type="text/javascript">
-    	var user = '<%=request.getRemoteUser()%>';
-    	var data = $("#inputDate").val();
-	
-        var ENTRADES_PER_AFEGIR;
-    	var ENTRADES_AFEGIDES;
-    	
-    	function afegirEntradaXhttp(user, date, msg){
-            
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                	testFinal();
-                }
-            };
+	<thead>
+		<tr>
+			<th></th>
+			<th>Tipus [ID]</th>
+			<th>Títol</th>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="afegit" items="${itemsAfegits}">
+			<tr>
+				<td class="itemInfo itemSel"><input type="checkbox"
+					name='checkbox[]' value='${afegit[2]}'></td>
+				<td class="itemInfo itemID">${afegit[0]}</td>
+				<td class="itemInfo itemMsg">${afegit[1]}</td>
+				<td class="itemInfo itemHash">${afegit[2]}</td>
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>
+</c:if>
+<script type="text/javascript">
+  	var user = '<%=request.getRemoteUser()%>';
+  	var data = $("#inputDate").val();
 
-            var url =  '<%=request.getContextPath()%> ${contexte}/afegirEntrada/' + user + "/" + date + "/" + msg;
-            xhttp.open("GET", url, true);
-            xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.send('');
-        }
-        
-    	
-		function afegirUnaEntrada(missatge) {
-			ENTRADES_AFEGIDES= 0;
-			ENTRADES_PER_AFEGIR = 1;
-			afegirEntradaXhttp(user, data, missatge);
+      var ENTRADES_PER_AFEGIR;
+  	var ENTRADES_AFEGIDES;
+  	
+  	function afegirEntradaXhttp(user, date, msg){
+          
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+              	testFinal();
+              }
+          };
+
+          var url =  '<%=request.getContextPath()%> ${contexte}/afegirEntrada/' + user + "/" + date + "/" + msg;
+          xhttp.open("GET", url, true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send('');
+      }
+      
+  	
+function afegirUnaEntrada(missatge) {
+	ENTRADES_AFEGIDES= 0;
+	ENTRADES_PER_AFEGIR = 1;
+	afegirEntradaXhttp(user, data, missatge);
+}
+
+function afegirTotesLesEntrades() {
+	var items = document.getElementsByClassName("itemInfo itemHash");
+	ENTRADES_AFEGIDES= 0;
+          ENTRADES_PER_AFEGIR = items.length;
+
+	for (var i = 0; i < items.length; i++) {
+		var missatge = items[i].innerText;
+		afegirEntradaXhttp(user, data, missatge);
+	}
+}
+
+function afegirSeleccionats(){
+       var items = $('input[type=checkbox]:checked');
+       ENTRADES_AFEGIDES= 0;
+          ENTRADES_PER_AFEGIR = items.length;
+
+	for (var i = 0; i < items.length; i++) {
+		var missatge = items[i].value;
+		afegirEntradaXhttp(user, data, missatge);
+	}
+}
+
+function testFinal(){
+	ENTRADES_AFEGIDES++;
+
+	if (ENTRADES_AFEGIDES == ENTRADES_PER_AFEGIR) {
+		if (ENTRADES_AFEGIDES == 1) {
+               alert("S'ha afegit l'entrada");
+		}else{
+               alert("S'han afegit " + ENTRADES_AFEGIDES + " entrades");
 		}
-
-		function afegirTotesLesEntrades() {
-			var items = document.getElementsByClassName("itemInfo itemHash");
-			ENTRADES_AFEGIDES= 0;
-            ENTRADES_PER_AFEGIR = items.length;
-
-			for (var i = 0; i < items.length; i++) {
-				var missatge = items[i].innerText;
-				afegirEntradaXhttp(user, data, missatge);
-			}
-		}
-		
-		function afegirSeleccionats(){
-	        var items = $('input[type=checkbox]:checked');
-	        ENTRADES_AFEGIDES= 0;
-            ENTRADES_PER_AFEGIR = items.length;
-
-			for (var i = 0; i < items.length; i++) {
-				var missatge = items[i].value;
-				afegirEntradaXhttp(user, data, missatge);
-			}
-		}
-		
-		function testFinal(){
-			ENTRADES_AFEGIDES++;
-
-			if (ENTRADES_AFEGIDES == ENTRADES_PER_AFEGIR) {
-				if (ENTRADES_AFEGIDES == 1) {
-	                alert("S'ha afegit l'entrada");
-				}else{
-	                alert("S'han afegit " + ENTRADES_AFEGIDES + " entrades");
-				}
-			}
-		}
-	</script>
-
-</body>
-</html>
+	}
+}
+</script>

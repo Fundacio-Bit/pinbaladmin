@@ -56,19 +56,6 @@
             <scope>provided</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.fundaciobit.queesticfent</groupId>
-			<artifactId>queesticfent-api-externa-client</artifactId>
-			<version>1.0</version>
-			<exclusions>
-                <exclusion>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>jsr305</artifactId>
-                </exclusion>
-             </exclusions>
-		</dependency>
-
-
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>

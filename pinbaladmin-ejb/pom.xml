@@ -73,6 +73,12 @@
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
 
+		<dependency>
+			<groupId>org.fundaciobit.queesticfent</groupId>
+			<artifactId>queesticfent-api-externa-client</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
         <!--         <dependency>
             <groupId>org.fundaciobit.pluginsib.utils</groupId>
             <artifactId>pluginsib-utils-commons</artifactId>
