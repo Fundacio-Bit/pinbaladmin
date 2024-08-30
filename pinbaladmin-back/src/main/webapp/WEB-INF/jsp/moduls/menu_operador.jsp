@@ -97,6 +97,13 @@
 				style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
 		</a></li>
 
+		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/estadistiques/list"/>"> <span
+				style="${(fn:contains(url, '/operador/estadistiques'))? "font-weight:bold;" : ""}">Estadístiques</span>
+		</a></li>
 		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 	

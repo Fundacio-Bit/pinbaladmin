@@ -283,6 +283,10 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/queesticfent.jsp" />
     </definition>
     
+    <definition name="estadistiques" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/estadistiques.jsp" />
+    </definition>
+
     <definition name="tramitview" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/tramitView.jsp" />
     </definition>
