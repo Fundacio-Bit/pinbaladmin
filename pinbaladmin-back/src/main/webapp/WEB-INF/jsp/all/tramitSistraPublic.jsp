@@ -1,4 +1,5 @@
 <!--  Capçalera i peu -->
+<%@page import="org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController"%>
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
@@ -16,12 +17,12 @@
 
 	<div id="titol-tramit" class="third">Sol·litud d'autorització</div>
 	<div id="button-menu" class="third">
-		<a href="https://se.caib.es/sistramitfront/asistente/iniciarTramite.html?tramite=CAIB.MODERNITZACIO.TEST_PINBALADMIN&version=1&idioma=ca&servicioCatalogo=false&idTramiteCatalogo=3261202">Tornar a Sistra</a>
+		<a href="<%=request.getContextPath() + TramitAPublicController.CONTEXT_WEB %>/cancelarTramit/${uuid}"><fmt:message key="tramit.sistra.cancelar.tramit"/></a>
 	</div>
 </div>
 
 <div id="footer">
-	<p>© 2024 - Fundacio BIT</p>
+	<p>© 2024 - Fundació BIT</p>
 </div>
 
 <script>
@@ -32,6 +33,8 @@
 	    
 		body.insertBefore(header, body.firstElementChild);
 		body.appendChild(footer);
+		
+		$(".alert.alert-success").hide();
 	});
 </script>
 

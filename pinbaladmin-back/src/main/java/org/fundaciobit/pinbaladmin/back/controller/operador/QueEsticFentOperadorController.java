@@ -190,7 +190,7 @@ public class QueEsticFentOperadorController {
 
 				if (fullevents.containsKey(hash)) {
 					String tipus = dada.split(":")[0].trim();
-					String titol = dada.split(":")[1].trim();
+					String titol = dada.substring(tipus.length() + 2, dada.length());
 
 					String[] missatge = { tipus, titol, hash };
 

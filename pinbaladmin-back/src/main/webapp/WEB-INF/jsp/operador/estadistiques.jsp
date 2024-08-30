@@ -106,7 +106,11 @@ th {
 #dades {
 	width: 70rem;
 	text-align: center;
-	margin: 0 6rem;
+	margin: 0rem;
+}
+
+#dades tr:hover {
+  background-color: #DDD;
 }
 </style>
 
