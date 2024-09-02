@@ -131,3 +131,6 @@ hs_err_pid*
 /pinbaladmin-ear/.project
 /pinbaladmin-ear/.settings
 /pinbaladmin-ear/target
+/scripts/bbdd/postgresql/2.0/last_changes.sql
+/scripts/bbdd/postgresql/2.0/update actualitzar consentiment.sql
+/correu.html

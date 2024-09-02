@@ -118,7 +118,6 @@ th {
 
 	<thead>
 		<tr>
-			<th></th>
 			<th>Tipus [ID]</th>
 			<th>Títol</th>
 		</tr>
@@ -126,11 +125,8 @@ th {
 	<tbody>
 		<c:forEach var="afegit" items="${itemsAfegits}">
 			<tr>
-				<td class="itemInfo itemSel"><input type="checkbox"
-					name='checkbox[]' value='${afegit[2]}'></td>
 				<td class="itemInfo itemID">${afegit[0]}</td>
 				<td class="itemInfo itemMsg">${afegit[1]}</td>
-				<td class="itemInfo itemHash">${afegit[2]}</td>
 			</tr>
 		</c:forEach>
 	</tbody>
