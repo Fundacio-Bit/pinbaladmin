@@ -1,4 +1,5 @@
 
+<%@page import="org.fundaciobit.pinbaladmin.back.controller.operador.LlistaCorreusOperadorController"%>
 <script>
 
     var emailIDCache;
@@ -64,7 +65,113 @@
         $("#modelSeleccioTramitador").modal();
     }
     
+    function cleanModalCorreu() {
+    	$("#visorCorreu").empty();
+    	
+		$("#adjuntsContainerCorreu").empty();
+		$("#adjuntsContainerCorreu").hide();
+
+		$("#div-nAdjunts").hide();
+		$(".modal-title").empty();
+	}
     
+    function veureCorreu(emailID) {
+    	
+    	cleanModalCorreu();
+    	
+    	$.ajax({
+			url : "<%= request.getContextPath() + LlistaCorreusOperadorController.CONTEXT_WEB %>/viewMessage2",
+			type : "GET",
+			data : {
+				emailID : emailID
+			},
+			success : function(data) {
+				var emi = JSON.parse(data);
+				console.log(emi);
+				console.log(typeof emi);
+					
+				if(typeof emi === "string"){
+					$("#visorCorreu").html("<h1>" + emi +"</h1>");
+                }else{
+					
+					$("#visorCorreu").html(emi.body);
+			        $(".modal-title").html(emi.subject);
+			        
+			        var infoAdjunts = "Correu amb " + emi.attachments.length + " adjunts";
+					$("#div-nAdjunts").html(infoAdjunts);
+					$("#div-nAdjunts").show();
+
+					emi.attachments.forEach(function(attach) {
+						
+						var clase = getClaseFromAttach(attach);
+						var name = attach.fileName.replaceAll("_", ' ');
+						var adjuntDiv = $("<div class='adjuntDivCorreu "+ clase + "'>"+name+"</div>");
+						
+	                    $("#adjuntsContainerCorreu").append(adjuntDiv);
+	                    $("#adjuntsContainerCorreu").show();
+					}); 
+					
+				}
+			}
+		});
+        $("#modelVeureCorreu").modal();
+    }
+    
+    function getClaseFromAttach(attach){
+    	
+    	var mime = attach.contentType;
+		console.log(mime);
+		
+		var clase = "unknow";
+		switch (mime) {
+		  case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+		  case "application/vnd.ms-excel":
+		    clase = "excel";
+		    break;
+		  case "application/msword":
+		  case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+		    clase = "word";
+		    break;
+		  case "application/pdf":
+		    clase = "pdf";
+		    break;
+		  case "image/jpeg":
+		  case "image/png":
+		    clase = "image";
+		    break;
+		  case "text/plain":
+		    clase = "text";
+		    break;
+		  case "application/zip":
+		    clase = "zip";
+		    break;
+		  case "application/xml":
+		    clase = "xml";
+		    break;
+		}
+		
+		if(clase == "unknow"){
+			var name = attach.fileName;
+            console.log("name: " + name);
+            if(name.includes("xlsx") || name.includes("xls")){
+                clase = "excel";
+            } else if(name.includes("word")){
+            	clase = "word";
+            } else if(name.includes("pdf")){
+            	clase = "pdf";
+            } else if(name.includes("png") || name.includes("jpeg")){
+            	clase = "image";
+            } else if(name.includes("text")){
+            	clase = "text";
+            } else if(name.includes("zip")){
+            	clase = "zip";
+            } else if(name.includes("xml")){
+            	clase = "xml";
+            }
+        }
+		
+		return clase;
+    }
     
 	function testExist() {
 		var checkBox = document.getElementById("checkNewItem");
@@ -76,6 +183,12 @@
 			$("#existent_element").hide();
 		}
 	}
+	
+	$(document).ready(function() {
+		$('#modelVeureCorreu').on('hide.bs.modal', function(e) {
+			cleanModalCorreu();
+		});
+	});
 </script>
 
 
@@ -144,11 +257,36 @@
 				<div class="modal-footer">
 				<button type="button" class="btn btn-default" onClick="myFunction()"
 					data-dismiss="modal">Ok</button>
+				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
+
+<!-- MODAL PER VEURE UN CORREU -->
+<div class="modal fade" id="modelVeureCorreu" role="dialog">
+	<div class="modal-dialog" style="max-width: 35rem;">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 id="modal-title" class="modal-title"></h4>
+				<button type="button" class="close"
+					style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
+			</div>
+
+			<div class="modal-body">
+				<div id="div-nAdjunts"></div>
+				<div id="adjuntsContainerCorreu"></div>
+	
+ 				<div id="visorCorreu"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 
 <style>
 .my_select {
@@ -207,6 +345,74 @@
 
 #label_tipusIncidencia, #label_operador, #label_estatSolicitud {
 	font-size: 1.15rem;
+}
+
+#modalVeureCorreu {
+	max-width: 600px;
+}
+
+#div-nAdjunts {
+	text-align: center;
+	padding: 5px;
+	border: 1px black outset;
+	border-radius: 5px;
+	margin-bottom: 1rem;
+	background-color: #ececec;
+}
+
+#adjuntsContainerCorreu {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin: 1rem auto;
+}
+
+.adjuntDivCorreu {
+	border: 1px black solid;
+	margin: 3px;
+	padding: 3px;
+	padding-left: 1rem;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+.excel {
+	background-color: #28a745;
+	color: white;
+}
+
+.word {
+	background-color: #007bff;
+	color: white;
+}
+
+.pdf {
+	background-color: #dc3545;
+	color: white;
+}
+
+.image {
+	background-color: #17a2b8;
+	color: white;
+}
+
+.text {
+	background-color: #ffc107;
+	color: black;
+}
+
+.zip {
+	background-color: #9b3add;
+	color: white;
+}
+
+.xml {
+	background-color: #17a2b8;
+	color: white;
+}
+
+.unknow {
+	background-color: #6c757d;
+	color: white;
 }
 </style>
 

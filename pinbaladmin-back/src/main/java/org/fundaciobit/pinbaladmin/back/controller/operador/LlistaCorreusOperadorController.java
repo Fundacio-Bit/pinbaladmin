@@ -56,16 +56,20 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+
 /**
  * 
  * @author anadal
  *
  */
 @Controller
-@RequestMapping(value = "/operador/llistacorreus")
+@RequestMapping(value = LlistaCorreusOperadorController.CONTEXT_WEB)
 @SessionAttributes(types = { EmailForm.class, EmailFilterForm.class })
 public class LlistaCorreusOperadorController extends EmailController {
 
+	public static final String CONTEXT_WEB= "/operador/llistacorreus";
+	    
     public static final String CACHE_DE_EMAILS_LLEGITS = "__CACHE_DE_EMAILS_LLEGITS__";
 
     public static final String CACHE_SIZE_DE_EMAILS_LLEGITS = "__CACHE_SIZE_DE_EMAILS_LLEGITS__";
@@ -145,6 +149,11 @@ public class LlistaCorreusOperadorController extends EmailController {
             // Afegir boto per Solicitud
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
                     "solicitud.convertir", "javascript:crearSolicitud({0})", AdditionalButtonStyle.SUCCESS)); // getContextWeb() + \"/solicitud/{0}\"
+
+            //Afegir botó per veure missatge a un iframe
+            emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE, "llistatcorreus.veurecorreu", 
+            		"javascript:veureCorreu({0})", AdditionalButtonStyle.INFO)); // getContextWeb() + \"/solicitud/{0}\"
+            
         }
 
         // Tramitadors
@@ -675,6 +684,94 @@ public class LlistaCorreusOperadorController extends EmailController {
         }
 
     }
+
+    @RequestMapping(value = "/viewMessage/{emailID}" )
+    public void getMessageView(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("emailID") java.lang.Long emailID) {
+
+        try {
+        	log.info("XYZ ZZZ getMessageEmail(" + emailID + ")");
+
+			final boolean enableCertificationCheck = false;
+			EmailReader er = new EmailReader(enableCertificationCheck);
+			
+			if (er.getCountMessages() == cachesize(request)) {
+				EmailMessageInfo emi = er.getMessage((int) (long) emailID);
+
+				String msg = emi.getBody();
+				log.info("msg = " + msg.length());
+
+				request.getSession().setAttribute("adjunts", emi.getAttachments().size());
+				log.info("adjunts = " + emi.getAttachments().size());
+				
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+
+				PrintWriter os = response.getWriter();
+				os.print("<html><body>");
+				os.print(msg);
+				os.print("</body></html>");
+				os.flush();
+				os.close();
+            } else {
+            	PrintWriter os = response.getWriter();
+				os.print("<h1>Error. Ha rebut altres correus. Torni a intentar-ho.</h1>");
+				os.flush();
+				os.close();
+            }
+
+        } catch (Throwable e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+	@RequestMapping(value = "/viewMessage2", method = RequestMethod.GET)
+	public void getMessageView2(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			String emailID = (String) request.getParameter("emailID");
+			log.info("XYZ ZZZ 2 getMessageEmail(" + emailID + ")");
+
+			final boolean enableCertificationCheck = false;
+			EmailReader er = new EmailReader(enableCertificationCheck);
+
+			if (er.getCountMessages() == cachesize(request)) {
+				EmailMessageInfo emi = er.getMessage(Integer.parseInt(emailID));
+
+				String msg = emi.getBody();
+				log.info("msg = " + msg.length());
+				log.info("adjunts = " + emi.getAttachments().size());
+
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+
+				PrintWriter os = response.getWriter();
+
+				Gson g = new Gson();
+				String emiJSON = g.toJson(emi);
+				os.print(emiJSON);
+				
+				os.flush();
+				os.close();
+			} else {
+				PrintWriter os = response.getWriter();
+				
+				Gson g = new Gson();
+				String emiJSON = g.toJson("Error. Ha rebut altres correus. Torni a intentar-ho.");
+				os.print(emiJSON);
+				
+//				os.print("<h1>Error. Ha rebut altres correus. Torni a intentar-ho.</h1>");
+
+				os.flush();
+				os.close();
+			}
+
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
     @Override
     public void delete(HttpServletRequest request, Email email) throws I18NException {
