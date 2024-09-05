@@ -1,10 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic.utils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 import org.apache.log4j.Logger;
