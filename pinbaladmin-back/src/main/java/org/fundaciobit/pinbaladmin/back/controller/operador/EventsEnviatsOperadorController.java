@@ -124,11 +124,17 @@ public class EventsEnviatsOperadorController extends EventController implements 
 
 				hiddenFields.add(FILTRE_AVANZAT_FIELD);
 			}
-
-			mav.addObject("eventsEnviats", true);
-			filterForm.setAttachedAdditionalJspCode(true);
-
+			
+			//Eliminar asumpte i destinatari dels filterBy
+			List<Field<?>> filterBy = filterForm.getDefaultFilterByFields();
+			filterBy.remove(EventFields.ASUMPTE);
+			filterBy.remove(EventFields.DESTINATARI);
+			filterForm.setFilterByFields(filterBy);
 		}
+		
+		mav.addObject("eventsEnviats", true);
+		filterForm.setAttachedAdditionalJspCode(true);
+		
 		return filterForm;
 	}
     
