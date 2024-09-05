@@ -94,7 +94,7 @@ public class CorreusCedentsOperadorController {
 		
 		MailCedentInfo[] mails = { discapacitat, famNombrosa, intervencio, padro };
 
-		String[] codis = {"SVDSCTFNWS01", "SVDSCDDWS01", "SVDCCAACPCWS01", "SVDCCAACPASWS01", "SCDCPAJU"};
+		String[] codis = {"SVDSCTFNWS01", "SVDCCAADISCAPACIDADWS01", "SVDCCAACPCWS01", "SVDCCAACPASWS01", "SCDCPAJU"};
 		
 		for (String codi : codis) {
 			Where wCodi = ServeiFields.CODI.equal(codi);
@@ -108,7 +108,7 @@ public class CorreusCedentsOperadorController {
 			case "SVDSCTFNWS01":
 				famNombrosa.afegirServei(serv);
 				break;
-			case "SVDSCDDWS01":
+			case "SVDCCAADISCAPACIDADWS01":
 				discapacitat.afegirServei(serv);
 				break;
 			case "SVDCCAACPCWS01":

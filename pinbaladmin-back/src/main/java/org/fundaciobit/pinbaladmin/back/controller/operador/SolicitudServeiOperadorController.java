@@ -365,7 +365,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 			case "SVDSCTFNWS01":
 				mail = new MailCedentInfo("FAM_NOMBROSA");
 				break;
-			case "SVDSCDDWS01":
+			case "SVDCCAADISCAPACIDADWS01":
 				mail = new MailCedentInfo("DISCAPACITAT");
 				break;
 			case "SVDCCAACPCWS01":

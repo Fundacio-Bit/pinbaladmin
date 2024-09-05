@@ -344,7 +344,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
                 }
                 log.info("Servei: " + servei.getNom());
                 
-                //servei.getNom = Consulta de datos de discapacidad # SVDSCDDWS01.
+                //servei.getNom = Consulta de datos de discapacidad por el real decreto 888/2022 # SVDCCAADISCAPACIDADWS01
                 String[] parts = servei.getNom().split(" # ");
                 Long id = null;
 				for (String part : parts) {

@@ -102,7 +102,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 			case "SVDSCTFNWS01":
 				famNombrosa.afegirServei(serv);
 				break;
-			case "SVDSCDDWS01":
+			case "SVDCCAADISCAPACIDADWS01":
 				discapacitat.afegirServei(serv);
 				break;
 			case "SVDCCAACPCWS01":
