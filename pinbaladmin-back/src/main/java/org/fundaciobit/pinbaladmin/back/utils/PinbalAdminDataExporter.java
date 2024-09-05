@@ -176,12 +176,12 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 
 			for (int j = 0; j < len; j++) {
 				// TODO nomes claus primaries uniques
-				log.info("J: " + j);
+//				log.info("J: " + j);
 				Object keyValue = Utils.getValueOfJavaField(list.get(j), primaryKeys[0].javaName);
-				log.info(j + " - KeyValue: " + keyValue);
+//				log.info(j + " - KeyValue: " + keyValue);
 
 				String str = values.get(keyValue);
-				log.info(j + " - Str: " + str);
+//				log.info(j + " - Str: " + str);
 
 				ExportItem item = new ExportItem(str, str);
 
@@ -276,24 +276,24 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 			column++;
 		}
 
-		//Comprovació que està tot correcte
-		
-		if (titles.length != items[0].length) {
-            log.error("El nombre de títols no coincideix amb el nombre de columnes");
-		}
-		
-		for (int i = 0; i < titles.length; i++) {
-			log.info("Columna " + i + ": " + titles[i]);
-		}
-		
-		for (int i = 0; i < items.length; i++) {
-			for (int j = 0; j < items[i].length; j++) {
-				log.info("Item[" + i + "][" + j + "]: " + items[i][j].getStringValue());
-			}
-			
-			log.info("\n\n");
-		}
-		
+//		//Comprovació que està tot correcte
+//		
+//		if (titles.length != items[0].length) {
+//            log.error("El nombre de títols no coincideix amb el nombre de columnes");
+//		}
+//		
+//		for (int i = 0; i < titles.length; i++) {
+//			log.info("Columna " + i + ": " + titles[i]);
+//		}
+//		
+//		for (int i = 0; i < items.length; i++) {
+//			for (int j = 0; j < items[i].length; j++) {
+//				log.info("Item[" + i + "][" + j + "]: " + items[i][j].getStringValue());
+//			}
+//			
+//			log.info("\n\n");
+//		}
+//		
 		return new ExportData(titles, items);
 	}
 //
