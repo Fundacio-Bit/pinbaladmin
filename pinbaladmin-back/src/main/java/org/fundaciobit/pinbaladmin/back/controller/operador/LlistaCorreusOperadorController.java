@@ -878,9 +878,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 		if (titol.indexOf("PID[") == 0 && soli.getExpedientPid() != null) {
 			asumpte = "PID [" + soli.getExpedientPid() + "] - " + asumpte;
 		}
-		String msg = "Bon dia;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
-				+ "    Des de la Fundació Bit l'informam que la seva " + tipus + " titulada <br><b>'" + titol
-				+ "</b>'<br>" + " ha estat rebuda correctament i es troba en estudi.<br/><br/>";
+		String msg = "Buenos días;<br/><br/><b>Número " + tipus + ": " + itemID + "</b><br/><br/>"
+				+ "    Desde la Fundación BIT le informamos de que su " + tipus + " titulada <br><b>'" + titol
+				+ "</b>'<br>" + " ha sido recibida correcamente y se encuentra en estudio.<br/><br/>";
 		
 		
 		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
