@@ -261,9 +261,13 @@ public class Configuracio implements Constants {
 		return getProperty(PINBALADMIN_PROPERTY_BASE + "correuscedents.default");
 	}
 	
-	public static String getCorreuSuport() {
-		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport");
+	public static String getCorreuSuportCAIB() {
+		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.caib");
 	}
+	public static String getCorreoSoporteEstatal() {
+		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.estatal");
+	}
+	
     public static String getPortafibGatewayV2() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.url");
     }

@@ -351,8 +351,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 					log.info("Part: " + part);
 					
 					id = serveiEjb.executeQueryOne(ServeiFields.SERVEIID, Where.OR(
-							ServeiFields.CODI.equal(part),
-							ServeiFields.NOM.equal(part), 
+							ServeiFields.CODI.like("%" + part.trim() + "%"),
+							ServeiFields.NOM.like("%" + part.trim() + "%"), 
 							ServeiFields.DESCRIPCIO.like("%" + part.trim() + "%")
 							));
 					

@@ -885,9 +885,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 		
 		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
-		boolean condition = false;
-		if (condition) {
-			enviarCorreu(Configuracio.getCorreuSuport(), "Suport CAIB", asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+		boolean isEstatal = soli.getEntitatEstatal() != null && soli.getEntitatEstatal().trim().length() > 0;
+		if (isEstatal) {
+			enviarCorreu(Configuracio.getCorreoSoporteEstatal(), "Soporte Intermediación", asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 	
@@ -908,8 +908,8 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		enviarCorreu(it.getContacteEmail(), it.getContacteNom(), subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
-		if (titol.indexOf("CAI-") > 0) {
-			enviarCorreu(Configuracio.getCorreuSuport(), "Suport CAIB", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
+		if (titol.contains("CAI-")) {
+			enviarCorreu(Configuracio.getCorreuSuportCAIB(), "Suport CAIB", subject, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_SUPORT);
 		}
 	}
 

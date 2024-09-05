@@ -33,8 +33,12 @@
 
 		// Si es una consulta a suport, el destinatari es suport, sino, el contacte
         if (select.value == -2) {
-    	    document.getElementById("event.destinatari").value = "Suport CAIB";
-    		document.getElementById("event.destinatarimail").value = "<%=Configuracio.getCorreuSuport()%>";
+<%--     	    document.getElementById("event.destinatari").value = "Soporte Intermediación";
+    		document.getElementById("event.destinatarimail").value = "<%=Configuracio.getCorreoSoporteEstatal()%>";
+ --%>
+     	    document.getElementById("event.destinatari").value = "Suport CAIB";
+    		document.getElementById("event.destinatarimail").value = "<%=Configuracio.getCorreuSuportCAIB()%>";
+    		
         } else if (select.value == 1 || select.value == -3) {
             document.getElementById("event.destinatari").value = "${persona_contacte}";
 			document.getElementById("event.destinatarimail").value = "${persona_contacte_mail}";
