@@ -214,7 +214,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
             {
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
-                adfield4.setCodeName("=Sense Llegir");
+                adfield4.setCodeName("sense.llegir");
                 adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
 
                 adfield4.setEscapeXml(false);

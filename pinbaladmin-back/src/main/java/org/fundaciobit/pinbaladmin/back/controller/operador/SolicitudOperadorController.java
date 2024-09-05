@@ -457,7 +457,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             {
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
-                adfield4.setCodeName("=Sense Llegir");
+                adfield4.setCodeName("sense.llegir");
                 adfield4.setPosition(MISSATGES_SENSE_LLEGIR_COLUMN);
 
                 adfield4.setEscapeXml(false);
@@ -483,7 +483,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 // solicitudFilterForm.getHiddenFields().remove(ENTITATESTATAL);
                 log.info("Afegim la columna ENTITAT_COLUMN");
                 AdditionalField<Long, String> adfield4 = new AdditionalField<Long, String>();
-                adfield4.setCodeName("=Entitat");
+                adfield4.setCodeName("entitat.entitat");
                 adfield4.setPosition(ENTITAT_COLUMN);
                 // Els valors s'ompliran al mètode postList()
                 adfield4.setValueMap(new HashMap<Long, String>());
@@ -506,7 +506,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 //                    hiddenFields.add(SolicitudFields.DEPARTAMENTID);
                 } else {
                     AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
-                    adfield.setCodeName("=Organ Gestor");
+                    adfield.setCodeName("organ.organ");
                     adfield.setPosition(COLUMNA_ORGAN);
                     adfield.setEscapeXml(false);
                     adfield.setValueMap(new HashMap<Long, String>());

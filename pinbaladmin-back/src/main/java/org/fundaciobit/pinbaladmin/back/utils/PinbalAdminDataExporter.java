@@ -110,7 +110,11 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 				break;
 			}
 			AdditionalField<?, ?> adField = additionalFields.get(pos);
-			titles[column] = I18NUtils.tradueix(adField.getCodeName());
+			String codeName = adField.getCodeName();
+			if (codeName.contains("filtreavanzat")) {
+				continue;
+			}
+			titles[column] = I18NUtils.tradueix(codeName);
 			column++;
 		}
 
@@ -130,17 +134,24 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 				continue;
 			}
 			AdditionalField<?, ?> adField = additionalFields.get(pos);
-			if (adField.getCodeName().startsWith("=")) {
-				titles[column] = adField.getCodeName().substring(1);
-			} else {
-				titles[column] = I18NUtils.tradueix(adField.getCodeName());
+			String codeName = adField.getCodeName();
+			
+			if (codeName.contains("filtreavanzat")) {
+				continue;
 			}
+			
+			if (codeName.startsWith("=")) {
+				titles[column] = codeName.substring(1);
+			} else {
+				titles[column] = I18NUtils.tradueix(codeName);
+			}
+			log.info("Title " + column + ": " + titles [column]);
 			column++;
 		}
 
 		// Afegir valors
 		int len = list.size();
-		ExportItem[][] items = new ExportItem[len][visibleFields.length + additionalFields.size()];
+		ExportItem[][] items = new ExportItem[len][column];
 
 		column = 0;
 		
@@ -150,10 +161,15 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 		for (Integer pos : additionalFields.keySet()) {
 			log.info("Pos: " + pos);
 			if (pos >= 0) {
-				break;
+				continue;
 			}
 			AdditionalField<?, ?> adField = additionalFields.get(pos);
 			log.info("AdField: " + adField.getCodeName());
+			
+			if (adField.getCodeName().contains("filtreavanzat")) {
+				log.info("No processam el filtre avançat");
+				continue;
+			}
 
 			// TODO Falta Value byField
 			Map<?, String> values = adField.getValueMap();
@@ -232,59 +248,110 @@ public class  PinbalAdminDataExporter implements IDataExporter {
 			}
 			AdditionalField<?, ?> adField = additionalFields.get(pos);
 
+			
+			if (adField.getCodeName().contains("filtreavanzat")) {
+				log.info("No processam el filtre avançat");
+				continue;
+			}
+
 			Map<?, String> values = adField.getValueMap();
 
+//			log.info("Columna: " + column + " - CodeName: " + adField.getCodeName());
+			
 			for (int j = 0; j < len; j++) {
+				// TODO nomes claus primaries uniques
+				Object keyValue = Utils.getValueOfJavaField(list.get(j), primaryKeys[0].javaName);
+				String str = values.get(keyValue);
 
-				String str;
-				if (values == null) {
-
-					String field = adField.getValueField().javaName;
-					int ps = field.indexOf('.');
-					field = field.substring(ps + 1);
-
-					Object value = getRecursiveValueOfJavaField(list.get(j), field);
-					str = String.valueOf(value);
-				} else {
-					// TODO nomes claus primaries uniques
-					Object primaryKeyValue = Utils.getValueOfJavaField(list.get(j), primaryKeys[0].javaName);
-					str = values.get(primaryKeyValue);
+				if (adField.getCodeName().equals("organ.organ")) {
+					str = processOrganGestor(str);
 				}
 
+				if (adField.getCodeName().equals("sense.llegir")) {
+					str = processSenseLlegir(str);
+				}
 				ExportItem item = new ExportItem(str, str);
-
 				items[j][column] = item;
 			}
 			column++;
 		}
 
+		//Comprovació que està tot correcte
+		
+		if (titles.length != items[0].length) {
+            log.error("El nombre de títols no coincideix amb el nombre de columnes");
+		}
+		
+		for (int i = 0; i < titles.length; i++) {
+			log.info("Columna " + i + ": " + titles[i]);
+		}
+		
+		for (int i = 0; i < items.length; i++) {
+			for (int j = 0; j < items[i].length; j++) {
+				log.info("Item[" + i + "][" + j + "]: " + items[i][j].getStringValue());
+			}
+			
+			log.info("\n\n");
+		}
+		
 		return new ExportData(titles, items);
 	}
+//
+//	private Object getRecursiveValueOfJavaField(Object target, String path) {
+//
+//		if (target == null) {
+//			return "";
+//		}
+//
+//		log.info("getRecursiveValueOfJavaField:: T:  " + target.getClass() + " ==> F: " + path);
+//
+//		int pos = path.indexOf('.');
+//		if (pos == -1) {
+//			return Utils.getValueOfJavaField(target, path);
+//		} else {
+//			String field = path.substring(0, pos);
+//			String path2 = path.substring(pos + 1);
+//
+//			log.info("GET CAMP ]" + field + "[");
+//			Object target2 = Utils.getValueOfJavaField(target, field);
+//
+//			return getRecursiveValueOfJavaField(target2, path2);
+//
+//		}
+//
+//	}
 
-	private Object getRecursiveValueOfJavaField(Object target, String path) {
-
-		if (target == null) {
-			return "";
+	public String processOrganGestor(String cadena) {
+		String result = "";
+		int pos = cadena.indexOf(">");
+		if (pos != -1) {
+			result = cadena.substring(pos+1);
+		}
+		int pos2 = result.indexOf("<");
+		if (pos2 != -1) {
+			result = result.substring(0, pos2);
 		}
 
-		log.info("getRecursiveValueOfJavaField:: T:  " + target.getClass() + " ==> F: " + path);
-
-		int pos = path.indexOf('.');
-		if (pos == -1) {
-			return Utils.getValueOfJavaField(target, path);
-		} else {
-			String field = path.substring(0, pos);
-			String path2 = path.substring(pos + 1);
-
-			log.info("GET CAMP ]" + field + "[");
-			Object target2 = Utils.getValueOfJavaField(target, field);
-
-			return getRecursiveValueOfJavaField(target2, path2);
-
+		return result.trim();
+	}
+	
+	public String processSenseLlegir(String cadena) {
+		//cadena es <span title="Events no llegits" class="badge badge-warning ">1</span><span title="Events no llegits" class="label label-warning"><b>&#9888;</b></span>
+        //volem retornar el número de events no llegits
+		
+		String result = "";
+		int pos = cadena.indexOf(">");
+		if (pos != -1) {
+			result = cadena.substring(pos + 1);
 		}
+		int pos2 = result.indexOf("<");
+		if (pos2 != -1) {
+			result = result.substring(0, pos2);
+		}
+		return result.trim();
 
 	}
-
+	
 	public static Field<?>[] getVisibleFields(BaseFilterForm filterForm, Field<?>[] allFields) {
 		Field<?>[] visibleFields;
 		{
