@@ -76,7 +76,7 @@ public class MailCedentInfo {
 		case "INTERVENCIO":
 			this.subject = "Intervenció CAIB - Cedent";
 			this.message = msg;
-			dests.add("cjimenez@interven.caib.es");
+			dests.add("mvich@interven.caib.es");
 			break;
 
 		case "PADRO":
