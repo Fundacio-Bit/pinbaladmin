@@ -2,8 +2,6 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +21,6 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.fundaciobit.apisib.apifirmaasyncsimple.v2.ApiFirmaAsyncSimple;
-import org.fundaciobit.apisib.apifirmaasyncsimple.v2.jersey.ApiFirmaAsyncSimpleJersey;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
@@ -394,9 +390,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif, String remitent) throws I18NException {
 		Solicitud soli = this.findByPrimaryKey(soliID);
 		
-		String titolPeticio = "Solicitud Autorització PINBAL Procediment " + soli.getProcedimentCodi();
-		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
-		String reason = "Solitud d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
+//		String titolPeticio = "Solicitud Autorització PINBAL Procediment " + soli.getProcedimentCodi();
+//		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
+//		String reason = "Solitud d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
 		
 		Long documentID = getDocIDFormulariDGPDF(soliID);
 
