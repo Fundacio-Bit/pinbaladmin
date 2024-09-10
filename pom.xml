@@ -23,7 +23,6 @@
         <module>pinbaladmin-api-externa</module>
         <module>pinbaladmin-api-interna</module>
         <module>pinbaladmin-ear</module>
-        <module>pinbaladmin-api-externa-client</module>
         <module>apialtapeticions</module>
         <module>scripts</module>
         
@@ -145,6 +144,8 @@
         <version_txt_template_file>./scripts/templates/versio.txt.template</version_txt_template_file>
         <pluginsib.userinformation.api.version>4.0.0-SNAPSHOT</pluginsib.userinformation.api.version>
         <!--<pluginsib.userinformation.impl.version>4.0.0-SNAPSHOT</pluginsib.userinformation.impl.version>-->
+        <pluginsib.utils.version>3.0.0-SNAPSHOT</pluginsib.utils.version>
+        
     </properties>
     <dependencyManagement>
         <dependencies>

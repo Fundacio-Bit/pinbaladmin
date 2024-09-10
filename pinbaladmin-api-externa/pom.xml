@@ -109,10 +109,10 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Genera el Client Rest per Java a partir del fitxer openapi.json -->
+<!--             Genera el Client Rest per Java a partir del fitxer openapi.json 
             <plugin>
 
-                <!-- https://openapi-generator.tech/docs/generators/java/ -->
+                 https://openapi-generator.tech/docs/generators/java/ 
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <version>7.1.0</version>
@@ -128,8 +128,8 @@
                             <skipValidateSpec>true</skipValidateSpec>
                             <configHelp>java</configHelp>
                             <library>resteasy</library>
-                            <!--    ** AMOLLA AJUDA D'AQUEST PLUGIN PER PANTALLA***  -->
-                            <!-- <configHelp>true</configHelp> -->
+                                ** AMOLLA AJUDA D'AQUEST PLUGIN PER PANTALLA***  
+                             <configHelp>true</configHelp> 
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.basedir}/../pinbaladmin-api-externa-client</output>
                             <apiPackage>${client.default.package}.api</apiPackage>
@@ -150,7 +150,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+-->
             <!-- Profile per incloure swagger-ui dins el mòdul -->
             <!-- Davalla la versió de swagger-ui (Web UI que parseja openapi.json. 
                 Veure index.html) -->
