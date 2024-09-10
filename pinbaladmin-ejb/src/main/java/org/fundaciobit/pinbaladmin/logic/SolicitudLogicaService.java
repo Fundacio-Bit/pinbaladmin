@@ -71,9 +71,8 @@ public interface SolicitudLogicaService extends SolicitudService {
 
 	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif, String remitent) throws I18NException;
 
-	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;
+//	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
 	
-    
-    
-
+//	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;
+	
 }

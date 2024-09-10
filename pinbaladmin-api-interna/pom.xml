@@ -105,29 +105,67 @@
             <plugin>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.2.15</version>
+                 <configuration>
+                    <outputFormat>JSON</outputFormat>
+                    <prettyPrint>TRUE</prettyPrint>
+                    <outputPath>${project.basedir}/openapi/</outputPath>                   
+                </configuration>
+                
                 <executions>
                     <execution>
+						<id>openapi1</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>resolve</goal>
                         </goals>
                         <configuration>
-                            <outputFileName>openapi</outputFileName>
-                            <outputPath>${project.basedir}/openapi/</outputPath>
-                            <outputFormat>JSON</outputFormat>
+							<contextId>PortaFIB Callback</contextId>
+                            <outputFileName>openapi_portafibcallback</outputFileName>
                             <resourcePackages>
-                                <package>org.fundaciobit.pinbaladmin.api.interna.config</package>
-                                <package>org.fundaciobit.pinbaladmin.api.interna.secure.dadesobertes</package>
+                                <package>org.fundaciobit.pinbaladmin.api.interna.all.portafibcallback</package>
                             </resourcePackages>
-                            <prettyPrint>TRUE</prettyPrint>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <!--  NOTA: No generam client ja que la primera API és el CallBack de PortaFIB -->
-            <!--  i l'altra API és DadesObertes (Que no necessita client java ja que accedeixen directament) -->
 
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeProjectDependencies>false</includeProjectDependencies>
+                    <includePluginDependencies>true</includePluginDependencies>
+                    <executableDependency>
+                        <artifactId>pluginsib-utils-rest</artifactId>
+                        <groupId>org.fundaciobit.pluginsib.utils</groupId>
+                    </executableDependency>
+                    <mainClass>
+                        org.fundaciobit.pluginsib.utils.rest.pomadaptertojboss72.AdaptApiClientPomToJboss72</mainClass>
+                    <arguments>
+                        <argument>${project.basedir}</argument>
+                    </arguments>
+
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <artifactId>pluginsib-utils-rest</artifactId>
+                        <groupId>org.fundaciobit.pluginsib.utils</groupId>
+                        <version>${pluginsib.utils.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
             <!-- Inclou el openapi.json i el swagger-ui dins el war -->
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>

@@ -16,19 +16,23 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -47,9 +51,12 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     @EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
     protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
+    
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentLogicaService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.DocumentLogicaService documentLogicaEjb;
 
-    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.SolicitudService.JNDI_NAME)
-    protected org.fundaciobit.pinbaladmin.ejb.SolicitudService solicitudEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService solicitudLogicaEjb;
 
     public static final String SESSIO_SOLIID_MANAGE_DOCUMENTS = "SESSIO_SOLIID_MANAGE_DOCUMENTS";
 
@@ -83,9 +90,9 @@ public class SolicitudDocumentOperadorController extends DocumentController {
             throws I18NException {
         DocumentFilterForm documentFilterForm = super.getDocumentFilterForm(pagina, mav, request);
 
-        Long soli = getSolicitudID(request);
+        Long soliID = getSolicitudID(request);
 
-        if (soli == null) {
+        if (soliID == null) {
 
             // TODO traduir
             HtmlUtils.saveMessageError(request, "No puc trobar documents de la solicitud ja que no s'ha passat "
@@ -94,10 +101,11 @@ public class SolicitudDocumentOperadorController extends DocumentController {
             mav.setView(new RedirectView("/operador/solicitudlocal/list", true));
         } else {
 
-            List<String> codi = solicitudEjb.executeQuery(SolicitudFields.PROCEDIMENTCODI,
-                    SolicitudFields.SOLICITUDID.equal(soli));
+            Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+            String codi = soli.getProcedimentCodi();
+            
             // TODO Traduir
-            documentFilterForm.setSubTitleCode("=Documents de la Solicitud amb Codi de Procediment " + codi.get(0));
+            documentFilterForm.setSubTitleCode("=Documents de la Solicitud amb Codi de Procediment " + codi);
 
             if (documentFilterForm.isNou()) {
 
@@ -106,18 +114,14 @@ public class SolicitudDocumentOperadorController extends DocumentController {
                         "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", AdditionalButtonStyle.WARNING));
 
                 documentFilterForm.setVisibleMultipleSelection(false);
-
                 documentFilterForm.setFilterByFields(new ArrayList<Field<?>>());
-
                 documentFilterForm.setGroupByFields(new ArrayList<Field<?>>());
-
             }
         }
 
-        log.info("Passa per getDocumentFilterForm:" + soli);
+        log.info("Passa per getDocumentFilterForm:" + soliID);
 
         return documentFilterForm;
-
     }
 
     public Long getSolicitudID(HttpServletRequest request) {
@@ -227,14 +231,14 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			try {
 				Long solicitudID = getSolicitudID(request);
 				if (solicitudID != null) {
-					SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
+					SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
 							? Constants.CONSENTIMENT_TIPUS_SI
 							: Constants.CONSENTIMENT_TIPUS_NOOP);
 
 					soli.setUrlconsentiment(null);
 					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
-					solicitudEjb.update(soli);
+					solicitudLogicaEjb.update(soli);
 				}
 			} catch (Throwable th) {
 				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
@@ -281,17 +285,65 @@ public class SolicitudDocumentOperadorController extends DocumentController {
         return "redirect:/operador/solicitudfullview/viewsessio";
     }
 
-    public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request,
-            ModelAndView mav, Where where)  throws I18NException {
-         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-         __tmp.add(new StringKeyValue("0" , "Altres"));
-         __tmp.add(new StringKeyValue("1" , "Formulari PDF"));
-         __tmp.add(new StringKeyValue("2" , "Formulari ODT"));
-         __tmp.add(new StringKeyValue("3" , "Excel Serveis"));
-         __tmp.add(new StringKeyValue("4" , "Consentiment noop"));
-         __tmp.add(new StringKeyValue("5" , "Consentiment si"));
-         return __tmp;
-       }    
-    
-    
+	public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request, ModelAndView mav, Where where)
+			throws I18NException {
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+		__tmp.add(new StringKeyValue("0", "Altres"));
+		__tmp.add(new StringKeyValue("1", "Formulari Director PDF"));
+		__tmp.add(new StringKeyValue("2", "Formulari ODT"));
+		__tmp.add(new StringKeyValue("3", "Excel Serveis"));
+		__tmp.add(new StringKeyValue("4", "Consentiment noop"));
+		__tmp.add(new StringKeyValue("5", "Consentiment si"));
+		__tmp.add(new StringKeyValue("6", "Formulari PDF"));
+		
+//		Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF
+		return __tmp;
+	}
+
+	@Override
+	public void postList(HttpServletRequest request, ModelAndView mav, DocumentFilterForm filterForm,
+			List<Document> list) throws I18NException {
+		super.postList(request, mav, filterForm, list);
+
+		filterForm.getAdditionalButtonsByPK().clear();
+
+		for (Document doc : list) {
+			if (doc.getNotes() == null && doc.getFitxerFirmatID() == null) {
+				// Si es null es que encara no s'ha enviat.
+
+				boolean isPdf = doc.getFitxerOriginal().getMime().equals("application/pdf");
+				
+				if (isPdf) {
+					filterForm.addAdditionalButtonByPK(doc.getDocumentID(),
+							new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
+									getContextWeb() + "/enviarDocAFirmar/" + doc.getDocumentID(),
+									AdditionalButtonStyle.PRIMARY));
+				}
+			}
+		}
+	}
+
+	@RequestMapping(value = "/enviarDocAFirmar/{documentID}")
+	public String enviarDocAFirmar(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable Long documentID) throws I18NException {
+
+		try {
+			log.info("Enviem a firmar el document[" + documentID + "]");
+
+			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+			String remitent = request.getRemoteUser();
+
+			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, nifDestinatari, remitent);
+
+			log.info("S'ha enviat a firmar el document [" + documentID + "]");
+			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");
+		} catch (I18NException e) {
+
+			String msg = "Error enviant a firmar el document [" + documentID + "]: " + I18NUtils.getMessage(e);
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
+		}
+		return "redirect:/operador/solicitudfullview/viewsessio";
+	}
+
 }

@@ -544,6 +544,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			// TODO XYZ ZZZ
 			Long serveiID = serveiEjb.executeQueryOne(ServeiFields.SERVEIID, ServeiFields.CODI.equal(codi.trim()));
 
+			if (serveiID == null) {
+                HtmlUtils.saveMessageWarning(request, "El servei [" + codi + "] no existeix. L'ignoram ...");
+                x++;
+                continue;
+            }
+			
 			// XYZ ZZZ
 			java.lang.Long estatSolicitudServeiID = 10L;
 			java.lang.String notes = ""; // str.toString();
@@ -612,10 +618,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 						enllazNormaLegal, consAdj, consentiment, consUrl, notes, caduca, caducafecha, normaLegal,
 						fitxerIDNorma, articles, norma2, fitxerIDNorma2, articles2, norma3, fitxerIDNorma3, articles3);
 
+				log.info("ss: " + ss);
+
 				solicitudServeiEjb.create(ss);
 
 			} else {
-				HtmlUtils.saveMessageWarning(request, "El servei [" + x + "] ja existeix. L'ignoram ...");
+				HtmlUtils.saveMessageWarning(request, "El servei [" + codi + "] ja existeix. L'ignoram ...");
 			}
 			
 			log.info("Servei [" + x + "][" + +serveiID + "] => " + codi);
@@ -739,8 +747,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 		} catch (Exception e) {
-			log.error("Error enviant a firmar la sol·licitud [" + soliID + "]", e);
-			HtmlUtils.saveMessageError(request, "Error enviant a firmar la sol·licitud [" + soliID + "]: " + e.getMessage());
+			String msg = "Error enviant a firmar la sol·licitud [" + soliID + "]: " + e.getMessage();
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
 		}
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
