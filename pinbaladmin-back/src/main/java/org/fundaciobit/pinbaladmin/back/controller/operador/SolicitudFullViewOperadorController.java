@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.Normalizer;
@@ -32,6 +33,8 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -604,7 +607,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 			if (count == 0) {
 
-				Long fitxerIDNorma = null;
+				Long fitxerIDNorma = crearFitxerNormaFromURL(enllazNormaLegal);
 
 				String norma2 = null;
 				String articles2 = null;
@@ -753,6 +756,28 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		}
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
-
   
+	public Long crearFitxerNormaFromURL(String url) throws I18NException {
+		try {
+			final boolean debug = false;
+			FileInfo fileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(url, debug);
+
+			String nom = fileInfo.getFileName();
+			long tamany = fileInfo.getSize();
+			String mime = "application/pdf";
+			String descripcio = "Fitxer de norma legal descarregat des de la URL [" + url + "]";
+
+			Fitxer fitxer = fitxerEjb.create(nom, tamany, mime, descripcio);
+
+			Long fitxerID = fitxer.getFitxerID();
+
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(fileInfo.getContent()), fitxerID);
+
+			return fitxerID;
+		} catch (Exception e) {
+			String msg = "Error creant fitxer de norma legal des de URL [" + url + "]: " + e.getMessage();
+			log.error(msg, e);
+			throw new I18NException("genapp.comodi", msg);
+		}
+	}
 }

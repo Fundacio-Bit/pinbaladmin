@@ -100,7 +100,11 @@ public class PdfDownloader {
 
         if (contentType.toLowerCase().contains("text/html")) {
 
+        	if (debug) System.out.println(urlString + " is a html page");
+
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            
+            if (debug) System.out.println("Reading html content from " + urlString);
 
             String line;
             StringBuilder content = new StringBuilder();
@@ -109,7 +113,11 @@ public class PdfDownloader {
             while ((line = bufferedReader.readLine()) != null) {
                 content.append(line + "\n");
             }
+            
+            if (debug) System.out.println("Html content read from " + urlString);
+            
             bufferedReader.close();
+            
             return getPdfUrlFromHtml(urlString, content.toString(), debug);
 
         } else if (contentType.toLowerCase().contains("application/pdf")) {
@@ -138,24 +146,34 @@ public class PdfDownloader {
             return downloadFileFromURL(con, filename);
         }
 
-        return null;
-
+        throw new IOException("Error obtenint el document PDF de BoeBoib. Revisar calsse PdfDownloader.java");
     }
 
     protected static FileInfo getPdfUrlFromHtml(String url, String html, boolean debug) throws Exception {
 
+    	if (debug) System.out.println("Searching for pdf url in " + url);
+    	if (debug) System.out.println(html);
+    	
         for (HtmlPagePdfUrlParser parser : AVAILABLE_HTML_PARSERS) {
             String urlToPdf = parser.parse(url, html, debug);
+            
+            if (debug) System.out.println("Found pdf url: " + urlToPdf);
 
             if (urlToPdf != null) {
+            	if (debug) System.out.println("Downloading pdf from " + urlToPdf);
+            	
                 FileInfo fi = downloadPDFFromBoeBoibUrl(urlToPdf, debug);
+                if (debug) System.out.println("Downloaded pdf from " + urlToPdf);
+                
                 if (fi != null) {
                     fi.setType(FileInfoType.HTMLPDF);
                 }
+                if (debug) System.out.println("Returning pdf from " + urlToPdf);
                 return fi;
             }
         }
 
+        if (debug) System.out.println("No pdf found in " + url);
         return null;
 
     }
@@ -257,10 +275,11 @@ public class PdfDownloader {
 
             // /eboibfront/img/ico/ico_pdf.gif\" alt=\"Documento pdf\">&nbsp;<a class=\"document\" rel=\"external\" href=\"/eboibfront/pdf/es/2023/25/1130476\" 
 
-            String toSearch = "<img src=\"/eboibfront/img/ico/ico_pdf.gif\" alt=\"Documento adjunto\" />";
+            String toSearch = "<img src=\"/eboibfront/img/ico/ico_pdf.gif\" alt=\"Documento pdf\" />";
             //"/eboibfront/img/ico/ico_pdf.gif"
             int index = htmlText.indexOf(toSearch);
 
+            if(debug) System.out.println("Index: " + index);
             
             
             if (index != -1) {
@@ -269,6 +288,7 @@ public class PdfDownloader {
 
                 index = htmlText.indexOf(href, index);
 
+                if(debug) System.out.println("nou Index: " + index);
                 if (index != -1) {
 
                     index = index + href.length();
@@ -276,15 +296,24 @@ public class PdfDownloader {
                     int index2 = htmlText.indexOf("\"", index);
 
                     try {
+                    	if(debug) System.out.println("URL: " + url);
+                    	
                         URL u = new URL(url);
 
                         String PdfURL = htmlText.substring(index, index2);
-                        String newUrl = u.getProtocol() + "://" + u.getHost() + (u.getPort() == -1 ? "" : (":" + u.getPort()))
-                                + PdfURL;
+                        
+                        String hostPort =  u.getHost() + (u.getPort() == -1 ? "" : (":" + u.getPort()));
+                        
+                        if (!PdfURL.contains(hostPort)) {
+							PdfURL = u.getProtocol() + "://" + hostPort + PdfURL;
+						}
                         if (debug) {
                             System.out.println("PdfURL: " + PdfURL);
                         }
-                        return newUrl;
+                        
+                        if(debug) System.out.println("New URL: " + PdfURL);
+                        
+                        return PdfURL;
 
                     } catch (MalformedURLException e) {
                         // TODO Auto-generated catch block
