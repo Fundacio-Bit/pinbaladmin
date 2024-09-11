@@ -38,6 +38,12 @@
             <module name="com.google.code.gson" export="TRUE"/>
             <module name="javax.activation.api" export="TRUE"/>
             <module name="com.sun.istack" export="TRUE"/> 
+
+            <module name="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" export="TRUE"/>
+            <module name="org.jboss.logging.commons.logging" export="TRUE"/>
+
+            <module name="org.slf4j" export="TRUE"/>
+            <module name="javax.mail.api" export="TRUE"/>
             
             <!--  APISIB JERSEY-CORE   -->
             <module name="org.codehaus.jackson.jackson-core-asl" export="true"/>
