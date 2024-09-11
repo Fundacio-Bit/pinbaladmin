@@ -87,9 +87,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
             Long _fitxerID_ = null;
-            if (missatge.startsWith("<") && missatge.endsWith(">")) {
-                missatge = "<div>" + missatge + "</div>";
-            }
+            missatge = "<div>" + missatge + "</div>";
 
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
                     destinatariEmail, subject, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
@@ -180,9 +178,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
             Long _fitxerID_ = null;
-            if (missatge.startsWith("<") && missatge.endsWith(">")) {
-                missatge = "<div>" + missatge + "</div>";
-            }
+            missatge = "<div>" + missatge + "</div>";
 
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
                     destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);

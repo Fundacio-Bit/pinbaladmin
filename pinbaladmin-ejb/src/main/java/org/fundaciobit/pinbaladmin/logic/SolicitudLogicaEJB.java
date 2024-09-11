@@ -269,7 +269,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
             boolean isEstatal = soli.getEntitatEstatal() != null;
             String asumpte = "Solicitud " + (isEstatal ? "estatal" : "local") + " creada correctament";
-            String missatge = msg;
+            
+            String missatge = "<div>" + msg + "</div>";
 
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
@@ -282,8 +283,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.lang.String _destinatari_ = null;
             java.lang.String _destinatariEmail_ = null;
 
+            java.lang.Long _fitxerID_ = null;
+            
             eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-                    _destinatariEmail_, asumpte, missatge, null, _noLlegit_, _caidIdentificadorConsulta_,
+                    _destinatariEmail_, asumpte, missatge, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
                     _caidNumeroSeguiment_);
             
             // Afegir Documents per cada Solicitud
@@ -348,9 +351,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
             Long _fitxerID_ = null;
-            if (missatge.startsWith("<") && missatge.endsWith(">")) {
-                missatge = "<div>" + missatge + "</div>";
-            }
+            missatge = "<div>" + missatge + "</div>";
 
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
                     destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
