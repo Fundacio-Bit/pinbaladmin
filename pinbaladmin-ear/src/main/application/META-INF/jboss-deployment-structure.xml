@@ -48,4 +48,13 @@
             
         </dependencies>
     </deployment>
+    
+    <sub-deployment name="pinbaladmin-back.war">
+        <dependencies>
+            <module name="org.apache.commons.beanutils" export="TRUE" />
+            <module name="org.apache.commons.collections" export="TRUE" />
+            <module name="javax.xml.bind.api" export="TRUE"/>  
+        </dependencies>
+    </sub-deployment>    
+
 </jboss-deployment-structure>
