@@ -149,8 +149,11 @@ public class CrearExcelDeServeis {
       
       // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
       Fitxer fitxerNorma = ss.getFitxernorma();
-      dades[10] = Configuracio.getAppUrl() +  FileDownloadController.fileUrl(fitxerNorma);
-      
+      if (fitxerNorma == null) {
+    	  dades[10] = ss.getEnllazNormaLegal();
+      } else {
+    	  dades[10] = Configuracio.getAppUrl() + FileDownloadController.fileUrl(fitxerNorma);
+      }      
       
       // L 11 L'Enllaç de Consentiment
       {

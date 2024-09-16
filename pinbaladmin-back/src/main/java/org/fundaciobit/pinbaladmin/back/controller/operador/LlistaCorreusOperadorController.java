@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +46,7 @@ import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -153,7 +157,7 @@ public class LlistaCorreusOperadorController extends EmailController {
             //Afegir botó per veure missatge a un iframe
             emailFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE, "llistatcorreus.veurecorreu", 
             		"javascript:veureCorreu({0})", AdditionalButtonStyle.INFO)); // getContextWeb() + \"/solicitud/{0}\"
-            
+			
         }
 
         // Tramitadors
@@ -255,7 +259,9 @@ public class LlistaCorreusOperadorController extends EmailController {
             emailFilterForm.getAdditionalFields().remove(MISSATGE22);
             
         }
-
+		
+		emailFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "assignacio.automatica",
+				"javascript:assignacioAutomatica()", AdditionalButtonStyle.SUCCESS));
         return emailFilterForm;
 
     }
@@ -429,6 +435,7 @@ public class LlistaCorreusOperadorController extends EmailController {
                 IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.afegirMailAIncidencia(emi, incidenciaID);
                 
                 er.deleteMessage((int) (long) emailID);
+                updateCacheSize();
 
 //                enviarCorreusIncidencia(it);
                 
@@ -509,7 +516,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 	@RequestMapping(value = "/solicitudExistent/{emailID}/{solicitudID}", method = RequestMethod.GET)
 	public String solicitudExistent(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("emailID") Long emailID, @PathVariable("solicitudID") Long solicitudID) {
-
+		log.info("XYZ ZZZ solicitudExistent(" + emailID + ", " + solicitudID + ")");
         try {
             final boolean enableCertificationCheck = false;
             EmailReader er = new EmailReader(enableCertificationCheck);
@@ -521,7 +528,7 @@ public class LlistaCorreusOperadorController extends EmailController {
                 Solicitud soli = solicitudLogicaEjb.afegirMailASolicitud(emi, solicitudID);
                 
                 er.deleteMessage((int) (long) emailID);
-
+                updateCacheSize();
 //                enviarCorreusSolicitud(soli);
                 
         		return "redirect:/operador/eventsolicitud/veureevents/" + soli.getSolicitudID();
@@ -542,6 +549,26 @@ public class LlistaCorreusOperadorController extends EmailController {
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
+	public void updateCacheSize() {
+		log.info("XYZ ZZZ updateCacheSize()");
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+
+		int size = 0;
+
+		try {
+			final boolean enableCertificationCheck = false;
+			EmailReader er = new EmailReader(enableCertificationCheck);
+			size = er.getCountMessages();
+			
+		} catch (Exception e) {
+			String msg = "Error actualitzant cache de correus: " + e.getMessage();
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
+		}
+		request.getSession().setAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS, size);
+	}
 	
 	@Override
     public List<Email> executeSelect(ITableManager<Email, Long> ejb, Where where, final OrderBy[] orderBy,
@@ -773,6 +800,146 @@ public class LlistaCorreusOperadorController extends EmailController {
 		}
 	}
 
+
+	@RequestMapping(value = "/assignacioAutomatica", method = RequestMethod.GET)
+	public void assignarAutomatic(HttpServletRequest request, HttpServletResponse response) {
+		//Envio:
+		/*
+		 *  correo x (con titulo TitX) se asigna a la incidencia y (con titulo TitY)
+		 *  
+		 *  [tipo, emailID, titulo, itemID, itemTitulo]
+		 *  ["soli", 2, "bla bla bla pid[1234] bla bla bla", 15232, "bla bla bla pid[1234] bla bla bla"]
+		 *  
+		 */
+		try {
+			
+			List<String[]> emails = new ArrayList<String[]>();
+			
+			String param = (String) request.getParameter("param");
+			log.info("XXX assignacioAutomatica(" + param + ")");
+
+			final boolean enableCertificationCheck = false;
+			EmailReader er = new EmailReader(enableCertificationCheck);
+
+			if (er.getCountMessages() == cachesize(request)) {
+				log.info("nMissatges: " + er.getCountMessages());
+				Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
+						.getAttribute(CACHE_DE_EMAILS_LLEGITS);
+				
+				for (EmailMessageInfo emi : cache.values()) {
+					String asunto = emi.getSubject();
+					
+					//Descifrar el asunto y buscar codigo de procedimento, o PID, o numero de incidencia, o lo que sea para buscarla en la BBDD.
+					
+					String pid = getPIDFromSubject(asunto);
+					if (pid != null) {
+						log.info("PID: " + pid);
+//						String pid = asunto.substring(idx_pid + 6, asunto.indexOf("]", idx_pid));
+						
+						List<Solicitud> auxSoli = solicitudLogicaEjb.select(SolicitudFields.EXPEDIENTPID.equal(pid));
+						if (auxSoli != null && auxSoli.size() > 0) {
+							Solicitud soli = auxSoli.get(0);
+							emails.add(new String[] { "soli", String.valueOf(emi.getNumber()), asunto,
+									String.valueOf(soli.getSolicitudID()), soli.getProcedimentNom() });
+						}
+					}else {
+						log.info("No s'ha trobat PID");
+					}
+					
+				}
+
+				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+
+				PrintWriter os = response.getWriter();
+
+				Gson g = new Gson();
+				String emiJSON = g.toJson(emails);
+				os.print(emiJSON);
+				
+				os.flush();
+				os.close();
+			} else {
+				PrintWriter os = response.getWriter();
+				
+				Gson g = new Gson();
+				String emiJSON = g.toJson("Error. Ha rebut altres correus. Torni a intentar-ho.");
+				os.print(emiJSON);
+
+				os.flush();
+				os.close();
+			}
+
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/itemExistent", method = RequestMethod.GET)
+	public void assignarItemExistent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		log.info("HOLAAAAAAAAAAAAAAAAAA assignarItemExistent");
+		try {
+			String tipus = (String) request.getParameter("tipus");
+			String emailID = (String) request.getParameter("emailID");
+			String itemID = (String) request.getParameter("itemID");
+
+			log.info("XYZ ZZZ assignarItemExistent(" + tipus + ", " + itemID + ", " + emailID + ")");
+			String ret;
+			if (tipus.equals("soli")) {
+				ret = solicitudExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
+			}else {
+				ret = incidenciaExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
+			}
+			log.info("ret = " + ret);
+			
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+
+			PrintWriter os = response.getWriter();
+
+			Gson g = new Gson();
+			String emiJSON = g.toJson(ret);
+			os.print(emiJSON);
+
+			os.flush();
+			os.close();
+
+		} catch (Throwable e) {
+			PrintWriter os = response.getWriter();
+
+			Gson g = new Gson();
+			String emiJSON = g.toJson("Error: " + e.getMessage());
+			os.print(emiJSON);
+
+			os.flush();
+			os.close();
+		}
+	}
+
+	public static String getPIDFromSubject(String input) {
+        // Definir el patrón regex para detectar PID y el número entre corchetes
+        String regex = "(\\[PID\\]|PID).*?\\[(\\d+)\\]";
+        
+        // Compilar el patrón
+        Pattern pattern = Pattern.compile(regex);
+        
+        // Crear un matcher con la entrada proporcionada
+        Matcher matcher = pattern.matcher(input);
+        
+        // Verificar si el patrón fue encontrado
+        if (matcher.find()) {
+            // Obtener el primer número entre corchetes después de PID
+            String pid = matcher.group(2);
+            return pid;
+//            System.out.println("El string contiene el patrón PID seguido del número: " + pid);
+        } else {
+        	return null;
+//            System.out.println("El string NO contiene el patrón PID seguido de un número entre corchetes.");
+        }
+    }
+	
     @Override
     public void delete(HttpServletRequest request, Email email) throws I18NException {
         final boolean enableCertificationCheck = false;
@@ -959,4 +1126,10 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		crearEventPerCorreu(mail, destinatari, asumpte, msg, soliID, incidenciaID, tipus);
 	}
+
+
 }
+
+
+
+

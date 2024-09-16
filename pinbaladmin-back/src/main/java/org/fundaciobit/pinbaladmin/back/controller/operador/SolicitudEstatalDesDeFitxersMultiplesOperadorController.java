@@ -477,18 +477,27 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         return solicituds;
     }
 
-    private static String getPIDFromSubject(String subject) {
 
-        Pattern patron = Pattern.compile("\\[(\\d+)\\]");
+	public static String getPIDFromSubject(String input) {
+        // Definir el patrón regex para detectar PID y el número entre corchetes
+        String regex = "(\\[PID\\]|PID).*?\\[(\\d+)\\]";
         
-        // Crear un objeto Matcher para encontrar coincidencias en el texto
-        Matcher matcher = patron.matcher(subject);
+        // Compilar el patrón
+        Pattern pattern = Pattern.compile(regex);
         
-        // Buscar el número entre corchetes y mostrarlo
-        while (matcher.find()) {
-            return matcher.group(1);
+        // Crear un matcher con la entrada proporcionada
+        Matcher matcher = pattern.matcher(input);
+        
+        // Verificar si el patrón fue encontrado
+        if (matcher.find()) {
+            // Obtener el primer número entre corchetes después de PID
+            String pid = matcher.group(2);
+            return pid;
+//            System.out.println("El string contiene el patrón PID seguido del número: " + pid);
+        } else {
+        	return null;
+//            System.out.println("El string NO contiene el patrón PID seguido de un número entre corchetes.");
         }
-        return null;
     }
-
+	
 }

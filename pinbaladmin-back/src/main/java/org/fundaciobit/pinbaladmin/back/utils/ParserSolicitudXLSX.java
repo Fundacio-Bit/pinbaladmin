@@ -145,8 +145,8 @@ public class ParserSolicitudXLSX {
                 }
                 
                 if (!filaBuida && row >= FIRST_DATA_ROW) {
+                    afegirFilaAInfo(filaExcel, info, darreraFila);
                     darreraFila = filaExcel;
-                    afegirFilaAInfo(filaExcel, info);
                 }
             }
 
@@ -172,32 +172,45 @@ public class ParserSolicitudXLSX {
         }
     }
 
-    private static void afegirFilaAInfo(String[] row, SolicitudInfo info) {
+    private static void afegirFilaAInfo(String[] row, SolicitudInfo info, String[] darreraFila) throws Exception {
         final int CODI_PROC_COL_A = 0;
         final int NOM_PROC_COL_B = 1;
-        final int CEDENT_COL_C = 2;
-        final int NOM_SERVEI_COL_D = 3;
+//        final int CEDENT_COL_C = 2;
+//        final int NOM_SERVEI_COL_D = 3;
 
         final int TIPUS_PROC_COL_G = 6;
-        final int CONSENTIMENT_COL_H = 7;
+//        final int CONSENTIMENT_COL_H = 7;
         final int NORMA_LEGAL_COL_I = 8;
         final int ARTICULOS_COL_J = 9;
         final int ENLLAZ_NORMA_LEGAL_COL_K = 10;
-        final int ENLLAZ_CONSENTIMENT_COL_L = 11;
-        final int DATA_CADUCITAT_COL_M = 12;
+//        final int ENLLAZ_CONSENTIMENT_COL_L = 11;
+//        final int DATA_CADUCITAT_COL_M = 12;
 
-        @SuppressWarnings("unused")
-        final int PERODIC_COL_N = 13;
-        @SuppressWarnings("unused")
-        final int AUTOMATIZAT_COL_O = 14;
-        @SuppressWarnings("unused")
-        final int PETICIONS_ESTIMADES_COL_P = 15;
-
+//        final int PERODIC_COL_N = 13;
+//        final int AUTOMATIZAT_COL_O = 14;
+//        final int PETICIONS_ESTIMADES_COL_P = 15;
+        
+        
+        //Si te codi de procediment, veure si ja el tenim i crear-lo o no.
+        //Si no te codi, cercar l'anterior i utilitzar-ho.
+        
         String codiProc = row[CODI_PROC_COL_A];
-
         System.out.println("codiProc: " + codiProc);
 
-        ProcedimentInfo iproc = info.getProcediment(codiProc);
+		if (codiProc == null || codiProc.trim().length() == 0) {
+			String codiProcAnterior = darreraFila[CODI_PROC_COL_A];
+			//Si el anterior es null, el excel esta mal.
+			
+			if (codiProcAnterior != null && codiProcAnterior.trim().length() > 0) {
+				codiProc = codiProcAnterior;
+				row[CODI_PROC_COL_A] = codiProcAnterior;
+			} else {
+				String msg = "ERROR: Codi de procediment buit i no te anterior.";
+				throw new Exception(msg);
+			}
+		}
+		
+		ProcedimentInfo iproc = info.getProcediment(codiProc);
 
         if (iproc == null) {
             String nom = row[NOM_PROC_COL_B];
@@ -208,46 +221,8 @@ public class ParserSolicitudXLSX {
             info.addProcediment(iproc);
         }
 
-        String nomServei = row[NOM_SERVEI_COL_D];
-        String cedent = row[CEDENT_COL_C];
-
-        String consentiment = row[CONSENTIMENT_COL_H];
-
-        String enllazConsentiment = null;
-        String tipusConsentiment = null;
-
-        if (!consentiment.equals("Ley")) {
-            enllazConsentiment = row[ENLLAZ_CONSENTIMENT_COL_L];
-            if (enllazConsentiment.startsWith("http")) {
-                tipusConsentiment = "Publicat";
-            } else {
-                tipusConsentiment = "Adjunt";
-            }
-        }
-
-        String notes = null;
-
-        String caducitat = row[DATA_CADUCITAT_COL_M];
-
-        String caduca;
-        String fechaCaduca;
-
-        if (caducitat.equals("No caduca")) {
-            caduca = caducitat;
-            fechaCaduca = null;
-        } else {
-            caduca = "Caduca";
-            fechaCaduca = caducitat;
-        }
-
-        System.out.println("nomServei: " + nomServei);
-        System.out.println("cedent: " + cedent);
-
-        ServeiInfo servei = new ServeiInfo(nomServei, cedent, tipusConsentiment, consentiment, enllazConsentiment,
-                notes, caduca, fechaCaduca);
-
-        iproc.addServei(servei);
-
+        ServeiInfo servei = getServei(row, iproc, darreraFila);
+        
         String norma = row[NORMA_LEGAL_COL_I];
         String articles = row[ARTICULOS_COL_J];
         String enllaz = row[ENLLAZ_NORMA_LEGAL_COL_K];
@@ -274,4 +249,85 @@ public class ParserSolicitudXLSX {
         return str;
     }
 
+	private static ServeiInfo getServei(String[] row, ProcedimentInfo iproc, String[] darreraFila) throws Exception {
+
+		final int CEDENT_COL_C = 2;
+		final int NOM_SERVEI_COL_D = 3;
+
+		final int CONSENTIMENT_COL_H = 7;
+		final int ENLLAZ_CONSENTIMENT_COL_L = 11;
+		final int DATA_CADUCITAT_COL_M = 12;
+
+		String nomServei = row[NOM_SERVEI_COL_D];
+
+		// Comprovar si es null o no. Si es null, agafar l'anterior.
+		// Llavors, veure si ja el tenim, i si el tenim, tornar-ho. Sino, crear-ho.
+
+		// Si l'anterior també es null, tornar error.
+
+		if (nomServei == null || nomServei.trim().length() == 0) {
+			String nomServeiAnterior = darreraFila[NOM_SERVEI_COL_D];
+
+			if (nomServeiAnterior != null && nomServeiAnterior.trim().length() > 0) {
+				nomServei = nomServeiAnterior;
+				row[NOM_SERVEI_COL_D] = nomServeiAnterior;
+			} else {
+				String msg = "ERROR: Nom de servei buit i no te anterior.";
+				throw new Exception(msg);
+			}
+		}
+
+		// Cercar si ja tenim el servei, i retornar-lo.
+		log.info("Servei: " + nomServei);
+		ServeiInfo iServ = iproc.getServei(nomServei);
+		log.info("iServ: " + iServ);
+		if (iServ != null) {
+			return iServ;
+		}
+		log.info("Creant nou servei: " + nomServei);
+
+		String cedent = row[CEDENT_COL_C];
+
+		String consentiment = row[CONSENTIMENT_COL_H];
+
+		String enllazConsentiment = null;
+		String tipusConsentiment = null;
+
+		if (!consentiment.equals("Ley")) {
+			enllazConsentiment = row[ENLLAZ_CONSENTIMENT_COL_L];
+			if (enllazConsentiment.startsWith("http")) {
+				tipusConsentiment = "Publicat";
+			} else {
+				tipusConsentiment = "Adjunt";
+			}
+		}
+
+		String notes = null;
+
+		String caducitat = row[DATA_CADUCITAT_COL_M];
+
+		String caduca;
+		String fechaCaduca;
+
+		if (caducitat.equals("No caduca")) {
+			caduca = caducitat;
+			fechaCaduca = null;
+		} else {
+			caduca = "Caduca";
+			fechaCaduca = caducitat;
+		}
+
+		System.out.println("nomServei: " + nomServei);
+		System.out.println("cedent: " + cedent);
+
+		ServeiInfo servei = new ServeiInfo(nomServei, cedent, tipusConsentiment, consentiment, enllazConsentiment,
+				notes, caduca, fechaCaduca);
+		
+        iproc.addServei(servei);
+
+		return servei;
+
+	}
+    
+    
 }

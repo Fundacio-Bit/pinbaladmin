@@ -189,6 +189,120 @@
 			cleanModalCorreu();
 		});
 	});
+	
+	
+	
+	//Metodo para obtener las posible asignaciones automaticas
+	function assignacioAutomatica() {
+        $.ajax({
+            url : "<%=request.getContextPath()%>${contexte}/assignacioAutomatica",
+            type : "GET",
+            success : function(data) {
+            	var emi = JSON.parse(data);
+				console.log(emi);
+            	
+				var table = document.createElement("table");
+				table.classList="table table-striped table-bordered table-hover";
+				var thead = "<thead><tr><th>Asumpte</th><th>Item</th><th>Titol</th><th>Assignar</th></tr></thead>";
+				table.innerHTML = thead;
+				var tbody = document.createElement("tbody");
+				
+				emi.forEach(function(item) {
+					var tr = document.createElement("tr");
+					var td1 = document.createElement("td");
+					td1.innerHTML = item[2];
+					tr.appendChild(td1);
+					
+					var td2 = document.createElement("td");
+					td2.innerHTML = item[0];
+					tr.appendChild(td2);
+					
+					var td3 = document.createElement("td");
+					td3.innerHTML = item[4];
+					tr.appendChild(td3);
+					
+					var td4 = document.createElement("td");
+					var btn = document.createElement("button");
+					btn.classList="btn btn-primary assignar-btn";
+					btn.innerHTML = "Assignar";
+					btn.onclick = function(event) {
+		                event.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
+						assignador(item[0], item[1], item[3]);
+                    };
+					td4.appendChild(btn);
+
+					tr.appendChild(td4);
+                    tbody.appendChild(tr);
+                });
+				
+				table.appendChild(tbody);
+				$("#assignacioAutomatica .modal-body").html(table);
+            }
+        });
+        $("#assignacioAutomatica").modal();
+
+    }
+	
+	
+    function assignador(tipus, emailID, itemID){
+		var msg = "assignador: " + tipus + " " + emailID + " " + itemID;
+		console.log(msg);
+    	$.ajax({
+			url : "<%= request.getContextPath() + LlistaCorreusOperadorController.CONTEXT_WEB %>/itemExistent",
+			type : "GET",
+			data : {
+				tipus : tipus,
+				emailID : emailID,
+				itemID : itemID
+			},
+			success : function(data) {
+				console.log(data)
+            	var msg = JSON.parse(data);
+
+				console.log(msg)
+				CORREUS_PENDENTS_ASSIGNACIO--;
+			}
+		});
+		
+    }
+    
+    var CORREUS_PENDENTS_ASSIGNACIO = 0;
+    
+	function assignadorAll(){
+		console.log("assignadorAll");
+		
+		var btns = document.getElementsByClassName("assignar-btn")
+
+		CORREUS_PENDENTS_ASSIGNACIO = btns.length;
+		
+		for(let i = btns.length -1; i >= 0; i--){
+			setTimeout(() => {
+				console.log("click: " + i);
+				$(btns[i]).click()
+			}, (btns.length - i-1) * 500);
+		}
+		
+		
+		console.log("start wait");
+		const intervalID = setInterval(testEnd, 500);
+
+		function testEnd() {
+			console.log("waiting: " + CORREUS_PENDENTS_ASSIGNACIO);
+			if(CORREUS_PENDENTS_ASSIGNACIO == 0){
+                clearInterval(intervalID);
+                location.reload();
+			}
+		}
+
+		
+/* 		setTimeout(() => {
+			while(CORREUS_PENDENTS_ASSIGNACIO > 0){
+				console.log("waiting: " + CORREUS_PENDENTS_ASSIGNACIO);
+	        }
+			location.reload();
+		}, btns.length * 1000);
+ */
+	}
 </script>
 
 
@@ -285,8 +399,27 @@
 	</div>
 </div>
 
+<!-- MODAL PER ASSIGNACIO AUTOMATICA -->
+<div class="modal fade" id="assignacioAutomatica" role="dialog">
+    <div class="modal-dialog" style="max-width: none;margin: 3rem 20rem;">
 
-
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-title" class="modal-title">Assignació automàtica</h4>
+                <button type="button" class="close"
+                    style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Processant correus...</p>
+            </div>
+                <div class="modal-footer">
+				<button type="button" class="btn btn-default"
+					onClick="assignadorAll()">Assignar tots</button>
+			</div>
+        </div>
+    </div>
+</div>
 
 <style>
 .my_select {
@@ -474,6 +607,7 @@ textarea {
 	width: fit-content;
 	margin-bottom: 10px;
 }
+
 </style>
 </c:if>
 

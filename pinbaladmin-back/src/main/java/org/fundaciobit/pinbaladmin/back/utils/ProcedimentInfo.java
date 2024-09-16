@@ -51,5 +51,17 @@ public class ProcedimentInfo {
   public void addServei(ServeiInfo servei) {
     this.serveis.add(servei);
   }
+  
+	public ServeiInfo getServei(String nom) {
+		
+		for (ServeiInfo servei : serveis) {
+			if (servei.getNom().equals(nom)) {
+				return servei;
+			}
+		}
+		return null;
+		
+	}
+  
 
 }
