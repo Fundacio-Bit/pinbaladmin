@@ -326,12 +326,15 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		} else {
 			FirmaAsyncSimpleSignedFile firma = getFitxerSignat(portafibID);
 			Long fitxerFirmatID = guardarFitxer(firma);
-
+			
+			//El document de l'event ha de ser una copia del document original.
+			Long fitxerFirmatIDCopia = guardarFitxer(firma);
+			
 			Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
 					DocumentSolicitudFields.DOCUMENTID.equal(docID));
 			if (soliID != null) {
 				afegirFitxerADocSolicitud(docID, soliID, fitxerFirmatID);
-				crearEventSolcitudFirmada(soliID, fitxerFirmatID);
+				crearEventSolcitudFirmada(soliID, fitxerFirmatIDCopia );
 			} else {
 				log.error("No hi ha cap sol·licitud amb documentID=" + docID + ". ", new Exception());
 			}
