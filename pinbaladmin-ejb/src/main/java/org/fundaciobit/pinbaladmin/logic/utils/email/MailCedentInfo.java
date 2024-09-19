@@ -64,6 +64,7 @@ public class MailCedentInfo {
 			this.subject = "Discapacitat - Cedent";
 			this.message = msg;
 			dests.add("amalorda@dgad.caib.es");
+			dests.add("emreynes@dgad.caib.es");
 			break;
 
 		case "FAM_NOMBROSA":

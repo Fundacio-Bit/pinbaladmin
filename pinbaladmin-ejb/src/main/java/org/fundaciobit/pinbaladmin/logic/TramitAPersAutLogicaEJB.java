@@ -818,17 +818,22 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long solicitudID = soli.getSolicitudID();
         log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
 
-        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
-        byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli);
+        String[] excels = { "locals", "estatals" };
 
-        String nom = SDF.format(new Date()) + plantillaXLSX.getName();
-        FitxerJPA fitxer = new FitxerJPA(nom, data.length, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
-        fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+		for (String excel : excels) {
+			File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
 
-        FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxer.getFitxerID());
+			String nom = SDF.format(new Date()) + plantillaXLSX.getName();
+			FitxerJPA fitxer = new FitxerJPA(nom, data.length,
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
 
-        Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
-    	afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxer.getFitxerID());
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+			afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
+		}
     }
 
 	private Long generarDocumentSolicitudAmbXML(String codiProc, Properties props,List<TramitIServ> listaTramitsI) throws Exception {

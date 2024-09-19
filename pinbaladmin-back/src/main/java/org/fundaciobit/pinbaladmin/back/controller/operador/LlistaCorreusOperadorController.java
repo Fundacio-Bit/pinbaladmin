@@ -390,7 +390,7 @@ public class LlistaCorreusOperadorController extends EmailController {
                 IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.afegirMailAIncidencia(emi, incidenciaID);
                 
                 er.deleteMessage((int) (long) emailID);
-                updateCacheSize();
+                updateCacheSize(er);
                 
         		return "redirect:/operador/eventincidenciatecnica/veureevents/" + it.getIncidenciaTecnicaID();
             } else {
@@ -476,7 +476,7 @@ public class LlistaCorreusOperadorController extends EmailController {
                 Solicitud soli = solicitudLogicaEjb.afegirMailASolicitud(emi, solicitudID);
                 
                 er.deleteMessage((int) (long) emailID);
-                updateCacheSize();
+                updateCacheSize(er);
                 
         		return "redirect:/operador/eventsolicitud/veureevents/" + soli.getSolicitudID();
             } else {
@@ -495,7 +495,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
-	public void updateCacheSize() {
+	public void updateCacheSize(EmailReader er) {
 		log.info("XYZ ZZZ updateCacheSize()");
 
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
@@ -504,10 +504,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 		int size = 0;
 
 		try {
-			final boolean enableCertificationCheck = false;
-			EmailReader er = new EmailReader(enableCertificationCheck);
 			size = er.getCountMessages();
-			
 		} catch (Exception e) {
 			String msg = "Error actualitzant cache de correus: " + e.getMessage();
 			log.error(msg, e);

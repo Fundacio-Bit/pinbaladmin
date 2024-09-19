@@ -53,7 +53,7 @@ public class CrearExcelDeServeis {
           "Peticiones al dia" // 15 
   };
 
-  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli)
+  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli, String tipusExcel)
       throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
     /*
      * Properties prop = getPropertiesFromFormulario(xml);
@@ -84,6 +84,15 @@ public class CrearExcelDeServeis {
     
     for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
 
+    	boolean esLocal = ss.getServei().getEntitatServei().isBalears();
+    	boolean volemLocal = tipusExcel.equals("locals");
+
+    	if((esLocal && !volemLocal) || (!esLocal && volemLocal)) {
+    		continue;
+    	}
+
+
+    	
       // String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
 
       System.out.println(" LLEGING SERVEI => " + ss.getId());
@@ -189,15 +198,14 @@ public class CrearExcelDeServeis {
     return dadesByServeiSolicitudID;
   }
 
-  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli)
+  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli, String tipusExcel)
       throws I18NException {
 
     XSSFWorkbook my_xlsx_workbook = null;
     FileInputStream input_document = null;
     try {
       Long soliID = soli.getSolicitudID();
-
-      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli);
+      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
 
       // Read Excel document first
       input_document = new FileInputStream(plantillaXLSX);

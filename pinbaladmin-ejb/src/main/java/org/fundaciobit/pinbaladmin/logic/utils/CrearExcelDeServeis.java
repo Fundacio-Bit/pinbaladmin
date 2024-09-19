@@ -18,6 +18,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.xml.sax.SAXException;
@@ -44,13 +46,13 @@ public class CrearExcelDeServeis {
           "Artículos", //9
           "Enlace http Norma Legal", //10
           "Enlace http Consentimiento ", //11
-          "ENLACENORCaducidad", //12
+          "Caducidad", //12
           "Periódico", //13
           "Automatizado", //14
           "Peticiones al dia" // 15 
   };
 
-  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli)
+  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli, String tipusExcel)
       throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
     /*
      * Properties prop = getPropertiesFromFormulario(xml);
@@ -81,6 +83,15 @@ public class CrearExcelDeServeis {
     
     for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
 
+    	boolean esLocal = ss.getServei().getEntitatServei().isBalears();
+    	boolean volemLocal = tipusExcel.equals("locals");
+
+    	if((esLocal && !volemLocal) || (!esLocal && volemLocal)) {
+    		continue;
+    	}
+
+
+    	
       // String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
 
       System.out.println(" LLEGING SERVEI => " + ss.getId());
@@ -142,8 +153,17 @@ public class CrearExcelDeServeis {
       dades[8] = ss.getNormaLegal(); // values.get(base + "NORMALEGAL");
       // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
       dades[9] = ss.getArticles(); // values.get(base + "ARTICULOS");
+      //dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      
       // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
-      dades[10] = "Adjunto"; //ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
+      Fitxer fitxerNorma = ss.getFitxernorma();
+      if (fitxerNorma == null) {
+    	  dades[10] = ss.getEnllazNormaLegal();
+      } else {
+    	  dades[10] = "Adjunto: " + fitxerNorma.getNom();
+//    	  dades[10] = Configuracio.getAppUrl() + FileDownloadController.fileUrl(fitxerNorma);
+      }      
+      
       // L 11 L'Enllaç de Consentiment
       {
         String ec = ss.getEnllazConsentiment();
@@ -178,15 +198,14 @@ public class CrearExcelDeServeis {
     return dadesByServeiSolicitudID;
   }
 
-  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli)
+  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli, String tipusExcel)
       throws I18NException {
 
     XSSFWorkbook my_xlsx_workbook = null;
     FileInputStream input_document = null;
     try {
       Long soliID = soli.getSolicitudID();
-
-      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli);
+      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
 
       // Read Excel document first
       input_document = new FileInputStream(plantillaXLSX);

@@ -5,6 +5,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -283,22 +284,27 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
             //File dest = new File(baseFile, "generat.xlsx");
 
-            byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli);
-            String nom = SDF.format(new Date()) + plantillaXLSX.getName();
-            Fitxer f = fitxerEjb.create(nom, data.length,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
+			String[] excels = { "locals", "estatals" };
 
-            FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
+			for (String excel : excels) {
 
-            Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
-            Document doc = documentEjb.create(nom, f.getFitxerID(), null, null,tipus);
+				byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
+				String nom = SDF.format(new Date())  + excel + "_"+ plantillaXLSX.getName();
+				Fitxer f = fitxerEjb.create(nom, data.length,
+						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
 
-            DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+				FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
-            documentSolicitudEjb.create(ds);
+				Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+				Document doc = documentEjb.create(nom, f.getFitxerID(), null, null, tipus);
 
-            HtmlUtils.saveMessageSuccess(request, "Generat el fitxer de serveis. Revisar un document titulat " + nom
-                    + " dins de l'apartat de 'Llistat de Documents-Sol·licitud'");
+				DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+
+				documentSolicitudEjb.create(ds);
+			}
+
+			HtmlUtils.saveMessageSuccess(request,
+					"Generat els fitxers de serveis. Revisar Llistat de Documents-Sol·licitud");
 
         } catch (I18NException ie) {
 
