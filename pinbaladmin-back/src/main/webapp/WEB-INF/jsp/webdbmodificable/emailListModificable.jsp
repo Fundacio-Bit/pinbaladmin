@@ -80,7 +80,7 @@
     	cleanModalCorreu();
     	
     	$.ajax({
-			url : "<%= request.getContextPath() + LlistaCorreusOperadorController.CONTEXT_WEB %>/viewMessage2",
+			url : "<%= request.getContextPath() + LlistaCorreusOperadorController.CONTEXT_WEB %>/viewMessage",
 			type : "GET",
 			data : {
 				emailID : emailID
@@ -188,6 +188,14 @@
 		$('#modelVeureCorreu').on('hide.bs.modal', function(e) {
 			cleanModalCorreu();
 		});
+		
+		$('#assignacioAutomatica').on('hide.bs.modal', function(e) {
+			if(CORREUS_PENDENTS_ASSIGNACIO < 0){
+				//S'han assignat correus.
+                location.reload();
+            }
+		});
+		
 	});
 	
 	
@@ -198,8 +206,8 @@
             url : "<%=request.getContextPath()%>${contexte}/assignacioAutomatica",
             type : "GET",
             success : function(data) {
-            	var emi = JSON.parse(data);
-				console.log(emi);
+            	var emails = JSON.parse(data);
+				console.log(emails);
             	
 				var table = document.createElement("table");
 				table.classList="table table-striped table-bordered table-hover";
@@ -207,8 +215,11 @@
 				table.innerHTML = thead;
 				var tbody = document.createElement("tbody");
 				
-				emi.forEach(function(item) {
+				emails.forEach(function(item) {
 					var tr = document.createElement("tr");
+					tr.classList="item-row";
+					tr.id = "item" +item[1];
+					
 					var td1 = document.createElement("td");
 					td1.innerHTML = item[2];
 					tr.appendChild(td1);
@@ -223,7 +234,8 @@
 					
 					var td4 = document.createElement("td");
 					var btn = document.createElement("button");
-					btn.classList="btn btn-primary assignar-btn";
+					btn.id = "btn" + item[1];
+					btn.classList="btn btn-primary assignat-btn";
 					btn.innerHTML = "Assignar";
 					btn.onclick = function(event) {
 		                event.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
@@ -259,6 +271,23 @@
 				console.log(data)
             	var msg = JSON.parse(data);
 
+				var tr = document.getElementById("item" + emailID);
+				
+				if(msg.includes("Error")){
+					tr.classList.add("error");
+					alert(msg);
+				} else{
+					tr.classList.add("assignat");
+					var btn = document.getElementById("btn" + emailID);
+					//Canviar onclick per un altre metode que redireccioni a msg.
+					btn.innerHTML = "Veure " + tipus;
+					btn.classList="btn btn-success assignar-btn";
+					btn.onclick = function(event) {
+						event.preventDefault();
+						window.location.href = msg;
+					};
+				}
+				
 				console.log(msg)
 				CORREUS_PENDENTS_ASSIGNACIO--;
 			}
@@ -279,7 +308,7 @@
 			setTimeout(() => {
 				console.log("click: " + i);
 				$(btns[i]).click()
-			}, (btns.length - i-1) * 500);
+			}, (btns.length - i-1) * 1000);
 		}
 		
 		
@@ -305,6 +334,15 @@
 	}
 </script>
 
+<style>
+.item-row.assignat {
+	background-color: #acfbb8 !important;
+}
+
+.item-row.error {
+	background-color: #fb9494 !important;
+}
+</style>
 
 <!-- Modal -->
 <% request.setAttribute("currentuser", request.getRemoteUser()); %>

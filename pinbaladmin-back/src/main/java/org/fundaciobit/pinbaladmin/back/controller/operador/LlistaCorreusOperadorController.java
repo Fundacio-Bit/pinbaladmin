@@ -33,6 +33,7 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.EmailController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
+import org.fundaciobit.pinbaladmin.back.utils.RegexUtils;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -45,6 +46,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EmailFields;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
@@ -115,6 +117,21 @@ public class LlistaCorreusOperadorController extends EmailController {
     }
 
     @Override
+    public boolean isActiveFormNew() {
+        return false;
+    }
+
+    @Override
+    public boolean isActiveFormEdit() {
+        return false;
+    }
+
+    @Override
+    public boolean isActiveFormView() {
+        return false;
+    }
+    
+    @Override
     public EmailFilterForm getEmailFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
             throws I18NException {
         EmailFilterForm emailFilterForm = super.getEmailFilterForm(pagina, mav, request);
@@ -181,13 +198,6 @@ public class LlistaCorreusOperadorController extends EmailController {
 				tipusIncidencies.add(new StringKeyValue(String.valueOf(tipus[i]), tipusNames[i]));
 			}
             
-//            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
-//            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-//            tipusIncidencies
-//                    .add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-//            tipusIncidencies.add(
-//                    new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
-
             mav.addObject("tipusIncidencies", tipusIncidencies);
         }
         
@@ -205,15 +215,6 @@ public class LlistaCorreusOperadorController extends EmailController {
 			for (int i = 0; i < estats.length; i++) {
 				estatSolicituds.add(new StringKeyValue(String.valueOf(estats[i]), estatsNames[i]));
 			}
-			
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
-//            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
 
             mav.addObject("estatSolicituds", estatSolicituds);
         }
@@ -270,18 +271,14 @@ public class LlistaCorreusOperadorController extends EmailController {
     public String amagarmissatgearxiu(HttpServletRequest request, HttpServletResponse response) {
 
         request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, false);
-
         return "redirect:" + getContextWeb() + "/list";
-
     }
 
     @RequestMapping(value = "/mostrarmissatgearxiu", method = RequestMethod.GET)
     public String mostrarmissatgearxiu(HttpServletRequest request, HttpServletResponse response) {
 
         request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, true);
-
         return "redirect:" + getContextWeb() + "/list";
-
     }
 
     @Override
@@ -312,22 +309,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 				
 				
 				if (email.getMessage() != null) {
-				//	String msg = email.getMessage().trim();
-
-					//if ((msg.startsWith("<") && msg.endsWith(">")) || msg.endsWith("</html>")) {
-						// map.put(email.getEmailID(), "<div
-						// style=\"max-width:500px;max-height:400px;overflow:scroll;\">" + msg
-						// + "</div>");
-						// width=\"500px\" height=\"350px\"
-
-						log.info("afegim iframe per missatge HTML");
-						map.put(emailID, "<iframe src=\"" + request.getContextPath()
-								+ getContextWeb() + "/message/" + emailID + "\"></iframe>");
-				//	} else {
-				//		log.info("afegim textarea per missatge TEXT");
-				//		map.put(emailID,
-				//				"<textarea readonly" + computeRowsCols(msg) + ">" + msg + "</textarea>");
-				//	}
+					log.info("afegim iframe per missatge HTML");
+					String src = request.getContextPath() + getContextWeb() + "/message/" + emailID;
+					map.put(emailID, "<iframe src=\"" + src + "\"></iframe>");
 				}
 
 				EmailMessageInfo emi = cache.get(email.getEmailID());
@@ -340,8 +324,11 @@ public class LlistaCorreusOperadorController extends EmailController {
 					for (EmailAttachmentInfo ads : emi.getAttachments()) {
 
 						str.append("<div class=\"adjuntDiv\" style=\"border-style: solid;border-width:1px;\">");
-						str.append("<small>-Nom: " + ads.getFileName() + "<br/>" + "-Mida: " + ads.getData().length
-								+ " bytes<br/>" + "-Tipus: " + ads.getContentType());
+						str.append("<small>"
+								+ "-Nom: " + ads.getFileName() + "<br/>" 
+								+ "-Mida: " + ads.getData().length + " bytes<br/>" 
+								+ "-Tipus: " + ads.getContentType());
+						
 						str.append("</small></div>");
 					}
 					str.append("</div>");
@@ -353,39 +340,16 @@ public class LlistaCorreusOperadorController extends EmailController {
 		filterForm.setSubTitleCode("=Tens " + cachesize(request) + " correus sense processar ...");
 	}
 
-    protected String computeRowsCols(String msg) {
-        int rows = 1;
-        int cols = 1;
-        if (msg != null) {
-            String[] lines = msg.split("\n");
-            rows = lines.length + 1;
-            for (int i = 0; i < lines.length; i++) {
-                cols = Math.max(cols, lines[i].length());
-                if (cols > 80) {
-                    cols = 80;
-                    break;
-                }
-            }
-        }
-
-        return " rows=\"" + Math.min(rows, 70) + "\" cols=\"" + cols + "\" ";
-    }
-
     @RequestMapping(value = "/incidencia/{emailID}/{operador}/{tipusIncidencia}", method = RequestMethod.GET)
     public String incidencia(HttpServletRequest request, HttpServletResponse response,
             @PathVariable("emailID") Long emailID, @PathVariable("operador") String operador,
             @PathVariable("tipusIncidencia") int tipusIncidencia) {
         try {
-
-            //Map<Long, EmailMessageInfo> cache
-            // cache= (Map<Long, EmailMessageInfo>) request.getSession().getAttribute(CACHE_DE_EMAILS_LLEGITS);
-
             final boolean enableCertificationCheck = false;
             EmailReader er = new EmailReader(enableCertificationCheck);
 
             if (er.getCountMessages() == cachesize(request)) {
 
-                //EmailMessageInfo emi = cache.get(emailID);
                 EmailMessageInfo emi = er.getMessage((int) (long) emailID);
 
                 String creador = LoginInfo.getInstance().getUsername();
@@ -395,28 +359,19 @@ public class LlistaCorreusOperadorController extends EmailController {
                 enviarCorreusIncidencia(it);
                 
         		return "redirect:/operador/eventincidenciatecnica/veureevents/" + it.getIncidenciaTecnicaID();
-
-//                return "redirect:" + EventIncidenciaTecnicaOperadorController.CONTEXT_PATH
-//                        + AbstractEventController.ENVIAR_ENLLAZ + it.getIncidenciaTecnicaID();
-
-                // return "redirect:" + IncidenciaTecnicaOperadorController.WEBCONTEXT +
-                // "/"
-                // + it.getIncidenciaTecnicaID() + "/edit";
-
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
-        } catch (I18NException e) {
-            String msg = I18NUtils.getMessage(e);
-            log.error(msg, e);
-            HtmlUtils.saveMessageError(request, msg);
-
         } catch (Exception e) {
-            String msg = "Error convertint a incidència: " + e.getMessage();
-            log.error(msg, e);
-            HtmlUtils.saveMessageError(request, msg);
-        }
-
+			String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error convertint a incidència: " + e.getMessage();
+			}
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
+		}
         return "redirect:" + getContextWeb() + "/list";
     }
 
@@ -436,11 +391,8 @@ public class LlistaCorreusOperadorController extends EmailController {
                 
                 er.deleteMessage((int) (long) emailID);
                 updateCacheSize();
-
-//                enviarCorreusIncidencia(it);
                 
         		return "redirect:/operador/eventincidenciatecnica/veureevents/" + it.getIncidenciaTecnicaID();
-
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
@@ -474,8 +426,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         try {
 
             long start = System.currentTimeMillis();
-            //Map<Long, EmailMessageInfo> cache;
-            //cache = (Map<Long, EmailMessageInfo>) request.getSession().getAttribute(CACHE_DE_EMAILS_LLEGITS);
 
             final boolean enableCertificationCheck = false;
             EmailReader er = new EmailReader(enableCertificationCheck);
@@ -494,9 +444,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 				for (SolicitudJPA soli : solicituds) {
 	                enviarCorreusSolicituds(soli, titol);
 				}
-                
                 return "redirect:/operador/solicitudestatal/list/" + start + "/" + end;
-
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
@@ -529,10 +477,8 @@ public class LlistaCorreusOperadorController extends EmailController {
                 
                 er.deleteMessage((int) (long) emailID);
                 updateCacheSize();
-//                enviarCorreusSolicitud(soli);
                 
         		return "redirect:/operador/eventsolicitud/veureevents/" + soli.getSolicitudID();
-
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
@@ -622,44 +568,9 @@ public class LlistaCorreusOperadorController extends EmailController {
             HtmlUtils.saveMessageError(request, msg);
         }
 
-        /*
-        if (orderBy == null || orderBy.length == 0) {
-          log.info("OrderBy NULL o buit");
-        } else {
-          for (OrderBy o : orderBy) {
-        log.info("   - OrderBy[" + o.javaName + "]: " + o.orderType);
-        
-        if (o.javaName.equals(DATAENVIAMENT.javaName)) {
-          Collections.sort(list, new EmailDateComparator(orderBy[0].orderType));
-          break;
-        }
-          }
-        }
-        */
-
         request.getSession().setAttribute(CACHE_DE_EMAILS_LLEGITS, cache);
         request.getSession().setAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS, size);
         return list;
-    }
-
-    /**
-     * 
-     * @author anadal
-     *
-     */
-    public class EmailDateComparator implements Comparator<Email> {
-
-        private final int orderType;
-
-        public EmailDateComparator(OrderType asc) {
-            this.orderType = asc.equals(OrderType.ASC) ? 1 : -1;
-        }
-
-        @Override
-        public int compare(Email o1, Email o2) {
-            return orderType * o1.getDataEnviament().compareTo(o2.getDataEnviament());
-        }
-
     }
 
     private EmailJPA message2email(EmailMessageInfo emi) {
@@ -712,48 +623,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     }
 
-    @RequestMapping(value = "/viewMessage/{emailID}" )
-    public void getMessageView(HttpServletRequest request, HttpServletResponse response,
-            @PathVariable("emailID") java.lang.Long emailID) {
-
-        try {
-        	log.info("XYZ ZZZ getMessageEmail(" + emailID + ")");
-
-			final boolean enableCertificationCheck = false;
-			EmailReader er = new EmailReader(enableCertificationCheck);
-			
-			if (er.getCountMessages() == cachesize(request)) {
-				EmailMessageInfo emi = er.getMessage((int) (long) emailID);
-
-				String msg = emi.getBody();
-				log.info("msg = " + msg.length());
-
-				request.getSession().setAttribute("adjunts", emi.getAttachments().size());
-				log.info("adjunts = " + emi.getAttachments().size());
-				
-				response.setContentType("text/html");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter os = response.getWriter();
-				os.print("<html><body>");
-				os.print(msg);
-				os.print("</body></html>");
-				os.flush();
-				os.close();
-            } else {
-            	PrintWriter os = response.getWriter();
-				os.print("<h1>Error. Ha rebut altres correus. Torni a intentar-ho.</h1>");
-				os.flush();
-				os.close();
-            }
-
-        } catch (Throwable e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-	@RequestMapping(value = "/viewMessage2", method = RequestMethod.GET)
+	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
 	public void getMessageView2(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
@@ -787,15 +657,11 @@ public class LlistaCorreusOperadorController extends EmailController {
 				Gson g = new Gson();
 				String emiJSON = g.toJson("Error. Ha rebut altres correus. Torni a intentar-ho.");
 				os.print(emiJSON);
-				
-//				os.print("<h1>Error. Ha rebut altres correus. Torni a intentar-ho.</h1>");
-
 				os.flush();
 				os.close();
 			}
 
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -803,72 +669,152 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 	@RequestMapping(value = "/assignacioAutomatica", method = RequestMethod.GET)
 	public void assignarAutomatic(HttpServletRequest request, HttpServletResponse response) {
-		//Envio:
-		/*
-		 *  correo x (con titulo TitX) se asigna a la incidencia y (con titulo TitY)
-		 *  
-		 *  [tipo, emailID, titulo, itemID, itemTitulo]
-		 *  ["soli", 2, "bla bla bla pid[1234] bla bla bla", 15232, "bla bla bla pid[1234] bla bla bla"]
-		 *  
-		 */
 		try {
-			
+
 			List<String[]> emails = new ArrayList<String[]>();
-			
+
 			String param = (String) request.getParameter("param");
 			log.info("XXX assignacioAutomatica(" + param + ")");
 
 			final boolean enableCertificationCheck = false;
 			EmailReader er = new EmailReader(enableCertificationCheck);
 
-			if (er.getCountMessages() == cachesize(request)) {
-				log.info("nMissatges: " + er.getCountMessages());
-				Map<Long, EmailMessageInfo> cache = (Map<Long, EmailMessageInfo>) request.getSession()
-						.getAttribute(CACHE_DE_EMAILS_LLEGITS);
+			final int start = 1;
+			final int end = er.getCountMessages();
+			final boolean includeAttachments = false;
+
+			List<EmailMessageInfo> llistaEmails = er.list(start, end, includeAttachments);
+			log.info("nMissatges: " + llistaEmails.size());
+
+			for (EmailMessageInfo emi : llistaEmails) {
 				
-				for (EmailMessageInfo emi : cache.values()) {
-					String asunto = emi.getSubject();
-					
-					//Descifrar el asunto y buscar codigo de procedimento, o PID, o numero de incidencia, o lo que sea para buscarla en la BBDD.
-					
-					String pid = getPIDFromSubject(asunto);
-					if (pid != null) {
-						log.info("PID: " + pid);
-//						String pid = asunto.substring(idx_pid + 6, asunto.indexOf("]", idx_pid));
+				int emailID = emi.getNumber();
+				log.info("");
+				log.info("emi: " + emailID);
+				
+				// Descifrar el asunto y buscar codiProc,PID, nInc, etc, y buscar en BBDD.
+				
+				String asunto = emi.getSubject();
+
+				String pid = RegexUtils.getPIDFromSubject(asunto);
+				if (pid != null) {
+					List<Solicitud> auxSoli = solicitudLogicaEjb.select(SolicitudFields.EXPEDIENTPID.equal(pid));
+					if (auxSoli != null && auxSoli.size() > 0) {
+
+						Solicitud soli = auxSoli.get(0);
+						log.info("\t PID: " + pid + " - CodiProc: " + soli.getProcedimentCodi());
 						
-						List<Solicitud> auxSoli = solicitudLogicaEjb.select(SolicitudFields.EXPEDIENTPID.equal(pid));
-						if (auxSoli != null && auxSoli.size() > 0) {
-							Solicitud soli = auxSoli.get(0);
-							emails.add(new String[] { "soli", String.valueOf(emi.getNumber()), asunto,
-									String.valueOf(soli.getSolicitudID()), soli.getProcedimentNom() });
-						}
+						emails.add(getAssignInfoSoli(emi, soli));
+						continue;
 					}else {
-						log.info("No s'ha trobat PID");
+						log.info("\t PID: " + pid + " - Solicitud no trobada.");
 					}
-					
 				}
 
-				response.setContentType("text/html");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter os = response.getWriter();
-
-				Gson g = new Gson();
-				String emiJSON = g.toJson(emails);
-				os.print(emiJSON);
+				// Correos que el remitente sea MTDFP Incidencias y el asunto lleve nIncidencia
 				
-				os.flush();
-				os.close();
-			} else {
-				PrintWriter os = response.getWriter();
-				
-				Gson g = new Gson();
-				String emiJSON = g.toJson("Error. Ha rebut altres correus. Torni a intentar-ho.");
-				os.print(emiJSON);
+				String remitente = emi.getDisplayFrom();
+				if (remitente.equals("aplicacion.gestorconsultas@correo.gob.es")) {
+					// Obtener los numeros que haya en el asunto (nIncidencia y nSeguiment).
+					Solicitud soli = null;
+					List<String> numeros = RegexUtils.extractAllNumbers(asunto);
+					for (String numero : numeros) {
+						// Buscar los numero en Solicitud.Notes. Si lo encuentra, se asigna a esa solicitud
+						
+						List<Solicitud> auxSoli = solicitudLogicaEjb
+								.select(SolicitudFields.NOTES.like("%" + numero + "%"));
+						
+						if (auxSoli != null && auxSoli.size() > 0) {
+							soli = auxSoli.get(0);
 
-				os.flush();
-				os.close();
+							log.info("\t nInc/nSeg: " + numero + ". Procediment: " + soli.getProcedimentCodi());
+							break;
+						} else {
+							log.info("\t nInc/nSeg: " + numero + " - No trobat.");
+						}
+					}
+
+					//Si ha encontrado la solicitud, 
+					if (soli != null) {
+						emails.add(getAssignInfoSoli(emi, soli));
+						continue;
+					}else {
+						log.info("\t Cap solicitud amb nInc/nSeg: " + numeros.toString());
+					}
+				}
+				
+				// Buscar los correos con CAI y asignarlos a la incidencia con ese CAI en el titulo.
+				String cai = RegexUtils.extractCAI(asunto);
+				if (cai != null) {
+					
+//					log.info("CAI: " + cai);
+					List<IncidenciaTecnica> auxInci = incidenciaTecnicaLogicaEjb
+							.select(IncidenciaTecnicaFields.TITOL.like("%CAI-%" + cai + "%"));
+					
+					if (auxInci != null && auxInci.size() > 0) {
+						IncidenciaTecnica it = auxInci.get(0);
+						log.info("\t CAI: " + cai + ". Incidencia " + it.getTitol());
+						
+						emails.add(getAssignInfoInc(emi, it));
+						continue;
+					}
+					
+					List<Solicitud> auxSoli = solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTNOM.like("%CAI-%" + cai + "%"));
+					if (auxSoli != null && auxSoli.size() > 0) {
+						Solicitud soli = auxSoli.get(0);
+						log.info("\t CAI: " + cai + ". Procediment " + soli.getProcedimentCodi());
+
+						emails.add(getAssignInfoSoli(emi, soli));
+						continue;
+					}
+					
+					log.info("\t CAI: " + cai + ". No trobat.");
+				}
+				
+				// Buscar los correos con el asunto de una respuesta automatica de soporte
+				String[] resposta = RegexUtils.testRespostaAutomaticaSuport(asunto); //[id, tipus]
+				if (resposta != null && resposta.length == 2) {
+					
+					Long id = Long.valueOf(resposta[0]);
+					String tipus = resposta[1];
+					
+					
+					log.info("\t Resposta Suport. PINBAL[" + resposta[0] + "] - " + resposta[1]);
+					
+					if (tipus.equals("INCIDENCIA")) {
+						IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
+						if(it != null) {
+							emails.add(getAssignInfoInc(emi, it));
+							log.info("\t Assignat a incidencia: " + it.getTitol());
+							continue;
+						}
+					} else if (tipus.equals("SOLICITUD")) {
+						Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(id);
+
+						if (soli != null) {
+                            emails.add(getAssignInfoSoli(emi, soli));
+                            log.info("\t Assignat a Solicitud: " + soli.getProcedimentCodi());
+                            continue;
+						}
+					}
+					log.info("\t " + resposta[1] + " no trobada.");
+				}
+				
+				//Si llega aqui es que no se ha asignado a nada.
+				log.info("\t No se puede asignar automatico");
 			}
+
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+
+			PrintWriter os = response.getWriter();
+
+			Gson g = new Gson();
+			String emiJSON = g.toJson(emails);
+			os.print(emiJSON);
+
+			os.flush();
+			os.close();
 
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
@@ -876,10 +822,41 @@ public class LlistaCorreusOperadorController extends EmailController {
 		}
 	}
 
+	private String[] getAssignInfoInc(EmailMessageInfo emi, IncidenciaTecnica it) {
+
+		String[] tipusIncidenciaNames = { "", "Tècnica", "Consulta", "Integracions", "Roles de permisos" };
+
+		String emailID = String.valueOf(emi.getNumber());
+		String tipus = tipusIncidenciaNames[it.getTipus()];
+		String asunto = emi.getSubject();
+
+		String inciID = String.valueOf(it.getIncidenciaTecnicaID());
+		String msg = it.getTitol();
+
+		return new String[] { tipus, emailID, asunto, inciID, msg };
+	}
+
+	private String[] getAssignInfoSoli(EmailMessageInfo emi, Solicitud soli) {
+		String tipus = soli.getEntitatEstatal() == null ? "Local" : "Estatal";
+		String emailID = String.valueOf(emi.getNumber());
+		String asunto = emi.getSubject();
+		String soliID = String.valueOf(soli.getSolicitudID());
+		
+		String notes = soli.getNotes();
+		if (notes == null || notes.trim().length() == 0) {
+			notes = "";
+		} else {
+			notes = "<br><br>" + notes.replace("\n", "<br>");
+		}
+
+		String msg = "PINBAL[" + soliID + "] " + soli.getProcedimentCodi() + ": " + soli.getProcedimentNom() + notes;
+
+		return new String[] { tipus, emailID, asunto, soliID, msg };
+	}
+
 	@RequestMapping(value = "/itemExistent", method = RequestMethod.GET)
 	public void assignarItemExistent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		log.info("HOLAAAAAAAAAAAAAAAAAA assignarItemExistent");
 		try {
 			String tipus = (String) request.getParameter("tipus");
 			String emailID = (String) request.getParameter("emailID");
@@ -887,12 +864,14 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 			log.info("XYZ ZZZ assignarItemExistent(" + tipus + ", " + itemID + ", " + emailID + ")");
 			String ret;
-			if (tipus.equals("soli")) {
+			if (tipus.equals("Estatal") || tipus.equals("Local")) {
 				ret = solicitudExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
 			}else {
 				ret = incidenciaExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
 			}
+			
 			log.info("ret = " + ret);
+			ret = ret.replace("redirect:", "/pinbaladmin");
 			
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -917,28 +896,6 @@ public class LlistaCorreusOperadorController extends EmailController {
 			os.close();
 		}
 	}
-
-	public static String getPIDFromSubject(String input) {
-        // Definir el patrón regex para detectar PID y el número entre corchetes
-        String regex = "(\\[PID\\]|PID).*?\\[(\\d+)\\]";
-        
-        // Compilar el patrón
-        Pattern pattern = Pattern.compile(regex);
-        
-        // Crear un matcher con la entrada proporcionada
-        Matcher matcher = pattern.matcher(input);
-        
-        // Verificar si el patrón fue encontrado
-        if (matcher.find()) {
-            // Obtener el primer número entre corchetes después de PID
-            String pid = matcher.group(2);
-            return pid;
-//            System.out.println("El string contiene el patrón PID seguido del número: " + pid);
-        } else {
-        	return null;
-//            System.out.println("El string NO contiene el patrón PID seguido de un número entre corchetes.");
-        }
-    }
 	
     @Override
     public void delete(HttpServletRequest request, Email email) throws I18NException {
@@ -978,21 +935,6 @@ public class LlistaCorreusOperadorController extends EmailController {
         log.info("XYZ ZZZ findByPrimaryKey(" + pos + ") => " + emi.getSubject());
 
         return message2email(emi);
-    }
-
-    @Override
-    public boolean isActiveFormNew() {
-        return false;
-    }
-
-    @Override
-    public boolean isActiveFormEdit() {
-        return false;
-    }
-
-    @Override
-    public boolean isActiveFormView() {
-        return false;
     }
 
     @Override
@@ -1126,10 +1068,4 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		crearEventPerCorreu(mail, destinatari, asumpte, msg, soliID, incidenciaID, tipus);
 	}
-
-
 }
-
-
-
-
