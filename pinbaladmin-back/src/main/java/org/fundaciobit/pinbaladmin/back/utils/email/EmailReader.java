@@ -177,6 +177,10 @@ public class EmailReader {
       // //"imaps";
       // //"pop3";
 
+   // Add SSL/TLS protocol settings
+	properties.put("mail." + storeType + ".ssl.enable", "true");
+	properties.put("mail." + storeType +".ssl.protocols", "TLSv1.2");
+      
       Session session = Session.getDefaultInstance(properties, null);
       // session.setDebug(true);
 

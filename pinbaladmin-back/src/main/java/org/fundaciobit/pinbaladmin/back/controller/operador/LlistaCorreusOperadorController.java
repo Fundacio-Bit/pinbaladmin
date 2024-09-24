@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +83,8 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     public static final String MOSTRAR_MISSATGE_ARXIU = "__mostrarMissatgeArxiu__";
 
+    public static final String CORREUS_PENDENTS_ESBORRAR = "__correusPendentsEsborrar__";
+    
     public static final int MISSATGE22 = 1;
 
     public static final int ATTACHMENTS = 2;
@@ -409,6 +412,14 @@ public class LlistaCorreusOperadorController extends EmailController {
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
+	private Long assignarIncidencia(EmailReader er, Long emailID, Long incidenciaID) throws Exception {
+		log.info("XYZ ZZZ assignarIncidencia(" + emailID + ", " + incidenciaID + ")");
+
+		EmailMessageInfo emi = er.getMessage((int) (long) emailID);
+		IncidenciaTecnica it = incidenciaTecnicaLogicaEjb.afegirMailAIncidencia(emi, incidenciaID);
+		return it.getIncidenciaTecnicaID();
+	}
+	
 	public int cachesize(HttpServletRequest request) {
         Integer i = (Integer) request.getSession().getAttribute(CACHE_SIZE_DE_EMAILS_LLEGITS);
 
@@ -471,14 +482,11 @@ public class LlistaCorreusOperadorController extends EmailController {
 
             if (er.getCountMessages() == cachesize(request)) {
 
-                EmailMessageInfo emi = er.getMessage((int) (long) emailID);
-
-                Solicitud soli = solicitudLogicaEjb.afegirMailASolicitud(emi, solicitudID);
-                
+            	Long soliID = assignarSolicitud(er, emailID, solicitudID);
                 er.deleteMessage((int) (long) emailID);
                 updateCacheSize(er);
                 
-        		return "redirect:/operador/eventsolicitud/veureevents/" + soli.getSolicitudID();
+        		return "redirect:/operador/eventsolicitud/veureevents/" + soliID;
             } else {
                 HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
             }
@@ -487,7 +495,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 			if (e instanceof I18NException) {
 				msg = I18NUtils.getMessage((I18NException) e);
 			} else {
-				msg = "Error convertint la incidencia: "  + e.getMessage();
+				msg = "Error assignant a solicitud: "  + e.getMessage();
 			}
             log.error(msg, e);
             HtmlUtils.saveMessageError(request, msg);
@@ -495,6 +503,15 @@ public class LlistaCorreusOperadorController extends EmailController {
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
+	
+	public Long assignarSolicitud(EmailReader er, Long emailID, Long solicitudID) throws Exception {
+		log.info("XYZ ZZZ assignarSolicitud(" + emailID + ", " + solicitudID + ")");
+
+		EmailMessageInfo emi = er.getMessage((int) (long) emailID);
+		Solicitud soli = solicitudLogicaEjb.afegirMailASolicitud(emi, solicitudID);
+		return soli.getSolicitudID();
+	}
+	
 	public void updateCacheSize(EmailReader er) {
 		log.info("XYZ ZZZ updateCacheSize()");
 
@@ -663,7 +680,6 @@ public class LlistaCorreusOperadorController extends EmailController {
 		}
 	}
 
-
 	@RequestMapping(value = "/assignacioAutomatica", method = RequestMethod.GET)
 	public void assignarAutomatic(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -687,7 +703,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 				
 				int emailID = emi.getNumber();
 				log.info("");
-				log.info("emi: " + emailID);
+				log.info("emi: " + emailID + " - " + emi.getDisplayFrom() + " - " + emi.getSubject());
 				
 				// Descifrar el asunto y buscar codiProc,PID, nInc, etc, y buscar en BBDD.
 				
@@ -859,13 +875,29 @@ public class LlistaCorreusOperadorController extends EmailController {
 			String emailID = (String) request.getParameter("emailID");
 			String itemID = (String) request.getParameter("itemID");
 
+			final boolean enableCertificationCheck = false;
+			EmailReader er = new EmailReader(enableCertificationCheck);
+			
+			List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+			if (correusPendentsEsborrar == null) {
+				correusPendentsEsborrar = new ArrayList<Long>();
+				request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
+			}
+			
 			log.info("XYZ ZZZ assignarItemExistent(" + tipus + ", " + itemID + ", " + emailID + ")");
 			String ret;
 			if (tipus.equals("Estatal") || tipus.equals("Local")) {
-				ret = solicitudExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
+				Long soliID = assignarSolicitud(er, Long.valueOf(emailID), Long.valueOf(itemID));
+				correusPendentsEsborrar.add(Long.valueOf(emailID));
+				ret = "redirect:/operador/eventsolicitud/veureevents/" + soliID;
+
 			}else {
-				ret = incidenciaExistent(request, response, Long.valueOf(emailID), Long.valueOf(itemID));
+				Long inciID = assignarIncidencia(er, Long.valueOf(emailID), Long.valueOf(itemID));
+				correusPendentsEsborrar.add(Long.valueOf(emailID));
+				ret = "redirect:/operador/eventincidenciatecnica/veureevents/" + inciID;
 			}
+			
+			request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
 			
 			log.info("ret = " + ret);
 			ret = ret.replace("redirect:", "/pinbaladmin");
@@ -892,6 +924,43 @@ public class LlistaCorreusOperadorController extends EmailController {
 			os.flush();
 			os.close();
 		}
+	}
+	
+	@RequestMapping(value = "/esborrarCorreusPendents", method = RequestMethod.GET)
+	public String esborrarCorreusPendents(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//Esborrar correus que hagi al llistat de correus assignats.
+		
+		log.info("XYZ ZZZ esborrarCorreusPendents");
+		
+		final boolean enableCertificationCheck = false;
+		EmailReader er = new EmailReader(enableCertificationCheck);
+		
+		if (er.getCountMessages() != cachesize(request)) {
+			HtmlUtils.saveMessageWarning(request, "Ha rebut altres correus. Torni a intentar-ho.");
+			return "redirect:" + getContextWeb() + "/list";
+		}
+		
+		List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+		
+		if (correusPendentsEsborrar != null && correusPendentsEsborrar.size() > 0) {
+			//Ordener al array de emailID al reves para borrar desde abajo.
+			Collections.sort(correusPendentsEsborrar, Collections.reverseOrder());
+			for (Long emailID : correusPendentsEsborrar) {
+					try {
+						er.deleteMessage((int) (long) emailID);
+						log.info("Correu esborrat: " + emailID);
+					} catch (Exception e) {
+						String msg = "Error esborrant correu: " + e.getMessage();
+						log.error(msg, e);
+						throw new I18NException("comodi", msg);
+					}
+			}
+			correusPendentsEsborrar.clear();
+			request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
+		}
+		
+		//retornar al llistat de correus.
+		return "redirect:" + getContextWeb() + "/list";
 	}
 	
     @Override

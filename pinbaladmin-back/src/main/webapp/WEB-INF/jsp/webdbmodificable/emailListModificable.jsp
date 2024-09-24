@@ -192,7 +192,8 @@
 		$('#assignacioAutomatica').on('hide.bs.modal', function(e) {
 			if(CORREUS_PENDENTS_ASSIGNACIO < 0){
 				//S'han assignat correus.
-                location.reload();
+				window.location.href = "<%=request.getContextPath()%>${contexte}/esborrarCorreusPendents";
+ //               location.reload();
             }
 		});
 		
@@ -235,7 +236,7 @@
 					var td4 = document.createElement("td");
 					var btn = document.createElement("button");
 					btn.id = "btn" + item[1];
-					btn.classList="btn btn-primary assignat-btn";
+					btn.classList="btn btn-primary assignar-btn";
 					btn.innerHTML = "Assignar";
 					btn.onclick = function(event) {
 		                event.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
@@ -303,34 +304,34 @@
 		var btns = document.getElementsByClassName("assignar-btn")
 
 		CORREUS_PENDENTS_ASSIGNACIO = btns.length;
-		
-		for(let i = btns.length -1; i >= 0; i--){
-			setTimeout(() => {
-				console.log("click: " + i);
-				$(btns[i]).click()
-			}, (btns.length - i-1) * 1000);
+//		var idx = CORREUS_PENDENTS_ASSIGNACIO-1;
+
+		console.log("start wait");
+		const intervalID = setInterval(testEnd, 300);
+
+		for (var i = 0; i < btns.length; i++) {
+			//Hacer click a todos los botones con setTimeout y i*500ms
+			
+			setTimeout(function(i) {
+				$(btns[i]).click();
+            }, i*300, i);
 		}
 		
-		
-		console.log("start wait");
-		const intervalID = setInterval(testEnd, 500);
-
-		function testEnd() {
+ 		function testEnd() {
 			console.log("waiting: " + CORREUS_PENDENTS_ASSIGNACIO);
+			//if finished stop wait
 			if(CORREUS_PENDENTS_ASSIGNACIO == 0){
                 clearInterval(intervalID);
-                location.reload();
-			}
+                
+                console.log("End wait");
+//                location.reload();
+				window.location.href = "<%=request.getContextPath()%>${contexte}/esborrarCorreusPendents";
+/* 			} else if(idx == CORREUS_PENDENTS_ASSIGNACIO-1){
+				console.log("Start idx: " + idx);
+				$(btns[idx]).click()
+				idx--;
+ */			}
 		}
-
-		
-/* 		setTimeout(() => {
-			while(CORREUS_PENDENTS_ASSIGNACIO > 0){
-				console.log("waiting: " + CORREUS_PENDENTS_ASSIGNACIO);
-	        }
-			location.reload();
-		}, btns.length * 1000);
- */
 	}
 </script>
 
