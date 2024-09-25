@@ -82,6 +82,14 @@
             <groupId>org.fundaciobit.pluginsib.utils</groupId>
             <version>${pluginsib.utils.version}</version>
         </dependency>        
+
+        <!-- Swagger UI Interface Web-->	        
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.utils</groupId>
+            <artifactId>pluginsib-utils-swagger-ui-configurable-webjar</artifactId>
+            <version>${pluginsib.utils.version}</version>
+        </dependency>
+
         <!-- Dependències de test -->
         <dependency>
             <groupId>junit</groupId>
@@ -120,6 +128,22 @@
                             </resourcePackages>
                         </configuration>
                     </execution>
+                    
+                    <execution>
+						<id>openapi2</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                        <configuration>
+							<contextId>Tramit SISTRA</contextId>
+                            <outputFileName>openapi_tramitsistra</outputFileName>
+                            <resourcePackages>
+                                <package>org.fundaciobit.pinbaladmin.api.interna.secure.tramitsistra</package>
+                            </resourcePackages>
+                        </configuration>
+                    </execution>
+                    
                 </executions>
             </plugin>
             <!--  NOTA: No generam client ja que la primera API és el CallBack de PortaFIB -->
@@ -171,8 +195,6 @@
                     </webResources>
                 </configuration>
             </plugin>
-            
         </plugins>
-        
     </build>
 </project>

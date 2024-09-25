@@ -214,10 +214,10 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 
         }
 
-        log.info("\n\n SQL W1 = " + ((w1 == null) ? "NULL" : w1.toSQL()));
+//        log.info("\n\n SQL W1 = " + ((w1 == null) ? "NULL" : w1.toSQL()));
 
         Where w2 = super.getAdditionalCondition(request);
-        log.info("\n\n SQL W2 = " + ((w2 == null) ? "NULL" : w2.toSQL()));
+//        log.info("\n\n SQL W2 = " + ((w2 == null) ? "NULL" : w2.toSQL()));
 
         if (w1 == null) {
             if (w2 == null) {

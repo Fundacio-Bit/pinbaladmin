@@ -171,7 +171,7 @@ public class EventsEnviatsOperadorController extends EventController implements 
     
 	protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
 		String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
-		log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
+//		log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
 		if (af == null || af.trim().length() == 0) {
 			return null;

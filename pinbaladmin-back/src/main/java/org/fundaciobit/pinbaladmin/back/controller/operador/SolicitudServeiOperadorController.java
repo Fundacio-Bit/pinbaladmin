@@ -257,7 +257,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             }
         }
 
-        log.info("Passa per getDocumentFilterForm:" + soli);
+//        log.info("Passa per getDocumentFilterForm:" + soli);
 
         return solicitudServeiFilterForm;
 

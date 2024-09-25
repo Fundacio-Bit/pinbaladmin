@@ -1,0 +1,306 @@
+{
+  "openapi" : "3.0.1",
+  "tags" : [ {
+    "name" : "TramitSistraService",
+    "description" : "TramitSistraService"
+  } ],
+  "paths" : {
+    "/secure/TramitSistraService/v1/resultado/{ticket}" : {
+      "get" : {
+        "tags" : [ "TramitSistraService" ],
+        "summary" : "Retorna les dades del formulari",
+        "operationId" : "getDatosFormularioFromTicket",
+        "parameters" : [ {
+          "name" : "ticket",
+          "in" : "path",
+          "description" : "Ticket del fomulario",
+          "required" : true,
+          "allowReserved" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR:C9LgPcvVJMkv7a0DmkliUA=="
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Operació realitzada correctament",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Resultado"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Paràmetres incorrectes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestExceptionInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "No Autenticat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "No Autoritzat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error no controlat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestExceptionInfo"
+                }
+              }
+            }
+          },
+          "510" : {
+            "description" : "Només s'utilitza per crear fitxer de constants...",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Resultado"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "BasicAuth" : [ ]
+        } ]
+      }
+    },
+    "/secure/TramitSistraService/v1/formulario" : {
+      "post" : {
+        "tags" : [ "TramitSistraService" ],
+        "summary" : "Retorna la URL per iniciar el tramit",
+        "operationId" : "getUrlFormulari",
+        "requestBody" : {
+          "description" : "Dades de la petició",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TramitSistraPojo"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Operació realitzada correctament",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Paràmetres incorrectes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestExceptionInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "No Autenticat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "No Autoritzat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error no controlat",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestExceptionInfo"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "BasicAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Resultado" : {
+        "type" : "object",
+        "properties" : {
+          "idSesionFormulario" : {
+            "type" : "string"
+          },
+          "cancelado" : {
+            "type" : "boolean"
+          },
+          "xml" : {
+            "type" : "string"
+          },
+          "pdf" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RestExceptionInfo" : {
+        "required" : [ "code", "errorMessage" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "description" : "Codi de HTTP de l'error. Veure https://en.wikipedia.org/wiki/List_of_HTTP_status_codes.",
+            "format" : "int32"
+          },
+          "errorMessage" : {
+            "type" : "string",
+            "description" : "Missatge de l'error"
+          },
+          "stackTrace" : {
+            "type" : "string",
+            "description" : "Stacktrace de l'excepció si n'hi hagués."
+          },
+          "causeException" : {
+            "type" : "string",
+            "description" : "Tipus de l'excepció origen (cause) si n'hi hagués."
+          },
+          "causeStackTrace" : {
+            "type" : "string",
+            "description" : "Stacktrace de l'excepció origen (cause) si n'hi hagués."
+          }
+        },
+        "description" : "Estructura de dades utilitzada per passar informació d'un error"
+      },
+      "ParametrosApertura" : {
+        "type" : "object",
+        "properties" : {
+          "codigo" : {
+            "type" : "string",
+            "description" : "codigo",
+            "example" : "codigo1"
+          },
+          "valor" : {
+            "type" : "string",
+            "description" : "valor",
+            "example" : "valor1"
+          }
+        },
+        "description" : "Lista parámetros (opcional)"
+      },
+      "TramitSistraPojo" : {
+        "type" : "object",
+        "properties" : {
+          "entidad" : {
+            "type" : "string",
+            "description" : "DIR3 de la entidad",
+            "example" : "A04003003"
+          },
+          "idSesionFormulario" : {
+            "type" : "string",
+            "description" : "Id sesión formulario de SISTRA2",
+            "example" : "CFDEKWNL-UHMZR8T8-T8WTFOOR"
+          },
+          "idFormularioExterno" : {
+            "type" : "string",
+            "description" : "Id formulario externo a ejecutar",
+            "example" : "FOR-EXT-1"
+          },
+          "idioma" : {
+            "type" : "string",
+            "description" : "Idioma (es, ca, en)",
+            "example" : "es"
+          },
+          "usuario" : {
+            "$ref" : "#/components/schemas/Usuario"
+          },
+          "xmlDatosActuales" : {
+            "type" : "string",
+            "description" : "XML con los datos actuales del formulario en Base64",
+            "example" : "< XML B64>"
+          },
+          "parametrosApertura" : {
+            "type" : "array",
+            "description" : "Lista parámetros (opcional)",
+            "items" : {
+              "$ref" : "#/components/schemas/ParametrosApertura"
+            }
+          },
+          "urlCallback" : {
+            "type" : "string",
+            "description" : "Url callback SISTRA2",
+            "example" : "<URL CALLBACK SISTRA2>"
+          }
+        }
+      },
+      "Usuario" : {
+        "type" : "object",
+        "properties" : {
+          "nif" : {
+            "type" : "string",
+            "description" : "nif",
+            "example" : "11111111H"
+          },
+          "nombre" : {
+            "type" : "string",
+            "description" : "Nombre",
+            "example" : "Nombre"
+          },
+          "apellido1" : {
+            "type" : "string",
+            "description" : "Primer apellido",
+            "example" : "Apellido 1"
+          },
+          "apellido2" : {
+            "type" : "string",
+            "description" : "Segundo apellido",
+            "example" : "Apellido 2"
+          }
+        },
+        "description" : "Usuario autenticado"
+      }
+    },
+    "securitySchemes" : {
+      "BasicAuth" : {
+        "type" : "http",
+        "scheme" : "basic"
+      }
+    }
+  }
+}

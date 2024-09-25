@@ -269,7 +269,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         InputStream xlsxIS = new ByteArrayInputStream(xlsx.getData());
 
-        final boolean debug = true;
+        final boolean debug = false;
         //Aquesta funció extreu la informació del fitxer excel
         SolicitudInfo info = ParserSolicitudXLSX.extreureInfo(xlsxIS, debug);
         

@@ -3,4 +3,9 @@
         "url": "./openapi_portafibcallback.json",
         "name": "PortaFIB Callback"
     }
+,
+    {
+        "url": "./openapi_tramitsistra.json",
+        "name": "Tramit SISTRA"
+    }
 ]

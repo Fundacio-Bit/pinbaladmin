@@ -441,7 +441,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             throws I18NException {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
-        
+        /*
         log.info("\n------------------------------------\n\n"
          + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") + "|\n"
          + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") + "|\n"
@@ -451,7 +451,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          + "\n\n\n"   
              
              );        
-        
+*/        
         
         if (solicitudFilterForm.isNou()) {
 
@@ -1177,7 +1177,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
 
         String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
-        log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
+//        log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
         if (af == null || af.trim().length() == 0) {
 //            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");

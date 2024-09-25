@@ -119,7 +119,7 @@ public class SolicitudDocumentOperadorController extends DocumentController {
             }
         }
 
-        log.info("Passa per getDocumentFilterForm:" + soliID);
+//        log.info("Passa per getDocumentFilterForm:" + soliID);
 
         return documentFilterForm;
     }

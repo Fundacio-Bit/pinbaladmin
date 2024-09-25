@@ -1,11 +1,17 @@
 package org.fundaciobit.pinbaladmin.back.utils.email;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Address;
+import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -17,8 +23,10 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
+
 
 /**
  * 
@@ -194,6 +202,7 @@ public class EmailEmlFormatParser {
 			log.info("rePart: No disposition. " + part.getContentType());
 			if (part.getContentType().startsWith("text/plain") || part.getContentType().startsWith("text/html")){
 				emi.setBody(part.getContent().toString());
+				log.info("\n\n" + emi.getBody() + "\n\n");
 			}
             return;
 		} else if (disposition.equals(Part.ATTACHMENT)) {
@@ -213,81 +222,67 @@ public class EmailEmlFormatParser {
 			
 			log.info("rePart: Adjunto ]" + fileName + "; " + mime + "; " + data.length + " bytes[");
 			
+			//Log headers per veure que podem treure: part.getAllHeaders()
+			Iterator<Header> ite = part.getAllHeaders().asIterator();
+			while (ite.hasNext()) {
+				Header header = ite.next();
+				log.info("rePart: Header: " + header.getName() + ": " + header.getValue());
+			}
+			
 			EmailAttachmentInfo attachment = new EmailAttachmentInfo(fileName, mime, data);
 			attachments.add(attachment);
 			return;
 		} else {
 			// Un caso como este es de un correo con lleva adjnutos dentro del cuerpo del
 			// correo, como imagenes, logos, etc
-			log.info("rePart: Adjunto interno, no tratamos. " + part.getContentType());
 			if (part.getContentType().startsWith("text/plain") || part.getContentType().startsWith("text/html")) {
 				if (emi.getBody() == null || emi.getBody().trim().equals("")) {
 					emi.setBody(part.getContent().toString());
 				}
+			}else {
+				
+				String mime = part.getContentType(); //MimeUtility.decodeText(part.getContentType());
+				byte[] data = IOUtils.toByteArray(part.getInputStream());
+
+				if (mime.startsWith("image")) {
+					log.info("rePart: Imagen incrustada. " + part.getFileName());
+					
+					String cid = part.getHeader("Content-Id")[0].replaceAll("[<>]", "");
+					log.info("rePart: cid: " + cid);
+					
+		            String base64Image = fileToBase64(data);
+		            
+		            String body = emi.getBody();
+		            
+		            //<img src="cid:part5.vjdBNrcs.e1KHVQwz@fundaciobit.org"
+		            //<img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" 
+		            
+		            String newBody = body.replace("cid:"+cid, "data:" + mime + ";base64, " + base64Image);
+	                emi.setBody(newBody);
+				} else {
+					log.info("rePart: Adjunto incrustado, no imagen. " + mime);
+					
+					List<EmailAttachmentInfo> attachments = emi.getAttachments();
+					String fileName = "internal-" + MimeUtility.decodeText(part.getFileName());
+					int pos = mime.indexOf(';');
+					if (pos != -1) {
+						mime = mime.substring(0, pos);
+					}
+					EmailAttachmentInfo attachment = new EmailAttachmentInfo(fileName, mime, data);
+					attachments.add(attachment);
+				}
 			}
 			return;
 		}
-		
-//		if (part.getDisposition() != null) {
-//
-//			String strFileName = part.getFileName();
-//			if (!StringUtils.isEmpty(strFileName)) {
-//				// MimeUtility.decodeText resuelve el problema de los nombres de archivos adjuntos confusos
-//				strFileName = MimeUtility.decodeText(strFileName);
-//				// System.out.println ("Adjunto encontrado:" + strFileNmae);
-//
-//				//Abrir el flujo de entrada del archivo adjunto
-////				InputStream in = part.getInputStream();
-//				
-//				// Leer los bytes adjuntos y almacenarlos en el archivo
-////				java.io.FileOutputStream out = new FileOutputStream(strFileName);
-////				int data;
-////				while ((data = in.read()) != -1) {
-////					out.write(data);
-////				}
-////				in.close();
-////				out.close();
-//			}
-//
-//			// System.out.println ("Tipo de contenido:" + MimeUtility.decodeText
-//			// (part.getContentType ()));
-//			// System.out.println ("Contenido del adjunto:" + part.getContent ());
-//
-//			List<EmailAttachmentInfo> attachments = emi.getAttachments();
-//			
-//			byte[] data = IOUtils.toByteArray(part.getInputStream());
-//
-//			String mime = MimeUtility.decodeText(part.getContentType());
-//			int pos = mime.indexOf(';');
-//			if (pos != -1) {
-//				mime = mime.substring(0, pos);
-//			}
-//
-//			// Si el contenido del correo es HTML y el cuerpo del correo no está vacío, el contenido del correo se considera como un archivo adjunto
-//			if (part.getContentType().startsWith("text/html") && (emi.getBody() == null || emi.getBody().equals(""))) {
-//				String body = new String(data);
-//				emi.setBody(body);
-//			} else {
-//				EmailAttachmentInfo attachment = new EmailAttachmentInfo(strFileName, mime, data);
-//				attachments.add(attachment);
-//			}
-
-//		} else {
-//			if (part.getContentType().startsWith("text/plain")) {
-//				// Contenido de texto
-//				emi.setBody(part.getContent().toString());
-//			} else if (part.getContentType().startsWith("text/html")) {
-//				// Contenido HTML
-//				emi.setBody(part.getContent().toString());
-//				{
-//					if (emi.getBody() == null || emi.getBody().equals("")) {
-//						emi.setBody(part.getContent().toString());
-//					}
-//				}
-//			}
-//		}
 	}
 
+	protected static String fileToBase64(byte[] data) throws FileNotFoundException, IOException {
+		String base64 = Base64.getEncoder().encodeToString(data);
+		return base64;
+	}
+	
+	
+	
   /**
    * @param multipart
    *          Recibir y descargar paquetes (incluido todo el contenido del
