@@ -56,6 +56,7 @@ public class PortaFIBCallbackRestService {
 	@GET
 	@Path("/versio")
 	public String getVersio() {
+		log.info("URL de CallBack Validada");
 		return "1";
 	}
 
