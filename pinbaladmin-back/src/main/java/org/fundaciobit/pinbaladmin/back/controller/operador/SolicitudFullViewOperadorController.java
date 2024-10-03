@@ -116,7 +116,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     mav.addObject("isView", __isView);
     
     if (__isView) {
-    	final boolean isEstatal = (solicitud.getDepartamentID() == null && solicitud.getOrganid() == null);
+    	final boolean isEstatal = solicitud.getEntitatEstatal() != null && solicitud.getEntitatEstatal().trim().length() > 0;
+
     	
       // Canviam el cancel·lar per un tornar.....
       solicitudForm.setCancelButtonVisible(false);
@@ -492,7 +493,23 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
         
     }
 
+    //Validador de apellido2 mientras en Madrid no funcione.
+    String propApe2Base = "FORMULARIO.DATOS_SOLICITUD.APE2SEC";
+    String[] partes = {"D", "E", "F", "G"};
     
+    boolean faltaApe2 = false;
+	for (String parte : partes) {
+		String propApe2 = propApe2Base + parte;
+		if (prop.getProperty(propApe2) == null) {
+			faltaApe2 = true;
+			log.info("Añadiendo apellido2 vacío: " + propApe2);
+			prop.setProperty(propApe2, "");
+		}
+	}
+
+	if (faltaApe2) {
+		HtmlUtils.saveMessageWarning(request, "NOTA: Falta el apellido 2 en el fomulario XML. Ignoramos porque aun no enviamos a Madrid.");
+	}
     
     ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
 
@@ -607,8 +624,17 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 			if (count == 0) {
 
-				Long fitxerIDNorma = crearFitxerNormaFromURL(enllazNormaLegal);
-
+				//XXX YYY ZZZ Tornar a posar obtenir PDF quan estigui en marxa api alta pinbal madrid.
+//				Long fitxerIDNorma = crearFitxerNormaFromURL(enllazNormaLegal);
+//				if (fitxerIDNorma == null) {
+//					HtmlUtils.saveMessageWarning(request, "No s'ha pogut crear el fitxer de la norma [" + normaLegal
+//							+ "] amb URL [" + enllazNormaLegal + "]");
+//				}
+				
+				
+				
+				Long fitxerIDNorma = null;
+				
 				String norma2 = null;
 				String articles2 = null;
 				Long fitxerIDNorma2 = null;
@@ -757,7 +783,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
   
-	public Long crearFitxerNormaFromURL(String url) throws I18NException {
+	public Long crearFitxerNormaFromURL(String url) {
 		try {
 			final boolean debug = false;
 			FileInfo fileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(url, debug);
@@ -775,9 +801,15 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 			return fitxerID;
 		} catch (Exception e) {
-			String msg = "Error creant fitxer de norma legal des de URL [" + url + "]: " + e.getMessage();
-			log.error(msg, e);
-			throw new I18NException("genapp.comodi", msg);
+			String errorMsg;
+			if (e instanceof I18NException) {
+				errorMsg = I18NUtils.getMessage((I18NException) e);
+			}else {
+				errorMsg = e.getMessage();
+			}
+			errorMsg = "Error creant fitxer de norma legal des de URL [" + url + "]: " + errorMsg;
+			log.warn(errorMsg, e);
+			return null;
 		}
 	}
 }

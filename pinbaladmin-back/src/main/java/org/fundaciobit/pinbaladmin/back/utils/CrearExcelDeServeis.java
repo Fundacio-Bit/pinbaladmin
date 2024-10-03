@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -207,6 +208,11 @@ public class CrearExcelDeServeis {
       Long soliID = soli.getSolicitudID();
       Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
 
+		if (dadesByServeiSolicitudID.isEmpty()) {
+			//Si no hi ha serveis, no cal generar l'excel
+			return null;
+		}
+      
       // Read Excel document first
       input_document = new FileInputStream(plantillaXLSX);
       // convert it into a POI object

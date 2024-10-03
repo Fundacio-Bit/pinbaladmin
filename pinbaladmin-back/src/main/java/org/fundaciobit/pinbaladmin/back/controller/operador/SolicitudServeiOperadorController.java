@@ -289,6 +289,11 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 			for (String excel : excels) {
 
 				byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
+				if (data == null) {
+					String msg = "No hi ha serveis " + excel + " per a la sol·licitud";
+					HtmlUtils.saveMessageInfo(request, msg);
+					continue;
+				}
 				String nom = SDF.format(new Date())  + excel + "_"+ plantillaXLSX.getName();
 				Fitxer f = fitxerEjb.create(nom, data.length,
 						"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
