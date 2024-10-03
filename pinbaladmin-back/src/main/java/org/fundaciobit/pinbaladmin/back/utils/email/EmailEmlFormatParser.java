@@ -202,7 +202,7 @@ public class EmailEmlFormatParser {
 			log.info("rePart: No disposition. " + part.getContentType());
 			if (part.getContentType().startsWith("text/plain") || part.getContentType().startsWith("text/html")){
 				emi.setBody(part.getContent().toString());
-				log.info("\n\n" + emi.getBody() + "\n\n");
+//				log.info("\n\n" + emi.getBody() + "\n\n");
 			}
             return;
 		} else if (disposition.equals(Part.ATTACHMENT)) {
@@ -223,11 +223,11 @@ public class EmailEmlFormatParser {
 			log.info("rePart: Adjunto ]" + fileName + "; " + mime + "; " + data.length + " bytes[");
 			
 			//Log headers per veure que podem treure: part.getAllHeaders()
-			Iterator<Header> ite = part.getAllHeaders().asIterator();
-			while (ite.hasNext()) {
-				Header header = ite.next();
-				log.info("rePart: Header: " + header.getName() + ": " + header.getValue());
-			}
+//			Iterator<Header> ite = part.getAllHeaders().asIterator();
+//			while (ite.hasNext()) {
+//				Header header = ite.next();
+//				log.info("rePart: Header: " + header.getName() + ": " + header.getValue());
+//			}
 			
 			EmailAttachmentInfo attachment = new EmailAttachmentInfo(fileName, mime, data);
 			attachments.add(attachment);
@@ -245,10 +245,9 @@ public class EmailEmlFormatParser {
 				byte[] data = IOUtils.toByteArray(part.getInputStream());
 
 				if (mime.startsWith("image")) {
-					log.info("rePart: Imagen incrustada. " + part.getFileName());
-					
 					String cid = part.getHeader("Content-Id")[0].replaceAll("[<>]", "");
-					log.info("rePart: cid: " + cid);
+					log.info("rePart: Imagen incrustada. " + part.getFileName() + "cid: " + cid);
+//					log.info("rePart: cid: " + cid);
 					
 		            String base64Image = fileToBase64(data);
 		            

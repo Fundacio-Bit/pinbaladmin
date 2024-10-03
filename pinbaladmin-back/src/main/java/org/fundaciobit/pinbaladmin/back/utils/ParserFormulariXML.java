@@ -135,26 +135,19 @@ public class ParserFormulariXML {
   }
 
   public static void createOdt(InputStream templateOdtInputStream,
-      java.io.OutputStream pdfOutputStream, Map<String, Object> map) throws Exception {
+			java.io.OutputStream odtOutputStream, Map<String, Object> map) throws Exception {
 
-      System.out.println("Load ODT file and set the template engine to: "
-          + TemplateEngineKind.Freemarker.name());
-      IXDocReport xdocGenerator = XDocReportRegistry.getRegistry()
-          .loadReport(templateOdtInputStream, TemplateEngineKind.Freemarker);
+		System.out.println("Load ODT file and set the template engine to: " + TemplateEngineKind.Freemarker.name());
+		IXDocReport xdocGenerator = XDocReportRegistry.getRegistry().loadReport(templateOdtInputStream,
+				TemplateEngineKind.Freemarker);
 
+		System.out.println("Processing the template with the Java model");
+		xdocGenerator.process(map, odtOutputStream);
 
-
-      System.out.println("Merge Java model with the ODT and convert it to PDF...");
-
-
-      xdocGenerator.process(map, pdfOutputStream);
-
-      System.out
-          .println("PDF conversion process has finished, closing the input/output streams...");
-      templateOdtInputStream.close();
-      pdfOutputStream.close();
-
-  }
+		System.out.println("ODT conversion process has finished, closing the input/output streams");
+		templateOdtInputStream.close();
+		odtOutputStream.close();
+	}
 
 
   public static void createPdf(InputStream templateOdtInputStream,

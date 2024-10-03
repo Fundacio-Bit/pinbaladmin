@@ -595,13 +595,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         }
         
-        TreeMap<Integer, AdditionalField<?, ?>> fi = solicitudFilterForm.getAdditionalFields();
-        
-        for (int i = 0; i < fi.size(); i++) {
-            log.info(solicitudFilterForm.getAdditionalFields().get(i));
-            
-        }
-        
+//        TreeMap<Integer, AdditionalField<?, ?>> fi = solicitudFilterForm.getAdditionalFields();
+//        
+//        for (int i = 0; i < fi.size(); i++) {
+//            log.info(solicitudFilterForm.getAdditionalFields().get(i));
+//            
+//        }
+//        
         
         return solicitudFilterForm;
     }
