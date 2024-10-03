@@ -61,27 +61,29 @@ public class MailCedentInfo {
 
 		switch (id) {
 		case "DISCAPACITAT":
-			this.subject = "Discapacitat - Cedent";
+			this.subject = "Discapacitat";
 			this.message = msg;
 			dests.add("amalorda@dgad.caib.es");
 			dests.add("emreynes@dgad.caib.es");
 			break;
 
 		case "FAM_NOMBROSA":
-			this.subject = "Família Numerosa - Cedent";
+			this.subject = "Família Numerosa";
 			this.message = msg;
 			dests.add("etid@imas.conselldemallorca.net");
 			dests.add("cmp.sac@cime.es");
+//			dests.add("ptrias@fundaciobit.org");
+//			dests.add("pautrias2@gmail.com");
 			break;
 
 		case "INTERVENCIO":
-			this.subject = "Intervenció CAIB - Cedent";
+			this.subject = "Intervenció CAIB";
 			this.message = msg;
 			dests.add("mvich@interven.caib.es");
 			break;
 
 		case "PADRO":
-			this.subject = "Padró - Cedent";
+			this.subject = "Padró";
 			this.message = "<div id=\"correu_padro\"  style=\"margin: .5rem;\" >"
 
 					+ "Benvolgut/da,<br>" + "<br>"
@@ -169,17 +171,18 @@ public class MailCedentInfo {
 		try {
 			Timestamp data = new Timestamp(System.currentTimeMillis());
 			int tipus = Constants.EVENT_TIPUS_CONSULTA_A_CEDENT;
-			String cedent = this.id;
+			String cedent = this.subject;
 
 			EventJPA evt = new EventJPA();
 			evt.setSolicitudID(soli.getSolicitudID());
 			evt.setDataEvent(data);
 			evt.setTipus(tipus);
-			evt.setPersona(cedent);
+			evt.setPersona(soli.getOperador());
+			evt.setDestinatari(cedent);
 			evt.setNoLlegit(false);
 
 			// Camps per enviar el correu
-			String subject = this.subject + "PID [" + soli.getExpedientPid() + "]";
+			String subject = this.subject + " - Cedent "+ "PID [" + soli.getExpedientPid() + "]";
 
 			String destinataris = ""; // = String.join(";", dests);
 			for (String dest : this.dests) {

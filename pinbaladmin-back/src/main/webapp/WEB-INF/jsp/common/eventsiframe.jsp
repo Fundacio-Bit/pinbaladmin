@@ -1308,138 +1308,127 @@ textarea.event {
 
 			<c:forEach var="event" items="${eventItems}">
 
-<!--
-    EVENT_TIPUS_CONSULTA_A_CEDENT = -3; // PRIVAT_TRAMITADOR CAP A CEDENT
-    EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT = -1; // PRIVAT_TRAMITADOR
+				<c:set var="consultaCedent" value="${event.tipus==-3}" />
+				<c:set var="suport" value="${event.tipus==-2}" />
+				<c:set var="tramitadorPrivat" value="${event.tipus==-1}" />
 
-    EVENT_TIPUS_COMENTARI_SUPORT = -2; // PRIVAT SUPORT
-    
-    EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC = 1; // PUBLIC_TRAMITADOR
-    EVENT_TIPUS_COMENTARI_CONTACTE = 2; // PUBLIC_CONTACTE
-    EVENT_TIPUS_CEDENT_RESPOSTA = 3; // PUBLIC_RESPOSTA DE CEDENT
- -->
+				<c:set var="tramitadorPublic" value="${event.tipus==1}" />
+				<c:set var="contacte" value="${event.tipus==2}" />
+				<c:set var="cedentResposta" value="${event.tipus==3}" />
+				
+				<!-- 				
+				isPublic se refiere a que si estamos en la vista publia, no si el comentario es publico.
+				isPublicEvent se refiere a si el comentario es publico o no.
+				 -->
 
-				<c:set var="isPublicEvent" value="${(event.tipus==1) || (event.tipus==-2)}" />
-				<c:set var="isContacte" value="${event.tipus == 2}" />
-				<c:set var="isCedent" value="${(event.tipus==3) || (event.tipus==-3)}" />
-				<c:set var="isSuport" value="${event.tipus == -2}" />
+				<c:set var="isPublicEvent" value="${ consultaCedent || tramitadorPublic || contacte || cedentResposta}" />
+				
+				<c:set var="isContacte" value="${contacte}" />
+				<c:set var="isCedent" value="${consultaCedent || cedentResposta}" />
+				<c:set var="isSuport" value="${suport}" />
 
 				<c:set var="show" value="${true}" />
 
-
-				<c:if test="${showOnlyPublic==true}">
-
-					<c:if test="${showOnlyPublic==true && isPublicEvent==false}">
-						<c:set var="show" value="${false}" />
-					</c:if>
-
-					<c:if test="${(not empty cedent)}">
-						<c:if test="${ isCedent && (event.persona eq cedent)}">
-							<c:set var="show" value="${true}" />
-						</c:if>
-						<c:if test="${ not isCedent || (event.persona ne cedent)}">
-							<c:set var="show" value="${false}" />
-						</c:if>
-					</c:if>
+				<c:if test="${showOnlyPublic && !isPublicEvent}">
+					<c:set var="show" value="${false}" />
 				</c:if>
-
-
+                
 				<c:if test="${show}">
 
 					<c:set var="mostrarMissatgeDreta"
-						value="${event.tipus == 2 || event.tipus==3}" />
+						value="${contacte || cedentResposta}" />
 
-					<c:set var="background" value="#cce6ff" />
 					<c:set var="border" value="#F0E68C" />
 
-					<c:if test="${!isPublic}"> <!-- Comentari privat -->
-						<c:set var="background" value="#ffb3b3" />
-						<c:set var="border" value="#ff0000" /> <!-- VERMELL -->
+					<c:if test="${tramitadorPrivat}">
+						<!-- Comentari privat -->
+						<c:set var="border" value="#ff0000" />
+						<!-- VERMELL -->
 						<c:set var="title" value="Privat" />
 					</c:if>
 
-					<c:if test="${isPublicEvent}"> <!-- Tramitador Public -->
-						<c:set var="background" value="#0000FF" />
-						<c:set var="border" value="#0000FF" /> <!-- BLAU -->
-						<c:set var="title" value="Compartit" />
+					<c:if test="${tramitadorPublic}">
+						<!-- Tramitador Public -->
+						<c:set var="border" value="#0000FF" />
+						<!-- BLAU -->
+						<c:set var="title" value="Correu" />
 					</c:if>
 
-					<c:if test="${isContacte}"> <!-- Comentari Contacte -->
-						<c:set var="background" value="#ccffcc" />
-						<c:set var="border" value="#9ACD32" /> <!-- VERD -->
-						<c:set var="title" value="Public" />
+					<c:if test="${contacte}">
+						<!-- Comentari Contacte -->
+						<c:set var="border" value="#9ACD32" />
+						<!-- VERD -->
+						<c:set var="title" value="Contacte" />
 					</c:if>
 
-					<c:if test="${isCedent}"> <!-- Comentari Cedent -->
-						<c:set var="border" value="#FF8C00" /> 
-						<c:set var="background" value="#FF8C00" /><!-- TARONJA -->
+					<c:if test="${isCedent}">
+						<!-- Comentari Cedent -->
+						<c:set var="border" value="#FF8C00" />
+						<!-- TARONJA -->
 						<c:set var="title" value="Cedent" />
 					</c:if>
 
-					<c:if test="${isSuport}"> <!-- Comentari Suport -->
+					<c:if test="${suport}">
+						<!-- Comentari Suport -->
 						<c:set var="border" value="#B44CD9" />
-						<c:set var="background" value="#FF8C00" /> <!-- LILA -->
+						<!-- LILA -->
 						<c:set var="title" value="Suport" />
 					</c:if>
 
 					<tr>
+						<!--  =============  MISSATGE ESQUERRA ===============   -->
 						<td align="right" width="45%"><c:if
-								test="${mostrarMissatgeDreta}">
+								test="${!mostrarMissatgeDreta}">
+								<div style="margin: 10px 10px 24px 10px">
+									<div
+										class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
+										<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
+									</div>
+								</div>
+							</c:if> <c:if test="${mostrarMissatgeDreta}">
 								<div style="margin-right: 20px">
 									${event.dataEvent}<br> <span
 										style="font-weight: bold; font-size: 10pt"> De
 										${event.persona} </span>
 								</div>
-							</c:if> <c:if test="${!mostrarMissatgeDreta}">
-								<div style="margin: 10px 10px 24px 10px">
-									<div class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
-										<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
-									</div>
-								</div>
 							</c:if>
 						</td>
+
+						<!--  =============  CERCLE ===============   -->
 						<td>
-							<!--  =============  CERCLE ===============   -->
 							<div style="display: flex; align-items: center;">
 								<div class="cercle" style="border-color: ${border}; z-index: 2;"
 									title="${title}"></div>
 								<div class="line" title="${title}"></div>
 							</div>
 						</td>
-						<td width="45%">
-							<div style="margin-left: 20px">
 
+						<!--  =============  MISSATGE DRETA ===============   -->
+						<td align="left" width="45%">
+							<div style="margin-left: 20px">
 								<c:if test="${!mostrarMissatgeDreta}">
-                                     ${event.dataEvent}<br />
-									<span style="font-weight: bold; font-size: 10pt">
-										<c:if test="${(event.tipus==-3)}">
-	                                       De ${operador} enviat a ${event.persona}
-	                                    </c:if> 
-	                                    <c:if test="${(event.tipus!=-3)}">
-	                                       De ${event.persona} 
-		                                   <c:if test="${(not empty event.destinatari)}">
-		                                      a ${event.destinatari} 
-		                                      <c:if test="${(not empty event.destinatarimail)}">
-                                                (${event.destinatarimail})
-                                              </c:if> 
-		                                   </c:if> 
-                                    </c:if>
+                                    ${event.dataEvent}<br />
+									<span style="font-weight: bold; font-size: 10pt"> De
+										${event.persona} <c:if test="${(not empty event.destinatari)}">
+									 	a ${event.destinatari}
+									 	<c:if test="${(not empty event.destinatarimail)}">
+									 		(${event.destinatarimail}) </c:if>
+										</c:if>
 									</span>
 								</c:if>
 
 								<c:if test="${mostrarMissatgeDreta}">
 									<div style="margin: 10px 10px 24px 10px">
-										<div class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
+										<div
+											class="entrada <c:if test="${event.noLlegit}">noLlegit</c:if>">
 											<%@ include file="/WEB-INF/jsp/common/eventscore.jsp"%>
 										</div>
 									</div>
 								</c:if>
 							</div>
 						</td>
-
 					</tr>
 				</c:if>
-
 			</c:forEach>
 		</table>
 	</div>

@@ -156,10 +156,11 @@ public class EmailUtil {
         }
     }
     
-    public static String getPeuCorreu(Long soliID, String tipus) {
+    public static String getPeuCorreu(Long itemID, String tipus, String destinatari) {
 		//tipus pot ser "solicitud" o "incidencia"
 		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
-				+ HibernateFileUtil.encryptFileID(soliID);
+				+ HibernateFileUtil.encryptFileID(itemID) + (destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(destinatari)));
+		
 		
 		String msg = "<div id=\"peu_correu\">"
 				

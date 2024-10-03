@@ -15,6 +15,7 @@ import org.fundaciobit.pinbaladmin.ejb.EventEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 /**
  * 
@@ -50,11 +51,28 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 			String subject = ev.getAsumpte();
 			String message = ev.getComentari();
 			
-			if (ev.getSolicitudID() != null) {
-				message += EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud");
-			} else {
-				message += EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica");
+			if (message.indexOf("<div>") == -1) {
+				message = "<div>" + message + "</div>";
 			}
+			
+			String peuCorreu;
+			if (ev.getSolicitudID() != null) {
+				SolicitudJPA s = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
+
+				String destinatari = null;
+				if (tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
+					destinatari = "CEDENT|" + ev.getDestinatari();
+				} else if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
+					destinatari = "CONTACTE|" + ev.getDestinatari();
+				}
+
+				log.info("EventLogicaEJB.create: tipus: " + tipus + " - destinatari: " + destinatari);
+				peuCorreu = EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud", destinatari);
+			} else {
+				peuCorreu = EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica", null);
+			}
+			
+			message = "<html><body>" + message + "<br><br>" + peuCorreu + "</body></html>";
 			
 //			
 //			if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT && ev.getSolicitudID() != null) {
