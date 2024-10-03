@@ -2,12 +2,15 @@ package org.fundaciobit.pinbaladmin.back.controller.common;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
@@ -23,7 +26,10 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaEJB;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CEDENTS_LOCALS;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CODIS_SERVEIS_LOCALS;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -309,43 +315,47 @@ public abstract class AbstractEventController<T> extends EventController impleme
 				List<String[]> cedents = new java.util.ArrayList<String[]>();
 				// [0] = id, [1] = nom, [2] = correu
 
-				MailCedentInfo discapacitat = new MailCedentInfo("DISCAPACITAT");
-				MailCedentInfo famNombrosa = new MailCedentInfo("FAM_NOMBROSA");
-				MailCedentInfo intervencio = new MailCedentInfo("INTERVENCIO");
-				MailCedentInfo padro = new MailCedentInfo("PADRO");
-				
-				MailCedentInfo[] mails = { discapacitat, famNombrosa, intervencio, padro };
+			    				//Crear un Map con CEDENTS_LOCALS y i MailCedentInfo
+				Map<CEDENTS_LOCALS, MailCedentInfo> mails = new HashMap<CEDENTS_LOCALS, MailCedentInfo>();
+				for (CEDENTS_LOCALS cedent : CEDENTS_LOCALS.values()) {
+					mails.put(cedent, new MailCedentInfo(cedent));
+				}
 				
 				//Obtenir llistat de cedents de la solicitud, i guardar-los a la sessió per al select de cedents
 				List<Long> serveisSolicitud = soliServLogicEjb
 						.executeQuery(SolicitudServeiFields.SERVEIID, SolicitudServeiFields.SOLICITUDID.equal(itemID));
 				
-				
 				for (Long serveiID : serveisSolicitud) {
 					Servei serv = serveiLogicEjb.findByPrimaryKey(serveiID);
 					String codi = serv.getCodi();
-					switch (codi) {
-					case "SVDSCTFNWS01":
-						famNombrosa.afegirServei(serv);
-						break;
-					case "SVDCCAADISCAPACIDADWS01":
-						discapacitat.afegirServei(serv);
-						break;
-					case "SVDCCAACPCWS01":
-					case "SVDCCAACPASWS01":
-						intervencio.afegirServei(serv);
-						break;
-					case "SCDCPAJU":
-						padro.afegirServei(serv);
-						break;
+
+					if (EnumUtils.isValidEnum(CODIS_SERVEIS_LOCALS.class, codi)) {
+						CODIS_SERVEIS_LOCALS codiEnum = CODIS_SERVEIS_LOCALS.valueOf(codi);
+						switch (codiEnum) {
+						case SVDSCTFNWS01:
+							mails.get(CEDENTS_LOCALS.FAM_NOMBROSA).afegirServei(serv);
+							break;
+						case SVDCCAADISCAPACIDADWS01:
+							mails.get(CEDENTS_LOCALS.DISCAPACITAT).afegirServei(serv);
+							break;
+						case SVDCCAACPCWS01:
+						case SVDCCAACPASWS01:
+							mails.get(CEDENTS_LOCALS.INTERVENCIO).afegirServei(serv);
+							break;
+						case SCDCPAJU:
+							mails.get(CEDENTS_LOCALS.PADRO).afegirServei(serv);
+							break;
+						}
 					}
 				}
-				for (MailCedentInfo mail : mails) {
+				
+				for (MailCedentInfo mail : mails.values()) {
 					if (mail.getServeis().size() > 0) {
-						cedents.add(
-								new String[] { mail.getId(), mail.getSubject(), String.join("; ", mail.getDests()) });
+						String dests = String.join("; ", mail.getDests());
+						cedents.add(new String[] { mail.getId(), mail.getSubject(), dests });
 					}
 				}
+				
 				log.info("cedents: " + cedents.toString());
 				mav.addObject("cedents", cedents);
             }

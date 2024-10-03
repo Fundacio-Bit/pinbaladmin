@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -35,6 +36,8 @@ import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CEDENTS_LOCALS;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CODIS_SERVEIS_LOCALS;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -369,41 +372,43 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
 		try {
 			Servei servei = serveiEjb.findByPrimaryKey(soliSer.getServeiID());
+			String codi = servei.getCodi();
+			if (EnumUtils.isValidEnum(CODIS_SERVEIS_LOCALS.class, codi)) {
+				
+				MailCedentInfo mail = null;
+				
+				CODIS_SERVEIS_LOCALS codiEnum = CODIS_SERVEIS_LOCALS.valueOf(codi);
+				switch (codiEnum) {
+				case SVDSCTFNWS01:
+					mail = new MailCedentInfo(CEDENTS_LOCALS.FAM_NOMBROSA);
+					break;
+				case SVDCCAADISCAPACIDADWS01:
+					mail = new MailCedentInfo(CEDENTS_LOCALS.DISCAPACITAT);
+					break;
+				case SVDCCAACPCWS01:
+				case SVDCCAACPASWS01:
+					mail = new MailCedentInfo(CEDENTS_LOCALS.INTERVENCIO);
+					break;
+				case SCDCPAJU:
+					mail = new MailCedentInfo(CEDENTS_LOCALS.PADRO);
+					break;
+				}
+				
+				if (mail != null) {
+					mail.afegirServei(servei);
 
-			MailCedentInfo mail = null;
-			
-			switch (servei.getCodi()) {
-			case "SVDSCTFNWS01":
-				mail = new MailCedentInfo("FAM_NOMBROSA");
-				break;
-			case "SVDCCAADISCAPACIDADWS01":
-				mail = new MailCedentInfo("DISCAPACITAT");
-				break;
-			case "SVDCCAACPCWS01":
-			case "SVDCCAACPASWS01":
-				mail = new MailCedentInfo("INTERVENCIO");
-				break;
-			case "SCDCPAJU":
-				mail = new MailCedentInfo("PADRO");
-				break;
+					Long soliID = soliSer.getSolicitudID();
+					SolicitudJPA soli = (SolicitudJPA) solicitudLogicaEjb.findByPrimaryKey(soliID);
+					Long excelID = soli.getSolicitudXmlID();
+					FitxerJPA excel = fitxerEjb.findByPrimaryKey(excelID);
+
+					mail.crearEvent(soli, excel, eventLogicaEjb);
+					mail.actualitzarEstatServei(soliID, solicitudServeiLogicaEjb);
+					String missatge = "Correu enviat a " + mail.getId();
+					log.info(missatge);
+					HtmlUtils.saveMessageSuccess(request, missatge);
+				}
 			}
-			
-			if (mail != null) {
-				mail.afegirServei(servei);
-
-				Long soliID = soliSer.getSolicitudID();
-				SolicitudJPA soli = (SolicitudJPA) solicitudLogicaEjb.findByPrimaryKey(soliID);
-				Long excelID = soli.getSolicitudXmlID();
-				FitxerJPA excel = fitxerEjb.findByPrimaryKey(excelID);
-
-//				mail.sendMail(soli, excel);
-				mail.crearEvent(soli, excel, eventLogicaEjb);
-				mail.actualitzarEstatServei(soliID, solicitudServeiLogicaEjb);
-				String missatge = "Correu enviat a " + mail.getId();
-				log.info(missatge);
-				HtmlUtils.saveMessageSuccess(request, missatge);
-			}
-			
 		} catch (Exception e) {
 			String missatge = "Error al enviar correu";
 			log.error(missatge, e);

@@ -1,7 +1,9 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CEDENTS_LOCALS;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CODIS_SERVEIS_LOCALS;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -73,17 +77,13 @@ public class CorreusCedentsOperadorController {
 
 		ModelAndView mav = new ModelAndView("infocorreuscedents");
 		
-		MailCedentInfo discapacitat = new MailCedentInfo("DISCAPACITAT");
-		MailCedentInfo famNombrosa = new MailCedentInfo("FAM_NOMBROSA");
-		MailCedentInfo intervencio = new MailCedentInfo("INTERVENCIO");
-		MailCedentInfo padro = new MailCedentInfo("PADRO");
+		Map<CEDENTS_LOCALS, MailCedentInfo> mails = new HashMap<CEDENTS_LOCALS, MailCedentInfo>();
+		for (CEDENTS_LOCALS cedent : CEDENTS_LOCALS.values()) {
+			mails.put(cedent, new MailCedentInfo(cedent));
+		}
 		
-		MailCedentInfo[] mails = { discapacitat, famNombrosa, intervencio, padro };
-
-		String[] codis = {"SVDSCTFNWS01", "SVDCCAADISCAPACIDADWS01", "SVDCCAACPCWS01", "SVDCCAACPASWS01", "SCDCPAJU"};
-		
-		for (String codi : codis) {
-			Where wCodi = ServeiFields.CODI.equal(codi);
+		for (CODIS_SERVEIS_LOCALS codi : CODIS_SERVEIS_LOCALS.values()) {
+			Where wCodi = ServeiFields.CODI.equal(codi.name());
 			List<Servei> llistat = serveiLogicaEjb.select(wCodi);
 			if (llistat.size() != 1) {
 				continue;
@@ -91,23 +91,23 @@ public class CorreusCedentsOperadorController {
 			Servei serv = llistat.get(0);	
 			
 			switch (codi) {
-			case "SVDSCTFNWS01":
-				famNombrosa.afegirServei(serv);
+			case SVDSCTFNWS01:
+				mails.get(CEDENTS_LOCALS.FAM_NOMBROSA).afegirServei(serv);
 				break;
-			case "SVDCCAADISCAPACIDADWS01":
-				discapacitat.afegirServei(serv);
+			case SVDCCAADISCAPACIDADWS01:
+				mails.get(CEDENTS_LOCALS.DISCAPACITAT).afegirServei(serv);
 				break;
-			case "SVDCCAACPCWS01":
-			case "SVDCCAACPASWS01":
-				intervencio.afegirServei(serv);
+			case SVDCCAACPCWS01:
+			case SVDCCAACPASWS01:
+				mails.get(CEDENTS_LOCALS.INTERVENCIO).afegirServei(serv);
 				break;
-			case "SCDCPAJU":
-				padro.afegirServei(serv);
+			case SCDCPAJU:
+				mails.get(CEDENTS_LOCALS.PADRO).afegirServei(serv);
 				break;
 			}
 		}
         
-		mav.addObject("items", mails);
+		mav.addObject("items", mails.values());
 		mav.addObject("contexte", getContextWeb());
         
         return mav;

@@ -1,11 +1,15 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
@@ -15,6 +19,8 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CEDENTS_LOCALS;
+import org.fundaciobit.pinbaladmin.logic.utils.email.MailCedentInfo.CODIS_SERVEIS_LOCALS;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -88,30 +94,31 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		// un correu o un altre
 		List<SolicitudServei> serveisSolicitud = solicitudServeiEjb.select(SolicitudServeiFields.SOLICITUDID.equal(soliID));
 
-		MailCedentInfo discapacitat = new MailCedentInfo("DISCAPACITAT");
-		MailCedentInfo famNombrosa = new MailCedentInfo("FAM_NOMBROSA");
-		MailCedentInfo intervencio = new MailCedentInfo("INTERVENCIO");
-		MailCedentInfo padro = new MailCedentInfo("PADRO");
-
-		MailCedentInfo[] mails = { discapacitat, famNombrosa, intervencio, padro };
-
+		Map<CEDENTS_LOCALS, MailCedentInfo> mails = new HashMap<CEDENTS_LOCALS, MailCedentInfo>();
+		for (CEDENTS_LOCALS cedent : CEDENTS_LOCALS.values()) {
+			mails.put(cedent, new MailCedentInfo(cedent));
+		}
+		
 		for (SolicitudServei servei : serveisSolicitud) {
 			Servei serv = serveiEjb.findByPrimaryKey(servei.getServeiID());
 			String codi = serv.getCodi();
-			switch (codi) {
-			case "SVDSCTFNWS01":
-				famNombrosa.afegirServei(serv);
-				break;
-			case "SVDCCAADISCAPACIDADWS01":
-				discapacitat.afegirServei(serv);
-				break;
-			case "SVDCCAACPCWS01":
-			case "SVDCCAACPASWS01":
-				intervencio.afegirServei(serv);
-				break;
-			case "SCDCPAJU":
-				padro.afegirServei(serv);
-				break;
+			if (EnumUtils.isValidEnum(CODIS_SERVEIS_LOCALS.class, codi)) {
+				CODIS_SERVEIS_LOCALS codiEnum = CODIS_SERVEIS_LOCALS.valueOf(codi);
+				switch (codiEnum) {
+				case SVDSCTFNWS01:
+					mails.get(CEDENTS_LOCALS.FAM_NOMBROSA).afegirServei(serv);
+					break;
+				case SVDCCAADISCAPACIDADWS01:
+					mails.get(CEDENTS_LOCALS.DISCAPACITAT).afegirServei(serv);
+					break;
+				case SVDCCAACPCWS01:
+				case SVDCCAACPASWS01:
+					mails.get(CEDENTS_LOCALS.INTERVENCIO).afegirServei(serv);
+					break;
+				case SCDCPAJU:
+					mails.get(CEDENTS_LOCALS.PADRO).afegirServei(serv);
+					break;
+				}
 			}
 		}
 
@@ -121,7 +128,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		
 		int errors = 0;
 		
-		for (MailCedentInfo mail : mails) {
+		for (MailCedentInfo mail : mails.values()) {
 			if (mail.getServeis().size() > 0) {
 				try {
 //					mail.sendMail(soli, excel);

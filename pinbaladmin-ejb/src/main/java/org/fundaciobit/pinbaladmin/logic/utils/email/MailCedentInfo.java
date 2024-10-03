@@ -17,9 +17,18 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 
-
 public class MailCedentInfo {
-    
+	
+//	public static final String[] CEDENTS_LOCALS = {"FAM_NOMBROSA", "DISCAPACITAT", "PADRO", "INTERVENCIO"};
+	
+	public static enum CEDENTS_LOCALS {
+		FAM_NOMBROSA, DISCAPACITAT, PADRO, INTERVENCIO;
+	}
+
+	public static enum CODIS_SERVEIS_LOCALS {
+		SVDSCTFNWS01, SVDCCAADISCAPACIDADWS01, SVDCCAACPCWS01, SVDCCAACPASWS01, SCDCPAJU
+	};
+
 	private String id;
 	private String subject;
 	private String message;
@@ -46,8 +55,9 @@ public class MailCedentInfo {
 		return serveis;
 	}
 
-	public MailCedentInfo(String id) {
-		this.id = id;
+	public MailCedentInfo(CEDENTS_LOCALS cedent) {
+		
+		this.id = cedent.name();
 		this.serveis = new ArrayList<Servei>();
 
 		List<String> dests = new ArrayList<String>();
@@ -59,15 +69,15 @@ public class MailCedentInfo {
 
 				+ "<div class=\"serveis\"  style=\"margin: .5rem;\">" + "		<b>#SERVEIS#</b>" + "</div>";
 
-		switch (id) {
-		case "DISCAPACITAT":
+		switch (cedent) {
+		case DISCAPACITAT:
 			this.subject = "Discapacitat";
 			this.message = msg;
 			dests.add("amalorda@dgad.caib.es");
 			dests.add("emreynes@dgad.caib.es");
 			break;
 
-		case "FAM_NOMBROSA":
+		case FAM_NOMBROSA:
 			this.subject = "Família Numerosa";
 			this.message = msg;
 			dests.add("etid@imas.conselldemallorca.net");
@@ -76,13 +86,13 @@ public class MailCedentInfo {
 //			dests.add("pautrias2@gmail.com");
 			break;
 
-		case "INTERVENCIO":
+		case INTERVENCIO:
 			this.subject = "Intervenció CAIB";
 			this.message = msg;
 			dests.add("mvich@interven.caib.es");
 			break;
 
-		case "PADRO":
+		case PADRO:
 			this.subject = "Padró";
 			this.message = "<div id=\"correu_padro\"  style=\"margin: .5rem;\" >"
 
