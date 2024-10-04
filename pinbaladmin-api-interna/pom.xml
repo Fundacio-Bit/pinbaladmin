@@ -124,6 +124,7 @@
 							<contextId>PortaFIB Callback</contextId>
                             <outputFileName>openapi_portafibcallback</outputFileName>
                             <resourcePackages>
+								<package>org.fundaciobit.pinbaladmin.api.interna.config</package>
                                 <package>org.fundaciobit.pinbaladmin.api.interna.all.portafibcallback</package>
                             </resourcePackages>
                         </configuration>
@@ -139,6 +140,7 @@
 							<contextId>Tramit SISTRA</contextId>
                             <outputFileName>openapi_tramitsistra</outputFileName>
                             <resourcePackages>
+								<package>org.fundaciobit.pinbaladmin.api.interna.config</package>
                                 <package>org.fundaciobit.pinbaladmin.api.interna.secure.tramitsistra</package>
                             </resourcePackages>
                         </configuration>

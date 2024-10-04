@@ -15,12 +15,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
  *
  */
 @OpenAPIDefinition(
-        servers = { @Server(url = "/enviafibapi/interna"),
-                @Server(url = "http://localhost:8080/enviafibapi/interna"),
-                @Server(url = "https://dev.caib.es/enviafibapi/interna"),
-                @Server(url = "https://proves.caib.es/enviafibapi/interna"),
-                @Server(url = "https://se.caib.es/enviafibapi/interna"),
-                @Server(url = "https://www.caib.es/enviafibapi/interna") }
+        servers = { @Server(url = "/pinbaladminapi/interna"),
+                @Server(url = "http://localhost:8080/pinbaladminapi/interna"),
+                @Server(url = "https://dev.caib.es/pinbaladminapi/interna"),
+                @Server(url = "https://proves.caib.es/pinbaladminapi/interna"),
+                @Server(url = "https://se.caib.es/pinbaladminapi/interna"),
+                @Server(url = "https://www.caib.es/pinbaladminapi/interna") }
 )
 @ApplicationPath("/")
 public class JAXRSConfiguration extends Application {
@@ -38,7 +38,7 @@ public class JAXRSConfiguration extends Application {
      */
     @PostConstruct
     private void init() {
-        log.info("Iniciant API REST INTERNA de EnviaFIB");
+        log.info("Iniciant API REST INTERNA de PinbalAdmin");
     }
 
 }

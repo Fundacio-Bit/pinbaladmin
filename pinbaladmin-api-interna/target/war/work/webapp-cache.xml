@@ -1,0 +1,584 @@
+<webapp-structure>
+  <registeredFiles>
+    <entry>
+      <string>currentBuild</string>
+      <path-set>
+        <pathsSet class="linked-hash-set">
+          <string>openapi_portafibcallback.json</string>
+          <string>openapi_tramitsistra.json</string>
+          <string>swaggerui_urls.json</string>
+          <string>WEB-INF/beans.xml</string>
+          <string>WEB-INF/jboss-web.xml</string>
+          <string>WEB-INF/web.xml</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/all/portafibcallback/PortaFIBCallbackRestService.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/config/JAXRSConfiguration.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/config/ObjectMapperConfiguration.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/config/RedirectToIndexFilter.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/secure/tramitsistra/ParametrosApertura.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/secure/tramitsistra/Resultado.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/secure/tramitsistra/TramitSistraPojo.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/secure/tramitsistra/TramitSistraService.class</string>
+          <string>WEB-INF/classes/org/fundaciobit/pinbaladmin/api/interna/secure/tramitsistra/Usuario.class</string>
+          <string>WEB-INF/lib/activation-1.1.1.redhat-5.jar</string>
+          <string>WEB-INF/lib/jboss-annotations-api_1.3_spec-1.0.1.Final-redhat-1.jar</string>
+          <string>WEB-INF/lib/jboss-jaxrs-api_2.1_spec-1.0.1.Final-redhat-00001.jar</string>
+          <string>WEB-INF/lib/jboss-jaxb-api_2.3_spec-1.0.1.Final-redhat-1.jar</string>
+          <string>WEB-INF/lib/genapp-core-2.0.0-SNAPSHOT.jar</string>
+          <string>WEB-INF/lib/portafib-callback-beans-1.1.jar</string>
+          <string>WEB-INF/lib/portafib-commons-2.2.0.jar</string>
+          <string>WEB-INF/lib/swagger-annotations-2.1.13.jar</string>
+          <string>WEB-INF/lib/commons-lang3-3.6.0.redhat-1.jar</string>
+          <string>WEB-INF/lib/pluginsib-utils-rest-3.0.0-SNAPSHOT.jar</string>
+          <string>WEB-INF/lib/pluginsib-utils-swagger-ui-configurable-webjar-3.0.0-SNAPSHOT.jar</string>
+        </pathsSet>
+      </path-set>
+    </entry>
+  </registeredFiles>
+  <dependenciesInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.jboss.spec</groupId>
+        <artifactId>jboss-javaee-8.0</artifactId>
+        <version>1.0.1.Final-redhat-00003</version>
+        <type>pom</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>19</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source>
+            <modelId>org.fundaciobit.pinbaladmin:pinbaladmin-api-interna:2.0.0</modelId>
+            <location>D:\Projectes\pinbaladmin\pinbaladmin-api-interna\pom.xml</location>
+          </source>
+        </location>
+        <groupIdLocation>
+          <lineNumber>20</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>21</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>134</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source>
+            <modelId>es.caib.maven:caib-artifacts-jdk11-jboss72:1.0.0-SNAPSHOT</modelId>
+            <location>D:\Programs\.m2\repository\es\caib\maven\caib-artifacts-jdk11-jboss72\1.0.0-SNAPSHOT\caib-artifacts-jdk11-jboss72-1.0.0-SNAPSHOT.pom</location>
+          </source>
+        </versionLocation>
+        <typeLocation>
+          <lineNumber>22</lineNumber>
+          <columnNumber>19</columnNumber>
+          <source reference="../../location/source"/>
+        </typeLocation>
+        <scopeLocation>
+          <lineNumber>23</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../location/source"/>
+        </scopeLocation>
+        <managementKey>org.jboss.spec:jboss-javaee-8.0:pom</managementKey>
+      </dependency>
+      <targetFileName>jboss-javaee-8.0-1.0.1.Final-redhat-00003.pom</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.22.redhat-2</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>25</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>26</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>27</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>205</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source>
+            <modelId>org.fundaciobit.pinbaladmin:pinbaladmin:2.0.0</modelId>
+            <location>D:\Projectes\pinbaladmin\pom.xml</location>
+          </source>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>28</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </scopeLocation>
+        <managementKey>org.slf4j:slf4j-api:jar</managementKey>
+      </dependency>
+      <targetFileName>slf4j-api-1.7.22.redhat-2.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.fundaciobit.pinbaladmin</groupId>
+        <artifactId>pinbaladmin-commons</artifactId>
+        <version>2.0.0</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>31</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>32</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>33</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>34</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>35</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </scopeLocation>
+        <managementKey>org.fundaciobit.pinbaladmin:pinbaladmin-commons:jar</managementKey>
+      </dependency>
+      <targetFileName>pinbaladmin-commons-2.0.0.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.fundaciobit.pinbaladmin</groupId>
+        <artifactId>pinbaladmin-persistence</artifactId>
+        <version>2.0.0</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions>
+          <org.apache.maven.model.Exclusion>
+            <groupId>javax.activation</groupId>
+            <artifactId>javax.activation-api</artifactId>
+            <location>
+              <lineNumber>43</lineNumber>
+              <columnNumber>28</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </location>
+            <groupIdLocation>
+              <lineNumber>44</lineNumber>
+              <columnNumber>30</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </groupIdLocation>
+            <artifactIdLocation>
+              <lineNumber>45</lineNumber>
+              <columnNumber>33</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </artifactIdLocation>
+          </org.apache.maven.model.Exclusion>
+          <org.apache.maven.model.Exclusion>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <location>
+              <lineNumber>47</lineNumber>
+              <columnNumber>28</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </location>
+            <groupIdLocation>
+              <lineNumber>48</lineNumber>
+              <columnNumber>30</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </groupIdLocation>
+            <artifactIdLocation>
+              <lineNumber>49</lineNumber>
+              <columnNumber>33</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </artifactIdLocation>
+          </org.apache.maven.model.Exclusion>
+        </exclusions>
+        <location>
+          <lineNumber>37</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>38</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>39</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>40</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>41</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </scopeLocation>
+        <managementKey>org.fundaciobit.pinbaladmin:pinbaladmin-persistence:jar</managementKey>
+      </dependency>
+      <targetFileName>pinbaladmin-persistence-2.0.0.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>es.caib.portafib</groupId>
+        <artifactId>portafib-callback-beans</artifactId>
+        <version>1.1</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>53</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>55</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>54</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>56</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <managementKey>es.caib.portafib:portafib-callback-beans:jar</managementKey>
+      </dependency>
+      <targetFileName>portafib-callback-beans-1.1.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.fundaciobit.pinbaladmin</groupId>
+        <artifactId>pinbaladmin-ejb</artifactId>
+        <version>2.0.0</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>58</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>59</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>60</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>61</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>62</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </scopeLocation>
+        <managementKey>org.fundaciobit.pinbaladmin:pinbaladmin-ejb:jar</managementKey>
+      </dependency>
+      <targetFileName>pinbaladmin-ejb-2.0.0.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-json-provider</artifactId>
+        <version>2.9.10.redhat-00003</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>64</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>65</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>66</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>280</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>281</lineNumber>
+          <columnNumber>24</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </scopeLocation>
+        <managementKey>com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar</managementKey>
+      </dependency>
+      <targetFileName>jackson-jaxrs-json-provider-2.9.10.redhat-00003.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>2.1.13</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>70</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>71</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>72</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>245</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </versionLocation>
+        <managementKey>io.swagger.core.v3:swagger-annotations:jar</managementKey>
+      </dependency>
+      <targetFileName>swagger-annotations-2.1.13.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.6.0.redhat-1</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>76</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>77</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>78</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>931</lineNumber>
+          <columnNumber>18</columnNumber>
+          <source>
+            <modelId>org.jboss.bom:eap-runtime-artifacts:7.2.0.GA</modelId>
+            <location>D:\Programs\.m2\repository\org\jboss\bom\eap-runtime-artifacts\7.2.0.GA\eap-runtime-artifacts-7.2.0.GA.pom</location>
+          </source>
+        </versionLocation>
+        <managementKey>org.apache.commons:commons-lang3:jar</managementKey>
+      </dependency>
+      <targetFileName>commons-lang3-3.6.0.redhat-1.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.fundaciobit.pluginsib.utils</groupId>
+        <artifactId>pluginsib-utils-rest</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>80</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>82</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>81</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>83</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-rest:jar</managementKey>
+      </dependency>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.fundaciobit.pluginsib.utils</groupId>
+        <artifactId>pluginsib-utils-swagger-ui-configurable-webjar</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>87</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>88</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>89</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>90</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </versionLocation>
+        <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-swagger-ui-configurable-webjar:jar</managementKey>
+      </dependency>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.1</version>
+        <type>jar</type>
+        <scope>test</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>94</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>95</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>96</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>228</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>97</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+        </scopeLocation>
+        <managementKey>junit:junit:jar</managementKey>
+      </dependency>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+        <type>jar</type>
+        <scope>provided</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>92</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>93</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>94</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>95</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>96</lineNumber>
+          <columnNumber>20</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </scopeLocation>
+        <managementKey>log4j:log4j:jar</managementKey>
+      </dependency>
+      <targetFileName>log4j-1.2.17.jar</targetFileName>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+    <org.apache.maven.plugins.war.util.DependencyInfo>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>3.3.2.Final</version>
+        <type>jar</type>
+        <scope>test</scope>
+        <exclusions/>
+        <location>
+          <lineNumber>157</lineNumber>
+          <columnNumber>21</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
+        </location>
+        <groupIdLocation>
+          <lineNumber>158</lineNumber>
+          <columnNumber>22</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
+        </groupIdLocation>
+        <artifactIdLocation>
+          <lineNumber>159</lineNumber>
+          <columnNumber>25</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
+        </artifactIdLocation>
+        <versionLocation>
+          <lineNumber>236</lineNumber>
+          <columnNumber>26</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </versionLocation>
+        <scopeLocation>
+          <lineNumber>237</lineNumber>
+          <columnNumber>24</columnNumber>
+          <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo[2]/dependency/versionLocation/source"/>
+        </scopeLocation>
+        <managementKey>org.jboss.logging:jboss-logging:jar</managementKey>
+      </dependency>
+    </org.apache.maven.plugins.war.util.DependencyInfo>
+  </dependenciesInfo>
+</webapp-structure>

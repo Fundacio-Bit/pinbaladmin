@@ -1,0 +1,9 @@
+org\fundaciobit\pinbaladmin\api\interna\config\ObjectMapperConfiguration.class
+org\fundaciobit\pinbaladmin\api\interna\secure\tramitsistra\TramitSistraPojo.class
+org\fundaciobit\pinbaladmin\api\interna\secure\tramitsistra\ParametrosApertura.class
+org\fundaciobit\pinbaladmin\api\interna\secure\tramitsistra\Usuario.class
+org\fundaciobit\pinbaladmin\api\interna\config\JAXRSConfiguration.class
+org\fundaciobit\pinbaladmin\api\interna\config\RedirectToIndexFilter.class
+org\fundaciobit\pinbaladmin\api\interna\secure\tramitsistra\TramitSistraService.class
+org\fundaciobit\pinbaladmin\api\interna\all\portafibcallback\PortaFIBCallbackRestService.class
+org\fundaciobit\pinbaladmin\api\interna\secure\tramitsistra\Resultado.class
