@@ -686,8 +686,8 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 			List<String[]> emails = new ArrayList<String[]>();
 
-			String param = (String) request.getParameter("param");
-			log.info("XXX assignacioAutomatica(" + param + ")");
+//			String param = (String) request.getParameter("param");
+			log.info("XXX assignacioAutomatica()");
 
 			final boolean enableCertificationCheck = false;
 			EmailReader er = new EmailReader(enableCertificationCheck);
@@ -871,6 +871,15 @@ public class LlistaCorreusOperadorController extends EmailController {
 	public void assignarItemExistent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		try {
+			
+			String assignadorAll = (String) request.getAttribute("startAssignadorAll");
+			if (assignadorAll.equals("true")) {
+				log.info("assignador All");
+			}else {
+				log.info("assignador One");
+			}
+
+			
 			String tipus = (String) request.getParameter("tipus");
 			String emailID = (String) request.getParameter("emailID");
 			String itemID = (String) request.getParameter("itemID");
@@ -881,19 +890,18 @@ public class LlistaCorreusOperadorController extends EmailController {
 			List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
 			if (correusPendentsEsborrar == null) {
 				correusPendentsEsborrar = new ArrayList<Long>();
-				request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
 			}
 			
 			log.info("XYZ ZZZ assignarItemExistent(" + tipus + ", " + itemID + ", " + emailID + ")");
 			String ret;
 			if (tipus.equals("Estatal") || tipus.equals("Local")) {
 				Long soliID = assignarSolicitud(er, Long.valueOf(emailID), Long.valueOf(itemID));
-				correusPendentsEsborrar.add(Long.valueOf(emailID));
+				addEmailIDPerEsborrar(request, emailID);
 				ret = "redirect:/operador/eventsolicitud/veureevents/" + soliID;
 
 			}else {
 				Long inciID = assignarIncidencia(er, Long.valueOf(emailID), Long.valueOf(itemID));
-				correusPendentsEsborrar.add(Long.valueOf(emailID));
+				addEmailIDPerEsborrar(request, emailID);
 				ret = "redirect:/operador/eventincidenciatecnica/veureevents/" + inciID;
 			}
 			
@@ -926,6 +934,16 @@ public class LlistaCorreusOperadorController extends EmailController {
 		}
 	}
 	
+	private void addEmailIDPerEsborrar(HttpServletRequest request, String emailID) {
+		List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+		if (correusPendentsEsborrar == null) {
+			correusPendentsEsborrar = new ArrayList<Long>();
+		}
+		log.info("Esborrarem emailID " + emailID);
+		correusPendentsEsborrar.add(Long.valueOf(emailID));
+		request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
+	}
+	
 	@RequestMapping(value = "/esborrarCorreusPendents", method = RequestMethod.GET)
 	public String esborrarCorreusPendents(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//Esborrar correus que hagi al llistat de correus assignats.
@@ -947,12 +965,12 @@ public class LlistaCorreusOperadorController extends EmailController {
 			Collections.sort(correusPendentsEsborrar, Collections.reverseOrder());
 			for (Long emailID : correusPendentsEsborrar) {
 					try {
+						log.info("Esborrarem correu: " + emailID);
 						er.deleteMessage((int) (long) emailID);
-						log.info("Correu esborrat: " + emailID);
 					} catch (Exception e) {
 						String msg = "Error esborrant correu: " + e.getMessage();
 						log.error(msg, e);
-						throw new I18NException("comodi", msg);
+						throw new I18NException("genapp.comodi", msg);
 					}
 			}
 			correusPendentsEsborrar.clear();
@@ -973,7 +991,7 @@ public class LlistaCorreusOperadorController extends EmailController {
         } catch (Exception e) {
             String msg = "Error esborrant Missatge de Correu: " + e.getMessage();
             log.error(msg, e);
-            throw new I18NException("comodi", msg);
+            throw new I18NException("genapp.comodi", msg);
         }
     }
 

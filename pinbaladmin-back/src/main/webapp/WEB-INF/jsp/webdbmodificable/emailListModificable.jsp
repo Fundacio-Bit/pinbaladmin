@@ -300,7 +300,7 @@
     
 	function assignadorAll(){
 		console.log("assignadorAll");
-		
+		<% request.setAttribute("startAssignadorAll", "true"); %>
 		var btns = document.getElementsByClassName("assignar-btn")
 
 		CORREUS_PENDENTS_ASSIGNACIO = btns.length;
@@ -325,6 +325,7 @@
                 
                 console.log("End wait");
 //                location.reload();
+				<% request.setAttribute("startAssignadorAll", "false"); %>
 				window.location.href = "<%=request.getContextPath()%>${contexte}/esborrarCorreusPendents";
 /* 			} else if(idx == CORREUS_PENDENTS_ASSIGNACIO-1){
 				console.log("Start idx: " + idx);
@@ -332,6 +333,7 @@
 				idx--;
  */			}
 		}
+		
 	}
 </script>
 
