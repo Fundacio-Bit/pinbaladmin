@@ -96,9 +96,9 @@ public class CrearExcelDeServeis {
     	
       // String base = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + x + ".";
 
-      System.out.println(" LLEGING SERVEI => " + ss.getId());
+    	log.info("\tLLEGING SERVEI => " + ss.getId());
 
-      String[] dades = new String[16];
+      String[] dades = new String[CAMPS_EXCEL.length];
 
       // A 0 FORMULARIO.DATOS_SOLICITUD.CODIPROC
       dades[0] = codiProc;
@@ -134,8 +134,6 @@ public class CrearExcelDeServeis {
         // No oposición => NO_OPOSICION
         // Ley => Ley
 
-        log.info("Consentiment: " + origen);
-        
         final String consentiment;
         if(origen.equals("noop")) {
             consentiment = "NO_OPOSICION";
@@ -144,7 +142,7 @@ public class CrearExcelDeServeis {
         } else if (origen.equals("llei")) {
             consentiment = "Ley";
         } else {
-            consentiment = null;
+            consentiment = "";
         }
 
         // values.get(base + "CONSENTIMIENTO");
@@ -200,119 +198,107 @@ public class CrearExcelDeServeis {
   }
 
   public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli, String tipusExcel)
-      throws I18NException {
+			throws I18NException {
 
-    XSSFWorkbook my_xlsx_workbook = null;
-    FileInputStream input_document = null;
-    try {
-      Long soliID = soli.getSolicitudID();
-      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
+		XSSFWorkbook my_xlsx_workbook = null;
+		FileInputStream input_document = null;
+		try {
+			Long soliID = soli.getSolicitudID();
+			Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
 
-		if (dadesByServeiSolicitudID.isEmpty()) {
-			//Si no hi ha serveis, no cal generar l'excel
-			return null;
+			if (dadesByServeiSolicitudID.isEmpty()) {
+				// Si no hi ha serveis, no cal generar l'excel
+				return null;
+			}
+
+			// Read Excel document first
+			input_document = new FileInputStream(plantillaXLSX);
+			// convert it into a POI object
+			my_xlsx_workbook = new XSSFWorkbook(input_document);
+			// Read excel sheet that needs to be updated
+			XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
+
+			// Primera FILA és 2
+			int primeraFila = 1;
+			String[][] capzalera = new String[][] { { soli.getDenominacio(), "'Entitat Nom'" },
+					{ soli.getNif(), "'Entitat NIF'" }, { soli.getDir3(), "'Entitat DIR3'" },
+					{ "52e7bcd3aaf2d7d8ff0ece2c50a601ed", "'Numero Serie'" }, { "SCSP", "Tecnologia" },
+					{ "3.5.0", "Versio" } };
+
+			XSSFRow firstRow = my_worksheet.getRow(primeraFila);
+
+			for (int col = 0; col < capzalera.length; col++) {
+				String[] dataCol = capzalera[col];
+				String value = dataCol[0];
+				String campName = dataCol[1];
+
+				if (value == null || value.trim().length() == 0) {
+					throw new Exception("El camp '" + campName + "' de la sol·licitud amb ID " + soliID + " val null ");
+				}
+
+				Cell cell = firstRow.getCell(col, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+				cell.setCellValue(value);
+			}
+			log.info("firstRow[" + firstRow + "]");
+
+			// Afegim les dades dels serveis a partir de la fila 6
+			int row = 6;
+			for (Long serveiSolicitudID : dadesByServeiSolicitudID.keySet()) {
+
+				String[] values = dadesByServeiSolicitudID.get(serveiSolicitudID);
+				for (int col = 0; col < values.length; col++) {
+
+					if (values[col] == null) {
+						String camp = CAMPS_EXCEL[col];
+
+						throw new Exception("El camp '" + camp + "' del servei-solicitud amb ID " + serveiSolicitudID
+								+ " o solicitud " + soliID + " val null ");
+					} else {
+						Cell cell = my_worksheet.getRow(row).getCell(col);
+						cell.setCellValue(values[col]);
+					}
+				}
+				row++;
+			}
+
+			
+			// Open OutputStream to write updates
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			// write changes
+			my_xlsx_workbook.write(output);
+			// close the stream
+			output.close();
+
+			return output.toByteArray();
+
+		} catch (Exception e) {
+			String msg = "Error generant plantilla excel: " + e.getMessage();
+			log.error(msg, e);
+			throw new I18NException("genapp.comodi", msg);
+		} finally {
+
+			if (my_xlsx_workbook != null) {
+				try {
+					my_xlsx_workbook.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (input_document != null) {
+				// important to close InputStream
+				try {
+					input_document.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 		}
-      
-      // Read Excel document first
-      input_document = new FileInputStream(plantillaXLSX);
-      // convert it into a POI object
-      my_xlsx_workbook = new XSSFWorkbook(input_document);
-      // Read excel sheet that needs to be updated
-      XSSFSheet my_worksheet = my_xlsx_workbook.getSheetAt(1); // Segona Fulla
 
-      // Primera FILA és 2
-      String  primeraFila = "1";
-      String[][] capzalera = new String[][] {
-          { soli.getDenominacio(), "'Entitat Nom'", primeraFila, "0" },
-          { soli.getNif(), "'Entitat NIF'", primeraFila, "1" },
-          { soli.getDir3(), "'Entitat DIR3'", primeraFila, "2" },          
-          { "52e7bcd3aaf2d7d8ff0ece2c50a601ed", "'Numero Serie'", primeraFila, "3" },
-          { "SCSP", "Tecnologia", primeraFila, "4" },
-          { "3.5.0", "Versio", primeraFila, "5" }
-          };
-
-      for (String[] valors : capzalera) {
-
-        String valor = valors[0];
-
-        if (valor == null || valor.trim().length() == 0) {
-          throw new Exception(
-              "El camp '" + valors[1] + "' de la sol·licitud amb ID " + soliID + " val null ");
-        }
-        log.info("Capçalera[" + valors + "]");
-        XSSFRow row = my_worksheet.getRow(Integer.parseInt(valors[2]));
-        log.info("ROW[" + row + "]");
-        Cell cell = row.getCell(Integer.parseInt(valors[3]), MissingCellPolicy.CREATE_NULL_AS_BLANK);
-        cell.setCellValue(valor);
-      }
-
-      int row = 6;
-
-      for (Long serveiSolicitudID : dadesByServeiSolicitudID.keySet()) {
-
-        String[] values = dadesByServeiSolicitudID.get(serveiSolicitudID);
-
-        for (int i = 0; i < values.length; i++) {
-
-          if (values[i] == null) {
-            String camp = CAMPS_EXCEL[i];
-
-            throw new Exception("El camp '" + camp + "' del servei-solicitud amb ID "
-                + serveiSolicitudID + " o solicitud " + soliID + " val null ");
-
-          } else {
-            Cell cell = my_worksheet.getRow(row).getCell(i);
-            cell.setCellValue(values[i]);
-          }
-        }
-        row++;
-      }
-
-      // Open FileOutputStream to write updates
-      ByteArrayOutputStream outputBA = new ByteArrayOutputStream();
-      // write changes
-      my_xlsx_workbook.write(outputBA);
-      // close the stream
-      outputBA.close();
-
-      
-
-
-
-      return outputBA.toByteArray();
-
-    } catch (Exception e) {
-
-      String msg = "Error generant plantilla excel: " + e.getMessage();
-
-      log.error(msg, e);
-
-      throw new I18NException("genapp.comodi", msg);
- 
-    } finally {
-      
-         if (my_xlsx_workbook != null) {
-           try {
-            my_xlsx_workbook.close();
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-         }
-         
-         if (input_document != null) {
-           // important to close InputStream
-           try {
-            input_document.close();
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-         }
-      
-    }
-
-  }
+	}
 
   /*
    * public static Properties getPropertiesFromFormulario(String xml) throws
