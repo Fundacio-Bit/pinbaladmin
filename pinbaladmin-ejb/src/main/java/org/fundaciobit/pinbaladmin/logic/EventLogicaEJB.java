@@ -69,7 +69,8 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 				log.info("EventLogicaEJB.create: tipus: " + tipus + " - destinatari: " + destinatari);
 				peuCorreu = EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud", destinatari);
 			} else {
-				peuCorreu = EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica", null);
+				String destinatari = "CONTACTE|" + ev.getDestinatari();
+				peuCorreu = EmailUtil.getPeuCorreu(ev.getIncidenciaTecnicaID(), "incidenciatecnica", destinatari);
 			}
 			
 			message = "<html><body>" + message + "<br><br>" + peuCorreu + "</body></html>";

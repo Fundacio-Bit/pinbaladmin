@@ -234,7 +234,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
                 String cadenaDestinatari = (String) request.getSession().getAttribute(SESSION_EVENT_DESTINATARI);
                 log.info("cadenaDestinatari => " + cadenaDestinatari);
-                if (cadenaDestinatari != null) {
+                if (cadenaDestinatari != null && cadenaDestinatari.trim().length() > 0) {
                 	String[] parts = cadenaDestinatari.split("\\|");
                 	String tipus = parts[0];
                 	String persona = parts[1]; //Anterior destinatari del correu del que ve
@@ -251,7 +251,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
 						break;
 					}
                 } else {
-//                    email = getPersonaContacteEmail(item);
+                	//Si es public, i no hi ha destinatari, comentari al contacte de la soli/incidencia
+					ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
                     ev.setPersona(getPersonaContacteEmail(item));
                 }
 
@@ -410,34 +411,40 @@ public abstract class AbstractEventController<T> extends EventController impleme
             throws I18NException {
 
         Long itemID;
-        if (isPublic()) {
-            itemID = HibernateFileUtil.decryptFileID(itemStrID);
-        } else {
-            itemID = Long.parseLong(itemStrID);
-        }
+        String destinatari;
+		try {
 
-       // String cedent = request.getParameter("cedent");
-        if (destinataritEnc == null || destinataritEnc.trim().length() == 0) {
-        	log.info("/veureevents: DESTINATARI NULL");
-            request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
-        } else {
-            try {
-            	String destinatari = HibernateFileUtil.decryptString(destinataritEnc);
-            	log.info("/veureevents: CEDENT => " + destinatari);
-                request.getSession().setAttribute(SESSION_EVENT_DESTINATARI, destinatari);
-//                        HibernateFileUtil.getEncrypter().decrypt(cedent));
-            } catch (Throwable t) {
-                request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
-                log.error("Error desencriptant cedent: " + destinataritEnc + "-" + t.getMessage());
-//                HtmlUtils.saveMessageWarning(request, "NO hem pogut obtenir el cedent: " + destinataritEnc);
-            }
-        }
-
-        request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
-//        request.getSession().setAttribute(SESSION_EVENT_IS_ESTATAL, isEstatal);
-
-        return "redirect:" + getContextWeb() + "/list";
-
+			if (isPublic()) {
+				itemID = HibernateFileUtil.decryptFileID(itemStrID);
+			} else {
+				itemID = Long.parseLong(itemStrID);
+			}
+			
+	        log.info("/veureevents: itemID => " + itemID + " - destinatariEnc => " + destinataritEnc);
+	        
+	        if (destinataritEnc == null || destinataritEnc.trim().length() == 0) {
+	        	log.info("/veureevents: DESTINATARI NULL");
+	        	destinatari = "";
+//	            request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
+	        } else {
+	            try {
+	            	destinatari = HibernateFileUtil.decryptString(destinataritEnc);
+	            	log.info("/veureevents: DESTINATARI->PERSONA => " + destinatari);
+	            } catch (Throwable t) {
+	            	destinatari = "";
+//	                request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
+	                log.error("Error desencriptant cedent: " + destinataritEnc + "-" + t.getMessage());
+	            }
+	        }
+	        
+	        request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
+	        request.getSession().setAttribute(SESSION_EVENT_DESTINATARI, destinatari);
+	        
+	        return "redirect:" + getContextWeb() + "/list";
+		} catch (Throwable t) {
+			HtmlUtils.saveMessageError(request, "Error obtenint itemID: " + itemStrID + "-" + t.getMessage());
+			throw new I18NException("genapp.comodi", "Error obtenint itemID: " + itemStrID + "-" + t.getMessage());
+		}
     }
 
     @Override
