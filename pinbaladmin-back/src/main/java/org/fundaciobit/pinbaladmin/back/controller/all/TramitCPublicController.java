@@ -61,7 +61,7 @@ public class TramitCPublicController extends TramitCOperadorController {
         //tramitForm.addReadOnlyField(ORGANARRELID);
         
         if (tramitForm.isNou()) {
-            TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
+//            TramitCDadesCesiJPA tramitC = tramitForm.getTramitCDadesCesi();
 
 //            tramitC.setDenominacio("Q0700733I");
 //            tramitC.setNif("Q0700733I");

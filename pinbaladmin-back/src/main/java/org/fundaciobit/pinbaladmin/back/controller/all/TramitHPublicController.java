@@ -57,7 +57,7 @@ public class TramitHPublicController extends TramitHOperadorController {
         tramitForm.addHiddenField(TRAMITID);
 
         if (tramitForm.isNou()) {
-            TramitHProcJPA tramitH = tramitForm.getTramitHProc();
+//            TramitHProcJPA tramitH = tramitForm.getTramitHProc();
 
 //            tramitH.setTipus("1");
 //            tramitH.setNom("Subvencions empreses que contracten persones amb discapacitat 2019");

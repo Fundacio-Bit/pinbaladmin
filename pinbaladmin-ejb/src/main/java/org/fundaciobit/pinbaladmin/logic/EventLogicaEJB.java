@@ -15,7 +15,6 @@ import org.fundaciobit.pinbaladmin.ejb.EventEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 /**
  * 
@@ -57,7 +56,7 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 			
 			String peuCorreu;
 			if (ev.getSolicitudID() != null) {
-				SolicitudJPA s = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
+//				SolicitudJPA s = solicitudLogicaEjb.findByPrimaryKey(ev.getSolicitudID());
 
 				String destinatari = null;
 				if (tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {

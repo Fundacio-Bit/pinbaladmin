@@ -2,7 +2,6 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

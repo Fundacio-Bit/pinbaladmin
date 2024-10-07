@@ -54,7 +54,7 @@ public class TramitDPublicController extends TramitDOperadorController {
         tramitForm.addHiddenField(TRAMITID);
 
         if (tramitForm.isNou()) {
-            TramitDCteAutJPA tramitD = tramitForm.getTramitDCteAut();
+//            TramitDCteAutJPA tramitD = tramitForm.getTramitDCteAut();
 
 //            tramitD.setNif("45186147W");
 //            tramitD.setNom("Toni");
