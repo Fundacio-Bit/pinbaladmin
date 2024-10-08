@@ -82,7 +82,9 @@ public class ParserSolicitudXLSX {
                 filaExcel = new String[MAX_COLUMNES];
 
                 XSSFRow therow = my_worksheet.getRow(row);
-                log.info("Processam row: " + row + " " + therow);
+                if(debug) {
+                	log.info("Processam row: " + row + " " + therow);
+                }
                 
                 if (therow == null) {
                     filaExcel = null;
