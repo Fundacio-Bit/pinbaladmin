@@ -247,6 +247,8 @@
 					tr.appendChild(td4);
                     tbody.appendChild(tr);
                 });
+				var size = emails == null ? 0 : emails.length;
+				$("#assignacioAutomatica #modal-title").html("Assignació automàtica: " + size + " elements");
 				
 				table.appendChild(tbody);
 				$("#assignacioAutomatica .modal-body").html(table);
@@ -300,7 +302,6 @@
     
 	function assignadorAll(){
 		console.log("assignadorAll");
-		<% request.setAttribute("startAssignadorAll", "true"); %>
 		var btns = document.getElementsByClassName("assignar-btn")
 
 		CORREUS_PENDENTS_ASSIGNACIO = btns.length;
@@ -325,7 +326,6 @@
                 
                 console.log("End wait");
 //                location.reload();
-				<% request.setAttribute("startAssignadorAll", "false"); %>
 				window.location.href = "<%=request.getContextPath()%>${contexte}/esborrarCorreusPendents";
 /* 			} else if(idx == CORREUS_PENDENTS_ASSIGNACIO-1){
 				console.log("Start idx: " + idx);

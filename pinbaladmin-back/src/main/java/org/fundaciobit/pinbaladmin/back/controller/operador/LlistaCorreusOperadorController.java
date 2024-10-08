@@ -867,15 +867,6 @@ public class LlistaCorreusOperadorController extends EmailController {
 	public void assignarItemExistent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		try {
-			
-			String assignadorAll = (String) request.getAttribute("startAssignadorAll");
-			if (assignadorAll.equals("true")) {
-				log.info("assignador All");
-			}else {
-				log.info("assignador One");
-			}
-
-			
 			String tipus = (String) request.getParameter("tipus");
 			String emailID = (String) request.getParameter("emailID");
 			String itemID = (String) request.getParameter("itemID");
@@ -883,10 +874,10 @@ public class LlistaCorreusOperadorController extends EmailController {
 			final boolean enableCertificationCheck = false;
 			EmailReader er = new EmailReader(enableCertificationCheck);
 			
-			List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
-			if (correusPendentsEsborrar == null) {
-				correusPendentsEsborrar = new ArrayList<Long>();
-			}
+//			List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+//			if (correusPendentsEsborrar == null) {
+//				correusPendentsEsborrar = new ArrayList<Long>();
+//			}
 			
 			log.info("XYZ ZZZ assignarItemExistent(" + tipus + ", " + itemID + ", " + emailID + ")");
 			String ret;
@@ -901,7 +892,9 @@ public class LlistaCorreusOperadorController extends EmailController {
 				ret = "redirect:/operador/eventincidenciatecnica/veureevents/" + inciID;
 			}
 			
-			request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
+			//Log nCorreus per esborrar.
+			List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+			log.info("Correus per esborrar: " + correusPendentsEsborrar.size());
 			
 			log.info("ret = " + ret);
 			ret = ret.replace("redirect:", "/pinbaladmin");
@@ -921,6 +914,15 @@ public class LlistaCorreusOperadorController extends EmailController {
 		} catch (Throwable e) {
 			PrintWriter os = response.getWriter();
 
+			String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error assignant a item: " + e.getMessage();
+			}
+			
+			log.error(msg, e);
+			
 			Gson g = new Gson();
 			String emiJSON = g.toJson("Error: " + e.getMessage());
 			os.print(emiJSON);

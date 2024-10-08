@@ -200,11 +200,33 @@
 	};
 
 	function validateForm() {
+		var isOk = true;
+		
 		var missatge = document.getElementById("event.comentari").value;
-		if (missatge.trim() == "") {
+		if (missatge.trim().length == 0) {
 			alert("El missatge no pot estar buit");
-			return false;
+			isOk = false;
 		}
-		return true;
+		
+		var tipus = document.getElementById("event_tipus").value;
+		//Si s'envia un correu, el destinatari no pot ser buit
+		if (tipus == 1 || tipus == -2 || tipus == -3) {
+			var destinatari = document.getElementById("event.destinatarimail").value;
+			if (destinatari.trim().length == 0) {
+				alert("No hi ha correu del destinatari");
+				isOk = false;
+			}
+		}
+		
+		// Si es un missatge del contacte, del cedent, o privat, la persona no pot ser buida
+		if (tipus == 2 || tipus == 3 || tipus == -1) {
+			var persona = document.getElementById("event.persona").value;
+			if (persona.trim().length == 0) {
+				alert("La persona no pot estar buida");
+				isOk = false;
+			}
+		}
+		return isOk;
 	}
+	
 </script>
