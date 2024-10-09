@@ -33,9 +33,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ESTATID)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DEPARTAMENTID)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.ORGANID)}</th>
         </c:if>

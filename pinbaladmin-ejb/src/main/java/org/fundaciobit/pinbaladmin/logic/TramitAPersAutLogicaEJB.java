@@ -229,9 +229,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String urlconsentiment = null;
         String consentimentadjunt = null;
         Long fitxerConsentimentID = null;
-        
-        //Depercats
-        Long departamentID = null;
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -413,7 +410,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setProcedimentNom(procedimentNom);
         soli.setProcedimentTipus(procedimentTipus);
         soli.setEstatID(estatID);
-        soli.setDepartamentID(departamentID);
         soli.setOrganid(organid);
         soli.setEntitatEstatal(entitatEstatal);
         soli.setPinfo(pinfo);

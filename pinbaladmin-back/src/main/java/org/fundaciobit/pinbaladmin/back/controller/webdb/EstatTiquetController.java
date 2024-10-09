@@ -506,6 +506,14 @@ public java.lang.Long stringToPK(String value) {
      return getRedirectWhenCancel(request, estatTiquetID);
   }
 
+  /**
+   * Entra aqui al pitjar el boto cancel en el la creació de EstatTiquet
+   */
+  @RequestMapping(value = "/cancel")
+  public String cancelEstatTiquet(HttpServletRequest request,HttpServletResponse response) {
+     return getRedirectWhenCancel(request, null);
+  }
+
   @Override
   public String getTableModelName() {
     return _TABLE_MODEL;

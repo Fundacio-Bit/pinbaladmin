@@ -236,7 +236,7 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
         if (solicituds.size() == 0) {
             HtmlUtils.saveMessageError(request,
-                    "No s'ha pogut processar cap petició del fitxer enviat. Revisar classe TipusProcediments per inclore-ho");
+                    "Al fitxer processat no hi ha cap solicitud vàlida. Revisi el fitxer " + xlsx.getFileName());
         }
 
         try {

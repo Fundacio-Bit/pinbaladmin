@@ -109,28 +109,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.Long departamentIDDesde;
-
-  public java.lang.Long getDepartamentIDDesde() {
-    return this.departamentIDDesde;
-  }
-
-  public void setDepartamentIDDesde(java.lang.Long departamentIDDesde) {
-    this.departamentIDDesde = departamentIDDesde;
-  }
-
-
-  private java.lang.Long departamentIDFins;
-
-  public java.lang.Long getDepartamentIDFins() {
-    return this.departamentIDFins;
-  }
-
-  public void setDepartamentIDFins(java.lang.Long departamentIDFins) {
-    this.departamentIDFins = departamentIDFins;
-  }
-
-
   private java.lang.Long organidDesde;
 
   public java.lang.Long getOrganidDesde() {
@@ -408,8 +386,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.procedimentTipus = __toClone.procedimentTipus;
     this.expedientPid = __toClone.expedientPid;
     this.estatIDSelect = __toClone.estatIDSelect;
-    this.departamentIDDesde = __toClone.departamentIDDesde;
-    this.departamentIDFins = __toClone.departamentIDFins;
     this.organidDesde = __toClone.organidDesde;
     this.organidFins = __toClone.organidFins;
     this.entitatEstatal = __toClone.entitatEstatal;
@@ -436,7 +412,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.portafibIDFins = __toClone.portafibIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
-    this.mapOfDepartamentForDepartamentID = __toClone.mapOfDepartamentForDepartamentID;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
@@ -454,7 +429,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   @Override
   public List<Field<?>> getDefaultGroupByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTATID ,DEPARTAMENTID ,ENTITATESTATAL ,FIRMATDOCSOLICITUD ,PRODUCCIO ,OPERADOR }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { ESTATID ,ENTITATESTATAL ,FIRMATDOCSOLICITUD ,PRODUCCIO ,OPERADOR }));
   }
 
 
@@ -497,18 +472,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfValuesForEstatID(Map<String, String> mapOfValuesForEstatID) {
     this.mapOfValuesForEstatID = mapOfValuesForEstatID;
-  }
-
-
-
-  private Map<String, String> mapOfDepartamentForDepartamentID;
-
-  public Map<String, String> getMapOfDepartamentForDepartamentID() {
-    return this.mapOfDepartamentForDepartamentID;
-  }
-
-  public void setMapOfDepartamentForDepartamentID(Map<String, String> mapOfDepartamentForDepartamentID) {
-    this.mapOfDepartamentForDepartamentID = mapOfDepartamentForDepartamentID;
   }
 
 

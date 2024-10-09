@@ -245,10 +245,9 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
             if (solicitud.getEntitatEstatal() == null) {
                 mapEntitatEstatal.put(id, "");
 
-                Long entitatID = solicitudEjb.executeQueryOne(new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITATID(),
-                        SolicitudFields.SOLICITUDID.equal(solicitud.getSolicitudID()));
+                String dir3 = solicitudEjb.executeQueryOne(SolicitudFields.DIR3, SolicitudFields.SOLICITUDID.equal(solicitud.getSolicitudID()));
 
-                String nom = entitatEjb.executeQueryOne(EntitatFields.NOM, EntitatFields.ENTITATID.equal(entitatID));
+                String nom = entitatEjb.executeQueryOne(EntitatFields.NOM, EntitatFields.DIR3.equal(dir3));
                 mapEntitatLocal.put(id, nom);
             } else {
                 mapEntitatEstatal.put(id, solicitud.getEntitatEstatal());

@@ -63,10 +63,6 @@ public class SolicitudController
 
   // References 
   @Autowired
-  protected DepartamentRefList departamentRefList;
-
-  // References 
-  @Autowired
   protected OrganRefList organRefList;
 
   /**
@@ -209,16 +205,6 @@ public class SolicitudController
       };
     }
 
-    // Field departamentID
-    {
-      _listSKV = getReferenceListForDepartamentID(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfDepartamentForDepartamentID(_tmp);
-      if (filterForm.getGroupByFields().contains(DEPARTAMENTID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, DEPARTAMENTID, false);
-      };
-    }
-
     // Field organid
     {
       _listSKV = getReferenceListForOrganid(request, mav, filterForm, list, groupByItemsMap, null);
@@ -302,7 +288,6 @@ public class SolicitudController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
-    __mapping.put(DEPARTAMENTID, filterForm.getMapOfDepartamentForDepartamentID());
     __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
@@ -373,15 +358,6 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForEstatID(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
-    if (solicitudForm.getListOfDepartamentForDepartamentID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForDepartamentID(request, mav, solicitudForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      solicitudForm.setListOfDepartamentForDepartamentID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfOrganForOrganid() == null) {
@@ -719,6 +695,14 @@ public java.lang.Long stringToPK(String value) {
      return getRedirectWhenCancel(request, solicitudID);
   }
 
+  /**
+   * Entra aqui al pitjar el boto cancel en el la creació de Solicitud
+   */
+  @RequestMapping(value = "/cancel")
+  public String cancelSolicitud(HttpServletRequest request,HttpServletResponse response) {
+     return getRedirectWhenCancel(request, null);
+  }
+
   @Override
   public String getTableModelName() {
     return _TABLE_MODEL;
@@ -853,46 +837,6 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("50" , "50"));
     __tmp.add(new StringKeyValue("60 " , "60 "));
     return __tmp;
-  }
-
-
-  public List<StringKeyValue> getReferenceListForDepartamentID(HttpServletRequest request,
-       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
-    if (solicitudForm.isHiddenField(DEPARTAMENTID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _where = null;
-    if (solicitudForm.isReadOnlyField(DEPARTAMENTID)) {
-      _where = DepartamentFields.DEPARTAMENTID.equal(solicitudForm.getSolicitud().getDepartamentID());
-    }
-    return getReferenceListForDepartamentID(request, mav, Where.AND(where, _where));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForDepartamentID(HttpServletRequest request,
-       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
-       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (solicitudFilterForm.isHiddenField(DEPARTAMENTID)
-       && !solicitudFilterForm.isGroupByField(DEPARTAMENTID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    if (!_groupByItemsMap.containsKey(DEPARTAMENTID)) {
-      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
-      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (Solicitud _item : list) {
-        if(_item.getDepartamentID() == null) { continue; };
-        _pkList.add(_item.getDepartamentID());
-        }
-        _w = DepartamentFields.DEPARTAMENTID.in(_pkList);
-      }
-    return getReferenceListForDepartamentID(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForDepartamentID(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    return departamentRefList.getReferenceList(DepartamentFields.DEPARTAMENTID, where );
   }
 
 

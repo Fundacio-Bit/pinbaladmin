@@ -22,7 +22,6 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.GroupByValueItem;
 import org.fundaciobit.genapp.common.query.ITableManager;
-import org.fundaciobit.genapp.common.query.Select;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
 import org.fundaciobit.genapp.common.query.StringField;
 import org.fundaciobit.genapp.common.query.SubQuery;
@@ -37,7 +36,6 @@ import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
-import org.fundaciobit.pinbaladmin.back.form.webdb.DepartamentRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
@@ -82,19 +80,11 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 public abstract class SolicitudOperadorController extends SolicitudController {
 
-    public static final Field<?> AREA_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA().AREAID();
-
     public static final int FILTRE_AVANZAT_COLUMN = -1;
 
     public static final int COLUMNA_ORGAN = 1;
     public static final int MISSATGES_SENSE_LLEGIR_COLUMN = 2;
     public static final int ENTITAT_COLUMN = 1;
-
-
-
-
-    public static final Field<?> ENTITAT_NOVA_ID = new SolicitudQueryPath().DEPARTAMENT().AREA().ENTITAT().ENTITATID();
-
 
     public static final StringField FILTRE_AVANZAT_FIELD = CODIDESCRIPTIU; // new
                                                                            // StringField("filtreavtable",
@@ -169,33 +159,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     /* falta metode init() per convertir departament a NOMENTITAT - DEPARTAMENT */
     @PostConstruct
     public void init() {
-
-        /*
-         * AreaQueryPath aqp = new AreaQueryPath();
-         * 
-         * this.areaRefList = new AreaRefList(this.areaRefList);
-         * areaRefList.setSelects(new Select[] { aqp.ENTITAT().NOM().select,
-         * AreaFields.NOM.select }); areaRefList.setSeparator(" - ");
-         */
-
-        // PER LLISTAT
-        /*
-         * departamentRefListPerLlistat = new
-         * DepartamentRefList(this.departamentRefList);
-         * departamentRefList.setSelects(new Select[] { DepartamentFields.NOM.select
-         * , new SelectConstant(" ["), DepartamentFields.DEPARTAMENTID.select,new
-         * SelectConstant("]") }); departamentRefList.setSeparator("");
-         */
-
-        // PER FORMULARI
-        DepartamentQueryPath dqp = new DepartamentQueryPath();
-
-        // Configura com es mostra el departament
-        this.departamentRefList = new DepartamentRefList(this.departamentRefList);
-        departamentRefList.setSelects(new Select[] { dqp.AREA().ENTITAT().NOM().select, dqp.AREA().NOM().select,
-                DepartamentFields.NOM.select });
-        departamentRefList.setSeparator(" - ");
-
     }
 
     @Override
@@ -271,7 +234,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 // log.info("XYZ ZZZ _jpa.getDepartamentID() = " +
                 // _jpa.getDepartamentID());
 
-                if (_jpa.getDepartamentID() == null && _jpa.getOrganid() == null) {
+                if (_jpa.getOrganid() == null) {
                     // Es Estatal
 
                     amagarCampsEstatal(solicitudForm);
@@ -284,9 +247,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             } else {
 
                 if (!solicitudForm.isNou()) {
-                    if (_jpa.getDepartamentID() == null  && _jpa.getOrganid() == null) {
+                    if (_jpa.getOrganid() == null) {
                         // solicitudForm.addHiddenField(ENTITATLOCALID);
-                        solicitudForm.addHiddenField(DEPARTAMENTID);
                         solicitudForm.addHiddenField(ORGANID);
                     } else {
                         solicitudForm.addHiddenField(ENTITATESTATAL);
@@ -336,7 +298,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     private void amagarCampsEstatal(SolicitudForm solicitudForm) {
         
         solicitudForm.addHiddenField(ORGANID);
-        solicitudForm.addHiddenField(DEPARTAMENTID);
         solicitudForm.addHiddenField(PINFO);
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
@@ -583,17 +544,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.setOrderAsc(false);
         }
         
-        String departamentIDDesde = request.getParameter("departamentIDDesde");
-        String departamentIDFins = request.getParameter("departamentIDFins");
-
-        if (departamentIDDesde != null && departamentIDDesde.trim().length() != 0 && departamentIDFins != null
-                && departamentIDFins.trim().length() != 0) {
-
-            solicitudFilterForm.setDepartamentIDDesde(Long.parseLong(departamentIDDesde));
-            solicitudFilterForm.setDepartamentIDFins(Long.parseLong(departamentIDFins));
-
-        }
-        
 //        TreeMap<Integer, AdditionalField<?, ?>> fi = solicitudFilterForm.getAdditionalFields();
 //        
 //        for (int i = 0; i < fi.size(); i++) {
@@ -694,7 +644,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             }
         }
 
-        Map<String, String> departamentLocalMap = filterForm.getMapOfDepartamentForDepartamentID();
+        Map<String, String> organGestorMap = filterForm.getMapOfOrganForOrganid();
 
         for (Solicitud soli : list) {
 
@@ -728,7 +678,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 } else {
                     // Catala
                     tipus = "ca";
-                    nom = departamentLocalMap.get(String.valueOf(organId));
+                    Organ aux = organEjb.findByPrimaryKey(organId);
+                    nom = "(" + aux.getDir3() + ") - " + aux.getNom();
                 }
                 String img;
                 img = "<img src=\"" + request.getContextPath() + "/img/" + tipus + "_petit_on.gif\" alt=\"" + tipus
@@ -898,14 +849,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         Map<Field<?>, GroupByItem> groupByItemsMap = super.fillReferencesForList(filterForm, request, mav, list,
                 groupItems);
 
-        /*
-         * log.info("SolicitudOperadorController::GroupBy = " +
-         * filterForm.getGroupBy()); log.info(
-         * "SolicitudOperadorController::GroupByValue = ]" +
-         * filterForm.getGroupValue() + "[");
-         */
         // GROUP BY BALEARS
-
         final boolean selected = BALEARS.javaName.equals(filterForm.getGroupBy());
         final String valGroup = filterForm.getGroupValue();
 
@@ -932,71 +876,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         if (selected) {
             filterForm.setVisibleGroupBy(true);
-        }
-
-        // AREA NOVA
-
-        Boolean estatal = isEstatal();
-        if (estatal != null && estatal == false) {
-
-            Map<String, String> _tmp;
-            List<StringKeyValue> _listSKV;
-            /*
-             * GroupByItem novaAreaGroupByItem = new GroupByItem(AREA_NOVA_ID,
-             * AREA_NOVA_ID.javaName, AREA_NOVA_ID.javaName, selected, new
-             * ArrayList<GroupByValueItem>());
-             * groupByItemsMap.put(AREA_NOVA_ID,novaAreaGroupByItem);
-             * 
-             * 
-             * 
-             * // Field AREA NOVA _listSKV = this.areaRefList.getReferenceList(
-             * AreaFields.NOM, null);
-             * 
-             * for(StringKeyValue skv : _listSKV) { log.info(" XYZ ZZZ   " +
-             * skv.getKey() + " => ]" + skv.getValue() + "["); }
-             * 
-             * _tmp = org.fundaciobit.genapp.common.utils.Utils.listToMap(_listSKV);
-             * groupByItemsMap.get(AREA_NOVA_ID).setCodeLabel(
-             * AreaFields._TABLE_TRANSLATION); fillValuesToGroupByItems(_tmp,
-             * groupByItemsMap, AREA_NOVA_ID, false);
-             * 
-             * 
-             * 
-             * List<GroupByValueItem> lgbvi =
-             * groupByItemsMap.get(AREA_NOVA_ID).getValues();
-             * 
-             * for(GroupByValueItem item : lgbvi) {
-             * 
-             * log.info(" XXXXXXXXXXXXX  " + item.getCodeLabel() + " ===> " +
-             * item.getValue()); log.info(" XXXXXXXXXXXXX  " + item.getCodeLabel() +
-             * " ===> " + _tmp.get(item.getValue())); log.info(" "); }
-             * 
-             * 
-             * 
-             */
-
-            {
-                _listSKV = getReferenceListForAreaNOVAID(request, mav, filterForm, list, groupByItemsMap, null);
-                _tmp = Utils.listToMap(_listSKV);
-                // filterForm.setMapOfAreaForAreaID(_tmp);
-                if (filterForm.getGroupByFields().contains(AREA_NOVA_ID)) {
-                    fillValuesToGroupByItems(_tmp, groupByItemsMap, AREA_NOVA_ID, false);
-                    groupByItemsMap.get(AREA_NOVA_ID).setCodeLabel("area.area");
-                }
-                ;
-            }
-
-            {
-                _listSKV = getReferenceListForEntitatNOVAID(request, mav, filterForm, list, groupByItemsMap, null);
-                _tmp = Utils.listToMap(_listSKV);
-                // filterForm.setMapOfAreaForAreaID(_tmp);
-                if (filterForm.getGroupByFields().contains(ENTITAT_NOVA_ID)) {
-                    fillValuesToGroupByItems(_tmp, groupByItemsMap, ENTITAT_NOVA_ID, false);
-                    groupByItemsMap.get(ENTITAT_NOVA_ID).setCodeLabel("entitat");
-                }
-                ;
-            }
-
         }
 
         return groupByItemsMap;
@@ -1162,7 +1041,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             if (esestatal) {
                 tipusEstatalService = SolicitudFields.ENTITATESTATAL.isNotNull();
             } else {
-                tipusEstatalService =  Where.OR(SolicitudFields.DEPARTAMENTID.isNotNull(), SolicitudFields.ORGANID.isNotNull());
+                tipusEstatalService =  SolicitudFields.ORGANID.isNotNull();
             }
         }
 
@@ -1424,7 +1303,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         Boolean estatal = isEstatal();
 
         if (estatal == null) {
-            estatal = (solicitudForm.getSolicitud().getDepartamentID() == null && solicitudForm.getSolicitud().getOrganid() == null);
+            estatal = (solicitudForm.getSolicitud().getOrganid() == null);
         }
 
         List<StringKeyValue> __tmp;

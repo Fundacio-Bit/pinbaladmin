@@ -559,6 +559,14 @@ public java.lang.Long stringToPK(String value) {
      return getRedirectWhenCancel(request, documentSolicitudID);
   }
 
+  /**
+   * Entra aqui al pitjar el boto cancel en el la creació de DocumentSolicitud
+   */
+  @RequestMapping(value = "/cancel")
+  public String cancelDocumentSolicitud(HttpServletRequest request,HttpServletResponse response) {
+     return getRedirectWhenCancel(request, null);
+  }
+
   @Override
   public String getTableModelName() {
     return _TABLE_MODEL;

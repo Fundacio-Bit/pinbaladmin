@@ -143,7 +143,7 @@ public class EntitatOperadorController extends EntitatController {
             SolicitudQueryPath sqp = new SolicitudQueryPath();
             // ORIG XXXX List<StringKeyValue> id_nom_Solis = solicitudEjb.executeQuery(smskv,SolicitudFields.ENTITATLOCALID.equal(entitat.getEntitatID())); 
             List<StringKeyValue> id_nom_Solis = solicitudEjb.executeQuery(smskv,
-                    sqp.DEPARTAMENT().AREA().ENTITATID().equal(entitat.getEntitatID()));
+                    sqp.DIR3().equal(entitat.getDir3()));
             //log.info("          - solis NOMS: ]" + Arrays.toString(id_nom_Solis.toArray())  + "["); 
 
             key = entitat.getEntitatID();

@@ -163,7 +163,7 @@ public class EmailOperatorController extends EmailController {
     protected String getEmailDestinatari(HttpServletRequest request) throws I18NException {
 
         // Seleccionam els correus de les solicituds Local
-        final Where where = Where.AND(SolicitudFields.DEPARTAMENTID.isNotNull(),
+        final Where where = Where.AND(SolicitudFields.ORGANID.isNotNull(),
                 SolicitudFields.PERSONACONTACTEEMAIL.isNotNull());
         List<String> emailsList = solicitudEjb.executeQuery(SolicitudFields.PERSONACONTACTEEMAIL, where);
 

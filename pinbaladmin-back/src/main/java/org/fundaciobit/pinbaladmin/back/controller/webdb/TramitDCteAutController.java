@@ -535,6 +535,14 @@ public java.lang.Long stringToPK(String value) {
      return getRedirectWhenCancel(request, cteautid);
   }
 
+  /**
+   * Entra aqui al pitjar el boto cancel en el la creació de TramitDCteAut
+   */
+  @RequestMapping(value = "/cancel")
+  public String cancelTramitDCteAut(HttpServletRequest request,HttpServletResponse response) {
+     return getRedirectWhenCancel(request, null);
+  }
+
   @Override
   public String getTableModelName() {
     return _TABLE_MODEL;

@@ -535,6 +535,14 @@ public java.lang.Long stringToPK(String value) {
      return getRedirectWhenCancel(request, dadestitid);
   }
 
+  /**
+   * Entra aqui al pitjar el boto cancel en el la creació de TramitGDadesTit
+   */
+  @RequestMapping(value = "/cancel")
+  public String cancelTramitGDadesTit(HttpServletRequest request,HttpServletResponse response) {
+     return getRedirectWhenCancel(request, null);
+  }
+
   @Override
   public String getTableModelName() {
     return _TABLE_MODEL;

@@ -4,16 +4,13 @@ import org.fundaciobit.pinbaladmin.model.entity.*;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import java.util.Set;
-import java.util.HashSet;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Index;
 import javax.persistence.GeneratedValue;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 
@@ -96,19 +93,6 @@ public class DepartamentJPA implements Departament {
     return __result;
   }
 
-// EXP  Field:departamentid | Table: pad_solicitud | Type: 0  
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "departament")
-    private Set<SolicitudJPA> solicituds = new HashSet<SolicitudJPA>(0);
-    public  Set<SolicitudJPA> getSolicituds() {
-    return this.solicituds;
-  }
-
-    public void setSolicituds(Set<SolicitudJPA> solicituds) {
-      this.solicituds = solicituds;
-    }
-
-
 // IMP Field:areaid | Table: pad_area | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -160,10 +144,6 @@ public class DepartamentJPA implements Departament {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
-    if(!"SolicitudJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
-      __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"DepartamentJPA"));
-    }
     // Copia de beans complexes (IMP)
     if(!"AreaJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.area) || org.hibernate.Hibernate.isInitialized(__jpa.getArea()) ) ) {

@@ -479,14 +479,7 @@
               "nom"
             ]
           },
-          "foreignKeys": [
-            {
-              "name": "pad_solicitud_depart_fk",
-              "table": "pad_solicitud",
-              "field": "departamentid",
-              "type": 0
-            }
-          ]
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -4369,45 +4362,6 @@
             "webtype": 16
           },
           "foreignKeys": []
-        },
-        {
-          "index": "pad_solicitud_departid_fk_i",
-          "isAutoIncrement": false,
-          "sqlName": "departamentid",
-          "sqlType": -5,
-          "size": 19,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Departamento",
-            "ca": "Departament"
-          },
-          "javaName": "departamentID",
-          "javaType": "java.lang.Long",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": true,
-          "webFieldInfo": {
-            "webtype": 3,
-            "foreignKey": {
-              "name": "pad_solicitud_depart_fk",
-              "table": "pad_departament",
-              "field": "departamentid",
-              "type": 1
-            }
-          },
-          "foreignKeys": [
-            {
-              "name": "pad_solicitud_depart_fk",
-              "table": "pad_departament",
-              "field": "departamentid",
-              "type": 1
-            }
-          ]
         },
         {
           "index": "pad_solicitud_organid_fk_i",

@@ -65,14 +65,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DEPARTAMENTID)}">
-          <td>
-          <c:set var="tmp">${solicitud.departamentID}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfDepartamentForDepartamentID[tmp]}
-          </c:if>
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
           <td>
           <c:set var="tmp">${solicitud.organid}</c:set>

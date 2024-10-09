@@ -15,7 +15,6 @@ public class SolicitudBean implements Solicitud {
 	java.lang.String procedimentTipus;
 	java.lang.String expedientPid;
 	java.lang.Long estatID;
-	java.lang.Long departamentID;
 	java.lang.Long organid;
 	java.lang.String entitatEstatal;
 	java.lang.String pinfo;
@@ -47,7 +46,7 @@ public class SolicitudBean implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -55,7 +54,6 @@ public class SolicitudBean implements Solicitud {
     this.procedimentTipus=procedimentTipus;
     this.expedientPid=expedientPid;
     this.estatID=estatID;
-    this.departamentID=departamentID;
     this.organid=organid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
@@ -82,14 +80,13 @@ public class SolicitudBean implements Solicitud {
     this.portafibID=portafibID;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long departamentID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
+  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.String expedientPid , java.lang.Long estatID , java.lang.Long organid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.procedimentNom=procedimentNom;
     this.procedimentTipus=procedimentTipus;
     this.expedientPid=expedientPid;
     this.estatID=estatID;
-    this.departamentID=departamentID;
     this.organid=organid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
@@ -135,7 +132,6 @@ public class SolicitudBean implements Solicitud {
     this.setProcedimentTipus(__bean.getProcedimentTipus());
     this.setExpedientPid(__bean.getExpedientPid());
     this.setEstatID(__bean.getEstatID());
-    this.setDepartamentID(__bean.getDepartamentID());
     this.setOrganid(__bean.getOrganid());
     this.setEntitatEstatal(__bean.getEntitatEstatal());
     this.setPinfo(__bean.getPinfo());
@@ -213,13 +209,6 @@ public class SolicitudBean implements Solicitud {
 	};
 	public void setEstatID(java.lang.Long _estatID_) {
 		this.estatID = _estatID_;
-	};
-
-	public java.lang.Long getDepartamentID() {
-		return(departamentID);
-	};
-	public void setDepartamentID(java.lang.Long _departamentID_) {
-		this.departamentID = _departamentID_;
 	};
 
 	public java.lang.Long getOrganid() {
@@ -404,7 +393,6 @@ public class SolicitudBean implements Solicitud {
     __tmp.setProcedimentTipus(__bean.getProcedimentTipus());
     __tmp.setExpedientPid(__bean.getExpedientPid());
     __tmp.setEstatID(__bean.getEstatID());
-    __tmp.setDepartamentID(__bean.getDepartamentID());
     __tmp.setOrganid(__bean.getOrganid());
     __tmp.setEntitatEstatal(__bean.getEntitatEstatal());
     __tmp.setPinfo(__bean.getPinfo());

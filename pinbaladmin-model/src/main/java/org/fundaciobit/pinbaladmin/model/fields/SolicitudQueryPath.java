@@ -39,10 +39,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.ESTATID);
   }
 
-  public LongField DEPARTAMENTID() {
-    return new LongField(getQueryPath(), SolicitudFields.DEPARTAMENTID);
-  }
-
   public LongField ORGANID() {
     return new LongField(getQueryPath(), SolicitudFields.ORGANID);
   }
@@ -189,14 +185,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     });
   }
 */
-
-  public DepartamentQueryPath DEPARTAMENT() {
-    return new DepartamentQueryPath(new QueryPath() {
-      public String getQueryPath() {
-          return SolicitudQueryPath.this.getQueryPath() + "departament" + ".";
-      }
-    });
-  }
 
   public OrganQueryPath ORGAN() {
     return new OrganQueryPath(new QueryPath() {

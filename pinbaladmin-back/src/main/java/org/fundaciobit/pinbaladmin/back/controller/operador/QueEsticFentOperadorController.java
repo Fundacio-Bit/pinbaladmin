@@ -228,7 +228,7 @@ public class QueEsticFentOperadorController {
 
                 if (soli.getEntitatEstatal() != null) {
                     tipus = "Estatal [" + id + "]";
-                } else if (soli.getDepartamentID() != null || soli.getOrganid() != null) {
+                } else if (soli.getOrganid() != null) {
                     tipus = "Local [" + id + "]";
                 }
                 titol = soli.getProcedimentNom();
