@@ -144,3 +144,6 @@ hs_err_pid*
 /pinbaladmin-api-interna/.settings
 /pinbaladmin-api-interna/.classpath
 /pinbaladmin-api-interna/.project
+/onlyEar.bat
+/pemfiles/intranet_caib_es.pem
+/tree.txt

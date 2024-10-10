@@ -1,0 +1,7 @@
+Assumpte: SW20240927: Alta autenticació a l'entorn SE/PRE/PRO
+
+Bon dia, 
+
+Per tal de canviar la securització a producció d'un usuari-aplicacio amb place_holders per utilitzar un tramit que hem creat a sistra2, hem de sol·licitar que es duguin a terme les pases del següent quadern de càrrega.
+
+Atentament,
