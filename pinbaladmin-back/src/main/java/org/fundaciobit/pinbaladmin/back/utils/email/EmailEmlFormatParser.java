@@ -49,7 +49,7 @@ public class EmailEmlFormatParser {
 		}
 
 		EmailMessageInfo emi = new EmailMessageInfo();
-		log.info("parseEml: " + msg.getMessageNumber());
+//		log.info("parseEml: " + msg.getMessageNumber());
 		emi.setNumber(msg.getMessageNumber());
 
 		// Este hace referencia a la columna Origen (message2email()),i a correo de contacto en Incidencia, y Solicitud
@@ -57,7 +57,7 @@ public class EmailEmlFormatParser {
 		// Este hace referencia a nombre de persona de contacto en Incidencia,y Solicitud
 		String replyToName;
 		
-		log.info("UEP replyTo: " + replyTo);
+//		log.info("UEP replyTo: " + replyTo);
 		if (replyTo == null || replyTo.equals("null") || replyTo.trim().equals("")) {
 			replyTo = getRecipients(msg.getFrom());
 			replyToName = getNames(msg.getFrom());
@@ -125,13 +125,13 @@ public class EmailEmlFormatParser {
 			Object o = msg.getContent();
 
 			String mime = msg.getContentType();
-			
+			int num = msg.getMessageNumber();
 			if (o instanceof String) {
 				
 				if (mime.indexOf("text/plain") != -1) {
-					log.info("Es String text/plain");
+					log.info("emi " + num + " -> text/plain");
 				} else if (mime.indexOf("text/html") != -1) {
-					log.info("Es String text/html");
+					log.info("emi " + num + " -> text/html");
 				}
 				emi.setBody((String) o);
 			} else if (o instanceof Multipart) {
@@ -139,9 +139,9 @@ public class EmailEmlFormatParser {
 				if (pos != -1) {
 					mime = mime.substring(0, pos);
 				}
-				log.info("Multipart: " + mime);
+				log.info("emi " + num + " -> multipart: " + mime);
 			} else {
-				log.info("mime: " + mime);
+				log.info("emi " + num + " -> mime: " + mime);
 			}
 		}
 		return emi;

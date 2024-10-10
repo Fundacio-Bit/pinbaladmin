@@ -381,7 +381,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 					String mailCedent = "";
 					cedentsAfegits.add(cedentID);
 
-					log.info("Servei: " + serv.getCodi() + " - Cedent: " + nomCedent + " - " + descCedent);
+//					log.info("Servei: " + serv.getCodi() + " - Cedent: " + nomCedent + " - " + descCedent);
 					
 					cedents.add(new String[] { cedentID.toString(), nomCedent + " - " + descCedent, mailCedent});
 				}

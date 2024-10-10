@@ -66,95 +66,111 @@ public class EmailUtil {
       * @throws Exception
       */
     public static void postMail(String subject, String message, boolean isHtml, String from, FitxerJPA adjunt, String... recipients)
-            throws Exception {
+			throws Exception {
 
-        
-        final Logger log = Logger.getLogger(EmailUtil.class);
+		boolean debug = Configuracio.isDesenvolupament();
+		final Logger log = Logger.getLogger(EmailUtil.class);
 
-        log.info("Provant log");
-        
-        Context ctx = new InitialContext();
-        log.info("ctx: " + ctx);
-        
-        Session session = (javax.mail.Session) ctx.lookup(Constants.MAIL_SERVICE);
-        log.info("session: " + session);
-        
-        Set<Entry<Object, Object>> set = session.getProperties().entrySet();
-        for (Entry<Object, Object> entry : set) {
-            log.info(entry.getKey() + " : " + entry.getValue());
-        }
-        
-        // Creamos el mensaje
-        MimeMessage msg = new MimeMessage(session);
-        
-        log.info("msg: " + msg);
+		if (debug) {
+			log.info("Provant log");
+		}
+		Context ctx = new InitialContext();
+		if (debug) {
+			log.info("ctx: " + ctx);
+		}
 
-        log.info("PRE-from: " + from);
-        
+		Session session = (javax.mail.Session) ctx.lookup(Constants.MAIL_SERVICE);
+
+		if (debug) {
+			log.info("session: " + session);
+		}
+		Set<Entry<Object, Object>> set = session.getProperties().entrySet();
+		for (Entry<Object, Object> entry : set) {
+			log.info(entry.getKey() + " : " + entry.getValue());
+		}
+
+		// Creamos el mensaje
+		MimeMessage msg = new MimeMessage(session);
+
+		if (debug) {
+			log.info("msg: " + msg);
+			log.info("PRE-from: " + from);
+		}
 //        from = "governdigital.pinbaladmin@fundaciobit.org";
-        
-        String noReply = "do-not-reply@fundaciobit.org";
-        InternetAddress[] replyTo = {new InternetAddress(noReply)};
-        msg.setReplyTo(replyTo);
-        
-        InternetAddress addressFrom = new InternetAddress(from);
-        log.info("addressFrom: " + addressFrom);
-        msg.setFrom(addressFrom);
 
-        // Indicamos los destinatarios
-        InternetAddress[] addressTo = new InternetAddress[recipients.length];
-        for (int i = 0; i < recipients.length; i++) {
-            addressTo[i] = new InternetAddress(recipients[i]);
-            log.info("addressTo[" + i + "]: " + addressTo[i]);
-        }
+		String noReply = "do-not-reply@fundaciobit.org";
+		InternetAddress[] replyTo = { new InternetAddress(noReply) };
+		msg.setReplyTo(replyTo);
 
-        final RecipientType type = RecipientType.TO;
-        log.info("type: " + type);
+		InternetAddress addressFrom = new InternetAddress(from);
+		if (debug) {
+			log.info("addressFrom: " + addressFrom);
+		}
+		msg.setFrom(addressFrom);
 
-        msg.setRecipients(type, addressTo);
+		// Indicamos los destinatarios
+		InternetAddress[] addressTo = new InternetAddress[recipients.length];
+		for (int i = 0; i < recipients.length; i++) {
+			addressTo[i] = new InternetAddress(recipients[i]);
+			if (debug) {
+				log.info("addressTo[" + i + "]: " + addressTo[i]);
+			}
+		}
 
-        // Configuramos el asunto
-        msg.setSubject(subject, "UTF-8");
-        msg.setSentDate(new Date());
-        
-        // Configuramos el contenido
-        if (isHtml) {
-            msg.setHeader("Content-Type", "text/html;charset=utf-8");
+		final RecipientType type = RecipientType.TO;
+		if (debug) {
+			log.info("type: " + type);
+		}
+		msg.setRecipients(type, addressTo);
 
-            Multipart multipart = new MimeMultipart();
-            
-            BodyPart messageBodyPart = new MimeBodyPart(); 
-            messageBodyPart.setContent(message,  "text/html; charset=utf-8");
-            
-            multipart.addBodyPart(messageBodyPart);
-            
-            if (adjunt != null) {
-                log.info("fitxerJPA: " + adjunt.getNom() + " - mime: " + adjunt.getMime());
-                
-                MimeBodyPart attachmentPart = new MimeBodyPart();
-                File fileAdjunt = FileSystemManager.getFile(adjunt.getFitxerID());
+		// Configuramos el asunto
+		msg.setSubject(subject, "UTF-8");
+		msg.setSentDate(new Date());
 
-                attachmentPart.setDataHandler(new DataHandler(new FileDataSource(fileAdjunt)));
-                attachmentPart.setFileName(adjunt.getNom());
-                
-                multipart.addBodyPart(attachmentPart);
-            }
-            
-            msg.setContent(multipart);
-        } else {
-            msg.setContent(message, "text/plain");
-        }
+		// Configuramos el contenido
+		if (isHtml) {
+			msg.setHeader("Content-Type", "text/html;charset=utf-8");
 
-        // Mandamos el mail
-        try {
-            log.info("Mandamos el mail: " + msg);
-            Transport.send(msg);
-            log.info("Mail mandado: " + msg);
-        }catch(Throwable th) {
-            log.error("Error amb correu: " + th.getMessage(), th);
-            throw th;
-        }
-    }
+			Multipart multipart = new MimeMultipart();
+
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(message, "text/html; charset=utf-8");
+
+			multipart.addBodyPart(messageBodyPart);
+
+			if (adjunt != null) {
+
+				if (debug) {
+					log.info("fitxerJPA: " + adjunt.getNom() + " - mime: " + adjunt.getMime());
+				}
+				MimeBodyPart attachmentPart = new MimeBodyPart();
+				File fileAdjunt = FileSystemManager.getFile(adjunt.getFitxerID());
+
+				attachmentPart.setDataHandler(new DataHandler(new FileDataSource(fileAdjunt)));
+				attachmentPart.setFileName(adjunt.getNom());
+
+				multipart.addBodyPart(attachmentPart);
+			}
+
+			msg.setContent(multipart);
+		} else {
+			msg.setContent(message, "text/plain");
+		}
+
+		// Mandamos el mail
+		try {
+			if (debug) {
+				log.info("Mandamos el mail: " + msg);
+			}
+			Transport.send(msg);
+			if (debug) {
+				log.info("Mail mandado: " + msg);
+			}
+		} catch (Throwable th) {
+			log.error("Error amb correu: " + th.getMessage(), th);
+			throw th;
+		}
+	}
     
     public static String getPeuCorreu(Long itemID, String tipus, String destinatari) {
 		//tipus pot ser "solicitud" o "incidencia"

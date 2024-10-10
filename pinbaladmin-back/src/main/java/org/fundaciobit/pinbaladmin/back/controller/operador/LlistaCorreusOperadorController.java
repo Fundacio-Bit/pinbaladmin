@@ -268,14 +268,14 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     @RequestMapping(value = "/amagarmissatgearxiu", method = RequestMethod.GET)
     public String amagarmissatgearxiu(HttpServletRequest request, HttpServletResponse response) {
-
+    	log.info("Click al botó per amagar missatge i arxiu");
         request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, false);
         return "redirect:" + getContextWeb() + "/list";
     }
 
     @RequestMapping(value = "/mostrarmissatgearxiu", method = RequestMethod.GET)
     public String mostrarmissatgearxiu(HttpServletRequest request, HttpServletResponse response) {
-
+    	log.info("Click al botó per mostrar missatge i arxiu");
         request.getSession().setAttribute(MOSTRAR_MISSATGE_ARXIU, true);
         return "redirect:" + getContextWeb() + "/list";
     }
@@ -286,7 +286,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 
 		Boolean mostrarMissatgeArxiu = (Boolean) request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
-		log.info("XYZ ZZZ postList(" + mostrarMissatgeArxiu + ")");
+		log.info("XYZ ZZZ postList(mostrarMissatgeArxiu: " + mostrarMissatgeArxiu + ")");
 		if (mostrarMissatgeArxiu == null || !mostrarMissatgeArxiu) {
 			log.info("No mostrar missatge arxiu");
 		} else {
@@ -559,9 +559,8 @@ public class LlistaCorreusOperadorController extends EmailController {
             List<EmailMessageInfo> emails = er.list(start, end, includeAttachments);
 
             for (EmailMessageInfo emi : emails) {
-            	log.info("XYZ ZZZ email: " + emi.getDisplayFrom());
                 EmailJPA e = message2email(emi);
-            	log.info("XYZ ZZZ email: " + e.getEnviador());
+            	log.info("emi " + emi.getNumber() + " - from: " + e.getEnviador());
 
                 list.add(e);
 
