@@ -437,33 +437,36 @@ public abstract class AbstractEventController<T> extends EventController impleme
             @PathVariable("itemStrID") String itemStrID, @PathVariable("destinatari") String destinataritEnc)
             throws I18NException {
 
-        Long itemID;
-        String destinatari;
 		try {
-
+			Long itemID;
+			String destinatari;
+			
 			if (isPublic()) {
 				itemID = HibernateFileUtil.decryptFileID(itemStrID);
+				log.info("/veureevents public: itemID => " + itemID + " - destinatariEnc => " + destinataritEnc);
+				
+				if (destinataritEnc == null || destinataritEnc.trim().length() == 0) {
+					log.info("/veureevents public: DESTINATARI NULL");
+					destinatari = "";
+//	            request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
+				} else {
+					try {
+						destinatari = HibernateFileUtil.decryptString(destinataritEnc);
+						log.info("/veureevents public: DESTINATARI->PERSONA => " + destinatari);
+					} catch (Throwable t) {
+						destinatari = "";
+//	                request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
+						log.error("/veureevents public: Error desencriptant destinatari persona: " + destinataritEnc + "-" + t.getMessage());
+					}
+				}
+				
 			} else {
+				String usr = request.getUserPrincipal().getName();
+				log.info("/veureevents operador (" + usr + "): itemStrID => " + itemStrID);
 				itemID = Long.parseLong(itemStrID);
+				destinatari = null;
 			}
 			
-	        log.info("/veureevents: itemID => " + itemID + " - destinatariEnc => " + destinataritEnc);
-	        
-	        if (destinataritEnc == null || destinataritEnc.trim().length() == 0) {
-	        	log.info("/veureevents: DESTINATARI NULL");
-	        	destinatari = "";
-//	            request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
-	        } else {
-	            try {
-	            	destinatari = HibernateFileUtil.decryptString(destinataritEnc);
-	            	log.info("/veureevents: DESTINATARI->PERSONA => " + destinatari);
-	            } catch (Throwable t) {
-	            	destinatari = "";
-//	                request.getSession().removeAttribute(SESSION_EVENT_DESTINATARI);
-	                log.error("Error desencriptant cedent: " + destinataritEnc + "-" + t.getMessage());
-	            }
-	        }
-	        
 	        request.getSession().setAttribute(SESSION_EVENT_SOLICITUD_INCIDENCIATECNICA_ID, itemID);
 	        request.getSession().setAttribute(SESSION_EVENT_DESTINATARI, destinatari);
 	        
