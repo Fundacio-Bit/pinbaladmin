@@ -644,8 +644,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             }
         }
 
-        Map<String, String> organGestorMap = filterForm.getMapOfOrganForOrganid();
-
         for (Solicitud soli : list) {
 
             if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_SENSE_ESTAT || soli.getProcedimentCodi().startsWith("CODI_")) {
