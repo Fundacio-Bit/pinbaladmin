@@ -80,7 +80,8 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         UserInfo info = null;
         // Si no interessa gestionar informació personal d'usuari, comentar aquest bloc.
         try {
-            IUserInformationPlugin plugin = getUserInformationPluginInstance();
+        	boolean debug = false;
+            IUserInformationPlugin plugin = getUserInformationPluginInstance(debug);
             info = plugin.getUserInfoByUserName(username);
         } catch (Throwable e) {
             String msg;
@@ -117,18 +118,21 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
 
     }
     
-    public static IUserInformationPlugin getUserInformationPluginInstance() throws I18NException {
+    public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug) throws I18NException {
         if (loginPlugin == null) {
 //            final String propertyPlugin = LOGIN_PLUGIN_KEY;
 
             Properties propTmp = Configuracio.getSystemAndFileProperties();
 
-            Set<Object> set = propTmp.keySet();
-            for (Object object : set) {
-                String key = (String) object;
-                String value = propTmp.getProperty(key);
-                log.info(key + ": " + value);
-            }
+			if (debug) {
+				log.info("Propietats de sistema i fitxer de configuració:");
+				Set<Object> set = propTmp.keySet();
+				for (Object object : set) {
+					String key = (String) object;
+					String value = propTmp.getProperty(key);
+					log.info(key + ": " + value);
+				}
+			}
             
             String className = propTmp.getProperty(LOGIN_PLUGIN_KEY);
             
@@ -143,6 +147,8 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");
             }
             loginPlugin = (IUserInformationPlugin) pluginInstance;
+        }else {
+			log.info("loginPlugin ja existeix. " + loginPlugin.getClass().getName());
         }
         return loginPlugin;
     }
