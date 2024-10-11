@@ -62,6 +62,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends SolicitudEstatalOperadorController {
 
     public static final String XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+//    
+    public static final String ODS_MIME = "application/vnd.oasis.opendocument.spreadsheet";
 
     @RequestMapping(value = "/nou", method = RequestMethod.GET)
     public String nou() {
@@ -154,15 +156,15 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
         // Cercar XLSX dins dels attachments
 
         log.info(" Cercar XLSX dins dels attachments");
-
+        boolean tieneOds = false;
         List<EmailAttachmentInfo> attachs = emi.getAttachments();
 
         EmailAttachmentInfo xlsx = null;
 
 		for (EmailAttachmentInfo eai : attachs) {
-
+			log.info("ContentType: " + eai.getContentType() + " Fitxer: " + eai.getFileName());
 			if (XLSX_MIME.equalsIgnoreCase(eai.getContentType())) {
-				log.info("trobat: " + eai.getFileName());
+				log.info("trobat excel: " + eai.getFileName());
 				xlsx = eai;
 				break;
 			}
@@ -172,8 +174,15 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 			log.info("Cercant Extensio: " + ext);
 
 			if (".xlsx".equalsIgnoreCase(ext)) {
+				log.info("trobat excel: " + eai.getFileName());
 				xlsx = eai;
 				break;
+			}
+			
+			if (".ods".equalsIgnoreCase(ext)) {
+				log.info("trobat ods: " + eai.getFileName());
+				tieneOds = true;
+				continue;
 			}
 
 			if (".zip".equalsIgnoreCase(ext)) {
@@ -220,10 +229,14 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 		}
         
         if (xlsx == null) {
-            String msg = "El document enviat " + emi.getSubject() + " no conté cap fitxer .xlsx";
+        	String msg = "No conté cap fitxer .xlsx";
+        	if (tieneOds) {
+        		msg += ", però si un fitxer .ods. No es pot processar fitxers .ods";
+        	}
             log.error(msg);
             throw new Exception(msg);
         }
+
 
         List<SolicitudJPA> solicituds;
         try {
