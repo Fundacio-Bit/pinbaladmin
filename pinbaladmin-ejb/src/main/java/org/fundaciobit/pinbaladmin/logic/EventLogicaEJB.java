@@ -63,7 +63,15 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 					destinatari = "CEDENT|" + ev.getDestinatari();
 				} else if (tipus == Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC) {
 					destinatari = "CONTACTE|" + ev.getDestinatari();
+				} else if (tipus == Constants.EVENT_TIPUS_COMENTARI_SUPORT) {
+					
+					if (ev.getDestinatarimail().equals(Configuracio.getCorreoSoporteEstatal())) {
+						destinatari = "SOPORTE";
+					} else if (ev.getDestinatarimail().equals(Configuracio.getCorreuSuportCAIB())) {
+						destinatari = "SUPORT";
+					}
 				}
+				
 
 				log.info("EventLogicaEJB.create: tipus: " + tipus + " - destinatari: " + destinatari);
 				peuCorreu = EmailUtil.getPeuCorreu(ev.getSolicitudID(), "solicitud", destinatari);

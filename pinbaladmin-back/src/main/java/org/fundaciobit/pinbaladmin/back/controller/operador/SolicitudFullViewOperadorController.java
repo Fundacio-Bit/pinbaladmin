@@ -143,7 +143,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
 							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
 			
-			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT) {
+			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
 						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
 			}
@@ -153,7 +153,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
 			}
 
-			if(solicitud.getEstatID() >= Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR) {
+			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID) {
 				log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
 				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
@@ -200,6 +201,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			}
 		} else {
 			// Si és estatal
+			
+			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
+				// Boto per enviar correus als cedents
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
+						"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
+			}
 			
 			//Boto per enviar correus als cedents
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",

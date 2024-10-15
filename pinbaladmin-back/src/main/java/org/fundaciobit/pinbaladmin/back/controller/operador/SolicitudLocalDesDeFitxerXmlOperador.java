@@ -167,7 +167,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 }
                 
                 // java.lang.Long estatID = null;
-                solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
+                solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director);
                 // java.lang.String ticketAssociat = null;
                 // java.lang.String ticketNumeroSeguiment = null;
                 // java.lang.Long departamentID = null;

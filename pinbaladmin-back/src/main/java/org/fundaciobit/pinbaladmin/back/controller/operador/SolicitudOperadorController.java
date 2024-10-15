@@ -44,12 +44,15 @@ import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentQueryPath;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
@@ -205,7 +208,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             solicitudForm.setAttachedAdditionalJspCode(true);
             
-            soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT);
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
@@ -1308,7 +1310,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         if (estatal) {
             __tmp = new java.util.ArrayList<StringKeyValue>();
             for (long estat : Constants.ESTATS_SOLICITUD) {
-            	if (estat == 40L || estat == 10L || estat == 60L || estat == 20L) {
+				if (estat == Constants.SOLICITUD_ESTAT_AUTORITZAT 
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents
+						|| estat == Constants.SOLICITUD_ESTAT_TANCAT
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR) {
             		String key = String.valueOf(estat);
             		__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
             	}
@@ -1441,5 +1447,4 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         return __tmp;
     }
-
 }

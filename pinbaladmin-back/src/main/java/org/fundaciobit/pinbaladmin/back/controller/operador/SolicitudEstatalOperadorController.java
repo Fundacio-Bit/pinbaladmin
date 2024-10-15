@@ -148,7 +148,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 		if (errors > 0) {
 			HtmlUtils.saveMessageError(request, "Hi ha hagut errors en l'enviament de correus");
 		} else {
-			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent);
 			solicitudEjb.update(soli);
 			HtmlUtils.saveMessageSuccess(request, "Correus enviats correctament");
 		}

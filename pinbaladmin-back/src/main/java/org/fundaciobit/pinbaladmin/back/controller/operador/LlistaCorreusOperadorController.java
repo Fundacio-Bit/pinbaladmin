@@ -188,15 +188,12 @@ public class LlistaCorreusOperadorController extends EmailController {
         {
         	// Tipus d'Incidencies
             List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
-
-			int[] tipus = { Constants.INCIDENCIA_TIPUS_TECNICA, Constants.INCIDENCIA_TIPUS_CONSULTA,
-					Constants.INCIDENCIA_TIPUS_INTEGRACIONS, Constants.INCIDENCIA_TIPUS_ROLEPERMISOS };
-			String[] tipusNames = { "Tècnica", "Consulta", "Integracions", "Roles de permisos" };
-			
-			for (int i = 0; i < tipus.length; i++) {
-				tipusIncidencies.add(new StringKeyValue(String.valueOf(tipus[i]), tipusNames[i]));
+            int [] estats = Constants.TIPUS_INCIDENCIES;
+			for (int estatID : estats) {
+				String key = String.valueOf(estatID);
+				String value = I18NUtils.tradueix("incidencia.tipus." + estatID);
+				tipusIncidencies.add(new StringKeyValue(key, value));
 			}
-            
             mav.addObject("tipusIncidencies", tipusIncidencies);
         }
         
@@ -204,17 +201,13 @@ public class LlistaCorreusOperadorController extends EmailController {
         	// Tipus de Solicituds
             List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
 
-			long[] estats = { Constants.SOLICITUD_ESTAT_SENSE_ESTAT, Constants.SOLICITUD_ESTAT_PENDENT,
-					Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
-					Constants.SOLICITUD_ESTAT_ESMENES, Constants.SOLICITUD_ESTAT_AUTORITZAT,
-					Constants.SOLICITUD_ESTAT_PENDENT_PINFO, Constants.SOLICITUD_ESTAT_TANCAT };
-			
-			String[] estatsNames = { "Sense Estat", "Pendent", "Pendent Firma Director", "Pendent d'autoritzar", "Esmenes", "Autoritzat", "Pendent pinfo", "Tancat" };
-            
-			for (int i = 0; i < estats.length; i++) {
-				estatSolicituds.add(new StringKeyValue(String.valueOf(estats[i]), estatsNames[i]));
+            long[] estats = Constants.ESTATS_SOLICITUD;
+			for (long estatID : estats) {
+				String key = String.valueOf(estatID);
+				String value = I18NUtils.tradueix("solicitud.estat." + estatID);
+				estatSolicituds.add(new StringKeyValue(key, value));
 			}
-
+            
             mav.addObject("estatSolicituds", estatSolicituds);
         }
 

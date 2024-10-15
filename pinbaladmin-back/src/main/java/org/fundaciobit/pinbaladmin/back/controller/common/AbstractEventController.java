@@ -77,6 +77,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
     @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService entitatServeiLogicEjb;
     
+    //Afegir EJB de solicitud Logica
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService solicitudLogicEjb;
+    
     public abstract boolean isPublic();
 
     public abstract boolean isSolicitud();
@@ -231,35 +235,42 @@ public abstract class AbstractEventController<T> extends EventController impleme
             eventForm.addHiddenField(DATAEVENT);
             eventForm.addHiddenField(NOLLEGIT);
 
-            if (isPublic()) {
+			if (isPublic()) {
 
-                String cadenaDestinatari = (String) request.getSession().getAttribute(SESSION_EVENT_DESTINATARI);
-                log.info("cadenaDestinatari => " + cadenaDestinatari);
-                if (cadenaDestinatari != null && cadenaDestinatari.trim().length() > 0) {
-                	String[] parts = cadenaDestinatari.split("\\|");
-                	String tipus = parts[0];
-                	String persona = parts[1]; //Anterior destinatari del correu del que ve
-					log.info("persona => " + persona + " - tipus => " + tipus);
-					
-					switch (tipus) {
-					case "CEDENT":
-						ev.setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
-						ev.setPersona(persona);
-						break;
-					case "CONTACTE":
+				String cadenaDestinatari = (String) request.getSession().getAttribute(SESSION_EVENT_DESTINATARI);
+				log.info("cadenaDestinatari => " + cadenaDestinatari);
+				if (cadenaDestinatari != null && cadenaDestinatari.trim().length() > 0) {
+					String[] parts = cadenaDestinatari.split("\\|");
+					if (parts.length == 2) {
+						String tipus = parts[0];
+						String persona = parts[1]; // Anterior destinatari del correu del que ve
+						log.info("persona => " + persona + " - tipus => " + tipus);
+
+						switch (tipus) {
+						case "CEDENT":
+							ev.setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
+							ev.setPersona(persona);
+							break;
+						case "CONTACTE":
+							ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
+							ev.setPersona(persona);
+							break;
+						}
+					} else {
+						//Error amb la cadena de destinatari
 						ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
-						ev.setPersona(persona);
-						break;
+						ev.setPersona(getPersonaContacteEmail(item));
 					}
-                } else {
-                	//Si es public, i no hi ha destinatari, comentari al contacte de la soli/incidencia
+				} else {
+					// Si es public, i no hi ha destinatari, comentari al contacte de la
+					// soli/incidencia
 					ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
-                    ev.setPersona(getPersonaContacteEmail(item));
-                }
+					ev.setPersona(getPersonaContacteEmail(item));
+				}
 
 //                ev.setPersona(email);
-                ev.setNoLlegit(true);
-            } else {
+				ev.setNoLlegit(true);
+			} else {
             	String asumpte = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + itemNom.toUpperCase() + " - " + getTitolItem(itemID);
 				if (isSolicitud()) {
 					Solicitud soli = ((Solicitud) item);
@@ -711,31 +722,28 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         // Tipus d'Incidencies
         {
-
             List<StringKeyValue> tipusIncidencies = new java.util.ArrayList<StringKeyValue>();
-
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-            tipusIncidencies.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
-
+            
+            int [] estats = Constants.TIPUS_INCIDENCIES;
+			for (int estatID : estats) {
+				String key = String.valueOf(estatID);
+				String value = I18NUtils.tradueix("incidencia.tipus." + estatID);
+				tipusIncidencies.add(new StringKeyValue(key, value));
+			}
             mav.addObject("tipusIncidencies", tipusIncidencies);
         }
 
         // Tipus de Solicituds
         {
-
             List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
 
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_SENSE_ESTAT), "Sense Estat"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT), "Pendent"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director), "Pendent Firma Director"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR), "Pendent d'autoritzar"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_ESMENES), "Esmenes"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_AUTORITZAT), "Autoritzat"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_PENDENT_PINFO), "Pendent pinfo"));
-            estatSolicituds.add(new StringKeyValue(String.valueOf(Constants.SOLICITUD_ESTAT_TANCAT), "Tancat"));
-
+            long[] estats = Constants.ESTATS_SOLICITUD;
+			for (long estatID : estats) {
+				String key = String.valueOf(estatID);
+				String value = I18NUtils.tradueix("solicitud.estat." + estatID);
+				estatSolicituds.add(new StringKeyValue(key, value));
+			}
+            
             mav.addObject("estatSolicituds", estatSolicituds);
         }
 
@@ -847,9 +855,54 @@ public abstract class AbstractEventController<T> extends EventController impleme
     }
 
     @Override
-    public EventJPA create(HttpServletRequest request, EventJPA event) throws I18NException, I18NValidationException {
-        return (EventJPA) eventLogicaEjb.create(event);
-    }
+	public EventJPA create(HttpServletRequest request, EventJPA event) throws I18NException, I18NValidationException {
+		// Afegint un event, s'ha de comprovar que si es una resposta de cedent d'una
+		// estatal, canviar l'estat de la solicitud depenent de les respostes pendents.
+		EventJPA eventCreat = (EventJPA) eventLogicaEjb.create(event);
+
+		Integer[] estatsCedents = { EVENT_TIPUS_CEDENT_RESPOSTA, EVENT_TIPUS_CONSULTA_A_CEDENT };
+
+		if (eventCreat.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
+			Long itemID = isSolicitud() ? eventCreat.getSolicitudID() : eventCreat.getIncidenciaTecnicaID();
+			T item = findItemByPrimaryKey(itemID);
+			if (item instanceof Solicitud) {
+				Solicitud soli = ((Solicitud) item);
+				Long soliID = soli.getSolicitudID();
+				if (soli.getEntitatEstatal() != null) {
+					// Comprovar si hi ha més respostes pendents
+					List<Event> eventsPendents = eventLogicaEjb.select(
+							Where.AND(EventFields.SOLICITUDID.equal(soliID), EventFields.TIPUS.in(estatsCedents)));
+					int numConsultes = 0;
+					int numRespostes = 0;
+					for (Event eventPendent : eventsPendents) {
+						if (eventPendent.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
+							numRespostes++;
+						} else {
+							numConsultes++;
+						}
+					}
+
+					Long nouEstat;
+					if (numConsultes == 0) {
+						log.info("ESTATAL - SoliID :" + soliID + " no hi ha consultes a cedents");
+						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents;
+					} else if (numConsultes == numRespostes) {
+						log.info("ESTATAL - SoliID :" + soliID + " Totes les consultes a cedents respostes ("
+								+ numRespostes + "/" + numConsultes + ")");
+						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+					} else {
+						log.info("ESTATAL - SoliID :" + soliID + " Consultes a cedents pendents de resposta ("
+								+ numRespostes + "/" + numConsultes + ")");
+						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent;
+					}
+
+					soli.setEstatID(nouEstat);
+					solicitudLogicEjb.update(soli);
+				}
+			}
+		}
+		return eventCreat;
+	}
 
     public abstract Long getItemID(T item);
 

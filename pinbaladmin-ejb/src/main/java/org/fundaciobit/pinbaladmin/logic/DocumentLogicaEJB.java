@@ -396,7 +396,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 			// a PENDENT_AUTORITZAR
 
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
 			solicitudLogicaEjb.update(soli);
 		}
 

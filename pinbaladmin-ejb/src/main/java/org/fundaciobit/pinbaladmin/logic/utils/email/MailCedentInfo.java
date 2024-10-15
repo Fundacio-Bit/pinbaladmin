@@ -73,7 +73,7 @@ public class MailCedentInfo {
 		case DISCAPACITAT:
 			this.subject = "Discapacitat";
 			this.message = msg;
-			dests.add("amalorda@dgad.caib.es");
+//			dests.add("amalorda@dgad.caib.es");
 			dests.add("emreynes@dgad.caib.es");
 			break;
 

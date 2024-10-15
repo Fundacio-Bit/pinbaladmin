@@ -173,10 +173,32 @@ public class EmailUtil {
 	}
     
     public static String getPeuCorreu(Long itemID, String tipus, String destinatari) {
+    	
+		if (destinatari == "SOPORTE") {
+			destinatari = "Soporte Intermediación";
+		}
+		if (destinatari == "SUPORT") {
+			destinatari = "Suport CAIB";
+		}
+    	
 		//tipus pot ser "solicitud" o "incidencia"
 		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
 				+ HibernateFileUtil.encryptFileID(itemID) + (destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(destinatari)));
 		
+		//Si es un correo a soporte, debe estar en castellano
+		if (destinatari.equals("Soporte Intermediación")) {
+			String msgEsp = "<div id=\"peu_correu\">" + "  <div id=\"reObrir\">"
+					+ "     Para responder, por favor, utilice el siguiente enlace: <a" + "     href=\"" + url
+					+ "\"> Acceder a solicitud</a>" + "  </div>" + "  <div id=\"firma\">"
+					+ "		Saludos<br /> <i>Área de Gobierno Digital - Fundación BIT</i>" + "  </div>"
+					+ "  <div id=\"noContestar\">"
+					+ "		Por favor, NO CONTESTE directamente a este correo, para hacer cualquier consulta sobre la "
+					+ tipus + " acceda al enlace aportado en este correo." + "  </div>" + "  <style>"
+					+ "     #peu_correu {margin: .5rem;}" + "     #peu_correu div {padding: .5rem 0;}"
+					+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}"
+					+ "  </style>" + "</div>";
+			return msgEsp;
+		}
 		
 		String msg = "<div id=\"peu_correu\">"
 				
