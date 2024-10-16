@@ -27,6 +27,8 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final IncidenciaTecnicaJPAManager pad_incidenciatecnica;
    private final OperadorJPAManager pad_operador;
    private final OrganJPAManager pad_organ;
+   private final PINFOJPAManager pad_pinfo;
+   private final PinfoDataJPAManager pad_pinfodata;
    private final ServeiJPAManager pad_servei;
    private final SolicitudJPAManager pad_solicitud;
    private final SolicitudServeiJPAManager pad_solicitudservei;
@@ -66,6 +68,8 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_incidenciatecnica = new IncidenciaTecnicaJPAManager(__em);
     this.pad_operador = new OperadorJPAManager(__em);
     this.pad_organ = new OrganJPAManager(__em);
+    this.pad_pinfo = new PINFOJPAManager(__em);
+    this.pad_pinfodata = new PinfoDataJPAManager(__em);
     this.pad_servei = new ServeiJPAManager(__em);
     this.pad_solicitud = new SolicitudJPAManager(__em);
     this.pad_solicitudservei = new SolicitudServeiJPAManager(__em);
@@ -166,6 +170,14 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public IOrganManager getOrganManager() {
         return this.pad_organ;
+    };
+
+    public IPINFOManager getPINFOManager() {
+        return this.pad_pinfo;
+    };
+
+    public IPinfoDataManager getPinfoDataManager() {
+        return this.pad_pinfodata;
     };
 
     public IServeiManager getServeiManager() {

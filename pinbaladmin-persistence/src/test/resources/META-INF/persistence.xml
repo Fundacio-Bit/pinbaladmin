@@ -28,6 +28,8 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.OperadorJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.OrganJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.PINFOJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.ServeiJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA</class>

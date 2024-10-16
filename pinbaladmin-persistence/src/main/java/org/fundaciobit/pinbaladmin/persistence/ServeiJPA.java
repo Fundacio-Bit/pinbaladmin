@@ -187,6 +187,19 @@ public class ServeiJPA implements Servei {
     return __result;
   }
 
+// EXP  Field:serveiid | Table: pad_pinfodata | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servei")
+    private Set<PinfoDataJPA> pinfoDatas = new HashSet<PinfoDataJPA>(0);
+    public  Set<PinfoDataJPA> getPinfoDatas() {
+    return this.pinfoDatas;
+  }
+
+    public void setPinfoDatas(Set<PinfoDataJPA> pinfoDatas) {
+      this.pinfoDatas = pinfoDatas;
+    }
+
+
 // EXP  Field:serveiid | Table: pad_solicitudservei | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "servei")
@@ -274,6 +287,10 @@ public class ServeiJPA implements Servei {
     if(!"SolicitudServeiJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServeis) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServeis())) ) {
       __tmp.setSolicitudServeis(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServeis(), __alreadyCopied,"ServeiJPA"));
+    }
+    if(!"PinfoDataJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfoDatas) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfoDatas())) ) {
+      __tmp.setPinfoDatas(PinfoDataJPA.copyJPA(__jpa.getPinfoDatas(), __alreadyCopied,"ServeiJPA"));
     }
     // Copia de beans complexes (IMP)
     if(!"EntitatServeiJPA".equals(origenJPA) && 

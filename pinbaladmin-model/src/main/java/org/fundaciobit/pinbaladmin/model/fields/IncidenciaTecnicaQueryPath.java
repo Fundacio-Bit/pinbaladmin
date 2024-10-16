@@ -94,4 +94,18 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
   }
 */
 
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public PINFOQueryPath PINFOS() {
+    return new PINFOQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return IncidenciaTecnicaQueryPath.this.getQueryPath() + "pINFOs" + ".";
+      }
+    });
+  }
+*/
+
 }

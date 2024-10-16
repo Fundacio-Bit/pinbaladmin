@@ -706,6 +706,26 @@
     </definition>
 
 
+    <definition name="pINFOFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="pINFO.pINFO" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pINFOForm.jsp" />
+    </definition>
+    
+    <definition name="pINFOListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pINFOList.jsp" />
+    </definition>
+
+
+    <definition name="pinfoDataFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="pinfoData.pinfoData" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoDataForm.jsp" />
+    </definition>
+    
+    <definition name="pinfoDataListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoDataList.jsp" />
+    </definition>
+
+
     <definition name="serveiFormWebDB" extends="webdb">
         <put-attribute name="titol" value="servei.servei" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiForm.jsp" />

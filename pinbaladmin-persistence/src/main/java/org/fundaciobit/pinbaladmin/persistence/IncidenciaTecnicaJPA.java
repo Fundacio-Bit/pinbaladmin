@@ -280,6 +280,19 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     }
 
 
+// EXP  Field:incidenciaid | Table: pad_pinfo | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incidenciaTecnica")
+    private Set<PINFOJPA> pINFOs = new HashSet<PINFOJPA>(0);
+    public  Set<PINFOJPA> getPINFOs() {
+    return this.pINFOs;
+  }
+
+    public void setPINFOs(Set<PINFOJPA> pINFOs) {
+      this.pINFOs = pINFOs;
+    }
+
+
 
  // ---------------  STATIC METHODS ------------------
   public static IncidenciaTecnicaJPA toJPA(IncidenciaTecnica __bean) {
@@ -332,6 +345,10 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     if(!"EventJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
       __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"IncidenciaTecnicaJPA"));
+    }
+    if(!"PINFOJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pINFOs) || org.hibernate.Hibernate.isInitialized(__jpa.getPINFOs())) ) {
+      __tmp.setPINFOs(PINFOJPA.copyJPA(__jpa.getPINFOs(), __alreadyCopied,"IncidenciaTecnicaJPA"));
     }
     // Copia de beans complexes (IMP)
 

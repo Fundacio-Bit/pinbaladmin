@@ -510,6 +510,19 @@ public class SolicitudJPA implements Solicitud {
     }
 
 
+// EXP  Field:procedimentid | Table: pad_pinfodata | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitud")
+    private Set<PinfoDataJPA> pinfoDatas = new HashSet<PinfoDataJPA>(0);
+    public  Set<PinfoDataJPA> getPinfoDatas() {
+    return this.pinfoDatas;
+  }
+
+    public void setPinfoDatas(Set<PinfoDataJPA> pinfoDatas) {
+      this.pinfoDatas = pinfoDatas;
+    }
+
+
 // EXP  Field:solicitudid | Table: pad_solicitudservei | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitud")
@@ -641,6 +654,10 @@ public class SolicitudJPA implements Solicitud {
     if(!"SolicitudServeiJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServeis) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServeis())) ) {
       __tmp.setSolicitudServeis(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServeis(), __alreadyCopied,"SolicitudJPA"));
+    }
+    if(!"PinfoDataJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfoDatas) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfoDatas())) ) {
+      __tmp.setPinfoDatas(PinfoDataJPA.copyJPA(__jpa.getPinfoDatas(), __alreadyCopied,"SolicitudJPA"));
     }
     if(!"DocumentSolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.documentSolicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getDocumentSolicituds())) ) {

@@ -2423,6 +2423,18 @@
               "type": 0
             },
             {
+              "name": "pad_pinfo_fitxer_fitxerfirm_fk",
+              "table": "pad_pinfo",
+              "field": "fitxerfirmatid",
+              "type": 0
+            },
+            {
+              "name": "pad_pinfo_fitxer_fitxerid_fk",
+              "table": "pad_pinfo",
+              "field": "fitxerid",
+              "type": 0
+            },
+            {
               "name": "pad_solicitud_fitxer_fk",
               "table": "pad_solicitud",
               "field": "documentsolicitudid",
@@ -3172,6 +3184,12 @@
               "table": "pad_event",
               "field": "incidenciatecnicaid",
               "type": 0
+            },
+            {
+              "name": "pad_pinfo_inctecnica_incide_fk",
+              "table": "pad_pinfo",
+              "field": "incidenciaid",
+              "type": 0
             }
           ]
         },
@@ -3854,6 +3872,471 @@
       ]
     },
     {
+      "name": "pad_pinfo",
+      "nameJava": "PINFO",
+      "shortName": "pinfo",
+      "labels": {
+        "ca": "PINFO",
+        "es": "PINFO"
+      },
+      "labelsPlural": {
+        "ca": "PINFOs",
+        "es": "PINFOs"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_pinfo_pk",
+          "index": "pad_pinfo_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "pinfoid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "ID Pinfo",
+            "es": "ID Pinfo"
+          },
+          "javaName": "PinfoID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_pinfo_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pfdat_pinfo_pinfoid_fk",
+              "table": "pad_pinfodata",
+              "field": "pinfoid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "index": "pad_pinfo_incidenciaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "incidenciaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Incidencia ID",
+            "es": "Incidencia ID"
+          },
+          "javaName": "IncidenciaID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfo_incidenciaid_fk",
+              "table": "pad_incidenciatecnica",
+              "field": "incidenciatecnicaid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pinfo_inctecnica_incide_fk",
+              "table": "pad_incidenciatecnica",
+              "field": "incidenciatecnicaid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estat",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "estat",
+            "es": "estat"
+          },
+          "javaName": "estat",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_pinfo_fitxerid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer",
+            "es": "Fichero"
+          },
+          "javaName": "fitxerID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfo_fitxerid_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pinfo_fitxer_fitxerid_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_pinfo_fitxerfirmatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerfirmatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Firmat",
+            "es": "Fichero Firmado"
+          },
+          "javaName": "fitxerfirmatID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfo_fitxerfirmatid_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pinfo_fitxer_fitxerfirm_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "portafibid",
+          "sqlType": 12,
+          "size": 50,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "ID PortaFIB",
+            "es": "ID PortaFIB"
+          },
+          "javaName": "portafibid",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_pinfodata",
+      "nameJava": "PinfoData",
+      "shortName": "pfdat",
+      "labels": {
+        "ca": "pinfodata",
+        "es": "pinfodata"
+      },
+      "labelsPlural": {
+        "ca": "pinfodatas",
+        "es": "pinfodatas"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_pinfodata_pk",
+          "index": "pad_pinfodata_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "pinfodataid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "pinfodataid",
+            "es": "pinfodataid"
+          },
+          "javaName": "pinfodataID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_pinfodata_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_pinfodata_pinfoid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "pinfoid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "pinfoid",
+            "es": "pinfoid"
+          },
+          "javaName": "pinfoID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfodata_pinfoid_fk",
+              "table": "pad_pinfo",
+              "field": "pinfoid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pfdat_pinfo_pinfoid_fk",
+              "table": "pad_pinfo",
+              "field": "pinfoid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estat",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "estat",
+            "es": "estat"
+          },
+          "javaName": "estat",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "usuariid",
+          "sqlType": 12,
+          "size": 200,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "usuariid",
+            "es": "usuariid"
+          },
+          "javaName": "usuariid",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_pinfodata_soli_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "procedimentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "procedimentid",
+            "es": "procedimentid"
+          },
+          "javaName": "procedimentID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfodata_procedimentid_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pfdat_solicitud_id_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_pinfodata_serveiid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "serveiid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "serveiid",
+            "es": "serveiid"
+          },
+          "javaName": "serveiID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_pinfodata_serveiid_fk",
+              "table": "pad_servei",
+              "field": "serveiid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_pfdat_servei_serveiid_fk",
+              "table": "pad_servei",
+              "field": "serveiid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "alta",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "alta",
+            "es": "alta"
+          },
+          "javaName": "alta",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
       "name": "pad_servei",
       "nameJava": "Servei",
       "shortName": "servei",
@@ -3901,6 +4384,12 @@
             ]
           },
           "foreignKeys": [
+            {
+              "name": "pad_pfdat_servei_serveiid_fk",
+              "table": "pad_pinfodata",
+              "field": "serveiid",
+              "type": 0
+            },
             {
               "name": "pad_soliservei_servei_fk",
               "table": "pad_solicitudservei",
@@ -4200,6 +4689,12 @@
               "name": "pad_event_solicitud_soli_fk",
               "table": "pad_event",
               "field": "solicitudid",
+              "type": 0
+            },
+            {
+              "name": "pad_pfdat_solicitud_id_fk",
+              "table": "pad_pinfodata",
+              "field": "procedimentid",
               "type": 0
             },
             {

@@ -154,6 +154,20 @@ ${entityname}
         </span></a>
         </li>
 
+    <%-- PINFO --%>
+       <fmt:message var="entityname" key="pINFO.pINFO.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/pINFO/list/1"/>" ><span style="${(fn:contains(url, 'pINFO/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
+    <%-- PinfoData --%>
+       <fmt:message var="entityname" key="pinfoData.pinfoData.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/pinfoData/list/1"/>" ><span style="${(fn:contains(url, 'pinfoData/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+${entityname}
+        </span></a>
+        </li>
+
     <%-- Servei --%>
        <fmt:message var="entityname" key="servei.servei.plural"/>
         <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/servei/list/1"/>" ><span style="${(fn:contains(url, 'servei/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
