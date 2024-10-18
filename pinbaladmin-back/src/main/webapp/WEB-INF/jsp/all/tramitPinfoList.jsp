@@ -5,42 +5,15 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-</head>
-<body>
-	<h2>Dades solicitant</h2>
-	<div id="dades-incidencia-container">
-		<!--
-	|			|Usuari	 | Usuari					|
-	|SOLICITANT	|Nom 	 | Nom						|
-	|			|Telefon | Telefon | Correu | Correu|	
- -->
-		<table id="dades-solicitant">
-			<tr>
-				<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT</td>
-				<td class="label">Usuari</td>
-				<td class="value" colspan="3">${usuariData}</td>
-			</tr>
-			<tr>
-				<td class="label">Nom</td>
-				<td class="value" colspan="3">${incidencia.contacteNom}</td>
-			</tr>
-			<tr>
-				<td class="label">Telefon</td>
-				<td class="value">${incidencia.contacteTelefon}</td>
-				<td class="label">Correu</td>
-				<td class="value">${incidencia.contacteEmail}</td>
-		</table>
-	</div>
 
-	<div>Aqui la informacion de los permisos a solicitar.</div>
 
-	<style>
+<style>
 #dades-incidencia-container {
 	margin: auto;
 	width: fit-content;
 	background: lightgray;
 	border-radius: 6px;
-	padding: 5px  1rem;
+	padding: 5px 1rem;
 }
 
 #dades-solicitant {
@@ -59,6 +32,43 @@
 #dades-solicitant .value {
 	
 }
+
+
+#includedContentLlistatPinfoData {
+  margin: 0 10rem;
+}
 </style>
+
+</head>
+<body>
+	<h2>Dades solicitant</h2>
+	<div id="dades-incidencia-container">
+		<!--
+	|			|Usuari	 | Usuari					|
+	|SOLICITANT	|Nom 	 | Nom						|
+	|			|Telefon | Telefon | Correu | Correu|	
+ -->
+		<table id="dades-solicitant">
+			<tr>
+				<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT
+				</td>
+				<td class="label">Usuari</td>
+				<td class="value" colspan="3">${usuariData}</td>
+			</tr>
+			<tr>
+				<td class="label">Nom</td>
+				<td class="value" colspan="3">${incidencia.contacteNom}</td>
+			</tr>
+			<tr>
+				<td class="label">Telefon</td>
+				<td class="value">${incidencia.contacteTelefon}</td>
+				<td class="label">Correu</td>
+				<td class="value">${incidencia.contacteEmail}</td>
+		</table>
+	</div>
+
+	<div id="includedContentLlistatPinfoData">
+		<%@ include file="/WEB-INF/jsp/webdb/pinfoDataList.jsp"%>
+	</div>
 </body>
 </html>

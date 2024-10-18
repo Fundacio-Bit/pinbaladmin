@@ -20,8 +20,10 @@ public class PinfoDataForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.pinfoData = __toClone.pinfoData;
     this.listOfPINFOForPinfoID = __toClone.listOfPINFOForPinfoID;
+    this.listOfValuesForEstat = __toClone.listOfValuesForEstat;
     this.listOfSolicitudForProcedimentID = __toClone.listOfSolicitudForProcedimentID;
     this.listOfServeiForServeiID = __toClone.listOfServeiForServeiID;
+    this.listOfValuesForAlta = __toClone.listOfValuesForAlta;
   }
   
   public PinfoDataForm(PinfoDataJPA pinfoData, boolean nou) {
@@ -49,6 +51,18 @@ public class PinfoDataForm extends PinbalAdminBaseForm {
 
 
 
+  private List<StringKeyValue> listOfValuesForEstat;
+
+  public List<StringKeyValue> getListOfValuesForEstat() {
+    return this.listOfValuesForEstat;
+  }
+
+  public void setListOfValuesForEstat(List<StringKeyValue> listOfValuesForEstat) {
+    this.listOfValuesForEstat = listOfValuesForEstat;
+  }
+
+
+
   private List<StringKeyValue> listOfSolicitudForProcedimentID;
 
   public List<StringKeyValue> getListOfSolicitudForProcedimentID() {
@@ -69,6 +83,18 @@ public class PinfoDataForm extends PinbalAdminBaseForm {
 
   public void setListOfServeiForServeiID(List<StringKeyValue> listOfServeiForServeiID) {
     this.listOfServeiForServeiID = listOfServeiForServeiID;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForAlta;
+
+  public List<StringKeyValue> getListOfValuesForAlta() {
+    return this.listOfValuesForAlta;
+  }
+
+  public void setListOfValuesForAlta(List<StringKeyValue> listOfValuesForAlta) {
+    this.listOfValuesForAlta = listOfValuesForAlta;
   }
 
 

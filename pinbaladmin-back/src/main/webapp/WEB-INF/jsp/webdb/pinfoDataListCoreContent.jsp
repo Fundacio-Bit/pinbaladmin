@@ -39,7 +39,10 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoDataFields.ESTAT)}">
           <td>
-          ${pinfoData.estat}
+          <c:set var="tmp">${pinfoData.estat}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForEstat[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoDataFields.USUARIID)}">
@@ -65,7 +68,10 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoDataFields.ALTA)}">
           <td>
-          ${pinfoData.alta}
+          <c:set var="tmp">${pinfoData.alta}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForAlta[tmp]}
+          </c:if>
           </td>
         </c:if>
 

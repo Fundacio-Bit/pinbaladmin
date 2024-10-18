@@ -4198,11 +4198,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "obert, tancat",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 14
+            "webtype": 16
           },
           "foreignKeys": []
         },
@@ -4214,8 +4215,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "usuariid",
-            "es": "usuariid"
+            "ca": "Usuari",
+            "es": "Usuario"
           },
           "javaName": "usuariid",
           "javaType": "java.lang.String",
@@ -4240,8 +4241,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "procedimentid",
-            "es": "procedimentid"
+            "ca": "Procediment",
+            "es": "Procedimientos"
           },
           "javaName": "procedimentID",
           "javaType": "java.lang.Long",
@@ -4279,8 +4280,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "serveiid",
-            "es": "serveiid"
+            "ca": "Servei",
+            "es": "Servicio"
           },
           "javaName": "serveiID",
           "javaType": "java.lang.Long",
@@ -4317,8 +4318,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "alta",
-            "es": "alta"
+            "ca": "Alta",
+            "es": "Alta"
           },
           "javaName": "alta",
           "javaType": "java.lang.Long",
@@ -4326,11 +4327,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "alta, baixa",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 14
+            "webtype": 16
           },
           "foreignKeys": []
         }

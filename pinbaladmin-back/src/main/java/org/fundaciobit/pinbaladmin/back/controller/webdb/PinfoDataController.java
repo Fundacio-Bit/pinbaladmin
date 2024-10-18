@@ -200,6 +200,16 @@ public class PinfoDataController
       };
     }
 
+    // Field estat
+    {
+      _listSKV = getReferenceListForEstat(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForEstat(_tmp);
+      if (filterForm.getGroupByFields().contains(ESTAT)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTAT, false);
+      };
+    }
+
     // Field procedimentID
     {
       _listSKV = getReferenceListForProcedimentID(request, mav, filterForm, list, groupByItemsMap, null);
@@ -220,6 +230,16 @@ public class PinfoDataController
       };
     }
 
+    // Field alta
+    {
+      _listSKV = getReferenceListForAlta(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForAlta(_tmp);
+      if (filterForm.getGroupByFields().contains(ALTA)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ALTA, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -236,8 +256,10 @@ public class PinfoDataController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(PINFOID, filterForm.getMapOfPINFOForPinfoID());
+    __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
     __mapping.put(PROCEDIMENTID, filterForm.getMapOfSolicitudForProcedimentID());
     __mapping.put(SERVEIID, filterForm.getMapOfServeiForServeiID());
+    __mapping.put(ALTA, filterForm.getMapOfValuesForAlta());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -295,6 +317,15 @@ public class PinfoDataController
       pinfoDataForm.setListOfPINFOForPinfoID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
+    if (pinfoDataForm.getListOfValuesForEstat() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEstat(request, mav, pinfoDataForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      pinfoDataForm.setListOfValuesForEstat(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
     if (pinfoDataForm.getListOfSolicitudForProcedimentID() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForProcedimentID(request, mav, pinfoDataForm, null);
 
@@ -311,6 +342,15 @@ public class PinfoDataController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       pinfoDataForm.setListOfServeiForServeiID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (pinfoDataForm.getListOfValuesForAlta() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForAlta(request, mav, pinfoDataForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      pinfoDataForm.setListOfValuesForAlta(_listSKV);
     }
     
   }
@@ -663,6 +703,37 @@ public java.lang.Long stringToPK(String value) {
   }
 
 
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, PinfoDataForm pinfoDataForm, Where where)  throws I18NException {
+    if (pinfoDataForm.isHiddenField(ESTAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForEstat(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, PinfoDataFilterForm pinfoDataFilterForm,
+       List<PinfoData> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (pinfoDataFilterForm.isHiddenField(ESTAT)
+       && !pinfoDataFilterForm.isGroupByField(ESTAT)
+       && !pinfoDataFilterForm.isFilterByField(ESTAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForEstat(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("obert" , "obert"));
+    __tmp.add(new StringKeyValue(" tancat" , " tancat"));
+    return __tmp;
+  }
+
+
   public List<StringKeyValue> getReferenceListForProcedimentID(HttpServletRequest request,
        ModelAndView mav, PinfoDataForm pinfoDataForm, Where where)  throws I18NException {
     if (pinfoDataForm.isHiddenField(PROCEDIMENTID)) {
@@ -740,6 +811,37 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForServeiID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return serveiRefList.getReferenceList(ServeiFields.SERVEIID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForAlta(HttpServletRequest request,
+       ModelAndView mav, PinfoDataForm pinfoDataForm, Where where)  throws I18NException {
+    if (pinfoDataForm.isHiddenField(ALTA)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForAlta(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForAlta(HttpServletRequest request,
+       ModelAndView mav, PinfoDataFilterForm pinfoDataFilterForm,
+       List<PinfoData> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (pinfoDataFilterForm.isHiddenField(ALTA)
+       && !pinfoDataFilterForm.isGroupByField(ALTA)
+       && !pinfoDataFilterForm.isFilterByField(ALTA)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForAlta(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForAlta(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("alta" , "alta"));
+    __tmp.add(new StringKeyValue(" baixa" , " baixa"));
+    return __tmp;
   }
 
 

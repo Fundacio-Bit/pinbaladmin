@@ -53,9 +53,31 @@
               </c:if>
             </td>
           <td id="pinfoData_estat_columnvalueid">
-            <form:errors path="pinfoData.estat" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ESTAT)? 'true' : 'false'}" cssClass="w-25 form-control  ${gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ESTAT)? ' uneditable-input' : ''}"  style=""  path="pinfoData.estat"   />
-
+          <form:errors path="pinfoData.estat" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ESTAT)}" >
+          <form:hidden path="pinfoData.estat"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.pinfoData.estat,__theForm.listOfValuesForEstat)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ESTAT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="pinfoData_estat"  onchange="if(typeof onChangeEstat == 'function') {  onChangeEstat(this); };"  cssClass="form-control col-md-9-optional" path="pinfoData.estat">
+            <c:forEach items="${__theForm.listOfValuesForEstat}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.pinfoData.estat }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.pinfoData.estat }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>
@@ -169,9 +191,31 @@
               </c:if>
             </td>
           <td id="pinfoData_alta_columnvalueid">
-            <form:errors path="pinfoData.alta" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ALTA)? 'true' : 'false'}" cssClass="w-25 form-control  ${gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ALTA)? ' uneditable-input' : ''}"  style=""  path="pinfoData.alta"   />
-
+          <form:errors path="pinfoData.alta" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ALTA)}" >
+          <form:hidden path="pinfoData.alta"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.pinfoData.alta,__theForm.listOfValuesForAlta)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,PinfoDataFields.ALTA)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="pinfoData_alta"  onchange="if(typeof onChangeAlta == 'function') {  onChangeAlta(this); };"  cssClass="form-control col-md-9-optional" path="pinfoData.alta">
+            <c:forEach items="${__theForm.listOfValuesForAlta}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.pinfoData.alta }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.pinfoData.alta }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>

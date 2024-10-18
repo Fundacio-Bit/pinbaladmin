@@ -65,25 +65,14 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
   }
 
 
-  private java.lang.Long estatDesde;
+  private java.util.List<java.lang.Long> estatSelect;
 
-  public java.lang.Long getEstatDesde() {
-    return this.estatDesde;
+  public java.util.List<java.lang.Long> getEstatSelect() {
+    return this.estatSelect;
   }
 
-  public void setEstatDesde(java.lang.Long estatDesde) {
-    this.estatDesde = estatDesde;
-  }
-
-
-  private java.lang.Long estatFins;
-
-  public java.lang.Long getEstatFins() {
-    return this.estatFins;
-  }
-
-  public void setEstatFins(java.lang.Long estatFins) {
-    this.estatFins = estatFins;
+  public void setEstatSelect(java.util.List<java.lang.Long> estatSelect) {
+    this.estatSelect = estatSelect;
   }
 
 
@@ -142,25 +131,14 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
   }
 
 
-  private java.lang.Long altaDesde;
+  private java.util.List<java.lang.Long> altaSelect;
 
-  public java.lang.Long getAltaDesde() {
-    return this.altaDesde;
+  public java.util.List<java.lang.Long> getAltaSelect() {
+    return this.altaSelect;
   }
 
-  public void setAltaDesde(java.lang.Long altaDesde) {
-    this.altaDesde = altaDesde;
-  }
-
-
-  private java.lang.Long altaFins;
-
-  public java.lang.Long getAltaFins() {
-    return this.altaFins;
-  }
-
-  public void setAltaFins(java.lang.Long altaFins) {
-    this.altaFins = altaFins;
+  public void setAltaSelect(java.util.List<java.lang.Long> altaSelect) {
+    this.altaSelect = altaSelect;
   }
 
 
@@ -173,18 +151,18 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
     this.pinfodataIDFins = __toClone.pinfodataIDFins;
     this.pinfoIDDesde = __toClone.pinfoIDDesde;
     this.pinfoIDFins = __toClone.pinfoIDFins;
-    this.estatDesde = __toClone.estatDesde;
-    this.estatFins = __toClone.estatFins;
+    this.estatSelect = __toClone.estatSelect;
     this.usuariid = __toClone.usuariid;
     this.procedimentIDDesde = __toClone.procedimentIDDesde;
     this.procedimentIDFins = __toClone.procedimentIDFins;
     this.serveiIDDesde = __toClone.serveiIDDesde;
     this.serveiIDFins = __toClone.serveiIDFins;
-    this.altaDesde = __toClone.altaDesde;
-    this.altaFins = __toClone.altaFins;
+    this.altaSelect = __toClone.altaSelect;
     this.mapOfPINFOForPinfoID = __toClone.mapOfPINFOForPinfoID;
+    this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
     this.mapOfSolicitudForProcedimentID = __toClone.mapOfSolicitudForProcedimentID;
     this.mapOfServeiForServeiID = __toClone.mapOfServeiForServeiID;
+    this.mapOfValuesForAlta = __toClone.mapOfValuesForAlta;
   }
   
   /* ========= UTILS ========== */
@@ -231,6 +209,18 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
 
 
 
+  private Map<String, String> mapOfValuesForEstat;
+
+  public Map<String, String> getMapOfValuesForEstat() {
+    return this.mapOfValuesForEstat;
+  }
+
+  public void setMapOfValuesForEstat(Map<String, String> mapOfValuesForEstat) {
+    this.mapOfValuesForEstat = mapOfValuesForEstat;
+  }
+
+
+
   private Map<String, String> mapOfSolicitudForProcedimentID;
 
   public Map<String, String> getMapOfSolicitudForProcedimentID() {
@@ -251,6 +241,18 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
 
   public void setMapOfServeiForServeiID(Map<String, String> mapOfServeiForServeiID) {
     this.mapOfServeiForServeiID = mapOfServeiForServeiID;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForAlta;
+
+  public Map<String, String> getMapOfValuesForAlta() {
+    return this.mapOfValuesForAlta;
+  }
+
+  public void setMapOfValuesForAlta(Map<String, String> mapOfValuesForAlta) {
+    this.mapOfValuesForAlta = mapOfValuesForAlta;
   }
 
 
