@@ -147,3 +147,6 @@ hs_err_pid*
 /onlyEar.bat
 /pemfiles/intranet_caib_es.pem
 /tree.txt
+/backfront.bat
+/front.bat
+/genapp/genapp.log.2
