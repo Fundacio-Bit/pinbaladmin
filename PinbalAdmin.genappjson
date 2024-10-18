@@ -9724,7 +9724,7 @@
     "es"
   ],
   "generateBack": true,
-  "generateFront": false,
+  "generateFront": true,
   "generateApiInterna": false,
   "generateApiExterna": true
 }

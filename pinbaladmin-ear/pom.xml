@@ -51,6 +51,13 @@
             <type>war</type>
         </dependency>
 
+    		<dependency>
+    			<groupId>org.fundaciobit.pinbaladmin</groupId>
+    			<artifactId>pinbaladmin-front</artifactId>
+    			<version>${project.version}</version>
+    			<type>war</type>
+    		</dependency>
+    		
         <dependency>
             <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>
             <groupId>org.fundaciobit.pinbaladmin</groupId>
@@ -354,14 +361,20 @@
                             <contextRoot>pinbaladmin</contextRoot>
                             <bundleFileName>pinbaladmin-back.war</bundleFileName>
                         </webModule>
-
-
+                        
                         <ejbModule>
                             <groupId>org.fundaciobit.pinbaladmin</groupId>
                             <artifactId>pinbaladmin-ejb</artifactId>
                             <bundleFileName>pinbaladmin-ejb.jar</bundleFileName>
                         </ejbModule>
 
+                        
+						<webModule>
+							<groupId>org.fundaciobit.pinbaladmin</groupId>
+							<artifactId>pinbaladmin-front</artifactId>
+							<contextRoot>pinbaladminfront</contextRoot>
+                            <bundleFileName>pinbaladmin-front.war</bundleFileName>
+						</webModule>
                         <ejbModule>
                             <groupId>org.fundaciobit.pinbaladmin</groupId>
                             <artifactId>pinbaladmin-ws-domini-sistra-server</artifactId>

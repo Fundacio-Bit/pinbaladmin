@@ -182,7 +182,7 @@ public class EmailUtil {
 		}
     	
 		//tipus pot ser "solicitud" o "incidencia"
-		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
+		String url = Configuracio.getAppBackUrl() + "/public/event" + tipus + "/veureevents/"
 				+ HibernateFileUtil.encryptFileID(itemID) + (destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(destinatari)));
 		
 		//Si es un correo a soporte, debe estar en castellano

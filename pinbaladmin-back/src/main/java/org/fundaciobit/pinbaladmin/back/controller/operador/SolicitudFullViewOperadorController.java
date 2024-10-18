@@ -314,7 +314,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
-    String callback = Configuracio.getAppUrl()
+    String callback = Configuracio.getAppBackUrl()
         + CallbackSeleniumController.CALLBACK_SELENIUM_CONTEXT + "/" + soli.getSolicitudID();
 
     mav.addObject("backurl", request.getContextPath() + backurl);

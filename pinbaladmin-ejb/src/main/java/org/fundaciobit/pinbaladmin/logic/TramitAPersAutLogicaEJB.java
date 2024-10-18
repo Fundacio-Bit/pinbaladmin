@@ -733,7 +733,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //	
 //	public static String getPeuCorreu(Long soliID) {
 //		String tipus = "soicitud";
-//		String url = Configuracio.getAppUrl() + "/public/event" + tipus + "/veureevents/"
+//		String url = Configuracio.getAppBackUrl() + "/public/event" + tipus + "/veureevents/"
 //				+ HibernateFileUtil.encryptFileID(soliID);
 //		
 //		String msg = ""

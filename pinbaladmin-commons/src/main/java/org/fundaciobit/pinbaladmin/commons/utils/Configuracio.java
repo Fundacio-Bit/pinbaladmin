@@ -106,8 +106,11 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "name", "PinbalAdmin");
     }
 
-    public static String getAppUrl() {
-        return getProperty(PINBALADMIN_PROPERTY_BASE + "url");
+    public static String getAppBackUrl() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "url.back");
+    }
+    public static String getAppFrontUrl() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "url.front");
     }
 
     public static String getDefaultLanguage() {

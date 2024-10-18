@@ -252,7 +252,7 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
     </definition>
     
-    <definition name="incidenciaTecnicaFormOperador" extends="operador_base">
+    <definition name="incidenciaTecnicaFormOperador" template="operador_base">
         <put-attribute name="titol" value="incidenciaTecnica.incidenciaTecnica" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
     </definition>
@@ -260,6 +260,23 @@
     <definition name="incidenciaTecnicaListOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
+
+    <definition name="incidenciaTecnicaPinfoFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
+    </definition>
+    
+    <definition name="incidenciaTecnicaPinfoListOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
+    </definition>
+
+    <definition name="pinfoDataFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoForm.jsp" />
+    </definition>
+    
+    <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoList.jsp" />
+    </definition>
+
 
     <definition name="solicitudestataldesdefitxersOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/solicitudestataldesdefitxers.jsp" />

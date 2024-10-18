@@ -160,7 +160,7 @@ public class CrearExcelDeServeis {
     	  dades[10] = ss.getEnllazNormaLegal();
       } else {
     	  dades[10] = "Adjunto: " + fitxerNorma.getNom();
-//    	  dades[10] = Configuracio.getAppUrl() + FileDownloadController.fileUrl(fitxerNorma);
+//    	  dades[10] = Configuracio.getAppBackUrl() + FileDownloadController.fileUrl(fitxerNorma);
       }      
       
       // L 11 L'Enllaç de Consentiment

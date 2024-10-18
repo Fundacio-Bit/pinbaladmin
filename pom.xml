@@ -19,6 +19,7 @@
         <module>pinbaladmin-ejb</module>
         <module>pinbaladmin-commons</module>
         <module>pinbaladmin-back</module>
+        <module>pinbaladmin-front</module>
         <module>pinbaladmin-ws</module>
          <!--<module>pinbaladmin-api-externa</module>-->
         <module>pinbaladmin-api-interna</module>
@@ -145,7 +146,11 @@
         <pluginsib.userinformation.api.version>4.0.0-SNAPSHOT</pluginsib.userinformation.api.version>
         <!--<pluginsib.userinformation.impl.version>4.0.0-SNAPSHOT</pluginsib.userinformation.impl.version>-->
         <pluginsib.utils.version>3.0.0-SNAPSHOT</pluginsib.utils.version>
-        
+        <pluginsib.login.version>2.0.0-SNAPSHOT</pluginsib.login.version>
+        <pluginsib.core.version>3.0.0-SNAPSHOT</pluginsib.core.version>
+
+
+
     </properties>
     <dependencyManagement>
         <dependencies>

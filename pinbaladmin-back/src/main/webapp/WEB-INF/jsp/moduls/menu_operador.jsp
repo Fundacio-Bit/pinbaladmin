@@ -75,7 +75,7 @@
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/incidencia/list"/>"> <span
-				style="${(fn:contains(url, '/incidencia'))? "font-weight:bold;" : ""}">
+				style="${(fn:contains(url, '/operador/incidencia'))? "font-weight:bold;" : ""}">
 					<fmt:message key="incidenciaTecnica.incidenciaTecnica.plural" />
 			</span>	</a> 
 			<c:if test="${incidenciesNoMeves ne 0}">
@@ -88,6 +88,12 @@
 				</a>
 			</c:if>
 		</li>
+
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/public/incidenciapinfo/new"/>"> <span
+				style="${(fn:contains(url, '/public/incidenciapinfo'))? "font-weight:bold;" : ""}">PINFOs</span>
+		</a></li>
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
