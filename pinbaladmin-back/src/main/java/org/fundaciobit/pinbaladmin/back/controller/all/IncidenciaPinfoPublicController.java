@@ -100,11 +100,23 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			String nomComplet = properties.getProperty("Nom") + " " + properties.getProperty("Cognom1") + " " + properties.getProperty("Cognom2");
 			incidencia.setContacteNom(nomComplet);
 			form.addReadOnlyField(IncidenciaTecnicaFields.CONTACTENOM);
+
+			incidencia.setDescripcio("Descripció de test");
+			incidencia.setContacteTelefon("971971971");
+			incidencia.setContacteEmail("ptrias@fundaciobit.org");
+			incidencia.setNomEntitat("La meva entitat: Fundació BIT");
+			
+			incidencia.setTitol("Titol de test");
 			
 			String usuariNIF = properties.getProperty("NIF");
 			String usuariNom = properties.getProperty("Username");
 			
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + usuariNom);
+			
+			form.setAttachedAdditionalJspCode(true);
+			mav.addObject("isPinfo", true);
+			
+			form.addHelpToField(NOMENTITAT, "MISSATGE PER VEURE HELP");
 		}
 
 		return form;
@@ -152,7 +164,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		} catch (IOException e) {
 			log.error("An error occurred." + e.getMessage(), e);
 			e.printStackTrace();
-		}		
+		}
 		
 		request.getSession().setAttribute("properties", properties);
 		request.getSession().setAttribute("token", token);

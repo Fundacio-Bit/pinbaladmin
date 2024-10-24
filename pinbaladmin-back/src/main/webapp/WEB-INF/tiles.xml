@@ -270,7 +270,7 @@
     </definition>
 
     <definition name="pinfoDataFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoDataForm.jsp" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoForm.jsp" />
     </definition>
     
     <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">

@@ -8,6 +8,14 @@
 
 
 <style>
+body {
+	display: flex;
+	/* align-items: center; */
+	justify-content: center;
+	min-height: 100vh;
+	background: #e9faff;
+}
+
 #dades-incidencia-container {
 	margin: auto;
 	width: fit-content;
@@ -33,42 +41,58 @@
 	
 }
 
-
 #includedContentLlistatPinfoData {
-  margin: 0 10rem;
+	margin: 1rem;
+}
+
+.myContainer {
+	background: white;
+	padding: 0 1rem;
+	border-radius: 6px;
+	border: 2px solid black;
+	margin: 2rem 7rem;
+	min-width: 75rem;
+	
+}
+
+#title {
+	text-align: center;
+	margin: 1rem;
 }
 </style>
 
 </head>
 <body>
-	<h2>Dades solicitant</h2>
-	<div id="dades-incidencia-container">
-		<!--
-	|			|Usuari	 | Usuari					|
-	|SOLICITANT	|Nom 	 | Nom						|
-	|			|Telefon | Telefon | Correu | Correu|	
- -->
-		<table id="dades-solicitant">
-			<tr>
-				<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT
-				</td>
-				<td class="label">Usuari</td>
-				<td class="value" colspan="3">${usuariData}</td>
-			</tr>
-			<tr>
-				<td class="label">Nom</td>
-				<td class="value" colspan="3">${incidencia.contacteNom}</td>
-			</tr>
-			<tr>
-				<td class="label">Telefon</td>
-				<td class="value">${incidencia.contacteTelefon}</td>
-				<td class="label">Correu</td>
-				<td class="value">${incidencia.contacteEmail}</td>
-		</table>
-	</div>
+	<div class="myContainer">
+		<h4 id="title" style="margin: 1rem auto;">Dades solicitant</h4>
 
-	<div id="includedContentLlistatPinfoData">
-		<%@ include file="/WEB-INF/jsp/webdb/pinfoDataList.jsp"%>
+		<div id="dades-incidencia-container">
+			<!--
+	|Usuari	 | Usuari					|
+	|Nom 	 | Nom						|
+	|Telefon | Telefon | Correu | Correu|	
+ -->
+			<table id="dades-solicitant">
+				<tr>
+					<!-- 					<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT</td> -->
+					<td class="label">Usuari</td>
+					<td class="value" colspan="3">${usuariData}</td>
+				</tr>
+				<tr>
+					<td class="label">Nom</td>
+					<td class="value" colspan="3">${incidencia.contacteNom}</td>
+				</tr>
+				<tr>
+					<td class="label">Telefon</td>
+					<td class="value">${incidencia.contacteTelefon}</td>
+					<td class="label">Correu</td>
+					<td class="value">${incidencia.contacteEmail}</td>
+			</table>
+		</div>
+
+		<div id="includedContentLlistatPinfoData">
+			<%@ include file="/WEB-INF/jsp/webdb/pinfoDataList.jsp"%>
+		</div>
 	</div>
 </body>
 </html>
