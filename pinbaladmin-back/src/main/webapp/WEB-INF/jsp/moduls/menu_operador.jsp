@@ -90,10 +90,10 @@
 		</li>
 
 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
+		<%-- <li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/public/incidenciapinfo/new"/>"> <span
 				style="${(fn:contains(url, '/public/incidenciapinfo'))? "font-weight:bold;" : ""}">PINFOs</span>
-		</a></li>
+		</a></li> --%>
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 

@@ -1,5 +1,5 @@
 
 
 <c:if test="${isPinfo == 'true'}">
-HOLA, PINFO JSP MODIFICABLE
+	<%@ include file="/WEB-INF/jsp/all/tramitSistraPublic.jsp"%>
 </c:if>

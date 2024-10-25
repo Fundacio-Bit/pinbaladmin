@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
+<%@ include file="/WEB-INF/jsp/all/tramitPinfoPublic.jsp"%>
 
 <html>
 <head>
@@ -7,32 +8,30 @@
 <title>Afegir permisos a la solicitud</title>
 
 <style>
-body {
+/* body {
 	display: flex;
-	/* align-items: center; */
 	justify-content: center;
 	min-height: 100vh;
 	background: #e9faff;
-}
-
+} */
 #form-container {
 	background: white;
 	padding: 1rem;
 	border-radius: 6px;
 	border: 2px solid black;
+	margin: 3rem;
 }
 
 #form-content {
 	display: flex;
-	flex-wrap: wrap;
+	margin: 0 2rem;
 }
 
 section {
-	/* 	background: white;
- */
 	padding: 1rem;
 	min-width: 50rem;
-	max-width: 60rem;
+	width: 100%;
+	max-width: 100%;
 	display: flex;
 	flex-flow: column;
 }
@@ -45,10 +44,6 @@ section .title {
 .botones {
 	text-align: right;
 	margin-top: 1rem;
-}
-
-.input-container {
-	min-height: 20rem;
 }
 
 .procediment-item {
@@ -100,13 +95,14 @@ section .title {
 	padding: 3px 6px;
 }
 
-.solSer.empty {
-	background-color: #FFF;
-}
-
 .keyServ, .keyProc {
 	position: relative;
 	cursor: help;
+}
+
+.keyProc{
+	text-align: center;
+	word-break: break-word;
 }
 
 .tooltip {
@@ -130,7 +126,12 @@ section .title {
 	padding: 0.3rem;
 }
 
-.selected {
+.solSer {
+	text-align: center;
+	background-color: #FFF;
+}
+
+.solSer.selected {
 	background-color: #d6eecd;
 	font-weight: bold;
 	cursor: pointer;
@@ -143,10 +144,6 @@ section .title {
 
 .marcarAll {
 	padding: 6px 1rem;
-	text-align: center;
-}
-
-.solSer {
 	text-align: center;
 }
 
@@ -186,11 +183,6 @@ section .title {
 
 </head>
 <body>
-
-	<div>
-		<h3>Afegir permisos a la solicitud</h3>
-	</div>
-
 	<div id="form-container">
 		<form id="pinfoDataForm" action="procesarPermisos" method="post"
 			enctype="multipart/form-data">

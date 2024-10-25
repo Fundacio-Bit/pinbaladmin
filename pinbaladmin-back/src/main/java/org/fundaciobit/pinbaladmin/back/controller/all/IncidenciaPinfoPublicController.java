@@ -109,9 +109,14 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			incidencia.setTitol("Titol de test");
 			
 			String usuariNIF = properties.getProperty("NIF");
-			String usuariNom = properties.getProperty("Username");
+			String username = properties.getProperty("Username");
 			
-			request.getSession().setAttribute("usuariData", usuariNIF + " - " + usuariNom);
+			request.getSession().setAttribute("usuariNIF", usuariNIF);
+			request.getSession().setAttribute("usuariNom", nomComplet);
+			request.getSession().setAttribute("usuariUsername", username);
+		
+			
+			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
 			
 			form.setAttachedAdditionalJspCode(true);
 			mav.addObject("isPinfo", true);

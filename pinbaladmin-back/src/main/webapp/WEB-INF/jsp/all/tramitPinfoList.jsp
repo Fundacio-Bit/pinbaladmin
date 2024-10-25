@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
 
+<%@ include file="/WEB-INF/jsp/all/tramitPinfoPublic.jsp"%>
+
 <html>
 <head>
 <meta charset="ISO-8859-1">
@@ -8,13 +10,6 @@
 
 
 <style>
-body {
-	display: flex;
-	/* align-items: center; */
-	justify-content: center;
-	min-height: 100vh;
-	background: #e9faff;
-}
 
 #dades-incidencia-container {
 	margin: auto;
@@ -76,7 +71,7 @@ body {
 				<tr>
 					<!-- 					<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT</td> -->
 					<td class="label">Usuari</td>
-					<td class="value" colspan="3">${usuariData}</td>
+					<td class="value" colspan="3">${usuariNIF}&nbsp;${usuariNom}</td>
 				</tr>
 				<tr>
 					<td class="label">Nom</td>
