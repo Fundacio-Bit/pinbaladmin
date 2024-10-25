@@ -382,6 +382,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 					mail = new MailCedentInfo(CEDENTS_LOCALS.FAM_NOMBROSA);
 					break;
 				case SVDCCAADISCAPACIDADWS01:
+				case SVDSCDDWS01:
 					mail = new MailCedentInfo(CEDENTS_LOCALS.DISCAPACITAT);
 					break;
 				case SVDCCAACPCWS01:

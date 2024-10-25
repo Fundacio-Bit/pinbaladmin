@@ -349,6 +349,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
 							mails.get(CEDENTS_LOCALS.FAM_NOMBROSA).afegirServei(serv);
 							break;
 						case SVDCCAADISCAPACIDADWS01:
+						case SVDSCDDWS01:
 							mails.get(CEDENTS_LOCALS.DISCAPACITAT).afegirServei(serv);
 							break;
 						case SVDCCAACPCWS01:
