@@ -1,6 +1,6 @@
 <%-- ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! --%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
-<un:useConstants var="PINFOFields" className="org.fundaciobit.pinbaladmin.model.fields.PINFOFields"/>
+<un:useConstants var="PinfoFields" className="org.fundaciobit.pinbaladmin.model.fields.PinfoFields"/>
   
 
   <%-- HIDDEN PARAMS: GROUP BY --%>
@@ -15,13 +15,13 @@
       var parentstr = "" + e.node.parentage[e.node.parentage.length - 1];
       document.getElementById('agruparPerCamp').value = parentstr;
       document.getElementById('agruparPerValor').value = e.node.value;
-      document.pINFO.submit();
+      document.pinfo.submit();
   })
 
   function groupByFieldValue(camp, valor) {
     document.getElementById('agruparPerCamp').value = camp;
     document.getElementById('agruparPerValor').value = valor;
-    document.pINFO.submit();
+    document.pinfo.submit();
   }
 
 </script>

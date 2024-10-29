@@ -29,56 +29,56 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.fundaciobit.pinbaladmin.back.form.webdb.*;
-import org.fundaciobit.pinbaladmin.back.form.webdb.PINFOForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoForm;
 
-import org.fundaciobit.pinbaladmin.back.validator.webdb.PINFOWebValidator;
+import org.fundaciobit.pinbaladmin.back.validator.webdb.PinfoWebValidator;
 
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
-import org.fundaciobit.pinbaladmin.persistence.PINFOJPA;
-import org.fundaciobit.pinbaladmin.model.entity.PINFO;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.*;
 
 /**
- * Controller per gestionar un PINFO
+ * Controller per gestionar un Pinfo
  *  ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! 
  * 
  * @author GenApp
  */
 @Controller
-@RequestMapping(value = "/webdb/pINFO")
-@SessionAttributes(types = { PINFOForm.class, PINFOFilterForm.class })
-public class PINFOController
-    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<PINFO, java.lang.Long, PINFOForm> implements PINFOFields {
+@RequestMapping(value = "/webdb/pinfo")
+@SessionAttributes(types = { PinfoForm.class, PinfoFilterForm.class })
+public class PinfoController
+    extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Pinfo, java.lang.Long, PinfoForm> implements PinfoFields {
 
-  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PINFOService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.PINFOService pINFOEjb;
-
-  @Autowired
-  private PINFOWebValidator pINFOWebValidator;
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PinfoService.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.PinfoService pinfoEjb;
 
   @Autowired
-  protected PINFORefList pINFORefList;
+  private PinfoWebValidator pinfoWebValidator;
+
+  @Autowired
+  protected PinfoRefList pinfoRefList;
 
   // References 
   @Autowired
   protected IncidenciaTecnicaRefList incidenciaTecnicaRefList;
 
   /**
-   * Llistat de totes PINFO
+   * Llistat de totes Pinfo
    */
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String llistat(HttpServletRequest request,
     HttpServletResponse response) throws I18NException {
-    PINFOFilterForm ff;
-    ff = (PINFOFilterForm) request.getSession().getAttribute(getSessionAttributeFilterForm());
+    PinfoFilterForm ff;
+    ff = (PinfoFilterForm) request.getSession().getAttribute(getSessionAttributeFilterForm());
     int pagina = (ff == null)? 1: ff.getPage();
     return "redirect:" + getContextWeb() + "/list/" + pagina;
   }
 
   /**
-   * Primera peticio per llistar PINFO de forma paginada
+   * Primera peticio per llistar Pinfo de forma paginada
    */
   @RequestMapping(value = "/list/{pagina}", method = RequestMethod.GET)
   public ModelAndView llistatPaginat(HttpServletRequest request,
@@ -89,29 +89,29 @@ public class PINFOController
       return null;
     }
     ModelAndView mav = new ModelAndView(getTileList());
-    llistat(mav, request, getPINFOFilterForm(pagina, mav, request));
+    llistat(mav, request, getPinfoFilterForm(pagina, mav, request));
     return mav;
   }
 
-  public PINFOFilterForm getPINFOFilterForm(Integer pagina, ModelAndView mav,
+  public PinfoFilterForm getPinfoFilterForm(Integer pagina, ModelAndView mav,
     HttpServletRequest request) throws I18NException {
-    PINFOFilterForm pINFOFilterForm;
-    pINFOFilterForm = (PINFOFilterForm) request.getSession().getAttribute(getSessionAttributeFilterForm());
-    if(pINFOFilterForm == null) {
-      pINFOFilterForm = new PINFOFilterForm();
-      pINFOFilterForm.setContexte(getContextWeb());
-      pINFOFilterForm.setEntityNameCode(getEntityNameCode());
-      pINFOFilterForm.setEntityNameCodePlural(getEntityNameCodePlural());
-      pINFOFilterForm.setNou(true);
+    PinfoFilterForm pinfoFilterForm;
+    pinfoFilterForm = (PinfoFilterForm) request.getSession().getAttribute(getSessionAttributeFilterForm());
+    if(pinfoFilterForm == null) {
+      pinfoFilterForm = new PinfoFilterForm();
+      pinfoFilterForm.setContexte(getContextWeb());
+      pinfoFilterForm.setEntityNameCode(getEntityNameCode());
+      pinfoFilterForm.setEntityNameCodePlural(getEntityNameCodePlural());
+      pinfoFilterForm.setNou(true);
     } else {
-      pINFOFilterForm.setNou(false);
+      pinfoFilterForm.setNou(false);
     }
-    pINFOFilterForm.setPage(pagina == null ? 1 : pagina);
-    return pINFOFilterForm;
+    pinfoFilterForm.setPage(pagina == null ? 1 : pagina);
+    return pinfoFilterForm;
   }
 
   /**
-   * Segona i següent peticions per llistar PINFO de forma paginada
+   * Segona i següent peticions per llistar Pinfo de forma paginada
    * 
    * @param request
    * @param pagina
@@ -122,7 +122,7 @@ public class PINFOController
   @RequestMapping(value = "/list/{pagina}", method = RequestMethod.POST)
   public ModelAndView llistatPaginat(HttpServletRequest request,
       HttpServletResponse response,@PathVariable Integer pagina,
-      @ModelAttribute PINFOFilterForm filterForm) throws I18NException {
+      @ModelAttribute PinfoFilterForm filterForm) throws I18NException {
     if(!isActiveList()) {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
       return null;
@@ -134,14 +134,14 @@ public class PINFOController
     // Actualitza el filter form
 
     request.getSession().setAttribute(getSessionAttributeFilterForm(), filterForm);
-    filterForm = getPINFOFilterForm(pagina, mav, request);
+    filterForm = getPinfoFilterForm(pagina, mav, request);
 
     llistat(mav, request, filterForm);
     return mav;
   }
 
   /**
-   * Codi centralitzat de llistat de PINFO de forma paginada.
+   * Codi centralitzat de llistat de Pinfo de forma paginada.
    * 
    * @param request
    * @param filterForm
@@ -149,8 +149,8 @@ public class PINFOController
    * @return
    * @throws I18NException
    */
-  protected List<PINFO> llistat(ModelAndView mav, HttpServletRequest request,
-     PINFOFilterForm filterForm) throws I18NException {
+  protected List<Pinfo> llistat(ModelAndView mav, HttpServletRequest request,
+     PinfoFilterForm filterForm) throws I18NException {
 
     int pagina = filterForm.getPage();
     request.getSession().setAttribute(getSessionAttributeFilterForm(), filterForm);
@@ -159,24 +159,24 @@ public class PINFOController
 
     preList(request, mav, filterForm);
 
-    List<PINFO> pINFO = processarLlistat(pINFOEjb,
+    List<Pinfo> pinfo = processarLlistat(pinfoEjb,
         filterForm, pagina, getAdditionalCondition(request), mav);
 
-    mav.addObject("pINFOItems", pINFO);
+    mav.addObject("pinfoItems", pinfo);
 
-    mav.addObject("pINFOFilterForm", filterForm);
+    mav.addObject("pinfoFilterForm", filterForm);
 
-    fillReferencesForList(filterForm,request, mav, pINFO, (List<GroupByItem>)mav.getModel().get("groupby_items"));
+    fillReferencesForList(filterForm,request, mav, pinfo, (List<GroupByItem>)mav.getModel().get("groupby_items"));
 
-    postList(request, mav, filterForm, pINFO);
+    postList(request, mav, filterForm, pinfo);
 
-    return pINFO;
+    return pinfo;
   }
 
 
-  public Map<Field<?>, GroupByItem> fillReferencesForList(PINFOFilterForm filterForm,
+  public Map<Field<?>, GroupByItem> fillReferencesForList(PinfoFilterForm filterForm,
     HttpServletRequest request, ModelAndView mav,
-      List<PINFO> list, List<GroupByItem> groupItems) throws I18NException {
+      List<Pinfo> list, List<GroupByItem> groupItems) throws I18NException {
     Map<Field<?>, GroupByItem> groupByItemsMap = new HashMap<Field<?>, GroupByItem>();
     for (GroupByItem groupByItem : groupItems) {
       groupByItemsMap.put(groupByItem.getField(),groupByItem);
@@ -185,7 +185,7 @@ public class PINFOController
     Map<String, String> _tmp;
     List<StringKeyValue> _listSKV;
 
-    // Field IncidenciaID
+    // Field incidenciaID
     {
       _listSKV = getReferenceListForIncidenciaID(request, mav, filterForm, list, groupByItemsMap, null);
       _tmp = Utils.listToMap(_listSKV);
@@ -202,10 +202,10 @@ public class PINFOController
   @RequestMapping(value = "/export/{dataExporterID}", method = RequestMethod.POST)
   public void exportList(@PathVariable("dataExporterID") String dataExporterID,
     HttpServletRequest request, HttpServletResponse response,
-    PINFOFilterForm filterForm) throws Exception, I18NException {
+    PinfoFilterForm filterForm) throws Exception, I18NException {
 
     ModelAndView mav = new ModelAndView(getTileList());
-    List<PINFO> list = llistat(mav, request, filterForm);
+    List<Pinfo> list = llistat(mav, request, filterForm);
     Field<?>[] allFields = ALL_PINFO_FIELDS;
 
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
@@ -218,10 +218,10 @@ public class PINFOController
 
 
   /**
-   * Carregar el formulari per un nou PINFO
+   * Carregar el formulari per un nou Pinfo
    */
   @RequestMapping(value = "/new", method = RequestMethod.GET)
-  public ModelAndView crearPINFOGet(HttpServletRequest request,
+  public ModelAndView crearPinfoGet(HttpServletRequest request,
       HttpServletResponse response) throws I18NException {
 
     if(!isActiveFormNew()) {
@@ -229,9 +229,9 @@ public class PINFOController
       return null;
     }
     ModelAndView mav = new ModelAndView(getTileForm());
-    PINFOForm pINFOForm = getPINFOForm(null, false, request, mav);
-    mav.addObject("pINFOForm" ,pINFOForm);
-    fillReferencesForForm(pINFOForm, request, mav);
+    PinfoForm pinfoForm = getPinfoForm(null, false, request, mav);
+    mav.addObject("pinfoForm" ,pinfoForm);
+    fillReferencesForForm(pinfoForm, request, mav);
   
     return mav;
   }
@@ -241,40 +241,40 @@ public class PINFOController
    * @return
    * @throws Exception
    */
-  public PINFOForm getPINFOForm(PINFOJPA _jpa,
+  public PinfoForm getPinfoForm(PinfoJPA _jpa,
        boolean __isView, HttpServletRequest request, ModelAndView mav) throws I18NException {
-    PINFOForm pINFOForm;
+    PinfoForm pinfoForm;
     if(_jpa == null) {
-      pINFOForm = new PINFOForm(new PINFOJPA(), true);
+      pinfoForm = new PinfoForm(new PinfoJPA(), true);
     } else {
-      pINFOForm = new PINFOForm(_jpa, false);
-      pINFOForm.setView(__isView);
+      pinfoForm = new PinfoForm(_jpa, false);
+      pinfoForm.setView(__isView);
     }
-    pINFOForm.setContexte(getContextWeb());
-    pINFOForm.setEntityNameCode(getEntityNameCode());
-    pINFOForm.setEntityNameCodePlural(getEntityNameCodePlural());
-    return pINFOForm;
+    pinfoForm.setContexte(getContextWeb());
+    pinfoForm.setEntityNameCode(getEntityNameCode());
+    pinfoForm.setEntityNameCodePlural(getEntityNameCodePlural());
+    return pinfoForm;
   }
 
-  public void fillReferencesForForm(PINFOForm pINFOForm,
+  public void fillReferencesForForm(PinfoForm pinfoForm,
     HttpServletRequest request, ModelAndView mav) throws I18NException {
     // Comprovam si ja esta definida la llista
-    if (pINFOForm.getListOfIncidenciaTecnicaForIncidenciaID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForIncidenciaID(request, mav, pINFOForm, null);
+    if (pinfoForm.getListOfIncidenciaTecnicaForIncidenciaID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForIncidenciaID(request, mav, pinfoForm, null);
 
       if(_listSKV != null && !_listSKV.isEmpty()) { 
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
-      pINFOForm.setListOfIncidenciaTecnicaForIncidenciaID(_listSKV);
+      pinfoForm.setListOfIncidenciaTecnicaForIncidenciaID(_listSKV);
     }
     
   }
 
   /**
-   * Guardar un nou PINFO
+   * Guardar un nou Pinfo
    */
   @RequestMapping(value = "/new", method = RequestMethod.POST)
-  public String crearPINFOPost(@ModelAttribute PINFOForm pINFOForm,
+  public String crearPinfoPost(@ModelAttribute PinfoForm pinfoForm,
       BindingResult result, HttpServletRequest request,
       HttpServletResponse response) throws Exception {
     if(!isActiveFormNew()) {
@@ -282,26 +282,26 @@ public class PINFOController
       return null;
     }
 
-    PINFOJPA pINFO = pINFOForm.getPINFO();
+    PinfoJPA pinfo = pinfoForm.getPinfo();
 
     FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
 
     try {
-      this.setFilesFormToEntity(afm, pINFO, pINFOForm); // FILE
-      preValidate(request, pINFOForm, result);
-      getWebValidator().validate(pINFOForm, result);
-      postValidate(request,pINFOForm, result);
+      this.setFilesFormToEntity(afm, pinfo, pinfoForm); // FILE
+      preValidate(request, pinfoForm, result);
+      getWebValidator().validate(pinfoForm, result);
+      postValidate(request,pinfoForm, result);
 
       if (result.hasErrors()) {
         afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
-        pINFO = create(request, pINFO);
+        pinfo = create(request, pinfo);
         afm.postPersistFiles(); // FILE
-        createMessageSuccess(request, "success.creation", pINFO.getPinfoID());
-        pINFOForm.setPINFO(pINFO);
-        return getRedirectWhenCreated(request, pINFOForm);
+        createMessageSuccess(request, "success.creation", pinfo.getPinfoID());
+        pinfoForm.setPinfo(pinfo);
+        return getRedirectWhenCreated(request, pinfoForm);
       }
     } catch (Throwable __e) {
       afm.processErrorFilesWithoutThrowException(); // FILE
@@ -316,15 +316,15 @@ public class PINFOController
   }
 
   @RequestMapping(value = "/view/{pinfoID}", method = RequestMethod.GET)
-  public ModelAndView veurePINFOGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
+  public ModelAndView veurePinfoGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
       HttpServletRequest request,
       HttpServletResponse response) throws I18NException {
-      return editAndViewPINFOGet(pinfoID,
+      return editAndViewPinfoGet(pinfoID,
         request, response, true);
   }
 
 
-  protected ModelAndView editAndViewPINFOGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
+  protected ModelAndView editAndViewPinfoGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
       HttpServletRequest request,
       HttpServletResponse response, boolean __isView) throws I18NException {
     if((!__isView) && !isActiveFormEdit()) {
@@ -336,46 +336,46 @@ public class PINFOController
         return null;
       }
     }
-    PINFOJPA pINFO = findByPrimaryKey(request, pinfoID);
+    PinfoJPA pinfo = findByPrimaryKey(request, pinfoID);
 
-    if (pINFO == null) {
+    if (pinfo == null) {
       createMessageWarning(request, "error.notfound", pinfoID);
       new ModelAndView(new RedirectView(getRedirectWhenCancel(request, pinfoID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());
-      PINFOForm pINFOForm = getPINFOForm(pINFO, __isView, request, mav);
-      pINFOForm.setView(__isView);
+      PinfoForm pinfoForm = getPinfoForm(pinfo, __isView, request, mav);
+      pinfoForm.setView(__isView);
       if(__isView) {
-        pINFOForm.setAllFieldsReadOnly(ALL_PINFO_FIELDS);
-        pINFOForm.setSaveButtonVisible(false);
-        pINFOForm.setDeleteButtonVisible(false);
+        pinfoForm.setAllFieldsReadOnly(ALL_PINFO_FIELDS);
+        pinfoForm.setSaveButtonVisible(false);
+        pinfoForm.setDeleteButtonVisible(false);
       }
-      fillReferencesForForm(pINFOForm, request, mav);
-      mav.addObject("pINFOForm", pINFOForm);
+      fillReferencesForForm(pinfoForm, request, mav);
+      mav.addObject("pinfoForm", pinfoForm);
       return mav;
     }
   }
 
 
   /**
-   * Carregar el formulari per modificar un PINFO existent
+   * Carregar el formulari per modificar un Pinfo existent
    */
   @RequestMapping(value = "/{pinfoID}/edit", method = RequestMethod.GET)
-  public ModelAndView editarPINFOGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
+  public ModelAndView editarPinfoGet(@PathVariable("pinfoID") java.lang.Long pinfoID,
       HttpServletRequest request,
       HttpServletResponse response) throws I18NException {
-      return editAndViewPINFOGet(pinfoID,
+      return editAndViewPinfoGet(pinfoID,
         request, response, false);
   }
 
 
 
   /**
-   * Editar un PINFO existent
+   * Editar un Pinfo existent
    */
   @RequestMapping(value = "/{pinfoID}/edit", method = RequestMethod.POST)
-  public String editarPINFOPost(@ModelAttribute PINFOForm pINFOForm,
+  public String editarPinfoPost(@ModelAttribute PinfoForm pinfoForm,
       BindingResult result, SessionStatus status, HttpServletRequest request,
       HttpServletResponse response) throws I18NException {
 
@@ -383,25 +383,25 @@ public class PINFOController
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
       return null;
     }
-    PINFOJPA pINFO = pINFOForm.getPINFO();
+    PinfoJPA pinfo = pinfoForm.getPinfo();
 
     FilesFormManager<Fitxer> afm = getFilesFormManager(); // FILE
     try {
-      this.setFilesFormToEntity(afm, pINFO, pINFOForm); // FILE
-      preValidate(request, pINFOForm, result);
-      getWebValidator().validate(pINFOForm, result);
-      postValidate(request, pINFOForm, result);
+      this.setFilesFormToEntity(afm, pinfo, pinfoForm); // FILE
+      preValidate(request, pinfoForm, result);
+      getWebValidator().validate(pinfoForm, result);
+      postValidate(request, pinfoForm, result);
 
       if (result.hasErrors()) {
         afm.processErrorFilesWithoutThrowException(); // FILE
         result.reject("error.form");
         return getTileForm();
       } else {
-        pINFO = update(request, pINFO);
+        pinfo = update(request, pinfo);
         afm.postPersistFiles(); // FILE
-        createMessageSuccess(request, "success.modification", pINFO.getPinfoID());
+        createMessageSuccess(request, "success.modification", pinfo.getPinfoID());
         status.setComplete();
-        return getRedirectWhenModified(request, pINFOForm, null);
+        return getRedirectWhenModified(request, pinfoForm, null);
       }
     } catch (Throwable __e) {
       afm.processErrorFilesWithoutThrowException(); // FILE
@@ -410,19 +410,19 @@ public class PINFOController
         return getTileForm();
       }
       String msg = createMessageError(request, "error.modification",
-          pINFO.getPinfoID(), __e);
+          pinfo.getPinfoID(), __e);
       log.error(msg, __e);
-      return getRedirectWhenModified(request, pINFOForm, __e);
+      return getRedirectWhenModified(request, pinfoForm, __e);
     }
 
   }
 
 
   /**
-   * Eliminar un PINFO existent
+   * Eliminar un Pinfo existent
    */
   @RequestMapping(value = "/{pinfoID}/delete")
-  public String eliminarPINFO(@PathVariable("pinfoID") java.lang.Long pinfoID,
+  public String eliminarPinfo(@PathVariable("pinfoID") java.lang.Long pinfoID,
       HttpServletRequest request,HttpServletResponse response) {
 
     if(!isActiveDelete()) {
@@ -430,12 +430,12 @@ public class PINFOController
       return null;
     }
     try {
-      PINFO pINFO = this.findByPrimaryKey(request, pinfoID);
-      if (pINFO == null) {
+      Pinfo pinfo = this.findByPrimaryKey(request, pinfoID);
+      if (pinfo == null) {
         String __msg = createMessageError(request, "error.notfound", pinfoID);
         return getRedirectWhenDelete(request, pinfoID, new Exception(__msg));
       } else {
-        delete(request, pINFO);
+        delete(request, pinfo);
         createMessageSuccess(request, "success.deleted", pinfoID);
         return getRedirectWhenDelete(request, pinfoID,null);
       }
@@ -451,7 +451,7 @@ public class PINFOController
 @RequestMapping(value = "/deleteSelected", method = RequestMethod.POST)
 public String deleteSelected(HttpServletRequest request,
     HttpServletResponse response,
-    @ModelAttribute PINFOFilterForm filterForm) throws Exception {
+    @ModelAttribute PinfoFilterForm filterForm) throws Exception {
 
   if(!isActiveDelete()) {
     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -462,7 +462,7 @@ public String deleteSelected(HttpServletRequest request,
   String redirect = null;
   if (seleccionats != null && seleccionats.length != 0) {
     for (int i = 0; i < seleccionats.length; i++) {
-      redirect = eliminarPINFO(stringToPK(seleccionats[i]), request, response);
+      redirect = eliminarPinfo(stringToPK(seleccionats[i]), request, response);
     }
   }
   if (redirect == null) {
@@ -502,58 +502,58 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getEntityNameCode() {
-    return "pINFO.pINFO";
+    return "pinfo.pinfo";
   }
 
   public String getEntityNameCodePlural() {
-    return "pINFO.pINFO.plural";
+    return "pinfo.pinfo.plural";
   }
 
   public String getPrimaryKeyColumnsTranslated() {
-    return  I18NUtils.tradueix("pINFO.PinfoID");
+    return  I18NUtils.tradueix("pinfo.pinfoID");
   }
 
-  @InitBinder("pINFOFilterForm")
+  @InitBinder("pinfoFilterForm")
   public void initBinderFilterForm(WebDataBinder binder) {
     super.initBinder(binder);
   }
 
-  @InitBinder("pINFOForm")
+  @InitBinder("pinfoForm")
   public void initBinderForm(WebDataBinder binder) {
     super.initBinder(binder);
 
     binder.setValidator(getWebValidator());
 
 
-    initDisallowedFields(binder, "pINFO.PinfoID");
+    initDisallowedFields(binder, "pinfo.pinfoID");
   }
 
-  public PINFOWebValidator getWebValidator() {
-    return pINFOWebValidator;
+  public PinfoWebValidator getWebValidator() {
+    return pinfoWebValidator;
   }
 
 
-  public void setWebValidator(PINFOWebValidator __val) {
+  public void setWebValidator(PinfoWebValidator __val) {
     if (__val != null) {
-      this.pINFOWebValidator= __val;
+      this.pinfoWebValidator= __val;
     }
   }
 
 
   /**
-   * Entra aqui al pitjar el boto cancel en el llistat de PINFO
+   * Entra aqui al pitjar el boto cancel en el llistat de Pinfo
    */
   @RequestMapping(value = "/{pinfoID}/cancel")
-  public String cancelPINFO(@PathVariable("pinfoID") java.lang.Long pinfoID,
+  public String cancelPinfo(@PathVariable("pinfoID") java.lang.Long pinfoID,
       HttpServletRequest request,HttpServletResponse response) {
      return getRedirectWhenCancel(request, pinfoID);
   }
 
   /**
-   * Entra aqui al pitjar el boto cancel en el la creació de PINFO
+   * Entra aqui al pitjar el boto cancel en el la creació de Pinfo
    */
   @RequestMapping(value = "/cancel")
-  public String cancelPINFO(HttpServletRequest request,HttpServletResponse response) {
+  public String cancelPinfo(HttpServletRequest request,HttpServletResponse response) {
      return getRedirectWhenCancel(request, null);
   }
 
@@ -564,27 +564,27 @@ public java.lang.Long stringToPK(String value) {
 
   // FILE
   @Override
-  public void setFilesFormToEntity(FilesFormManager<Fitxer> afm, PINFO pINFO,
-      PINFOForm form) throws I18NException {
+  public void setFilesFormToEntity(FilesFormManager<Fitxer> afm, Pinfo pinfo,
+      PinfoForm form) throws I18NException {
 
     FitxerJPA f;
     f = (FitxerJPA)afm.preProcessFile(form.getFitxerID(), form.isFitxerIDDelete(),
-        form.isNou()? null : pINFO.getFitxer());
-    ((PINFOJPA)pINFO).setFitxer(f);
+        form.isNou()? null : pinfo.getFitxer());
+    ((PinfoJPA)pinfo).setFitxer(f);
     if (f != null) { 
-      pINFO.setFitxerID(f.getFitxerID());
+      pinfo.setFitxerID(f.getFitxerID());
     } else {
-      pINFO.setFitxerID(null);
+      pinfo.setFitxerID(null);
     }
 
 
     f = (FitxerJPA)afm.preProcessFile(form.getFitxerfirmatID(), form.isFitxerfirmatIDDelete(),
-        form.isNou()? null : pINFO.getFitxerfirmat());
-    ((PINFOJPA)pINFO).setFitxerfirmat(f);
+        form.isNou()? null : pinfo.getFitxerfirmat());
+    ((PinfoJPA)pinfo).setFitxerfirmat(f);
     if (f != null) { 
-      pINFO.setFitxerfirmatID(f.getFitxerID());
+      pinfo.setFitxerfirmatID(f.getFitxerID());
     } else {
-      pINFO.setFitxerfirmatID(null);
+      pinfo.setFitxerfirmatID(null);
     }
 
 
@@ -592,9 +592,9 @@ public java.lang.Long stringToPK(String value) {
 
   // FILE
   @Override
-  public void deleteFiles(PINFO pINFO) {
-    deleteFile(pINFO.getFitxerID());
-    deleteFile(pINFO.getFitxerfirmatID());
+  public void deleteFiles(Pinfo pinfo) {
+    deleteFile(pinfo.getFitxerID());
+    deleteFile(pinfo.getFitxerfirmatID());
   }
   // Mètodes a sobreescriure 
 
@@ -624,30 +624,30 @@ public java.lang.Long stringToPK(String value) {
 
 
   public List<StringKeyValue> getReferenceListForIncidenciaID(HttpServletRequest request,
-       ModelAndView mav, PINFOForm pINFOForm, Where where)  throws I18NException {
-    if (pINFOForm.isHiddenField(INCIDENCIAID)) {
+       ModelAndView mav, PinfoForm pinfoForm, Where where)  throws I18NException {
+    if (pinfoForm.isHiddenField(INCIDENCIAID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _where = null;
-    if (pINFOForm.isReadOnlyField(INCIDENCIAID)) {
-      _where = IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(pINFOForm.getPINFO().getIncidenciaID());
+    if (pinfoForm.isReadOnlyField(INCIDENCIAID)) {
+      _where = IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(pinfoForm.getPinfo().getIncidenciaID());
     }
     return getReferenceListForIncidenciaID(request, mav, Where.AND(where, _where));
   }
 
 
   public List<StringKeyValue> getReferenceListForIncidenciaID(HttpServletRequest request,
-       ModelAndView mav, PINFOFilterForm pINFOFilterForm,
-       List<PINFO> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (pINFOFilterForm.isHiddenField(INCIDENCIAID)
-       && !pINFOFilterForm.isGroupByField(INCIDENCIAID)) {
+       ModelAndView mav, PinfoFilterForm pinfoFilterForm,
+       List<Pinfo> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (pinfoFilterForm.isHiddenField(INCIDENCIAID)
+       && !pinfoFilterForm.isGroupByField(INCIDENCIAID)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
     if (!_groupByItemsMap.containsKey(INCIDENCIAID)) {
       // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
       java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
-      for (PINFO _item : list) {
+      for (Pinfo _item : list) {
         if(_item.getIncidenciaID() == null) { continue; };
         _pkList.add(_item.getIncidenciaID());
         }
@@ -670,23 +670,23 @@ public java.lang.Long stringToPK(String value) {
     return rm.value()[0];
   }
 
-  public void preValidate(HttpServletRequest request,PINFOForm pINFOForm , BindingResult result)  throws I18NException {
+  public void preValidate(HttpServletRequest request,PinfoForm pinfoForm , BindingResult result)  throws I18NException {
   }
 
-  public void postValidate(HttpServletRequest request,PINFOForm pINFOForm, BindingResult result)  throws I18NException {
+  public void postValidate(HttpServletRequest request,PinfoForm pinfoForm, BindingResult result)  throws I18NException {
   }
 
-  public void preList(HttpServletRequest request, ModelAndView mav, PINFOFilterForm filterForm)  throws I18NException {
+  public void preList(HttpServletRequest request, ModelAndView mav, PinfoFilterForm filterForm)  throws I18NException {
   }
 
-  public void postList(HttpServletRequest request, ModelAndView mav, PINFOFilterForm filterForm,  List<PINFO> list) throws I18NException {
+  public void postList(HttpServletRequest request, ModelAndView mav, PinfoFilterForm filterForm,  List<Pinfo> list) throws I18NException {
   }
 
-  public String getRedirectWhenCreated(HttpServletRequest request, PINFOForm pINFOForm) {
+  public String getRedirectWhenCreated(HttpServletRequest request, PinfoForm pinfoForm) {
     return "redirect:" + getContextWeb() + "/list/1";
   }
 
-  public String getRedirectWhenModified(HttpServletRequest request, PINFOForm pINFOForm, Throwable __e) {
+  public String getRedirectWhenModified(HttpServletRequest request, PinfoForm pinfoForm, Throwable __e) {
     if (__e == null) {
       return "redirect:" + getContextWeb() + "/list";
     } else {
@@ -703,15 +703,15 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getTileForm() {
-    return "pINFOFormWebDB";
+    return "pinfoFormWebDB";
   }
 
   public String getTileList() {
-    return "pINFOListWebDB";
+    return "pinfoListWebDB";
   }
 
   public String getSessionAttributeFilterForm() {
-    return "PINFO_FilterForm_" + this.getClass().getName();
+    return "Pinfo_FilterForm_" + this.getClass().getName();
   }
 
 
@@ -721,25 +721,25 @@ public java.lang.Long stringToPK(String value) {
   }
 
 
-  public PINFOJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long pinfoID) throws I18NException {
-    return (PINFOJPA) pINFOEjb.findByPrimaryKey(pinfoID);
+  public PinfoJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long pinfoID) throws I18NException {
+    return (PinfoJPA) pinfoEjb.findByPrimaryKey(pinfoID);
   }
 
 
-  public PINFOJPA create(HttpServletRequest request, PINFOJPA pINFO)
+  public PinfoJPA create(HttpServletRequest request, PinfoJPA pinfo)
     throws I18NException, I18NValidationException {
-    return (PINFOJPA) pINFOEjb.create(pINFO);
+    return (PinfoJPA) pinfoEjb.create(pinfo);
   }
 
 
-  public PINFOJPA update(HttpServletRequest request, PINFOJPA pINFO)
+  public PinfoJPA update(HttpServletRequest request, PinfoJPA pinfo)
     throws I18NException, I18NValidationException {
-    return (PINFOJPA) pINFOEjb.update(pINFO);
+    return (PinfoJPA) pinfoEjb.update(pinfo);
   }
 
 
-  public void delete(HttpServletRequest request, PINFO pINFO) throws I18NException {
-    pINFOEjb.delete(pINFO);
+  public void delete(HttpServletRequest request, Pinfo pinfo) throws I18NException {
+    pinfoEjb.delete(pinfo);
   }
 
 } // Final de Classe

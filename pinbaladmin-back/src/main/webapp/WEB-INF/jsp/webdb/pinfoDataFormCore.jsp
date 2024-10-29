@@ -16,12 +16,12 @@
           <form:errors path="pinfoData.pinfoID" cssClass="errorField alert alert-danger" />
           <c:if test="${gen:contains(__theForm.readOnlyFields ,PinfoDataFields.PINFOID)}" >
           <form:hidden path="pinfoData.pinfoID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.pinfoData.pinfoID,__theForm.listOfPINFOForPinfoID)}"  />
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.pinfoData.pinfoID,__theForm.listOfPinfoForPinfoID)}"  />
           </c:if>
           <c:if test="${!gen:contains(__theForm.readOnlyFields ,PinfoDataFields.PINFOID)}" >
           <c:set var="containEmptyValue"  value="false" />
           <form:select id="pinfoData_pinfoID"  onchange="if(typeof onChangePinfoID == 'function') {  onChangePinfoID(this); };"  cssClass="form-control col-md-9-optional" path="pinfoData.pinfoID">
-            <c:forEach items="${__theForm.listOfPINFOForPinfoID}" var="tmp">
+            <c:forEach items="${__theForm.listOfPinfoForPinfoID}" var="tmp">
                 <form:option value="${tmp.key}">${tmp.value}</form:option>
                 <c:if test="${empty tmp.key}">
                   <c:set var="containEmptyValue"  value="true" />

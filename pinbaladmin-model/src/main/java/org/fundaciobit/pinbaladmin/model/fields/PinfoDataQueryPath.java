@@ -48,10 +48,10 @@ public class PinfoDataQueryPath extends org.fundaciobit.genapp.common.query.Quer
   }
 
 
-  public PINFOQueryPath PINFO() {
-    return new PINFOQueryPath(new QueryPath() {
+  public PinfoQueryPath PINFO() {
+    return new PinfoQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return PinfoDataQueryPath.this.getQueryPath() + "pINFO" + ".";
+          return PinfoDataQueryPath.this.getQueryPath() + "pinfo" + ".";
       }
     });
   }

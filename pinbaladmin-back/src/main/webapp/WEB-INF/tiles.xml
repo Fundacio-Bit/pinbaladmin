@@ -261,22 +261,6 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
 
-    <definition name="incidenciaTecnicaPinfoFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
-    </definition>
-    
-    <definition name="incidenciaTecnicaPinfoListOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
-    </definition>
-
-    <definition name="pinfoDataFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoForm.jsp" />
-    </definition>
-    
-    <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoList.jsp" />
-    </definition>
-
 
     <definition name="solicitudestataldesdefitxersOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/solicitudestataldesdefitxers.jsp" />
@@ -446,6 +430,36 @@
 
     <definition name="postCreateIframeOperador" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
     <definition name="postCreateIframePublic" template="/WEB-INF/jsp/common/postcreateiframe.jsp" />
+    
+    
+    
+    <!-- TRAMIT PINFO -->
+    <definition name="incidenciaTecnicaPinfoFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
+    </definition>
+    
+    <definition name="incidenciaTecnicaPinfoListOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
+    </definition>
+
+    <definition name="pinfoDataFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoForm.jsp" />
+    </definition>
+    
+    <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoList.jsp" />
+    </definition>
+
+    <definition name="pinfoFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoForm.jsp" />
+    </definition>
+    
+    <definition name="pinfoListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoList.jsp" />
+    </definition>
+
+    
+    
     
 
     <!--  ===========  USER  ================== -->
@@ -723,13 +737,13 @@
     </definition>
 
 
-    <definition name="pINFOFormWebDB" extends="webdb">
-        <put-attribute name="titol" value="pINFO.pINFO" />
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pINFOForm.jsp" />
+    <definition name="pinfoFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="pinfo.pinfo" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoForm.jsp" />
     </definition>
     
-    <definition name="pINFOListWebDB" extends="webdb">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pINFOList.jsp" />
+    <definition name="pinfoListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoList.jsp" />
     </definition>
 
 

@@ -283,13 +283,13 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
 // EXP  Field:incidenciaid | Table: pad_pinfo | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "incidenciaTecnica")
-    private Set<PINFOJPA> pINFOs = new HashSet<PINFOJPA>(0);
-    public  Set<PINFOJPA> getPINFOs() {
-    return this.pINFOs;
+    private Set<PinfoJPA> pinfos = new HashSet<PinfoJPA>(0);
+    public  Set<PinfoJPA> getPinfos() {
+    return this.pinfos;
   }
 
-    public void setPINFOs(Set<PINFOJPA> pINFOs) {
-      this.pINFOs = pINFOs;
+    public void setPinfos(Set<PinfoJPA> pinfos) {
+      this.pinfos = pinfos;
     }
 
 
@@ -346,9 +346,9 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
       __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"IncidenciaTecnicaJPA"));
     }
-    if(!"PINFOJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pINFOs) || org.hibernate.Hibernate.isInitialized(__jpa.getPINFOs())) ) {
-      __tmp.setPINFOs(PINFOJPA.copyJPA(__jpa.getPINFOs(), __alreadyCopied,"IncidenciaTecnicaJPA"));
+    if(!"PinfoJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfos) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfos())) ) {
+      __tmp.setPinfos(PinfoJPA.copyJPA(__jpa.getPinfos(), __alreadyCopied,"IncidenciaTecnicaJPA"));
     }
     // Copia de beans complexes (IMP)
 

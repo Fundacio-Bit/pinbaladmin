@@ -4,15 +4,15 @@ import java.util.List;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.fundaciobit.pinbaladmin.back.form.PinbalAdminBaseForm;
-import org.fundaciobit.pinbaladmin.persistence.PINFOJPA;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 
 /**
  *  ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! 
  * Created by GenApp. Do not modify.
  */
-public class PINFOForm extends PinbalAdminBaseForm {
+public class PinfoForm extends PinbalAdminBaseForm {
   
-  private PINFOJPA pINFO;
+  private PinfoJPA pinfo;
   
   
   private CommonsMultipartFile fitxerID;
@@ -22,25 +22,25 @@ public class PINFOForm extends PinbalAdminBaseForm {
   private CommonsMultipartFile fitxerfirmatID;
   private boolean fitxerfirmatIDDelete;
   
-  public PINFOForm() {
+  public PinfoForm() {
   }
   
-  public PINFOForm(PINFOForm __toClone) {
+  public PinfoForm(PinfoForm __toClone) {
     super(__toClone);
-      this.pINFO = __toClone.pINFO;
+      this.pinfo = __toClone.pinfo;
     this.listOfIncidenciaTecnicaForIncidenciaID = __toClone.listOfIncidenciaTecnicaForIncidenciaID;
   }
   
-  public PINFOForm(PINFOJPA pINFO, boolean nou) {
+  public PinfoForm(PinfoJPA pinfo, boolean nou) {
     super(nou);
-    this.pINFO = pINFO;
+    this.pinfo = pinfo;
   }
   
-  public PINFOJPA getPINFO() {
-    return pINFO;
+  public PinfoJPA getPinfo() {
+    return pinfo;
   }
-  public void setPINFO(PINFOJPA pINFO) {
-    this.pINFO = pINFO;
+  public void setPinfo(PinfoJPA pinfo) {
+    this.pinfo = pinfo;
   }
   
   

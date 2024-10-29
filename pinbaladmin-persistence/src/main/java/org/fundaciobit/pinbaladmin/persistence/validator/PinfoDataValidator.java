@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
-import org.fundaciobit.pinbaladmin.model.fields.PINFOFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 
@@ -30,7 +30,7 @@ public class PinfoDataValidator<I extends PinfoData>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
-    ,org.fundaciobit.pinbaladmin.model.dao.IPINFOManager __pINFOManager
+    ,org.fundaciobit.pinbaladmin.model.dao.IPinfoManager __pinfoManager
     ,org.fundaciobit.pinbaladmin.model.dao.IPinfoDataManager __pinfoDataManager
     ,org.fundaciobit.pinbaladmin.model.dao.IServeiManager __serveiManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
@@ -65,11 +65,11 @@ public class PinfoDataValidator<I extends PinfoData>
       java.lang.Long __pinfoid = __target__.getPinfoID();
       if (__pinfoid != null ) {
         Long __count_ = null;
-        try { __count_ = __pINFOManager.count(PINFOFields.PINFOID.equal(__pinfoid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        try { __count_ = __pinfoManager.count(PinfoFields.PINFOID.equal(__pinfoid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
         if (__count_ == null || __count_ == 0) {        
           __vr.rejectValue(PINFOID, "error.notfound",
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("pINFO.pINFO"),
-         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("pINFO.PinfoID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("pinfo.pinfo"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("pinfo.pinfoID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__pinfoid)));
         }
       }

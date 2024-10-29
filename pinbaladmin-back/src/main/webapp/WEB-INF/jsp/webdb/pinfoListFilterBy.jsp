@@ -1,6 +1,6 @@
 <%-- ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! --%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
-<un:useConstants var="PINFOFields" className="org.fundaciobit.pinbaladmin.model.fields.PINFOFields"/>
+<un:useConstants var="PinfoFields" className="org.fundaciobit.pinbaladmin.model.fields.PinfoFields"/>
 
   <%-- HIDDEN PARAMS: FILTER BY --%> 
   <form:hidden path="visibleFilterBy"/>
@@ -50,46 +50,59 @@
       </c:forEach>
 
 
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PINFOFields.PINFOID)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.PINFOID)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>
-              <span class="add-on"><fmt:message key="pINFO.PinfoID" />:</span>
+              <span class="add-on"><fmt:message key="pinfo.pinfoID" />:</span>
 
               <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
               
-              <form:input cssClass="input-append input-small" path="PinfoIDDesde" />
+              <form:input cssClass="input-append input-small" path="pinfoIDDesde" />
 
 
               <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
 
-              <form:input cssClass="input-append input-small search-query" path="PinfoIDFins" />
+              <form:input cssClass="input-append input-small search-query" path="pinfoIDFins" />
 
             </div>
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PINFOFields.INCIDENCIAID)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.INCIDENCIAID)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>
-              <span class="add-on"><fmt:message key="pINFO.IncidenciaID" />:</span>
+              <span class="add-on"><fmt:message key="pinfo.incidenciaID" />:</span>
 
               <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
               
-              <form:input cssClass="input-append input-small" path="IncidenciaIDDesde" />
+              <form:input cssClass="input-append input-small" path="incidenciaIDDesde" />
 
 
               <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
 
-              <form:input cssClass="input-append input-small search-query" path="IncidenciaIDFins" />
+              <form:input cssClass="input-append input-small search-query" path="incidenciaIDFins" />
 
             </div>
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PINFOFields.ESTAT)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.SOLICITANTNIF)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.solicitantNIF" var="solicitantNIF" />
+              <fmt:message key="genapp.form.searchby" var="cercapersolicitantNIF" >                
+                 <fmt:param value="${solicitantNIF}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${solicitantNIF}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapersolicitantNIF}" path="solicitantNIF" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.ESTAT)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>
-              <span class="add-on"><fmt:message key="pINFO.estat" />:</span>
+              <span class="add-on"><fmt:message key="pinfo.estat" />:</span>
 
               <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
               
@@ -104,15 +117,28 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PINFOFields.PORTAFIBID)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.PORTAFIBID)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="pINFO.portafibid" var="portafibid" />
+              <fmt:message key="pinfo.portafibid" var="portafibid" />
               <fmt:message key="genapp.form.searchby" var="cercaperportafibid" >                
                  <fmt:param value="${portafibid}"/>
               </fmt:message>
               <span class="add-on"><c:out value="${portafibid}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperportafibid}" path="portafibid" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.DESTINATARINIF)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.destinatariNIF" var="destinatariNIF" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdestinatariNIF" >                
+                 <fmt:param value="${destinatariNIF}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${destinatariNIF}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinatariNIF}" path="destinatariNIF" />
             </div>
 
 

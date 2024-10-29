@@ -203,26 +203,26 @@ public class FitxerJPA implements Fitxer {
 // EXP  Field:fitxerfirmatid | Table: pad_pinfo | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxerfirmatID")
-    private Set<PINFOJPA> pINFO_fitxerfirmatids = new HashSet<PINFOJPA>(0);
-    public  Set<PINFOJPA> getPINFO_fitxerfirmatids() {
-    return this.pINFO_fitxerfirmatids;
+    private Set<PinfoJPA> pinfo_fitxerfirmatids = new HashSet<PinfoJPA>(0);
+    public  Set<PinfoJPA> getPinfo_fitxerfirmatids() {
+    return this.pinfo_fitxerfirmatids;
   }
 
-    public void setPINFO_fitxerfirmatids(Set<PINFOJPA> pINFO_fitxerfirmatids) {
-      this.pINFO_fitxerfirmatids = pINFO_fitxerfirmatids;
+    public void setPinfo_fitxerfirmatids(Set<PinfoJPA> pinfo_fitxerfirmatids) {
+      this.pinfo_fitxerfirmatids = pinfo_fitxerfirmatids;
     }
 
 
 // EXP  Field:fitxerid | Table: pad_pinfo | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxerID")
-    private Set<PINFOJPA> pINFO_fitxerids = new HashSet<PINFOJPA>(0);
-    public  Set<PINFOJPA> getPINFO_fitxerids() {
-    return this.pINFO_fitxerids;
+    private Set<PinfoJPA> pinfo_fitxerids = new HashSet<PinfoJPA>(0);
+    public  Set<PinfoJPA> getPinfo_fitxerids() {
+    return this.pinfo_fitxerids;
   }
 
-    public void setPINFO_fitxerids(Set<PINFOJPA> pINFO_fitxerids) {
-      this.pINFO_fitxerids = pINFO_fitxerids;
+    public void setPinfo_fitxerids(Set<PinfoJPA> pinfo_fitxerids) {
+      this.pinfo_fitxerids = pinfo_fitxerids;
     }
 
 
@@ -466,6 +466,14 @@ public class FitxerJPA implements Fitxer {
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.formularis) || org.hibernate.Hibernate.isInitialized(__jpa.getFormularis())) ) {
       __tmp.setFormularis(FormulariJPA.copyJPA(__jpa.getFormularis(), __alreadyCopied,"FitxerJPA"));
     }
+    if(!"PinfoJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfo_fitxerfirmatids) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfo_fitxerfirmatids())) ) {
+      __tmp.setPinfo_fitxerfirmatids(PinfoJPA.copyJPA(__jpa.getPinfo_fitxerfirmatids(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"PinfoJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfo_fitxerids) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfo_fitxerids())) ) {
+      __tmp.setPinfo_fitxerids(PinfoJPA.copyJPA(__jpa.getPinfo_fitxerids(), __alreadyCopied,"FitxerJPA"));
+    }
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_solicitudxmlids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_solicitudxmlids())) ) {
       __tmp.setSolicitud_solicitudxmlids(SolicitudJPA.copyJPA(__jpa.getSolicitud_solicitudxmlids(), __alreadyCopied,"FitxerJPA"));
@@ -473,10 +481,6 @@ public class FitxerJPA implements Fitxer {
     if(!"SolicitudServeiJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServei_fitxernorma2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServei_fitxernorma2ids())) ) {
       __tmp.setSolicitudServei_fitxernorma2ids(SolicitudServeiJPA.copyJPA(__jpa.getSolicitudServei_fitxernorma2ids(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"PINFOJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pINFO_fitxerfirmatids) || org.hibernate.Hibernate.isInitialized(__jpa.getPINFO_fitxerfirmatids())) ) {
-      __tmp.setPINFO_fitxerfirmatids(PINFOJPA.copyJPA(__jpa.getPINFO_fitxerfirmatids(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"SolicitudServeiJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitudServei_fitxernorma3ids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitudServei_fitxernorma3ids())) ) {
@@ -525,10 +529,6 @@ public class FitxerJPA implements Fitxer {
     if(!"TiquetJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt2ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt2ids())) ) {
       __tmp.setTiquet_adjunt2ids(TiquetJPA.copyJPA(__jpa.getTiquet_adjunt2ids(), __alreadyCopied,"FitxerJPA"));
-    }
-    if(!"PINFOJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pINFO_fitxerids) || org.hibernate.Hibernate.isInitialized(__jpa.getPINFO_fitxerids())) ) {
-      __tmp.setPINFO_fitxerids(PINFOJPA.copyJPA(__jpa.getPINFO_fitxerids(), __alreadyCopied,"FitxerJPA"));
     }
     // Copia de beans complexes (IMP)
 

@@ -60,7 +60,7 @@ public class PinfoDataController
 
   // References 
   @Autowired
-  protected PINFORefList pINFORefList;
+  protected PinfoRefList pinfoRefList;
 
   // References 
   @Autowired
@@ -194,7 +194,7 @@ public class PinfoDataController
     {
       _listSKV = getReferenceListForPinfoID(request, mav, filterForm, list, groupByItemsMap, null);
       _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfPINFOForPinfoID(_tmp);
+      filterForm.setMapOfPinfoForPinfoID(_tmp);
       if (filterForm.getGroupByFields().contains(PINFOID)) {
         fillValuesToGroupByItems(_tmp, groupByItemsMap, PINFOID, false);
       };
@@ -255,7 +255,7 @@ public class PinfoDataController
 
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
-    __mapping.put(PINFOID, filterForm.getMapOfPINFOForPinfoID());
+    __mapping.put(PINFOID, filterForm.getMapOfPinfoForPinfoID());
     __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
     __mapping.put(PROCEDIMENTID, filterForm.getMapOfSolicitudForProcedimentID());
     __mapping.put(SERVEIID, filterForm.getMapOfServeiForServeiID());
@@ -308,13 +308,13 @@ public class PinfoDataController
   public void fillReferencesForForm(PinfoDataForm pinfoDataForm,
     HttpServletRequest request, ModelAndView mav) throws I18NException {
     // Comprovam si ja esta definida la llista
-    if (pinfoDataForm.getListOfPINFOForPinfoID() == null) {
+    if (pinfoDataForm.getListOfPinfoForPinfoID() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForPinfoID(request, mav, pinfoDataForm, null);
 
       if(_listSKV != null && !_listSKV.isEmpty()) { 
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
-      pinfoDataForm.setListOfPINFOForPinfoID(_listSKV);
+      pinfoDataForm.setListOfPinfoForPinfoID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (pinfoDataForm.getListOfValuesForEstat() == null) {
@@ -670,7 +670,7 @@ public java.lang.Long stringToPK(String value) {
     }
     Where _where = null;
     if (pinfoDataForm.isReadOnlyField(PINFOID)) {
-      _where = PINFOFields.PINFOID.equal(pinfoDataForm.getPinfoData().getPinfoID());
+      _where = PinfoFields.PINFOID.equal(pinfoDataForm.getPinfoData().getPinfoID());
     }
     return getReferenceListForPinfoID(request, mav, Where.AND(where, _where));
   }
@@ -691,7 +691,7 @@ public java.lang.Long stringToPK(String value) {
         if(_item.getPinfoID() == null) { continue; };
         _pkList.add(_item.getPinfoID());
         }
-        _w = PINFOFields.PINFOID.in(_pkList);
+        _w = PinfoFields.PINFOID.in(_pkList);
       }
     return getReferenceListForPinfoID(request, mav, Where.AND(where,_w));
   }
@@ -699,7 +699,7 @@ public java.lang.Long stringToPK(String value) {
 
   public List<StringKeyValue> getReferenceListForPinfoID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
-    return pINFORefList.getReferenceList(PINFOFields.PINFOID, where );
+    return pinfoRefList.getReferenceList(PinfoFields.PINFOID, where );
   }
 
 

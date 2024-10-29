@@ -154,15 +154,15 @@ public class PinfoDataJPA implements PinfoData {
 // IMP Field:pinfoid | Table: pad_pinfo | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pinfoid", referencedColumnName ="PinfoID", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_pfdat_pinfo_pinfoid_fk"))
-    private PINFOJPA pINFO;
+    @JoinColumn(name = "pinfoid", referencedColumnName ="pinfoID", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_pfdat_pinfo_pinfoid_fk"))
+    private PinfoJPA pinfo;
 
-    public PINFOJPA getPINFO() {
-    return this.pINFO;
+    public PinfoJPA getPinfo() {
+    return this.pinfo;
   }
 
-    public  void setPINFO(PINFOJPA pINFO) {
-    this.pINFO = pINFO;
+    public  void setPinfo(PinfoJPA pinfo) {
+    this.pinfo = pinfo;
   }
 
 // IMP Field:solicitudid | Table: pad_solicitud | Type: 1  
@@ -239,9 +239,9 @@ public class PinfoDataJPA implements PinfoData {
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud()) ) ) {
       __tmp.setSolicitud(SolicitudJPA.copyJPA(__jpa.getSolicitud(), __alreadyCopied,"PinfoDataJPA"));
     }
-    if(!"PINFOJPA".equals(origenJPA) && 
-       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pINFO) || org.hibernate.Hibernate.isInitialized(__jpa.getPINFO()) ) ) {
-      __tmp.setPINFO(PINFOJPA.copyJPA(__jpa.getPINFO(), __alreadyCopied,"PinfoDataJPA"));
+    if(!"PinfoJPA".equals(origenJPA) && 
+       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfo) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfo()) ) ) {
+      __tmp.setPinfo(PinfoJPA.copyJPA(__jpa.getPinfo(), __alreadyCopied,"PinfoDataJPA"));
     }
     if(!"ServeiJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.servei) || org.hibernate.Hibernate.isInitialized(__jpa.getServei()) ) ) {

@@ -19,7 +19,7 @@ public class PinfoDataForm extends PinbalAdminBaseForm {
   public PinfoDataForm(PinfoDataForm __toClone) {
     super(__toClone);
       this.pinfoData = __toClone.pinfoData;
-    this.listOfPINFOForPinfoID = __toClone.listOfPINFOForPinfoID;
+    this.listOfPinfoForPinfoID = __toClone.listOfPinfoForPinfoID;
     this.listOfValuesForEstat = __toClone.listOfValuesForEstat;
     this.listOfSolicitudForProcedimentID = __toClone.listOfSolicitudForProcedimentID;
     this.listOfServeiForServeiID = __toClone.listOfServeiForServeiID;
@@ -39,14 +39,14 @@ public class PinfoDataForm extends PinbalAdminBaseForm {
   }
   
   
-  private List<StringKeyValue> listOfPINFOForPinfoID;
+  private List<StringKeyValue> listOfPinfoForPinfoID;
 
-  public List<StringKeyValue> getListOfPINFOForPinfoID() {
-    return this.listOfPINFOForPinfoID;
+  public List<StringKeyValue> getListOfPinfoForPinfoID() {
+    return this.listOfPinfoForPinfoID;
   }
 
-  public void setListOfPINFOForPinfoID(List<StringKeyValue> listOfPINFOForPinfoID) {
-    this.listOfPINFOForPinfoID = listOfPINFOForPinfoID;
+  public void setListOfPinfoForPinfoID(List<StringKeyValue> listOfPinfoForPinfoID) {
+    this.listOfPinfoForPinfoID = listOfPinfoForPinfoID;
   }
 
 

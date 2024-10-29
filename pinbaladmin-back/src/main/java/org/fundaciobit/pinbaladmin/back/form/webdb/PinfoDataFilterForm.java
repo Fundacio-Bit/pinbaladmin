@@ -158,7 +158,7 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
     this.serveiIDDesde = __toClone.serveiIDDesde;
     this.serveiIDFins = __toClone.serveiIDFins;
     this.altaSelect = __toClone.altaSelect;
-    this.mapOfPINFOForPinfoID = __toClone.mapOfPINFOForPinfoID;
+    this.mapOfPinfoForPinfoID = __toClone.mapOfPinfoForPinfoID;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
     this.mapOfSolicitudForProcedimentID = __toClone.mapOfSolicitudForProcedimentID;
     this.mapOfServeiForServeiID = __toClone.mapOfServeiForServeiID;
@@ -197,14 +197,14 @@ public class PinfoDataFilterForm extends PinbalAdminBaseFilterForm implements Pi
    // -----------------------
    // Maps de referencies.
    // -----------------------
-  private Map<String, String> mapOfPINFOForPinfoID;
+  private Map<String, String> mapOfPinfoForPinfoID;
 
-  public Map<String, String> getMapOfPINFOForPinfoID() {
-    return this.mapOfPINFOForPinfoID;
+  public Map<String, String> getMapOfPinfoForPinfoID() {
+    return this.mapOfPinfoForPinfoID;
   }
 
-  public void setMapOfPINFOForPinfoID(Map<String, String> mapOfPINFOForPinfoID) {
-    this.mapOfPINFOForPinfoID = mapOfPINFOForPinfoID;
+  public void setMapOfPinfoForPinfoID(Map<String, String> mapOfPinfoForPinfoID) {
+    this.mapOfPinfoForPinfoID = mapOfPinfoForPinfoID;
   }
 
 

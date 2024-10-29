@@ -3873,7 +3873,7 @@
     },
     {
       "name": "pad_pinfo",
-      "nameJava": "PINFO",
+      "nameJava": "Pinfo",
       "shortName": "pinfo",
       "labels": {
         "ca": "PINFO",
@@ -3902,7 +3902,7 @@
             "ca": "ID Pinfo",
             "es": "ID Pinfo"
           },
-          "javaName": "PinfoID",
+          "javaName": "pinfoID",
           "javaType": "long",
           "traduible": false,
           "showInWebList": true,
@@ -3939,7 +3939,7 @@
             "ca": "Incidencia ID",
             "es": "Incidencia ID"
           },
-          "javaName": "IncidenciaID",
+          "javaName": "incidenciaID",
           "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
@@ -3965,6 +3965,31 @@
               "type": 1
             }
           ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solicitantnif",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "NIF Solicitant",
+            "es": "NIF Solicitante"
+          },
+          "javaName": "solicitantNIF",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -4081,6 +4106,31 @@
             "es": "ID PortaFIB"
           },
           "javaName": "portafibid",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "destinatarinif",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "NIF Destinatari",
+            "es": "NIF Destinatario"
+          },
+          "javaName": "destinatariNIF",
           "javaType": "java.lang.String",
           "traduible": false,
           "showInWebList": true,

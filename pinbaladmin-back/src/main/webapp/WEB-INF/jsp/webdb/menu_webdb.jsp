@@ -154,9 +154,9 @@ ${entityname}
         </span></a>
         </li>
 
-    <%-- PINFO --%>
-       <fmt:message var="entityname" key="pINFO.pINFO.plural"/>
-        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/pINFO/list/1"/>" ><span style="${(fn:contains(url, 'pINFO/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
+    <%-- Pinfo --%>
+       <fmt:message var="entityname" key="pinfo.pinfo.plural"/>
+        <li style="list-style-type: disc; list-style-position: inside;"><a href="<c:url value="/webdb/pinfo/list/1"/>" ><span style="${(fn:contains(url, 'pinfo/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
 ${entityname}
         </span></a>
         </li>

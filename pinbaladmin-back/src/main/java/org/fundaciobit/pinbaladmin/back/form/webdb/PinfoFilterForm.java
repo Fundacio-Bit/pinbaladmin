@@ -11,7 +11,7 @@ import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.pinbaladmin.back.form.PinbalAdminBaseFilterForm;
 
-import org.fundaciobit.pinbaladmin.model.fields.PINFOFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 
 /**
  *  ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! 
@@ -19,49 +19,60 @@ import org.fundaciobit.pinbaladmin.model.fields.PINFOFields;
  * 
  */
 @Component
-public class PINFOFilterForm extends PinbalAdminBaseFilterForm implements PINFOFields {
+public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoFields {
 
-  private java.lang.Long PinfoIDDesde;
+  private java.lang.Long pinfoIDDesde;
 
   public java.lang.Long getPinfoIDDesde() {
-    return this.PinfoIDDesde;
+    return this.pinfoIDDesde;
   }
 
-  public void setPinfoIDDesde(java.lang.Long PinfoIDDesde) {
-    this.PinfoIDDesde = PinfoIDDesde;
+  public void setPinfoIDDesde(java.lang.Long pinfoIDDesde) {
+    this.pinfoIDDesde = pinfoIDDesde;
   }
 
 
-  private java.lang.Long PinfoIDFins;
+  private java.lang.Long pinfoIDFins;
 
   public java.lang.Long getPinfoIDFins() {
-    return this.PinfoIDFins;
+    return this.pinfoIDFins;
   }
 
-  public void setPinfoIDFins(java.lang.Long PinfoIDFins) {
-    this.PinfoIDFins = PinfoIDFins;
+  public void setPinfoIDFins(java.lang.Long pinfoIDFins) {
+    this.pinfoIDFins = pinfoIDFins;
   }
 
 
-  private java.lang.Long IncidenciaIDDesde;
+  private java.lang.Long incidenciaIDDesde;
 
   public java.lang.Long getIncidenciaIDDesde() {
-    return this.IncidenciaIDDesde;
+    return this.incidenciaIDDesde;
   }
 
-  public void setIncidenciaIDDesde(java.lang.Long IncidenciaIDDesde) {
-    this.IncidenciaIDDesde = IncidenciaIDDesde;
+  public void setIncidenciaIDDesde(java.lang.Long incidenciaIDDesde) {
+    this.incidenciaIDDesde = incidenciaIDDesde;
   }
 
 
-  private java.lang.Long IncidenciaIDFins;
+  private java.lang.Long incidenciaIDFins;
 
   public java.lang.Long getIncidenciaIDFins() {
-    return this.IncidenciaIDFins;
+    return this.incidenciaIDFins;
   }
 
-  public void setIncidenciaIDFins(java.lang.Long IncidenciaIDFins) {
-    this.IncidenciaIDFins = IncidenciaIDFins;
+  public void setIncidenciaIDFins(java.lang.Long incidenciaIDFins) {
+    this.incidenciaIDFins = incidenciaIDFins;
+  }
+
+
+  private java.lang.String solicitantNIF;
+
+  public java.lang.String getSolicitantNIF() {
+    return this.solicitantNIF;
+  }
+
+  public void setSolicitantNIF(java.lang.String solicitantNIF) {
+    this.solicitantNIF = solicitantNIF;
   }
 
 
@@ -98,18 +109,31 @@ public class PINFOFilterForm extends PinbalAdminBaseFilterForm implements PINFOF
   }
 
 
-  public PINFOFilterForm() {
+  private java.lang.String destinatariNIF;
+
+  public java.lang.String getDestinatariNIF() {
+    return this.destinatariNIF;
+  }
+
+  public void setDestinatariNIF(java.lang.String destinatariNIF) {
+    this.destinatariNIF = destinatariNIF;
+  }
+
+
+  public PinfoFilterForm() {
   }
   
-  public PINFOFilterForm(PINFOFilterForm __toClone) {
+  public PinfoFilterForm(PinfoFilterForm __toClone) {
     super(__toClone);
-    this.PinfoIDDesde = __toClone.PinfoIDDesde;
-    this.PinfoIDFins = __toClone.PinfoIDFins;
-    this.IncidenciaIDDesde = __toClone.IncidenciaIDDesde;
-    this.IncidenciaIDFins = __toClone.IncidenciaIDFins;
+    this.pinfoIDDesde = __toClone.pinfoIDDesde;
+    this.pinfoIDFins = __toClone.pinfoIDFins;
+    this.incidenciaIDDesde = __toClone.incidenciaIDDesde;
+    this.incidenciaIDFins = __toClone.incidenciaIDFins;
+    this.solicitantNIF = __toClone.solicitantNIF;
     this.estatDesde = __toClone.estatDesde;
     this.estatFins = __toClone.estatFins;
     this.portafibid = __toClone.portafibid;
+    this.destinatariNIF = __toClone.destinatariNIF;
     this.mapOfIncidenciaTecnicaForIncidenciaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaID;
   }
   

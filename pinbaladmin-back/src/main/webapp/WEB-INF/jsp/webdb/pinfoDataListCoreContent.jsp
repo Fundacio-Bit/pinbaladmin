@@ -33,7 +33,7 @@
           <td>
           <c:set var="tmp">${pinfoData.pinfoID}</c:set>
           <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfPINFOForPinfoID[tmp]}
+          ${__theFilterForm.mapOfPinfoForPinfoID[tmp]}
           </c:if>
           </td>
         </c:if>

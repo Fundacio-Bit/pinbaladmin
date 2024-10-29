@@ -1,6 +1,6 @@
 <%-- ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! --%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
-<un:useConstants var="PINFOFields" className="org.fundaciobit.pinbaladmin.model.fields.PINFOFields"/>
+<un:useConstants var="PinfoFields" className="org.fundaciobit.pinbaladmin.model.fields.PinfoFields"/>
 
 
 
@@ -9,7 +9,7 @@
         <c:if test="${ __entry.key < 0  && ((empty __entry.value.searchBy)? true : !gen:contains(__theFilterForm.hiddenFields, __entry.value.searchBy)) && ((empty __entry.value.groupBy )? true : !gen:contains(__theFilterForm.hiddenFields, __entry.value.groupBy ))}">
           <td>
              <c:if test="${not empty __entry.value.valueMap }">
-               <c:out escapeXml="${__entry.value.escapeXml}" value="${__entry.value.valueMap[pINFO.PinfoID]}" />
+               <c:out escapeXml="${__entry.value.escapeXml}" value="${__entry.value.valueMap[pinfo.pinfoID]}" />
              </c:if>
              <c:if test="${not empty __entry.value.valueField }">
                <c:set var="__tmp" value="${pageScope}" />
@@ -24,41 +24,51 @@
           </c:forEach>
 
 
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.PINFOID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.PINFOID)}">
           <td>
-          ${pINFO.PinfoID}
+          ${pinfo.pinfoID}
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.INCIDENCIAID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.INCIDENCIAID)}">
           <td>
-          <c:set var="tmp">${pINFO.IncidenciaID}</c:set>
+          <c:set var="tmp">${pinfo.incidenciaID}</c:set>
           <c:if test="${not empty tmp}">
           ${__theFilterForm.mapOfIncidenciaTecnicaForIncidenciaID[tmp]}
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.ESTAT)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNIF)}">
           <td>
-          ${pINFO.estat}
+          ${pinfo.solicitantNIF}
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.FITXERID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.ESTAT)}">
           <td>
-            <c:if test="${not empty pINFO.fitxer}">
-              <a target="_blank" href="<c:url value="${pad:fileUrl(pINFO.fitxer)}"/>">${pINFO.fitxer.nom}</a>
+          ${pinfo.estat}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.FITXERID)}">
+          <td>
+            <c:if test="${not empty pinfo.fitxer}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(pinfo.fitxer)}"/>">${pinfo.fitxer.nom}</a>
             </c:if>
            </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.FITXERFIRMATID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.FITXERFIRMATID)}">
           <td>
-            <c:if test="${not empty pINFO.fitxerfirmat}">
-              <a target="_blank" href="<c:url value="${pad:fileUrl(pINFO.fitxerfirmat)}"/>">${pINFO.fitxerfirmat.nom}</a>
+            <c:if test="${not empty pinfo.fitxerfirmat}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(pinfo.fitxerfirmat)}"/>">${pinfo.fitxerfirmat.nom}</a>
             </c:if>
            </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PINFOFields.PORTAFIBID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.PORTAFIBID)}">
           <td>
-          ${pINFO.portafibid}
+          ${pinfo.portafibid}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.DESTINATARINIF)}">
+          <td>
+          ${pinfo.destinatariNIF}
           </td>
         </c:if>
 
@@ -68,7 +78,7 @@
         <c:if test="${ __entry.key >= 0  && ((empty __entry.value.searchBy)? true : !gen:contains(__theFilterForm.hiddenFields, __entry.value.searchBy)) && ((empty __entry.value.groupBy )? true : !gen:contains(__theFilterForm.hiddenFields, __entry.value.groupBy ))}">
           <td>
              <c:if test="${not empty __entry.value.valueMap }">
-               <c:out escapeXml="${__entry.value.escapeXml}" value="${__entry.value.valueMap[pINFO.PinfoID]}" />
+               <c:out escapeXml="${__entry.value.escapeXml}" value="${__entry.value.valueMap[pinfo.pinfoID]}" />
              </c:if>
              <c:if test="${not empty __entry.value.valueField }">
                <c:set var="__tmp" value="${pageScope}" />

@@ -18,11 +18,11 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
-import org.fundaciobit.pinbaladmin.logic.PINFOLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.PINFO;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
-import org.fundaciobit.pinbaladmin.persistence.PINFOJPA;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -47,8 +47,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	@EJB(mappedName = IncidenciaTecnicaLogicaService.JNDI_NAME)
 	protected IncidenciaTecnicaLogicaService incidenciaTecnicaLogicaEjb;
 
-	@EJB(mappedName = PINFOLogicaService.JNDI_NAME)
-	protected PINFOLogicaService pinfoLogicEjb;
+	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
+	protected PinfoLogicaService pinfoLogicEjb;
 	
 	@Override
 	public String getTileForm() {
@@ -146,13 +146,18 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 		//Hem de crear el PINFO amb les dades de la incidencia
 		Long incidenciaID = it.getIncidenciaTecnicaID();
-		Long estat = 0L;
+		Long estat = Constants.ESTAT_PINFO_CREANT;
+		String solicitantNIF = (String) request.getSession().getAttribute("usuariNIF");
+		
 		Long fitxerID = null;
 		Long fitxerFirmatID = null;
 		String portafibid = null;
+		String destinatariNIF = null;
 		
-		PINFOJPA pinfo = new PINFOJPA(incidenciaID, estat, fitxerID, fitxerFirmatID, portafibid);
-		PINFO PINFO = pinfoLogicEjb.create(pinfo);
+		PinfoJPA pinfo = new PinfoJPA(incidenciaID, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF);
+		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
+		
+		log.info("Creant Pinfo " + Pinfo.getPinfoID());
 		
 		return it;
 	}

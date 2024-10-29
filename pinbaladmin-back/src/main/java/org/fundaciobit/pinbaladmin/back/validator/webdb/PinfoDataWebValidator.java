@@ -32,8 +32,8 @@ public class PinfoDataWebValidator extends AbstractWebValidator<PinfoDataForm, P
   protected PinfoDataValidator<PinfoData> validator = new PinfoDataValidator<PinfoData>();
 
   // EJB's
-  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PINFOService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.PINFOService pINFOEjb;
+  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PinfoService.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.PinfoService pinfoEjb;
 
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PinfoDataService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.PinfoDataService pinfoDataEjb;
@@ -86,7 +86,7 @@ public class PinfoDataWebValidator extends AbstractWebValidator<PinfoDataForm, P
 
     BeanValidatorResult<PinfoData> __vr = new BeanValidatorResult<PinfoData>();
     validator.validate(__vr, __bean,
-      isNou, pINFOEjb, pinfoDataEjb, serveiEjb, solicitudEjb);
+      isNou, pinfoEjb, pinfoDataEjb, serveiEjb, solicitudEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();

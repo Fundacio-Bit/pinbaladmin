@@ -2,44 +2,52 @@
 package org.fundaciobit.pinbaladmin.model.fields;
 import org.fundaciobit.genapp.common.query.*;
 
-public class PINFOQueryPath extends org.fundaciobit.genapp.common.query.QueryPath {
+public class PinfoQueryPath extends org.fundaciobit.genapp.common.query.QueryPath {
 
-  public PINFOQueryPath() {
+  public PinfoQueryPath() {
   }
 
-  protected PINFOQueryPath(QueryPath parentQueryPath) {
+  protected PinfoQueryPath(QueryPath parentQueryPath) {
     super(parentQueryPath);
   }
 
   public LongField PINFOID() {
-    return new LongField(getQueryPath(), PINFOFields.PINFOID);
+    return new LongField(getQueryPath(), PinfoFields.PINFOID);
   }
 
   public LongField INCIDENCIAID() {
-    return new LongField(getQueryPath(), PINFOFields.INCIDENCIAID);
+    return new LongField(getQueryPath(), PinfoFields.INCIDENCIAID);
+  }
+
+  public StringField SOLICITANTNIF() {
+    return new StringField(getQueryPath(), PinfoFields.SOLICITANTNIF);
   }
 
   public LongField ESTAT() {
-    return new LongField(getQueryPath(), PINFOFields.ESTAT);
+    return new LongField(getQueryPath(), PinfoFields.ESTAT);
   }
 
   public LongField FITXERID() {
-    return new LongField(getQueryPath(), PINFOFields.FITXERID);
+    return new LongField(getQueryPath(), PinfoFields.FITXERID);
   }
 
   public LongField FITXERFIRMATID() {
-    return new LongField(getQueryPath(), PINFOFields.FITXERFIRMATID);
+    return new LongField(getQueryPath(), PinfoFields.FITXERFIRMATID);
   }
 
   public StringField PORTAFIBID() {
-    return new StringField(getQueryPath(), PINFOFields.PORTAFIBID);
+    return new StringField(getQueryPath(), PinfoFields.PORTAFIBID);
+  }
+
+  public StringField DESTINATARINIF() {
+    return new StringField(getQueryPath(), PinfoFields.DESTINATARINIF);
   }
 
 
 
   @Override
   public String getQueryPath() {
-    return ((this.parentQueryPath == null) ? (PINFOFields._TABLE_MODEL + ".")
+    return ((this.parentQueryPath == null) ? (PinfoFields._TABLE_MODEL + ".")
         : this.parentQueryPath.getQueryPath());
   }
 
@@ -52,7 +60,7 @@ public class PINFOQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
   public PinfoDataQueryPath PINFODATAS() {
     return new PinfoDataQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return PINFOQueryPath.this.getQueryPath() + "pinfoDatas" + ".";
+          return PinfoQueryPath.this.getQueryPath() + "pinfoDatas" + ".";
       }
     });
   }
@@ -61,7 +69,7 @@ public class PINFOQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
   public IncidenciaTecnicaQueryPath INCIDENCIATECNICA() {
     return new IncidenciaTecnicaQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return PINFOQueryPath.this.getQueryPath() + "incidenciaTecnica" + ".";
+          return PinfoQueryPath.this.getQueryPath() + "incidenciaTecnica" + ".";
       }
     });
   }
@@ -69,7 +77,7 @@ public class PINFOQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
   public FitxerQueryPath FITXER() {
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return PINFOQueryPath.this.getQueryPath() + "fitxer" + ".";
+          return PinfoQueryPath.this.getQueryPath() + "fitxer" + ".";
       }
     });
   }
@@ -77,7 +85,7 @@ public class PINFOQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
   public FitxerQueryPath FITXERFIRMAT() {
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return PINFOQueryPath.this.getQueryPath() + "fitxerfirmat" + ".";
+          return PinfoQueryPath.this.getQueryPath() + "fitxerfirmat" + ".";
       }
     });
   }

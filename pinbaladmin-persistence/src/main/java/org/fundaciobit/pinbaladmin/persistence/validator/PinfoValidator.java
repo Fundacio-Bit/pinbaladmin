@@ -2,9 +2,9 @@ package org.fundaciobit.pinbaladmin.persistence.validator;
 
 import org.apache.log4j.Logger;
 
-import org.fundaciobit.pinbaladmin.model.entity.PINFO;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.pinbaladmin.model.fields.PINFOFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
@@ -15,13 +15,13 @@ import org.fundaciobit.genapp.common.validation.IValidatorResult;
  * @author GenApp
  * @author anadal
  */
-public class PINFOValidator<I extends PINFO>
-    extends org.fundaciobit.genapp.common.validation.AbstractValidator    implements PINFOFields {
+public class PinfoValidator<I extends Pinfo>
+    extends org.fundaciobit.genapp.common.validation.AbstractValidator    implements PinfoFields {
 
     protected final Logger log = Logger.getLogger(getClass());
 
 
-  public PINFOValidator() {
+  public PinfoValidator() {
     super();    
   }
   
@@ -29,15 +29,31 @@ public class PINFOValidator<I extends PINFO>
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
     ,org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager
-    ,org.fundaciobit.pinbaladmin.model.dao.IPINFOManager __pINFOManager) {
+    ,org.fundaciobit.pinbaladmin.model.dao.IPinfoManager __pinfoManager) {
 
     // Valors Not Null
     // Check size
+    if (__vr.getFieldErrorCount(SOLICITANTNIF) == 0) {
+      java.lang.String __solicitantnif = __target__.getSolicitantNIF();
+      if (__solicitantnif!= null && __solicitantnif.length() > 100) {
+        __vr.rejectValue(SOLICITANTNIF, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(SOLICITANTNIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(PORTAFIBID) == 0) {
       java.lang.String __portafibid = __target__.getPortafibid();
       if (__portafibid!= null && __portafibid.length() > 50) {
         __vr.rejectValue(PORTAFIBID, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PORTAFIBID)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(50)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(DESTINATARINIF) == 0) {
+      java.lang.String __destinatarinif = __target__.getDestinatariNIF();
+      if (__destinatarinif!= null && __destinatarinif.length() > 100) {
+        __vr.rejectValue(DESTINATARINIF, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESTINATARINIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
       }
     }
 

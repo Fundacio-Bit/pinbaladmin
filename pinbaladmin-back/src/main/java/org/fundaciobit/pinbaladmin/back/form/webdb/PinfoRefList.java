@@ -11,9 +11,9 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Select;
 import org.fundaciobit.genapp.common.query.Where;
 
-import org.fundaciobit.pinbaladmin.ejb.PINFOService;
+import org.fundaciobit.pinbaladmin.ejb.PinfoService;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.model.fields.PINFOFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.genapp.common.web.controller.RefListBase;
 
 /**
@@ -22,22 +22,22 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class PINFORefList extends RefListBase
-    implements PINFOFields {
+public class PinfoRefList extends RefListBase
+    implements PinfoFields {
 
-  @EJB(mappedName = PINFOService.JNDI_NAME)
-  private PINFOService pINFOEjb;
+  @EJB(mappedName = PinfoService.JNDI_NAME)
+  private PinfoService pinfoEjb;
 
-  public PINFORefList(PINFORefList __clone) {
+  public PinfoRefList(PinfoRefList __clone) {
     super(__clone);
-    this.pINFOEjb = __clone.pINFOEjb;
+    this.pinfoEjb = __clone.pinfoEjb;
   }
-  public PINFORefList() {
+  public PinfoRefList() {
     setSelects(new Select<?>[] { PINFOID.select });
   }
   public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
     Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = pINFOEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    List<StringKeyValue> list = pinfoEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
   }
 }

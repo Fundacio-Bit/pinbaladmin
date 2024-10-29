@@ -129,10 +129,10 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
-  public PINFOQueryPath PINFO_FITXERFIRMATIDS() {
-    return new PINFOQueryPath(new QueryPath() {
+  public PinfoQueryPath PINFO_FITXERFIRMATIDS() {
+    return new PinfoQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return FitxerQueryPath.this.getQueryPath() + "pINFO_fitxerfirmatids" + ".";
+          return FitxerQueryPath.this.getQueryPath() + "pinfo_fitxerfirmatids" + ".";
       }
     });
   }
@@ -143,10 +143,10 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
-  public PINFOQueryPath PINFO_FITXERIDS() {
-    return new PINFOQueryPath(new QueryPath() {
+  public PinfoQueryPath PINFO_FITXERIDS() {
+    return new PinfoQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return FitxerQueryPath.this.getQueryPath() + "pINFO_fitxerids" + ".";
+          return FitxerQueryPath.this.getQueryPath() + "pinfo_fitxerids" + ".";
       }
     });
   }

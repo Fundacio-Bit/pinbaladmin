@@ -42,9 +42,9 @@
       </a>
     </c:if>
       <%-- BOTO DE ESBORRAT MULTIPLE  --%>
-    <c:if test="${__theFilterForm.deleteSelectedButtonVisible && __theFilterForm.visibleMultipleSelection && not empty pINFOItems}">
+    <c:if test="${__theFilterForm.deleteSelectedButtonVisible && __theFilterForm.visibleMultipleSelection && not empty pinfoItems}">
       <a class="btn btn-danger btn-sm float-right botoselecciolist" style="" href="#myModal"
-        onclick="openModalSubmit('<c:url value="${contexte}/deleteSelected"/>','show', 'pINFO');"
+        onclick="openModalSubmit('<c:url value="${contexte}/deleteSelected"/>','show', 'pinfo');"
         title="<fmt:message key="genapp.delete"/>">
         <i class="fas fa-trash icon-white"></i>
         <fmt:message key="genapp.delete.selected" />

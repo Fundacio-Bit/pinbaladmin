@@ -143,4 +143,12 @@ public interface Constants {
     public static final String CONSENTIMENT_PUBLICAT = "publicat";
     public static final String CONSENTIMENT_ADJUNT = "adjunt";
     
+    public static final Long ESTAT_PINFO_CREANT = 0L;
+    public static final Long ESTAT_PINFO_PENDENT_FIRMA = 1L;
+    public static final Long ESTAT_PINFO_PENDENT_TRAMITAR = 2L;
+    public static final Long ESTAT_PINFO_TRAMITAT = 3L;
+    
+    public static final Long[] ESTATS_PINFO = { ESTAT_PINFO_CREANT, ESTAT_PINFO_PENDENT_FIRMA, ESTAT_PINFO_PENDENT_TRAMITAR, ESTAT_PINFO_TRAMITAT };
+    
+    
 }

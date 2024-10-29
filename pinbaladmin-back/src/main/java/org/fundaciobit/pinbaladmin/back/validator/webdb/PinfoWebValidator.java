@@ -12,11 +12,11 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.fundaciobit.pinbaladmin.persistence.validator.PINFOValidator;
+import org.fundaciobit.pinbaladmin.persistence.validator.PinfoValidator;
 
-import org.fundaciobit.pinbaladmin.back.form.webdb.PINFOForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoForm;
 import org.fundaciobit.genapp.common.web.validation.AbstractWebValidator;
-import org.fundaciobit.pinbaladmin.model.entity.PINFO;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 
 
 /**
@@ -24,41 +24,41 @@ import org.fundaciobit.pinbaladmin.model.entity.PINFO;
  * @author anadal
  */
 @Component
-public class PINFOWebValidator extends AbstractWebValidator<PINFOForm, PINFO>
-     implements Validator, PINFOFields {
+public class PinfoWebValidator extends AbstractWebValidator<PinfoForm, Pinfo>
+     implements Validator, PinfoFields {
 
      protected final Logger log = Logger.getLogger(getClass());
 
-  protected PINFOValidator<PINFO> validator = new PINFOValidator<PINFO>();
+  protected PinfoValidator<Pinfo> validator = new PinfoValidator<Pinfo>();
 
   // EJB's
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaService incidenciaTecnicaEjb;
 
-  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PINFOService.JNDI_NAME)
-  protected org.fundaciobit.pinbaladmin.ejb.PINFOService pINFOEjb;
+  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.PinfoService.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.PinfoService pinfoEjb;
 
 
 
-  public PINFOWebValidator() {
+  public PinfoWebValidator() {
     super();    
   }
   
   @Override
-  public PINFO getBeanOfForm(PINFOForm form) {
-    return  form.getPINFO();
+  public Pinfo getBeanOfForm(PinfoForm form) {
+    return  form.getPinfo();
   }
 
   @Override
-  public Class<PINFOForm> getClassOfForm() {
-    return PINFOForm.class;
+  public Class<PinfoForm> getClassOfForm() {
+    return PinfoForm.class;
   }
 
   @Override
-  public void validate(PINFOForm __form, PINFO __bean, Errors errors) {
+  public void validate(PinfoForm __form, Pinfo __bean, Errors errors) {
 
-    WebValidationResult<PINFOForm> wvr;
-    wvr = new WebValidationResult<PINFOForm>(errors);
+    WebValidationResult<PinfoForm> wvr;
+    wvr = new WebValidationResult<PinfoForm>(errors);
 
     boolean isNou;
     {
@@ -75,12 +75,12 @@ public class PINFOWebValidator extends AbstractWebValidator<PINFOForm, PINFO>
   }
 
 
-  public void validate(PINFOForm __form, PINFO __bean, Errors errors,
-    WebValidationResult<PINFOForm> wvr, boolean isNou) {
+  public void validate(PinfoForm __form, Pinfo __bean, Errors errors,
+    WebValidationResult<PinfoForm> wvr, boolean isNou) {
 
-    BeanValidatorResult<PINFO> __vr = new BeanValidatorResult<PINFO>();
+    BeanValidatorResult<Pinfo> __vr = new BeanValidatorResult<Pinfo>();
     validator.validate(__vr, __bean,
-      isNou, incidenciaTecnicaEjb, pINFOEjb);
+      isNou, incidenciaTecnicaEjb, pinfoEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();
@@ -100,11 +100,11 @@ public class PINFOWebValidator extends AbstractWebValidator<PINFOForm, PINFO>
     return field.fullName;
   }
 
-  public PINFOValidator<PINFO> getValidator() {
+  public PinfoValidator<Pinfo> getValidator() {
     return validator;
   }
 
-  public void setValidator(PINFOValidator<PINFO> validator) {
+  public void setValidator(PinfoValidator<Pinfo> validator) {
     this.validator = validator;
   }
 

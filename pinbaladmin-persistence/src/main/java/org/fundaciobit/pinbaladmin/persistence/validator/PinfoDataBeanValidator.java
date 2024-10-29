@@ -17,7 +17,7 @@ public class PinfoDataBeanValidator
 
 
   // EJB's
-  protected final org.fundaciobit.pinbaladmin.model.dao.IPINFOManager __pINFOManager;
+  protected final org.fundaciobit.pinbaladmin.model.dao.IPinfoManager __pinfoManager;
 
   protected final org.fundaciobit.pinbaladmin.model.dao.IPinfoDataManager __pinfoDataManager;
 
@@ -29,11 +29,11 @@ public class PinfoDataBeanValidator
   public final PinfoDataValidator<PinfoDataJPA> _validator;
 
 
-  public PinfoDataBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IPINFOManager __pINFOManager,
+  public PinfoDataBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IPinfoManager __pinfoManager,
      org.fundaciobit.pinbaladmin.model.dao.IPinfoDataManager __pinfoDataManager,
      org.fundaciobit.pinbaladmin.model.dao.IServeiManager __serveiManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) { 
-    this.__pINFOManager = __pINFOManager;
+    this.__pinfoManager = __pinfoManager;
     this.__pinfoDataManager = __pinfoDataManager;
     this.__serveiManager = __serveiManager;
     this.__solicitudManager = __solicitudManager;
@@ -41,11 +41,11 @@ public class PinfoDataBeanValidator
   }
 
   public PinfoDataBeanValidator(PinfoDataValidator<PinfoDataJPA> _validator,
-     org.fundaciobit.pinbaladmin.model.dao.IPINFOManager __pINFOManager,
+     org.fundaciobit.pinbaladmin.model.dao.IPinfoManager __pinfoManager,
      org.fundaciobit.pinbaladmin.model.dao.IPinfoDataManager __pinfoDataManager,
      org.fundaciobit.pinbaladmin.model.dao.IServeiManager __serveiManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
-    this.__pINFOManager = __pINFOManager;
+    this.__pinfoManager = __pinfoManager;
     this.__pinfoDataManager = __pinfoDataManager;
     this.__serveiManager = __serveiManager;
     this.__solicitudManager = __solicitudManager;
@@ -55,7 +55,7 @@ public class PinfoDataBeanValidator
   @Override
   public List<I18NFieldError> validate(PinfoDataJPA target, boolean isNou) throws I18NException {
     BeanValidatorResult<PinfoDataJPA> _bvr_ = new BeanValidatorResult<PinfoDataJPA>();
-    _validator.validate(_bvr_, target, isNou, __pINFOManager, __pinfoDataManager, __serveiManager, __solicitudManager);
+    _validator.validate(_bvr_, target, isNou, __pinfoManager, __pinfoDataManager, __serveiManager, __solicitudManager);
     return _bvr_.getErrors();
   }
 }

@@ -24,7 +24,7 @@ public interface IPinbalAdminDaoManagers {
 	public IIncidenciaTecnicaManager getIncidenciaTecnicaManager();
 	public IOperadorManager getOperadorManager();
 	public IOrganManager getOrganManager();
-	public IPINFOManager getPINFOManager();
+	public IPinfoManager getPinfoManager();
 	public IPinfoDataManager getPinfoDataManager();
 	public IServeiManager getServeiManager();
 	public ISolicitudManager getSolicitudManager();

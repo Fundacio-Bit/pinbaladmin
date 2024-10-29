@@ -99,10 +99,10 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
-  public PINFOQueryPath PINFOS() {
-    return new PINFOQueryPath(new QueryPath() {
+  public PinfoQueryPath PINFOS() {
+    return new PinfoQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return IncidenciaTecnicaQueryPath.this.getQueryPath() + "pINFOs" + ".";
+          return IncidenciaTecnicaQueryPath.this.getQueryPath() + "pinfos" + ".";
       }
     });
   }

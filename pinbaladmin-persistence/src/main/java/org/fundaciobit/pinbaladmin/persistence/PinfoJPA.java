@@ -18,7 +18,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 
 
-@Entity(name = "PINFOJPA")
+@Entity(name = "PinfoJPA")
 @Table(name = "pad_pinfo" , indexes = { 
         @Index(name="pad_pinfo_pk_i", columnList = "pinfoid"),
         @Index(name="pad_pinfo_incidenciaid_fk_i", columnList = "incidenciaid"),
@@ -26,15 +26,18 @@ import javax.persistence.Id;
         @Index(name="pad_pinfo_fitxerfirmatid_fk_i", columnList = "fitxerfirmatid")})
 @SequenceGenerator(name="PINFO_SEQ", sequenceName="pad_pinfo_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
-public class PINFOJPA implements PINFO {
+public class PinfoJPA implements Pinfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="PINFO_SEQ")
     @Column(name="pinfoid",nullable = false,length = 19)
-    long PinfoID;
+    long pinfoID;
 
     @Column(name="incidenciaid",length = 19)
-    java.lang.Long IncidenciaID;
+    java.lang.Long incidenciaID;
+
+    @Column(name="solicitantnif",length = 100)
+    java.lang.String solicitantNIF;
 
     @Column(name="estat",length = 19)
     java.lang.Long estat;
@@ -48,40 +51,49 @@ public class PINFOJPA implements PINFO {
     @Column(name="portafibid",length = 50)
     java.lang.String portafibid;
 
+    @Column(name="destinatarinif",length = 100)
+    java.lang.String destinatariNIF;
+
 
 
   /** Constructor Buit */
-  public PINFOJPA() {
+  public PinfoJPA() {
   }
 
   /** Constructor amb tots els camps  */
-  public PINFOJPA(long PinfoID , java.lang.Long IncidenciaID , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid) {
-    this.PinfoID=PinfoID;
-    this.IncidenciaID=IncidenciaID;
+  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF) {
+    this.pinfoID=pinfoID;
+    this.incidenciaID=incidenciaID;
+    this.solicitantNIF=solicitantNIF;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
     this.portafibid=portafibid;
+    this.destinatariNIF=destinatariNIF;
 }
   /** Constructor sense valors autoincrementals */
-  public PINFOJPA(java.lang.Long IncidenciaID , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid) {
-    this.IncidenciaID=IncidenciaID;
+  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF) {
+    this.incidenciaID=incidenciaID;
+    this.solicitantNIF=solicitantNIF;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
     this.portafibid=portafibid;
+    this.destinatariNIF=destinatariNIF;
 }
   /** Constructor dels valors Not Null */
-  public PINFOJPA(long PinfoID) {
-    this.PinfoID=PinfoID;
+  public PinfoJPA(long pinfoID) {
+    this.pinfoID=pinfoID;
 }
-  public PINFOJPA(PINFO __bean) {
+  public PinfoJPA(Pinfo __bean) {
     this.setPinfoID(__bean.getPinfoID());
     this.setIncidenciaID(__bean.getIncidenciaID());
+    this.setSolicitantNIF(__bean.getSolicitantNIF());
     this.setEstat(__bean.getEstat());
     this.setFitxerID(__bean.getFitxerID());
     this.setFitxerfirmatID(__bean.getFitxerfirmatID());
     this.setPortafibid(__bean.getPortafibid());
+    this.setDestinatariNIF(__bean.getDestinatariNIF());
     // Fitxer
     this.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer
@@ -89,17 +101,24 @@ public class PINFOJPA implements PINFO {
 	}
 
 	public long getPinfoID() {
-		return(PinfoID);
+		return(pinfoID);
 	};
-	public void setPinfoID(long _PinfoID_) {
-		this.PinfoID = _PinfoID_;
+	public void setPinfoID(long _pinfoID_) {
+		this.pinfoID = _pinfoID_;
 	};
 
 	public java.lang.Long getIncidenciaID() {
-		return(IncidenciaID);
+		return(incidenciaID);
 	};
-	public void setIncidenciaID(java.lang.Long _IncidenciaID_) {
-		this.IncidenciaID = _IncidenciaID_;
+	public void setIncidenciaID(java.lang.Long _incidenciaID_) {
+		this.incidenciaID = _incidenciaID_;
+	};
+
+	public java.lang.String getSolicitantNIF() {
+		return(solicitantNIF);
+	};
+	public void setSolicitantNIF(java.lang.String _solicitantNIF_) {
+		this.solicitantNIF = _solicitantNIF_;
 	};
 
 	public java.lang.Long getEstat() {
@@ -130,13 +149,20 @@ public class PINFOJPA implements PINFO {
 		this.portafibid = _portafibid_;
 	};
 
+	public java.lang.String getDestinatariNIF() {
+		return(destinatariNIF);
+	};
+	public void setDestinatariNIF(java.lang.String _destinatariNIF_) {
+		this.destinatariNIF = _destinatariNIF_;
+	};
+
 
 
   @Override
   public boolean equals(Object __obj) {
   boolean __result;
-    if (__obj != null && __obj instanceof PINFO) {
-      PINFO __instance = (PINFO)__obj;
+    if (__obj != null && __obj instanceof Pinfo) {
+      Pinfo __instance = (Pinfo)__obj;
       __result = true;
       __result = __result && (this.getPinfoID() == __instance.getPinfoID()) ;
     } else {
@@ -147,7 +173,7 @@ public class PINFOJPA implements PINFO {
 
 // EXP  Field:pinfoid | Table: pad_pinfodata | Type: 0  
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pINFO")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pinfo")
     private Set<PinfoDataJPA> pinfoDatas = new HashSet<PinfoDataJPA>(0);
     public  Set<PinfoDataJPA> getPinfoDatas() {
     return this.pinfoDatas;
@@ -202,15 +228,17 @@ public class PINFOJPA implements PINFO {
 
 
  // ---------------  STATIC METHODS ------------------
-  public static PINFOJPA toJPA(PINFO __bean) {
+  public static PinfoJPA toJPA(Pinfo __bean) {
     if (__bean == null) { return null;}
-    PINFOJPA __tmp = new PINFOJPA();
+    PinfoJPA __tmp = new PinfoJPA();
     __tmp.setPinfoID(__bean.getPinfoID());
     __tmp.setIncidenciaID(__bean.getIncidenciaID());
+    __tmp.setSolicitantNIF(__bean.getSolicitantNIF());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setFitxerfirmatID(__bean.getFitxerfirmatID());
     __tmp.setPortafibid(__bean.getPortafibid());
+    __tmp.setDestinatariNIF(__bean.getDestinatariNIF());
     // Fitxer
     __tmp.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer
@@ -219,39 +247,39 @@ public class PINFOJPA implements PINFO {
 	}
 
 
-  public static PINFOJPA copyJPA(PINFOJPA __jpa) {
+  public static PinfoJPA copyJPA(PinfoJPA __jpa) {
     return copyJPA(__jpa,new java.util.HashMap<Object,Object>(), null);
   }
 
-  static java.util.Set<PINFOJPA> copyJPA(java.util.Set<PINFOJPA> __jpaSet,
+  static java.util.Set<PinfoJPA> copyJPA(java.util.Set<PinfoJPA> __jpaSet,
     java.util.Map<Object,Object> __alreadyCopied, String origenJPA) {
     if (__jpaSet == null) { return null; }
-    java.util.Set<PINFOJPA> __tmpSet = (java.util.Set<PINFOJPA>) __alreadyCopied.get(__jpaSet);
+    java.util.Set<PinfoJPA> __tmpSet = (java.util.Set<PinfoJPA>) __alreadyCopied.get(__jpaSet);
     if (__tmpSet != null) { return __tmpSet; };
-    __tmpSet = new java.util.HashSet<PINFOJPA>(__jpaSet.size());
+    __tmpSet = new java.util.HashSet<PinfoJPA>(__jpaSet.size());
     __alreadyCopied.put(__jpaSet, __tmpSet);
-    for (PINFOJPA __jpa : __jpaSet) {
+    for (PinfoJPA __jpa : __jpaSet) {
       __tmpSet.add(copyJPA(__jpa, __alreadyCopied, origenJPA));
     }
     return __tmpSet;
   }
 
-  static PINFOJPA copyJPA(PINFOJPA __jpa,
+  static PinfoJPA copyJPA(PinfoJPA __jpa,
     java.util.Map<Object,Object> __alreadyCopied, String origenJPA) {
     if (__jpa == null) { return null; }
-    PINFOJPA __tmp = (PINFOJPA) __alreadyCopied.get(__jpa);
+    PinfoJPA __tmp = (PinfoJPA) __alreadyCopied.get(__jpa);
     if (__tmp != null) { return __tmp; };
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     if(!"PinfoDataJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.pinfoDatas) || org.hibernate.Hibernate.isInitialized(__jpa.getPinfoDatas())) ) {
-      __tmp.setPinfoDatas(PinfoDataJPA.copyJPA(__jpa.getPinfoDatas(), __alreadyCopied,"PINFOJPA"));
+      __tmp.setPinfoDatas(PinfoDataJPA.copyJPA(__jpa.getPinfoDatas(), __alreadyCopied,"PinfoJPA"));
     }
     // Copia de beans complexes (IMP)
     if(!"IncidenciaTecnicaJPA".equals(origenJPA) && 
        (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.incidenciaTecnica) || org.hibernate.Hibernate.isInitialized(__jpa.getIncidenciaTecnica()) ) ) {
-      __tmp.setIncidenciaTecnica(IncidenciaTecnicaJPA.copyJPA(__jpa.getIncidenciaTecnica(), __alreadyCopied,"PINFOJPA"));
+      __tmp.setIncidenciaTecnica(IncidenciaTecnicaJPA.copyJPA(__jpa.getIncidenciaTecnica(), __alreadyCopied,"PinfoJPA"));
     }
 
     return __tmp;
