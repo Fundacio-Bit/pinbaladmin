@@ -127,7 +127,7 @@ public class ServeiOperadorController extends ServeiController {
                 valuedivBuffer.append("<ul>");
                 for (SolicitudDTO solicitud : solicituds) {
 
-                    String tipus = (solicitud.getDepartamentID() == null ? "es" : "ca");
+                    String tipus = (solicitud.getOrganGestor() == null ? "es" : "ca");
 
                     String imgUrl = request.getContextPath() + "/img/" + tipus + "_petit_on.gif";
                     String img = "<img src=\"" + imgUrl + "\" alt=\"" + tipus

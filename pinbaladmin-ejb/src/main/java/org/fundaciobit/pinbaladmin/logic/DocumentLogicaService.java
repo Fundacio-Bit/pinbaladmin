@@ -19,5 +19,5 @@ public interface DocumentLogicaService extends DocumentService {
 	
 //	public Long crearIEnviarPeticioDeFirma(Long documentID, String destinatariNif, String titolPeticio, String description, String reason, String remitent) throws Exception;
 
-	public void cosesAFerDocumentFirmat(Long portafibID) throws I18NException;
+	public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException;
 }

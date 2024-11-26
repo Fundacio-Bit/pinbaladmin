@@ -955,3 +955,163 @@ ALTER TABLE pad_solicitudservei
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 create index pad_soliservei_fitxer_n3_fk_i on pad_solicitudservei (fitxernorma3id);
+
+
+-- Sequence: pad_pinfo_seq
+
+-- DROP SEQUENCE pad_pinfo_seq;
+
+CREATE SEQUENCE pad_pinfo_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1024
+  CACHE 1;
+ALTER TABLE pad_pinfo_seq
+  OWNER TO pinbaladmin2;
+
+-- Table: pad_pinfo
+
+-- DROP TABLE pad_pinfo;
+
+CREATE TABLE pad_pinfo
+(
+  pinfoid bigint NOT NULL DEFAULT nextval('pad_pinfo_seq'::regclass),
+  incidenciaid bigint,
+  estat bigint,
+  fitxerid bigint,
+  fitxerfirmatid bigint,
+  portafibid character varying(50),
+  CONSTRAINT pad_pinfo_pk PRIMARY KEY (pinfoid),
+  CONSTRAINT pad_pinfo_fitxer_fitxerfirm_fk FOREIGN KEY (fitxerfirmatid)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT pad_pinfo_fitxer_fitxerid_fk FOREIGN KEY (fitxerid)
+      REFERENCES pad_fitxer (fitxerid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT pad_pinfo_inctecnica_incide_fk FOREIGN KEY (incidenciaid)
+      REFERENCES pad_incidenciatecnica (incidenciatecnicaid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pad_pinfo
+  OWNER TO pinbaladmin2;
+
+-- Index: pad_pinfo_fitxerfirmatid_fk_i
+
+-- DROP INDEX pad_pinfo_fitxerfirmatid_fk_i;
+
+CREATE INDEX pad_pinfo_fitxerfirmatid_fk_i
+  ON pad_pinfo
+  USING btree
+  (fitxerfirmatid);
+
+-- Index: pad_pinfo_fitxerid_fk_i
+
+-- DROP INDEX pad_pinfo_fitxerid_fk_i;
+
+CREATE INDEX pad_pinfo_fitxerid_fk_i
+  ON pad_pinfo
+  USING btree
+  (fitxerid);
+
+-- Index: pad_pinfo_incidenciaid_fk_i
+
+-- DROP INDEX pad_pinfo_incidenciaid_fk_i;
+
+CREATE INDEX pad_pinfo_incidenciaid_fk_i
+  ON pad_pinfo
+  USING btree
+  (incidenciaid);
+
+-- Index: pad_pinfo_pk_i
+
+-- DROP INDEX pad_pinfo_pk_i;
+
+CREATE INDEX pad_pinfo_pk_i
+  ON pad_pinfo
+  USING btree
+  (pinfoid);
+
+
+-- Sequence: pad_pinfodata_seq
+
+-- DROP SEQUENCE pad_pinfodata_seq;
+
+CREATE SEQUENCE pad_pinfodata_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1235
+  CACHE 1;
+ALTER TABLE pad_pinfodata_seq
+  OWNER TO pinbaladmin2;
+
+-- Table: pad_pinfodata
+
+-- DROP TABLE pad_pinfodata;
+
+CREATE TABLE pad_pinfodata
+(
+  pinfodataid bigint NOT NULL DEFAULT nextval('pad_pinfodata_seq'::regclass),
+  pinfoid bigint,
+  estat bigint,
+  usuariid character varying(200),
+  procedimentid bigint,
+  serveiid bigint,
+  alta bigint,
+  CONSTRAINT pad_pinfodata_pk PRIMARY KEY (pinfodataid),
+  CONSTRAINT pad_pfdat_pinfo_pinfoid_fk FOREIGN KEY (pinfoid)
+      REFERENCES pad_pinfo (pinfoid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT pad_pfdat_servei_serveiid_fk FOREIGN KEY (serveiid)
+      REFERENCES pad_servei (serveiid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT pad_pfdat_solicitud_id_fk FOREIGN KEY (procedimentid)
+      REFERENCES pad_solicitud (solicitudid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pad_pinfodata
+  OWNER TO pinbaladmin2;
+
+-- Index: pad_pinfodata_pinfoid_fk_i
+
+-- DROP INDEX pad_pinfodata_pinfoid_fk_i;
+
+CREATE INDEX pad_pinfodata_pinfoid_fk_i
+  ON pad_pinfodata
+  USING btree
+  (pinfoid);
+
+-- Index: pad_pinfodata_pk_i
+
+-- DROP INDEX pad_pinfodata_pk_i;
+
+CREATE INDEX pad_pinfodata_pk_i
+  ON pad_pinfodata
+  USING btree
+  (pinfodataid);
+
+-- Index: pad_pinfodata_serveiid_fk_i
+
+-- DROP INDEX pad_pinfodata_serveiid_fk_i;
+
+CREATE INDEX pad_pinfodata_serveiid_fk_i
+  ON pad_pinfodata
+  USING btree
+  (serveiid);
+
+-- Index: pad_pinfodata_soli_fk_i
+
+-- DROP INDEX pad_pinfodata_soli_fk_i;
+
+CREATE INDEX pad_pinfodata_soli_fk_i
+  ON pad_pinfodata
+  USING btree
+  (procedimentid);
+

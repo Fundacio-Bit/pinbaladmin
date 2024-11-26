@@ -41,7 +41,7 @@
 
 .myContainer {
 	background: white;
-	padding: 0 1rem;
+	padding: 1rem;
 	border-radius: 6px;
 	border: 2px solid black;
 	margin: 2rem 7rem;
@@ -53,18 +53,47 @@
 	margin: 1rem;
 }
 
+.info-usuari-full {
+	width: fit-content;
+	margin: 2rem auto;
+	border: 1px black solid;
+	padding: 15px;
+	border-radius: 5px;
+	box-shadow: 2px 4px 3px 2px #888;
+}
+
 .pinfodata-user {
-	margin-left: 1rem;
+	text-align: center;
+	font-style: italic;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.taula-procediment {
+	margin-top: 1rem;
+	width: 45rem;
 }
 
 .pinfodata-procediment {
-	margin-left: 3rem;
+	background: lightgray;
+	font-weight: bold;
+	padding: 4px;
+}
+
+.llista-serveis {
+	padding: 6px;
 }
 
 .pinfodata-servei {
-	margin-left: 5rem;
+	
 }
 
+#msgAfegirPinfoData {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4rem;
+	margin-top: 2rem;
+}
 </style>
 
 </head>
@@ -97,8 +126,6 @@
 		</div>
 
 		<div id="includedContentLlistatPinfoData">
-			<%-- 			<%@ include file="/WEB-INF/jsp/webdb/pinfoDataList.jsp"%> --%>
-
 			<form:form name="pinfoData" cssClass="form-search"
 				modelAttribute="pinfoDataFilterForm"
 				method="${(empty method)?'post':method}"
@@ -106,98 +133,51 @@
 
 				<%@include file="/WEB-INF/jsp/webdb/pinfoDataListCommon.jsp"%>
 
-				<c:if test="${empty pinfoDataItems}">
+				<c:if test="${empty pinfoDataFull.usuaris}">
 					<div>
-						<p class="lead">Afegir dades al PINFO</p>
-						<%@include file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
+						<%@include
+							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
+						<div id="msgAfegirPinfoData">
+							<p class="lead">Afegir dades al PINFO...</p>
+						</div>
 					</div>
 				</c:if>
 
-				<c:if test="${not empty pinfoDataItems}">
+				<c:if test="${not empty pinfoDataFull.usuaris}">
 					<div id="${formName}_listheader" class="filterLine lead"
 						style="margin-bottom: 10px">
-						<%@include file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
+						<%@include
+							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
 					</div>
-
-
 
 					<div id="pinfo-data-content">
-						<c:set var="lastPinfoData"/>
-						<c:forEach var="pinfoData" items="${pinfoDataItems}">	
-							<c:if test="${empty lastPinfoData || lastPinfoData.usuariid != pinfoData.usuariid}">
-								<div class="pinfodata-user">
-									<p>${pinfoData.usuariid}</p>
-								</div>
-							</c:if>
+						<p>PinfoID : ${pinfoDataFull.pinfoID}</p>
 
-							<c:if test="${empty lastPinfoData || lastPinfoData.procedimentID != pinfoData.procedimentID}">
-								<div class="pinfodata-procediment">
-									<p>
-									<c:set var="tmp">${pinfoData.procedimentID}</c:set>
-									${__theFilterForm.mapOfSolicitudForProcedimentID[tmp]}
-									</p>
-								</div>
-							</c:if>
+						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
+							<div class="info-usuari-full">
+								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
 
-							<div class="pinfodata-servei">
-								<p>
-									<c:set var="tmp">${pinfoData.serveiID}</c:set>
-									${__theFilterForm.mapOfServeiForServeiID[tmp]}
-								</p>
+								<c:forEach var="procediment" items="${usuari.procediments}">
+									<table border="1" class="taula-procediment">
+										<tr>
+											<td class="pinfodata-procediment">
+												${procediment.procediment}</td>
+										</tr>
+										<tr>
+											<td class="llista-serveis">
+												<c:set var="primer" value="true"/> 
+												<c:forEach var="servei" items="${procediment.serveis}">
+													<c:if test="${not primer}">, </c:if>
+													${servei.servei}
+	                                            	<c:set var="primer" value="false" />
+												</c:forEach>
+											</td>
+										</tr>
+									</table>
+								</c:forEach>
 							</div>
-							
-							<c:set var="lastPinfoData" value="${pinfoData}"/>
 						</c:forEach>
 					</div>
-
-
-
-					<%-- <div id="table-container">
-						<table id="tablePinfoData"
-							class="table table-sm table-bordered table-striped table-genapp table-genapp-list">
-							<thead>
-								<tr>
-									<%@include
-										file="/WEB-INF/jsp/webdb/pinfoDataListCoreHeaderMultipleSelect.jsp"%>
-									<%@include
-										file="/WEB-INF/jsp/webdb/pinfoDataListCoreHeader.jsp"%>
-
-									ADD HERE NEW COLUMNS HEADER 
-									<%@include
-										file="/WEB-INF/jsp/webdb/pinfoDataListButtonsHeader.jsp"%>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="pinfoData" items="${pinfoDataItems}">
-
-									<tr id="pinfoData_rowid_${pinfoData.pinfodataID}">
-										<%@include
-											file="/WEB-INF/jsp/webdb/pinfoDataListCoreMultipleSelect.jsp"%>
-
-										<td>${pinfoData.usuariid}</td>
-										<td>
-											<c:set var="tmp">${pinfoData.procedimentID}</c:set>
-											${__theFilterForm.mapOfSolicitudForProcedimentID[tmp]}
-										</td>
-										
-										<td>
-											<c:set var="tmp">${pinfoData.serveiID}</c:set>
-											${__theFilterForm.mapOfServeiForServeiID[tmp]}
-										</td>
-										
-										<td>
-											<c:set var="tmp">${pinfoData.alta}</c:set>
-											${__theFilterForm.mapOfValuesForAlta[tmp]}
-										</td>
-										
-										 ADD HERE NEW COLUMNS CONTENT
-										<%@include file="/WEB-INF/jsp/webdb/pinfoDataListButtons.jsp"%>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div> --%>
-					
 
 					<c:if test="${__theFilterForm.attachedAdditionalJspCode}">
 						<%@include
@@ -205,8 +185,8 @@
 					</c:if>
 				</c:if>
 			</form:form>
-
 		</div>
+
 	</div>
 </body>
 </html>

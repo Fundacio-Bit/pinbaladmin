@@ -48,6 +48,9 @@ public class PortaFIBCallbackRestService {
 	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentLogicaService.JNDI_NAME)
 	protected org.fundaciobit.pinbaladmin.logic.DocumentLogicaService documentLogicaEjb;
 	
+	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.PinfoLogicaService.JNDI_NAME)
+	protected org.fundaciobit.pinbaladmin.logic.PinfoLogicaService pinfoLogicaEjb;
+	
 
 	@Operation(tags = "Callback", operationId = "versio", summary = "Informa de la versió de l'API de CallBack Implementada")
 	@ApiResponses(value = {
@@ -118,10 +121,19 @@ public class PortaFIBCallbackRestService {
 
 				Long portafibID = event.getSigningRequest().getID();
 				log.info("Petició firmada amb portafibID = " + portafibID);
-
-//				solicitudLogicaEjb.cosesAFerSolicitudFirmada(portafibID);
 				
-				documentLogicaEjb.cosesAFerDocumentFirmat(portafibID);
+				Long docID = documentLogicaEjb.cosesAFerDocumentFirmat(portafibID);
+				
+				if (docID != null) {
+					log.info("Document Firmat amb ID = " + docID);
+				}else {
+					Long pinfoID = pinfoLogicaEjb.cosesAFerPinfoFirmat(portafibID);
+					if (pinfoID != null) {
+						log.info("Pinfo firmat amb ID = " + pinfoID);
+					}else {
+						log.error("PortaFIBID no trobat enlloc: " + portafibID);
+					}
+				}
 			}
 				break;
 			case (int) ConstantsV2.NOTIFICACIOAVIS_PETICIO_REBUTJADA: {

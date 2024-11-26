@@ -71,6 +71,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		IncidenciaTecnicaForm form = super.getIncidenciaTecnicaForm(_jpa, __isView, request, mav);
 
 		if (form.isNou()) {
+			form.setTitleCode("pinfo.create");
+			
 			IncidenciaTecnicaJPA incidencia = form.getIncidenciaTecnica();
 
 			incidencia.setTipus(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS);
@@ -120,8 +122,6 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			
 			form.setAttachedAdditionalJspCode(true);
 			mav.addObject("isPinfo", true);
-			
-			form.addHelpToField(NOMENTITAT, "MISSATGE PER VEURE HELP");
 		}
 
 		return form;

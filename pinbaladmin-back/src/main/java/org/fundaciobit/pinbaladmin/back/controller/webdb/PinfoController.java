@@ -195,6 +195,16 @@ public class PinfoController
       };
     }
 
+    // Field estat
+    {
+      _listSKV = getReferenceListForEstat(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForEstat(_tmp);
+      if (filterForm.getGroupByFields().contains(ESTAT)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTAT, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -211,6 +221,7 @@ public class PinfoController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(INCIDENCIAID, filterForm.getMapOfIncidenciaTecnicaForIncidenciaID());
+    __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -266,6 +277,15 @@ public class PinfoController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       pinfoForm.setListOfIncidenciaTecnicaForIncidenciaID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (pinfoForm.getListOfValuesForEstat() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEstat(request, mav, pinfoForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      pinfoForm.setListOfValuesForEstat(_listSKV);
     }
     
   }
@@ -660,6 +680,40 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForIncidenciaID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return incidenciaTecnicaRefList.getReferenceList(IncidenciaTecnicaFields.INCIDENCIATECNICAID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, PinfoForm pinfoForm, Where where)  throws I18NException {
+    if (pinfoForm.isHiddenField(ESTAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForEstat(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, PinfoFilterForm pinfoFilterForm,
+       List<Pinfo> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (pinfoFilterForm.isHiddenField(ESTAT)
+       && !pinfoFilterForm.isGroupByField(ESTAT)
+       && !pinfoFilterForm.isFilterByField(ESTAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForEstat(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstat(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("-1" , "-1"));
+    __tmp.add(new StringKeyValue("0" , "0"));
+    __tmp.add(new StringKeyValue("1" , "1"));
+    __tmp.add(new StringKeyValue("2" , "2"));
+    __tmp.add(new StringKeyValue("3" , "3"));
+    return __tmp;
   }
 
 

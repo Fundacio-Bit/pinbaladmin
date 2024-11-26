@@ -1,9 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,11 +18,9 @@ import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleRevis
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignature;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureBlock;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureRequestBase;
-import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureRequestInfo;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureRequestWithSignBlockList;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignedFile;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSigner;
-import org.fundaciobit.apisib.apifirmaasyncsimple.v2.jersey.ApiFirmaAsyncSimpleJersey;
 import org.fundaciobit.apisib.core.exceptions.AbstractApisIBException;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
@@ -34,6 +29,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEJB;
 import org.fundaciobit.pinbaladmin.ejb.OperadorService;
+import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
@@ -75,35 +71,6 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	@Override
 	public Document update(Document instance) throws I18NException {
 		return super.update(instance);
-	}
-
-	protected ApiFirmaAsyncSimple getApiFirmaAsyncSimple() throws I18NException {
-
-		String host = Configuracio.getPortafibGatewayV2();
-		String username = Configuracio.getPortafibUsername();
-		String password = Configuracio.getPortafibPassword();
-
-		ApiFirmaAsyncSimpleJersey api;
-
-		try {
-			new URL(host);
-			api = new ApiFirmaAsyncSimpleJersey(host, username, password);
-
-		} catch (MalformedURLException urle) {
-			String errorMsg = "Error a la URL de conexió amb PortaFIB. Revisar la URL de la propietat "
-					+ Constants.PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.url" + " de l'arxiu: "
-					+ Constants.PINBALADMIN_PROPERTY_BASE + "system.properties.";
-
-			throw new I18NException(errorMsg + "   -   " + urle.getMessage());
-		} catch (Exception e) {
-			throw new I18NException("error.portafib.conexio.api",
-					Constants.PINBALADMIN_PROPERTY_BASE + "system.properties.", e.getMessage());
-		}
-
-		// api.setConnectionTimeoutMs(20000); // 20 segons
-		// api.setReadTimeoutMs(20000); // 20 segons
-
-		return api;
 	}
 
 	@Override
@@ -201,7 +168,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		FirmaAsyncSimpleSignatureRequestWithSignBlockList signatureRequest;
 		signatureRequest = new FirmaAsyncSimpleSignatureRequestWithSignBlockList(signatureRequestBase, signatureBlocks);
 
-		ApiFirmaAsyncSimple api = getApiFirmaAsyncSimple();
+		ApiFirmaAsyncSimple api = PortafibUtils.getApiFirmaAsyncSimple();
 		
 		try {
 			peticioDeFirmaID = api.createAndStartSignatureRequestWithSignBlockList(signatureRequest);
@@ -318,17 +285,17 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	}
 	// ------------ Rebre Document Firmat -------------------{
 	@Override
-	public void cosesAFerDocumentFirmat(Long portafibID) throws I18NException {
+	public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException {
 		Long docID = getDocIDFromPortafibID(portafibID);
 
 		if (docID == null) {
-			log.error("No hi ha cap document amb portafibID=" + portafibID + ". ", new Exception());
+			log.error("No hi ha cap document amb portafibID=" + portafibID);
 		} else {
-			FirmaAsyncSimpleSignedFile firma = getFitxerSignat(portafibID);
-			Long fitxerFirmatID = guardarFitxer(firma);
+			FirmaAsyncSimpleSignedFile firma = PortafibUtils.getFitxerSignat(portafibID);
+			Long fitxerFirmatID = PortafibUtils.guardarFitxer(firma, fitxerEjb);
 			
 			//El document de l'event ha de ser una copia del document original.
-			Long fitxerFirmatIDCopia = guardarFitxer(firma);
+			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(firma, fitxerEjb);
 			
 			Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
 					DocumentSolicitudFields.DOCUMENTID.equal(docID));
@@ -336,57 +303,16 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 				afegirFitxerADocSolicitud(docID, soliID, fitxerFirmatID);
 				crearEventSolcitudFirmada(soliID, fitxerFirmatIDCopia );
 			} else {
-				log.error("No hi ha cap sol·licitud amb documentID=" + docID + ". ", new Exception());
+				log.error("No hi ha cap sol·licitud amb documentID=" + docID);
 			}
 		}
+		return docID;
 	}
 
 	protected Long getDocIDFromPortafibID(Long portafibID) throws I18NException {
 		return this.executeQueryOne(DocumentFields.DOCUMENTID, DocumentFields.NOTES.like("%" + portafibID + "%"));
 	}
-
-	protected FirmaAsyncSimpleSignedFile getFitxerSignat(long portafibID) throws I18NException {
-		String languageUI = "ca";
-
-		FirmaAsyncSimpleSignatureRequestInfo rinfo = null;
-		rinfo = new FirmaAsyncSimpleSignatureRequestInfo(portafibID, languageUI);
-
-		ApiFirmaAsyncSimple api;
-		FirmaAsyncSimpleSignedFile fitxerSignat = null;
-		try {
-			api = getApiFirmaAsyncSimple();
-			fitxerSignat = api.getSignedFileOfSignatureRequest(rinfo);
-		} catch (Throwable t) {
-			throw new I18NException("error.portafib.fitxersignat", String.valueOf(portafibID), t.getMessage());
-		}
-
-		return fitxerSignat;
-	}
-
-	protected long guardarFitxer(FirmaAsyncSimpleSignedFile firma) throws I18NException {
-		// Guarda fitxer signat a FileSystemManager i a la BD. Retorna el ID del fitxer
-		String nom = firma.getSignedFile().getNom();
-		String mime = firma.getSignedFile().getMime();
-		byte[] data = firma.getSignedFile().getData();
-
-		Fitxer fdb = fitxerEjb.create(nom, data.length, mime, null);
-
-		Long fitxerID = fdb.getFitxerID();
-
-		try {
-			File fitxersignat = FileSystemManager.getFile(fitxerID);
-			FileOutputStream fos = new FileOutputStream(fitxersignat);
-			fos.write(data);
-			fos.flush();
-			fos.close();
-
-		} catch (Throwable t) {
-			throw new I18NException("error.fitxer.guardar.fsm", String.valueOf(fitxerID), t.getMessage());
-		}
-
-		return fitxerID;
-	}
-
+	
 	protected void afegirFitxerADocSolicitud(Long docID, Long soliID, Long fitxerID) throws I18NException {
 		Document doc = this.findByPrimaryKey(docID);
 		doc.setFitxerFirmatID(fitxerID);

@@ -1,3 +1,4 @@
+<%@page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoPublicController"%>
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController"%>
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.IncidenciaPinfoPublicController"%>
 
@@ -19,7 +20,7 @@
 
 	<div id="titol-tramit" class="third">Tramit PINFO</div>
 	<div id="button-menu" class="third">
-		<a href="<%=request.getContextPath() + PinfoDataPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="exit"/></a>
+		<a href="<%=request.getContextPath() + PinfoPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="tramitpinfo.exit"/></a>
 	</div>
 </div>
 

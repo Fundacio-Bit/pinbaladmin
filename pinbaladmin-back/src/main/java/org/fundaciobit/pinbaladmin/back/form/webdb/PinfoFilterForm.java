@@ -76,25 +76,14 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
   }
 
 
-  private java.lang.Long estatDesde;
+  private java.util.List<java.lang.Long> estatSelect;
 
-  public java.lang.Long getEstatDesde() {
-    return this.estatDesde;
+  public java.util.List<java.lang.Long> getEstatSelect() {
+    return this.estatSelect;
   }
 
-  public void setEstatDesde(java.lang.Long estatDesde) {
-    this.estatDesde = estatDesde;
-  }
-
-
-  private java.lang.Long estatFins;
-
-  public java.lang.Long getEstatFins() {
-    return this.estatFins;
-  }
-
-  public void setEstatFins(java.lang.Long estatFins) {
-    this.estatFins = estatFins;
+  public void setEstatSelect(java.util.List<java.lang.Long> estatSelect) {
+    this.estatSelect = estatSelect;
   }
 
 
@@ -130,11 +119,11 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
     this.incidenciaIDDesde = __toClone.incidenciaIDDesde;
     this.incidenciaIDFins = __toClone.incidenciaIDFins;
     this.solicitantNIF = __toClone.solicitantNIF;
-    this.estatDesde = __toClone.estatDesde;
-    this.estatFins = __toClone.estatFins;
+    this.estatSelect = __toClone.estatSelect;
     this.portafibid = __toClone.portafibid;
     this.destinatariNIF = __toClone.destinatariNIF;
     this.mapOfIncidenciaTecnicaForIncidenciaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaID;
+    this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
   }
   
   /* ========= UTILS ========== */
@@ -177,6 +166,18 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
 
   public void setMapOfIncidenciaTecnicaForIncidenciaID(Map<String, String> mapOfIncidenciaTecnicaForIncidenciaID) {
     this.mapOfIncidenciaTecnicaForIncidenciaID = mapOfIncidenciaTecnicaForIncidenciaID;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForEstat;
+
+  public Map<String, String> getMapOfValuesForEstat() {
+    return this.mapOfValuesForEstat;
+  }
+
+  public void setMapOfValuesForEstat(Map<String, String> mapOfValuesForEstat) {
+    this.mapOfValuesForEstat = mapOfValuesForEstat;
   }
 
 

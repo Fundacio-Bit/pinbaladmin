@@ -185,6 +185,7 @@ public class EmailUtil {
 		String url = Configuracio.getAppBackUrl() + "/public/event" + tipus + "/veureevents/"
 				+ HibernateFileUtil.encryptFileID(itemID) + (destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(destinatari)));
 		
+		System.out.print("URL: " + url);
 		//Si es un correo a soporte, debe estar en castellano
 		if (destinatari.equals("Soporte Intermediación")) {
 			String msgEsp = "<div id=\"peu_correu\">" + "  <div id=\"reObrir\">"

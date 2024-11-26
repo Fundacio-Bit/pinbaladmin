@@ -237,38 +237,27 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
 			if (isPublic()) {
 
-				String cadenaDestinatari = (String) request.getSession().getAttribute(SESSION_EVENT_DESTINATARI);
-				log.info("cadenaDestinatari => " + cadenaDestinatari);
-				if (cadenaDestinatari != null && cadenaDestinatari.trim().length() > 0) {
-					String[] parts = cadenaDestinatari.split("\\|");
-					if (parts.length == 2) {
-						String tipus = parts[0];
-						String persona = parts[1]; // Anterior destinatari del correu del que ve
-						log.info("persona => " + persona + " - tipus => " + tipus);
+				String[] visitant = getVisitantWeb(request);
+				if (visitant != null) {
+					String tipus = visitant[0];
+					String persona = visitant[1]; // Anterior destinatari del correu del que ve
+					log.info("persona => " + persona + " - tipus => " + tipus);
 
-						switch (tipus) {
-						case "CEDENT":
-							ev.setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
-							ev.setPersona(persona);
-							break;
-						case "CONTACTE":
-							ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
-							ev.setPersona(persona);
-							break;
-						}
-					} else {
-						//Error amb la cadena de destinatari
+					switch (tipus) {
+					case "CEDENT":
+						ev.setTipus(EVENT_TIPUS_CEDENT_RESPOSTA);
+						ev.setPersona(persona);
+						break;
+					case "CONTACTE":
 						ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
-						ev.setPersona(getPersonaContacteEmail(item));
+						ev.setPersona(persona);
+						break;
 					}
-				} else {
-					// Si es public, i no hi ha destinatari, comentari al contacte de la
-					// soli/incidencia
+				}else {
 					ev.setTipus(EVENT_TIPUS_COMENTARI_CONTACTE);
-					ev.setPersona(getPersonaContacteEmail(item));
+					ev.setPersona(getPersonaContacteNom(item));
 				}
-
-//                ev.setPersona(email);
+				
 				ev.setNoLlegit(true);
 			} else {
             	String asumpte = "PINBAL [" + itemID + "] - ACTUALITZACIÓ " + itemNom.toUpperCase() + " - " + getTitolItem(itemID);
@@ -433,6 +422,34 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
     public abstract boolean isClosed(T item);
 
+    
+	public String[] getVisitantWeb(HttpServletRequest request) {
+		String[] visitant;
+
+		String cadenaDestinatari = (String) request.getSession().getAttribute(SESSION_EVENT_DESTINATARI);
+		log.info("cadenaDestinatari => " + cadenaDestinatari);
+		if (cadenaDestinatari != null && cadenaDestinatari.trim().length() > 0) {
+			String[] parts = cadenaDestinatari.split("\\|");
+			if (parts.length == 2) {
+				String tipus = parts[0];
+				String persona = parts[1]; // Anterior destinatari del correu del que ve
+				log.info("persona => " + persona + " - tipus => " + tipus);
+
+				visitant = new String[] { tipus, persona };
+			} else {
+				log.error("Error descomposant cadenaDestinatari: " + cadenaDestinatari);
+				visitant = new String[] { null, null };
+			}
+			
+		}else {
+			log.info("cadenaDestinatari NULL");
+			visitant = new String[] { null, null };			
+		}
+
+		return visitant;
+	}
+    
+    
     @RequestMapping(value = "/veureevents/{itemStrID}", method = RequestMethod.GET)
     public String veureEvents(HttpServletRequest request, HttpServletResponse response, @PathVariable String itemStrID)
             throws I18NException {
@@ -652,7 +669,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
             mav.addObject("cedent", cedent);
         }
 
-
+        
+        mav.addObject("visitant", getVisitantWeb(request)[1]);
         mav.addObject("operador", getOperador(item));
         mav.addObject("creador", getCreador(item));
         mav.addObject("datacreacio", SDF.format(getDataCreacio(item)));

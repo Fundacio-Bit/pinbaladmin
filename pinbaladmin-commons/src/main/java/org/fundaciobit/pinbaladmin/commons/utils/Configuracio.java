@@ -295,4 +295,16 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.directorgeneral");
 	}
 
+	public static String getPortaFIBApiFlowUrl() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.url");
+	}
+
+	public static String getPortaFIBApiFlowUsername() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.username");
+	}
+
+	public static String getPortaFIBApiFlowPassword() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.password");
+	}
+
 }

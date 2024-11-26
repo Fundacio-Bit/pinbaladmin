@@ -260,6 +260,43 @@
 
             </exclusions>
         </dependency>
+        
+        
+        <dependency>
+            <artifactId>apiplantillafluxsimple-jersey</artifactId>
+            <groupId>org.fundaciobit.apisib.apiplantillafluxsimple</groupId>
+            <version>1.0.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-client</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-xc</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-jaxrs</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- Necessari per apifirmaasyncsimple-jersey -->
         <dependency>

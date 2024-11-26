@@ -1321,7 +1321,16 @@ textarea.event {
 				isPublicEvent se refiere a si el comentario es publico o no.
 				 -->
 
-				<c:set var="isPublicEvent" value="${ consultaCedent || tramitadorPublic || contacte || cedentResposta}" />
+				<c:set var="isPublicEvent" value="${ suport || consultaCedent || tramitadorPublic || contacte || cedentResposta}" />
+				
+				<!-- Si es un event public, s'han de mostrar els missatges enviats pel destinatari, o enviats al destinatari -->
+				<c:set var="visitant" value="${visitant}" />
+				<c:set var="esMeuOPerJo" value="${event.persona eq visitant || event.destinatari eq visitant || event.destinatarimail eq visitant}" />
+				
+<!-- 			Visitant: ${visitant} <br />
+				Persona: ${event.persona} - Destinatari: ${event.destinatari} - DestinatariMail: ${event.destinatarimail} <br />
+				Es meu o per jo: ${esMeuOPerJo} <br />  -->
+				
 				
 				<c:set var="isContacte" value="${contacte}" />
 				<c:set var="isCedent" value="${consultaCedent || cedentResposta}" />
@@ -1332,6 +1341,11 @@ textarea.event {
 				<c:if test="${showOnlyPublic && !isPublicEvent}">
 					<c:set var="show" value="${false}" />
 				</c:if>
+                
+                
+                <c:if test="${isPublic && show && !esMeuOPerJo}">
+                    <c:set var="show" value="${false}" />
+                </c:if>
                 
 				<c:if test="${show}">
 

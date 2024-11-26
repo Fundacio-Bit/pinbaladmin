@@ -2,7 +2,6 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -11,43 +10,31 @@ import javax.servlet.http.HttpServletResponse;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
-import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.GroupByItem;
-import org.fundaciobit.genapp.common.query.ITableManager;
-import org.fundaciobit.genapp.common.query.OrderBy;
-import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
-import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
-import org.fundaciobit.pinbaladmin.back.controller.operador.TramitIOperadorController.Item;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
-import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
-import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
-import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
-import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -111,10 +98,17 @@ public class PinfoDataPublicController extends PinfoDataController {
 		PinfoDataFilterForm filterForm = super.getPinfoDataFilterForm(pagina, mav, request);
 
 		Long id = (Long) request.getSession().getAttribute("incidenciaId");
-
+		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
+		
 		if (id == null) {
 			id = 50111L;
 		}
+		
+		if (pinfoID == null) {
+			pinfoID = pinfoLogicEjb.executeQueryOne(PinfoFields.PINFOID, PinfoFields.INCIDENCIAID.equal(id));
+//			pinfoID = 1005L;
+		}
+		
 		IncidenciaTecnica inc = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
 		mav.addObject("incidencia", inc);
 
@@ -128,9 +122,12 @@ public class PinfoDataPublicController extends PinfoDataController {
 			filterForm.setItemsPerPage(-1);
 			filterForm.setTitleCode("tramit.pinfo.solicitar");
 			filterForm.setAttachedAdditionalJspCode(true);
-		
-			filterForm.addAdditionalButton(new AdditionalButton("fas fa-file-pdf", "generar.pdf", getContextWeb() + "/generaPdf", AdditionalButtonStyle.PRIMARY));
+		}
 
+		log.info("getPinfoDataFilterForm():: pinfoID: " + pinfoID);
+		if (pinfoID != null) {
+			PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
+			mav.addObject("pinfoDataFull", pinfoDataFull);
 		}
 
 		return filterForm;
@@ -143,7 +140,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		log.info("pinfoID: " + pinfoID);
 		
-		List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));		
+//		List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));		
 
 //		HtmlUtils.saveMessageInfo(request, "Hay " + pinfoDataList.size() + " pinfodatas.");
 		
@@ -173,34 +170,34 @@ public class PinfoDataPublicController extends PinfoDataController {
 		return form;
 	}
 
-	@Override
-	public List<PinfoData> executeSelect(ITableManager<PinfoData, Long> ejb, Where where, OrderBy[] orderBy,
-			Integer itemsPerPage, int inici) throws I18NException {
-		log.info("pasa por executeSelect");
-
-		OrderBy orderByServ = new OrderBy(PinfoDataFields.SERVEIID, OrderType.ASC);
-		OrderBy orderByProc = new OrderBy(PinfoDataFields.PROCEDIMENTID, OrderType.ASC);
-		OrderBy orderByUser = new OrderBy(PinfoDataFields.USUARIID, OrderType.ASC);
-
-		OrderBy[] myOrderBy = { orderByUser, orderByProc, orderByServ };
-
-		OrderBy[] newOrderBy;
-		
-		if (orderBy == null) {
-			newOrderBy = myOrderBy;
-		} else {
-			newOrderBy = new OrderBy[orderBy.length + myOrderBy.length];
-
-			for (int i = 0; i < orderBy.length; i++) {
-				newOrderBy[i] = orderBy[i];
-			}
-			for (int i = 0; i < myOrderBy.length; i++) {
-				newOrderBy[orderBy.length + i] = myOrderBy[i];
-			}
-		}
-
-		return super.executeSelect(ejb, where, newOrderBy, itemsPerPage, inici);
-	}
+//	@Override
+//	public List<PinfoData> executeSelect(ITableManager<PinfoData, Long> ejb, Where where, OrderBy[] orderBy,
+//			Integer itemsPerPage, int inici) throws I18NException {
+//		log.info("pasa por executeSelect");
+//
+//		OrderBy orderByServ = new OrderBy(PinfoDataFields.SERVEIID, OrderType.ASC);
+//		OrderBy orderByProc = new OrderBy(PinfoDataFields.PROCEDIMENTID, OrderType.ASC);
+//		OrderBy orderByUser = new OrderBy(PinfoDataFields.USUARIID, OrderType.ASC);
+//
+//		OrderBy[] myOrderBy = { orderByUser, orderByProc, orderByServ };
+//
+//		OrderBy[] newOrderBy;
+//		
+//		if (orderBy == null) {
+//			newOrderBy = myOrderBy;
+//		} else {
+//			newOrderBy = new OrderBy[orderBy.length + myOrderBy.length];
+//
+//			for (int i = 0; i < orderBy.length; i++) {
+//				newOrderBy[i] = orderBy[i];
+//			}
+//			for (int i = 0; i < myOrderBy.length; i++) {
+//				newOrderBy[orderBy.length + i] = myOrderBy[i];
+//			}
+//		}
+//
+//		return super.executeSelect(ejb, where, newOrderBy, itemsPerPage, inici);
+//	}
 
 	@Override
 	public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
@@ -209,7 +206,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		Long incidenciaID = (Long) request.getSession().getAttribute("incidenciaId");
 
-//		log.info("incidenciaID 1: " + incidenciaID);
+		log.info("getAdditionalCondition():: incidenciaID  " + incidenciaID);
 		if (incidenciaID == null) {
 			incidenciaID = 50111L;
 		}
@@ -217,7 +214,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		if (incidenciaID != null) {
 
 			List<Pinfo> pinfos = pinfoLogicEjb.select(PinfoFields.INCIDENCIAID.equal(incidenciaID));
-//			log.info("pinfos: " + pinfos.size());
+			log.info("getAdditionalCondition():: pinfos: " + pinfos.size());
 			if (pinfos.size() == 1) {
 				Long pinfoID = pinfos.get(0).getPinfoID();
 				log.info("pinfoID: " + pinfoID);
@@ -322,6 +319,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 //		PinfoData pinfoData = pinfoDataLogicaEjb.create(pinfoDataJPA);
 //		log.info("pinfoData: " + pinfoData.getPinfodataID());
 
+		
+		
 		return "redirect:" + CONTEXT_WEB + "/list";
 	}
 
@@ -446,11 +445,26 @@ public class PinfoDataPublicController extends PinfoDataController {
 		for (Servei servei : serveis) {
             String key =String.valueOf(servei.getServeiID());
             EntitatServei entitatServei = entitatLogicaEjb.findByPrimaryKey(servei.getEntitatServeiID());
-            String value = "(" + entitatServei.getNom()+ ") " + servei.getNom();
+//            String value = "(" + entitatServei.getNom()+ ") " + servei.getNom();
+            String value = servei.getCodi();
             
             tmp.add(new StringKeyValue(key, value));
 		}
 		
 		return tmp;
+	}
+	
+	
+	@Override
+	public void postList(HttpServletRequest request, ModelAndView mav, PinfoDataFilterForm filterForm,
+			List<PinfoData> list) throws I18NException {
+
+		super.postList(request, mav, filterForm, list);
+		filterForm.getAdditionalButtons().clear();
+		if (list.size() > 0) {
+			filterForm.addAdditionalButton(new AdditionalButton("fas fa-file-pdf", "generar.pdf",
+					getContextWeb() + "/generaPdf", AdditionalButtonStyle.PRIMARY));
+		}
+
 	}
 }

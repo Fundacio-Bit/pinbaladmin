@@ -252,7 +252,7 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/common/eventsiframe.jsp" />
     </definition>
     
-    <definition name="incidenciaTecnicaFormOperador" template="operador_base">
+    <definition name="incidenciaTecnicaFormOperador" extends="operador_base">
         <put-attribute name="titol" value="incidenciaTecnica.incidenciaTecnica" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
     </definition>
@@ -458,8 +458,13 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoList.jsp" />
     </definition>
 
-    
-    
+   <definition name="flowview" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/urlflow_iframe.jsp" />
+    </definition>
+ 
+    <definition name="finaliframe" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/final_iframe.jsp" />
+    </definition>
     
 
     <!--  ===========  USER  ================== -->

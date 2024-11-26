@@ -5,13 +5,13 @@ public class SolicitudDTO {
     private final Long solicitudID;
     private final String procedimentCodi;
     private final String procedimentNom;
-    private final Long departamentID;
+    private final Long organGestor;
 
-    public SolicitudDTO(Long solicitudID, String procedimentCodi, String procedimentNom, Long departamentID) {
+    public SolicitudDTO(Long solicitudID, String procedimentCodi, String procedimentNom, Long organGestor) {
         this.solicitudID = solicitudID;
         this.procedimentCodi = procedimentCodi;
         this.procedimentNom = procedimentNom;
-        this.departamentID = departamentID;
+        this.organGestor = organGestor;
     }
 
     public Long getSolicitudID() {
@@ -26,10 +26,10 @@ public class SolicitudDTO {
         return procedimentNom;
     }
 
-    public Long getDepartamentID() {
-        return departamentID;
-    }
-
+	public Long getOrganGestor() {
+		return organGestor;
+	}
+    
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -48,6 +48,6 @@ public class SolicitudDTO {
     @Override
     public String toString() {
         return "SolicitudDTO{" + "solicitudID=" + solicitudID + ", procedimentCodi='" + procedimentCodi + '\''
-                + ", procedimentNom='" + procedimentNom + '\'' + ", departamentID=" + departamentID + '}';
+                + ", procedimentNom='" + procedimentNom + '\'' + ", organGestor='" + organGestor + '}';
     }
 }

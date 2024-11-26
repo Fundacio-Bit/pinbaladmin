@@ -96,10 +96,24 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             return Collections.emptyMap();
         }
 
-        Query query = __em.createQuery("select " + "s.serveiID, " + "solser.solicitudID, "
-                + "solser.solicitud.procedimentCodi,  " + "solser.solicitud.procedimentNom,  "
-                + "solser.solicitud.departamentID " + "from ServeiJPA s join s.solicitudServeis solser "
-                + "where s.serveiID in (:serveiIds) " + "order by s.serveiID, solser.solicitud.dataInici DESC");
+//		Query query = __em.createQuery("select " + "s.serveiID, " + "solser.solicitudID, "
+//				+ "solser.solicitud.procedimentCodi,  " + "solser.solicitud.procedimentNom "
+//				+ "from ServeiJPA s join s.solicitudServeis solser "
+//				+ "where s.serveiID in (:serveiIds) " + "order by s.serveiID, solser.solicitud.dataInici DESC");
+		
+		
+		String queryStr = ""
+				+ "SELECT "
+				+ "		s.serveiID, solser.solicitudID, solser.solicitud.procedimentCodi, solser.solicitud.procedimentNom, solser.solicitud.organid "
+				+ "FROM " 
+				+ "		ServeiJPA s join s.solicitudServeis solser " 
+				+ "WHERE "
+				+ "		s.serveiID in (:serveiIds) " 
+				+ "ORDER BY "
+				+ "		s.serveiID, solser.solicitud.dataInici DESC";
+
+		Query query = __em.createQuery(queryStr);
+		
         query.setParameter("serveiIds", serveiIds);
         List<Object[]> resultList = (List<Object[]>) query.getResultList();
 
@@ -110,8 +124,12 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         for (Object[] result : resultList) {
             Long serveiId = (Long) result[0];
-            SolicitudDTO solicitudDTO = new SolicitudDTO((Long) result[1], (String) result[2], (String) result[3],
-                    (Long) result[4]);
+            Long solicitudId = (Long) result[1];
+            String procedimentCodi = (String) result[2];
+            String procedimentNom = (String) result[3];
+            Long organGestor = (Long) result[4];
+            
+            SolicitudDTO solicitudDTO = new SolicitudDTO(solicitudId, procedimentCodi, procedimentNom, organGestor);
             resultMap.get(serveiId).add(solicitudDTO);
         }
 

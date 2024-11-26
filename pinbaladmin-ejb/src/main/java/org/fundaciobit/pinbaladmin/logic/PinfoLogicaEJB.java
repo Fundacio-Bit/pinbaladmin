@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.logic;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,21 +15,42 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.apache.commons.io.FileUtils;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.ApiFirmaAsyncSimple;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleAnnex;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleExternalSigner;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleFile;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleMetadata;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleReviser;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignature;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureBlock;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureRequestBase;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignatureRequestWithSignBlockList;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSignedFile;
+import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleSigner;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleBlock;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleExternalSigner;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleFlowTemplate;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleReviser;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleSignature;
+import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleSigner;
+import org.fundaciobit.apisib.core.exceptions.AbstractApisIBException;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.OrderBy;
-import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.ejb.OperadorService;
 import org.fundaciobit.pinbaladmin.ejb.PinfoEJB;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
-import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
-import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
-import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 
 /**
  * 
@@ -44,12 +66,19 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	@EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
 	protected PinfoDataLogicaService pinfoDataLogicaEjb;
 
-	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
-	protected SolicitudLogicaService solicitudLogicaEjb;
+	@EJB(mappedName = IncidenciaTecnicaLogicaService.JNDI_NAME)
+	protected IncidenciaTecnicaLogicaService incidenciaLogicaEjb;
 
-	@EJB(mappedName = ServeiLogicaService.JNDI_NAME)
-	protected ServeiLogicaService serveiLogicaEjb;
+	@EJB(mappedName = OperadorService.JNDI_NAME)
+	protected OperadorService operadorEjb;
 
+	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+	protected FitxerPublicLogicaService fitxerPublicEjb;
+	
+	@EJB(mappedName = EventLogicaService.JNDI_NAME)
+	protected EventLogicaService eventLogicaEjb;
+	
+	
 	@Override
 	@PermitAll
 	public Pinfo create(Pinfo instance) throws I18NException {
@@ -72,84 +101,26 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	public Long generarPinfoPDF(Long pinfoID) throws Exception, I18NException {
 
 		log.info("Generant PDF per PINFO: " + pinfoID);
-		PinfoJPA pinfo = findByPrimaryKey(pinfoID);
-
-		OrderBy orderByServ = new OrderBy(PinfoDataFields.SERVEIID, OrderType.ASC);
-		OrderBy orderByProc = new OrderBy(PinfoDataFields.PROCEDIMENTID, OrderType.ASC);
-		OrderBy orderByUser = new OrderBy(PinfoDataFields.USUARIID, OrderType.ASC);
-
-		OrderBy[] orderBy = { orderByUser, orderByProc, orderByServ };
-		List<PinfoData> llista = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID), orderBy);
-
-		String lastUsuariID = null;
-		Long lastProcedimentID = null;
-
-		List<UsuariData> usuarisList = new ArrayList<UsuariData>();
-
-		List<ProcedimentData> procedimentsList;
-		List<ServeiData> serveisList;
-
-		UsuariData lastUsuariData = null;
-		ProcedimentData lastProcedimentData = null;
-
-		for (PinfoData pinfoData : llista) {
-			String usuariID = pinfoData.getUsuariid();
-			Long procedimentID = pinfoData.getProcedimentID();
-			Long serveiID = pinfoData.getServeiID();
-
-			// Si es distinto, uno nuevo, sino, cojemos el anterior.
-			if (!usuariID.equals(lastUsuariID)) {
-				UsuariData usuariData = new UsuariData(usuariID, new ArrayList<ProcedimentData>());
-				procedimentsList = usuariData.getProcediments();
-				lastUsuariData = usuariData;
-				lastUsuariID = usuariID;
-				usuarisList.add(usuariData);
-			} else {
-				procedimentsList = lastUsuariData.getProcediments();
-			}
-
-			// Puede ser que el codigo de procedimiento sea igual, pero haya cambiado el
-			// usuario. En ese caso, se crea un nuevo procedimiento.
-			if (!procedimentID.equals(lastProcedimentID) || !usuariID.equals(lastUsuariID)) {
-				SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
-				ProcedimentData procedimentData = new ProcedimentData(procedimentID,
-						solicitud.getProcedimentCodi() + " - " + solicitud.getProcedimentNom(),
-						new ArrayList<ServeiData>());
-				serveisList = procedimentData.getServeis();
-				lastProcedimentData = procedimentData;
-				lastProcedimentID = procedimentID;
-				procedimentsList.add(procedimentData);
-			} else {
-				serveisList = lastProcedimentData.getServeis();
-			}
-
-			ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
-			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi());
-			serveisList.add(serveiData);
-		}
-
-		PinfoDataFull pinfoDataFull = new PinfoDataFull(pinfoID, usuarisList);
-		printPinfoDataFull(pinfoDataFull);
-
-		log.info(llista.size() + " registres de PinfoData per PINFO" + pinfoID);
-
-		String fileName = "PINFO_" + pinfoID + ".pdf";
-		File outputPDF = File.createTempFile("pinbaladmin_formulari_pinfo", ".pdf");
-		FileOutputStream fosPDF = new FileOutputStream(outputPDF);
-
-		File plantilla = new File(Configuracio.getTemplatePinfo());
-		byte[] template = FileUtils.readFileToByteArray(plantilla);
-
-		log.info(template.length + " bytes llegits de la plantilla: " + plantilla.getAbsolutePath());
-
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String dataStr = sdf.format(new Date());
 		data.put("fecha", dataStr);
 
+		PinfoJPA pinfo = findByPrimaryKey(pinfoID);
 		data.put("pinfo", pinfo);
+
+		PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
 		data.put("pinfoDataFull", pinfoDataFull);
+
+		String fileName = "PINFO_" + pinfoID + ".pdf";
+		File outputPDF = File.createTempFile("pinbaladmin_formulari_pinfo", ".pdf");
+		FileOutputStream fosPDF = new FileOutputStream(outputPDF);
+
+		File plantilla = new File(Configuracio.getTemplatePinfo());
+		byte[] template = FileUtils.readFromFile(plantilla);
+
+		log.info(template.length + " bytes llegits de la plantilla: " + plantilla.getAbsolutePath());
 
 		try {
 			ParserFormulariXML.createPdf(new ByteArrayInputStream(template), fosPDF, data);
@@ -180,131 +151,290 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		}
 	}
 
-	private void printPinfoDataFull(PinfoDataFull pinfoDataFull) {
-		log.info("PinfoDataFull: " + pinfoDataFull.getPinfoID());
-		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
-			log.info("Usuari: " + usuariData.getUsuariID());
-			for (ProcedimentData procedimentData : usuariData.getProcediments()) {
-				log.info("\tProcediment: " + procedimentData.getProcedimentID());
-				for (ServeiData serveiData : procedimentData.getServeis()) {
-					log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei());
+	// Enviar Pinfo amb PortaFIB.
+
+	@Override
+	public PinfoJPA arrancarPeticioFlux(long pinfoID, String languageUI, FlowTemplateSimpleFlowTemplate flux) throws I18NException {
+
+		log.info("Paso 6.2. Arrancar Peticio PortaFIB EJB");
+		log.info("\n" + FlowTemplateSimpleFlowTemplate.toString(flux));
+
+		Pinfo pinfo = this.findByPrimaryKey(pinfoID);
+		
+		log.info("Paso 7.1: Cream signatureBlocks amb flux: " + flux);
+		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = convertFluxToSignatureBlocks(flux);
+		log.info("Paso 7.2: SignatureBlock: " + signatureBlocks.length + " blocs" + signatureBlocks);
+		
+		// Arrancar la petició
+		log.info("Paso 8: Arrancar la petició");
+		arrancarPeticioBySignatureBlocks(pinfo, languageUI, signatureBlocks);
+
+		log.info("Paso 11: Peticio arrancada correctament");
+		return (PinfoJPA) pinfo;
+	}
+
+	public FirmaAsyncSimpleSignatureBlock[] convertFluxToSignatureBlocks(FlowTemplateSimpleFlowTemplate flux)
+			throws I18NException {
+
+		List<FlowTemplateSimpleBlock> blocks = flux.getBlocks();
+
+		FirmaAsyncSimpleSignatureBlock[] signatureBlocks;
+		signatureBlocks = new FirmaAsyncSimpleSignatureBlock[blocks.size()];
+
+		int count = 0;
+		for (FlowTemplateSimpleBlock blockOrigen : blocks) {
+
+			List<FirmaAsyncSimpleSignature> signers = new ArrayList<FirmaAsyncSimpleSignature>();
+			for (FlowTemplateSimpleSignature signOrigen : blockOrigen.getSignatures()) {
+
+				FirmaAsyncSimpleSigner personToSign = new FirmaAsyncSimpleSigner();
+
+				FlowTemplateSimpleSigner signerOrig = signOrigen.getSigner();
+
+				FlowTemplateSimpleExternalSigner externalOrig = signerOrig.getExternalSigner();
+				if (externalOrig != null) {
+					FirmaAsyncSimpleExternalSigner destExtSigner = new FirmaAsyncSimpleExternalSigner();
+					destExtSigner.setAdministrationId(externalOrig.getAdministrationId());
+					destExtSigner.setEmail(externalOrig.getEmail());
+					destExtSigner.setLanguage(externalOrig.getLanguage());
+
+					destExtSigner.setName(externalOrig.getName());
+					destExtSigner.setSecurityLevel(externalOrig.getSecurityLevel());
+					destExtSigner.setSurnames(externalOrig.getSurnames());
+
+					personToSign.setExternalSigner(destExtSigner);
+				} else {
+					personToSign.setAdministrationID(signerOrig.getAdministrationID());
+					personToSign.setIntermediateServerUsername(signerOrig.getIntermediateServerUsername());
+					personToSign.setPositionInTheCompany(signerOrig.getPositionInTheCompany());
+					personToSign.setUsername(signerOrig.getUsername());
 				}
+
+				final boolean required = signOrigen.isRequired();
+				String reason = signOrigen.getReason(); // Usar la de la Petició
+
+				// Revisors
+				int minimumNumberOfRevisers = signOrigen.getMinimumNumberOfRevisers();
+
+				List<FirmaAsyncSimpleReviser> revisersDest;
+
+				List<FlowTemplateSimpleReviser> revisorsOrigen = signOrigen.getRevisers();
+
+				if (revisorsOrigen == null || revisorsOrigen.size() == 0) {
+					revisersDest = null;
+				} else {
+					revisersDest = new ArrayList<FirmaAsyncSimpleReviser>();
+					for (FlowTemplateSimpleReviser revOrig : revisorsOrigen) {
+						FirmaAsyncSimpleReviser revDest = new FirmaAsyncSimpleReviser();
+						revDest.setAdministrationID(revOrig.getAdministrationID());
+						revDest.setIntermediateServerUsername(revOrig.getIntermediateServerUsername());
+						revDest.setPositionInTheCompany(revOrig.getPositionInTheCompany());
+						revDest.setRequired(revOrig.isRequired());
+						revDest.setUsername(revOrig.getUsername());
+						revisersDest.add(revDest);
+					}
+				}
+
+				signers.add(new FirmaAsyncSimpleSignature(personToSign, required, reason, minimumNumberOfRevisers,
+						revisersDest));
+
 			}
-		}
 
+			int minimumNumberOfSignaturesRequired = blockOrigen.getSignatureMinimum();
+			signatureBlocks[count] = new FirmaAsyncSimpleSignatureBlock(minimumNumberOfSignaturesRequired, signers);
+			count++;
+
+		}
+		return signatureBlocks;
 	}
 
-	public class ServeiData {
-		private Long serveiID;
-		private String servei;
+	public void arrancarPeticioBySignatureBlocks(Pinfo pinfo, String languageUI,
+			FirmaAsyncSimpleSignatureBlock[] signatureBlocks) throws I18NException {
 
-		public ServeiData(Long serveiID, String servei) {
-			this.serveiID = serveiID;
-			this.servei = servei;
+		Long idPortafib;
+		try {
+			IncidenciaTecnica in = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+
+			FirmaAsyncSimpleFile fitxerAFirmar = getFitxer(pinfo.getFitxer());
+			String titolPeticio = in.getTitol();
+			String description = "Firma d'un PINFO";
+			
+			String remitentNom = in.getContacteNom();
+			String solicitantNIF = pinfo.getSolicitantNIF();
+			
+			String reason = "Autorització de la solicitud de permisos";
+
+			//Hauria d'obtenir el nif del destinatari del fluxe, pero no funciona. Revisar el métode convertFluxToSignatureBlocks
+			FirmaAsyncSimpleSigner signer = signatureBlocks[0].getSigners().get(0).getSigner();
+			
+			String destinatariNIF = signer.getAdministrationID();
+			String portafibUsername = signer.getIntermediateServerUsername();
+
+			if (destinatariNIF == null && portafibUsername != null) {
+				destinatariNIF = portafibUsername;
+			}
+			
+			FirmaAsyncSimpleExternalSigner externalSigner = signer.getExternalSigner();
+			log.info("Paso 9.7: Destinatari ExternalSigner: " + externalSigner);
+			
+			
+			
+			log.info("Paso 9.1: Crear la petició de firma amb fitxer: " + fitxerAFirmar.getNom());
+			idPortafib = createSignatureRequestAndStart(fitxerAFirmar, signatureBlocks, titolPeticio, description,
+					reason, solicitantNIF, remitentNom);
+
+			log.info("Paso 10: PortaFIB ID: " + idPortafib);
+			
+			pinfo.setPortafibid(String.valueOf(idPortafib));
+			pinfo.setDestinatariNIF(destinatariNIF);
+			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_FIRMA);
+
+		} catch (Throwable e) {
+			log.error("Error al crear la petició de firma", e);
+			pinfo.setEstat(Constants.ESTAT_PINFO_ERROR);
+			throw new I18NException("error.portafib.creacio", e.getMessage());
+		}
+		this.update(pinfo);
+	}
+
+	protected FirmaAsyncSimpleFile getFitxer(Fitxer fitxer) throws I18NException {
+
+		File f = FileSystemManager.getFile(fitxer.getFitxerID());
+
+		if (!f.exists()) {
+			throw new I18NException("error.fitxer.noexist", f.getAbsolutePath());
 		}
 
-		public Long getServeiID() {
-			return this.serveiID;
+		byte[] data;
+		try {
+			data = FileUtils.readFromFile(f);
+		} catch (Throwable t) {
+			throw new I18NException("error.fitxer.cantread", f.getAbsolutePath(), t.getMessage());
 		}
 
-		public String getServei() {
-			return this.servei;
+		FirmaAsyncSimpleFile file = new FirmaAsyncSimpleFile(fitxer.getNom(), fitxer.getMime(), data);
+		return file;
+	}
+
+	protected Long createSignatureRequestAndStart(FirmaAsyncSimpleFile fitxerAFirmar,
+			FirmaAsyncSimpleSignatureBlock[] signatureBlocks, String titolPeticio, String description, String reason,
+			String remitentNIF, String remitentFullName) throws Exception {
+
+		String languageUI = "ca";
+		String languageDoc = "ca";
+
+		// Fitxer a Firmar
+		if (fitxerAFirmar == null) {
+			throw new I18NException("genapp.comodi", "No s'ha definit fitxer a firmar");
 		}
 
-		public void setServeiID(Long serveiID) {
-			this.serveiID = serveiID;
-		}
+		Long tipusDocumentalID = 14L; // Elegir un tipus documental: Autorització. 14 - Sol·licitud
 
-		public void setServei(String servei) {
-			this.servei = servei;
+		String senderUsername = remitentNIF;
+		String senderFullName = remitentFullName;
+
+		String profileCode = Configuracio.getPortafibProfile();
+		int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
+
+		// Annexes
+		List<FirmaAsyncSimpleAnnex> annexs = new ArrayList<FirmaAsyncSimpleAnnex>();
+
+		String title = titolPeticio.length() > 250 ? titolPeticio.substring(0, 250) : titolPeticio;
+
+		FirmaAsyncSimpleFile originalDetachedSignature = null;
+
+		String descripcioTipusDocumental = null;
+
+		String expedientCode = null;
+		String expedientName = null;
+		String expedientUrl = null;
+		String procedureCode = null;
+		String procedureName = null;
+		String additionalInformation = null;
+		Double additionalInformationEvaluable = null;
+
+		List<FirmaAsyncSimpleMetadata> metadadaList = null;
+
+		FirmaAsyncSimpleSignatureRequestBase signatureRequestBase;
+		signatureRequestBase = new FirmaAsyncSimpleSignatureRequestBase(profileCode, title, description, reason,
+				fitxerAFirmar, originalDetachedSignature, tipusDocumentalID, descripcioTipusDocumental, languageDoc,
+				languageUI, priority, senderUsername, senderFullName, expedientCode, expedientName, expedientUrl,
+				procedureCode, procedureName, additionalInformation, additionalInformationEvaluable, annexs,
+				metadadaList);
+
+		Long peticioDeFirmaID;
+
+		FirmaAsyncSimpleSignatureRequestWithSignBlockList signatureRequest;
+		signatureRequest = new FirmaAsyncSimpleSignatureRequestWithSignBlockList(signatureRequestBase, signatureBlocks);
+
+		ApiFirmaAsyncSimple api = PortafibUtils.getApiFirmaAsyncSimple();
+
+		try {
+			peticioDeFirmaID = api.createAndStartSignatureRequestWithSignBlockList(signatureRequest);
+			return peticioDeFirmaID;
+		} catch (AbstractApisIBException e) {
+//			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
+			throw new I18NException("error.portafib.generic", new I18NArgumentString(e.getMessage()));
 		}
 	}
 
-	public class ProcedimentData {
-		private Long procedimentID;
-		private String procediment;
-		private List<ServeiData> serveis = new ArrayList<ServeiData>();
+	
+	@Override
+	public Long cosesAFerPinfoFirmat(Long portafibID) throws I18NException {
+		Long pinfoID = getPinfoIDFromPortafibID(portafibID);
+		
+		if (pinfoID == null) {
+			log.error("No s'ha trobat Pinfo amb portafibid = " + portafibID);
+		}else {
+			FirmaAsyncSimpleSignedFile firma = PortafibUtils.getFitxerSignat(portafibID);
+			Long fitxerFirmatID = PortafibUtils.guardarFitxer(firma, fitxerPublicEjb);
 
-		public ProcedimentData(Long procedimentID, String procediment, List<ServeiData> serveis) {
-			this.procedimentID = procedimentID;
-			this.procediment = procediment;
-			this.serveis = serveis;
-		}
+			PinfoJPA pinfo = findByPrimaryKey(pinfoID);
+			pinfo.setFitxerfirmatID(fitxerFirmatID);
+			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_TRAMITAR);
+			update(pinfo);
+			
+			
+			//El document de l'event ha de ser una copia del document original.
+			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(firma, fitxerPublicEjb);
+			crearEventSolcitudFirmada(pinfo, fitxerFirmatIDCopia);			
 
-		public Long getProcedimentID() {
-			return this.procedimentID;
 		}
-
-		public String getProcediment() {
-			return this.procediment;
-		}
-
-		public List<ServeiData> getServeis() {
-			return this.serveis;
-		}
-
-		public void setProcedimentID(Long procedimentID) {
-			this.procedimentID = procedimentID;
-		}
-
-		public void setProcediment(String procediment) {
-			this.procediment = procediment;
-		}
-
-		public void setServeis(List<ServeiData> serveis) {
-			this.serveis = serveis;
-		}
+		
+		return pinfoID;
 	}
-
-	public class UsuariData {
-		private String usuariID;
-		private List<ProcedimentData> procediments = new ArrayList<ProcedimentData>();
-
-		public UsuariData(String usuariID, List<ProcedimentData> procediments) {
-			this.usuariID = usuariID;
-			this.procediments = procediments;
-		}
-
-		public String getUsuariID() {
-			return this.usuariID;
-		}
-
-		public List<ProcedimentData> getProcediments() {
-			return this.procediments;
-		}
-
-		public void setUsuariID(String usuariID) {
-			this.usuariID = usuariID;
-		}
-
-		public void setProcediments(List<ProcedimentData> procediments) {
-			this.procediments = procediments;
-		}
+	
+	protected Long getPinfoIDFromPortafibID(Long portafibID) throws I18NException {
+		return this.executeQueryOne(PinfoFields.PINFOID, PinfoFields.PORTAFIBID.equal(String.valueOf(portafibID)));
 	}
+	
+	protected void crearEventSolcitudFirmada(Pinfo pinfo, Long fitxerFirmatID) throws I18NException {
 
-	public class PinfoDataFull {
-		private Long pinfoID;
-		private List<UsuariData> usuaris = new ArrayList<UsuariData>();
+		log.info("Afegir event de peticio rebuda de portafib");
+		
+		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+		
+		{
+			Long _solicitudID_ = null;
+			Long _incidenciaTecnicaID_ = incidencia.getIncidenciaTecnicaID();
 
-		public PinfoDataFull(Long pinfoID, List<UsuariData> usuaris) {
-			this.pinfoID = pinfoID;
-			this.usuaris = usuaris;
-		}
+			Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
 
-		public Long getPinfoID() {
-			return this.pinfoID;
-		}
+			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
+			boolean _noLlegit_ = true;
+			Long _fitxerID_ = fitxerFirmatID;
+			String _missatge_ = "S'ha rebut el pinfo firmat de Portafib";
+			String _asumpte_ = "Guardat Fitxer Firmat";
+			String _persona_ = "Usuari PortaFIB (" + pinfo.getDestinatariNIF() + ")";
 
-		public List<UsuariData> getUsuaris() {
-			return this.usuaris;
-		}
+			String _destinatari_ = incidencia.getContacteNom();
+			String _destinatariEmail_ = incidencia.getContacteEmail();
+			String _caidIdentificadorConsulta_ = null;
+			String _caidNumeroSeguiment_ = null;
 
-		public void setPinfoID(Long pinfoID) {
-			this.pinfoID = pinfoID;
-		}
-
-		public void setUsuaris(List<UsuariData> usuaris) {
-			this.usuaris = usuaris;
+			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+					_destinatariEmail_, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
+					_caidNumeroSeguiment_);
 		}
 	}
 

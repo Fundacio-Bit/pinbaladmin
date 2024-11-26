@@ -3936,8 +3936,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "Incidencia ID",
-            "es": "Incidencia ID"
+            "ca": "Incidencia",
+            "es": "Incidencia"
           },
           "javaName": "incidenciaID",
           "javaType": "java.lang.Long",
@@ -3999,8 +3999,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "estat",
-            "es": "estat"
+            "ca": "Estat",
+            "es": "Estado"
           },
           "javaName": "estat",
           "javaType": "java.lang.Long",
@@ -4008,11 +4008,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "-1,0,1,2,3",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 14
+            "webtype": 16
           },
           "foreignKeys": []
         },
