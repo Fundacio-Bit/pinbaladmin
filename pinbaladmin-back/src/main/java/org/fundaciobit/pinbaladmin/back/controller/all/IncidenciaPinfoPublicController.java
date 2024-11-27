@@ -85,12 +85,15 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addHiddenField(IncidenciaTecnicaFields.DATAINICI);
 			form.addHiddenField(IncidenciaTecnicaFields.DATAFI);
 
+			
+			
 			incidencia.setOperador("pinbaladmin");
 			incidencia.setCreador("pinbladmin");
 			form.addHiddenField(IncidenciaTecnicaFields.OPERADOR);
 			form.addHiddenField(IncidenciaTecnicaFields.CREADOR);
 
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT);
+			form.addHiddenField(IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA);
 
 			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
 			
