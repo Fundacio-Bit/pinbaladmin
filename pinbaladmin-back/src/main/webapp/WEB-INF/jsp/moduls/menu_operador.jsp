@@ -90,6 +90,13 @@
 		</li>
 
 
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/pinfo/list"/>"> <span
+				style="${(fn:contains(url, '/operador/pinfo'))? "font-weight:bold;" : ""}">
+					<fmt:message key="pinfo.pinfo" />
+			</span>
+		</a></li>
+
 		<%-- <li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/public/incidenciapinfo/new"/>"> <span
 				style="${(fn:contains(url, '/public/incidenciapinfo'))? "font-weight:bold;" : ""}">PINFOs</span>

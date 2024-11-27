@@ -261,6 +261,16 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
 
+    <definition name="pinfoOperadorForm" extends="operador_base">
+        <put-attribute name="titol" value="incidenciaTecnica.incidenciaTecnica" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoForm.jsp" />
+    </definition>
+    
+    <definition name="pinfoOperadorList" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoList.jsp" />
+    </definition>
+
+
 
     <definition name="solicitudestataldesdefitxersOperador" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/solicitudestataldesdefitxers.jsp" />

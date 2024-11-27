@@ -179,7 +179,7 @@ public class PinfoPublicController extends PinfoController {
 //	public String enviarPinfoPortaFIB(HttpServletRequest request, @PathVariable("pinfoID") java.lang.Long pinfoID)
 //			throws I18NException {
 
-	public void afegirEventPinfoEnviatPortaFIB(Long pinfoID) throws I18NException {
+	public Event afegirEventPinfoEnviatPortaFIB(Long pinfoID) throws I18NException {
 
 		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
 		String destinatariNIF = pinfo.getDestinatariNIF();
@@ -206,19 +206,22 @@ public class PinfoPublicController extends PinfoController {
 		ev.setComentari(msg);
 
 		Event evt = eventLogicaEjb.create(ev);
-		log.info("Event creat: " + evt.getEventID());
+		return evt;
 	}
 
 	@Override
 	public String getRedirectWhenCreated(HttpServletRequest request, PinfoForm pinfoForm) {
 		Long itemID = pinfoForm.getPinfo().getIncidenciaID();
-		return redirectToEventsPinfo(itemID);
+		return redirectToEventsPinfo(itemID, null);
 	}
 
-	public String redirectToEventsPinfo(Long incidenciaID) {
+	public String redirectToEventsPinfo(Long incidenciaID, String destinatari) {
 		// Configuracio.getAppBackUrl()
+		String id = HibernateFileUtil.encryptFileID(incidenciaID);
+		String dest = destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(destinatari));
 
-		String url = "/public/eventincidenciatecnica/veureevents/" + HibernateFileUtil.encryptFileID(incidenciaID);
+		String url = "/public/eventincidenciatecnica/veureevents/" + id + dest;
+
 		log.info("redirectToEventsPinfo: " + url);
 		return "redirect:" + url;
 	}
@@ -388,12 +391,13 @@ public class PinfoPublicController extends PinfoController {
 					Long incidenciaID = pinfoLogicaEjb.findByPrimaryKey(pinfoID).getIncidenciaID();
 
 					log.info("Paso 13. Afegir event de notificació a PortaFIB");
-					afegirEventPinfoEnviatPortaFIB(pinfoID);
+					Event evt = afegirEventPinfoEnviatPortaFIB(pinfoID);
+					String cadenaDestinatari = "CONTACTE|" + evt.getDestinatari();
 
 					ModelAndView mav = new ModelAndView("finaliframe");
 
 					String urlRedirect = Configuracio.getAppBackUrl()
-							+ redirectToEventsPinfo(incidenciaID).replace("redirect:", "");
+							+ redirectToEventsPinfo(incidenciaID, cadenaDestinatari).replace("redirect:", "");
 					String urlRedirect2 = request.getContextPath() + getContextWeb() + "/finalWebAuth/" + transactionID;
 
 					log.info("Paso 14: Redirecto to: " + urlRedirect);
