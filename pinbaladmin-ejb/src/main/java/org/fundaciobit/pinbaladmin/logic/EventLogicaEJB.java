@@ -41,6 +41,12 @@ public class EventLogicaEJB extends EventEJB implements EventLogicaService {
 				|| tipus == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
 
 			String email = ev.getDestinatarimail();
+			
+			if (email == null || email.trim().length() == 0) {
+				log.warn("No s'ha trobat correu electrònic per enviar el correu");
+				return ev;
+			}
+			
 			String[] destinataris = email.split(";");
 			
 			final String from = Configuracio.getAppEmail();

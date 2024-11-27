@@ -442,7 +442,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //        	log.info("Enviem event de creació de la sol·licitud");
 //			eventSolicitudCreada(creador, soliID);
 			log.info("Enviem mail al sol·licitant");
-			enviarMailSolicitant(solicitud);
+			
+//			String destinatariMail = solicitud.getPersonaContacteEmail();
+			String destinatariMail = null;
+			enviarMailSolicitant(solicitud, destinatariMail);
+			
 			log.info("Generem documents de la sol·licitud");
 			generarDocumentsSolicitud(soliID, organid, prop);
 			log.info("Afegim serveis a la sol·licitud");
@@ -642,7 +646,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //    }
 //    
     
-	private void enviarMailSolicitant(SolicitudJPA solicitud) {
+	private void enviarMailSolicitant(SolicitudJPA solicitud, String destinatariMail) {
         // Afegir event de creació de la solicitud.
         try {
             java.lang.Long _solicitudID_ = solicitud.getSolicitudID();
@@ -661,7 +665,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             boolean _noLlegit_ = true;
             
             java.lang.String _destinatari_ = solicitud.getPersonaContacte();
-            java.lang.String _destinatariMail_ = solicitud.getPersonaContacteEmail();
+            java.lang.String _destinatariMail_ = destinatariMail;
             java.lang.String _caidConsulta_ = null;
             java.lang.String _caidSeguiment_ = null;
             
