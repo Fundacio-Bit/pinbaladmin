@@ -4,23 +4,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.springframework.stereotype.Controller;
@@ -50,6 +57,9 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
 	protected PinfoLogicaService pinfoLogicEjb;
 	
+	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
+	protected OrganLogicaService organLogicEjb;
+	
 	@Override
 	public String getTileForm() {
 		return "incidenciaTecnicaPinfoFormOperador";
@@ -69,6 +79,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	public IncidenciaTecnicaForm getIncidenciaTecnicaForm(IncidenciaTecnicaJPA _jpa, boolean __isView,
 			HttpServletRequest request, ModelAndView mav) throws I18NException {
 		IncidenciaTecnicaForm form = super.getIncidenciaTecnicaForm(_jpa, __isView, request, mav);
+        request.setAttribute("desplegableOrgans", true);
 
 		if (form.isNou()) {
 			form.setTitleCode("pinfo.create");
@@ -95,7 +106,6 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT);
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA);
 
-			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
 			
 			String token = (String) request.getSession().getAttribute("token");
 //			incidencia.setDescripcio("El meu Token es: " + token);
@@ -109,8 +119,10 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			incidencia.setDescripcio("Descripció de test");
 			incidencia.setContacteTelefon("971971971");
 			incidencia.setContacteEmail("ptrias@fundaciobit.org");
-			incidencia.setNomEntitat("La meva entitat: Fundació BIT");
 			
+			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
+			incidencia.setNomEntitat("Govern Digital");
+
 			incidencia.setTitol("Titol de test");
 			
 			String usuariNIF = properties.getProperty("NIF");
@@ -202,8 +214,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 						new Object[] { I18NUtils.tradueix(CONTACTETELEFON.fullName) });
 			}
 			if (incidenciaTecnica.getNomEntitat() == null || incidenciaTecnica.getNomEntitat().isEmpty()) {
-				ValidationUtils.rejectIfEmptyOrWhitespace(result, get(NOMENTITAT), "genapp.validation.required",
-						new Object[] { I18NUtils.tradueix(NOMENTITAT.fullName) });
+				ValidationUtils.rejectIfEmptyOrWhitespace(result, get(ORGANID), "genapp.validation.required",
+						new Object[] { I18NUtils.tradueix(ORGANID.fullName) });
 			}
 		}
 	}
@@ -218,6 +230,42 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		
 		return "redirect:" + PinfoDataPublicController.CONTEXT_WEB + "/list";
 	}
+	
+    @Override
+    public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        
+        if (where != null) {
+        }
+        
+        List<Organ> organs = organLogicEjb.select(where);
+
+        for (Organ organ : organs) {
+
+            Organ aux = organ;
+            List<String> jerarquia = new ArrayList<String>();
+//            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
+            jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+
+            if (where != null) {
+                while (aux.getCif() == null && aux.getDir3pare() != null) {
+                    List<Organ> listAux = organLogicEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+                    aux = listAux.get(0);
+//                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
+                    jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+                }
+            }
+            String str = String.join("|", jerarquia);
+
+            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), str));
+        }
+
+        return __tmp;
+        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
+    }    
+
 	
 	
 }

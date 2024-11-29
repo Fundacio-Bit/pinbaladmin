@@ -15,6 +15,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	java.sql.Timestamp dataFi;
 	int estat;
 	int tipus;
+	java.lang.Long organid;
 	java.lang.String nomEntitat;
 	java.lang.String contacteNom;
 	java.lang.String contacteEmail;
@@ -30,7 +31,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
@@ -38,6 +39,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.organid=organid;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -48,13 +50,14 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.operador=operador;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.organid=organid;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -85,6 +88,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
     this.setTipus(__bean.getTipus());
+    this.setOrganid(__bean.getOrganid());
     this.setNomEntitat(__bean.getNomEntitat());
     this.setContacteNom(__bean.getContacteNom());
     this.setContacteEmail(__bean.getContacteEmail());
@@ -142,6 +146,13 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	};
 	public void setTipus(int _tipus_) {
 		this.tipus = _tipus_;
+	};
+
+	public java.lang.Long getOrganid() {
+		return(organid);
+	};
+	public void setOrganid(java.lang.Long _organid_) {
+		this.organid = _organid_;
 	};
 
 	public java.lang.String getNomEntitat() {
@@ -214,6 +225,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setTipus(__bean.getTipus());
+    __tmp.setOrganid(__bean.getOrganid());
     __tmp.setNomEntitat(__bean.getNomEntitat());
     __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setContacteEmail(__bean.getContacteEmail());

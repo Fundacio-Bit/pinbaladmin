@@ -32,7 +32,29 @@
             </td>
           <td id="incidenciaTecnica_descripcio_columnvalueid">
               <form:errors path="incidenciaTecnica.descripcio" cssClass="errorField alert alert-danger" />
-       <form:textarea cssClass=" ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DESCRIPCIO)? 'mceEditorReadOnly':'mceEditor'}"  path="incidenciaTecnica.descripcio"  />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.DESCRIPCIO)? 'true' : 'false'}" path="incidenciaTecnica.descripcio"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_descripcio" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_descripcio" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('incidenciaTecnica.descripcio'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_descripcio').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_descripcio').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_descripcio').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
            </td>
         </tr>
         </c:if>
@@ -165,6 +187,46 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.ORGANID)}">
+        <tr id="incidenciaTecnica_organid_rowid">
+          <td id="incidenciaTecnica_organid_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.ORGANID])?'incidenciaTecnica.organid':__theForm.labels[IncidenciaTecnicaFields.ORGANID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.ORGANID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.ORGANID]}" ></i>
+              </c:if>
+            </td>
+          <td id="incidenciaTecnica_organid_columnvalueid">
+          <form:errors path="incidenciaTecnica.organid" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.ORGANID)}" >
+          <form:hidden path="incidenciaTecnica.organid"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.incidenciaTecnica.organid,__theForm.listOfOrganForOrganid)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.ORGANID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="incidenciaTecnica_organid"  onchange="if(typeof onChangeOrganid == 'function') {  onChangeOrganid(this); };"  cssClass="form-control col-md-9-optional" path="incidenciaTecnica.organid">
+            <c:forEach items="${__theForm.listOfOrganForOrganid}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.incidenciaTecnica.organid }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.incidenciaTecnica.organid }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
           </form:select>
           </c:if>
            </td>

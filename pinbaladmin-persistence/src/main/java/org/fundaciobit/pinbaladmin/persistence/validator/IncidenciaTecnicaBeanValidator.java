@@ -19,25 +19,31 @@ public class IncidenciaTecnicaBeanValidator
   // EJB's
   protected final org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager;
 
+  protected final org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager;
+
 
   public final IncidenciaTecnicaValidator<IncidenciaTecnicaJPA> _validator;
 
 
-  public IncidenciaTecnicaBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager) { 
+  public IncidenciaTecnicaBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager,
+     org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager) { 
     this.__incidenciaTecnicaManager = __incidenciaTecnicaManager;
+    this.__organManager = __organManager;
     _validator = new IncidenciaTecnicaValidator<IncidenciaTecnicaJPA>();
   }
 
   public IncidenciaTecnicaBeanValidator(IncidenciaTecnicaValidator<IncidenciaTecnicaJPA> _validator,
-     org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager) {
+     org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager,
+     org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager) {
     this.__incidenciaTecnicaManager = __incidenciaTecnicaManager;
+    this.__organManager = __organManager;
     this._validator = _validator;
   }
 
   @Override
   public List<I18NFieldError> validate(IncidenciaTecnicaJPA target, boolean isNou) throws I18NException {
     BeanValidatorResult<IncidenciaTecnicaJPA> _bvr_ = new BeanValidatorResult<IncidenciaTecnicaJPA>();
-    _validator.validate(_bvr_, target, isNou, __incidenciaTecnicaManager);
+    _validator.validate(_bvr_, target, isNou, __incidenciaTecnicaManager, __organManager);
     return _bvr_.getErrors();
   }
 }

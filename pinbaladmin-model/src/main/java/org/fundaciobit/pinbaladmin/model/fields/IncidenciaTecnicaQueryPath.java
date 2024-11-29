@@ -39,6 +39,10 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     return new IntegerField(getQueryPath(), IncidenciaTecnicaFields.TIPUS);
   }
 
+  public LongField ORGANID() {
+    return new LongField(getQueryPath(), IncidenciaTecnicaFields.ORGANID);
+  }
+
   public StringField NOMENTITAT() {
     return new StringField(getQueryPath(), IncidenciaTecnicaFields.NOMENTITAT);
   }
@@ -107,5 +111,13 @@ public class IncidenciaTecnicaQueryPath extends org.fundaciobit.genapp.common.qu
     });
   }
 */
+
+  public OrganQueryPath ORGAN() {
+    return new OrganQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return IncidenciaTecnicaQueryPath.this.getQueryPath() + "organ" + ".";
+      }
+    });
+  }
 
 }

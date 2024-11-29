@@ -58,6 +58,10 @@ public class IncidenciaTecnicaController
   @Autowired
   protected IncidenciaTecnicaRefList incidenciaTecnicaRefList;
 
+  // References 
+  @Autowired
+  protected OrganRefList organRefList;
+
   /**
    * Llistat de totes IncidenciaTecnica
    */
@@ -198,6 +202,16 @@ public class IncidenciaTecnicaController
       };
     }
 
+    // Field organid
+    {
+      _listSKV = getReferenceListForOrganid(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfOrganForOrganid(_tmp);
+      if (filterForm.getGroupByFields().contains(ORGANID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANID, false);
+      };
+    }
+
     // Field creador
     {
       _listSKV = getReferenceListForCreador(request, mav, filterForm, list, groupByItemsMap, null);
@@ -235,6 +249,7 @@ public class IncidenciaTecnicaController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
     __mapping.put(TIPUS, filterForm.getMapOfValuesForTipus());
+    __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
     exportData(request, response, dataExporterID, filterForm,
@@ -301,6 +316,15 @@ public class IncidenciaTecnicaController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       incidenciaTecnicaForm.setListOfValuesForTipus(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (incidenciaTecnicaForm.getListOfOrganForOrganid() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForOrganid(request, mav, incidenciaTecnicaForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      incidenciaTecnicaForm.setListOfOrganForOrganid(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (incidenciaTecnicaForm.getListOfValuesForCreador() == null) {
@@ -694,6 +718,46 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("3" , "3"));
     __tmp.add(new StringKeyValue("4" , "4"));
     return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, IncidenciaTecnicaForm incidenciaTecnicaForm, Where where)  throws I18NException {
+    if (incidenciaTecnicaForm.isHiddenField(ORGANID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (incidenciaTecnicaForm.isReadOnlyField(ORGANID)) {
+      _where = OrganFields.ORGANID.equal(incidenciaTecnicaForm.getIncidenciaTecnica().getOrganid());
+    }
+    return getReferenceListForOrganid(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, IncidenciaTecnicaFilterForm incidenciaTecnicaFilterForm,
+       List<IncidenciaTecnica> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (incidenciaTecnicaFilterForm.isHiddenField(ORGANID)
+       && !incidenciaTecnicaFilterForm.isGroupByField(ORGANID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(ORGANID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (IncidenciaTecnica _item : list) {
+        if(_item.getOrganid() == null) { continue; };
+        _pkList.add(_item.getOrganid());
+        }
+        _w = OrganFields.ORGANID.in(_pkList);
+      }
+    return getReferenceListForOrganid(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return organRefList.getReferenceList(OrganFields.ORGANID, where );
   }
 
 

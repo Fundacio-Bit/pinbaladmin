@@ -3,23 +3,27 @@ package org.fundaciobit.pinbaladmin.persistence;
 import org.fundaciobit.pinbaladmin.model.entity.*;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import java.util.HashSet;
 import javax.persistence.Entity;
-import javax.persistence.GenerationType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import java.util.Set;
+import org.hibernate.annotations.Type;
+import java.util.HashSet;
+import javax.persistence.GenerationType;
 import javax.persistence.Index;
 import javax.persistence.GeneratedValue;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import java.util.Set;
-import org.hibernate.annotations.Type;
 import javax.persistence.Id;
 
 
 @Entity(name = "IncidenciaTecnicaJPA")
 @Table(name = "pad_incidenciatecnica" , indexes = { 
-        @Index(name="pad_incidenciatecnica_pk_i", columnList = "incidenciatecnicaid")})
+        @Index(name="pad_incidenciatecnica_pk_i", columnList = "incidenciatecnicaid"),
+        @Index(name="pad_inctecnica_organid_fk_i", columnList = "organid")})
 @SequenceGenerator(name="INCIDENCIATECNICA_SEQ", sequenceName="pad_incidenciatecnica_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
 public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
@@ -49,6 +53,9 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @org.hibernate.annotations.ColumnDefault("1")
     @Column(name="tipus",nullable = false,length = 10)
     int tipus = 1;
+
+    @Column(name="organid",length = 19)
+    java.lang.Long organid;
 
     @Column(name="nomentitat",length = 255)
     java.lang.String nomEntitat;
@@ -82,7 +89,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaJPA(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
@@ -90,6 +97,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.organid=organid;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -100,13 +108,14 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.operador=operador;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaJPA(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.organid=organid;
     this.nomEntitat=nomEntitat;
     this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
@@ -137,6 +146,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
     this.setTipus(__bean.getTipus());
+    this.setOrganid(__bean.getOrganid());
     this.setNomEntitat(__bean.getNomEntitat());
     this.setContacteNom(__bean.getContacteNom());
     this.setContacteEmail(__bean.getContacteEmail());
@@ -194,6 +204,13 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
 	};
 	public void setTipus(int _tipus_) {
 		this.tipus = _tipus_;
+	};
+
+	public java.lang.Long getOrganid() {
+		return(organid);
+	};
+	public void setOrganid(java.lang.Long _organid_) {
+		this.organid = _organid_;
 	};
 
 	public java.lang.String getNomEntitat() {
@@ -293,6 +310,20 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     }
 
 
+// IMP Field:organid | Table: pad_organ | Type: 1  
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organid", referencedColumnName ="organid", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_inctecnica_organ_organi_fk"))
+    private OrganJPA organ;
+
+    public OrganJPA getOrgan() {
+    return this.organ;
+  }
+
+    public  void setOrgan(OrganJPA organ) {
+    this.organ = organ;
+  }
+
 
  // ---------------  STATIC METHODS ------------------
   public static IncidenciaTecnicaJPA toJPA(IncidenciaTecnica __bean) {
@@ -305,6 +336,7 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setTipus(__bean.getTipus());
+    __tmp.setOrganid(__bean.getOrganid());
     __tmp.setNomEntitat(__bean.getNomEntitat());
     __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setContacteEmail(__bean.getContacteEmail());
@@ -351,6 +383,10 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
       __tmp.setPinfos(PinfoJPA.copyJPA(__jpa.getPinfos(), __alreadyCopied,"IncidenciaTecnicaJPA"));
     }
     // Copia de beans complexes (IMP)
+    if(!"OrganJPA".equals(origenJPA) && 
+       (!org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.organ) || org.hibernate.Hibernate.isInitialized(__jpa.getOrgan()) ) ) {
+      __tmp.setOrgan(OrganJPA.copyJPA(__jpa.getOrgan(), __alreadyCopied,"IncidenciaTecnicaJPA"));
+    }
 
     return __tmp;
   }

@@ -131,6 +131,28 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.lang.Long organidDesde;
+
+  public java.lang.Long getOrganidDesde() {
+    return this.organidDesde;
+  }
+
+  public void setOrganidDesde(java.lang.Long organidDesde) {
+    this.organidDesde = organidDesde;
+  }
+
+
+  private java.lang.Long organidFins;
+
+  public java.lang.Long getOrganidFins() {
+    return this.organidFins;
+  }
+
+  public void setOrganidFins(java.lang.Long organidFins) {
+    this.organidFins = organidFins;
+  }
+
+
   private java.lang.String nomEntitat;
 
   public java.lang.String getNomEntitat() {
@@ -234,6 +256,8 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.dataFiFins = __toClone.dataFiFins;
     this.estatSelect = __toClone.estatSelect;
     this.tipusSelect = __toClone.tipusSelect;
+    this.organidDesde = __toClone.organidDesde;
+    this.organidFins = __toClone.organidFins;
     this.nomEntitat = __toClone.nomEntitat;
     this.contacteNom = __toClone.contacteNom;
     this.contacteEmail = __toClone.contacteEmail;
@@ -244,6 +268,7 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.operador = __toClone.operador;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
     this.mapOfValuesForTipus = __toClone.mapOfValuesForTipus;
+    this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
   }
@@ -300,6 +325,18 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   public void setMapOfValuesForTipus(Map<String, String> mapOfValuesForTipus) {
     this.mapOfValuesForTipus = mapOfValuesForTipus;
+  }
+
+
+
+  private Map<String, String> mapOfOrganForOrganid;
+
+  public Map<String, String> getMapOfOrganForOrganid() {
+    return this.mapOfOrganForOrganid;
+  }
+
+  public void setMapOfOrganForOrganid(Map<String, String> mapOfOrganForOrganid) {
+    this.mapOfOrganForOrganid = mapOfOrganForOrganid;
   }
 
 

@@ -33,6 +33,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.TIPUS)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.TIPUS)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.ORGANID)}">
+        <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.ORGANID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
         <th>${pad:getSortIcons(__theFilterForm,IncidenciaTecnicaFields.NOMENTITAT)}</th>
         </c:if>

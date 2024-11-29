@@ -3239,7 +3239,7 @@
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 8
+            "webtype": 2
           },
           "foreignKeys": []
         },
@@ -3345,6 +3345,45 @@
             "webtype": 16
           },
           "foreignKeys": []
+        },
+        {
+          "index": "pad_inctecnica_organid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "organid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Órgan Gestor",
+            "es": "Órgano Gestor"
+          },
+          "javaName": "organid",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_incidenciatecnica_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_inctecnica_organ_organi_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          ]
         },
         {
           "isAutoIncrement": false,
@@ -3722,6 +3761,12 @@
             ]
           },
           "foreignKeys": [
+            {
+              "name": "pad_inctecnica_organ_organi_fk",
+              "table": "pad_incidenciatecnica",
+              "field": "organid",
+              "type": 0
+            },
             {
               "name": "pad_solicitud_organ_fk",
               "table": "pad_solicitud",

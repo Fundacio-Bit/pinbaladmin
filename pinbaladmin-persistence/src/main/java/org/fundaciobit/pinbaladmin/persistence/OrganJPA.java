@@ -141,6 +141,19 @@ public class OrganJPA implements Organ {
     return __result;
   }
 
+// EXP  Field:organid | Table: pad_incidenciatecnica | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organ")
+    private Set<IncidenciaTecnicaJPA> incidenciaTecnicas = new HashSet<IncidenciaTecnicaJPA>(0);
+    public  Set<IncidenciaTecnicaJPA> getIncidenciaTecnicas() {
+    return this.incidenciaTecnicas;
+  }
+
+    public void setIncidenciaTecnicas(Set<IncidenciaTecnicaJPA> incidenciaTecnicas) {
+      this.incidenciaTecnicas = incidenciaTecnicas;
+    }
+
+
 // EXP  Field:organid | Table: pad_solicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organ")
@@ -211,6 +224,10 @@ public class OrganJPA implements Organ {
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
       __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"OrganJPA"));
+    }
+    if(!"IncidenciaTecnicaJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.incidenciaTecnicas) || org.hibernate.Hibernate.isInitialized(__jpa.getIncidenciaTecnicas())) ) {
+      __tmp.setIncidenciaTecnicas(IncidenciaTecnicaJPA.copyJPA(__jpa.getIncidenciaTecnicas(), __alreadyCopied,"OrganJPA"));
     }
     // Copia de beans complexes (IMP)
     if(!"EntitatJPA".equals(origenJPA) && 

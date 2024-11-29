@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
 
@@ -27,7 +28,8 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
-    ,org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager) {
+    ,org.fundaciobit.pinbaladmin.model.dao.IIncidenciaTecnicaManager __incidenciaTecnicaManager
+    ,org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager) {
 
     // Valors Not Null
     __vr.rejectIfEmptyOrWhitespace(__target__,TITOL, 
@@ -163,6 +165,20 @@ public class IncidenciaTecnicaValidator<I extends IncidenciaTecnica>
     }
 
     // Fields with References to Other tables 
+    if (__vr.getFieldErrorCount(ORGANID) == 0) {
+      java.lang.Long __organid = __target__.getOrganid();
+      if (__organid != null ) {
+        Long __count_ = null;
+        try { __count_ = __organManager.count(OrganFields.ORGANID.equal(__organid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(ORGANID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organ"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organid"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__organid)));
+        }
+      }
+    }
+
   } // Final de mètode
   public String get(Field<?> field) {
     return field.fullName;

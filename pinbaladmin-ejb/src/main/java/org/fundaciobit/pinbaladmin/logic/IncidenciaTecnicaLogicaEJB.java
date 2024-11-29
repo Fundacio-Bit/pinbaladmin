@@ -68,6 +68,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String caidNumeroSeguiment = null;
         java.lang.String destinatari = null;
         java.lang.String destinatariEmail = null;
+        Long organID = null;
 
         log.info(destinatariEmail);
         
@@ -75,7 +76,7 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             contacteEmail = "suport@caib.es";
         }
         
-        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge, data, dataFi, estat, tipus, nomEntitat,
+        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge, data, dataFi, estat, tipus, organID, nomEntitat,
                 contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
 
         IncidenciaTecnica it = (IncidenciaTecnica) this.create(itJPA);

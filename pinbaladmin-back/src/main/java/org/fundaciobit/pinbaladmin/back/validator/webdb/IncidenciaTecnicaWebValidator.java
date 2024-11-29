@@ -35,6 +35,9 @@ public class IncidenciaTecnicaWebValidator extends AbstractWebValidator<Incidenc
   @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.IncidenciaTecnicaService incidenciaTecnicaEjb;
 
+  @javax.ejb.EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OrganService.JNDI_NAME)
+  protected org.fundaciobit.pinbaladmin.ejb.OrganService organEjb;
+
 
 
   public IncidenciaTecnicaWebValidator() {
@@ -77,7 +80,7 @@ public class IncidenciaTecnicaWebValidator extends AbstractWebValidator<Incidenc
 
     BeanValidatorResult<IncidenciaTecnica> __vr = new BeanValidatorResult<IncidenciaTecnica>();
     validator.validate(__vr, __bean,
-      isNou, incidenciaTecnicaEjb);
+      isNou, incidenciaTecnicaEjb, organEjb);
 
     if (__vr.hasErrors()) {
         List<I18NFieldError> vrErrors = __vr.getErrors();

@@ -23,6 +23,9 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public int getTipus();
 	public void setTipus(int _tipus_);
 
+	public java.lang.Long getOrganid();
+	public void setOrganid(java.lang.Long _organid_);
+
 	public java.lang.String getNomEntitat();
 	public void setNomEntitat(java.lang.String _nomEntitat_);
 
