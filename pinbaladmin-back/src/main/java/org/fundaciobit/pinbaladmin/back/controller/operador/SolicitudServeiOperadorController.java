@@ -41,6 +41,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -399,10 +400,33 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
 					Long soliID = soliSer.getSolicitudID();
 					SolicitudJPA soli = (SolicitudJPA) solicitudLogicaEjb.findByPrimaryKey(soliID);
-					Long excelID = soli.getSolicitudXmlID();
-					FitxerJPA excel = fitxerEjb.findByPrimaryKey(excelID);
+					FitxerJPA adjunt;
+					//Si es estatal, enviar zip con todos los documentos. Sino, enviar solo el excel.
+					if (soli.getOrganid() == null && soli.getEntitatEstatal() != null) {
+						List<FitxerJPA> adjunts = new ArrayList<FitxerJPA>();
 
-					mail.crearEvent(soli, excel, eventLogicaEjb);
+						//Llistat d'events d'aquesta solicitud enviats pel contacte amb fitxerid distint de null.
+						Where wSoli = EventFields.SOLICITUDID.equal(soliID);
+						Where wTipus = EventFields.TIPUS.equal(Constants.EVENT_TIPUS_COMENTARI_CONTACTE);
+						Where wFitxer = EventFields.FITXERID.isNotNull();
+
+						List<Long> llistaAdjunts = eventLogicaEjb.executeQuery(EventFields.FITXERID, Where.AND(wSoli, wTipus, wFitxer));
+						llistaAdjunts.add(soli.getSolicitudXmlID());
+						
+						for (Long fitxerID : llistaAdjunts) {
+							FitxerJPA fitxer = fitxerEjb.findByPrimaryKey(fitxerID);
+							adjunts.add(fitxer);
+						}
+						
+						adjunt = MailCedentInfo.convertirAdjuntsZip(adjunts, fitxerEjb);
+						adjunt.setNom(soli.getProcedimentCodi() + "_pid_" + soli.getExpedientPid() + "_adjunts.zip");
+						fitxerEjb.update(adjunt);
+						
+					}else {
+						adjunt = fitxerEjb.findByPrimaryKey(soli.getSolicitudXmlID());
+					}
+					
+					mail.crearEvent(soli, adjunt, eventLogicaEjb);
 					mail.actualitzarEstatServei(soliID, solicitudServeiLogicaEjb);
 					String missatge = "Correu enviat a " + mail.getId();
 					log.info(missatge);

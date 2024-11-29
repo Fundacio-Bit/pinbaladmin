@@ -1,11 +1,19 @@
 package org.fundaciobit.pinbaladmin.logic.utils.email;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudServeiService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -16,6 +24,8 @@ import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
+
+import fr.opensagres.odfdom.converter.core.utils.ByteArrayOutputStream;
 
 public class MailCedentInfo {
 	
@@ -178,7 +188,7 @@ public class MailCedentInfo {
 //		}
 //	}
 	
-	public void crearEvent(SolicitudJPA soli, FitxerJPA excel, EventLogicaService eventLogicaEjb) throws Exception {
+	public void crearEvent(SolicitudJPA soli, FitxerJPA adjunt, EventLogicaService eventLogicaEjb) throws Exception {
 		try {
 			Timestamp data = new Timestamp(System.currentTimeMillis());
 			int tipus = Constants.EVENT_TIPUS_CONSULTA_A_CEDENT;
@@ -219,7 +229,8 @@ public class MailCedentInfo {
 			msg = msg.replaceAll("#ENTITAT#", entitat);
 
 			evt.setComentari(msg);
-			evt.setFitxer(excel);
+			evt.setFitxerID(adjunt.getFitxerID());
+			evt.setFitxer(adjunt);
 			evt.setDestinatarimail(destinataris);
 			evt.setAsumpte(subject);
 
@@ -230,6 +241,54 @@ public class MailCedentInfo {
 
 	}
 
+	public static FitxerJPA convertirAdjuntsZip(List<FitxerJPA> adjunts, FitxerService fitxerEjb) {
+		// Si hay solo un adjunto, devolver ese adjunto
+		if (adjunts.size() == 1) {
+			return adjunts.get(0);
+		}
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+
+			for (FitxerJPA fitxer : adjunts) {
+				ZipEntry entry = new ZipEntry(fitxer.getNom());
+				zos.putNextEntry(entry);
+
+				byte[] content = FileSystemManager.getFileContent(fitxer.getFitxerID());
+				zos.write(content);
+
+				zos.closeEntry();
+			}
+		} catch (IOException e) {
+			System.out.println("Error al crear el archivo ZIP: " + e.getMessage());
+			return null;
+		}
+
+		try {
+			// Obtener el contenido del ZIP
+			byte[] data = baos.toByteArray();
+
+			// Crear el nuevo FitxerJPA para el archivo ZIP
+			String fileName = "adjunts.zip"; // "adjunts_" + new Timestamp(System.currentTimeMillis()).getTime() + ".zip"
+			long tamany = data.length;
+			String mime = "application/zip";
+			String descripcio = "Archivo ZIP conteniendo múltiples archivos";
+
+			FitxerJPA zipFile = (FitxerJPA) fitxerEjb.create(fileName, tamany, mime, descripcio);
+
+			// Guardar el archivo ZIP en el sistema de archivos
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(data), zipFile.getFitxerID());
+
+			return zipFile;
+
+		} catch (I18NException e) {
+			System.out.println("Error al cerrar el archivo ZIP: " + e.getMessage());
+			return null;
+		}
+	}
+		
+	
+	
 	public void actualitzarEstatServei(Long soliID, SolicitudServeiService solicitudServeiEjb) throws Exception {
 		try {
 			Where wSoli = SolicitudServeiFields.SOLICITUDID.equal(soliID);
