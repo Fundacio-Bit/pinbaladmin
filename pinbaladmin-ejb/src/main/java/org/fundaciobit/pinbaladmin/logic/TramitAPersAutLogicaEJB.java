@@ -381,6 +381,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 //								urlconsentiment = J.getUrlconsentiment();
 //							}
 						}
+                        
+						if (J.getAdjuntID() != null) {
+							fitxerConsentimentID = J.getAdjuntID();
+						}
+                        
                         map.put("urlConsentiment", urlconsentiment);
                         map.put("adjConsentiment", nomFitxerADjunt);
 
@@ -495,6 +500,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         if (fitxerConsentimentID != null) {
 
+        	log.info("Tenim document de consentiment: " + fitxerConsentimentID + " - " + consentiment );
+        	
         	FitxerJPA cons = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerConsentimentID);
         	File consFile = FileSystemManager.getFile(cons.getFitxerID());
         	
@@ -508,6 +515,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
         	String nom = "Document Consentiment";
         	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
+        }else {
+        	log.info("No tenim document de consentiment");
         }
 
     }
