@@ -628,6 +628,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         filterForm.getAdditionalButtonsByPK().clear();
         boolean error = false;
+        boolean solicitudADistribucio = false;
 
         Map<Long, String> mapEntitat = null;
         Map<Long, String> mapOrgan = null;
@@ -646,11 +647,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         for (Solicitud soli : list) {
 
             if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_SENSE_ESTAT || soli.getProcedimentCodi().startsWith("CODI_")) {
-                error = true;
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
-                        new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_WARNING), "solicitud.senseestat",
-                                "javascript:alert('Revisi estat o codi de procediment.')", AdditionalButtonStyle.DANGER));
-
+                        new AdditionalButton(IconUtils.getWhite("fas fa-cog"), "solicitud.senseestat",
+                                "javascript:alert('Revisar si ha arribat aquesta solicitud a DISTRIBUCIÓ. \n\nCodiProc: " + soli.getProcedimentCodi() + "')", AdditionalButtonStyle.PRIMARY));
+                solicitudADistribucio = true;
             } else {
                 Long count = solicitudServeiEjb
                         .count(Where.AND(SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()),
@@ -708,12 +708,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     mapOrgan.put(soli.getSolicitudID(), html);
                 }
             }           
-
         }
 
         if (error) {
             HtmlUtils.saveMessageError(request, "Hi ha sol·licituds amb estat incorrecte");
         }
+        
+		if (solicitudADistribucio) {
+			HtmlUtils.saveMessageInfo(request, "Revisar solicituds a Distribució");
+		}
 
         // Map<Long, String> map;
         // map = (Map<Long,

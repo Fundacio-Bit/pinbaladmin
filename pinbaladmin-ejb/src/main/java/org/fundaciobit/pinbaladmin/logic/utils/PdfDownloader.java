@@ -304,7 +304,7 @@ public class PdfDownloader {
                         
                         String hostPort =  u.getHost() + (u.getPort() == -1 ? "" : (":" + u.getPort()));
                         
-                        if (!PdfURL.contains(hostPort)) {
+                        if (!PdfURL.contains("http") && !PdfURL.contains("https") && !PdfURL.contains("://") ){
 							PdfURL = u.getProtocol() + "://" + hostPort + PdfURL;
 						}
                         if (debug) {

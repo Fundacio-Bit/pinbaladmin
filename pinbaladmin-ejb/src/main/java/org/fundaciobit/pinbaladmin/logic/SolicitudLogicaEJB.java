@@ -1012,7 +1012,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 					//Si no hay normaLegal, o no enlace, no se añade la norma
 					if (normaLegal == null || normaLegal.trim().length() == 0) {
 						if (enlace == null || enlace.trim().length() == 0) {
-							log.info("No hi ha norma legal ni enllaç. No s'afegirà la norma.");
+							log.info("No hi ha norma legal ni enllaç " + i + ". No s'afegirà la norma " + i + ".");
 							continue;
 						}
 					}
@@ -1025,7 +1025,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 					String descripcio = null;
 					byte[] contingut = null;
 					
-					log.info("NORMA - " + normaLegal + ": " + fitxerNormaID + " - " + enlace);
+					log.info("PRE-NORMA " + i + " - " + normaLegal + ": " + fitxerNormaID + " - " + enlace);
 					if (fitxerNormaID != null) {
 		                File normaFile = FileSystemManager.getFile(fitxerNormaID);
 		                FitxerJPA fitxer = fitxerEjb.findByPrimaryKey(fitxerNormaID);
@@ -1048,7 +1048,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 						continue;
 					}
 					
-                    log.info("NORMA - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
+                    log.info("POST-NORMA " + i + " - " +  normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
                     descripcio = "Norma Legal " + i  + " - " + ss.getServei().getNom();
                     // descripcio = "Norma del servicio: " + ss.getServei().getNom();
                     

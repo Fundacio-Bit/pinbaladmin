@@ -106,6 +106,29 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
 
         // TODO GenApp Afegir el codi oportu despres del login
 
+        
+        //Intentam conseguir el NIF de l'usuari
+        String nif = null;
+        
+        sc.getAuthentication().getCredentials().toString();
+        log.info("Credentials: " + sc.getAuthentication().getCredentials().toString());
+        
+        
+        sc.getAuthentication().getDetails().toString();
+        log.info("Details: " + sc.getAuthentication().getDetails().toString());
+        
+        log.info("Authorities: " + sc.getAuthentication().getAuthorities().toString());
+        
+        
+		nif = info.getAdministrationID();
+		log.info("NIF: " + nif);        
+        
+        
+        
+        
+        
+        
+        
         LoginInfo loginInfo;
         // create a new authentication token
         loginInfo = new LoginInfo(user, username, new HashSet<GrantedAuthority>(realAuthorities), language, info);

@@ -57,6 +57,29 @@ table.solicitud.servicio.item {
 
 <h3>Estado de la solicitud</h3>
 
+
+<div id="observaciones-container" class="item">
+	<c:set var="estadoProc"
+		value="${retorno.procedimiento.estadoProcedimiento}" />
+
+	<table border="1">
+		<tr>
+			<th class="item">Estado</th>
+			<td class="item">${estadoProc.estado}: ${estadoProc.descripcion}
+			</td>
+		</tr>
+		<c:if test="${estadoProc.observaciones != null}">
+			<tr>
+				<th class="item">Observaciones</th>
+			</tr>
+			<tr>
+				<td class="item">${estadoProc.observaciones}</td>
+			</tr>
+		</c:if>
+	</table>
+</div>
+<br>
+
 <div id="procedimiento-container" class="solicitud item">
 	<c:set var="procedimiento" value="${retorno.procedimiento}" />
 	<h5>Datos Procedimiento:</h5>
@@ -97,6 +120,7 @@ table.solicitud.servicio.item {
 	</table>
 </div>
 <br>
+
 
 <div id="servicios-container" class="solicitud procedimiento item">
 	<h5>Servicios:</h5>

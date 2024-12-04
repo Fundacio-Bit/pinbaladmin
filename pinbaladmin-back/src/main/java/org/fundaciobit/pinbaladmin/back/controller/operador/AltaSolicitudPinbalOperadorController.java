@@ -142,6 +142,8 @@ public class AltaSolicitudPinbalOperadorController {
     public String altaSolicitud(HttpServletRequest request, HttpServletResponse response,
             @RequestParam("soliID") Long soliID) {
 
+    	final String errorProcedimientoDuplicado = "01";
+    	
         String consulta = request.getParameter("consulta");
 
         ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
@@ -156,38 +158,40 @@ public class AltaSolicitudPinbalOperadorController {
             es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = solicitudLogicaEjb
                     .altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
+            int nouEstatPinbal;
+            
             if (resposta.getErrores() == null) {
                 System.out.println(" # Errors: 0");
 
-                //Si ha anat be, i hem afegit fitxer manualment, afegir-ho als documents d'una sol.licitud
+                //Si ha anat be, guardam missatge d'exit i actualitzam l'estat pinbal a pendent de tramitar, perque l'han de revisar.
 
                 String mensaje = resposta.getEstado().getDescripcion();
                 HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
 
                 log.info("Actualitzam solicitud amb ID= " + soliID);
 
-                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, Constants.ESTAT_PINBAL_PENDENT_TRAMITAR,
-                        SolicitudFields.SOLICITUDID.equal(soliID));
+                nouEstatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
             } else {
-                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, Constants.ESTAT_PINBAL_ERROR,
-                        SolicitudFields.SOLICITUDID.equal(soliID));
-                for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
-                        .getError()) {
 
-                    if (error.getCodigo().equals("01")) {
+            	nouEstatPinbal = Constants.ESTAT_PINBAL_ERROR;
+            	
+				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
+						.getError()) {
+
+                    if (error.getCodigo().equals(errorProcedimientoDuplicado)) {
                         //Ja esta donaada d'alta la solicitud. Cercam el seu estat i l'assignam
+                    	
                         Consulta consultaEstat = new Consulta();
                         consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
 
                         Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario,
                                 consultaEstat);
-
-                        int estatPinbal = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
-                        log.info("estado procedimiento: " + estatPinbal + " - "
-                                + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
-
-                        solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
-                                SolicitudFields.SOLICITUDID.equal(soliID));
+                        
+						es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estat = retorno
+								.getProcedimiento().getEstadoProcedimiento();
+                        
+						nouEstatPinbal = estat.getEstado();
+						log.info("estado procedimiento: " + nouEstatPinbal + " - " + estat.getDescripcion());
 
                         HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
                     }
@@ -195,6 +199,11 @@ public class AltaSolicitudPinbalOperadorController {
                     HtmlUtils.saveMessageError(request, errorMsg);
                 }
             }
+            
+            
+            solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, nouEstatPinbal,
+                    SolicitudFields.SOLICITUDID.equal(soliID));
+            
         } catch (Exception e) {
             HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
         }
@@ -225,14 +234,23 @@ public class AltaSolicitudPinbalOperadorController {
             Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consulta);
 
             ModelAndView mav = new ModelAndView("consultaestatpinbal");
+            
             mav.addObject("retorno", retorno);
+            
             log.info("context:: " + getContextWeb());
-            mav.addObject("returnUrl",
-                    "/pinbaladmin" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID);
+            
+			String returnUrl = "/pinbaladmin" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
+            mav.addObject("returnUrl",returnUrl);
 
-            int estatPinbal = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
-            log.info("estado procedimiento: " + estatPinbal + " - "
-                    + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
+			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estado = retorno
+					.getProcedimiento().getEstadoProcedimiento();
+
+			int estatPinbal = estado.getEstado();
+			log.info("estado procedimiento: " + estatPinbal + " - " + estado.getDescripcion());
+
+			String observaciones = estado.getObservaciones();
+			
+			log.info("observaciones: " + observaciones);
 
             solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
                     SolicitudFields.SOLICITUDID.equal(soliID));
@@ -336,13 +354,16 @@ public class AltaSolicitudPinbalOperadorController {
 
         UserInfo ui = LoginInfo.getInstance().getUserInfo();
 
-        String nif = "45186147W";
-        String fullName = "Juan Pablo Trias Segura";
+        String nif = "00000000T";
+        String fullName = "Usuari Anonim 00000000T";
         
-        if (ui != null) {
-            nif = ui.getAdministrationID();
-            fullName = ui.getFullName();
-        }
+//        if (ui != null) {
+//            nif = ui.getAdministrationID();
+//            fullName = ui.getFullName();
+//            
+//        }
+        log.info("NIF: " + nif);
+        log.info("Nombre completo: " + fullName);
 
         funcionario.setNifFuncionario(nif);
         funcionario.setNombreCompletoFuncionario(fullName);
