@@ -115,7 +115,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 //				log.info("Creant nou procediment");
 				SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
 				ProcedimentData procedimentData = new ProcedimentData(procedimentID,
-						solicitud.getProcedimentCodi() + " - " + solicitud.getProcedimentNom(),
+						solicitud.getProcedimentNom(),solicitud.getProcedimentCodi(), 
 						new ArrayList<ServeiData>());
 				serveisList = procedimentData.getServeis();
 				lastProcedimentData = procedimentData;
@@ -127,7 +127,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			}
 
 			ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
-			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi());
+			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), pinfoData.getPinfodataID());
 			serveisList.add(serveiData);
 		}
 
@@ -158,10 +158,13 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	public class ServeiData {
 		private Long serveiID;
 		private String servei;
+		private Long pinfoDataID;
+		
 
-		public ServeiData(Long serveiID, String servei) {
+		public ServeiData(Long serveiID, String servei, Long pinfoDataID) {
 			this.serveiID = serveiID;
 			this.servei = servei;
+			this.pinfoDataID = pinfoDataID;
 		}
 
 		public Long getServeiID() {
@@ -171,6 +174,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		public String getServei() {
 			return this.servei;
 		}
+		
+		public Long getPinfoDataID() {
+			return this.pinfoDataID;
+		}
 
 		public void setServeiID(Long serveiID) {
 			this.serveiID = serveiID;
@@ -179,16 +186,22 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		public void setServei(String servei) {
 			this.servei = servei;
 		}
+		
+		public void setPinfoDataID(Long pinfoDataID) {
+			this.pinfoDataID = pinfoDataID;
+		}
 	}
 
 	public class ProcedimentData {
 		private Long procedimentID;
 		private String procediment;
+		private String codi;
 		private List<ServeiData> serveis = new ArrayList<ServeiData>();
 
-		public ProcedimentData(Long procedimentID, String procediment, List<ServeiData> serveis) {
+		public ProcedimentData(Long procedimentID, String procediment, String codi,  List<ServeiData> serveis) {
 			this.procedimentID = procedimentID;
 			this.procediment = procediment;
+			this.codi = codi;
 			this.serveis = serveis;
 		}
 
@@ -200,6 +213,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			return this.procediment;
 		}
 
+		public String getCodi() {
+			return this.codi;
+		}
+		
 		public List<ServeiData> getServeis() {
 			return this.serveis;
 		}
@@ -212,6 +229,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			this.procediment = procediment;
 		}
 
+		public void setCodi(String codi) {
+            this.codi = codi;
+		}
+		
 		public void setServeis(List<ServeiData> serveis) {
 			this.serveis = serveis;
 		}

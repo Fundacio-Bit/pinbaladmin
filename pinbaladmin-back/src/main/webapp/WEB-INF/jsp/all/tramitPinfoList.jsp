@@ -58,12 +58,16 @@
 	margin: 2rem auto;
 	border: 1px black solid;
 	padding: 15px;
-	border-radius: 5px;
-	box-shadow: 2px 4px 3px 2px #888;
+	border-radius: 3px;
+	box-shadow: 1px 2px 3px 1px #888;
+}
+
+.btn.btn-danger {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .pinfodata-user {
-	text-align: center;
 	font-style: italic;
 	font-size: 18px;
 	font-weight: bold;
@@ -71,13 +75,14 @@
 
 .taula-procediment {
 	margin-top: 1rem;
-	width: 45rem;
+	width: 100%;
 }
 
 .pinfodata-procediment {
 	background: lightgray;
 	font-weight: bold;
-	padding: 4px;
+	padding: 0 10px;
+	width: 20rem;
 }
 
 .llista-serveis {
@@ -93,6 +98,10 @@
 	text-align: center;
 	margin-bottom: 4rem;
 	margin-top: 2rem;
+}
+
+.btn-delete-container {
+	width: 0;
 }
 </style>
 
@@ -150,7 +159,7 @@
 							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
 					</div>
 
-					<div id="pinfo-data-content">
+<%-- 					<div id="pinfo-data-content">
 						<p>PinfoID : ${pinfoDataFull.pinfoID}</p>
 
 						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
@@ -178,6 +187,47 @@
 							</div>
 						</c:forEach>
 					</div>
+ --%>
+
+					<div id="pinfo-data-content">
+						<p>PinfoID : ${pinfoDataFull.pinfoID}</p>
+						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
+							<div class="info-usuari-full">
+								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
+								
+								<c:forEach var="procediment" items="${usuari.procediments}">
+									<table class="taula-procediment">
+										<tr>
+											<td class="pinfodata-procediment" rowspan="${procediment.serveis.size()}">
+												${procediment.codi} <br> ${procediment.procediment}
+											</td>
+												
+											<td class="llista-serveis">${procediment.serveis.get(0).servei}</td>
+											
+											<td class="btn-delete-container">
+												<a href="<c:url value="/public/pinfodata/${procediment.serveis.get(0).pinfoDataID}/delete" />" class="btn btn-danger">
+													<i class="fas fa-times"></i>
+												</a>
+											</td>
+										</tr>
+										<c:forEach var="servei" items="${procediment.serveis}" varStatus="status">
+											<c:if test="${!status.first}">
+												<tr>
+													<td class="llista-serveis">${servei.servei}</td>
+													<td class="btn-delete-container">
+														<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
+															<i class="fas fa-times"></i>
+														</a>
+													</td>
+												</tr>
+											</c:if>
+										</c:forEach>
+									</table>
+								</c:forEach>
+							</div>
+						</c:forEach>
+					</div>
+
 
 					<c:if test="${__theFilterForm.attachedAdditionalJspCode}">
 						<%@include
