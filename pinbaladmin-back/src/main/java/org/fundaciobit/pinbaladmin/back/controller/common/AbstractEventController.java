@@ -714,10 +714,10 @@ public abstract class AbstractEventController<T> extends EventController impleme
 
         mav.addObject("showOnlyPublic", isPublic());
 
-        if (eventFilterForm.isNou()) {
-            eventFilterForm.setOrderBy(DATAEVENT.fullName);
-            eventFilterForm.setOrderAsc(true);
+        eventFilterForm.setOrderBy(DATAEVENT.fullName);
+        eventFilterForm.setOrderAsc(true);
 
+        if (eventFilterForm.isNou()) {
             eventFilterForm.addHiddenField(INCIDENCIATECNICAID);
             eventFilterForm.addHiddenField(EVENTID);
             eventFilterForm.addHiddenField(FITXERID);
@@ -787,6 +787,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         } else {
             w = isSolicitud() ? EventFields.SOLICITUDID.equal(itemID) : EventFields.INCIDENCIATECNICAID.equal(itemID);
         }
+        
+        //Añadir aqui el order by data asc.
 
         return w;
     }
