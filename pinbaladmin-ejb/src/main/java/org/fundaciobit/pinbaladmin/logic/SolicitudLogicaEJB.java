@@ -371,6 +371,12 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             Long _fitxerID_ = null;
             missatge = "<div>" + missatge + "</div>";
 
+            //Reduir string asumpte a 255 chars si es mes llarg.
+			if (asumpte.length() > 255) {
+				asumpte = asumpte.substring(0, 255);
+			}
+            
+            
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
                     destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
         }
@@ -1670,8 +1676,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		@Schedule(hour = "07", minute = "00", persistent = false),
 		@Schedule(hour = "10", minute = "00", persistent = false),
 		@Schedule(hour = "13", minute = "00", persistent = false),
-		@Schedule(hour = "15", minute = "08", persistent = false)
-
+		@Schedule(hour = "15", minute = "00", persistent = false),
+		@Schedule(hour = "17", minute = "00", persistent = false)
 	})
 	protected void obtenirEstatsSolicitudsPinbal() {
 		log.info("Comença obtenirEstatsSolicitudsPinbal()");
