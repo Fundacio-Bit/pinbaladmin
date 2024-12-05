@@ -879,47 +879,49 @@ public abstract class AbstractEventController<T> extends EventController impleme
 		// estatal, canviar l'estat de la solicitud depenent de les respostes pendents.
 		EventJPA eventCreat = (EventJPA) eventLogicaEjb.create(event);
 
-		Integer[] estatsCedents = { EVENT_TIPUS_CEDENT_RESPOSTA, EVENT_TIPUS_CONSULTA_A_CEDENT };
-
-		if (eventCreat.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
-			Long itemID = isSolicitud() ? eventCreat.getSolicitudID() : eventCreat.getIncidenciaTecnicaID();
-			T item = findItemByPrimaryKey(itemID);
-			if (item instanceof Solicitud) {
-				Solicitud soli = ((Solicitud) item);
-				Long soliID = soli.getSolicitudID();
-				if (soli.getEntitatEstatal() != null) {
-					// Comprovar si hi ha més respostes pendents
-					List<Event> eventsPendents = eventLogicaEjb.select(
-							Where.AND(EventFields.SOLICITUDID.equal(soliID), EventFields.TIPUS.in(estatsCedents)));
-					int numConsultes = 0;
-					int numRespostes = 0;
-					for (Event eventPendent : eventsPendents) {
-						if (eventPendent.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
-							numRespostes++;
-						} else {
-							numConsultes++;
-						}
-					}
-
-					Long nouEstat;
-					if (numConsultes == 0) {
-						log.info("ESTATAL - SoliID :" + soliID + " no hi ha consultes a cedents");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents;
-					} else if (numConsultes == numRespostes) {
-						log.info("ESTATAL - SoliID :" + soliID + " Totes les consultes a cedents respostes ("
-								+ numRespostes + "/" + numConsultes + ")");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-					} else {
-						log.info("ESTATAL - SoliID :" + soliID + " Consultes a cedents pendents de resposta ("
-								+ numRespostes + "/" + numConsultes + ")");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent;
-					}
-
-					soli.setEstatID(nouEstat);
-					solicitudLogicEjb.update(soli);
-				}
-			}
-		}
+		
+		//Pilar ha pedido que no se actualice el estado de las estatales automatico. Se comenta todo.
+//		Integer[] estatsCedents = { EVENT_TIPUS_CEDENT_RESPOSTA, EVENT_TIPUS_CONSULTA_A_CEDENT };
+//
+//		if (eventCreat.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
+//			Long itemID = isSolicitud() ? eventCreat.getSolicitudID() : eventCreat.getIncidenciaTecnicaID();
+//			T item = findItemByPrimaryKey(itemID);
+//			if (item instanceof Solicitud) {
+//				Solicitud soli = ((Solicitud) item);
+//				Long soliID = soli.getSolicitudID();
+//				if (soli.getEntitatEstatal() != null) {
+//					// Comprovar si hi ha més respostes pendents
+//					List<Event> eventsPendents = eventLogicaEjb.select(
+//							Where.AND(EventFields.SOLICITUDID.equal(soliID), EventFields.TIPUS.in(estatsCedents)));
+//					int numConsultes = 0;
+//					int numRespostes = 0;
+//					for (Event eventPendent : eventsPendents) {
+//						if (eventPendent.getTipus() == EVENT_TIPUS_CEDENT_RESPOSTA) {
+//							numRespostes++;
+//						} else {
+//							numConsultes++;
+//						}
+//					}
+//
+//					Long nouEstat;
+//					if (numConsultes == 0) {
+//						log.info("ESTATAL - SoliID :" + soliID + " no hi ha consultes a cedents");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents;
+//					} else if (numConsultes == numRespostes) {
+//						log.info("ESTATAL - SoliID :" + soliID + " Totes les consultes a cedents respostes ("
+//								+ numRespostes + "/" + numConsultes + ")");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+//					} else {
+//						log.info("ESTATAL - SoliID :" + soliID + " Consultes a cedents pendents de resposta ("
+//								+ numRespostes + "/" + numConsultes + ")");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent;
+//					}
+//
+//					soli.setEstatID(nouEstat);
+//					solicitudLogicEjb.update(soli);
+//				}
+//			}
+//		}
 		return eventCreat;
 	}
 
