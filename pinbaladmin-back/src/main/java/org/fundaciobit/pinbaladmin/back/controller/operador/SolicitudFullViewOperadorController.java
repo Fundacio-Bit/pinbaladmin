@@ -202,12 +202,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		} else {
 			// Si és estatal
 			
-			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
-				// Boto per enviar correus als cedents
-				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
-						"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
-			}
-			
+//			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
+//				// Boto per enviar correus als cedents
+//				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
+//						"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
+//			}
+//			
 			//Boto per enviar correus als cedents
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
 					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
