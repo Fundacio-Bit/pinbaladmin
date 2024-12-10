@@ -70,10 +70,10 @@ table.solicitud.servicio.item {
 		</tr>
 		<c:if test="${estadoProc.observaciones != null}">
 			<tr>
-				<th class="item">Observaciones</th>
+				<th colspan="2" class="item">Observaciones</th>
 			</tr>
 			<tr>
-				<td class="item">${estadoProc.observaciones}</td>
+				<td colspan="2" class="item">${estadoProc.observaciones}</td>
 			</tr>
 		</c:if>
 	</table>

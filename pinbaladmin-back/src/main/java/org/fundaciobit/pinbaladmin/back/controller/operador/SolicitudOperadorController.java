@@ -1297,6 +1297,38 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     @Override
+    public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
+    		SolicitudForm solicitudForm, Where where) throws I18NException {
+    	
+    	List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    	
+		for (String consentimentTipus : Constants.CONSENTIMENTS_TIPUS) {
+			String key = consentimentTipus;
+			String value = I18NUtils.tradueix("consentiment.tipus." + key);
+
+			__tmp.add(new StringKeyValue(key, value));
+		}
+		
+		return __tmp;
+    }
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request, ModelAndView mav,
+			SolicitudForm solicitudForm, Where where) throws I18NException {
+
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+		for (String consentimentAdj : Constants.CONSENTIMENTS) {
+			String key = consentimentAdj;
+			String value = I18NUtils.tradueix("consentiment." + key);
+
+			__tmp.add(new StringKeyValue(key, value));
+		}
+
+		return __tmp;
+	}
+    
+    @Override
     public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav,
             SolicitudForm solicitudForm, Where where) throws I18NException {
 

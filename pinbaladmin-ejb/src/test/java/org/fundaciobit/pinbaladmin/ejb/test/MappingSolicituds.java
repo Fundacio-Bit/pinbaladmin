@@ -23,15 +23,63 @@ import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
 
+import es.caib.enviafib.logic.PluginEstructuraOrganitzativaLogicaEJB.C;
+
 
 public class MappingSolicituds {
-
-    @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
-    protected TramitAPersAutLogicaService tramitAEjb;
-
  
     public static void main(String[] args) {
-    	system.out.println("Hello World");
+
+    	A a = new A();
+    	B b = new B();
+    	
+    	C c = b;
+    	c.myMethod();
+    	
     	
     }
+    
+    public class A extends C {
+  		private int Aa;
+  		private int Ab;
+  		
+  		public A() {
+  			this.Aa = 1;
+  			this.Ab = 2;
+  		}
+  		
+  		@Override
+  		public void myMethod() {
+  			System.out.println("A");
+  		}
+  		
+  	}
+      
+  	public class B extends C {
+  		private int Ba;
+  		private int Bb;
+
+  		public B() {
+  			this.Ba = 1;
+  			this.Bb = 2;
+  		}
+
+  		@Override
+  		public void myMethod() {
+  			System.out.println("B");
+  		}
+  	}
+  	
+  	public abstract class C {
+  		private int Ca;
+  		private int Cb;
+
+  		public C() {
+  			this.Ca = 1;
+  			this.Cb = 2;
+  		}
+
+  		public abstract void myMethod();
+  	}
+  	
 }

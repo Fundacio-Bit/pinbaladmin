@@ -154,7 +154,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			}
 
 			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID) {
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_ESMENES) {
 				log.info("Estat PBL: " + solicitud.getEstatpinbal());
 
 				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",

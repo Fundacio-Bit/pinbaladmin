@@ -139,9 +139,13 @@ public interface Constants {
     public static final String CONSENTIMENT_TIPUS_SI = "si";
     public static final String CONSENTIMENT_TIPUS_LLEI = "llei";
     public static final String CONSENTIMENT_TIPUS_NOOP = "noop";
+    
+    public static final String[] CONSENTIMENTS_TIPUS = { CONSENTIMENT_TIPUS_SI, CONSENTIMENT_TIPUS_LLEI, CONSENTIMENT_TIPUS_NOOP };
 
     public static final String CONSENTIMENT_PUBLICAT = "publicat";
     public static final String CONSENTIMENT_ADJUNT = "adjunt";
+    
+    public static final String[] CONSENTIMENTS = { CONSENTIMENT_PUBLICAT, CONSENTIMENT_ADJUNT };
     
     public static final Long ESTAT_PINFO_ERROR = -1L;
     public static final Long ESTAT_PINFO_CREANT = 0L;
