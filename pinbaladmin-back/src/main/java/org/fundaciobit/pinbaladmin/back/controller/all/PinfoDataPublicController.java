@@ -77,6 +77,10 @@ public class PinfoDataPublicController extends PinfoDataController {
 	@EJB(mappedName = EntitatServeiLogicService.JNDI_NAME)
 	protected EntitatServeiLogicService entitatLogicaEjb;
 
+	public final String ALTA_BAIXA = "alta_baixa";
+	public final Long PINFODATA_ALTA = 1L;
+	public final Long PINFODATA_BAIXA = 0L;
+	
 	@Override
 	public String getTileForm() {
 		return "pinfoDataFormPublic";
@@ -118,6 +122,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 			filterForm.addHiddenField(PinfoDataFields.ESTAT);
 
 			filterForm.setVisibleExportList(false);
+			filterForm.setDeleteSelectedButtonVisible(false);
+			filterForm.setAddButtonVisible(false);
 
 			filterForm.setItemsPerPage(-1);
 			filterForm.setTitleCode("tramit.pinfo.solicitar");
@@ -287,8 +293,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		Long estat = 0L; // Creant
-		Long alta = 1L; // Alta
-
+		Long alta_baixa = (Long) request.getSession().getAttribute(ALTA_BAIXA);
+		
 		for (String u : usuaris) {
 			for (String solSer : solicitudServeis) {
 				SolicitudServei ss = solicitudServeiLogicaEjb.findByPrimaryKey(Long.parseLong(solSer));
@@ -296,7 +302,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 				Long serveiID = ss.getServeiID();
 
 				log.info("user: " + u + " procedimentID: " + procedimentID + " serveiID: " + serveiID);
-				PinfoDataJPA pinfoDataJPA = new PinfoDataJPA(pinfoID, estat, u, procedimentID, serveiID, alta);
+				PinfoDataJPA pinfoDataJPA = new PinfoDataJPA(pinfoID, estat, u, procedimentID, serveiID, alta_baixa);
 
 				PinfoData pinfoData = pinfoDataLogicaEjb.create(pinfoDataJPA);
 				log.info("pinfoData: " + pinfoData.getPinfodataID());
@@ -461,10 +467,38 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		super.postList(request, mav, filterForm, list);
 		filterForm.getAdditionalButtons().clear();
+		
 		if (list.size() > 0) {
 			filterForm.addAdditionalButton(new AdditionalButton("fas fa-file-pdf", "generar.pdf",
 					getContextWeb() + "/generaPdf", AdditionalButtonStyle.PRIMARY));
 		}
 
+		//Afegir botó crear alta, i per crear baixa.
+		filterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramitpinfo.baixa",
+				getContextWeb() + "/crearbaixa", AdditionalButtonStyle.DANGER));
+		
+		filterForm.addAdditionalButton(new AdditionalButton("fas fa-plus", "tramitpinfo.alta",
+				getContextWeb() + "/crearalta", AdditionalButtonStyle.SUCCESS));
+		
 	}
+	
+	
+	@RequestMapping(value = "/crearalta")
+	public String crearAlta(HttpServletRequest request, ModelAndView mav) throws I18NException {
+		log.info("crearAlta");
+		
+		//Redirigir a new amb method igual a alta.
+		request.getSession().setAttribute(ALTA_BAIXA, PINFODATA_ALTA);
+		return "redirect:" + CONTEXT_WEB + "/new";
+	}
+	
+	@RequestMapping(value = "/crearbaixa")
+	public String crearBaixa(HttpServletRequest request, ModelAndView mav) throws I18NException {
+		log.info("crearBaixa");
+
+		// Redirigir a new amb method igual a baixa.
+		request.getSession().setAttribute(ALTA_BAIXA, PINFODATA_BAIXA);
+		return "redirect:" + CONTEXT_WEB + "/new";
+	}
+	
 }

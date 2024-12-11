@@ -63,8 +63,8 @@
 }
 
 .btn.btn-danger {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }
 
 .pinfodata-user {
@@ -82,7 +82,7 @@
 	background: lightgray;
 	font-weight: bold;
 	padding: 0 10px;
-	width: 20rem;
+	width: 25rem;
 }
 
 .llista-serveis {
@@ -94,21 +94,30 @@
 }
 
 #msgAfegirPinfoData {
-	font-style: italic;
-	text-align: center;
-	margin-bottom: 4rem;
-	margin-top: 2rem;
+    text-align: center;
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
 }
 
 .btn-delete-container {
 	width: 0;
+}
+
+.tipus1 {
+	color: black;
+}
+
+.tipus0 {
+	color: red;
 }
 </style>
 
 </head>
 <body>
 	<div class="myContainer">
-		<h4 id="title" style="margin: 1rem auto;">Dades solicitant</h4>
+<%-- 		<h4 id="title" style="margin: 1rem auto;">Dades solicitant</h4>
 
 		<div id="dades-incidencia-container">
 			<!--
@@ -132,7 +141,7 @@
 					<td class="label">Correu</td>
 					<td class="value">${incidencia.contacteEmail}</td>
 			</table>
-		</div>
+		</div> --%>
 
 		<div id="includedContentLlistatPinfoData">
 			<form:form name="pinfoData" cssClass="form-search"
@@ -146,10 +155,22 @@
 					<div>
 						<%@include
 							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
+							
+							
 						<div id="msgAfegirPinfoData">
 							<p class="lead">Afegir dades al PINFO...</p>
 						</div>
 					</div>
+
+					<script type="text/javascript">
+						var elements = $('a[href*="/pinfodata/crear"]');
+						let alta = elements[1];
+						elements[1] = elements[0];
+						elements[0] = alta;
+						
+						elements.removeClass("float-right");
+						$("#msgAfegirPinfoData").html(elements);
+					</script>
 				</c:if>
 
 				<c:if test="${not empty pinfoDataFull.usuaris}">
@@ -159,38 +180,9 @@
 							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
 					</div>
 
-<%-- 					<div id="pinfo-data-content">
-						<p>PinfoID : ${pinfoDataFull.pinfoID}</p>
-
-						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
-							<div class="info-usuari-full">
-								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
-
-								<c:forEach var="procediment" items="${usuari.procediments}">
-									<table border="1" class="taula-procediment">
-										<tr>
-											<td class="pinfodata-procediment">
-												${procediment.procediment}</td>
-										</tr>
-										<tr>
-											<td class="llista-serveis">
-												<c:set var="primer" value="true"/> 
-												<c:forEach var="servei" items="${procediment.serveis}">
-													<c:if test="${not primer}">, </c:if>
-													${servei.servei}
-	                                            	<c:set var="primer" value="false" />
-												</c:forEach>
-											</td>
-										</tr>
-									</table>
-								</c:forEach>
-							</div>
-						</c:forEach>
-					</div>
- --%>
 
 					<div id="pinfo-data-content">
-						<p>PinfoID : ${pinfoDataFull.pinfoID}</p>
+<%-- 						<p>PinfoID : ${pinfoDataFull.pinfoID}</p> --%>
 						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
 							<div class="info-usuari-full">
 								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
@@ -202,7 +194,7 @@
 												${procediment.codi} <br> ${procediment.procediment}
 											</td>
 												
-											<td class="llista-serveis">${procediment.serveis.get(0).servei}</td>
+											<td class="llista-serveis tipus${procediment.serveis.get(0).alta}">${procediment.serveis.get(0).servei}</td>
 											
 											<td class="btn-delete-container">
 												<a href="<c:url value="/public/pinfodata/${procediment.serveis.get(0).pinfoDataID}/delete" />" class="btn btn-danger">
@@ -213,7 +205,7 @@
 										<c:forEach var="servei" items="${procediment.serveis}" varStatus="status">
 											<c:if test="${!status.first}">
 												<tr>
-													<td class="llista-serveis">${servei.servei}</td>
+													<td class="llista-serveis tipus${procediment.serveis.get(0).alta}">${servei.servei}</td>
 													<td class="btn-delete-container">
 														<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
 															<i class="fas fa-times"></i>
@@ -236,7 +228,6 @@
 				</c:if>
 			</form:form>
 		</div>
-
 	</div>
 </body>
 </html>
