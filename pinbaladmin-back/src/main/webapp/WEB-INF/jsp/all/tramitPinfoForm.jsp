@@ -19,7 +19,7 @@
 	padding: 1rem;
 	border-radius: 6px;
 	border: 2px solid black;
-	margin: 3rem;
+	margin: 0 3rem;
 }
 
 #form-content {
@@ -38,6 +38,11 @@ section {
 
 section .title {
 	font-size: 25px;
+	margin: 0 0 .5rem 0;
+}
+
+.sub-title {
+	font-size: 20px;
 	margin: 0 0 .5rem 0;
 }
 
@@ -100,7 +105,7 @@ section .title {
 	cursor: help;
 }
 
-.keyProc{
+.keyProc {
 	text-align: center;
 	word-break: break-word;
 }
@@ -179,10 +184,19 @@ section .title {
 	cursor: pointer;
 	color: #ae0808;
 }
+
+#backToList-button-container {
+	text-align: right;
+	margin: 1rem 5rem;
+}
 </style>
 
 </head>
 <body>
+	<div id="backToList-button-container">
+		<a id="backToList-button" href="list/1" class="btn btn-secondary">Tornar al llistat</a>
+	</div>
+
 	<div id="form-container">
 		<form id="pinfoDataForm" action="procesarPermisos" method="post"
 			enctype="multipart/form-data">
@@ -238,7 +252,9 @@ section .title {
 				</section>
 
 				<section id="section3">
-					<div class="title">Selecciona los servicios:</div>
+					<div class="title">Assignar permisos:</div>
+					<div id="subtitle-usuaris" class="sub-title"></div>
+					
 
 					<div class="input-container servei">
 						<div id="taula-serveis-cont">
@@ -403,8 +419,9 @@ section .title {
 
 		function construyeTablaServicios(serveisTrobats, allSoliServ) {
 
-			//Cream una primera fila amb els procediments, i despres de cada un, es mostren els serveis d'aquest
+			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.join(", ");
 			
+			//Cream una primera fila amb els procediments, i despres de cada un, es mostren els serveis d'aquest
 			var trTitol = $("<tr></tr>");	
 			trTitol.append("<td id=\"titol-serveis\" rowspan=\"2\">SERVEIS</td>");
 			trTitol.append("<td id=\"titol-procediments\" colspan=\"" + procediments.length + "\" style=\"text-align: center;\">PROCEDIMENTS</td>");
