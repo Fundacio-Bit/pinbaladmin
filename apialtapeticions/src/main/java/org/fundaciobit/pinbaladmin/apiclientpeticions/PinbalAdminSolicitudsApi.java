@@ -189,14 +189,8 @@ public class PinbalAdminSolicitudsApi {
         return resposta;
     }
 
-    /**
-     * 
-     * @author anadal
-     *
-     */
-    protected static class SolicitudPinbalAdminAlta extends Solicitud {
 
-        protected Logger log = Logger.getLogger(this.getClass());
+    protected class SolicitudPinbalAdminAlta extends Solicitud {
 
         final es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos datosEspecificos;
 
@@ -212,8 +206,7 @@ public class PinbalAdminSolicitudsApi {
             StringWriter sw = new StringWriter();
             try {
 
-                JAXBContext contexto = JAXBContext.newInstance(
-                        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos.class);
+                JAXBContext contexto = JAXBContext.newInstance(this.datosEspecificos.getClass());
 
                 Marshaller marshaller = contexto.createMarshaller();
 
@@ -228,9 +221,7 @@ public class PinbalAdminSolicitudsApi {
         }
     }
 
-    protected static class SolicitudPinbalAdminConsulta extends Solicitud {
-
-        protected Logger log = Logger.getLogger(this.getClass());
+    protected class SolicitudPinbalAdminConsulta extends Solicitud {
 
         final es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.DatosEspecificos datosEspecificos;
 
@@ -246,8 +237,7 @@ public class PinbalAdminSolicitudsApi {
             StringWriter sw = new StringWriter();
             try {
 
-                JAXBContext contexto = JAXBContext.newInstance(
-                        es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.DatosEspecificos.class);
+                JAXBContext contexto = JAXBContext.newInstance(this.datosEspecificos.getClass());
 
                 Marshaller marshaller = contexto.createMarshaller();
 
@@ -262,9 +252,7 @@ public class PinbalAdminSolicitudsApi {
         }
     }
     
-    protected static class SolicitudPinbalAdminModificacio extends Solicitud {
-
-        protected Logger log = Logger.getLogger(this.getClass());
+    protected class SolicitudPinbalAdminModificacio extends Solicitud {
 
         final es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos datosEspecificos;
 
@@ -280,8 +268,7 @@ public class PinbalAdminSolicitudsApi {
             StringWriter sw = new StringWriter();
             try {
 
-                JAXBContext contexto = JAXBContext.newInstance(
-                        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos.class);
+                JAXBContext contexto = JAXBContext.newInstance(this.datosEspecificos.getClass());
 
                 Marshaller marshaller = contexto.createMarshaller();
 

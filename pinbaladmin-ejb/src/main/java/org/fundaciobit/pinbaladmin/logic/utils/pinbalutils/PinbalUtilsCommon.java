@@ -27,16 +27,6 @@ public class PinbalUtilsCommon {
 	public PinbalUtilsCommon() {
 	}
 
-	public es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno consultaEstatApiPinbal(
-			ScspTitular titular, ScspFuncionario funcionario,
-			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta consulta) throws Exception {
-
-		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
-				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA));
-		return api.consultaEstatPinbalApi(consulta, titular, funcionario);
-
-	}
-
 	public class DocAuthInfo {
 
 		private FitxerJPA fitxer;

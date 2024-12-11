@@ -40,6 +40,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAlta;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsCommon;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsulta;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacio;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
@@ -490,8 +491,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Consulta consulta)
 			throws Exception {
 
-		PinbalUtilsCommon common = new PinbalUtilsCommon();
-		return common.consultaEstatApiPinbal(titular, funcionario, consulta);
+		PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
+		return cons.consultaEstatApiPinbal(titular, funcionario, consulta);
 	}
 
 	@Override
