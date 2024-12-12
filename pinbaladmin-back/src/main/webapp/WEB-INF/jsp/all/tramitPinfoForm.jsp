@@ -156,12 +156,14 @@ section .title {
 	margin-top: 1rem;
 }
 
+.usuari-data-container,
 .procediment-data-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
+.usuari-li,
 .procediment-li {
 	padding-top: 5px;
 	padding-right: 1rem;
@@ -170,16 +172,19 @@ section .title {
 	border: 1px solid white;
 }
 
+.usuari-li:hover,
 .procediment-li:hover {
 	background-color: #f1f1f1;
 	border-bottom-color: black;
 	border-top-color: black;
 }
 
+.usuari-data-text,
 .procediment-data-text {
 	margin-right: 1rem;
 }
 
+.usuari-data-delete,
 .procediment-data-delete {
 	cursor: pointer;
 	color: #ae0808;
@@ -419,7 +424,7 @@ section .title {
 
 		function construyeTablaServicios(serveisTrobats, allSoliServ) {
 
-			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.join(", ");
+			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.map(u => u.nom).join(", ")
 			
 			//Cream una primera fila amb els procediments, i despres de cada un, es mostren els serveis d'aquest
 			var trTitol = $("<tr></tr>");	
@@ -518,10 +523,8 @@ section .title {
 				return;
 			if (usuaris.includes(user))
 				return;
-
-			$("#llistat-usuaris ul").append("<li>" + user + "</li>");
-			usuaris.push(user);
-			$("input[name='userID']").val("");
+			
+			validarUsuariPluginUserInformation(user);
 		}
 
 
@@ -664,7 +667,9 @@ section .title {
 				function(event) {
 					event.preventDefault();
 
-					$("input[name='usuaris']").val(usuaris.join(","));
+					let usuarisAuxx = [];
+					$("input[name='usuaris']").val(
+							usuaris.map(u => u.nom).join(","));
 
 					var selecteds = $("#taula-serveis .selected");
 					if (selecteds.length == 0) {
@@ -682,6 +687,55 @@ section .title {
 
 					this.submit();
 				});
+		
+		
+		
+		function validarUsuariPluginUserInformation(user) {
+			//Aqui ens arriba un string amb el nom de l'usuari. No es buit, i no está repetit.
+			console.log("Validant usuari " + user + " a LDAP");
+			
+			//Aqui es on es faria la crida al plugin de validació d'usuaris.
+			
+			$.ajax({
+				url : "validarUsuariPluginUserInformation",
+				type : "GET",
+				data : {
+					user : user
+				},
+				success : function(usuari) {
+                    console.log("Usuari validat");
+        			console.log(usuari);
+        			
+        			if (usuari == null) {
+        				alert("Usuari no trobat");
+        				return;
+        			}
+
+        			
+        			
+        			let li = $("<li></li>").addClass("usuari-li");
+        			let container = $("<div></div>").addClass("usuari-data-container");
+        			
+        			let spanText = $("<span></span>").addClass("usuari-data-text").text(usuari.nom + " - " + usuari.nif);
+        			
+        			let spanDelete = $("<span></span>").addClass("usuari-data-delete").html('<i class="fas fa-times"></i>').click(function() {
+                        procediments = procediments.filter(function(p) {
+                            return p.id != proc.id;
+                        });
+                        li.remove();
+                    });
+        			
+        			container.append(spanText);
+        			container.append(spanDelete);
+        			li.append(container);
+        			
+        			$("#llistat-usuaris ul").append(li);
+        			usuaris.push(usuari);
+        			$("input[name='userID']").val("");
+				}
+			});
+		}
+		
 	</script>
 </body>
 </html>

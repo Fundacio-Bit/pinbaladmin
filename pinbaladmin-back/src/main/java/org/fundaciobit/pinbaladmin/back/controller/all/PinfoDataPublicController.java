@@ -2,11 +2,14 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
@@ -16,6 +19,9 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
+import org.fundaciobit.pinbaladmin.back.security.AuthenticationSuccessListener;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
@@ -36,6 +42,10 @@ import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
+import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
+import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
+import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -308,25 +318,6 @@ public class PinfoDataPublicController extends PinfoDataController {
 				log.info("pinfoData: " + pinfoData.getPinfodataID());
 			}
 		}
-
-//		log.info("user: " + user);
-//		log.info("procedimentID: " + procedimentIDStr);
-//		log.info("serveiID: " + serveiIDStr);
-
-//		Long procedimentID = Long.parseLong(procedimentIDStr);
-//		Long serveiID = Long.parseLong(serveiIDStr);
-//		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
-//
-//		Long estat = 0L; //Creant
-//		Long alta = 1L; //Alta
-//		
-//		PinfoDataJPA pinfoDataJPA = new PinfoDataJPA(pinfoID, estat, user, procedimentID, serveiID, alta);
-//		
-//		PinfoData pinfoData = pinfoDataLogicaEjb.create(pinfoDataJPA);
-//		log.info("pinfoData: " + pinfoData.getPinfodataID());
-
-		
-		
 		return "redirect:" + CONTEXT_WEB + "/list";
 	}
 
@@ -501,4 +492,119 @@ public class PinfoDataPublicController extends PinfoDataController {
 		return "redirect:" + CONTEXT_WEB + "/new";
 	}
 	
+	public class UsuariData{
+		private String username;
+		private String nom;
+		private String nif;
+		
+		public UsuariData(String username, String nom, String nif) {
+			this.username = username;
+			this.nom = nom;
+			this.nif = nif;
+		}
+		
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		
+		public String getNom() {
+			return nom;
+		}
+		
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+		
+		public String getNif() {
+			return nif;
+		}
+		
+		public void setNif(String nif) {
+			this.nif = nif;
+		}
+	}
+	
+	@RequestMapping(value = { "/validarUsuariPluginUserInformation" }, method = RequestMethod.GET)
+	public void validarUsuariPluginUserInformation(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String user = (String) request.getParameter("user");
+		log.info("user: ]" + user + "[");
+
+		//Cridada a plugn de UserInformation(user)
+		
+//        IEstructuraOrganitzativaPlugin instance = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
+//        String dir3 = instance.getDir3DepartamentDireccioGeneral(user);
+
+		UsuariData usuari;
+		
+		boolean debug = false;
+        IUserInformationPlugin plugin = getUserInformationPluginInstance(debug);
+        UserInfo info = plugin.getUserInfoByUserName(user);
+        
+        if (info == null) {
+        	usuari = null;
+		} else {
+			String nom = info.getFullName();
+			String nif = info.getAdministrationID() + " - " + info.getEmail();
+
+			usuari = new UsuariData(user, nom, nif);
+		}
+
+		Gson g = new Gson();
+		String procedimentsJsonString = g.toJson(usuari);
+
+		// log.info(procedimentsJsonString );
+
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(procedimentsJsonString);
+		out.flush();
+	}
+
+    public static final String LOGIN_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "userinformationplugin";
+
+    public static IUserInformationPlugin loginPlugin = null;
+
+    protected final static Logger log = Logger.getLogger(PinfoDataController.class);
+
+    public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug) throws I18NException {
+        if (loginPlugin == null) {
+//            final String propertyPlugin = LOGIN_PLUGIN_KEY;
+
+            Properties propTmp = Configuracio.getSystemAndFileProperties();
+
+			if (debug) {
+				log.info("Propietats de sistema i fitxer de configuració:");
+				Set<Object> set = propTmp.keySet();
+				for (Object object : set) {
+					String key = (String) object;
+					String value = propTmp.getProperty(key);
+					log.info(key + ": " + value);
+				}
+			}
+            
+            String className = propTmp.getProperty(LOGIN_PLUGIN_KEY);
+            
+            log.info("className: " + className);
+            Object pluginInstance = PluginsManager.instancePluginByClassName(className,
+                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
+
+//            Object pluginInstance = PluginsManager.instancePluginByProperty(propertyPlugin,
+//                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
+
+            if (pluginInstance == null) {
+                throw new I18NException("plugin.donotinstantiateplugin.userinfo");
+            }
+            loginPlugin = (IUserInformationPlugin) pluginInstance;
+        }else {
+			log.info("loginPlugin ja existeix. " + loginPlugin.getClass().getName());
+        }
+        return loginPlugin;
+    }
+
 }

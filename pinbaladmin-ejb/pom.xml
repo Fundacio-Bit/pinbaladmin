@@ -323,6 +323,13 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.estructuraorganitzativa</groupId>
+            <artifactId>pluginsib-estructuraorganitzativa-api</artifactId>
+            <version>${pluginsib.estructuraorganitzativa.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
