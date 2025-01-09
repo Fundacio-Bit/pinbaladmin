@@ -99,8 +99,19 @@ public class PinfoOperadorController extends PinfoController {
 	public void postList(HttpServletRequest request, ModelAndView mav, PinfoFilterForm filterForm, List<Pinfo> list)
 			throws I18NException {
 		super.postList(request, mav, filterForm, list);
-		
 		//afegir botó per veure events d'un Pinfo
-		
 	}
+	
+	@Override
+	public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
+
+		Long[] estats = { Constants.ESTAT_PINFO_PENDENT_FIRMA, Constants.ESTAT_PINFO_PENDENT_TRAMITAR,
+				Constants.ESTAT_PINFO_TRAMITAT };
+		
+		Where wEstats = PinfoFields.ESTAT.in(estats);
+
+		return Where.AND(super.getAdditionalCondition(request), wEstats);
+	}
+	
+	
 }

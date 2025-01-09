@@ -20,6 +20,7 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
 import org.fundaciobit.pinbaladmin.back.security.AuthenticationSuccessListener;
+import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
@@ -30,7 +31,9 @@ import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
@@ -42,6 +45,7 @@ import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
@@ -91,6 +95,12 @@ public class PinfoDataPublicController extends PinfoDataController {
 	public final Long PINFODATA_ALTA = 1L;
 	public final Long PINFODATA_BAIXA = 0L;
 	
+	public final Long PINFOID_DEFAULT = 1114l;
+	public final Long INCIDENCIAID_DEFAULT = 50220l;
+	
+	public final String RESPONSABLE = "responsable";
+	public final String LLISTA_RESPONSABLES = "llistaResponsables";
+	
 	@Override
 	public String getTileForm() {
 		return "pinfoDataFormPublic";
@@ -115,7 +125,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		
 		if (id == null) {
-			id = 50111L;
+			id = INCIDENCIAID_DEFAULT;
 		}
 		
 		if (pinfoID == null) {
@@ -160,7 +170,9 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 //		HtmlUtils.saveMessageInfo(request, "Hay " + pinfoDataList.size() + " pinfodatas.");
 		
-		Long fitxerID = pinfoLogicEjb.generarPinfoPDF(pinfoID);
+		Responsable responsable = (Responsable) request.getSession().getAttribute(RESPONSABLE);
+		
+		Long fitxerID = pinfoLogicEjb.generarPinfoPDF(pinfoID, responsable);
 		log.info("fitxerID: " + fitxerID);
 		
 		return "redirect:" + PinfoPublicController.CONTEXT_WEB + "/" + pinfoID + "/edit";
@@ -224,7 +236,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		log.info("getAdditionalCondition():: incidenciaID  " + incidenciaID);
 		if (incidenciaID == null) {
-			incidenciaID = 50111L;
+			incidenciaID = INCIDENCIAID_DEFAULT;
 		}
 
 		if (incidenciaID != null) {
@@ -461,7 +473,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 		if (list.size() > 0) {
 			filterForm.addAdditionalButton(new AdditionalButton("fas fa-file-pdf", "generar.pdf",
-					getContextWeb() + "/generaPdf", AdditionalButtonStyle.PRIMARY));
+			getContextWeb() + "/seleccionarResponsable", AdditionalButtonStyle.PRIMARY));
 		}
 
 		//Afegir botó crear alta, i per crear baixa.
@@ -472,6 +484,105 @@ public class PinfoDataPublicController extends PinfoDataController {
 				getContextWeb() + "/crearalta", AdditionalButtonStyle.SUCCESS));
 		
 	}
+	
+	@RequestMapping(value = "/seleccionarResponsable", method = RequestMethod.GET)
+	public ModelAndView seleccionarResponsableGet(HttpServletRequest request) throws I18NException {
+		log.info("mostrarResponsables GET");
+		
+		ModelAndView mav = new ModelAndView("llistaResponsables");
+		
+		//EJB obtenir els responsables
+		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
+		log.info("pinfoID: " + pinfoID);
+		
+		//Obtenir els procediments dels PinfoDatas:
+		List<Responsable> responsablesList = getLlistaResponsablesProcediments(pinfoID);
+		request.getSession().setAttribute(LLISTA_RESPONSABLES, responsablesList);
+		mav.addObject("responsables", responsablesList);
+		return mav;
+	}
+	
+	private List<Responsable> getLlistaResponsablesProcediments(Long pinfoID) throws I18NException {
+
+		List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
+		try {
+
+			// Obtenir els procediments dels PinfoDatas:
+			List<Long> procedimentsList = new java.util.ArrayList<Long>();
+			List<String> listaNifs = new java.util.ArrayList<String>();
+			List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));
+			for (PinfoData pinfoData : pinfoDataList) {
+				if (!procedimentsList.contains(pinfoData.getProcedimentID())) {
+					procedimentsList.add(pinfoData.getProcedimentID());
+				}
+			}
+
+			for (Long procedimentID : procedimentsList) {
+				Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
+				Long xmlSolicitud = solicitud.getSolicitudXmlID();
+				
+				log.error( procedimentID +  ": xmlSolicitud " + xmlSolicitud);
+				if (xmlSolicitud == null) {
+					continue;
+				}
+				
+				Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xmlSolicitud);
+
+				String nif = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECD");
+				nif = nif.toUpperCase();
+				String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
+				String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
+				String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
+				String cargo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CARGOSECD");
+				String telefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
+				String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
+				String nomOcult = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECD");
+
+				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + cargo + " - " + telefon + " - " + mail
+						+ " - " + nomOcult);
+
+				Responsable responsable = new Responsable(nif, nom, ape1, ape2, cargo, telefon, mail, nomOcult);				
+				
+				if (!listaNifs.contains(nif)) {
+                    responsablesList.add(responsable);
+                    listaNifs.add(nif);
+				}
+				
+			}
+
+		} catch (Exception e) {
+			log.error("Error getLlistaResponsablesProcediments: " + e.getMessage());
+		}
+		return responsablesList;
+	}
+	
+	@RequestMapping(value = "/seleccionarResponsable", method = RequestMethod.POST)
+	public String seleccionarResponsablePost(HttpServletRequest request) throws I18NException {
+		log.info("seleccionarResponsable POST");
+		
+		String selecionat = request.getParameter("responsable");
+		
+		List<Responsable> responsablesList = (List<Responsable>) request.getSession().getAttribute(LLISTA_RESPONSABLES);
+		Responsable responsable = null;
+		
+		for (Responsable res : responsablesList) {
+			if (res.getNif().equals(selecionat)) {
+				responsable = res;
+				break;
+			}
+		}
+		
+		request.getSession().setAttribute(RESPONSABLE, responsable);
+		
+		//Guardar responsable a destinatariNIF del Pinfo, i redireccionar a PDF
+		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
+		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
+		pinfo.setDestinatariNIF(responsable.getNif());
+		pinfoLogicEjb.update(pinfo);
+
+		return "redirect:" + CONTEXT_WEB + "/generaPdf";
+	}
+	
 	
 	
 	@RequestMapping(value = "/crearalta")
@@ -537,8 +648,10 @@ public class PinfoDataPublicController extends PinfoDataController {
 		//Cridada a plugn de UserInformation(user)
 		
 //        IEstructuraOrganitzativaPlugin instance = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
-//        String dir3 = instance.getDir3DepartamentDireccioGeneral(user);
-
+//		String cap = instance.getCapAreaConsellerName(user);
+		
+//		log.info("El cap de " + user + " es " + cap);
+        
 		UsuariData usuari;
 		
 		boolean debug = false;
@@ -548,8 +661,22 @@ public class PinfoDataPublicController extends PinfoDataController {
         if (info == null) {
         	usuari = null;
 		} else {
-			String nom = info.getFullName();
-			String nif = info.getAdministrationID() + " - " + info.getEmail();
+			String nom = info.getFullName() + " - " + info.getAdministrationID();
+			String nif = ""
+//			+ cap + " - "
+			+ info.getAddress() + " - " 
+			+ info.getCompany() + " - " 
+			+ info.getCompanyArea() + " - " 
+			+ info.getCompanyDepartment() + " - " 
+			+ info.getDir3() + " - " 
+			+ info.getId() + " - " 
+			+ info.getNotes() + " - " 
+			+ info.getName() + " - " 
+			+ info.getPhoneNumber() + " - " 
+			+ info.getBirthDate() + " - " 
+			+ info.getCreationDate() + " - " 
+			+ info.getGender() + " - " 
+			+ info.getEmail();
 
 			usuari = new UsuariData(user, nom, nif);
 		}
@@ -606,5 +733,4 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
         return loginPlugin;
     }
-
 }

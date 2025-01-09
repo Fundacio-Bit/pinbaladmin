@@ -44,8 +44,10 @@ import org.fundaciobit.pinbaladmin.ejb.PinfoEJB;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
+import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -78,6 +80,9 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
 	
+	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
+	protected OrganLogicaService organLogicaEjb;
+	
 	
 	@Override
 	@PermitAll
@@ -98,7 +103,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	}
 
 	@Override
-	public Long generarPinfoPDF(Long pinfoID) throws Exception, I18NException {
+	public Long generarPinfoPDF(Long pinfoID, Responsable responsable) throws Exception, I18NException {
 
 		log.info("Generant PDF per PINFO: " + pinfoID);
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -110,9 +115,22 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		PinfoJPA pinfo = findByPrimaryKey(pinfoID);
 		data.put("pinfo", pinfo);
 
+		data.put("responsable", responsable);
+		
 		PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
 		data.put("pinfoDataFull", pinfoDataFull);
 
+		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+		data.put("incidencia", incidencia);
+		
+		String organGestor = "";
+		
+		Organ organ = organLogicaEjb.findByPrimaryKey(incidencia.getOrganid());
+		if (organ != null) {
+			organGestor = organ.getNom() + " (" + organ.getDir3() + ")";
+		}
+		data.put("organGestor", organGestor);
+		
 		String fileName = "PINFO_" + pinfoID + ".pdf";
 		File outputPDF = File.createTempFile("pinbaladmin_formulari_pinfo", ".pdf");
 		FileOutputStream fosPDF = new FileOutputStream(outputPDF);

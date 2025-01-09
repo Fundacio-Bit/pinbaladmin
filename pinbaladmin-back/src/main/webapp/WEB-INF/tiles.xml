@@ -326,6 +326,17 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/eventList.jsp"/>
     </definition>
 
+
+    <definition name="pinfoDataFormOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/permisosUsuari.jsp" />
+    </definition>
+
+    <definition name="pinfoDataListOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoDataList.jsp"/>
+    </definition>
+
+
+
     <!-- =====   TRAMIT SISTRA OPERADOR ===== -->
     <definition name="tramitSistraListOperador" extends="operador_base">
         <put-attribute name="titol" value="tramitAPersAut.tramitAPersAut" />
@@ -458,6 +469,10 @@
     
     <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoList.jsp" />
+    </definition>
+    
+    <definition name="llistaResponsables" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/seleccionarResponsable.jsp" />
     </definition>
 
     <definition name="pinfoFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">

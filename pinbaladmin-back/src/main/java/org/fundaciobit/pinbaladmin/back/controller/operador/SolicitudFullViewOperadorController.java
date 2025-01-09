@@ -155,8 +155,14 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
 					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_ESMENES) {
-				log.info("Estat PBL: " + solicitud.getEstatpinbal());
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_ESMENES 
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_AUTORITZAT
+					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT
+					) {
+				
+				Integer estatPbl = solicitud.getEstatpinbal();
+				
+				log.info("Estat PBL: " + estatPbl);
 
 				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
 						"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
@@ -167,15 +173,15 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
 						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
 
-				if (solicitud.getEstatpinbal() == null) {
-					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+				if (estatPbl == null) {
+					estatPbl = Constants.ESTAT_PINBAL_NO_SOLICITAT;
 				}
 
-				if (solicitud.getEstatpinbal() >= 0) {
+				if (estatPbl != Constants.ESTAT_PINBAL_NO_SOLICITAT) {
 					solicitudForm.addAdditionalButton(consulta);
 				}
 
-				switch (solicitud.getEstatpinbal()) {
+				switch (estatPbl) {
 				case Constants.ESTAT_PINBAL_ERROR:
 				case Constants.ESTAT_PINBAL_NO_SOLICITAT:
 				case Constants.ESTAT_PINBAL_NO_APROVAT:

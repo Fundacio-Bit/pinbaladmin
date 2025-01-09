@@ -158,7 +158,8 @@ public class AltaSolicitudPinbalOperadorController {
             es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = solicitudLogicaEjb
                     .altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
-            int nouEstatPinbal;
+            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+//            int nouEstatPinbal;
             
             if (resposta.getErrores() == null) {
                 System.out.println(" # Errors: 0");
@@ -170,15 +171,17 @@ public class AltaSolicitudPinbalOperadorController {
 
                 log.info("Actualitzam solicitud amb ID= " + soliID);
 
-                nouEstatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
-                
+//                nouEstatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+
 				// Actualitzar estat solicitut a pendent autoritzar:
-				solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
-						SolicitudFields.SOLICITUDID.equal(soliID));
+//				solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
+//						SolicitudFields.SOLICITUDID.equal(soliID));
+				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
                 
 			} else {
 
-				nouEstatPinbal = Constants.ESTAT_PINBAL_ERROR;
+//				nouEstatPinbal = Constants.ESTAT_PINBAL_ERROR;
 
 				boolean procdedimentDuplicat = false;
 				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
@@ -203,24 +206,23 @@ public class AltaSolicitudPinbalOperadorController {
 					Consulta consultaEstat = new Consulta();
 					consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
 
-					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consultaEstat);
-
+					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
+					
 					es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estat = retorno
 							.getProcedimiento().getEstadoProcedimiento();
 
-					nouEstatPinbal = estat.getEstado();
-					log.info("estado procedimiento: " + nouEstatPinbal + " - " + estat.getDescripcion());
+//					nouEstatPinbal = estat.getEstado();
+					log.info("estado procedimiento: " + estat.getEstado() + " - " + estat.getDescripcion());
 
 					HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
 				} else {
-					solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID,
-							SolicitudFields.SOLICITUDID.equal(soliID));
-
+//					solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID,
+//							SolicitudFields.SOLICITUDID.equal(soliID));
+					soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
 				}
 			}
             
-            solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, nouEstatPinbal,
-                    SolicitudFields.SOLICITUDID.equal(soliID));
+            solicitudLogicaEjb.update(soli);
             
         } catch (Exception e) {
             HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
@@ -249,7 +251,7 @@ public class AltaSolicitudPinbalOperadorController {
             Consulta consulta = new Consulta();
             consulta.setCodigoProcedimiento(soli.getProcedimentCodi());
 
-            Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, consulta);
+            Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
 
             ModelAndView mav = new ModelAndView("consultaestatpinbal");
             
@@ -263,54 +265,55 @@ public class AltaSolicitudPinbalOperadorController {
 			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estado = retorno
 					.getProcedimiento().getEstadoProcedimiento();
 
-			int estatPinbal = estado.getEstado();
-			log.info("estado procedimiento: " + estatPinbal + " - " + estado.getDescripcion());
+//			int estatPinbal = estado.getEstado();
+			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
 			
-			Long nouEstatID = null;
-			
-			switch (estatPinbal) {
-			case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-			case Constants.ESTAT_PINBAL_ERROR:
-			case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID;
-				break;
-
-			case Constants.ESTAT_PINBAL_SUBSANAT:
-			case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-				break;
-				
-			case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-			case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-				nouEstatID = Constants.SOLICITUD_ESTAT_ESMENES;
-				break;
-				
-			case Constants.ESTAT_PINBAL_DESISTIT:
-			case Constants.ESTAT_PINBAL_NO_APROVAT:
-			case Constants.ESTAT_PINBAL_DESESTIMAT:
-				nouEstatID = Constants.SOLICITUD_ESTAT_TANCAT;
-				break;
-			
-			case Constants.ESTAT_PINBAL_APROVAT:
-			case Constants.ESTAT_PINBAL_AUTORITZAT:
-				nouEstatID = Constants.SOLICITUD_ESTAT_AUTORITZAT;
-			    break;
-
-			}
-
-			String observaciones = estado.getObservaciones();
-			log.info("observaciones: " + observaciones);
-
-			soli.setEstatpinbal(estatPinbal);
-			if (nouEstatID != null) {
-				soli.setEstatID(nouEstatID);
-			}
-			
-			if (observaciones != null) {
-//				soli.setObservacions(observaciones);
-			}
-			
-			solicitudLogicaEjb.update(soli);
+//			Long nouEstatID = null;
+//			
+//			switch (estatPinbal) {
+//			case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+//			case Constants.ESTAT_PINBAL_ERROR:
+//			case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+//				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID;
+//				break;
+//
+//			case Constants.ESTAT_PINBAL_SUBSANAT:
+//			case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+//				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+//				break;
+//				
+//			case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+//			case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+//				nouEstatID = Constants.SOLICITUD_ESTAT_ESMENES;
+//				break;
+//				
+//			case Constants.ESTAT_PINBAL_DESISTIT:
+//			case Constants.ESTAT_PINBAL_NO_APROVAT:
+//			case Constants.ESTAT_PINBAL_DESESTIMAT:
+//				nouEstatID = Constants.SOLICITUD_ESTAT_TANCAT;
+//				break;
+//			
+//			case Constants.ESTAT_PINBAL_APROVAT:
+//			case Constants.ESTAT_PINBAL_AUTORITZAT:
+//				nouEstatID = Constants.SOLICITUD_ESTAT_AUTORITZAT;
+//			    break;
+//
+//			}
+//
+//			String observaciones = estado.getObservaciones();
+//			log.info("observaciones: " + observaciones);
+//
+//			soli.setEstatpinbal(estatPinbal);
+//			if (nouEstatID != null) {
+//				soli.setEstatID(nouEstatID);
+//			}
+//			
+//			if (observaciones != null) {
+////				soli.setObservacions(observaciones);
+//			}
+//			
+//			
+//			solicitudLogicaEjb.update(soli);
 
             HtmlUtils.saveMessageSuccess(request, "Dades de la consutla:");
             return mav;
@@ -344,15 +347,14 @@ public class AltaSolicitudPinbalOperadorController {
                 Consulta consultaEstat = new Consulta();
                 consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
 
-                Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario,
-                        consultaEstat);
+				Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
 
                 int estatPinbal = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
                 log.info("estado procedimiento: " + estatPinbal + " - "
                         + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
 
-                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
-                        SolicitudFields.SOLICITUDID.equal(soliID));
+//                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
+//                        SolicitudFields.SOLICITUDID.equal(soliID));
 
                 HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
 

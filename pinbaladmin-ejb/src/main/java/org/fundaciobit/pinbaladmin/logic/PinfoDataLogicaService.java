@@ -1,6 +1,8 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -21,4 +23,6 @@ public interface PinfoDataLogicaService extends PinfoDataService {
     public PinfoDataFull getEstructuraUsuarisProcedimentServeis(Long pinfoID)  throws I18NException ;
 
     public IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa() throws I18NException;
+
+    public List<String> getResponsablesProcedimentsPinfos(Long pinfoID) throws I18NException;
 }

@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudServeiEJB;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -61,4 +62,11 @@ public class SolicitudServeiLogicaEJB extends SolicitudServeiEJB implements Soli
 
         return files;
     }
+    
+	@Override
+	@PermitAll
+	public SolicitudServei update(SolicitudServei instance) throws I18NException {
+		return super.update(instance);
+	}
+
 }

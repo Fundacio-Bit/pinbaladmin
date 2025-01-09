@@ -71,38 +71,47 @@
 	font-style: italic;
 	font-size: 18px;
 	font-weight: bold;
+	margin-bottom: 2px;
 }
 
 .taula-procediment {
-	margin-top: 1rem;
+	margin-bottom: 1rem;
 	width: 100%;
+	display: flex;
 }
 
 .pinfodata-procediment {
 	background: lightgray;
 	font-weight: bold;
-	padding: 0 10px;
+	padding: 5px 10px; width : 25rem; display : flex;
+	align-items: center;
 	width: 25rem;
+	display: flex;
 }
 
 .llista-serveis {
 	padding: 6px;
+	display: flex;
+	justify-content: space-between;
+	min-width: 20rem;
 }
 
-.pinfodata-servei {
-	
+.pinfodata-serveis {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 #msgAfegirPinfoData {
-    text-align: center;
-    margin: 2rem;
-    display: flex;
-    justify-content: center;
-    gap: 16px;
+	text-align: center;
+	margin: 2rem;
+	display: flex;
+	justify-content: center;
+	gap: 16px;
 }
 
 .btn-delete-container {
-	width: 0;
+	
 }
 
 .tipus1 {
@@ -188,33 +197,88 @@
 								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
 								
 								<c:forEach var="procediment" items="${usuari.procediments}">
-									<table class="taula-procediment">
+									<c:set var="altes" value="${procediment.altes}" />
+									<c:set var="baixes" value="${procediment.baixes}"/>
+									
+									<div class="taula-procediment">
+
+										<div class="pinfodata-procediment">${procediment.codi}
+											<br> ${procediment.procediment}
+										</div>
+										<div class="pinfodata-serveis">
+											<c:if test="${altes.size() > 0}">
+												<c:forEach var="servei" items="${altes}" varStatus="status">
+													<div class="llista-serveis">
+														<div class="servei-item tipus${servei.alta}">
+															${servei.servei}
+														</div>
+														<div class="btn-delete-container">
+															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
+																class="btn btn-danger"><i class="fas fa-times"></i>
+															</a>
+														</div>
+													</div>
+												</c:forEach>
+											</c:if>
+
+											<c:if test="${baixes.size() > 0}">
+												<c:forEach var="servei" items="${baixes}" varStatus="status">
+													<div class="llista-serveis">
+														<div class="servei-item tipus${servei.alta}">
+															${servei.servei}
+														</div>
+														<div class="btn-delete-container">
+															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
+																class="btn btn-danger"><i class="fas fa-times"></i>
+															</a>
+														</div>
+													</div>
+												</c:forEach>
+											</c:if>
+										</div>
+									</div>
+									
+									
+									<%-- <table class="taula-procediment">
 										<tr>
-											<td class="pinfodata-procediment" rowspan="${procediment.serveis.size()}">
+											<td class="pinfodata-procediment" rowspan="${altes.size() + baixes.size()}">
 												${procediment.codi} <br> ${procediment.procediment}
 											</td>
-												
-											<td class="llista-serveis tipus${procediment.serveis.get(0).alta}">${procediment.serveis.get(0).servei}</td>
-											
-											<td class="btn-delete-container">
-												<a href="<c:url value="/public/pinfodata/${procediment.serveis.get(0).pinfoDataID}/delete" />" class="btn btn-danger">
-													<i class="fas fa-times"></i>
-												</a>
-											</td>
-										</tr>
-										<c:forEach var="servei" items="${procediment.serveis}" varStatus="status">
-											<c:if test="${!status.first}">
-												<tr>
-													<td class="llista-serveis tipus${procediment.serveis.get(0).alta}">${servei.servei}</td>
-													<td class="btn-delete-container">
-														<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
-															<i class="fas fa-times"></i>
-														</a>
-													</td>
-												</tr>
+
+											<c:if test="${altes.size() > 0">
+												<td class="llista-serveis tipus1">Altes</td>
 											</c:if>
+										</tr>
+										
+										<c:forEach var="servei" items="${altes}" varStatus="status">
+											<tr>
+												<td class="llista-serveis tipus${servei.alta}">${servei.servei}</td>
+												<td class="btn-delete-container">
+													<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
+														<i class="fas fa-times"></i>
+													</a>
+												</td>
+											</tr>
 										</c:forEach>
-									</table>
+										
+										<c:if test="${baixes.size() > 0">
+											<td class="llista-serveis tipus0">Baixes</td>
+										</c:if>
+											
+										<c:forEach var="servei" items="${baixes}" varStatus="status">
+											<tr>
+												<td class="llista-serveis tipus${servei.alta}">${servei.servei}</td>
+												<td class="btn-delete-container">
+													<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
+														<i class="fas fa-times"></i>
+													</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</table> --%>
+									
+									
+									
 								</c:forEach>
 							</div>
 						</c:forEach>

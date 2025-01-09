@@ -349,6 +349,9 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 					.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 			estatPendentMadrid |= ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_REBUT;
 
+			//ja que alta també s'utilitza per fer subsanacions, pot haver serveis autoritzats que s'hagin de tornar a enviar
+			estatPendentMadrid = true;
+			
 			if (!balear && estatPendentMadrid) {
 
 				Servicio servicio = new Servicio();

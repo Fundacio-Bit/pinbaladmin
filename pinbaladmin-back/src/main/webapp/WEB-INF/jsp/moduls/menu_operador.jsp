@@ -96,6 +96,14 @@
 					<fmt:message key="pinfo.pinfo.plural" />
 			</span>
 		</a></li> 
+		
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/pinfoData/new"/>"> <span
+				style="${(fn:contains(url, '/operador/pinfoData/permisosusuari'))? "font-weight:bold;" : ""}">
+					<fmt:message key="pinfoData.permisosusuari" />
+			</span>
+		</a></li> 
+		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 

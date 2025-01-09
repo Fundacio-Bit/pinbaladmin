@@ -29,6 +29,12 @@ import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 
+
+import org.fundaciobit.pluginsib.utils.ldap.LDAPConstants;
+import org.fundaciobit.pluginsib.utils.ldap.LDAPUser;
+import org.fundaciobit.pluginsib.utils.ldap.LDAPUserManager;
+
+
 /**
  * 
  * @author anadal
@@ -82,9 +88,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		
 		OrderBy orderByServ = new OrderBy(PinfoDataFields.SERVEIID, OrderType.ASC);
 		OrderBy orderByProc = new OrderBy(PinfoDataFields.PROCEDIMENTID, OrderType.ASC);
+		OrderBy orderByAlta = new OrderBy(PinfoDataFields.ALTA, OrderType.DESC);
 		OrderBy orderByUser = new OrderBy(PinfoDataFields.USUARIID, OrderType.ASC);
 
-		OrderBy[] orderBy = { orderByUser, orderByProc, orderByServ };
+		OrderBy[] orderBy = { orderByUser, orderByProc, orderByAlta, orderByServ };
 		List<PinfoData> llista = this.select(PinfoDataFields.PINFOID.equal(pinfoID), orderBy);
 
 		String lastUsuariID = null;
@@ -93,7 +100,8 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		List<UsuariData> usuarisList = new ArrayList<UsuariData>();
 
 		List<ProcedimentData> procedimentsList;
-		List<ServeiData> serveisList;
+		List<ServeiData> altaList;
+		List<ServeiData> baixaList;
 
 		UsuariData lastUsuariData = null;
 		ProcedimentData lastProcedimentData = null;
@@ -128,19 +136,25 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 				SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
 				ProcedimentData procedimentData = new ProcedimentData(procedimentID,
 						solicitud.getProcedimentNom(),solicitud.getProcedimentCodi(), 
-						new ArrayList<ServeiData>());
-				serveisList = procedimentData.getServeis();
+						new ArrayList<ServeiData>(), new ArrayList<ServeiData>());
+				altaList = procedimentData.getAltes();
+				baixaList = procedimentData.getBaixes();
 				lastProcedimentData = procedimentData;
 				lastProcedimentID = procedimentID;
 				procedimentsList.add(procedimentData);
 			} else {
 //				log.info("Procediment " + procedimentID + " ja existent, afegirem al seu serveiList.");
-				serveisList = lastProcedimentData.getServeis();
+				altaList = lastProcedimentData.getAltes();
+				baixaList = lastProcedimentData.getBaixes();
 			}
 
 			ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
 			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), pinfoData.getPinfodataID(), pinfoData.getAlta());
-			serveisList.add(serveiData);
+			if (pinfoData.getAlta() == 1) {
+				altaList.add(serveiData);
+			} else {
+				baixaList.add(serveiData);
+			}
 		}
 
 		PinfoDataFull pinfoDataFull = new PinfoDataFull(pinfoID, usuarisList);
@@ -158,8 +172,20 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			log.info("Usuari: " + usuariData.getUsuariID());
 			for (ProcedimentData procedimentData : usuariData.getProcediments()) {
 				log.info("\tProcediment: " + procedimentData.getProcedimentID());
-				for (ServeiData serveiData : procedimentData.getServeis()) {
-					log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei());
+				
+				if (procedimentData.getAltes().size() > 0) {
+					log.info("\t\tALTA");
+					for (ServeiData serveiData : procedimentData.getAltes()) {
+						log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei() + " - " + serveiData.getAlta());
+					}
+				}
+				
+				if (procedimentData.getBaixes().size() > 0) {
+					log.info("\t\tBAIXA");
+					for (ServeiData serveiData : procedimentData.getBaixes()) {
+						log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei() + " - "
+								+ serveiData.getAlta());
+					}
 				}
 			}
 		}
@@ -218,13 +244,15 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		private Long procedimentID;
 		private String procediment;
 		private String codi;
-		private List<ServeiData> serveis = new ArrayList<ServeiData>();
+		private List<ServeiData> altes = new ArrayList<ServeiData>();
+		private List<ServeiData> baixes = new ArrayList<ServeiData>();
 
-		public ProcedimentData(Long procedimentID, String procediment, String codi,  List<ServeiData> serveis) {
+		public ProcedimentData(Long procedimentID, String procediment, String codi,  List<ServeiData> altes, List<ServeiData> baixes) {
 			this.procedimentID = procedimentID;
 			this.procediment = procediment;
 			this.codi = codi;
-			this.serveis = serveis;
+			this.altes = altes;
+			this.baixes = baixes;
 		}
 
 		public Long getProcedimentID() {
@@ -239,8 +267,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			return this.codi;
 		}
 		
-		public List<ServeiData> getServeis() {
-			return this.serveis;
+		public List<ServeiData> getAltes() {
+			return this.altes;
+		}
+		
+		public List<ServeiData> getBaixes() {
+            return this.baixes;
 		}
 
 		public void setProcedimentID(Long procedimentID) {
@@ -255,8 +287,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
             this.codi = codi;
 		}
 		
-		public void setServeis(List<ServeiData> serveis) {
-			this.serveis = serveis;
+		public void setAltes(List<ServeiData> altes) {
+			this.altes = altes;
+		}
+		
+		public void setBaixes(List<ServeiData> baixes) {
+			this.baixes = baixes;
 		}
 	}
 
@@ -312,11 +348,15 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		}
 	}
 
-	
+	private IPluginIB pluginInstance = null;
+
 	@Override
 	public IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa() throws I18NException{
 
-		IPluginIB pluginInstance = null;
+		if (pluginInstance != null) {
+			log.info("Plugin d'estructura organitzativa ja creat.");
+			return (IEstructuraOrganitzativaPlugin) pluginInstance;
+		}
 
 		String clase = "org.fundaciobit.pluginsib.estructuraorganitzativa.ldapcaib.LdapCaibEstructuraOrganitzativaPlugin";
 		String propertyBase = Constants.PINBALADMIN_PROPERTY_BASE;
@@ -428,6 +468,68 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	}
 	
 	
+//	private LDAPUserManager ldapUserManager = null;
+//	String LDAPCAIB_ESTRUCTURAORGANITZATIVA_PROPERTY_BASE = ESTRUCTURAORGANITZATIVA_PROPERTY_BASE
+//            + "ldapcaib.";
+//	String LDAP_BASE_PROPERTIES = LDAPCAIB_ESTRUCTURAORGANITZATIVA_PROPERTY_BASE;
+//	
+//	public LDAPUserManager getLDAPUserManager() {
+//
+//		if (ldapUserManager == null) {
+//
+//			Properties ldapProperties = new Properties();
+//			for (String attrib : LDAPConstants.LDAP_PROPERTIES) {
+//				String value = getProperty(LDAP_BASE_PROPERTIES + attrib);
+//				if (value == null) {
+//					if (!attrib.equals(LDAPConstants.LDAP_SEARCHFILTER)
+//							&& !attrib.equals(LDAPConstants.LDAP_ADDITIONAL_ATTRIBUTES)) {
+//						System.err.println("Property[" + LDAP_BASE_PROPERTIES + attrib + "] is NULL");
+//					}
+//				} else {
+//					ldapProperties.setProperty(attrib, value);
+//				}
+//			}
+//
+//			ldapUserManager = new LDAPUserManager(ldapProperties);
+//		}
+//		return ldapUserManager;
+//	}		
+	
+	public void test() throws Exception {
+		
+		IEstructuraOrganitzativaPlugin plugin =  getPluginEstructuraOrganitzativa();
+
+		String username = "e45186147w";
+		String cap = plugin.getCapAreaConsellerName(username);
+		
+		log.info("El cap de " + username + " es " + cap);
+//		
+//		LDAPUser[] usuaris = getLDAPUserManager().getUserArray();
+//		for (LDAPUser ldapUser : usuaris) {
+//			log.info(ldapUser.getAdministrationID() + " - " + ldapUser.getName());
+//		}
+	}
+	
+	
+	@Override
+	public List<String> getResponsablesProcedimentsPinfos(Long pinfoID) throws I18NException{
+		
+		List<String> responsablesList = new ArrayList<String>();
+		
+		List<PinfoData> pinfoDatas= this.select(PinfoDataFields.PINFOID.equal(pinfoID));
+		
+		for (PinfoData pinfoData : pinfoDatas) {
+			Long procedimentID = pinfoData.getProcedimentID();
+			SolicitudJPA procediment = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
+			String responsable = procediment.getResponsableProcNom() + " - " + procediment.getResponsableProcEmail();
+
+			if (!responsablesList.contains(responsable)) {
+				responsablesList.add(responsable);
+			}
+		}
+
+		return responsablesList;
+	}
 	
 	
 }
