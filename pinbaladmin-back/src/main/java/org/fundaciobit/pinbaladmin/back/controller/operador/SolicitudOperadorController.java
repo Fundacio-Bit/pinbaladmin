@@ -649,7 +649,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_SENSE_ESTAT || soli.getProcedimentCodi().startsWith("CODI_")) {
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite("fas fa-cog"), "solicitud.senseestat",
-                                "javascript:alert('Revisar si ha arribat aquesta solicitud a DISTRIBUCIÓ. \n\nCodiProc: " + soli.getProcedimentCodi() + "')", AdditionalButtonStyle.PRIMARY));
+								"javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
+										+ " ha arribat a DISTRIBUCIÓ.')",
+								AdditionalButtonStyle.PRIMARY));
                 solicitudADistribucio = true;
             } else {
                 Long count = solicitudServeiEjb
