@@ -646,11 +646,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         for (Solicitud soli : list) {
 
-            if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_SENSE_ESTAT || soli.getProcedimentCodi().startsWith("CODI_")) {
+            if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO || soli.getProcedimentCodi().startsWith("CODI_")) {
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite("fas fa-cog"), "solicitud.senseestat",
-								"javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
-										+ " ha arribat a DISTRIBUCIÓ.')",
+//								"javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
+//										+ " ha arribat a DISTRIBUCIÓ.')",
+                        		
+								"javascript:openModalSolicitudDistribucio(" + soli.getSolicitudID() + ", '" + soli.getProcedimentCodi() + " - " + soli.getProcedimentNom() + "')",
+
+										
 								AdditionalButtonStyle.PRIMARY));
                 solicitudADistribucio = true;
             } else {
@@ -1481,4 +1485,21 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         return __tmp;
     }
+    
+    @RequestMapping(value = "/canviarEstatSoli/{solicitudID}", method = RequestMethod.GET)
+    public String canviarEstatSoli(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+    	
+    	log.info("canviarEstatSoli:: " + solicitudID);
+    	
+    	//Actualitzar l'estat de la sol·licitud a Pendent enviar director.
+    	
+    	SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+    	soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director);
+    	solicitudLogicaEjb.update(soli);
+    	
+        //Tornar al llistat
+        return "redirect:" + getContextWeb() + "/list";
+    }
+
 }

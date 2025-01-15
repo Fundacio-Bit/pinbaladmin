@@ -341,3 +341,29 @@
     margin: 0 1rem;
 }
 </style>
+
+
+
+
+
+<!--  MODAL PER CANVIAR ESTAT SOLICITUDS DISTRIBUCIO -->
+
+
+<script>
+	function openModalSolicitudDistribucio(soliID, procediment) {
+		//Crear missatges amb les dades de la solicitud.
+
+		let titol = "Revisar Solicitud a Distribució: ";
+		let mmissatge = "Si la solicitud està a DISTRIBUCIÓ, fer click a ACCEPTAR per canviar l'estat.";
+		
+		let result = confirm(titol + "\n\n" + procediment + "\n\n" + mmissatge);
+        if (result === true) {
+            console.log("User clicked OK");
+            window.location.href = '<%=request.getContextPath()%>${contexte}/canviarEstatSoli/'+soliID;
+        } else {
+            console.log("User clicked Cancel");
+        }
+        
+		//Si accepta, redirigir a /canviarEstatSoli, sino, no fer res.
+	}
+</script>

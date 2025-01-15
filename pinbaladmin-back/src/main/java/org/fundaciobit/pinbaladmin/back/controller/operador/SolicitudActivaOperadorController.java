@@ -93,7 +93,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		long anticEstatPendent = 10;
 
-		Long[] estatsAProcesar = { Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director,
+		Long[] estatsAProcesar = {Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director,
 				Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID, Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director,
 				Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
 				Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent, anticEstatPendent };

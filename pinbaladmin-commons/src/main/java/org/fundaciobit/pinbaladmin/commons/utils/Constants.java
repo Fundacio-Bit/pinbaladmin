@@ -69,6 +69,8 @@ public interface Constants {
     // Estats de una solicitud
     public static final long SOLICITUD_ESTAT_SENSE_ESTAT = -1;
     
+    public static final long SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO = 5;
+    
  //   public static final long SOLICITUD_ESTAT_PENDENT = 10;
     public static final long SOLICITUD_ESTAT_PENDENT_Enviar_Director = 11;
     public static final long SOLICITUD_ESTAT_PENDENT_Enviar_Cedents = 12;
@@ -82,7 +84,7 @@ public interface Constants {
     public static final long SOLICITUD_ESTAT_PENDENT_PINFO = 50;
     public static final long SOLICITUD_ESTAT_TANCAT = 60;
     
-	public static final long[] ESTATS_SOLICITUD = { SOLICITUD_ESTAT_SENSE_ESTAT, SOLICITUD_ESTAT_PENDENT_Enviar_Director, SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
+	public static final long[] ESTATS_SOLICITUD = { SOLICITUD_ESTAT_SENSE_ESTAT, SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO, SOLICITUD_ESTAT_PENDENT_Enviar_Director, SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
 			SOLICITUD_ESTAT_PENDENT_Firma_Director, SOLICITUD_ESTAT_PENDENT_Firma_Cedent, SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID, SOLICITUD_ESTAT_PENDENT_AUTORITZAR, SOLICITUD_ESTAT_ESMENES,
 			SOLICITUD_ESTAT_AUTORITZAT, SOLICITUD_ESTAT_PENDENT_PINFO, SOLICITUD_ESTAT_TANCAT };
     
