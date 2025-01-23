@@ -147,8 +147,10 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
 						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
 			}
-			
-			if (!isFirmatPelDirector(solicitud)) {
+			//Si no te el document firmat pel DG, i está pendent d'enviar o de rebre firma, mostrar el botó. (Pot ser que s'envii manual)
+			if (!isFirmatPelDirector(solicitud)
+					&& (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director
+							|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director)) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
 			}

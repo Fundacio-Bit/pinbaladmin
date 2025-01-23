@@ -1496,6 +1496,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     	
     	SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
     	soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director);
+    	soli.setOperador(request.getUserPrincipal().getName());
+    	
     	solicitudLogicaEjb.update(soli);
     	
         //Tornar al llistat

@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -247,11 +249,40 @@ public class MailCedentInfo {
 			return adjunts.get(0);
 		}
 
+		
+		//Falta comprobar que no haya nombres de ficheros repetidos. Si hay nombres repetidos, añadir un sufijo al nombre del fichero.
+		// Para hacerlo, se puede usar un Map<String, Integer> para guardar el número de veces que se ha repetido un nombre de fichero.
+		// Si se repite, se añade el sufijo "_n" al nombre del fichero, donde n es el número de veces que se ha repetido.
+		// Ejemplo: "fichero.txt" -> "fichero_1.txt", "fichero_2.txt", etc.
+		
+		// Crear el map
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		// Recorrer la lista de adjuntos
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
 
 			for (FitxerJPA fitxer : adjunts) {
-				ZipEntry entry = new ZipEntry(fitxer.getNom());
+				
+				// Comprobar si el nombre del fichero ya existe en el map
+				String nom = fitxer.getNom();
+				Integer count = map.get(nom);
+				if (count == null) {
+					count = 0;
+				} else {
+					count++;
+				}
+				map.put(nom, count);
+				
+				// Si el nombre ya existe, añadir el sufijo
+				if (count > 0) {
+					nom = nom.substring(0, nom.lastIndexOf('.')) + "_" + count + nom.substring(nom.lastIndexOf('.'));
+				}
+				
+				System.out.println("Añadiendo fichero al ZIP: " + nom);
+				
+				// Crear la entrada ZIP
+				ZipEntry entry = new ZipEntry(nom);
 				zos.putNextEntry(entry);
 
 				byte[] content = FileSystemManager.getFileContent(fitxer.getFitxerID());

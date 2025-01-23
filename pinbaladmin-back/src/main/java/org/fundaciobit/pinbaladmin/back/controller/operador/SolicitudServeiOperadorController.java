@@ -15,6 +15,7 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
+import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
@@ -409,8 +410,10 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 						Where wSoli = EventFields.SOLICITUDID.equal(soliID);
 						Where wTipus = EventFields.TIPUS.equal(Constants.EVENT_TIPUS_COMENTARI_CONTACTE);
 						Where wFitxer = EventFields.FITXERID.isNotNull();
+						
+						OrderBy order = new OrderBy(EventFields.EVENTID);
 
-						List<Long> llistaAdjunts = eventLogicaEjb.executeQuery(EventFields.FITXERID, Where.AND(wSoli, wTipus, wFitxer));
+						List<Long> llistaAdjunts = eventLogicaEjb.executeQuery(EventFields.FITXERID, Where.AND(wSoli, wTipus, wFitxer), order);
 						llistaAdjunts.add(soli.getSolicitudXmlID());
 						
 						for (Long fitxerID : llistaAdjunts) {
