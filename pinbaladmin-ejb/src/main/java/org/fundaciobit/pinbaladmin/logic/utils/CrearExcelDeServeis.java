@@ -95,7 +95,7 @@ public class CrearExcelDeServeis {
 
       System.out.println(" LLEGING SERVEI => " + ss.getId());
 
-      String[] dades = new String[16];
+      String[] dades = new String[CAMPS_EXCEL.length];
 
       // A 0 FORMULARIO.DATOS_SOLICITUD.CODIPROC
       dades[0] = codiProc;

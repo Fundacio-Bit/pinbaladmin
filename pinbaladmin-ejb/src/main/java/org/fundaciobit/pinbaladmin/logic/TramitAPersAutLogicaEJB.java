@@ -116,7 +116,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
 
     
-    public static SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH.mm_");
 
     @Override
     @PermitAll
@@ -328,9 +328,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         	H.setUrlseu("---");
                         }
 
-                        dataFi = H.getCaducitatdata();
                         String dataFiStr;
                         if (H.isCaducitat()) {
+                        	dataFi = H.getCaducitatdata();
                             dataFiStr = SDF.format(dataFi);
                         } else {
                             dataFiStr = "";
@@ -827,13 +827,16 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long solicitudID = soli.getSolicitudID();
         log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
 
+        
+        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+        
         String[] excels = { "locals", "estatals" };
 
 		for (String excel : excels) {
-			File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
 			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
 
-			String nom = SDF.format(new Date()) + plantillaXLSX.getName();
+			String nom = SDF.format(new Date())  + excel + "_"+ plantillaXLSX.getName();
+
 			FitxerJPA fitxer = new FitxerJPA(nom, data.length,
 					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
 			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);

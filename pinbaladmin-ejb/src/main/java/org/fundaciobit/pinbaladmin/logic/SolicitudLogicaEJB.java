@@ -710,10 +710,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 						if (estatPinbalOld != estatPinbalNew) {
 							crearMissatgeCanviEstat(solicitud, estatPinbalOld, estatPinbalNew);
 						}
+					} else {
+						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: " + retorno.getEstado().getCodigoEstado() + " - " + retorno.getEstado().getLiteralError() );
 					}
 					
-					
-
 				} catch (Exception e) {
 					log.error("Error al consultar l'estat de la solicitud " + codi + ": " + e.getMessage(), e);
 					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
