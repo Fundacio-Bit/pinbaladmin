@@ -111,6 +111,16 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             nomServeiField.setEscapeXml(false);
             solicitudServeiFilterForm.addAdditionalField(nomServeiField);
 
+            
+            //Canvis tramit sistra:
+            solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.NOTES);
+            solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.FECHACADUCA);
+            solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.CADUCA);
+            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMAID);
+            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA2ID);
+            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA3ID);
+
+            
         }
 
         return solicitudServeiFilterForm;
@@ -183,6 +193,13 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 				}
 			}
 		}
+		
+		solicitudServeiForm.addHiddenField(SolicitudServeiFields.NOTES);
+		solicitudServeiForm.addHiddenField(SolicitudServeiFields.ENLLAZNORMALEGAL);
+		solicitudServeiForm.addHiddenField(SolicitudServeiFields.ENLLAZCONSENTIMENT);
+		solicitudServeiForm.addHiddenField(SolicitudServeiFields.TIPUSCONSENTIMENT);
+		solicitudServeiForm.addHiddenField(SolicitudServeiFields.CONSENTIMENT);
+		
 		request.setAttribute("normesAfegides", normesAfegides);
 		solicitudServeiForm.setAttachedAdditionalJspCode(true);
 		

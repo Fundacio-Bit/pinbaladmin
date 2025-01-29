@@ -43,6 +43,7 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -208,6 +209,10 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					break;
 				}
 			}
+			
+			solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
+			solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
+			
 		} else {
 			// Si és estatal
 			

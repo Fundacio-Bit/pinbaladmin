@@ -94,10 +94,12 @@ public class AltaSolicitudPinbalOperadorController {
                     errors.add("Fa falta un document d'autorització");
                 }
 
+                //Si servicios es null, no hay servicios pendientes de autorizar. Si el tamaño es 0, es hay problemas con las normas.
                 if (solicitudA.getProcedimiento().getServicios() == null
                         || solicitudA.getProcedimiento().getServicios().getServicio().size() == 0) {
                     errors.add("No hi ha serveis pendents d'autoritzar");
                 }
+                
                 
                 request.getSession().setAttribute("solicitud", solicitudA);
                 mav = new ModelAndView("altasolicitudpinbal");

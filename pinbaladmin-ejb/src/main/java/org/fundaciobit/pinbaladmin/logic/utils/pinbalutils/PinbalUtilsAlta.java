@@ -342,6 +342,8 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
 		int MAX_NORMES_SERVEI = 3;
+		int serveisPerAfegir = 0;
+		int serveisAfegits = 0;
 
 		for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
 			boolean balear = ss.getServei().getEntitatServei().isBalears();
@@ -351,7 +353,7 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 			//ja que alta també s'utilitza per fer subsanacions, pot haver serveis autoritzats que s'hagin de tornar a enviar
 			estatPendentMadrid = true;
-			
+			serveisPerAfegir++;
 			if (!balear && estatPendentMadrid) {
 
 				Servicio servicio = new Servicio();
@@ -449,14 +451,32 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 					normas.getNorma().add(norma);
 				}
 
+				if (normas.getNorma().size() == 0) {
+                    log.info("No s'ha pogut afegir cap norma al servei " + ss.getServei().getCodi());
+                    continue;
+				}
+				
 				String codigoCertificado = ss.getServei().getCodi();
 
 				servicio.setCodigoCertificado(codigoCertificado);
 				servicio.setNormas(normas);
 
 				servicios.getServicio().add(servicio);
+				serveisAfegits++;
 			}
 		}
+		
+		// Si no hay servicios para añadir
+		if (serveisPerAfegir == 0) {
+			log.info("No hi ha serveis per afegir.");
+		}else {
+			if (serveisAfegits == 0) {
+				log.info("No s'han afegit serveis a la solicitud. Problemes amb normes o fitxers.");
+			}else {
+                log.info("S'han afegit " + serveisAfegits + " serveis a la solicitud.");
+			}
+		}
+		
 		return servicios;
 	}
 

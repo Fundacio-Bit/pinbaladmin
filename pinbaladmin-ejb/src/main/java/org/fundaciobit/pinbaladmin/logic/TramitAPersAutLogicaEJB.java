@@ -229,6 +229,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String urlconsentiment = null;
         String consentimentadjunt = null;
         Long fitxerConsentimentID = null;
+        String nomFitxerAdjunt = null;
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -366,28 +367,21 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         
                         consentiment = J.getConsentiment();
 						urlconsentiment = "";
-						String nomFitxerADjunt; 
-                        if (consentiment.equals(Constants.CONSENTIMENT_TIPUS_LLEI)) {
-                        	nomFitxerADjunt = "---";
-                        	consentimentadjunt = "---";
+						
+						if (J.getAdjunt() != null) {
+							consentimentadjunt = Constants.CONSENTIMENT_ADJUNT;
+							nomFitxerAdjunt = J.getAdjunt().getNom();
 						}else {
-							nomFitxerADjunt = J.getAdjunt().getNom();
-							log.info("Fitxer Consentiment: " + consentimentadjunt);
-	                        consentimentadjunt = J.getConsentimentadjunt();
-//							if (consentimentadjunt.equals(Constants.CONSENTIMENT_ADJUNT)) {
-//								urlconsentiment = "";
-//		                        fitxerConsentimentID = J.getAdjuntID();
-//							} else {
-//								urlconsentiment = J.getUrlconsentiment();
-//							}
+							consentimentadjunt = Constants.CONSENTIMENT_PUBLICAT;
+							nomFitxerAdjunt = "---"; 	
+							
 						}
-                        
-						if (J.getAdjuntID() != null) {
-							fitxerConsentimentID = J.getAdjuntID();
-						}
-                        
+						
+						log.info("Fitxer Consentiment: " + nomFitxerAdjunt);
+
                         map.put("urlConsentiment", urlconsentiment);
-                        map.put("adjConsentiment", nomFitxerADjunt);
+                        map.put("adjConsentiment", nomFitxerAdjunt);
+                        
 
                     break;
                 }
