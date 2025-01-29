@@ -616,7 +616,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         
         Long tramitID = HibernateFileUtil.decryptFileID(ticketGFE);
         
-        final String likeStr = "%tramitid[" + tramitID + "]%";
+        final String likeStr = "%TramitID[" + tramitID + "]%";
 
         Where w = SolicitudFields.NOTES.like(likeStr);
         
