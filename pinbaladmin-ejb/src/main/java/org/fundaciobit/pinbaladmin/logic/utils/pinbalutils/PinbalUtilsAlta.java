@@ -195,7 +195,7 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 				if (original.getMime().equals("application/pdf")) {
 					FitxerJPA fitxer = original;
 					String desc = "Fitxer PDF associat al procediment";
-					String tipo = "DOC AUTORITZACÓ";
+					String tipo = "FORMULARIO DE AUTORIZACION";
 					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
 				}
 			}

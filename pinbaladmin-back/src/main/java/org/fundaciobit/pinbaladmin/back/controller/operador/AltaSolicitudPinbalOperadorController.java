@@ -19,6 +19,7 @@ import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -167,24 +168,17 @@ public class AltaSolicitudPinbalOperadorController {
                 System.out.println(" # Errors: 0");
 
                 //Si ha anat be, guardam missatge d'exit i actualitzam l'estat pinbal a pendent de tramitar, perque l'han de revisar.
-
+                //Afegir event de solicitud enviada a Pinbal.
                 String mensaje = resposta.getEstado().getDescripcion();
-                HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
-
-                log.info("Actualitzam solicitud amb ID= " + soliID);
-
-//                nouEstatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+        		afegirEventSolicitudEnviada(soli, mensaje);
+        		HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
 
 				// Actualitzar estat solicitut a pendent autoritzar:
-//				solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
-//						SolicitudFields.SOLICITUDID.equal(soliID));
+                log.info("Actualitzam solicitud amb ID= " + soliID);
 				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
 				soli.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
                 
 			} else {
-
-//				nouEstatPinbal = Constants.ESTAT_PINBAL_ERROR;
-
 				boolean procdedimentDuplicat = false;
 				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
 						.getError()) {
@@ -235,6 +229,30 @@ public class AltaSolicitudPinbalOperadorController {
         return "redirect:" + returnUrl;
     }
 
+	private void afegirEventSolicitudEnviada(SolicitudJPA soli, String mensaje) {
+		
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+		String persona = soli.getOperador();
+		String subject = "Solicitud enviada a PINBAL. " + soli.getProcedimentCodi();		
+		String msg = "S'ha enviat la sol·licitud a PINBAL. " + mensaje;
+		
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(soli.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(tipus);
+		event.setPersona(persona );
+		event.setDestinatari(null);
+		event.setDestinatarimail(null);
+		event.setAsumpte(subject);
+		event.setComentari(msg);
+		event.setFitxerID(null);
+		event.setNoLlegit(true);
+		event.setCaidIdentificadorConsulta(null);
+		event.setCaidNumeroSeguiment(null);
+	}
+
     @RequestMapping(value = "/consultaestado/{soliID}", method = RequestMethod.GET)
     public ModelAndView consultaEstado(HttpServletRequest request, HttpServletResponse response,
             @PathVariable Long soliID) {
@@ -264,12 +282,14 @@ public class AltaSolicitudPinbalOperadorController {
 			String returnUrl = "/pinbaladmin" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
             mav.addObject("returnUrl",returnUrl);
 
-			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estado = retorno
-					.getProcedimiento().getEstadoProcedimiento();
+            
+//			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estado = retorno
+//					.getProcedimiento().getEstadoProcedimiento();
 
 //			int estatPinbal = estado.getEstado();
-			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
-			
+//			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
+
+            
 //			Long nouEstatID = null;
 //			
 //			switch (estatPinbal) {

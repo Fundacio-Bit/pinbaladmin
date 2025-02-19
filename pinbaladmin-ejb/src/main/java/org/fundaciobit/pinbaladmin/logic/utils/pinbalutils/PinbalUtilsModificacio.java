@@ -14,7 +14,6 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
-import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsCommon.DocAuthInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -193,7 +192,7 @@ public class PinbalUtilsModificacio extends PinbalUtilsCommon {
 				if (original.getMime().equals("application/pdf")) {
 					FitxerJPA fitxer = original;
 					String desc = "Fitxer PDF associat al procediment";
-					String tipo = "DOC AUTORITZACÓ";
+					String tipo = "FORMULARIO DE AUTORIZACION";
 					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
 				}
 			}
@@ -340,6 +339,8 @@ public class PinbalUtilsModificacio extends PinbalUtilsCommon {
 		Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
 
 		int MAX_NORMES_SERVEI = 3;
+		int serveisPerAfegir = 0;
+		int serveisAfegits = 0;
 
 		for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
 			boolean balear = ss.getServei().getEntitatServei().isBalears();
@@ -347,6 +348,9 @@ public class PinbalUtilsModificacio extends PinbalUtilsCommon {
 					.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 			estatPendentMadrid |= ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_REBUT;
 
+			//ja que alta també s'utilitza per fer subsanacions, pot haver serveis autoritzats que s'hagin de tornar a enviar
+			estatPendentMadrid = true;
+			serveisPerAfegir++;
 			if (!balear && estatPendentMadrid) {
 
 				Servicio servicio = new Servicio();
@@ -444,14 +448,32 @@ public class PinbalUtilsModificacio extends PinbalUtilsCommon {
 					normas.getNorma().add(norma);
 				}
 
+				if (normas.getNorma().size() == 0) {
+                    log.info("No s'ha pogut afegir cap norma al servei " + ss.getServei().getCodi());
+                    continue;
+				}
+				
 				String codigoCertificado = ss.getServei().getCodi();
 
 				servicio.setCodigoCertificado(codigoCertificado);
 				servicio.setNormas(normas);
 
 				servicios.getServicio().add(servicio);
+				serveisAfegits++;
 			}
 		}
+		
+		// Si no hay servicios para añadir
+		if (serveisPerAfegir == 0) {
+			log.info("No hi ha serveis per afegir.");
+		}else {
+			if (serveisAfegits == 0) {
+				log.info("No s'han afegit serveis a la solicitud. Problemes amb normes o fitxers.");
+			}else {
+                log.info("S'han afegit " + serveisAfegits + " serveis a la solicitud.");
+			}
+		}
+		
 		return servicios;
 	}
 

@@ -49,6 +49,8 @@ public class PinbalUtilsConsulta extends PinbalUtilsCommon {
 		case SOLICITUD_TROBADA:
 
 			EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
+			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
+
 			actualitzarEstatSolicitud(estado, solicitud);
 			break;
 		case PROCEDIMENT_NO_TROBAT:

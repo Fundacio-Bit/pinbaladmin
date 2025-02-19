@@ -11,6 +11,8 @@ th {
 .item {
 	max-width: 52rem;
 	padding: 0.25rem 0.5rem;
+	width: fit-content;
+	
 }
 
 .table-rol {
