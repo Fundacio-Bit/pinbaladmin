@@ -6,8 +6,10 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitEOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecForm;
 import org.fundaciobit.pinbaladmin.persistence.TramitECteAudJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,4 +68,17 @@ public class TramitEPublicController extends TramitEOperadorController {
         }
        return tramitForm;
     }
+
+    @Override
+    public void preValidate(HttpServletRequest request, TramitECteAudForm tramitForm, BindingResult result)
+    		throws I18NException {
+    	super.preValidate(request, tramitForm, result);
+    	
+    	String carrec = tramitForm.getTramitECteAud().getCarrec();
+    	if (carrec != null && carrec.trim().length() > 0) {
+    		carrec = "---";
+		}
+    	tramitForm.getTramitECteAud().setCarrec(carrec);
+    }
+
 }

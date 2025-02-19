@@ -50,6 +50,7 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -600,4 +601,16 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
          __tmp.add(new StringKeyValue(Constants.CONSENTIMENT_TIPUS_NOOP, "No Oposició"));
          return __tmp;
        }
+    
+    @Override
+    public void preValidate(HttpServletRequest request, SolicitudServeiForm solicitudServeiForm, BindingResult result)
+    		throws I18NException {
+
+    	super.preValidate(request, solicitudServeiForm, result);
+    	
+    	if (solicitudServeiForm.getSolicitudServei().getConsentiment() == null) {
+    		solicitudServeiForm.getSolicitudServei().setConsentiment("---");
+    	}
+    	
+    }
 }

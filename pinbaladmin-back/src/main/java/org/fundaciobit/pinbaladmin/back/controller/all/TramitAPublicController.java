@@ -92,14 +92,9 @@ public class TramitAPublicController extends TramitAOperadorController {
     public ModelAndView getRedirectToFinishTramit(HttpServletRequest request, HttpServletResponse response,
             @PathVariable("uuid") java.lang.String uuid) {
 
-        try {
-        	Long tramitID = HibernateFileUtil.decryptFileID(uuid);
-            crearSolicitudAmbTramitID(tramitID);
-        } catch (Exception e) {
-            log.error(e);
-            HtmlUtils.saveMessageError(request, "Error creant incidencia amb tramit Sistra: " + e.getMessage());
-        }
-        
+    	Long tramitID = HibernateFileUtil.decryptFileID(uuid);
+    	crearSolicitudAmbTramitID(request, tramitID);
+    	
         return returnToSistraPost(uuid);
     }
 
@@ -141,9 +136,13 @@ public class TramitAPublicController extends TramitAOperadorController {
         return mav;
     }
     
-    public void crearSolicitudAmbTramitID(Long tramitID) throws Exception {
-        log.info("Generador del fitxer XML amb tramitID=" + tramitID);
-        SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitID);
-        log.info("Solicitud Creada a BBDD: " + soli.getSolicitudID());
+    public void crearSolicitudAmbTramitID(HttpServletRequest request, Long tramitID) {
+        try {
+        	log.info("Generador del fitxer XML amb tramitID=" + tramitID);
+        	SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitID);
+        	log.info("Solicitud Creada a BBDD: " + soli.getSolicitudID());
+        } catch (Exception e) {
+            HtmlUtils.saveMessageError(request, "Error creant incidencia amb tramit Sistra: " + e.getMessage());
+        }
     }
 }

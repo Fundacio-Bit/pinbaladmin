@@ -195,14 +195,14 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 				case Constants.ESTAT_PINBAL_APROVAT:
 				case Constants.ESTAT_PINBAL_SUBSANAT:
+				case Constants.ESTAT_PINBAL_AUTORITZAT:
+				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
 					solicitudForm.addAdditionalButton(modificacio);
 					break;
 
 				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
 				case Constants.ESTAT_PINBAL_DESISTIT:
 				case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-				case Constants.ESTAT_PINBAL_AUTORITZAT:
-				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
 					break;
 
 				default:

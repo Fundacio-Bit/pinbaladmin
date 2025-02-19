@@ -8,6 +8,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitFCteTecForm;
 import org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -65,5 +66,17 @@ public class TramitFPublicController extends TramitFOperadorController {
 //            tramitF.setMail("tecnic@fbit.org");
         }
        return tramitForm;
+    }
+    
+    @Override
+    public void preValidate(HttpServletRequest request, TramitFCteTecForm tramitFCteTecForm, BindingResult result)
+    		throws I18NException {
+    	super.preValidate(request, tramitFCteTecForm, result);
+    	
+    	String carrec = tramitFCteTecForm.getTramitFCteTec().getCarrec();
+    	if (carrec != null && carrec.trim().length() > 0) {
+    		carrec = "---";
+		}
+    	tramitFCteTecForm.getTramitFCteTec().setCarrec(carrec);
     }
 }

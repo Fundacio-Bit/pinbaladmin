@@ -115,8 +115,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
 
-    
-    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH.mm_");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
 
     @Override
     @PermitAll
@@ -156,31 +155,25 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         super.delete(TramitAPersAutFields.TRAMITID.equal(tramitID));
     }
 
-    private Long generarXMLFromMap(Map<String, Object> map) {
-        try {
+	private Long generarXMLFromMap(Map<String, Object> map) throws Exception {
+		String plantillaFitxerXml = Configuracio.getTemplateTramitSistraXml();
+		log.info("fileXml: " + plantillaFitxerXml);
 
-            String plantillaFitxerXml = Configuracio.getTemplateTramitSistraXml();
-            log.info("fileXml: " + plantillaFitxerXml );
+		String plantilla = FileUtils.readFileToString(new File(plantillaFitxerXml), Charset.defaultCharset());
 
-            String plantilla = FileUtils.readFileToString(new File(plantillaFitxerXml ), Charset.defaultCharset());
+		String result = TemplateEngine.processExpressionLanguage(plantilla, map);
 
-            String result = TemplateEngine.processExpressionLanguage(plantilla, map);
+		String fileName = "D:/Projectes/pinbaladmin-files/formulario_nuevo.xml";
 
-            String fileName = "D:/Projectes/pinbaladmin-files/formulario_nuevo.xml";
+		FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
 
-            FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
+		byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
-            byte[] data = FileUtils.readFileToByteArray(new File(fileName));
+		Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "aplication.xml", null);
+		FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
-            Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "aplication.xml", null);
-            FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
-
-            return f.getFitxerID();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+		return f.getFitxerID();
+	}
     
     @Override
     public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException {
@@ -401,7 +394,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			soli.setSolicitudXmlID(solicitudXmlID);
 	        soli.setDocumentSolicitudID(docSoliID);
 		} catch (Exception e) {
-			log.error("Error generant document de la sol·licitud: " + e.getMessage(), e);
+			String msg = "Error generant XML de la sol·licitud: " + e.getMessage();
+			log.error(msg, e);
+			throw new I18NException(msg);
 		}
 		
         soli.setProcedimentCodi(procedimentCodi); 
@@ -829,7 +824,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		for (String excel : excels) {
 			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
 
-			String nom = SDF.format(new Date())  + excel + "_"+ plantillaXLSX.getName();
+			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx
+			String nom = excel + "_" + SDF.format(new Date()) + "_" + plantillaXLSX.getName();
 
 			FitxerJPA fitxer = new FitxerJPA(nom, data.length,
 					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
