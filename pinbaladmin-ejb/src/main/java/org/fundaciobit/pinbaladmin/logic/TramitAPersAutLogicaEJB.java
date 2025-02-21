@@ -169,7 +169,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 		byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
-		Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "aplication.xml", null);
+		Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "application/xml", null);
 		FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 
 		return f.getFitxerID();
@@ -359,14 +359,19 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         tramitJ = J;
                         
                         consentiment = J.getConsentiment();
-						urlconsentiment = "";
-						
+
 						if (J.getAdjunt() != null) {
+						
 							consentimentadjunt = Constants.CONSENTIMENT_ADJUNT;
 							nomFitxerAdjunt = J.getAdjunt().getNom();
+							urlconsentiment = CrearExcelDeServeis.generarURLDownload(J.getAdjunt());
+							urlconsentiment = urlconsentiment.replace("&mime=", "&amp;mime=");
+
 						}else {
+							
 							consentimentadjunt = Constants.CONSENTIMENT_PUBLICAT;
-							nomFitxerAdjunt = "---"; 	
+							nomFitxerAdjunt = "---"; 
+	                        urlconsentiment = null;
 							
 						}
 						
@@ -504,6 +509,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
         	String nom = "Document Consentiment";
         	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
+        	
         }else {
         	log.info("No tenim document de consentiment");
         }

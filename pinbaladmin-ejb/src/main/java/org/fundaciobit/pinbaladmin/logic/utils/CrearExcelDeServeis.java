@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
@@ -155,21 +159,25 @@ public class CrearExcelDeServeis {
       //dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
       
       // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
+      //TODO: Controlar que pot haver multiples normes
       Fitxer fitxerNorma = ss.getFitxernorma();
       if (fitxerNorma == null) {
     	  dades[10] = ss.getEnllazNormaLegal();
       } else {
-    	  dades[10] = "Adjunto: " + fitxerNorma.getNom();
+//    	  dades[10] = "Adjunto: " + fitxerNorma.getNom();
+    	  dades[10] = generarURLDownload(fitxerNorma);
 //    	  dades[10] = Configuracio.getAppBackUrl() + FileDownloadController.fileUrl(fitxerNorma);
       }      
       
       // L 11 L'Enllaç de Consentiment
       {
-        String ec = ss.getEnllazConsentiment();
-        if (ec == null || ec.trim().length() == 0) {
-          dades[11] = "Adjunto";
+    	  
+        String urlConsentiment = soli.getUrlconsentiment();
+        
+        if (urlConsentiment == null ) {
+          dades[11] = "Ley";
         } else {
-          dades[11] = ec;
+          dades[11] = urlConsentiment;
         }
       }
 
@@ -306,6 +314,44 @@ public class CrearExcelDeServeis {
     }
 
   }
+
+	public static String generarURLDownload(Fitxer arxiu) {
+		String CONTEXTWEB = "/public/arxiu/";
+
+		String url = Configuracio.getAppBackUrl();
+		if (arxiu == null) {
+			// TODO Llançar error
+			url += "/img/blank.gif";
+		} else {
+			// {arxiuId}/{filename}/{contentType}
+			String idfile = HibernateFileUtil.encryptFileID(arxiu.getFitxerID());
+
+			String base = CONTEXTWEB + idfile;
+			String nombre = arxiu.getNom();
+			if (nombre == null) {
+				url += base;
+			}
+			try {
+				base = base + "?nom=" + URLEncoder.encode(nombre, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				base = base + "?nom=" + nombre;
+			} //
+			String mime = arxiu.getMime();
+			if (mime == null) {
+				url += base;
+			}
+			try {
+				base = base + "&mime=" + URLEncoder.encode(mime, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				base = base + "&mime=" + mime;
+			}
+			url += base;
+		}
+
+		return url;
+	}
 
   /*
    * public static Properties getPropertiesFromFormulario(String xml) throws
