@@ -772,18 +772,46 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
 		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
-        EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
-        String nifArrel = entitatArrel.getCIF();
-
-		if (nifArrel.equals("S0711001H")) {
-	        String dir3Dgtic = "A04027005";
-	        List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
-	        if (organ.size() == 1) {
-	            Organ dgtic = organ.get(0);
-	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+		
+		while (organGestor.getEntitatid() == null) {
+			List<Organ> pare = organLogicaEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
+	        if (pare.size() == 1) {
+	        	organGestor = pare.get(0);
+	        }else if (pare.size() == 0) {
+	        	log.error("No s'ha trobat l'entitat pare de l'organ: " + organGestor.getNom());
+            	break;
+	        }else {
+	        	//Si hi ha mes d'un pare, miram el qui tengui CIF o dir3pare.
+				for (Organ o : pare) {
+					if (o.getCif() != null) {
+						organGestor = o;
+						break;
+					}
+					if (o.getDir3pare() != null) {
+						organGestor = o;
+					}
+				}
 	        }
-	    }
+		}
+		
+        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", organGestor.getNom());
+        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", organGestor.getDir3());
+
+		
+		
+//		
+//        EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
+//        String nifArrel = entitatArrel.getCIF();
+//
+//		if (nifArrel.equals("S0711001H")) {
+//	        String dir3Dgtic = "A04027005";
+//	        List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+//	        if (organ.size() == 1) {
+//	            Organ dgtic = organ.get(0);
+//	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+//	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+//	        }
+//	    }
 
 		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
 		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
