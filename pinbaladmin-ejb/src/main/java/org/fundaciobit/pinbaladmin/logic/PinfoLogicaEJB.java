@@ -45,13 +45,18 @@ import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 
 /**
@@ -392,10 +397,150 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			return peticioDeFirmaID;
 		} catch (AbstractApisIBException e) {
 //			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
-			throw new I18NException("error.portafib.generic", new I18NArgumentString(e.getMessage()));
+			throw new I18NException("error.portafib.generic", e.getMessage());
 		}
 	}
 
+	
+
+	
+	
+	//NOVA VERSIÓ ENVIAMENT A PORTAFIB AMB NIF.
+	@Override
+	public void enviarPinfoPortaFIB(Long pinfoID, Responsable responsable) throws I18NException {
+
+		Pinfo pinfo = findByPrimaryKey(pinfoID);
+		Long incidenciaID = pinfo.getIncidenciaID();
+		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(incidenciaID);
+		
+		String destinatariNif = pinfo.getDestinatariNIF();
+
+		Long fitxerID = pinfo.getFitxerID();
+		String titolPeticio = incidencia.getTitol();
+		String description = incidencia.getDescripcio();
+		String reason = "Autorització de la solicitud de permisos";
+		String senderUsername = pinfo.getSolicitantNIF();
+		String senderFullName = incidencia.getContacteNom();
+		
+		Long idPortafib = crearIEnviarPeticioDeFirma(fitxerID, destinatariNif, titolPeticio, description, reason, senderUsername, senderFullName);
+
+		log.info("Peticio de firma creada: " + idPortafib);
+
+		pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_FIRMA);
+		pinfo.setPortafibid(String.valueOf(idPortafib));
+
+		this.update(pinfo);
+		
+		afegirEventPinfoEnviat(incidencia, pinfo, responsable);
+	}
+
+	public Long crearIEnviarPeticioDeFirma(Long fitxerID, String destinatariNif, String titolPeticio,
+			String description, String reason, String senderUsername, String senderFullName) throws I18NException {
+
+		String languageUI = "ca";
+		String languageDoc = "ca";
+
+		// Fitxer a Firmar
+		FirmaAsyncSimpleFile fitxerAFirmar =  PortafibUtils.getPortaFIBFileFromFitxerID(fitxerID, fitxerPublicLogicaEjb);
+		if (fitxerAFirmar == null) {
+			throw new I18NException("genapp.comodi", "No s'ha definit fitxer a firmar");
+		}
+
+		Long tipusDocumentalID = 14L; // Elegir un tipus documental: Autorització. 14 - Sol·licitud
+
+		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
+
+		String profileCode = Configuracio.getPortafibProfile();
+		int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
+
+		// Annexes
+		List<FirmaAsyncSimpleAnnex> annexs = new ArrayList<FirmaAsyncSimpleAnnex>();
+
+		String title = titolPeticio.length() > 250 ? titolPeticio.substring(0, 250) : titolPeticio;
+
+		FirmaAsyncSimpleFile originalDetachedSignature = null;
+
+		String descripcioTipusDocumental = null;
+
+		String expedientCode = null;
+		String expedientName = null;
+		String expedientUrl = null;
+		String procedureCode = null;
+		String procedureName = null;
+		String additionalInformation = null;
+		Double additionalInformationEvaluable = null;
+
+		List<FirmaAsyncSimpleMetadata> metadadaList = null;
+
+		FirmaAsyncSimpleSignatureRequestBase signatureRequestBase;
+		signatureRequestBase = new FirmaAsyncSimpleSignatureRequestBase(profileCode, title, description, reason,
+				fitxerAFirmar, originalDetachedSignature, tipusDocumentalID, descripcioTipusDocumental, languageDoc,
+				languageUI, priority, senderUsername, senderFullName, expedientCode, expedientName, expedientUrl,
+				procedureCode, procedureName, additionalInformation, additionalInformationEvaluable, annexs,
+				metadadaList);
+
+		Long peticioDeFirmaID;
+
+		FirmaAsyncSimpleSignatureRequestWithSignBlockList signatureRequest;
+		signatureRequest = new FirmaAsyncSimpleSignatureRequestWithSignBlockList(signatureRequestBase, signatureBlocks);
+
+		ApiFirmaAsyncSimple api = PortafibUtils.getApiFirmaAsyncSimple();
+		
+		try {
+			peticioDeFirmaID = api.createAndStartSignatureRequestWithSignBlockList(signatureRequest);
+			return peticioDeFirmaID;
+		} catch (AbstractApisIBException e) {
+//			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
+			log.error("Error al crear la petició de firma: " + e.getMessage(), e);
+			throw new I18NException("error.portafib.generic", e.getMessage());
+		}
+	}
+	
+	protected void afegirEventPinfoEnviat(IncidenciaTecnica it, Pinfo pinfo, Responsable responsable) throws I18NException {
+		//Afegir l'event de la incidencia, i l'event de pinfo enviat a PortaFIB
+		log.info("Afegir event de peticio enviada a portafib");
+		{
+			Long _incidenciaTecnicaID_ = it.getIncidenciaTecnicaID();
+
+			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
+			boolean _noLlegit_ = true;
+			String _persona_ = it.getContacteNom();
+			
+			//Event de la incidencia.
+			EventJPA evIncidencia = new EventJPA();
+			evIncidencia.setIncidenciaTecnicaID(_incidenciaTecnicaID_);
+			evIncidencia.setDataEvent(new Timestamp(System.currentTimeMillis()));
+			evIncidencia.setTipus(_tipus_);
+			evIncidencia.setPersona(_persona_);
+			evIncidencia.setNoLlegit(_noLlegit_);
+
+			evIncidencia.setAsumpte("Incidencia " + it.getIncidenciaTecnicaID() +  " creada");
+			evIncidencia.setComentari(it.getTitol() + "\n" + it.getDescripcio());
+			eventLogicaEjb.create(evIncidencia);
+			
+			//Event de Pinfo Enviat.
+			EventJPA evPinfo = new EventJPA();
+			evPinfo.setIncidenciaTecnicaID(_incidenciaTecnicaID_);
+			evPinfo.setDataEvent(new Timestamp(System.currentTimeMillis()));
+			evPinfo.setTipus(_tipus_);
+			evPinfo.setPersona(_persona_);
+			evPinfo.setNoLlegit(_noLlegit_);
+			
+			Long pinfoID = pinfo.getPinfoID();
+			String msgPinfoEnviat = 
+					"PINFO " + pinfoID + " enviat a Portafib.\n" 
+					+ "Remitent: " + _persona_ + " (" + pinfo.getSolicitantNIF() + ")\n" 
+					+ "Destinatari: " + responsable.getNomOcult() + " (" + responsable.getNif() + ")";
+			
+			evPinfo.setFitxerID(pinfo.getFitxerID());
+			evPinfo.setAsumpte("PINFO " + pinfoID + " enviat a Portafib");
+			evPinfo.setComentari(msgPinfoEnviat);
+			
+			eventLogicaEjb.create(evPinfo);
+			
+		}
+	}
+	
 	
 	@Override
 	public Long cosesAFerPinfoFirmat(Long portafibID) throws I18NException {
@@ -404,18 +549,17 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		if (pinfoID == null) {
 			log.error("No s'ha trobat Pinfo amb portafibid = " + portafibID);
 		}else {
-			FirmaAsyncSimpleSignedFile firma = PortafibUtils.getFitxerSignat(portafibID);
-			Long fitxerFirmatID = PortafibUtils.guardarFitxer(firma, fitxerPublicEjb);
+			FirmaAsyncSimpleSignedFile fitxerFirmat = PortafibUtils.getFitxerSignat(portafibID);
+			Long fitxerFirmatID = PortafibUtils.guardarFitxer(fitxerFirmat, fitxerPublicEjb);
 
 			PinfoJPA pinfo = findByPrimaryKey(pinfoID);
 			pinfo.setFitxerfirmatID(fitxerFirmatID);
 			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_TRAMITAR);
 			update(pinfo);
 			
-			
 			//El document de l'event ha de ser una copia del document original.
-			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(firma, fitxerPublicEjb);
-			crearEventSolcitudFirmada(pinfo, fitxerFirmatIDCopia);			
+			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(fitxerFirmat, fitxerPublicEjb);
+			crearEventPinfoFirmat(pinfo, fitxerFirmatIDCopia);			
 
 		}
 		
@@ -426,9 +570,9 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		return this.executeQueryOne(PinfoFields.PINFOID, PinfoFields.PORTAFIBID.equal(String.valueOf(portafibID)));
 	}
 	
-	protected void crearEventSolcitudFirmada(Pinfo pinfo, Long fitxerFirmatID) throws I18NException {
+	protected void crearEventPinfoFirmat(Pinfo pinfo, Long fitxerFirmatID) throws I18NException {
 
-		log.info("Afegir event de peticio rebuda de portafib");
+		log.info("Afegir event de PINFO rebut de portafib");
 		
 		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
 		
@@ -455,5 +599,21 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 					_caidNumeroSeguiment_);
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -28,14 +28,17 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaContro
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.springframework.stereotype.Controller;
@@ -70,6 +73,9 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
+    
+    @EJB(mappedName = PinfoLogicaService.JNDI_NAME)
+    protected PinfoLogicaService pinfoLogicaEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
@@ -545,38 +551,48 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         Map<Long, String> map;
         map = (Map<Long, String>) filterForm.getAdditionalField(MISSATGES_SENSE_LLEGIR_COLUMN).getValueMap();
         map.clear();
+        
+        filterForm.getAdditionalButtonsByPK().clear();
 
         final StringField operador = new EventQueryPath().INCIDENCIATECNICA().OPERADOR();
 
         final String loginUserName = request.getRemoteUser();
 
-        for (IncidenciaTecnica inc : list) {
+		for (IncidenciaTecnica inc : list) {
 
-            final String user = inc.getOperador();
+			final String user = inc.getOperador();
 
-            // incidencies
+			// incidencies
+			Long eventsPendents = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
+					EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), operador.equal(user)));
 
-            Long incidencies = eventLogicaEjb.count(Where.AND(EventFields.NOLLEGIT.equal(Boolean.TRUE),
-                    EventFields.INCIDENCIATECNICAID.equal(inc.getIncidenciaTecnicaID()), operador.equal(user)));
+			if (eventsPendents != 0) {
+				final String color;
+				if (loginUserName.equals(user)) {
+					color = "danger";
+				} else {
+					color = "warning";
+				}
 
-            if (incidencies != 0) {
+				final String text = "<span title=\"Events no llegits\" class=\"badge badge-" + color + " \">"
+						+ eventsPendents + "</span>" + "<span title=\"Events no llegits\" class=\"label label-" + color
+						+ "\"><b>&#9888;</b></span>";
 
-                final String color;
-                if (loginUserName.equals(user)) {
-                    color = "danger";
-                } else {
-                    color = "warning";
-                }
-
-                final String text = "<span title=\"Events no llegits\" class=\"badge badge-" + color + " \">"
-                        + incidencies + "</span>" + "<span title=\"Events no llegits\" class=\"label label-" + color
-                        + "\"><b>&#9888;</b></span>";
-
-                map.put(inc.getIncidenciaTecnicaID(), text);
-
-            }
-
-        }
+				map.put(inc.getIncidenciaTecnicaID(), text);
+			}
+			
+			//Afegir botó per tramitar Pinfos.
+			if (inc.getTipus() == Constants.INCIDENCIA_TIPUS_ROLEPERMISOS) {
+				Long pinfoID = pinfoLogicaEjb.executeQueryOne(PinfoFields.PINFOID,
+						PinfoFields.INCIDENCIAID.equal(inc.getIncidenciaTecnicaID()));
+				if (pinfoID != null) {
+					filterForm.addAdditionalButtonByPK(inc.getIncidenciaTecnicaID(),
+							new AdditionalButton("fas fa-user-check", "tramitar.pinfo",
+									PinfoOperadorController.WEBCONTEXT + "/view/" + pinfoID,
+									AdditionalButtonStyle.PRIMARY));
+				}
+			}
+		}
 
     }
 

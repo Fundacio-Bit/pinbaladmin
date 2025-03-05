@@ -27,7 +27,7 @@
 
     function miFuncionTest(elem){
         console.log('miFuncionTest');
-        var iframeDocument = elem.contentDocument || elem.contentWindow.document;
+/*         var iframeDocument = elem.contentDocument || elem.contentWindow.document;
         console.log(iframeDocument);
         
         // Esperar hasta que el iframe esté completamente cargado
@@ -40,5 +40,5 @@
                 element.style.backgroundColor = "red";
             });
         });
-    }
+ */    }
 </script>

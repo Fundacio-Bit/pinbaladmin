@@ -132,7 +132,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		String senderFullName = operadorEjb.executeQueryOne(OperadorFields.NOM,
 				OperadorFields.USERNAME.equal(remitent));
 
-		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = convertNifToSignatureBlocks(destinatariNif);
+		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
 
 		String profileCode = Configuracio.getPortafibProfile();
 		int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
@@ -180,84 +180,13 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	}
 
 	protected FirmaAsyncSimpleFile getFitxerPortafibFromDoc(Document doc) throws I18NException {
-
-//		log.info("getFitxerPortafibFromDocID: " + docID);
-//
-//		Document doc = this.findByPrimaryKey(docID);
 		Long fitxerID = doc.getFitxerOriginalID();
 
 		log.info("fitxerID: " + fitxerID);
-
-		File file = FileSystemManager.getFile(fitxerID);
-		Fitxer fitxer = fitxerEjb.findByPrimaryKey(fitxerID);
-
-		if (!file.exists()) {
-			throw new I18NException("error.fitxer.noexist", file.getAbsolutePath());
-		}
-
-		byte[] data;
-		try {
-			data = FileUtils.readFromFile(file);
-		} catch (Throwable t) {
-			throw new I18NException("error.fitxer.cantread", file.getAbsolutePath(), t.getMessage());
-		}
-
-		FirmaAsyncSimpleFile portafibFile = new FirmaAsyncSimpleFile(fitxer.getNom(), fitxer.getMime(), data);
-		return portafibFile;
+		return PortafibUtils.getPortaFIBFileFromFitxerID(fitxerID, fitxerEjb);
 	}
 
-	protected FirmaAsyncSimpleSignatureBlock[] convertNifToSignatureBlocks(String nifDestinatari) throws I18NException {
-		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = null;
-
-		String[][] destinataris = new String[][] { { nifDestinatari } };
-
-		if (destinataris == null || destinataris.length == 0) {
-			throw new I18NException("error.nifdestinatari.undefined.property", "nifsDestinataris", "test.properties");
-		}
-
-		signatureBlocks = new FirmaAsyncSimpleSignatureBlock[destinataris.length];
-
-		for (int i = 0; i < destinataris.length; i++) {
-			String[] destinatarisBloc = destinataris[i];
-			if (destinatarisBloc == null || destinatarisBloc.length == 0) {
-				throw new I18NException("error.nifdestinatari.destinatarios", String.valueOf(i));
-			}
-			log.info("BLOC[" + i + "] => Destinataris = " + Arrays.toString(destinatarisBloc));
-			List<FirmaAsyncSimpleSignature> signers = new ArrayList<FirmaAsyncSimpleSignature>();
-			for (int j = 0; j < destinatarisBloc.length; j++) {
-
-				String nif = destinatarisBloc[j].trim();
-
-				if (nif.trim().length() == 0) {
-					throw new I18NException("error.nifdestinatari.destinatario", String.valueOf(i), String.valueOf(j));
-				}
-
-				FirmaAsyncSimpleSigner personToSign;
-
-				personToSign = new FirmaAsyncSimpleSigner();
-				personToSign.setAdministrationID(nif);
-
-				boolean required = true;
-				String reason = null; // Usar la de la Petició
-
-				// Revisors
-				int minimumNumberOfRevisers;
-				List<FirmaAsyncSimpleReviser> revisers;
-
-				minimumNumberOfRevisers = 0;
-				revisers = null;
-
-				signers.add(new FirmaAsyncSimpleSignature(personToSign, required, reason, minimumNumberOfRevisers,
-						revisers));
-
-			}
-
-			int minimumNumberOfSignaturesRequired = signers.size();
-			signatureBlocks[i] = new FirmaAsyncSimpleSignatureBlock(minimumNumberOfSignaturesRequired, signers);
-
-		}
-		return signatureBlocks;
-	}
+	
 
 	protected void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException {
 		log.info("Afegir event de peticio enviada a portafib");

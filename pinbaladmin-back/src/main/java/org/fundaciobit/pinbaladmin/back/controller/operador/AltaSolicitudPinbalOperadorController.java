@@ -433,16 +433,60 @@ public class AltaSolicitudPinbalOperadorController {
 
         ScspFuncionario funcionario = new ScspFuncionario();
 
-        UserInfo ui = LoginInfo.getInstance().getUserInfo();
+//        UserInfo ui = LoginInfo.getInstance().getUserInfo();
 
-        String nif = "00000000T";
-        String fullName = "Usuari Anonim 00000000T";
+		String nif = null;
+		String fullName = null;
         
 //        if (ui != null) {
 //            nif = ui.getAdministrationID();
 //            fullName = ui.getFullName();
-//            
+//        	if (fullName == null) {
+//				fullName = ui.getName() + " " + ui.getSurname1() + " " + ui.getSurname2();
+//			}
+//        }else {
+//        	String username = LoginInfo.getInstance().getUsername();
+//        	
+//        	switch (username) {
+//        	case "ptrias":
+//        		nif = "45186147W";
+//        		fullName = "Juan Pablo Trias";
+//        		break;
+//        	case "pvico":
+//        		nif = "43084402C";
+//        		fullName = "Pilar Vico Hervas";
+//        		break;
+//        	case "atrobat":
+//        		nif = "43120476F";
+//        		fullName = "Toni Trobat Obrador";
+//        		break;
+//			default:
+//				nif = "00000000T";
+//				fullName = "Usuari Anonim 00000000T";
+//        	}
+//        	
 //        }
+        
+    	String username = LoginInfo.getInstance().getUsername();
+    	switch (username) {
+    	case "ptrias":
+    		nif = "45186147W";
+    		fullName = "Juan Pablo Trias";
+    		break;
+    	case "pvico":
+    		nif = "43084402C";
+    		fullName = "Pilar Vico Hervas";
+    		break;
+    	case "atrobat":
+    		nif = "43120476F";
+    		fullName = "Toni Trobat Obrador";
+    		break;
+		default:
+			nif = "00000000T";
+			fullName = "Usuari Anonim 00000000T";
+    	}
+
+        
         log.info("NIF: " + nif);
         log.info("Nombre completo: " + fullName);
 

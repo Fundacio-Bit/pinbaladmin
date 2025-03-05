@@ -475,6 +475,10 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/seleccionarResponsable.jsp" />
     </definition>
 
+    <definition name="showPinfoPdf" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/showPinfoPdf.jsp" />
+    </definition>
+
     <definition name="pinfoFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoForm.jsp" />
     </definition>

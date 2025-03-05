@@ -40,7 +40,9 @@ import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
+import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
@@ -127,6 +129,10 @@ public class PinfoPublicController extends PinfoController {
 			
 			pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-arrow-left", "tornar",
 					PinfoDataPublicController.CONTEXT_WEB + "/list/1" , AdditionalButtonStyle.SECONDARY));
+			
+			pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-sign", "Enviar a firmar",
+					CONTEXT_WEB + "/enviarPinfoPortaFIB/" + pinfoID , AdditionalButtonStyle.PRIMARY));
+
 		}
 
 		String urlPinfoPDF = "/pinbaladmin" + FileDownloadController.fileUrl(pinfo.getFitxer());
@@ -136,6 +142,26 @@ public class PinfoPublicController extends PinfoController {
 		pinfoForm.setAttachedAdditionalJspCode(true);
 		return pinfoForm;
 	}
+	
+	@RequestMapping(value = "/enviarPinfoPortaFIB/{pinfoID}")
+	public String enviarPinfoPortaFIB(HttpServletRequest request, @PathVariable("pinfoID") java.lang.Long pinfoID)
+			throws I18NException {
+
+		log.info("Paso 1: /enviarPinfoPortaFIB/" + pinfoID);
+
+		Responsable responsable = (Responsable) request.getSession().getAttribute(PinfoDataPublicController.RESPONSABLE);
+		
+
+		//EJB Per enviar peticio a firmar
+		pinfoLogicaEjb.enviarPinfoPortaFIB(pinfoID, responsable);
+		
+		//Redirect to llistat events.
+		Long incidenciaID = pinfoLogicaEjb.executeQueryOne(PinfoFields.INCIDENCIAID, PinfoFields.PINFOID.equal(pinfoID));
+		IncidenciaTecnicaJPA it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(incidenciaID);
+		String destinatari = "CONTACTE|" + it.getContacteNom();
+		return redirectToEventsPinfo(incidenciaID, destinatari);
+	}
+	
 
 	@Override
 	public PinfoFilterForm getPinfoFilterForm(Integer pagina, ModelAndView mav, HttpServletRequest request)
@@ -212,7 +238,9 @@ public class PinfoPublicController extends PinfoController {
 	@Override
 	public String getRedirectWhenCreated(HttpServletRequest request, PinfoForm pinfoForm) {
 		Long itemID = pinfoForm.getPinfo().getIncidenciaID();
-		return redirectToEventsPinfo(itemID, null);
+		IncidenciaTecnicaJPA it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(itemID);
+		String destinatari = it.getContacteNom();
+		return redirectToEventsPinfo(itemID, destinatari);
 	}
 
 	public String redirectToEventsPinfo(Long incidenciaID, String destinatari) {

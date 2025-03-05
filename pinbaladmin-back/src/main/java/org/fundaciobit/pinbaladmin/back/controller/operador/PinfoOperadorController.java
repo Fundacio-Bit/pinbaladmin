@@ -2,21 +2,28 @@ package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoQueryPath;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +39,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class PinfoOperadorController extends PinfoController {
 
 	public static final String WEBCONTEXT = "/operador/pinfo";
+	
+	@EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
+	protected PinfoDataLogicaService pinfoDataLogicEjb;
 
 	@Override
 	public String getTileForm() {
@@ -77,6 +87,44 @@ public class PinfoOperadorController extends PinfoController {
 		}
 
 		return pinfoFilterForm;
+	}
+	
+	
+	@Override
+	public PinfoForm getPinfoForm(PinfoJPA _jpa, boolean __isView, HttpServletRequest request, ModelAndView mav)
+			throws I18NException {
+		PinfoForm pinfoForm = super.getPinfoForm(_jpa, __isView, request, mav);
+		
+		if (__isView) {
+			PinfoJPA pinfo = pinfoForm.getPinfo();
+			Long estat = pinfo.getEstat();
+			
+			if (estat == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
+				pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-cogs", "procesar.pinfo",
+						WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+			}
+			
+		}
+
+		return pinfoForm;
+	}
+	
+	
+	@RequestMapping(value = "/procesarPinfo/{pinfoID}")
+	public String procesarPinfo(HttpServletRequest request, ModelAndView mav, @PathVariable("pinfoID") java.lang.Long pinfoID) throws I18NException {
+		
+		Where wPinfoID = PinfoFields.PINFOID.equal(pinfoID);
+		List<PinfoData> pinfoDatas =  pinfoDataLogicEjb.select(wPinfoID);
+		
+		log.info("Procesant PinfoData " + pinfoDatas.size());
+		
+		for (PinfoData pinfoData : pinfoDatas) {	
+			log.info("Procesant PinfoData " + pinfoData.getPinfodataID() + ": usr[" + pinfoData.getUsuariid() + "] - ["
+					+ pinfoData.getProcedimentID() + "] - [" + pinfoData.getServeiID() + "] - [" + pinfoData.getAlta() + "]");
+		}
+		
+		return "redirect:" + WEBCONTEXT + "/view/" + pinfoID;
+
 	}
 
 	@Override

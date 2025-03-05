@@ -25,6 +25,7 @@ public interface PinfoLogicaService extends PinfoService {
 			throws I18NException;
 
 	public Long cosesAFerPinfoFirmat(Long portafibID) throws I18NException;
-	
+
+	public void enviarPinfoPortaFIB(Long pinfoID, Responsable responsable) throws I18NException ;
 	
 }

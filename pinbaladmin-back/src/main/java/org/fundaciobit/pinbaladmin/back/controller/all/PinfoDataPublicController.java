@@ -16,6 +16,7 @@ import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
+import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
@@ -24,6 +25,7 @@ import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
+import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
@@ -90,6 +92,9 @@ public class PinfoDataPublicController extends PinfoDataController {
 	
 	@EJB(mappedName = EntitatServeiLogicService.JNDI_NAME)
 	protected EntitatServeiLogicService entitatLogicaEjb;
+	
+	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+	protected FitxerPublicLogicaService fitxerLogicaEjb;
 
 	public final String ALTA_BAIXA = "alta_baixa";
 	public final Long PINFODATA_ALTA = 1L;
@@ -98,7 +103,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 	public final Long PINFOID_DEFAULT = 1114l;
 	public final Long INCIDENCIAID_DEFAULT = 50220l;
 	
-	public final String RESPONSABLE = "responsable";
+	public static final String RESPONSABLE = "responsable";
 	public final String LLISTA_RESPONSABLES = "llistaResponsables";
 	
 	@Override
@@ -159,24 +164,37 @@ public class PinfoDataPublicController extends PinfoDataController {
 		return filterForm;
 	}
 
-	@RequestMapping(value = "/generaPdf")
-	public String generaPdf(HttpServletRequest request, ModelAndView mav) throws Exception {
+	@RequestMapping(value = "/generaPdf", method = RequestMethod.GET)
+	public ModelAndView generaPdf(HttpServletRequest request) throws Exception {
 		log.info("generaPdf");
+
+		ModelAndView mav = new ModelAndView("showPinfoPdf");
 
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		log.info("pinfoID: " + pinfoID);
-		
-//		List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));		
-
-//		HtmlUtils.saveMessageInfo(request, "Hay " + pinfoDataList.size() + " pinfodatas.");
+		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
 		
 		Responsable responsable = (Responsable) request.getSession().getAttribute(RESPONSABLE);
 		
 		Long fitxerID = pinfoLogicEjb.generarPinfoPDF(pinfoID, responsable);
 		log.info("fitxerID: " + fitxerID);
 		
-		return "redirect:" + PinfoPublicController.CONTEXT_WEB + "/" + pinfoID + "/edit";
+		Fitxer f = fitxerLogicaEjb.findByPrimaryKey(fitxerID);
+
+		//Afegor el nom del destinatari enviant a PortaFIB per guardar-ho a l'event que es crea.
+		//afegirEventPinfoEnviat(incidenciaID, senderUsername, msg);
+		
+		String urlPinfoPDF = "/pinbaladmin" + FileDownloadController.fileUrl(f);
+		String urlFirmarPinfo =  Configuracio.getAppBackUrl() + PinfoPublicController.CONTEXT_WEB  + "/enviarPinfoPortaFIB/" +pinfoID;
+
+		mav.addObject("urlPinfoPDF", urlPinfoPDF);
+		mav.addObject("urlFirmarPinfo", urlFirmarPinfo);
+		
+		mav.addObject("pinfo", pinfo);
+		
+		return mav;
 	}
+	
 	
 	@Override
 	public PinfoDataForm getPinfoDataForm(PinfoDataJPA _jpa, boolean __isView, HttpServletRequest request,
@@ -561,18 +579,29 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("seleccionarResponsable POST");
 		
 		String selecionat = request.getParameter("responsable");
+		log.info("selecionat: " + selecionat);
 		
 		List<Responsable> responsablesList = (List<Responsable>) request.getSession().getAttribute(LLISTA_RESPONSABLES);
 		Responsable responsable = null;
-		
-		for (Responsable res : responsablesList) {
-			if (res.getNif().equals(selecionat)) {
-				responsable = res;
-				break;
+
+		if (selecionat.equals("otro")) {
+			String nomComplet = request.getParameter("responsable-otro-nom");
+			String dni = request.getParameter("responsable-otro-dni");
+
+			log.info("Otro: nif: " + dni +  " nomComplet: " + nomComplet);
+			
+			responsable = new Responsable(dni, nomComplet);
+			responsable.setNif(dni);
+		} else {
+			for (Responsable res : responsablesList) {
+				if (res.getNif().equals(selecionat)) {
+					responsable = res;
+					break;
+				}
 			}
-		}
+		}		
 		
-		request.getSession().setAttribute(RESPONSABLE, responsable);
+		log.info("responsable: " + responsable.getNif());
 		
 		//Guardar responsable a destinatariNIF del Pinfo, i redireccionar a PDF
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
@@ -580,6 +609,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 		pinfo.setDestinatariNIF(responsable.getNif());
 		pinfoLogicEjb.update(pinfo);
 
+		request.getSession().setAttribute(RESPONSABLE, responsable);
+		
 		return "redirect:" + CONTEXT_WEB + "/generaPdf";
 	}
 	

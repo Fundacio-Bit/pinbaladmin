@@ -22,6 +22,18 @@ public class Responsable {
 		this.nomOcult = nomOcult;
 	}
 
+	//Constructor per defecte
+	public Responsable(String NIF, String nomComplet) {
+		this.nif = NIF;
+		this.nom = null;
+		this.ape1 = null;
+		this.ape2 = null;
+		this.cargo = null;
+		this.telefon = null;
+		this.mail = null;
+		this.nomOcult = nomComplet;
+	}
+	
 	public String getNif() {
 		return nif;
 	}

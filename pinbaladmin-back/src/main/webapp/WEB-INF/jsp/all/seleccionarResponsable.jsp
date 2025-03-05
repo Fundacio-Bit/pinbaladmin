@@ -67,9 +67,19 @@ label {
 				</div>
 			</c:forEach>
 
+				<div class="element">
+					<input type="radio" name="responsable" id="responsable-otro" value="otro"/>
+					<label for="responsable-otro">Otro</label><br>
+					
+					<label for="responsable-otro-dni">DNI</label>
+					<input type="text" class="respo-otro" id="responsable-otro-dni" name="responsable-otro-dni" />
+					<label for="responsable-otro-nom">Nombre</label>
+					<input type="text" class="respo-otro" id="responsable-otro-nom" name="responsable-otro-nom"  />
+				</div>
+				
 			<div id="btn-container">
 				<a class="btn btn-sm btn-primary"
-					onclick="document.getElementById('seleccionarResponsable').submit();"
+					onclick="submitForm();"
 					title="<fmt:message key="generar.pdf"/>"> <i
 					class="fas fa-file-pdf"></i> <fmt:message key="generar.pdf" />
 				</a>
@@ -78,23 +88,47 @@ label {
 	</div>
 
 	<script>
-		document.getElementById("seleccionarResponsable").onsubmit = function(
-				event) {
-			var responsables = document.getElementsByName("responsable");
-			var seleccionado = false;
+			
+	
+	//on input on class class="respo-otro", select the radio button.
+	
+	$(document).ready(function(){
+		$('.respo-otro').on('input', function(){
+	        $('#responsable-otro').prop('checked', true);
+		});
+	});
+	
+	function submitForm() {
+		console.log('submitForm');
+		var responsables = document.getElementsByName("responsable");
+		var seleccionado = false;
 
-			for (var i = 0; i < responsables.length; i++) {
-				if (responsables[i].checked) {
-					seleccionado = true;
-					break;
+		for (var i = 0; i < responsables.length; i++) {
+			if (responsables[i].checked) {
+				if (responsables[i].value === 'otro'){
+					var responsableOtroNom = document.getElementById("responsable-otro-nom").value;
+					console.log(responsableOtroNom);
+					var responsableOtroDni = document.getElementById("responsable-otro-dni").value;
+					console.log(responsableOtroDni);
+                       if (responsableOtroNom === '' || responsableOtroDni === '') {
+                           alert('Debe introducir un responsable antes de enviar el formulario.');
+                           break;
+                       }else{
+//                        alert('Se ha seleccionado el responsable: ' + responsableOtroNom + ' con DNI: ' + responsableOtroDni);
+                       }
 				}
+				
+				seleccionado = true;
+				break;
 			}
+		}
 
-			if (!seleccionado) {
-				alert('Debe seleccionar un responsable antes de enviar el formulario.');
-				event.preventDefault(); // Evita que el formulario se envíe
-			}
-		};
+		if (!seleccionado) {
+			alert('Debe seleccionar un responsable antes de enviar el formulario.');
+		}else{
+			document.getElementById('seleccionarResponsable').submit();
+		}
+	}
 	</script>
 </body>
 </html>
