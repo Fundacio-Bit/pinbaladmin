@@ -735,7 +735,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 				log.info(objectToJsonString(permisosServei));
 
 				usuariClient.grantPermissions(codiUsuari, permisosServei);
-				String msg = "Permisos afegits correctament per usuari " + codiUsuari + ": \n";
+				String msg = "Permisos afegits correctament per usuari " + codiUsuari;
 				missatges.add(msg);
 				log.info(msg);
 				log.info(objectToJsonString(permisosServei));

@@ -54,7 +54,8 @@
 }
 
 .info-usuari-full {
-	width: fit-content;
+	/* 	width: fit-content; */
+	max-width: 45rem;
 	margin: 2rem auto;
 	border: 1px black solid;
 	padding: 15px;
@@ -71,22 +72,24 @@
 	font-style: italic;
 	font-size: 18px;
 	font-weight: bold;
-	margin-bottom: 2px;
+	margin: 6px;
 }
 
 .taula-procediment {
 	margin-bottom: 1rem;
 	width: 100%;
-	display: flex;
+	/* 	display: flex;
+	  flex-direction: column;
+ */
 }
 
 .pinfodata-procediment {
-	background: lightgray;
+	background: #e6e6e6;
 	font-weight: bold;
-	padding: 5px 10px; width : 25rem; display : flex;
+	padding: 5px 10px;
 	align-items: center;
-	width: 25rem;
 	display: flex;
+	border-radius: 5px 00px 00px 5px;
 }
 
 .llista-serveis {
@@ -100,6 +103,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	margin-left: .5rem;
+	margin-top: .5rem;
 }
 
 #msgAfegirPinfoData {

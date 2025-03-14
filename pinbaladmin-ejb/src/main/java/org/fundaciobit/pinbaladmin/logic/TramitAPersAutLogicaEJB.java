@@ -360,27 +360,26 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         
                         consentiment = J.getConsentiment();
 
-						if (J.getAdjunt() != null) {
-						
+						if (J.getAdjuntID() != null) {
 							consentimentadjunt = Constants.CONSENTIMENT_ADJUNT;
 							nomFitxerAdjunt = J.getAdjunt().getNom();
-							urlconsentiment = CrearExcelDeServeis.generarURLDownload(J.getAdjunt());
-							urlconsentiment = urlconsentiment.replace("&mime=", "&amp;mime=");
-
-						}else {
+							fitxerConsentimentID = J.getAdjuntID();
+							urlconsentiment = null;
 							
+							map.put("urlConsentiment", "---");
+							map.put("adjConsentiment", nomFitxerAdjunt);
+						}
+						
+						if (J.getUrlconsentiment() != null) {
+							urlconsentiment = J.getConsentiment();
 							consentimentadjunt = Constants.CONSENTIMENT_PUBLICAT;
-							nomFitxerAdjunt = "---"; 
-	                        urlconsentiment = null;
+							fitxerConsentimentID = null;
 							
+							map.put("urlConsentiment", urlconsentiment);
+							map.put("adjConsentiment", "---");
 						}
 						
 						log.info("Fitxer Consentiment: " + nomFitxerAdjunt);
-
-                        map.put("urlConsentiment", urlconsentiment);
-                        map.put("adjConsentiment", nomFitxerAdjunt);
-                        
-
                     break;
                 }
             }

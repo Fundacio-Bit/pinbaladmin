@@ -98,7 +98,7 @@
 		</a>
 		
 		<c:if test="${pinfosPendents ne 0}">
-				<a href="<c:url value="/operador/pinfo/list"/>">
+				<a href="<c:url value="/operador/pinfo/pendent/list"/>">
 					<span class="badge badge-danger">${pinfosPendents}</span>
 				</a>
 			</c:if>

@@ -21,8 +21,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
+import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.xml.sax.SAXException;
@@ -164,13 +167,31 @@ public class CrearExcelDeServeis {
       if (fitxerNorma == null) {
     	  dades[10] = ss.getEnllazNormaLegal();
       } else {
-//    	  dades[10] = "Adjunto: " + fitxerNorma.getNom();
     	  dades[10] = generarURLDownload(fitxerNorma);
-//    	  dades[10] = Configuracio.getAppBackUrl() + FileDownloadController.fileUrl(fitxerNorma);
       }      
       
       // L 11 L'Enllaç de Consentiment
       {
+    	//Conseguir el fitxerID del doc de consentiment adj, i generar la url de descarrega.
+    	  
+    	if (soli.getConsentiment().equals("llei")) {
+            dades[11] = "Ley";
+		}else {
+	        String urlConsentiment = soli.getUrlconsentiment();
+	        if (urlConsentiment != null ) {
+	        	dades[11] = urlConsentiment;
+	        }else {
+				for (DocumentSolicitudJPA docSol : soli.getDocumentSolicituds()) {
+					DocumentJPA doc = docSol.getDocument();
+					if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+							|| doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
+						dades[11] = generarURLDownload(doc.getFitxerOriginal());
+						break;
+					}
+				}
+	        }
+		}
+    	  
     	  
         String urlConsentiment = soli.getUrlconsentiment();
         

@@ -12,6 +12,17 @@
 
 
 <style>
+#title {
+	text-align: center;
+}
+
+.botonera {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin: 20px;
+}
+
 #fitxerPDF {
 	display: flex;
 	flex-direction: column;
@@ -29,12 +40,12 @@ canvas {
 </head>
 <body>
 
-    <h1>PINFO ${pinfo.pinfoID}</h1>
+    <h3 id="title">PINFO ${pinfo.pinfoID}</h3>
 
-
-	<a href="${urlFirmarPinfo}" class="btn btn-primary">Enviar a firmar</a>
-
-	<a href="${urlPinfoPDF}" class="btn btn-primary">Descargar PDF</a>
+	<div class="botonera">
+		<a href="${urlFirmarPinfo}" class="btn btn-primary">Enviar a firmar</a>
+		<a href="${urlPinfoPDF}" class="btn btn-primary">Descargar PDF</a>
+	</div>
 
 	<div id="fitxerPDF"></div>
 
