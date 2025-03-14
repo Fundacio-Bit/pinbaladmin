@@ -18,11 +18,14 @@ import org.apache.tiles.request.Request;
 import org.fundaciobit.pinbaladmin.ejb.IdiomaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Idioma;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IdiomaFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -139,6 +142,8 @@ public class BasePreparer implements ViewPreparer, Constants {
     
     protected static IncidenciaTecnicaLogicaService incidenciaTecnicaLogicaEjb;
     
+    protected static PinfoLogicaService pinfoLogicEjb;
+    
 
     @Override
     public void execute(Request tilesRequest, AttributeContext attributeContext) throws PreparerException {
@@ -227,6 +232,10 @@ public class BasePreparer implements ViewPreparer, Constants {
                 if (eventLogicaEjb == null) {
                     eventLogicaEjb = (EventLogicaService) new InitialContext().lookup(EventLogicaService.JNDI_NAME);
                 }
+                
+				if (pinfoLogicEjb == null) {
+					pinfoLogicEjb = (PinfoLogicaService) new InitialContext().lookup(PinfoLogicaService.JNDI_NAME);
+				}
                 
 //				if (solicitudLogicaEjb == null) {
 //					solicitudLogicaEjb = (SolicitudLogicaService) new InitialContext()
@@ -340,6 +349,17 @@ public class BasePreparer implements ViewPreparer, Constants {
 
                     request.put("incidenciesMeves", incidenciesMeves);
                     request.put("incidenciesNoMeves", incidenciesNoMeves);
+                }
+                
+                
+                //PINFOS
+                {
+					Long[] estats = { Constants.ESTAT_PINFO_PENDENT_TRAMITAR, Constants.ESTAT_PINFO_TRAMITAT };
+            		
+            		Where wEsatsPendents = PinfoFields.ESTAT.in(estats);
+            		
+                	Long pinfosPendents = pinfoLogicEjb.count(wEsatsPendents);
+                	request.put("pinfosPendents", pinfosPendents);
                 }
 
             } catch (I18NException e) {

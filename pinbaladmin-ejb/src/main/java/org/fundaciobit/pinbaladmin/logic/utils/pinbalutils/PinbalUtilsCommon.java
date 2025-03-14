@@ -58,6 +58,12 @@ public class PinbalUtilsCommon {
 			throws Exception {
 
 		PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
+		
+		String url = Configuracio.getApiPinbalUrl();
+		String username = Configuracio.getApiPinbalUsername();
+		String password = Configuracio.getApiPinbalPassword();
+		
+		log.info("URL: ]" + url + "[ Username: ]" + username + "[ Password: ]" + password + "[");
 
 		config.setUrlBase(Configuracio.getApiPinbalUrl());
 		config.setUsername(Configuracio.getApiPinbalUsername());

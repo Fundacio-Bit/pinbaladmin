@@ -95,7 +95,15 @@
 				style="${(fn:contains(url, '/operador/pinfo'))? "font-weight:bold;" : ""}">
 					<fmt:message key="pinfo.pinfo.plural" />
 			</span>
-		</a></li> 
+		</a>
+		
+		<c:if test="${pinfosPendents ne 0}">
+				<a href="<c:url value="/operador/pinfo/list"/>">
+					<span class="badge badge-danger">${pinfosPendents}</span>
+				</a>
+			</c:if>
+		
+		</li> 
 		
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/pinfoData/new"/>"> <span

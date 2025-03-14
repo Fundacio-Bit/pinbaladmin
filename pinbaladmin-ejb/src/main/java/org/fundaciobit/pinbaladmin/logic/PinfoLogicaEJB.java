@@ -64,6 +64,7 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 
 /**
  * 
@@ -625,7 +626,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	}
 
 	@Override
-	public void enviarMissatgeSolicitant(String operador, Long pinfoID) throws I18NException {
+	public void enviarMissatgeSolicitant(UserInfo operador, Long pinfoID) throws I18NException {
 
 		Pinfo pinfo = this.findByPrimaryKey(pinfoID);
 		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
@@ -635,7 +636,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		String msg = "Bon dia, " + incidencia.getContacteNom() + " <br><br>" + "Hem tramitat la seva solicitud (PINFO "
 				+ pinfoID + "): <br><br>"
 				+ "<div style=\"border: 1px solid #00000040;padding: .5rem;background-color: #f7f7f7;border-radius: 3px;\">"
-				+ missatgePinbal + "</div><br>" + "Salutacions cordials, <br><br>" + operador + ", Fundació BIT";
+				+ missatgePinbal + "</div><br>" + "Salutacions cordials, <br><br>" + operador.getFullName() + ", Fundació BIT";
 
 		log.info("Afegir event de PINFO rebut de portafib");
 
@@ -643,7 +644,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			String _missatge_ = "<div style='margin: .5rem;'>" + msg + "</div>";
 
 			String _asumpte_ = "Pinfo " + pinfoID + " Tramitat";
-			String _persona_ = operador;
+			String _persona_ = operador.getFullName();
 
 			Long _solicitudID_ = null;
 			Long _incidenciaTecnicaID_ = incidencia.getIncidenciaTecnicaID();
@@ -666,6 +667,10 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		}
 		pinfo.setEstat(Constants.ESTAT_PINFO_NOTIFICAT);
 		this.update(pinfo);
+		
+		incidencia.setOperador(operador.getUsername());
+		incidencia.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
+		incidenciaLogicaEjb.update(incidencia);
 
 	}
 	

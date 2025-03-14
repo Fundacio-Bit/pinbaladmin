@@ -11,6 +11,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.PinfoService;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 
 /**
  * 
@@ -33,6 +34,6 @@ public interface PinfoLogicaService extends PinfoService {
 
 	public List<StringKeyValue> getEntitats() throws I18NException;
 
-	public void enviarMissatgeSolicitant(String operador, Long pinfoID)  throws I18NException;
+	public void enviarMissatgeSolicitant(UserInfo operador, Long pinfoID)  throws I18NException;
 	
 }

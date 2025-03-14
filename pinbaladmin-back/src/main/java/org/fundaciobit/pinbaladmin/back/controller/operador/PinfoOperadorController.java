@@ -20,11 +20,13 @@ import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoQueryPath;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -147,6 +149,12 @@ public class PinfoOperadorController extends PinfoController {
 		
 		try {
 			pinfoDataLogicaEjb.procesarPermisosPinfo(pinfoID);
+			
+			String operador = LoginInfo.getInstance().getUsername();
+			
+			String msg = "PINFO " + pinfoID + " processat correctament";
+			HtmlUtils.saveMessageSuccess(request, msg);
+			
 		} catch (I18NException e) {
 			String msg = "Error Procesant PINFO " + pinfoID + ": " + I18NUtils.getMessage(e);
 			log.error(msg, e);
@@ -161,7 +169,7 @@ public class PinfoOperadorController extends PinfoController {
 			@PathVariable("pinfoID") java.lang.Long pinfoID) {
 
 		try {
-			String operador = LoginInfo.getInstance().getUserInfo().getFullName();
+			UserInfo operador = LoginInfo.getInstance().getUserInfo();
 			pinfoLogicEjb.enviarMissatgeSolicitant(operador, pinfoID);
 			String msg = "Missatge enviat al solicitant del PINFO " + pinfoID;
 			HtmlUtils.saveMessageSuccess(request, msg);
