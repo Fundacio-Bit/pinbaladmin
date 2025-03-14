@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.DepartamentWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.DepartamentJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Departament;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Departament
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="departament.departament.plural", order=30, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/departament")
 @SessionAttributes(types = { DepartamentForm.class, DepartamentFilterForm.class })
@@ -331,7 +333,6 @@ public class DepartamentController
 
     if (departament == null) {
       createMessageWarning(request, "error.notfound", departamentID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, departamentID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitAPersAutWebValidat
 import org.fundaciobit.pinbaladmin.persistence.TramitAPersAutJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitAPersAut;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitAPersAut
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitAPersAut.tramitAPersAut.plural", order=300, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitAPersAut")
 @SessionAttributes(types = { TramitAPersAutForm.class, TramitAPersAutFilterForm.class })
@@ -302,7 +304,6 @@ public class TramitAPersAutController
 
     if (tramitAPersAut == null) {
       createMessageWarning(request, "error.notfound", persautid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, persautid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

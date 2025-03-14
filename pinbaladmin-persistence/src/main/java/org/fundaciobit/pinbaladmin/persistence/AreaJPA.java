@@ -83,18 +83,23 @@ public class AreaJPA implements Area {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Area) {
-      Area __instance = (Area)__obj;
-      __result = true;
-      __result = __result && (this.getAreaID() == __instance.getAreaID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Area) {
+            Area __instance = (Area)__obj;
+            __result = true;
+            __result = __result && (this.getAreaID() == __instance.getAreaID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getAreaID())).hashCode();
+    }
 
 // EXP  Field:areaid | Table: pad_departament | Type: 0  
 

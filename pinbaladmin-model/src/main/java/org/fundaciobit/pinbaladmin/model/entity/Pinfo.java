@@ -8,6 +8,9 @@ public interface Pinfo extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getIncidenciaID();
 	public void setIncidenciaID(java.lang.Long _incidenciaID_);
 
+	public java.lang.String getEntitat();
+	public void setEntitat(java.lang.String _entitat_);
+
 	public java.lang.String getSolicitantNIF();
 	public void setSolicitantNIF(java.lang.String _solicitantNIF_);
 
@@ -25,6 +28,12 @@ public interface Pinfo extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.String getDestinatariNIF();
 	public void setDestinatariNIF(java.lang.String _destinatariNIF_);
+
+	public java.lang.String getDestinatariNom();
+	public void setDestinatariNom(java.lang.String _destinatariNom_);
+
+	public java.lang.String getMissatgePinbal();
+	public void setMissatgePinbal(java.lang.String _missatgePinbal_);
 
   // Fitxer
   public <F extends Fitxer> F getFitxer();

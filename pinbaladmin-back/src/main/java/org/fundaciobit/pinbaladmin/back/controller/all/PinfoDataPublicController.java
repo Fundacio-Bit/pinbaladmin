@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Properties;
@@ -59,6 +60,16 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
+
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.comu.Page;
+import es.caib.pinbal.client.serveis.ServeiClient;
+import es.caib.pinbal.client.usuaris.FiltreUsuaris;
+import es.caib.pinbal.client.usuaris.UsuariClient;
+import es.caib.pinbal.client.usuaris.UsuariEntitat;
+import com.sun.jersey.api.client.ClientResponse;
 
 /**
  * 
@@ -96,12 +107,12 @@ public class PinfoDataPublicController extends PinfoDataController {
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerLogicaEjb;
 
-	public final String ALTA_BAIXA = "alta_baixa";
-	public final Long PINFODATA_ALTA = 1L;
-	public final Long PINFODATA_BAIXA = 0L;
+	public static final String ALTA_BAIXA = "alta_baixa";
+//	public final Long PINFODATA_ALTA = 1L;
+//	public final Long PINFODATA_BAIXA = 0L;
 	
-	public final Long PINFOID_DEFAULT = 1114l;
-	public final Long INCIDENCIAID_DEFAULT = 50220l;
+	public final Long PINFOID_DEFAULT = 1169l;
+	public final Long INCIDENCIAID_DEFAULT = 50275l;
 	
 	public static final String RESPONSABLE = "responsable";
 	public final String LLISTA_RESPONSABLES = "llistaResponsables";
@@ -174,9 +185,9 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("pinfoID: " + pinfoID);
 		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
 		
-		Responsable responsable = (Responsable) request.getSession().getAttribute(RESPONSABLE);
+//		Responsable responsable = (Responsable) request.getSession().getAttribute(RESPONSABLE);
 		
-		Long fitxerID = pinfoLogicEjb.generarPinfoPDF(pinfoID, responsable);
+		Long fitxerID = pinfoLogicEjb.generarPinfoPDF(pinfoID);
 		log.info("fitxerID: " + fitxerID);
 		
 		Fitxer f = fitxerLogicaEjb.findByPrimaryKey(fitxerID);
@@ -302,8 +313,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 	public List<StringKeyValue> getReferenceListForAlta(HttpServletRequest request, ModelAndView mav, Where where)
 			throws I18NException {
 		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-		__tmp.add(new StringKeyValue("1", "Alta"));
-		__tmp.add(new StringKeyValue("0", "Baixa"));
+		__tmp.add(new StringKeyValue(String.valueOf(Constants.PINFO_ALTA), "Alta"));
+		__tmp.add(new StringKeyValue(String.valueOf(Constants.PINFO_BAIXA), "Baixa"));
 
 		return __tmp;
 	}
@@ -385,6 +396,94 @@ public class PinfoDataPublicController extends PinfoDataController {
 		public void setValue(String value) {
 			this.value = value;
 		}
+	}
+
+	final String baseUrl = Configuracio.getApiPinbalClientUrl();
+	final String username = Configuracio.getApiPinbalClientUsername();
+	final String password = Configuracio.getApiPinbalClientPassword();
+	final LogLevel logLevel = LogLevel.INFO;
+
+	UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+	
+	@RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
+	public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+//		String param = (String) request.getParameter("query");
+//		log.info("param: ]" + param + "[");
+
+		String nom = (String) request.getParameter("nom");
+		log.info("nom: ]" + nom + "[");
+		String nif = (String) request.getParameter("nif");
+		log.info("nif: ]" + nif + "[");
+
+//		final String baseUrl = Configuracio.getApiPinbalClientUrl();
+//		final String username = Configuracio.getApiPinbalClientUsername();
+//		final String password = Configuracio.getApiPinbalClientPassword();
+//		final LogLevel logLevel = LogLevel.INFO;
+//
+//		log.info("Creant Clients");
+//		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+//		log.info("Clients creats");
+
+		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
+		final String ENTITAT_CIF = pinfoLogicEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
+		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
+
+		final int page = 0;
+		final int size = 10;
+		String sort = null;
+		FiltreUsuaris filter = new FiltreUsuaris();
+		filter.setIsDelegat(true);
+		
+		
+		try {
+			
+			filter.setNom(nom);
+			filter.setNif(nif);
+			
+			Page<UsuariEntitat> usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, size, sort);
+			log.info("Elems: " + usuariPage.getTotalElements());
+			log.info("Pages: " + usuariPage.getTotalPages());
+			log.info("ContentSize: " + usuariPage.getContent().size());
+			
+			log.info(usuariPage.getContent());
+			
+//			usuariPage.getContent().get(0).get
+			
+			
+			Gson g = new Gson();
+			String usuarisJson = g.toJson(usuariPage.getContent());
+
+			
+			 log.info(usuarisJson );
+
+			PrintWriter out = response.getWriter();
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			out.print(usuarisJson);
+			out.flush();
+		}catch (ClientHandlerException | UniformInterfaceException e) {
+            log.error("Error obtenirJsonUsuaris: " + e.getMessage());
+            
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print("[]");
+            out.flush();
+        }
+		
+
+//		usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, usuariPage.getTotalElements()-1, sort);
+		
+//		List<UsuariEntitat> llistatFiltrar = new java.util.ArrayList<UsuariEntitat>();
+//		for (UsuariEntitat usuari : usuariPage.getContent()) {
+//			if (usuari.getNif().contains(param) || usuari.getNom().contains(param)) {
+//				llistatFiltrar.add(usuari);
+//			}
+//		}
+		
+		
+		
 	}
 
 	@RequestMapping(value = { "/jsonProcediments" }, method = RequestMethod.GET)
@@ -490,7 +589,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		filterForm.getAdditionalButtons().clear();
 		
 		if (list.size() > 0) {
-			filterForm.addAdditionalButton(new AdditionalButton("fas fa-file-pdf", "generar.pdf",
+			filterForm.addAdditionalButton(new AdditionalButton("fas fa-user-tie", "tramitpinfo.responsable",
 			getContextWeb() + "/seleccionarResponsable", AdditionalButtonStyle.PRIMARY));
 		}
 
@@ -607,9 +706,10 @@ public class PinfoDataPublicController extends PinfoDataController {
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
 		pinfo.setDestinatariNIF(responsable.getNif());
+		pinfo.setDestinatariNom(responsable.getNomOcult());
 		pinfoLogicEjb.update(pinfo);
 
-		request.getSession().setAttribute(RESPONSABLE, responsable);
+//		request.getSession().setAttribute(RESPONSABLE, responsable);
 		
 		return "redirect:" + CONTEXT_WEB + "/generaPdf";
 	}
@@ -621,7 +721,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("crearAlta");
 		
 		//Redirigir a new amb method igual a alta.
-		request.getSession().setAttribute(ALTA_BAIXA, PINFODATA_ALTA);
+		request.getSession().setAttribute(ALTA_BAIXA, Constants.PINFO_ALTA);
 		return "redirect:" + CONTEXT_WEB + "/new";
 	}
 	
@@ -630,7 +730,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("crearBaixa");
 
 		// Redirigir a new amb method igual a baixa.
-		request.getSession().setAttribute(ALTA_BAIXA, PINFODATA_BAIXA);
+		request.getSession().setAttribute(ALTA_BAIXA, Constants.PINFO_BAIXA);
 		return "redirect:" + CONTEXT_WEB + "/new";
 	}
 	

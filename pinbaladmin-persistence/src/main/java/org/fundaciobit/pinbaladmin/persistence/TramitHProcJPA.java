@@ -224,18 +224,23 @@ public class TramitHProcJPA implements TramitHProc {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitHProc) {
-      TramitHProc __instance = (TramitHProc)__obj;
-      __result = true;
-      __result = __result && (this.getProcid() == __instance.getProcid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitHProc) {
+            TramitHProc __instance = (TramitHProc)__obj;
+            __result = true;
+            __result = __result && (this.getProcid() == __instance.getProcid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getProcid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

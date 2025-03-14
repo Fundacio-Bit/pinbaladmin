@@ -29,6 +29,7 @@ public class PinfoForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.pinfo = __toClone.pinfo;
     this.listOfIncidenciaTecnicaForIncidenciaID = __toClone.listOfIncidenciaTecnicaForIncidenciaID;
+    this.listOfValuesForEntitat = __toClone.listOfValuesForEntitat;
     this.listOfValuesForEstat = __toClone.listOfValuesForEstat;
   }
   
@@ -81,6 +82,18 @@ public class PinfoForm extends PinbalAdminBaseForm {
 
   public void setListOfIncidenciaTecnicaForIncidenciaID(List<StringKeyValue> listOfIncidenciaTecnicaForIncidenciaID) {
     this.listOfIncidenciaTecnicaForIncidenciaID = listOfIncidenciaTecnicaForIncidenciaID;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForEntitat;
+
+  public List<StringKeyValue> getListOfValuesForEntitat() {
+    return this.listOfValuesForEntitat;
+  }
+
+  public void setListOfValuesForEntitat(List<StringKeyValue> listOfValuesForEntitat) {
+    this.listOfValuesForEntitat = listOfValuesForEntitat;
   }
 
 

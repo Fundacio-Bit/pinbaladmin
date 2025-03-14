@@ -14,23 +14,29 @@ public interface PinfoFields extends java.io.Serializable {
 
 	 public static final LongField PINFOID = new LongField(_TABLE_MODEL, "pinfoID", "pinfoid");  // PK
 	 public static final LongField INCIDENCIAID = new LongField(_TABLE_MODEL, "incidenciaID", "incidenciaid");
+	 public static final StringField ENTITAT = new StringField(_TABLE_MODEL, "entitat", "entitat");
 	 public static final StringField SOLICITANTNIF = new StringField(_TABLE_MODEL, "solicitantNIF", "solicitantnif");
 	 public static final LongField ESTAT = new LongField(_TABLE_MODEL, "estat", "estat");
 	 public static final LongField FITXERID = new LongField(_TABLE_MODEL, "fitxerID", "fitxerid");
 	 public static final LongField FITXERFIRMATID = new LongField(_TABLE_MODEL, "fitxerfirmatID", "fitxerfirmatid");
 	 public static final StringField PORTAFIBID = new StringField(_TABLE_MODEL, "portafibid", "portafibid");
 	 public static final StringField DESTINATARINIF = new StringField(_TABLE_MODEL, "destinatariNIF", "destinatarinif");
+	 public static final StringField DESTINATARINOM = new StringField(_TABLE_MODEL, "destinatariNom", "destinatarinom");
+	 public static final StringField MISSATGEPINBAL = new StringField(_TABLE_MODEL, "missatgePinbal", "missatgepinbal");
 
 
   public static final Field<?>[] ALL_PINFO_FIELDS = {
     PINFOID,
     INCIDENCIAID,
+    ENTITAT,
     SOLICITANTNIF,
     ESTAT,
     FITXERID,
     FITXERFIRMATID,
     PORTAFIBID,
-    DESTINATARINIF
+    DESTINATARINIF,
+    DESTINATARINOM,
+    MISSATGEPINBAL
   };
 
 

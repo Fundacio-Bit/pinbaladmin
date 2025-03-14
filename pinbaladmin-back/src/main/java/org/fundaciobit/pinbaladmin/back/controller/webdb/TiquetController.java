@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.TiquetJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Tiquet;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Tiquet
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tiquet.tiquet.plural", order=270, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tiquet")
 @SessionAttributes(types = { TiquetForm.class, TiquetFilterForm.class })
@@ -384,7 +386,6 @@ public class TiquetController
 
     if (tiquet == null) {
       createMessageWarning(request, "error.notfound", tiquetID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, tiquetID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -601,17 +601,17 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 				
 				
 
-				// Gestio consentiment
-				{
-					String tipusConsentiment = J.getConsentimentadjunt();
-					String consentiment = J.getConsentiment();
-					String enllazConsentiment = J.getUrlconsentiment();
-
-					// XXX CONSENT: Esborrar
-					ss.setConsentiment(consentiment);
-					ss.setEnllazConsentiment(enllazConsentiment);
-					ss.setTipusConsentiment(tipusConsentiment);
-				}
+//				// Gestio consentiment
+//				{
+//					String tipusConsentiment = J.getConsentimentadjunt();
+//					String consentiment = J.getConsentiment();
+//					String enllazConsentiment = J.getUrlconsentiment();
+//
+//					// XXX CONSENT: Esborrar
+//					ss.setConsentiment(consentiment);
+//					ss.setEnllazConsentiment(enllazConsentiment);
+//					ss.setTipusConsentiment(tipusConsentiment);
+//				}
 
 				log.info("Norma Legal:" + ss.getNormaLegal());
 

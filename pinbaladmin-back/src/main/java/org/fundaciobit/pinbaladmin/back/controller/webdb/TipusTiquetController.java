@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TipusTiquetWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.TipusTiquetJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TipusTiquet;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TipusTiquet
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tipusTiquet.tipusTiquet.plural", order=260, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tipusTiquet")
 @SessionAttributes(types = { TipusTiquetForm.class, TipusTiquetFilterForm.class })
@@ -302,7 +304,6 @@ public class TipusTiquetController
 
     if (tipusTiquet == null) {
       createMessageWarning(request, "error.notfound", tipusTiquetID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, tipusTiquetID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

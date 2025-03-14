@@ -53,6 +53,7 @@ import org.jboss.ejb3.annotation.TransactionTimeout;
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Servicio;
 
@@ -692,14 +693,19 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 					final String SOLICITUD_TROBADA = "0";
 					if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 
-						int estatPinbalNew = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
-						if (estatPinbalOld != estatPinbalNew) {
-							crearMissatgeCanviEstat(solicitud, estatPinbalOld, estatPinbalNew);
+						EstadoProcedimiento estadoActual = retorno.getProcedimiento().getEstadoProcedimiento();
+						if (estatPinbalOld != estadoActual.getEstado()) {
+							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR && estadoActual.getEstado() != Constants.ESTAT_PINBAL_ERROR) {
+								crearMissatgeCanviEstat(solicitud.getSolicitudID(), estatPinbalOld, estadoActual);
+							}
 						}
+						solicitud.setEstatpinbal(estadoActual.getEstado());
 					} else {
 						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: " + retorno.getEstado().getCodigoEstado() + " - " + retorno.getEstado().getLiteralError() );
 					}
 					
+				} catch (I18NException e) {
+					log.error("Error creant event de canvi de solicitud " + solicitud.getProcedimentCodi() + ": " + e.getMessage());
 				} catch (Exception e) {
 					log.error("Error al consultar l'estat de la solicitud " + codi + ": " + e.getMessage(), e);
 					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
@@ -724,20 +730,29 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		log.info("Acaba obtenirEstatsSolicitudsPinbal()");
 	}
     
-    private void crearMissatgeCanviEstat(Solicitud solicitud, int estadoAnterior, int estadoActual) {
-		solicitud.setEstatpinbal(estadoActual);
+    private void crearMissatgeCanviEstat(Long solicitudID, int estadoAnterior, EstadoProcedimiento estadoActual) throws I18NException {
+    	String estadoAnteriorStr = getEstatString(estadoAnterior);
+    	String estadoActualStr = getEstatString(estadoActual.getEstado());
 
+    	String msgPinbal = estadoActual.getDescripcion();
+    	if (estadoActual.getObservaciones() != null && !estadoActual.getObservaciones().isEmpty()) {
+    	    msgPinbal += "<br><br><b>Observacions:</b> " + estadoActual.getObservaciones();
+    	}
+
+    	String descripcio = "<div style=\"margin: 0.5rem; font-size: 15px;\">"
+    	        + "<b>Actualització de l'estat de la sol·licitud a Pinbal</b><br>"
+    	        + "<br>"
+    	        + "<b>Estat anterior:</b> " + estadoAnteriorStr + "<br>"
+    	        + "<b>Estat actual:</b> " + estadoActualStr + "<br>"
+    	        		+ "<br>"
+    	        + msgPinbal
+    	        + "</div>";
+
+    	String asumpte = "Actualització de l'estat de la solicitud a Pinbal";
+
+		
 		// afegir event a la solicitud indicant el canvi d'estat
 		Long _incidenciaTecnicaID_ = null;
-		Long _solicitudID_ = solicitud.getSolicitudID();
-
-		String estadoAnteriorStr = getEstatString(estadoAnterior);
-		String estadoActualStr = getEstatString(estadoActual);
-		
-		String descripcio = "<div style=\"margin: 0.5rem;font-size: 15px;\">Actualització de l'estat de la solicitud a Pinbal. <br><br>Estat anterior: <b>"
-				+ estadoAnteriorStr + "</b>. Estat actual: <b>" + estadoActualStr + "</b></div>";
-
-		String asumpte = "Actualització de l'estat de la solicitud a Pinbal";
 		
 		Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
 		int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
@@ -750,13 +765,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		String _destinatariEmail_ = null;
 
 		log.info("Afegint event a la solicitud. Descripció: " + descripcio);
-		try {
-			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
-					_destinatari_, _destinatariEmail_, asumpte, descripcio, null, _noLlegit_,
-					_caidIdentificadorConsulta_, _caidNumeroSeguiment_);
-		} catch (I18NException e) {
-			log.error("Error creant event de canvi de solicitud " + solicitud.getProcedimentCodi() + ": " + e.getMessage());
-		}
+		eventLogicaEjb.create(solicitudID, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
+				_destinatari_, _destinatariEmail_, asumpte, descripcio, null, _noLlegit_,
+				_caidIdentificadorConsulta_, _caidNumeroSeguiment_);
 	}
     
 	private String getEstatString(int estado) {

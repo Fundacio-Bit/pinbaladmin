@@ -84,18 +84,23 @@ public class GrupEntitatCedentJPA implements GrupEntitatCedent {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof GrupEntitatCedent) {
-      GrupEntitatCedent __instance = (GrupEntitatCedent)__obj;
-      __result = true;
-      __result = __result && (this.getGrupEntitatCedentID() == __instance.getGrupEntitatCedentID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof GrupEntitatCedent) {
+            GrupEntitatCedent __instance = (GrupEntitatCedent)__obj;
+            __result = true;
+            __result = __result && (this.getGrupEntitatCedentID() == __instance.getGrupEntitatCedentID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getGrupEntitatCedentID())).hashCode();
+    }
 
 // IMP Field:grupentitatid | Table: pad_grupentitat | Type: 1  
 

@@ -42,6 +42,46 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.ENTITAT)}">
+        <tr id="pinfo_entitat_rowid">
+          <td id="pinfo_entitat_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.ENTITAT])?'pinfo.entitat':__theForm.labels[PinfoFields.ENTITAT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.ENTITAT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.ENTITAT]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_entitat_columnvalueid">
+          <form:errors path="pinfo.entitat" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,PinfoFields.ENTITAT)}" >
+          <form:hidden path="pinfo.entitat"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.pinfo.entitat,__theForm.listOfValuesForEntitat)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,PinfoFields.ENTITAT)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="pinfo_entitat"  onchange="if(typeof onChangeEntitat == 'function') {  onChangeEntitat(this); };"  cssClass="form-control col-md-9-optional" path="pinfo.entitat">
+            <c:forEach items="${__theForm.listOfValuesForEntitat}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.pinfo.entitat }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.pinfo.entitat }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.SOLICITANTNIF)}">
         <tr id="pinfo_solicitantNIF_rowid">
           <td id="pinfo_solicitantNIF_columnlabelid">
@@ -244,6 +284,63 @@
             <form:errors path="pinfo.destinatariNIF" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.DESTINATARINIF)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,PinfoFields.DESTINATARINIF)? ' uneditable-input' : ''}"  style="" maxlength="100" path="pinfo.destinatariNIF"   />
 
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.DESTINATARINOM)}">
+        <tr id="pinfo_destinatariNom_rowid">
+          <td id="pinfo_destinatariNom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.DESTINATARINOM])?'pinfo.destinatariNom':__theForm.labels[PinfoFields.DESTINATARINOM]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.DESTINATARINOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.DESTINATARINOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_destinatariNom_columnvalueid">
+            <form:errors path="pinfo.destinatariNom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.DESTINATARINOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,PinfoFields.DESTINATARINOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="pinfo.destinatariNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.MISSATGEPINBAL)}">
+        <tr id="pinfo_missatgePinbal_rowid">
+          <td id="pinfo_missatgePinbal_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.MISSATGEPINBAL])?'pinfo.missatgePinbal':__theForm.labels[PinfoFields.MISSATGEPINBAL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.MISSATGEPINBAL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.MISSATGEPINBAL]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_missatgePinbal_columnvalueid">
+              <form:errors path="pinfo.missatgePinbal" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.MISSATGEPINBAL)? 'true' : 'false'}" path="pinfo.missatgePinbal"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_missatgePinbal" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_missatgePinbal" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgePinbal'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgePinbal'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgePinbal'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_missatgePinbal').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_missatgePinbal').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_missatgePinbal').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
            </td>
         </tr>
         </c:if>

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.AreaWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.AreaJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Area;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Area
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="area.area.plural", order=0, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/area")
 @SessionAttributes(types = { AreaForm.class, AreaFilterForm.class })
@@ -331,7 +333,6 @@ public class AreaController
 
     if (area == null) {
       createMessageWarning(request, "error.notfound", areaID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, areaID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

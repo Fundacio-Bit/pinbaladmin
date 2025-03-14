@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.OrganWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Organ
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="organ.organ.plural", order=200, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/organ")
 @SessionAttributes(types = { OrganForm.class, OrganFilterForm.class })
@@ -331,7 +333,6 @@ public class OrganController
 
     if (organ == null) {
       createMessageWarning(request, "error.notfound", organid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, organid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

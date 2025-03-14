@@ -158,18 +158,23 @@ public class TramitECteAudJPA implements TramitECteAud {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitECteAud) {
-      TramitECteAud __instance = (TramitECteAud)__obj;
-      __result = true;
-      __result = __result && (this.getCteaudid() == __instance.getCteaudid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitECteAud) {
+            TramitECteAud __instance = (TramitECteAud)__obj;
+            __result = true;
+            __result = __result && (this.getCteaudid() == __instance.getCteaudid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getCteaudid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

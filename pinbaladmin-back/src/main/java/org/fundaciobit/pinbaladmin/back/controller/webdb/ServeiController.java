@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.ServeiWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Servei
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="servei.servei.plural", order=230, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/servei")
 @SessionAttributes(types = { ServeiForm.class, ServeiFilterForm.class })
@@ -398,7 +400,6 @@ public class ServeiController
 
     if (servei == null) {
       createMessageWarning(request, "error.notfound", serveiID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, serveiID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

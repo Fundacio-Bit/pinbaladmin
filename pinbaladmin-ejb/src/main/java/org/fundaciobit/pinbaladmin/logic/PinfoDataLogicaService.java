@@ -25,4 +25,8 @@ public interface PinfoDataLogicaService extends PinfoDataService {
     public IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa() throws I18NException;
 
     public List<String> getResponsablesProcedimentsPinfos(Long pinfoID) throws I18NException;
+
+	public void procesarPermisosPinfo(Long pinfoID) throws I18NException;
+
+	public void llistatUsuarisPinbal();
 }

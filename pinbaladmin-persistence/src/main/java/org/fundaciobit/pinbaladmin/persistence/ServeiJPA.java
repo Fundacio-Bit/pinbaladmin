@@ -174,18 +174,23 @@ public class ServeiJPA implements Servei {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Servei) {
-      Servei __instance = (Servei)__obj;
-      __result = true;
-      __result = __result && (this.getServeiID() == __instance.getServeiID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Servei) {
+            Servei __instance = (Servei)__obj;
+            __result = true;
+            __result = __result && (this.getServeiID() == __instance.getServeiID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getServeiID())).hashCode();
+    }
 
 // EXP  Field:serveiid | Table: pad_pinfodata | Type: 0  
 

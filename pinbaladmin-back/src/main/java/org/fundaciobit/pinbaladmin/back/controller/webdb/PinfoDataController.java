@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.PinfoDataWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un PinfoData
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="pinfoData.pinfoData.plural", order=220, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/pinfoData")
 @SessionAttributes(types = { PinfoDataForm.class, PinfoDataFilterForm.class })
@@ -419,7 +421,6 @@ public class PinfoDataController
 
     if (pinfoData == null) {
       createMessageWarning(request, "error.notfound", pinfodataID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, pinfodataID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -149,11 +149,11 @@ public class PinfoPublicController extends PinfoController {
 
 		log.info("Paso 1: /enviarPinfoPortaFIB/" + pinfoID);
 
-		Responsable responsable = (Responsable) request.getSession().getAttribute(PinfoDataPublicController.RESPONSABLE);
+		//Responsable responsable = (Responsable) request.getSession().getAttribute(PinfoDataPublicController.RESPONSABLE);
 		
 
 		//EJB Per enviar peticio a firmar
-		pinfoLogicaEjb.enviarPinfoPortaFIB(pinfoID, responsable);
+		pinfoLogicaEjb.enviarPinfoPortaFIB(pinfoID); //, responsable);
 		
 		//Redirect to llistat events.
 		Long incidenciaID = pinfoLogicaEjb.executeQueryOne(PinfoFields.INCIDENCIAID, PinfoFields.PINFOID.equal(pinfoID));

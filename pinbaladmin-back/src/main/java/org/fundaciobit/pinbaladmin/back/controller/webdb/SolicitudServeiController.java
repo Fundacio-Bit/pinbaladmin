@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un SolicitudServei
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="solicitudServei.solicitudServei.plural", order=250, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/solicitudServei")
 @SessionAttributes(types = { SolicitudServeiForm.class, SolicitudServeiFilterForm.class })
@@ -424,7 +426,6 @@ public class SolicitudServeiController
 
     if (solicitudServei == null) {
       createMessageWarning(request, "error.notfound", id);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, id), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

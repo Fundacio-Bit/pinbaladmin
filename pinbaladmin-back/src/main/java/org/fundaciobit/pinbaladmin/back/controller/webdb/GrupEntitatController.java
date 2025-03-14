@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.GrupEntitatWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.GrupEntitatJPA;
 import org.fundaciobit.pinbaladmin.model.entity.GrupEntitat;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un GrupEntitat
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="grupEntitat.grupEntitat.plural", order=150, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/grupEntitat")
 @SessionAttributes(types = { GrupEntitatForm.class, GrupEntitatFilterForm.class })
@@ -302,7 +304,6 @@ public class GrupEntitatController
 
     if (grupEntitat == null) {
       createMessageWarning(request, "error.notfound", grupEntitatID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, grupEntitatID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

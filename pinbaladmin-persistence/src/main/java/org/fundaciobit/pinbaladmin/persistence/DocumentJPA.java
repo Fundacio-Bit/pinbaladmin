@@ -134,18 +134,23 @@ public class DocumentJPA implements Document {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Document) {
-      Document __instance = (Document)__obj;
-      __result = true;
-      __result = __result && (this.getDocumentID() == __instance.getDocumentID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Document) {
+            Document __instance = (Document)__obj;
+            __result = true;
+            __result = __result && (this.getDocumentID() == __instance.getDocumentID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDocumentID())).hashCode();
+    }
 
 // EXP  Field:documentid | Table: pad_documentsolicitud | Type: 0  
 

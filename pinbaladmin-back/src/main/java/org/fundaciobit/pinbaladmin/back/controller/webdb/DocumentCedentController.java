@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.DocumentCedentJPA;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentCedent;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un DocumentCedent
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="documentCedent.documentCedent.plural", order=50, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/documentCedent")
 @SessionAttributes(types = { DocumentCedentForm.class, DocumentCedentFilterForm.class })
@@ -340,7 +342,6 @@ public class DocumentCedentController
 
     if (documentCedent == null) {
       createMessageWarning(request, "error.notfound", documentCedentID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, documentCedentID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

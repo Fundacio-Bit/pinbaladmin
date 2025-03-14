@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitHProcWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.TramitHProcJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitHProc
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitHProc.tramitHProc.plural", order=370, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitHProc")
 @SessionAttributes(types = { TramitHProcForm.class, TramitHProcFilterForm.class })
@@ -360,7 +362,6 @@ public class TramitHProcController
 
     if (tramitHProc == null) {
       createMessageWarning(request, "error.notfound", procid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, procid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

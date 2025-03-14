@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Event
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="event.event.plural", order=120, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/event")
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
@@ -387,7 +389,6 @@ public class EventController
 
     if (event == null) {
       createMessageWarning(request, "error.notfound", eventID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, eventID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

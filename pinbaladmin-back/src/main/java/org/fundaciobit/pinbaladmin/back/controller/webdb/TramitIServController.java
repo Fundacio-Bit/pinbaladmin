@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.TramitIServJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitIServ;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitIServ
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitIServ.tramitIServ.plural", order=380, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitIServ")
 @SessionAttributes(types = { TramitIServForm.class, TramitIServFilterForm.class })
@@ -340,7 +342,6 @@ public class TramitIServController
 
     if (tramitIServ == null) {
       createMessageWarning(request, "error.notfound", servid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, servid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

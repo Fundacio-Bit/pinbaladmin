@@ -94,18 +94,23 @@ public class CampSolicitudJPA implements CampSolicitud {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof CampSolicitud) {
-      CampSolicitud __instance = (CampSolicitud)__obj;
-      __result = true;
-      __result = __result && (this.getCampSolicitudID() == __instance.getCampSolicitudID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof CampSolicitud) {
+            CampSolicitud __instance = (CampSolicitud)__obj;
+            __result = true;
+            __result = __result && (this.getCampSolicitudID() == __instance.getCampSolicitudID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getCampSolicitudID())).hashCode();
+    }
 
 // IMP Field:campformulariid | Table: pad_campformulari | Type: 1  
 

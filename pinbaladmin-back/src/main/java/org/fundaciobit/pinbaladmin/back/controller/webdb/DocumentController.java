@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Document
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="document.document.plural", order=40, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/document")
 @SessionAttributes(types = { DocumentForm.class, DocumentFilterForm.class })
@@ -336,7 +338,6 @@ public class DocumentController
 
     if (document == null) {
       createMessageWarning(request, "error.notfound", documentID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, documentID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

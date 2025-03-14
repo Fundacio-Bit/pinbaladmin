@@ -92,18 +92,23 @@ public class EntitatServeiJPA implements EntitatServei {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof EntitatServei) {
-      EntitatServei __instance = (EntitatServei)__obj;
-      __result = true;
-      __result = __result && (this.getEntitatServeiID() == __instance.getEntitatServeiID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof EntitatServei) {
+            EntitatServei __instance = (EntitatServei)__obj;
+            __result = true;
+            __result = __result && (this.getEntitatServeiID() == __instance.getEntitatServeiID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getEntitatServeiID())).hashCode();
+    }
 
 // EXP  Field:entitatserveiid | Table: pad_documentcedent | Type: 0  
 

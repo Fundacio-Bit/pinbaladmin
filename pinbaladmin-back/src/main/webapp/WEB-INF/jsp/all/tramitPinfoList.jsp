@@ -194,7 +194,7 @@
 <%-- 						<p>PinfoID : ${pinfoDataFull.pinfoID}</p> --%>
 						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
 							<div class="info-usuari-full">
-								<div class="pinfodata-user">Usuari: ${usuari.usuariID}</div>
+								<div class="pinfodata-user">Usuari: ${usuari.usuariNom} - ${usuari.usuariNif} - ${usuari.usuariCodi} </div>
 								
 								<c:forEach var="procediment" items="${usuari.procediments}">
 									<c:set var="altes" value="${procediment.altes}" />

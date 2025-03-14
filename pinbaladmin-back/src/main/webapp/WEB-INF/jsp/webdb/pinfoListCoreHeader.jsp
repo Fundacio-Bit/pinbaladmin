@@ -18,6 +18,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.INCIDENCIAID)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.INCIDENCIAID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.ENTITAT)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.ENTITAT)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNIF)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.SOLICITANTNIF)}</th>
         </c:if>
@@ -35,6 +38,12 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.DESTINATARINIF)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.DESTINATARINIF)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.DESTINATARINOM)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.DESTINATARINOM)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.MISSATGEPINBAL)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.MISSATGEPINBAL)}</th>
         </c:if>
 
 

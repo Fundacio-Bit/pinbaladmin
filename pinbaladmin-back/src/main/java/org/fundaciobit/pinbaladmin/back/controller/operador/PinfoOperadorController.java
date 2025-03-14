@@ -9,14 +9,17 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoForm;
+import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
@@ -41,7 +44,10 @@ public class PinfoOperadorController extends PinfoController {
 	public static final String WEBCONTEXT = "/operador/pinfo";
 	
 	@EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
-	protected PinfoDataLogicaService pinfoDataLogicEjb;
+	protected PinfoDataLogicaService pinfoDataLogicaEjb;
+	
+	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
+	protected PinfoLogicaService pinfoLogicEjb;
 
 	@Override
 	public String getTileForm() {
@@ -63,27 +69,31 @@ public class PinfoOperadorController extends PinfoController {
 			throws I18NException {
 		PinfoFilterForm pinfoFilterForm = super.getPinfoFilterForm(pagina, mav, request);
 
-//		String str = "";
-//		Where i = new PinfoQueryPath().FITXER().NOM().like("%" + str + "%");
-		
 		if (pinfoFilterForm.isNou()) {
 			pinfoFilterForm.setVisibleMultipleSelection(false);
 			pinfoFilterForm.setDeleteButtonVisible(false);
 			pinfoFilterForm.setDeleteSelectedButtonVisible(false);
-			pinfoFilterForm.setEditButtonVisible(false);
+			pinfoFilterForm.setEditButtonVisible(true);
 			pinfoFilterForm.setViewButtonVisible(true);
-
+			
+			pinfoFilterForm.addHiddenField(ENTITAT);
 			pinfoFilterForm.addHiddenField(PORTAFIBID);
-			pinfoFilterForm.addHiddenField(FITXERID);
+//			pinfoFilterForm.addHiddenField(FITXERID);
 			pinfoFilterForm.addHiddenField(FITXERFIRMATID);
+			pinfoFilterForm.addHiddenField(DESTINATARINIF);
+			pinfoFilterForm.addHiddenField(DESTINATARINOM);
+			pinfoFilterForm.addHiddenField(MISSATGEPINBAL);
 			
 			//Afegir filtre per NifSolicitant, NifDestinatari, idpinfo,
 			List<Field<?>> filterBy = pinfoFilterForm.getDefaultFilterByFields();
-			filterBy.add(PinfoFields.DESTINATARINIF);
+		//	filterBy.add(PinfoFields.DESTINATARINIF);
 			filterBy.add(PinfoFields.SOLICITANTNIF);
 			filterBy.add(PinfoFields.PINFOID);
 			
 			pinfoFilterForm.setFilterByFields(filterBy);
+			
+			pinfoFilterForm.setOrderBy(PinfoFields.PINFOID.fullName);
+			pinfoFilterForm.setOrderAsc(false);
 		}
 
 		return pinfoFilterForm;
@@ -99,29 +109,77 @@ public class PinfoOperadorController extends PinfoController {
 			PinfoJPA pinfo = pinfoForm.getPinfo();
 			Long estat = pinfo.getEstat();
 			
-			if (estat == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
+			if (estat == Constants.ESTAT_PINFO_CREANT) {
+				pinfoForm.addHiddenField(FITXERID);
+				pinfoForm.addHiddenField(FITXERFIRMATID);
+				pinfoForm.addHiddenField(PORTAFIBID);
+				pinfoForm.addHiddenField(DESTINATARINIF);
+				pinfoForm.addHiddenField(DESTINATARINOM);
+				pinfoForm.addHiddenField(MISSATGEPINBAL);
+				
+			} else if (estat == Constants.ESTAT_PINFO_PENDENT_FIRMA) {
+				pinfoForm.addHiddenField(FITXERFIRMATID);
+				pinfoForm.addHiddenField(MISSATGEPINBAL);
+
+			} else if (estat == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
+				pinfoForm.addHiddenField(FITXERID);
+				pinfoForm.addHiddenField(PORTAFIBID);
+				pinfoForm.addHiddenField(MISSATGEPINBAL);
+
 				pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-cogs", "procesar.pinfo",
 						WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+
+			} else if (estat == Constants.ESTAT_PINFO_TRAMITAT) {
+				pinfoForm.addHiddenField(FITXERID);
+				pinfoForm.addHiddenField(PORTAFIBID);
+
+				pinfoForm.addAdditionalButton(
+						new AdditionalButton("fas fa-paper-plane", "tramitpinfo.enviarmissatge.solicitant",
+								WEBCONTEXT + "/enviarMissatgeSolicitant/{0}", AdditionalButtonStyle.SUCCESS));
 			}
-			
 		}
 
 		return pinfoForm;
 	}
 	
-	
 	@RequestMapping(value = "/procesarPinfo/{pinfoID}")
-	public String procesarPinfo(HttpServletRequest request, ModelAndView mav, @PathVariable("pinfoID") java.lang.Long pinfoID) throws I18NException {
+	public String procesarPinfo(HttpServletRequest request, ModelAndView mav, @PathVariable("pinfoID") java.lang.Long pinfoID) {
 		
-		Where wPinfoID = PinfoFields.PINFOID.equal(pinfoID);
-		List<PinfoData> pinfoDatas =  pinfoDataLogicEjb.select(wPinfoID);
-		
-		log.info("Procesant PinfoData " + pinfoDatas.size());
-		
-		for (PinfoData pinfoData : pinfoDatas) {	
-			log.info("Procesant PinfoData " + pinfoData.getPinfodataID() + ": usr[" + pinfoData.getUsuariid() + "] - ["
-					+ pinfoData.getProcedimentID() + "] - [" + pinfoData.getServeiID() + "] - [" + pinfoData.getAlta() + "]");
+		try {
+			pinfoDataLogicaEjb.procesarPermisosPinfo(pinfoID);
+		} catch (I18NException e) {
+			String msg = "Error Procesant PINFO " + pinfoID + ": " + I18NUtils.getMessage(e);
+			log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
 		}
+		
+		return "redirect:" + WEBCONTEXT + "/view/" + pinfoID;
+	}
+	
+	@RequestMapping(value = "/enviarMissatgeSolicitant/{pinfoID}")
+	public String enviarMissatgeSolicitant(HttpServletRequest request, ModelAndView mav,
+			@PathVariable("pinfoID") java.lang.Long pinfoID) {
+
+		try {
+			String operador = LoginInfo.getInstance().getUserInfo().getFullName();
+			pinfoLogicEjb.enviarMissatgeSolicitant(operador, pinfoID);
+			String msg = "Missatge enviat al solicitant del PINFO " + pinfoID;
+			HtmlUtils.saveMessageSuccess(request, msg);
+			
+		} catch (I18NException e) {
+			String msgError = I18NUtils.getMessage(e);
+			log.error(msgError, e);
+			HtmlUtils.saveMessageError(request, msgError);
+		}
+
+		return "redirect:" + WEBCONTEXT + "/view/" + pinfoID;
+	}
+	
+	@RequestMapping(value = "/llistatUsuaris/{pinfoID}")
+	public String llistatUsuaris(HttpServletRequest request, ModelAndView mav, @PathVariable("pinfoID") java.lang.Long pinfoID) {
+
+		
+		pinfoDataLogicaEjb.llistatUsuarisPinbal();
 		
 		return "redirect:" + WEBCONTEXT + "/view/" + pinfoID;
 
@@ -146,20 +204,48 @@ public class PinfoOperadorController extends PinfoController {
 	@Override
 	public void postList(HttpServletRequest request, ModelAndView mav, PinfoFilterForm filterForm, List<Pinfo> list)
 			throws I18NException {
+
+		filterForm.getAdditionalButtonsByPK().clear();
+
 		super.postList(request, mav, filterForm, list);
-		//afegir botó per veure events d'un Pinfo
+		// afegir botó per veure events d'un Pinfo
+
+		for (Pinfo pinfo : list) {
+			Long pinfoID = pinfo.getPinfoID();
+			Long incidenciaID = pinfo.getIncidenciaID();
+
+			filterForm.addAdditionalButtonByPK(pinfoID,
+					new AdditionalButton("fas fa-bullhorn", "veure.events",
+							EventIncidenciaTecnicaOperadorController.CONTEXT_PATH + "/veureevents/" + incidenciaID,
+							AdditionalButtonStyle.SUCCESS));
+
+			if (pinfo.getEstat() == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
+				filterForm.addAdditionalButtonByPK(pinfoID, new AdditionalButton("fas fa-cogs", "procesar.pinfo",
+						WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+
+			} else if (pinfo.getEstat() == Constants.ESTAT_PINFO_TRAMITAT) {
+				filterForm.addAdditionalButtonByPK(pinfoID,
+						new AdditionalButton("fas fa-paper-plane", "tramitpinfo.enviarmissatge.solicitant",
+								WEBCONTEXT + "/enviarMissatgeSolicitant/{0}", AdditionalButtonStyle.LIGHT));
+			}
+		}
 	}
 	
 	@Override
 	public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
 
 		Long[] estats = { Constants.ESTAT_PINFO_PENDENT_FIRMA, Constants.ESTAT_PINFO_PENDENT_TRAMITAR,
-				Constants.ESTAT_PINFO_TRAMITAT };
+				Constants.ESTAT_PINFO_TRAMITAT, Constants.ESTAT_PINFO_NOTIFICAT };
 		
 		Where wEstats = PinfoFields.ESTAT.in(estats);
 
 		return Where.AND(super.getAdditionalCondition(request), wEstats);
 	}
 	
-	
+	@Override
+	public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request, ModelAndView mav, Where where)
+			throws I18NException {
+		return pinfoLogicEjb.getEntitats();
+	}
+
 }

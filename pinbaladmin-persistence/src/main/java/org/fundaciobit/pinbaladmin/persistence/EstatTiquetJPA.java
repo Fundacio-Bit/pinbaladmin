@@ -59,18 +59,23 @@ public class EstatTiquetJPA implements EstatTiquet {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof EstatTiquet) {
-      EstatTiquet __instance = (EstatTiquet)__obj;
-      __result = true;
-      __result = __result && (this.getEstatTiquetID() == __instance.getEstatTiquetID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof EstatTiquet) {
+            EstatTiquet __instance = (EstatTiquet)__obj;
+            __result = true;
+            __result = __result && (this.getEstatTiquetID() == __instance.getEstatTiquetID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getEstatTiquetID())).hashCode();
+    }
 
 // EXP  Field:estattiquetid | Table: pad_tiquet | Type: 0  
 

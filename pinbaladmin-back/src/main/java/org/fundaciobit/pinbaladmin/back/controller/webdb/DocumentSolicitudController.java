@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.DocumentSolicitudWebVali
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un DocumentSolicitud
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="documentSolicitud.documentSolicitud.plural", order=70, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/documentSolicitud")
 @SessionAttributes(types = { DocumentSolicitudForm.class, DocumentSolicitudFilterForm.class })
@@ -355,7 +357,6 @@ public class DocumentSolicitudController
 
     if (documentSolicitud == null) {
       createMessageWarning(request, "error.notfound", documentSolicitudID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, documentSolicitudID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

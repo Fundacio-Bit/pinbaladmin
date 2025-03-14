@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,24 +17,45 @@ import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
+import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.PinfoDataEJB;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
+import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
+import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.IPluginIB;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 
-import org.fundaciobit.pluginsib.utils.ldap.LDAPConstants;
-import org.fundaciobit.pluginsib.utils.ldap.LDAPUser;
-import org.fundaciobit.pluginsib.utils.ldap.LDAPUserManager;
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.comu.Page;
+import es.caib.pinbal.client.procediments.Procediment;
+import es.caib.pinbal.client.procediments.ProcedimentClient;
+import es.caib.pinbal.client.serveis.Servei;
+import es.caib.pinbal.client.serveis.ServeiClient;
+import es.caib.pinbal.client.usuaris.FiltreUsuaris;
+import es.caib.pinbal.client.usuaris.PermisosServei;
+import es.caib.pinbal.client.usuaris.ProcedimentServei;
+import es.caib.pinbal.client.usuaris.UsuariClient;
+import es.caib.pinbal.client.usuaris.UsuariEntitat;
 
+//import org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * 
@@ -48,6 +70,9 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 	@EJB(mappedName = ServeiLogicaService.JNDI_NAME)
 	protected ServeiLogicaService serveiLogicaEjb;
+	
+	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
+	protected PinfoLogicaService pinfoLogicaEjb;
 	
 	@Override
 	@PermitAll
@@ -83,7 +108,19 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 	@Override
 	public PinfoDataFull getEstructuraUsuarisProcedimentServeis(Long pinfoID) throws I18NException {
+		final String ENTITAT_CIF = pinfoLogicaEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
+		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
 		
+		 //= "GOVERN"; // "S0711001H";
+		// final String CODI_USUARI = "e45186147w"; //"S0711001H";
+
+		final String baseUrl = Configuracio.getApiPinbalClientUrl();
+		final String username = Configuracio.getApiPinbalClientUsername();
+		final String password = Configuracio.getApiPinbalClientPassword();
+		final LogLevel logLevel = LogLevel.INFO;
+
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+
 		log.info("getEstructuraUsuarisProcedimentServeis per PINFO" + pinfoID);
 		
 		OrderBy orderByServ = new OrderBy(PinfoDataFields.SERVEIID, OrderType.ASC);
@@ -119,11 +156,18 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			// Si es distinto, uno nuevo, sino, cojemos el anterior.
 			if (nouUsuari) {
 //				log.info("Creant nou usuari amb nova llista de procediments");
-				UsuariData usuariData = new UsuariData(usuariID, new ArrayList<ProcedimentData>());
-				procedimentsList = usuariData.getProcediments();
-				lastUsuariData = usuariData;
-				lastUsuariID = usuariID;
-				usuarisList.add(usuariData);
+				try {
+					UsuariEntitat usuariEntitat = usuariClient.getUsuari(usuariID, ENTITAT_CIF);
+					UsuariData usuariData = new UsuariData(usuariEntitat.getCodi(), usuariEntitat.getNif(), usuariEntitat.getNom(), new ArrayList<ProcedimentData>());
+					procedimentsList = usuariData.getProcediments();
+					lastUsuariData = usuariData;
+					lastUsuariID = usuariID;
+					usuarisList.add(usuariData);
+				} catch (Exception e) {
+					String msg = "Error obtenint usuari " + usuariID + ": " + e.getMessage();
+					log.error(msg, e);
+					throw new I18NException("genapp.comodi", msg);
+				}
 			} else {
 //				log.info("Usuari " + usuariID + " ja existent, afegirem al seu procediment.");
 				procedimentsList = lastUsuariData.getProcediments();
@@ -169,7 +213,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	private void printPinfoDataFull(PinfoDataFull pinfoDataFull) {
 		log.info("PinfoDataFull: " + pinfoDataFull.getPinfoID());
 		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
-			log.info("Usuari: " + usuariData.getUsuariID());
+			log.info("Usuari: " + usuariData.getUserInfo());
 			for (ProcedimentData procedimentData : usuariData.getProcediments()) {
 				log.info("\tProcediment: " + procedimentData.getProcedimentID());
 				
@@ -297,28 +341,55 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	}
 
 	public class UsuariData {
-		private String usuariID;
+		private String usuariCodi;
+		private String usuariNif;
+		private String usuariNom;
+
 		private List<ProcedimentData> procediments = new ArrayList<ProcedimentData>();
 
-		public UsuariData(String usuariID, List<ProcedimentData> procediments) {
-			this.usuariID = usuariID;
+		public UsuariData(String usuariCodi, String usuariNif, String usuariNom, List<ProcedimentData> procediments) {
+			this.usuariCodi = usuariCodi;
+			this.usuariNif = usuariNif;
+			this.usuariNom = usuariNom;
+			
+			
 			this.procediments = procediments;
-		}
-
-		public String getUsuariID() {
-			return this.usuariID;
 		}
 
 		public List<ProcedimentData> getProcediments() {
 			return this.procediments;
 		}
 
-		public void setUsuariID(String usuariID) {
-			this.usuariID = usuariID;
-		}
-
 		public void setProcediments(List<ProcedimentData> procediments) {
 			this.procediments = procediments;
+		}
+
+		public String getUsuariCodi() {
+			return usuariCodi;
+		}
+
+		public void setUsuariCodi(String usuariCodi) {
+			this.usuariCodi = usuariCodi;
+		}
+
+		public String getUsuariNif() {
+			return usuariNif;
+		}
+
+		public void setUsuariNif(String usuariNif) {
+			this.usuariNif = usuariNif;
+		}
+
+		public String getUsuariNom() {
+			return usuariNom;
+		}
+
+		public void setUsuariNom(String usuariNom) {
+			this.usuariNom = usuariNom;
+		}
+		
+		public String getUserInfo() {
+			return this.usuariCodi + " - " + this.usuariNif + " - " + this.usuariNom;
 		}
 	}
 
@@ -531,5 +602,270 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		return responsablesList;
 	}
 	
+//	@Override
+	public void procesarPermisosPinfoOld(Long pinfoID) throws I18NException {
+
+		//Cambiar todo esto por un select where pinfoID = pinfoID.
+//		PinfoDataFull pinfoDataFull = this.getEstructuraUsuarisProcedimentServeis(pinfoID);
+//		log.info("Procesant PinfoDatas " + pinfoDataFull);
+//
+//		for (UsuariData user : pinfoDataFull.getUsuaris()) {
+//			for (ProcedimentData proc : user.getProcediments()) {
+//				for (ServeiData serv : proc.getAltes()) {
+//					log.info("ALTA: " + user.getUsuariID() + " - " + proc.getProcediment() + " - "
+//							+ serv.getServei());
+//				}
+//				for (ServeiData serv : proc.getBaixes()) {
+//					log.info("BAIXA: " + user.getUsuariID() + " - " + proc.getProcediment() + " - "
+//							+ serv.getServei());
+//				}
+//			}
+//		}
+
+		Where where = PinfoDataFields.PINFOID.equal(pinfoID);
+		List<PinfoData> pinfoDatas = this.select(where);
+		
+		for (PinfoData pinfoData : pinfoDatas) {
+
+			String usuariID = pinfoData.getUsuariid();
+			
+			String procedimentCodi = solicitudLogicaEjb.executeQueryOne(SolicitudFields.PROCEDIMENTCODI,
+					SolicitudFields.SOLICITUDID.equal(pinfoData.getProcedimentID()));
+
+			String serveiCodi = serveiLogicaEjb.executeQueryOne(ServeiFields.CODI,
+					ServeiFields.SERVEIID.equal(pinfoData.getServeiID()));
+			
+			String action = pinfoData.getAlta() == Constants.PINFO_ALTA ? "ALTA" : "BAIXA";
+
+			cridadaPinbalPermisos(usuariID, procedimentCodi, serveiCodi, action);
+		}
+	}
 	
+	@Override
+	public void procesarPermisosPinfo(Long pinfoID) throws I18NException {
+        final String ENTITAT_CIF = "GOVERN"; //"S0711001H";
+       // final String CODI_USUARI = "e45186147w"; //"S0711001H";
+		
+        PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
+		List<String> missatges = new ArrayList<String>();
+        
+    	final String baseUrl = Configuracio.getApiPinbalClientUrl();
+    	final String username = Configuracio.getApiPinbalClientUsername();
+    	final String password = Configuracio.getApiPinbalClientPassword();
+    	final LogLevel logLevel = LogLevel.INFO;
+
+        log.info("Creant Clients");
+
+		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+		
+		log.info("Clients creats");
+		
+		PinfoDataFull pinfoDataFull = getEstructuraUsuarisProcedimentServeis(pinfoID);
+		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
+			
+			try {
+				String codiUsuari =  usuariData.getUsuariCodi();
+				log.info("Usuari: " + usuariData.getUserInfo());
+//				UsuariEntitat usuariEntitat = usuariClient.getUsuari(codiUsuari, ENTITAT_CIF);
+//				log.info(objectToJsonString(usuariEntitat));
+
+				List<ProcedimentServei> procedimentServeiList = new ArrayList<ProcedimentServei>();
+
+				for (ProcedimentData procedimentData : usuariData.getProcediments()) {
+					String procedimentCodi = procedimentData.getCodi();
+					log.info("procedimentCodi: " + procedimentCodi);
+					Long procedimentId = null;
+					try {
+						Procediment procediment = procedimentClient.getProcediment(procedimentCodi, ENTITAT_CIF);
+//						log.info(objectToJsonString(procediment));
+						procedimentId = procediment.getId();
+								
+                    } catch (Throwable t) {
+                    	//El procediment no existeix a Pinbal. No fem res.
+                    	String msg = "El procediment " + procedimentCodi + " no existeix a Pinbal.";
+                    	missatges.add(msg);
+                    	continue;
+					}
+
+					for (ServeiData serveiData : procedimentData.getAltes()) {
+						String serveiCodi = null;
+
+						try {
+							log.info("serveiCodi: " + serveiData.getServei());
+							Servei servei = serveiClient.getServei(serveiData.getServei());
+							log.info(objectToJsonString(servei));
+							serveiCodi = servei.getCodi();
+									
+	                    } catch (Throwable t) {
+	                    	//El procediment no existeix a Pinbal. No fem res.
+	                    	String msg = "El servei " + serveiData.getServei() + " no existeix a Pinbal.";
+	                    	missatges.add(msg);
+	                    	log.error(msg);
+	                    	continue;
+						}
+						// Afegim el servei al procediment perque nomes demanaran permisos que a
+						// PinbalAdmin estan autoritzats.
+						if (procedimentId != null && serveiCodi != null) {
+							log.info("ProcemintId: " + procedimentId + " - ServeiCodi: " + serveiCodi);
+							try {
+								procedimentClient.enableServeiToProcediment(procedimentId, serveiCodi);
+								log.info("Servei afegit al procediment.");
+								procedimentServeiList.add(new ProcedimentServei(procedimentCodi, serveiCodi));
+								
+		                    } catch (Throwable t) {
+		                    	//El procediment no existeix a Pinbal. No fem res.
+								String msg = "El servei " + serveiData.getServei()
+										+ " no es pot autoritzar per el procediment " + procedimentCodi + ".";
+		                    	missatges.add(msg);
+		                    	log.error(msg);
+							}
+						}
+					}
+				}
+
+				if (procedimentServeiList.isEmpty()) {
+					String msg = "No hi ha serveis a afegir. Usuari: " + codiUsuari;
+					missatges.add(msg);
+					continue;
+				}
+				
+				PermisosServei permisosServei = new PermisosServei(codiUsuari, ENTITAT_CIF, procedimentServeiList);
+				log.info(objectToJsonString(permisosServei));
+
+				usuariClient.grantPermissions(codiUsuari, permisosServei);
+				String msg = "Permisos afegits correctament per usuari " + codiUsuari + ": \n";
+				missatges.add(msg);
+				log.info(msg);
+				log.info(objectToJsonString(permisosServei));
+
+			} catch (Throwable t) {
+				String msg = "Error processant permisos per usuari " + usuariData.getUserInfo() + " - " + t.getMessage();
+				log.error(msg, t);
+				throw new I18NException("genapp.comodi", msg);
+			}
+		}
+		
+		pinfo.setMissatgePinbal(String.join("\n", missatges));
+		pinfo.setEstat(Constants.ESTAT_PINFO_TRAMITAT);
+		pinfoLogicaEjb.update(pinfo);
+		
+		log.info("Permisos solicitats afegits correctament.");
+	}
+	
+	@Override
+	public void llistatUsuarisPinbal() {
+
+    	final String baseUrl = Configuracio.getApiPinbalClientUrl();
+    	final String username = Configuracio.getApiPinbalClientUsername();
+    	final String password = Configuracio.getApiPinbalClientPassword();
+    	final LogLevel logLevel = LogLevel.INFO;
+
+        log.info("Creant Clients");
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+        log.info("Clients creats");
+
+        final String ENTITAT_CIF = "GOVERN"; //"S0711001H";
+        
+		int page = 0;
+		int size = -1;
+		String sort = null;
+        FiltreUsuaris filter = null;
+
+        try {
+			Page<UsuariEntitat> usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, size, sort);
+			log.info(objectToJsonString(usuariPage));
+
+		} catch (UniformInterfaceException | ClientHandlerException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public void cridadaPinbalPermisos(String username, String procediment, String servei, String action) {
+		
+		username = "e45186147w";
+//		procediment = "CODSVDR_GBA_20121107";
+		procediment = "CODSVDR_20121107";
+		
+		log.info("Cridada a Pinbal per permisos: " + username + " - " + procediment + " - " + servei + " - " + action);
+		
+		try {
+			peticionSincrona(username, procediment, servei, action) ;
+		} catch (Exception e) {
+			String msg = "Error cridant a Pinbal per permisos. " + e.getMessage();
+			log.error(msg, e);
+		}
+	}
+	
+    public void peticionSincrona(String codiUsuari, String codiProcediment, String codiServei, String action) throws UniformInterfaceException, IOException {
+    	
+    	log.info("Cridant a Pinbal per permisos");
+    	
+    	final String baseUrl = Configuracio.getApiPinbalClientUrl();
+    	final String username = Configuracio.getApiPinbalClientUsername();
+    	final String password = Configuracio.getApiPinbalClientPassword();
+    	
+        final String ENTITAT_CIF = "GOVERN"; //"S0711001H";
+        final String CODIGO_PROCEDIMIENTO = "CODSVDR_GBA_20121107";
+        final String PETICION_SCSP_ID = "PINBAL00000000000000265474";
+        final boolean ENABLE_LOGGING = true;
+        final boolean BASIC_AUTH = true;
+        
+        LogLevel logLevel = LogLevel.INFO;
+        log.info("Creant Clients");
+
+		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+		
+		log.info("Clients creats");
+		
+		UsuariEntitat usuari = usuariClient.getUsuari(codiUsuari, ENTITAT_CIF);
+        log.info(objectToJsonString(usuari));
+
+        Procediment procediment = procedimentClient.getProcediment(codiProcediment, ENTITAT_CIF);
+        log.info(objectToJsonString(procediment));
+        
+        Servei servei = serveiClient.getServei(codiServei);
+        log.info(objectToJsonString(servei));
+
+        procedimentClient.enableServeiToProcediment(procediment.getId(), codiServei);
+        //AFEGIR PERMISOS.
+        
+        PermisosServei permisos1 = usuariClient.getUserPermissions(codiUsuari, ENTITAT_CIF);
+        log.info(objectToJsonString(permisos1));
+
+        ProcedimentServei procedimentServei = new ProcedimentServei(codiProcediment, codiServei);
+        log.info(objectToJsonString(procedimentServei));
+
+        List<ProcedimentServei>  procedimentServeiList = new ArrayList<ProcedimentServei>();
+        procedimentServeiList.add(procedimentServei);
+//        
+        PermisosServei permisosServei = new PermisosServei(codiUsuari, ENTITAT_CIF, procedimentServeiList);
+        log.info(objectToJsonString(permisosServei));
+        
+        try{
+        	usuariClient.grantPermissions(codiUsuari, permisosServei);
+        	
+        } catch (Throwable t) {
+        	
+        }
+        
+        PermisosServei permisos2 = usuariClient.getUserPermissions(codiUsuari, ENTITAT_CIF);
+        log.info(objectToJsonString(permisos2));
+        
+    }
+	
+    private String objectToJsonString(Object obj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        mapper.setSerializationInclusion(Include.NON_NULL);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        return "\n" + mapper.writeValueAsString(obj);
+    }
 }

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitBDadesSoliWebValid
 import org.fundaciobit.pinbaladmin.persistence.TramitBDadesSoliJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitBDadesSoli;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitBDadesSoli
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitBDadesSoli.tramitBDadesSoli.plural", order=310, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitBDadesSoli")
 @SessionAttributes(types = { TramitBDadesSoliForm.class, TramitBDadesSoliFilterForm.class })
@@ -371,7 +373,6 @@ public class TramitBDadesSoliController
 
     if (tramitBDadesSoli == null) {
       createMessageWarning(request, "error.notfound", dadessoliid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, dadessoliid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

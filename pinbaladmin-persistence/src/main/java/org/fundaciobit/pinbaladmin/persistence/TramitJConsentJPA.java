@@ -128,18 +128,23 @@ public class TramitJConsentJPA implements TramitJConsent {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitJConsent) {
-      TramitJConsent __instance = (TramitJConsent)__obj;
-      __result = true;
-      __result = __result && (this.getConsentid() == __instance.getConsentid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitJConsent) {
+            TramitJConsent __instance = (TramitJConsent)__obj;
+            __result = true;
+            __result = __result && (this.getConsentid() == __instance.getConsentid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getConsentid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

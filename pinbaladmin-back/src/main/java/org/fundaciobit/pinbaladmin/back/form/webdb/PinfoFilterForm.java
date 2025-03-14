@@ -65,6 +65,17 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
   }
 
 
+  private java.lang.String entitat;
+
+  public java.lang.String getEntitat() {
+    return this.entitat;
+  }
+
+  public void setEntitat(java.lang.String entitat) {
+    this.entitat = entitat;
+  }
+
+
   private java.lang.String solicitantNIF;
 
   public java.lang.String getSolicitantNIF() {
@@ -109,6 +120,28 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
   }
 
 
+  private java.lang.String destinatariNom;
+
+  public java.lang.String getDestinatariNom() {
+    return this.destinatariNom;
+  }
+
+  public void setDestinatariNom(java.lang.String destinatariNom) {
+    this.destinatariNom = destinatariNom;
+  }
+
+
+  private java.lang.String missatgePinbal;
+
+  public java.lang.String getMissatgePinbal() {
+    return this.missatgePinbal;
+  }
+
+  public void setMissatgePinbal(java.lang.String missatgePinbal) {
+    this.missatgePinbal = missatgePinbal;
+  }
+
+
   public PinfoFilterForm() {
   }
   
@@ -118,11 +151,15 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
     this.pinfoIDFins = __toClone.pinfoIDFins;
     this.incidenciaIDDesde = __toClone.incidenciaIDDesde;
     this.incidenciaIDFins = __toClone.incidenciaIDFins;
+    this.entitat = __toClone.entitat;
     this.solicitantNIF = __toClone.solicitantNIF;
     this.estatSelect = __toClone.estatSelect;
     this.portafibid = __toClone.portafibid;
     this.destinatariNIF = __toClone.destinatariNIF;
+    this.destinatariNom = __toClone.destinatariNom;
+    this.missatgePinbal = __toClone.missatgePinbal;
     this.mapOfIncidenciaTecnicaForIncidenciaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaID;
+    this.mapOfValuesForEntitat = __toClone.mapOfValuesForEntitat;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;
   }
   
@@ -166,6 +203,18 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
 
   public void setMapOfIncidenciaTecnicaForIncidenciaID(Map<String, String> mapOfIncidenciaTecnicaForIncidenciaID) {
     this.mapOfIncidenciaTecnicaForIncidenciaID = mapOfIncidenciaTecnicaForIncidenciaID;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForEntitat;
+
+  public Map<String, String> getMapOfValuesForEntitat() {
+    return this.mapOfValuesForEntitat;
+  }
+
+  public void setMapOfValuesForEntitat(Map<String, String> mapOfValuesForEntitat) {
+    this.mapOfValuesForEntitat = mapOfValuesForEntitat;
   }
 
 

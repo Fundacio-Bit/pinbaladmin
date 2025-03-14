@@ -33,6 +33,14 @@ public class PinfoValidator<I extends Pinfo>
 
     // Valors Not Null
     // Check size
+    if (__vr.getFieldErrorCount(ENTITAT) == 0) {
+      java.lang.String __entitat = __target__.getEntitat();
+      if (__entitat!= null && __entitat.length() > 50) {
+        __vr.rejectValue(ENTITAT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENTITAT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(50)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(SOLICITANTNIF) == 0) {
       java.lang.String __solicitantnif = __target__.getSolicitantNIF();
       if (__solicitantnif!= null && __solicitantnif.length() > 100) {
@@ -54,6 +62,22 @@ public class PinfoValidator<I extends Pinfo>
       if (__destinatarinif!= null && __destinatarinif.length() > 100) {
         __vr.rejectValue(DESTINATARINIF, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESTINATARINIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(DESTINATARINOM) == 0) {
+      java.lang.String __destinatarinom = __target__.getDestinatariNom();
+      if (__destinatarinom!= null && __destinatarinom.length() > 255) {
+        __vr.rejectValue(DESTINATARINOM, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESTINATARINOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(MISSATGEPINBAL) == 0) {
+      java.lang.String __missatgepinbal = __target__.getMissatgePinbal();
+      if (__missatgepinbal!= null && __missatgepinbal.length() > 255) {
+        __vr.rejectValue(MISSATGEPINBAL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGEPINBAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 

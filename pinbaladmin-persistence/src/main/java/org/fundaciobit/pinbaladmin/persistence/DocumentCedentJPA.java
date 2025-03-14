@@ -133,18 +133,23 @@ public class DocumentCedentJPA implements DocumentCedent {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof DocumentCedent) {
-      DocumentCedent __instance = (DocumentCedent)__obj;
-      __result = true;
-      __result = __result && (this.getDocumentCedentID() == __instance.getDocumentCedentID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof DocumentCedent) {
+            DocumentCedent __instance = (DocumentCedent)__obj;
+            __result = true;
+            __result = __result && (this.getDocumentCedentID() == __instance.getDocumentCedentID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDocumentCedentID())).hashCode();
+    }
 
 // IMP Field:entitatserveiid | Table: pad_entitatservei | Type: 1  
 

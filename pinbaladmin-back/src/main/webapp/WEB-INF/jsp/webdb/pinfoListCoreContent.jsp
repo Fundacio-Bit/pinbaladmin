@@ -37,6 +37,14 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.ENTITAT)}">
+          <td>
+          <c:set var="tmp">${pinfo.entitat}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForEntitat[tmp]}
+          </c:if>
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNIF)}">
           <td>
           ${pinfo.solicitantNIF}
@@ -72,6 +80,16 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.DESTINATARINIF)}">
           <td>
           ${pinfo.destinatariNIF}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.DESTINATARINOM)}">
+          <td>
+          ${pinfo.destinatariNom}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.MISSATGEPINBAL)}">
+          <td>
+          ${pinfo.missatgePinbal}
           </td>
         </c:if>
 

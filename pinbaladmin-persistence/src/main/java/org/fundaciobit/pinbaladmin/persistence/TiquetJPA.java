@@ -269,18 +269,23 @@ public class TiquetJPA implements Tiquet {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Tiquet) {
-      Tiquet __instance = (Tiquet)__obj;
-      __result = true;
-      __result = __result && (this.getTiquetID() == __instance.getTiquetID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Tiquet) {
+            Tiquet __instance = (Tiquet)__obj;
+            __result = true;
+            __result = __result && (this.getTiquetID() == __instance.getTiquetID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getTiquetID())).hashCode();
+    }
 
 // IMP Field:estattiquetid | Table: pad_estattiquet | Type: 1  
 

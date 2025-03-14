@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitDCteAutWebValidato
 import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitDCteAut;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitDCteAut
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitDCteAut.tramitDCteAut.plural", order=330, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitDCteAut")
 @SessionAttributes(types = { TramitDCteAutForm.class, TramitDCteAutFilterForm.class })
@@ -331,7 +333,6 @@ public class TramitDCteAutController
 
     if (tramitDCteAut == null) {
       createMessageWarning(request, "error.notfound", cteautid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, cteautid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

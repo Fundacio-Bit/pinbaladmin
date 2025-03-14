@@ -167,18 +167,23 @@ public class TramitFCteTecJPA implements TramitFCteTec {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitFCteTec) {
-      TramitFCteTec __instance = (TramitFCteTec)__obj;
-      __result = true;
-      __result = __result && (this.getCtetecid() == __instance.getCtetecid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitFCteTec) {
+            TramitFCteTec __instance = (TramitFCteTec)__obj;
+            __result = true;
+            __result = __result && (this.getCtetecid() == __instance.getCtetecid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getCtetecid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.EstatTiquetWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.EstatTiquetJPA;
 import org.fundaciobit.pinbaladmin.model.entity.EstatTiquet;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un EstatTiquet
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="estatTiquet.estatTiquet.plural", order=110, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/estatTiquet")
 @SessionAttributes(types = { EstatTiquetForm.class, EstatTiquetFilterForm.class })
@@ -302,7 +304,6 @@ public class EstatTiquetController
 
     if (estatTiquet == null) {
       createMessageWarning(request, "error.notfound", estatTiquetID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, estatTiquetID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

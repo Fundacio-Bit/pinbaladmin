@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.CampSolicitudWebValidato
 import org.fundaciobit.pinbaladmin.persistence.CampSolicitudJPA;
 import org.fundaciobit.pinbaladmin.model.entity.CampSolicitud;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un CampSolicitud
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="campSolicitud.campSolicitud.plural", order=20, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/campSolicitud")
 @SessionAttributes(types = { CampSolicitudForm.class, CampSolicitudFilterForm.class })
@@ -355,7 +357,6 @@ public class CampSolicitudController
 
     if (campSolicitud == null) {
       createMessageWarning(request, "error.notfound", campSolicitudID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, campSolicitudID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

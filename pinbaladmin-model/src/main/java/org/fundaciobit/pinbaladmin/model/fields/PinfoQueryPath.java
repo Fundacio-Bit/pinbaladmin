@@ -19,6 +19,10 @@ public class PinfoQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new LongField(getQueryPath(), PinfoFields.INCIDENCIAID);
   }
 
+  public StringField ENTITAT() {
+    return new StringField(getQueryPath(), PinfoFields.ENTITAT);
+  }
+
   public StringField SOLICITANTNIF() {
     return new StringField(getQueryPath(), PinfoFields.SOLICITANTNIF);
   }
@@ -41,6 +45,14 @@ public class PinfoQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
 
   public StringField DESTINATARINIF() {
     return new StringField(getQueryPath(), PinfoFields.DESTINATARINIF);
+  }
+
+  public StringField DESTINATARINOM() {
+    return new StringField(getQueryPath(), PinfoFields.DESTINATARINOM);
+  }
+
+  public StringField MISSATGEPINBAL() {
+    return new StringField(getQueryPath(), PinfoFields.MISSATGEPINBAL);
   }
 
 

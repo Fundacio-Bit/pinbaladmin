@@ -80,18 +80,23 @@ public class DepartamentJPA implements Departament {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Departament) {
-      Departament __instance = (Departament)__obj;
-      __result = true;
-      __result = __result && (this.getDepartamentID() == __instance.getDepartamentID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Departament) {
+            Departament __instance = (Departament)__obj;
+            __result = true;
+            __result = __result && (this.getDepartamentID() == __instance.getDepartamentID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDepartamentID())).hashCode();
+    }
 
 // IMP Field:areaid | Table: pad_area | Type: 1  
 

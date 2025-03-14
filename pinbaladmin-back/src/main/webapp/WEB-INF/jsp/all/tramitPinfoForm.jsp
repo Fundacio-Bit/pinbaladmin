@@ -36,9 +36,14 @@ section {
 	flex-flow: column;
 }
 
+.header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: .5rem;
+}
+
 section .title {
 	font-size: 25px;
-	margin: 0 0 .5rem 0;
 }
 
 .sub-title {
@@ -51,17 +56,17 @@ section .title {
 	margin-top: 1rem;
 }
 
-.procediment-item {
+.procediment-item, .usuari-item {
 	cursor: pointer;
 	padding: 6px;
 	background-color: #fff;
 }
 
-.procediment-item:hover {
+.procediment-item:hover, , .usuari-item:hover {
 	background-color: #f1f1f1;
 }
 
-#autocomplete-procediments {
+#autocomplete-procediments, #autocomplete-usuaris {
 	display: block;
 	position: absolute;
 	z-index: 1;
@@ -75,8 +80,8 @@ section .title {
 	padding: 6px;
 }
 
-.procediment-item:hover {
-	background-color: #f1f1f1;
+#autocomplete-usuaris div {
+	padding: 6px;
 }
 
 /* #taula-serveis td:nth-child(1), #taula-serveis tr:nth-child(1) {
@@ -156,15 +161,13 @@ section .title {
 	margin-top: 1rem;
 }
 
-.usuari-data-container,
-.procediment-data-container {
+.usuari-data-container, .procediment-data-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-.usuari-li,
-.procediment-li {
+.usuari-li, .procediment-li {
 	padding-top: 5px;
 	padding-right: 1rem;
 	padding-bottom: 5px;
@@ -172,20 +175,17 @@ section .title {
 	border: 1px solid white;
 }
 
-.usuari-li:hover,
-.procediment-li:hover {
+.usuari-li:hover, .procediment-li:hover {
 	background-color: #f1f1f1;
 	border-bottom-color: black;
 	border-top-color: black;
 }
 
-.usuari-data-text,
-.procediment-data-text {
+.usuari-data-text, .procediment-data-text {
 	margin-right: 1rem;
 }
 
-.usuari-data-delete,
-.procediment-data-delete {
+.usuari-data-delete, .procediment-data-delete {
 	cursor: pointer;
 	color: #ae0808;
 }
@@ -193,6 +193,10 @@ section .title {
 #backToList-button-container {
 	text-align: right;
 	margin: 1rem 5rem;
+}
+
+#input-usuari-container {
+	display: flex;
 }
 </style>
 
@@ -214,25 +218,52 @@ section .title {
 			<div id="form-content">
 
 				<section id="section1">
-					<div class="title">Introduce los usuarios:</div>
+					<div class="header">
+						<div class="title">Introduce los usuarios:</div>
+					
+						<div class="botones">
+							<button type="button" class="pagination-button btn"
+								onclick="next();"><fmt:message key="tramitpinfodata.sec1.seguent"/></button>
+						</div>
+					</div>
+					
 					<div class="input-container user">
 						<div id="cercador-usuaris">
-							<input type="text" name="userID" placeholder="Usuari"
+<!-- 							<input type="text" name="userID" placeholder="Usuari"
 								value="ptrias">
-							<button type="button" class="btn" onclick="afegirUsuari();">Add</button>
+							<button type="button" class="btn" onclick="afegirUsuari();">Add</button> -->
+	
+							<div id="input-usuari-container">
+							
+
+ 							<input id="usuariNom" name="userID" type="text"
+								autocomplete="off" class="campsUsuari w-25 form-control"
+								placeholder="Nom">
+ 							<input id="usuariNif" name="userID" type="text"
+								autocomplete="off" class="campsUsuari w-25 form-control"
+								placeholder="NIF">
+							</div>
+ 
+							<div id="autocomplete-usuaris"></div>
 						</div>
 						<div id="llistat-usuaris">
 							<ul></ul>
 						</div>
 					</div>
-					<div class="botones">
-						<button type="button" class="pagination-button btn"
-							onclick="next();">Siguiente</button>
-					</div>
 				</section>
 
 				<section id="section2">
-					<div class="title">Introduce los procedimientos:</div>
+
+					<div class="header">
+						<div class="title">Introduce los procedimientos:</div>
+
+						<div class="botones">
+							<button type="button" class="pagination-button btn"
+								onclick="prev();"><fmt:message key="tramitpinfodata.sec2.anterior"/></button>
+							<button type="button" class="pagination-button btn"
+								onclick="next();"><fmt:message key="tramitpinfodata.sec2.seguent"/></button>
+						</div>
+					</div>
 
 					<div class="input-container procediment">
 						<div id="cercador-procediments">
@@ -247,17 +278,19 @@ section .title {
 							<ul ></ul>
 						</div>
 					</div>
-
-					<div class="botones">
-						<button type="button" class="pagination-button btn"
-							onclick="prev();">Anterior</button>
-						<button type="button" class="pagination-button btn"
-							onclick="next();">Siguiente</button>
-					</div>
 				</section>
 
 				<section id="section3">
-					<div class="title">Assignar permisos:</div>
+					<div class="header">
+						<div class="title">Assignar permisos:</div>
+	
+						<div class="botones">
+							<button type="button" class="pagination-button btn"
+								onclick="prev()"><fmt:message key="tramitpinfodata.sec3.anterior"/></button>
+								
+							<input type="submit" class="btn" value="<fmt:message key="tramitpinfodata.sec3.seguent"/>">
+						</div>
+					</div>
 					<div id="subtitle-usuaris" class="sub-title"></div>
 					
 
@@ -265,12 +298,6 @@ section .title {
 						<div id="taula-serveis-cont">
 							<table id="taula-serveis" border="1"></table>
 						</div>
-					</div>
-
-					<div class="botones">
-						<button type="button" class="pagination-button btn"
-							onclick="prev()">Anterior</button>
-						<input type="submit" class="btn" value="Submit">
 					</div>
 				</section>
 
@@ -289,74 +316,142 @@ section .title {
 		$(document).ready(function() {
 
 			$("#procedimentID").on("input", function() {
-				var procediment = $(this).val();
+				var	procediment = $(this).val();
 				console.log(procediment);
-				if (procediment.length < 2) {
-					$("#autocomplete-procediments").empty();
-					return;
+				if (procediment.length < 2) { 
+					$("#autocomplete-procediments").empty(); 
+					return; 
 				}
+				
 				$.ajax({
-					url : "jsonProcediments",
-					type : "GET",
-					data : {
-						query : procediment
-					},
-					success : function(data) {
-						$("#autocomplete-procediments").empty();
-						data.forEach(function(proc) {
-							//Si el procediment ja esta a la llista, no el mostri
-
-							afegirProcediment(proc);
-						});
-					}
-				});
+                    url : "jsonProcediments",
+                    type : "GET",
+                    data : { query : procediment },
+                    success : function(data) {
+                        $("#autocomplete-procediments").empty();
+                        data.forEach(function(proc) {
+                            //Si el procediment ja esta a la llista, no el mostri
+                            afegirProcediment(proc);
+                        });
+                    }
+                });
+								
 			});
-
+			
+			$(".campsUsuari").on("input", function() {
+                var nom = $("#usuariNom").val();
+                var nif = $("#usuariNif").val();
+                
+                console.log("nom: " + nom + ", nif: " + nif );
+                if (nom.length < 1 && nif.length < 1) {
+                    $("#autocomplete-usuaris").empty();
+                    return;
+                }
+                
+                $.ajax({
+                    url : "jsonUsuaris",
+                    type : "GET",
+                    data : { nom : nom, nif : nif },
+                    success : function(data) {
+                        $("#autocomplete-usuaris").empty();
+                        data.forEach(function(usuari) {
+                            //Si el usuari ja esta a la llista, no el mostri
+                            afegirUsuari(usuari);
+                        });
+                    }
+                });
+	        });
+			
 		});
-
+		
 		function afegirProcediment(proc) {
 			var procedimentDiv = document.createElement("div");
-			procedimentDiv.classList.add("procediment-item");
-			procedimentDiv.innerHTML = proc.key + " - " + proc.value;
-			procedimentDiv.onclick = function() {
-				elegirProcediment(proc);
-			};
-
-			$("#autocomplete-procediments").append(procedimentDiv);
+            procedimentDiv.classList.add("procediment-item");
+            procedimentDiv.innerHTML = proc.key + " - " + proc.value;
+            procedimentDiv.onclick = function() {
+                elegirProcediment(proc);
+            };
+            $("#autocomplete-procediments").append(procedimentDiv);
+        }
+		
+		function convertirUsuariEnUser(usuari) {
+			            console.log(usuari);
+            return { key : usuari.nif, value : usuari.nom, nom : usuari.nom, codi : usuari.codi };
 		}
+		
+		function afegirUsuari(usuari) {
+            var usuariDiv = document.createElement("div");
+            usuariDiv.classList.add("usuari-item");
+            usuariDiv.innerHTML = usuari.nif + " - " + usuari.nom;
+            usuariDiv.onclick = function() {
+                elegirUsuari(usuari);
+            };
 
+            $("#autocomplete-usuaris").append(usuariDiv);
+        }
+		
 		function elegirProcediment(proc) {
-			
-			for (let i = 0; i < procediments.length; i++) {
+			            for (let i = 0; i < procediments.length; i++) {
                 if (procediments[i].key == proc.key) {
-					alert("Ja el tenim a la llista");
-					return;
+                    alert("Ja el tenim a la llista");
+                    return;
                 }
             }
-			
-			procediments.push(proc);
-			
-			let li = $("<li></li>").addClass("procediment-li");
-			let container = $("<div></div>").addClass("procediment-data-container");
-			
-			let spanText = $("<span></span>").addClass("procediment-data-text").text(proc.key + " - " + proc.value);
-			
-			let spanDelete = $("<span></span>").addClass("procediment-data-delete").html('<i class="fas fa-times"></i>').click(function() {
+
+            procediments.push(proc);
+            let li = $("<li></li>").addClass("procediment-li");
+            let container = $("<div></div>").addClass("procediment-data-container");
+            
+            let spanText = $("<span></span>").addClass("procediment-data-text").text(proc.key + " - " + proc.value);
+            
+            let spanDelete = $("<span></span>").addClass("procediment-data-delete").html('<i class="fas fa-times"></i>').click(function() {
                 procediments = procediments.filter(function(p) {
                     return p.id != proc.id;
                 });
                 li.remove();
             });
-			
-			container.append(spanText);
-			container.append(spanDelete);
-			li.append(container);
-			
-			$("#llistat-procediments ul").append(li);
-			$("input[name='procedimentID']").val("");
-			$("#autocomplete-procediments").empty();
+            
+            container.append(spanText);
+            container.append(spanDelete);
+            li.append(container);
+            
+            $("#llistat-procediments ul").append(li);
+            $("input[name='procedimentID']").val("");
+            $("#autocomplete-procediments").empty();
 		}
-
+		
+		function elegirUsuari(usuari) {
+            for (let i = 0; i < usuaris.length; i++) {
+                if (usuaris[i].codi == usuari.codi) {
+                    alert("Ja el tenim a la llista");
+                    return;
+                }
+            }
+            
+            usuaris.push(usuari);
+            
+            let li = $("<li></li>").addClass("usuari-li");
+            let container = $("<div></div>").addClass("usuari-data-container");
+            
+            let text = usuari.nif + " - " + usuari.nom + " - " + usuari.codi;
+            let spanText = $("<span></span>").addClass("usuari-data-text").text(text);
+            
+            let spanDelete = $("<span></span>").addClass("usuari-data-delete").html('<i class="fas fa-times"></i>').click(function() {
+                usuaris = usuaris.filter(function(u) {
+                    return u.codi != usuari.codi;
+                });
+                li.remove();
+            });
+            
+            container.append(spanText);
+            container.append(spanDelete);
+            li.append(container);
+            
+            $("#llistat-usuaris ul").append(li);
+            $(".campsUsuari").val("");
+            $("#autocomplete-usuaris").empty();
+        }
+		
 		function next() {
 			//if actualSection is okey, then go to, else, show error
 
@@ -424,7 +519,7 @@ section .title {
 
 		function construyeTablaServicios(serveisTrobats, allSoliServ) {
 
-			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.map(u => u.nom).join(", ")
+			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.map(u => u.nom + " (" + u.nif + " - " + u.codi + ")").join(", ")
 			
 			//Cream una primera fila amb els procediments, i despres de cada un, es mostren els serveis d'aquest
 			var trTitol = $("<tr></tr>");	
@@ -516,8 +611,8 @@ section .title {
 			$("#section" + section).show();
 		}
 
-		function afegirUsuari() {
-			var user = $("input[name='userID']").val();
+		function afegirUsuariOld() {
+			var user = $(".campsUsuari").val();
 
 			if (user == "")
 				return;
@@ -607,60 +702,29 @@ section .title {
 		}
 
 		function marcarServeiAll(chcek, procKey) {
-
 			var marcar = chcek.checked;
 			console.log(marcar);
 
 			var tds = $("td[serv='" + procKey + "']");
-
 			console.log(tds);
 
 			for (let i = 0; i < tds.length; i++) {
 				var td = tds[i];
 				marcarSolSerVal(td, marcar);
-				/* 			  var input = td.getElementsByTagName("input")[0];
-				 if (marcar) {
-				 input.checked = true;
-				 //				  td.classList.remove("noSelected");
-				 //				  td.classList.add("selected");
-				 }else{
-				 input.checked = false;
-				 //				  td.classList.remove("selected");
-				 //				  td.classList.add("noSelected");
-				 }
-				 */}
-
-			//elem.innerHTML = "desmarcarAll";
-			//elem.setAttribute("onclick", "desmarcarServeiAll(this)");
+			}
 		}
 
 		function marcarProcedimentAll(chcek, procKey) {
-
 			var marcar = chcek.checked;
 			console.log(marcar);
 
 			var tds = $("td[proc='" + procKey + "']");
-
 			console.log(tds);
 
 			for (let i = 0; i < tds.length; i++) {
 				var td = tds[i];
 				marcarSolSerVal(td, marcar);
-
-				/* 			  var input = td.getElementsByTagName("input")[0];
-				 if (marcar) {
-				 input.checked = true;
-				 //				  td.classList.remove("noSelected");
-				 //				  td.classList.add("selected");
-				 }else{
-				 input.checked = false;
-				 //				  td.classList.remove("selected");
-				 //				  td.classList.add("noSelected");
-				 }
-				 */}
-
-			//elem.innerHTML = "desmarcarAll";
-			//elem.setAttribute("onclick", "desmarcarServeiAll(this)");
+			 }
 		}
 
 		$("#pinfoDataForm").submit(
@@ -669,7 +733,7 @@ section .title {
 
 					let usuarisAuxx = [];
 					$("input[name='usuaris']").val(
-							usuaris.map(u => u.nom).join(","));
+							usuaris.map(u => u.codi).join(","));
 
 					var selecteds = $("#taula-serveis .selected");
 					if (selecteds.length == 0) {
@@ -731,7 +795,7 @@ section .title {
         			
         			$("#llistat-usuaris ul").append(li);
         			usuaris.push(usuari);
-        			$("input[name='userID']").val("");
+        			$(".campsUsuari").val("");
 				}
 			});
 		}

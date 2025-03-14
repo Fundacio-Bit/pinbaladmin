@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitFCteTecWebValidato
 import org.fundaciobit.pinbaladmin.persistence.TramitFCteTecJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitFCteTec;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitFCteTec
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitFCteTec.tramitFCteTec.plural", order=350, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitFCteTec")
 @SessionAttributes(types = { TramitFCteTecForm.class, TramitFCteTecFilterForm.class })
@@ -331,7 +333,6 @@ public class TramitFCteTecController
 
     if (tramitFCteTec == null) {
       createMessageWarning(request, "error.notfound", ctetecid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, ctetecid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

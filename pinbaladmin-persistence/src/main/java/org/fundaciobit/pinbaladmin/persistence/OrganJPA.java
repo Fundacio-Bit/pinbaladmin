@@ -128,18 +128,23 @@ public class OrganJPA implements Organ {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Organ) {
-      Organ __instance = (Organ)__obj;
-      __result = true;
-      __result = __result && (this.getOrganid() == __instance.getOrganid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Organ) {
+            Organ __instance = (Organ)__obj;
+            __result = true;
+            __result = __result && (this.getOrganid() == __instance.getOrganid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getOrganid())).hashCode();
+    }
 
 // EXP  Field:organid | Table: pad_incidenciatecnica | Type: 0  
 

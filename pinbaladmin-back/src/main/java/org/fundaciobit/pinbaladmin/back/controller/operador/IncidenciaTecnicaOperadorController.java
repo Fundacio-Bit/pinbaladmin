@@ -581,19 +581,19 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 				map.put(inc.getIncidenciaTecnicaID(), text);
 			}
 			
-			//Afegir botó per tramitar Pinfos.
-			if (inc.getTipus() == Constants.INCIDENCIA_TIPUS_ROLEPERMISOS) {
-				Long pinfoID = pinfoLogicaEjb.executeQueryOne(PinfoFields.PINFOID,
-						PinfoFields.INCIDENCIAID.equal(inc.getIncidenciaTecnicaID()));
-				if (pinfoID != null) {
-					filterForm.addAdditionalButtonByPK(inc.getIncidenciaTecnicaID(),
-							new AdditionalButton("fas fa-user-check", "tramitar.pinfo",
-									PinfoOperadorController.WEBCONTEXT + "/view/" + pinfoID,
-									AdditionalButtonStyle.PRIMARY));
-				}
-			}
+//			//Afegir botó per tramitar Pinfos.
+//			if (inc.getTipus() == Constants.INCIDENCIA_TIPUS_ROLEPERMISOS) {
+//				Long pinfoID = pinfoLogicaEjb.executeQueryOne(PinfoFields.PINFOID,
+//						PinfoFields.INCIDENCIAID.equal(inc.getIncidenciaTecnicaID()));
+//				if (pinfoID != null) {
+//					filterForm.addAdditionalButtonByPK(inc.getIncidenciaTecnicaID(),
+//							new AdditionalButton("fas fa-user-check", "tramitar.pinfo",
+//									PinfoOperadorController.WEBCONTEXT + "/view/" + pinfoID,
+//									AdditionalButtonStyle.PRIMARY));
+//				}
+//			}
+			
 		}
-
     }
 
     @Override

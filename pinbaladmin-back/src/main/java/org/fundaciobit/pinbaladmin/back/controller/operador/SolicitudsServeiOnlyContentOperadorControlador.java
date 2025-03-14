@@ -113,14 +113,9 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 
             
             //Canvis tramit sistra:
-            solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.NOTES);
+           // solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.NOTES);
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.FECHACADUCA);
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.CADUCA);
-            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMAID);
-            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA2ID);
-            solicitudServeiFilterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA3ID);
-
-            
         }
 
         return solicitudServeiFilterForm;
@@ -162,8 +157,16 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
         mapNomServei = (Map<Long, String>) filterForm.getAdditionalField(NOMSERVEI).getValueMap();
         mapNomServei.clear();
 
+        int normes1 = 0;
+        int normes2 = 0;
+        int normes3 = 0;
+        
         for (SolicitudServei solicitudServei : list) {
             Long SolSerID = solicitudServei.getId();
+            
+			if (solicitudServei.getFitxernormaID() != null) normes1++;
+			if (solicitudServei.getFitxernorma2ID() != null) normes2++;
+			if (solicitudServei.getFitxernorma3ID() != null) normes3++;
 
             Servei servei = serveiEjb.findByPrimaryKey(solicitudServei.getServeiID());
 
@@ -174,6 +177,18 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             mapCodiServei.put(SolSerID, codiServei);
             mapNomServei.put(SolSerID, nomServei);
         }
+        
+		if (normes1 > 0) {
+			filterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMAID);
+		}
+		
+		if (normes2 > 0) {
+			filterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA2ID);
+		}
+		
+		if (normes3 > 0) {
+			filterForm.getHiddenFields().remove(SolicitudServeiFields.FITXERNORMA3ID);
+		}
     }
     
     @Override
@@ -194,7 +209,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
 			}
 		}
 		
-		solicitudServeiForm.addHiddenField(SolicitudServeiFields.NOTES);
+//		solicitudServeiForm.addHiddenField(SolicitudServeiFields.NOTES);
 		solicitudServeiForm.addHiddenField(SolicitudServeiFields.ENLLAZNORMALEGAL);
 		solicitudServeiForm.addHiddenField(SolicitudServeiFields.ENLLAZCONSENTIMENT);
 		solicitudServeiForm.addHiddenField(SolicitudServeiFields.TIPUSCONSENTIMENT);

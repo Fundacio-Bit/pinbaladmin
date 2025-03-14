@@ -114,18 +114,23 @@ public class EmailJPA implements Email {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Email) {
-      Email __instance = (Email)__obj;
-      __result = true;
-      __result = __result && (this.getEmailID() == __instance.getEmailID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Email) {
+            Email __instance = (Email)__obj;
+            __result = true;
+            __result = __result && (this.getEmailID() == __instance.getEmailID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getEmailID())).hashCode();
+    }
 
 
  // ---------------  STATIC METHODS ------------------

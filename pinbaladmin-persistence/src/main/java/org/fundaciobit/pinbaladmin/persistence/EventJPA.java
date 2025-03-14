@@ -239,18 +239,23 @@ public class EventJPA implements Event {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Event) {
-      Event __instance = (Event)__obj;
-      __result = true;
-      __result = __result && (this.getEventID() == __instance.getEventID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Event) {
+            Event __instance = (Event)__obj;
+            __result = true;
+            __result = __result && (this.getEventID() == __instance.getEventID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getEventID())).hashCode();
+    }
 
 // IMP Field:solicitudid | Table: pad_solicitud | Type: 1  
 

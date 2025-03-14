@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Pinfo
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="pinfo.pinfo.plural", order=210, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/pinfo")
 @SessionAttributes(types = { PinfoForm.class, PinfoFilterForm.class })
@@ -195,6 +197,16 @@ public class PinfoController
       };
     }
 
+    // Field entitat
+    {
+      _listSKV = getReferenceListForEntitat(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForEntitat(_tmp);
+      if (filterForm.getGroupByFields().contains(ENTITAT)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ENTITAT, false);
+      };
+    }
+
     // Field estat
     {
       _listSKV = getReferenceListForEstat(request, mav, filterForm, list, groupByItemsMap, null);
@@ -221,6 +233,7 @@ public class PinfoController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(INCIDENCIAID, filterForm.getMapOfIncidenciaTecnicaForIncidenciaID());
+    __mapping.put(ENTITAT, filterForm.getMapOfValuesForEntitat());
     __mapping.put(ESTAT, filterForm.getMapOfValuesForEstat());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
@@ -277,6 +290,15 @@ public class PinfoController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       pinfoForm.setListOfIncidenciaTecnicaForIncidenciaID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (pinfoForm.getListOfValuesForEntitat() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEntitat(request, mav, pinfoForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      pinfoForm.setListOfValuesForEntitat(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (pinfoForm.getListOfValuesForEstat() == null) {
@@ -360,7 +382,6 @@ public class PinfoController
 
     if (pinfo == null) {
       createMessageWarning(request, "error.notfound", pinfoID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, pinfoID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());
@@ -680,6 +701,38 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForIncidenciaID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return incidenciaTecnicaRefList.getReferenceList(IncidenciaTecnicaFields.INCIDENCIATECNICAID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request,
+       ModelAndView mav, PinfoForm pinfoForm, Where where)  throws I18NException {
+    if (pinfoForm.isHiddenField(ENTITAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForEntitat(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request,
+       ModelAndView mav, PinfoFilterForm pinfoFilterForm,
+       List<Pinfo> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (pinfoFilterForm.isHiddenField(ENTITAT)
+       && !pinfoFilterForm.isGroupByField(ENTITAT)
+       && !pinfoFilterForm.isFilterByField(ENTITAT)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForEntitat(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("GOVERN" , "GOVERN"));
+    __tmp.add(new StringKeyValue("FOGAIBA" , "FOGAIBA"));
+    __tmp.add(new StringKeyValue("IBSALUT" , "IBSALUT"));
+    return __tmp;
   }
 
 

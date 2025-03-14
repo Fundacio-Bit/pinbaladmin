@@ -59,18 +59,23 @@ public class TipusTiquetJPA implements TipusTiquet {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TipusTiquet) {
-      TipusTiquet __instance = (TipusTiquet)__obj;
-      __result = true;
-      __result = __result && (this.getTipusTiquetID() == __instance.getTipusTiquetID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TipusTiquet) {
+            TipusTiquet __instance = (TipusTiquet)__obj;
+            __result = true;
+            __result = __result && (this.getTipusTiquetID() == __instance.getTipusTiquetID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getTipusTiquetID())).hashCode();
+    }
 
 // EXP  Field:tipustiquetid | Table: pad_tiquet | Type: 0  
 

@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.EmailWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.EmailJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Email
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="email.email.plural", order=80, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/email")
 @SessionAttributes(types = { EmailForm.class, EmailFilterForm.class })
@@ -302,7 +304,6 @@ public class EmailController
 
     if (email == null) {
       createMessageWarning(request, "error.notfound", emailID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, emailID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.CampFormulariWebValidato
 import org.fundaciobit.pinbaladmin.persistence.CampFormulariJPA;
 import org.fundaciobit.pinbaladmin.model.entity.CampFormulari;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un CampFormulari
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="campFormulari.campFormulari.plural", order=10, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/campFormulari")
 @SessionAttributes(types = { CampFormulariForm.class, CampFormulariFilterForm.class })
@@ -331,7 +333,6 @@ public class CampFormulariController
 
     if (campFormulari == null) {
       createMessageWarning(request, "error.notfound", campFormulariID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, campFormulariID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

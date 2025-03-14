@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.OperadorWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.OperadorJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Operador;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Operador
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="operador.operador.plural", order=190, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/operador")
 @SessionAttributes(types = { OperadorForm.class, OperadorFilterForm.class })
@@ -302,7 +304,6 @@ public class OperadorController
 
     if (operador == null) {
       createMessageWarning(request, "error.notfound", operadorID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, operadorID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitGDadesTitWebValida
 import org.fundaciobit.pinbaladmin.persistence.TramitGDadesTitJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitGDadesTit;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitGDadesTit
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitGDadesTit.tramitGDadesTit.plural", order=360, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitGDadesTit")
 @SessionAttributes(types = { TramitGDadesTitForm.class, TramitGDadesTitFilterForm.class })
@@ -331,7 +333,6 @@ public class TramitGDadesTitController
 
     if (tramitGDadesTit == null) {
       createMessageWarning(request, "error.notfound", dadestitid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, dadestitid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -144,18 +144,23 @@ public class EntitatJPA implements Entitat {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Entitat) {
-      Entitat __instance = (Entitat)__obj;
-      __result = true;
-      __result = __result && (this.getEntitatID() == __instance.getEntitatID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Entitat) {
+            Entitat __instance = (Entitat)__obj;
+            __result = true;
+            __result = __result && (this.getEntitatID() == __instance.getEntitatID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getEntitatID())).hashCode();
+    }
 
 // EXP  Field:entitatid | Table: pad_area | Type: 0  
 

@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.EntitatServeiWebValidato
 import org.fundaciobit.pinbaladmin.persistence.EntitatServeiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un EntitatServei
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="entitatServei.entitatServei.plural", order=100, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/entitatServei")
 @SessionAttributes(types = { EntitatServeiForm.class, EntitatServeiFilterForm.class })
@@ -305,7 +307,6 @@ public class EntitatServeiController
 
     if (entitatServei == null) {
       createMessageWarning(request, "error.notfound", entitatServeiID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, entitatServeiID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

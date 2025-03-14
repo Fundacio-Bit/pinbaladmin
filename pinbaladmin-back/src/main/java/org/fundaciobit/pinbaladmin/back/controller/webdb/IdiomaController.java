@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.IdiomaWebValidator;
 import org.fundaciobit.pinbaladmin.persistence.IdiomaJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Idioma;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Idioma
@@ -41,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="idioma.idioma.plural", order=170, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/idioma")
 @SessionAttributes(types = { IdiomaForm.class, IdiomaFilterForm.class })
@@ -305,7 +307,6 @@ public class IdiomaController
 
     if (idioma == null) {
       createMessageWarning(request, "error.notfound", idiomaID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, idiomaID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

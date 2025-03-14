@@ -37,6 +37,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.FormulariJPA;
 import org.fundaciobit.pinbaladmin.model.entity.Formulari;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un Formulari
@@ -44,6 +45,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="formulari.formulari.plural", order=140, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/formulari")
 @SessionAttributes(types = { FormulariForm.class, FormulariFilterForm.class })
@@ -311,7 +313,6 @@ public class FormulariController
 
     if (formulari == null) {
       createMessageWarning(request, "error.notfound", formulariid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, formulariid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

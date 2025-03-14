@@ -39,6 +39,7 @@ import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitJConsent
@@ -46,6 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitJConsent.tramitJConsent.plural", order=390, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitJConsent")
 @SessionAttributes(types = { TramitJConsentForm.class, TramitJConsentFilterForm.class })
@@ -380,7 +382,6 @@ public class TramitJConsentController
 
     if (tramitJConsent == null) {
       createMessageWarning(request, "error.notfound", consentid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, consentid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitECteAudWebValidato
 import org.fundaciobit.pinbaladmin.persistence.TramitECteAudJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitECteAud;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitECteAud
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitECteAud.tramitECteAud.plural", order=340, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitECteAud")
 @SessionAttributes(types = { TramitECteAudForm.class, TramitECteAudFilterForm.class })
@@ -331,7 +333,6 @@ public class TramitECteAudController
 
     if (tramitECteAud == null) {
       createMessageWarning(request, "error.notfound", cteaudid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, cteaudid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

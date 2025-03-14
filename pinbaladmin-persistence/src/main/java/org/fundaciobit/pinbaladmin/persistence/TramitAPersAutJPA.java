@@ -212,18 +212,23 @@ public class TramitAPersAutJPA implements TramitAPersAut {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitAPersAut) {
-      TramitAPersAut __instance = (TramitAPersAut)__obj;
-      __result = true;
-      __result = __result && (this.getPersautid() == __instance.getPersautid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitAPersAut) {
+            TramitAPersAut __instance = (TramitAPersAut)__obj;
+            __result = true;
+            __result = __result && (this.getPersautid() == __instance.getPersautid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getPersautid())).hashCode();
+    }
 
 // EXP  Field:tramitid | Table: pad_tramit_b_dades_soli | Type: 0  
 

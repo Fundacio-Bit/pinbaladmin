@@ -96,18 +96,23 @@ public class CampFormulariJPA implements CampFormulari {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof CampFormulari) {
-      CampFormulari __instance = (CampFormulari)__obj;
-      __result = true;
-      __result = __result && (this.getCampFormulariID() == __instance.getCampFormulariID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof CampFormulari) {
+            CampFormulari __instance = (CampFormulari)__obj;
+            __result = true;
+            __result = __result && (this.getCampFormulariID() == __instance.getCampFormulariID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getCampFormulariID())).hashCode();
+    }
 
 // EXP  Field:campformulariid | Table: pad_campsolicitud | Type: 0  
 

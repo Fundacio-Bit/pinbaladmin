@@ -34,14 +34,19 @@ import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleR
 import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleSignature;
 import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleSigner;
 import org.fundaciobit.apisib.core.exceptions.AbstractApisIBException;
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.OperadorService;
 import org.fundaciobit.pinbaladmin.ejb.PinfoEJB;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.ProcedimentData;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.ServeiData;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.UsuariData;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
@@ -50,6 +55,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
@@ -75,9 +81,6 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 	@EJB(mappedName = IncidenciaTecnicaLogicaService.JNDI_NAME)
 	protected IncidenciaTecnicaLogicaService incidenciaLogicaEjb;
-
-	@EJB(mappedName = OperadorService.JNDI_NAME)
-	protected OperadorService operadorEjb;
 
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerPublicEjb;
@@ -108,7 +111,22 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	}
 
 	@Override
-	public Long generarPinfoPDF(Long pinfoID, Responsable responsable) throws Exception, I18NException {
+	public List<StringKeyValue> getEntitats() throws I18NException {
+		String[][] entitats = { 
+				{ "GOVERN", "Govern de les Illes Balears" }, 
+				{ "FOGAIBA", "FOGAIBA text" },
+				{ "IBSALUT", "Illes Balears SALUT" } 
+			};
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+		
+		for (String[] entitat : entitats) {
+			__tmp.add(new StringKeyValue(entitat[0], entitat[1]));
+		}
+		return __tmp;
+	}	
+	
+	@Override
+	public Long generarPinfoPDF(Long pinfoID) throws Exception, I18NException {
 
 		log.info("Generant PDF per PINFO: " + pinfoID);
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -119,11 +137,13 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 		PinfoJPA pinfo = findByPrimaryKey(pinfoID);
 		data.put("pinfo", pinfo);
-
-		data.put("responsable", responsable);
 		
 		PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
 		data.put("pinfoDataFull", pinfoDataFull);
+		
+		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
+			log.info("Usuari: " + usuariData.getUsuariNom() + " (" + usuariData.getUsuariNif() +  " - " + usuariData.getUsuariCodi() + ")");
+		}
 
 		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
 		data.put("incidencia", incidencia);
@@ -407,7 +427,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	
 	//NOVA VERSIÓ ENVIAMENT A PORTAFIB AMB NIF.
 	@Override
-	public void enviarPinfoPortaFIB(Long pinfoID, Responsable responsable) throws I18NException {
+	public void enviarPinfoPortaFIB(Long pinfoID) throws I18NException {
 
 		Pinfo pinfo = findByPrimaryKey(pinfoID);
 		Long incidenciaID = pinfo.getIncidenciaID();
@@ -431,7 +451,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 		this.update(pinfo);
 		
-		afegirEventPinfoEnviat(incidencia, pinfo, responsable);
+		afegirEventPinfoEnviat(incidencia, pinfo);
 	}
 
 	public Long crearIEnviarPeticioDeFirma(Long fitxerID, String destinatariNif, String titolPeticio,
@@ -496,7 +516,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		}
 	}
 	
-	protected void afegirEventPinfoEnviat(IncidenciaTecnica it, Pinfo pinfo, Responsable responsable) throws I18NException {
+	protected void afegirEventPinfoEnviat(IncidenciaTecnica it, Pinfo pinfo) throws I18NException {
 		//Afegir l'event de la incidencia, i l'event de pinfo enviat a PortaFIB
 		log.info("Afegir event de peticio enviada a portafib");
 		{
@@ -515,7 +535,8 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			evIncidencia.setNoLlegit(_noLlegit_);
 
 			evIncidencia.setAsumpte("Incidencia " + it.getIncidenciaTecnicaID() +  " creada");
-			evIncidencia.setComentari(it.getTitol() + "\n" + it.getDescripcio());
+			evIncidencia.setComentari(
+					"<div style='margin: .5rem;'>" + it.getTitol() + "<br>" + it.getDescripcio() + "</div>");
 			eventLogicaEjb.create(evIncidencia);
 			
 			//Event de Pinfo Enviat.
@@ -530,11 +551,13 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			String msgPinfoEnviat = 
 					"PINFO " + pinfoID + " enviat a Portafib.\n" 
 					+ "Remitent: " + _persona_ + " (" + pinfo.getSolicitantNIF() + ")\n" 
-					+ "Destinatari: " + responsable.getNomOcult() + " (" + responsable.getNif() + ")";
+					+ "Destinatari: " + pinfo.getDestinatariNom() + " (" + pinfo.getDestinatariNIF() + ")";
 			
 			evPinfo.setFitxerID(pinfo.getFitxerID());
 			evPinfo.setAsumpte("PINFO " + pinfoID + " enviat a Portafib");
-			evPinfo.setComentari(msgPinfoEnviat);
+			String _missatge_ = "<div style='margin: .5rem;'>" + msgPinfoEnviat + "</div>";
+
+			evPinfo.setComentari(_missatge_);
 			
 			eventLogicaEjb.create(evPinfo);
 			
@@ -585,9 +608,10 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
 			boolean _noLlegit_ = true;
 			Long _fitxerID_ = fitxerFirmatID;
-			String _missatge_ = "S'ha rebut el pinfo firmat de Portafib";
+			String _missatge_ = "<div style='margin: .5rem;'>" + "S'ha rebut el pinfo firmat de Portafib" + "</div>";
+
 			String _asumpte_ = "Guardat Fitxer Firmat";
-			String _persona_ = "Usuari PortaFIB (" + pinfo.getDestinatariNIF() + ")";
+			String _persona_ = "Usuari PortaFIB " + pinfo.getDestinatariNom() + " (" + pinfo.getDestinatariNIF() + ")";
 
 			String _destinatari_ = incidencia.getContacteNom();
 			String _destinatariEmail_ = incidencia.getContacteEmail();
@@ -599,21 +623,50 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 					_caidNumeroSeguiment_);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
+	@Override
+	public void enviarMissatgeSolicitant(String operador, Long pinfoID) throws I18NException {
+
+		Pinfo pinfo = this.findByPrimaryKey(pinfoID);
+		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+
+		String missatgePinbal = pinfo.getMissatgePinbal().replace("\n", "<br>");
+
+		String msg = "Bon dia, " + incidencia.getContacteNom() + " <br><br>" + "Hem tramitat la seva solicitud (PINFO "
+				+ pinfoID + "): <br><br>"
+				+ "<div style=\"border: 1px solid #00000040;padding: .5rem;background-color: #f7f7f7;border-radius: 3px;\">"
+				+ missatgePinbal + "</div><br>" + "Salutacions cordials, <br><br>" + operador + ", Fundació BIT";
+
+		log.info("Afegir event de PINFO rebut de portafib");
+
+		{
+			String _missatge_ = "<div style='margin: .5rem;'>" + msg + "</div>";
+
+			String _asumpte_ = "Pinfo " + pinfoID + " Tramitat";
+			String _persona_ = operador;
+
+			Long _solicitudID_ = null;
+			Long _incidenciaTecnicaID_ = incidencia.getIncidenciaTecnicaID();
+
+			Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+
+			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
+			boolean _noLlegit_ = false;
+			Long _fitxerID_ = null;
+
+			String _destinatari_ = incidencia.getContacteNom();
+			String _destinatariEmail_ = incidencia.getContacteEmail();
+
+			String _caidIdentificadorConsulta_ = null;
+			String _caidNumeroSeguiment_ = null;
+
+			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+					_destinatariEmail_, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
+					_caidNumeroSeguiment_);
+		}
+		pinfo.setEstat(Constants.ESTAT_PINFO_NOTIFICAT);
+		this.update(pinfo);
+
+	}
+	
 }

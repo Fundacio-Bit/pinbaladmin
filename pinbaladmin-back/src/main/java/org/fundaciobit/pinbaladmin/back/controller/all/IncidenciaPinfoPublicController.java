@@ -134,7 +134,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		
 			
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
-			
+			request.getSession().setAttribute("entitats", pinfoLogicEjb.getEntitats());
+
 			form.setAttachedAdditionalJspCode(true);
 			mav.addObject("isPinfo", true);
 		}
@@ -164,12 +165,17 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		Long estat = Constants.ESTAT_PINFO_CREANT;
 		String solicitantNIF = (String) request.getSession().getAttribute("usuariNIF");
 		
+		String entitat = request.getParameter("incidenciaTecnica.entitatid");
+		log.info("Entitat: " + entitat);
+		
 		Long fitxerID = null;
 		Long fitxerFirmatID = null;
 		String portafibid = null;
 		String destinatariNIF = null;
+		String destinatariNom = null;
+		String missatgePinbal = null;
 		
-		PinfoJPA pinfo = new PinfoJPA(incidenciaID, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF);
+		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal);
 		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
 		
 		log.info("Creant Pinfo " + Pinfo.getPinfoID());
@@ -265,7 +271,5 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
         return __tmp;
         //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
     }    
-
-	
-	
+    
 }

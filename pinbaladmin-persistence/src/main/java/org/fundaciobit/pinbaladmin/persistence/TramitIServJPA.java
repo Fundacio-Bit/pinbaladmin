@@ -242,18 +242,23 @@ public class TramitIServJPA implements TramitIServ {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitIServ) {
-      TramitIServ __instance = (TramitIServ)__obj;
-      __result = true;
-      __result = __result && (this.getServid() == __instance.getServid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitIServ) {
+            TramitIServ __instance = (TramitIServ)__obj;
+            __result = true;
+            __result = __result && (this.getServid() == __instance.getServid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getServid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

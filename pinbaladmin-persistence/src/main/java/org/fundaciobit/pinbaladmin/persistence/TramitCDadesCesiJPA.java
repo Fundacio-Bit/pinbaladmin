@@ -209,18 +209,23 @@ public class TramitCDadesCesiJPA implements TramitCDadesCesi {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitCDadesCesi) {
-      TramitCDadesCesi __instance = (TramitCDadesCesi)__obj;
-      __result = true;
-      __result = __result && (this.getDadescesiid() == __instance.getDadescesiid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitCDadesCesi) {
+            TramitCDadesCesi __instance = (TramitCDadesCesi)__obj;
+            __result = true;
+            __result = __result && (this.getDadescesiid() == __instance.getDadescesiid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDadescesiid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

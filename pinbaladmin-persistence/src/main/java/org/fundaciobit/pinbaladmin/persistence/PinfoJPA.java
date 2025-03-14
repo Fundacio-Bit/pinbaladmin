@@ -36,6 +36,9 @@ public class PinfoJPA implements Pinfo {
     @Column(name="incidenciaid",length = 19)
     java.lang.Long incidenciaID;
 
+    @Column(name="entitat",length = 50)
+    java.lang.String entitat;
+
     @Column(name="solicitantnif",length = 100)
     java.lang.String solicitantNIF;
 
@@ -54,6 +57,12 @@ public class PinfoJPA implements Pinfo {
     @Column(name="destinatarinif",length = 100)
     java.lang.String destinatariNIF;
 
+    @Column(name="destinatarinom",length = 255)
+    java.lang.String destinatariNom;
+
+    @Column(name="missatgepinbal",length = 255)
+    java.lang.String missatgePinbal;
+
 
 
   /** Constructor Buit */
@@ -61,25 +70,31 @@ public class PinfoJPA implements Pinfo {
   }
 
   /** Constructor amb tots els camps  */
-  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF) {
+  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
     this.pinfoID=pinfoID;
     this.incidenciaID=incidenciaID;
+    this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
     this.portafibid=portafibid;
     this.destinatariNIF=destinatariNIF;
+    this.destinatariNom=destinatariNom;
+    this.missatgePinbal=missatgePinbal;
 }
   /** Constructor sense valors autoincrementals */
-  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF) {
+  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
     this.incidenciaID=incidenciaID;
+    this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
     this.portafibid=portafibid;
     this.destinatariNIF=destinatariNIF;
+    this.destinatariNom=destinatariNom;
+    this.missatgePinbal=missatgePinbal;
 }
   /** Constructor dels valors Not Null */
   public PinfoJPA(long pinfoID) {
@@ -88,12 +103,15 @@ public class PinfoJPA implements Pinfo {
   public PinfoJPA(Pinfo __bean) {
     this.setPinfoID(__bean.getPinfoID());
     this.setIncidenciaID(__bean.getIncidenciaID());
+    this.setEntitat(__bean.getEntitat());
     this.setSolicitantNIF(__bean.getSolicitantNIF());
     this.setEstat(__bean.getEstat());
     this.setFitxerID(__bean.getFitxerID());
     this.setFitxerfirmatID(__bean.getFitxerfirmatID());
     this.setPortafibid(__bean.getPortafibid());
     this.setDestinatariNIF(__bean.getDestinatariNIF());
+    this.setDestinatariNom(__bean.getDestinatariNom());
+    this.setMissatgePinbal(__bean.getMissatgePinbal());
     // Fitxer
     this.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer
@@ -112,6 +130,13 @@ public class PinfoJPA implements Pinfo {
 	};
 	public void setIncidenciaID(java.lang.Long _incidenciaID_) {
 		this.incidenciaID = _incidenciaID_;
+	};
+
+	public java.lang.String getEntitat() {
+		return(entitat);
+	};
+	public void setEntitat(java.lang.String _entitat_) {
+		this.entitat = _entitat_;
 	};
 
 	public java.lang.String getSolicitantNIF() {
@@ -156,20 +181,39 @@ public class PinfoJPA implements Pinfo {
 		this.destinatariNIF = _destinatariNIF_;
 	};
 
+	public java.lang.String getDestinatariNom() {
+		return(destinatariNom);
+	};
+	public void setDestinatariNom(java.lang.String _destinatariNom_) {
+		this.destinatariNom = _destinatariNom_;
+	};
+
+	public java.lang.String getMissatgePinbal() {
+		return(missatgePinbal);
+	};
+	public void setMissatgePinbal(java.lang.String _missatgePinbal_) {
+		this.missatgePinbal = _missatgePinbal_;
+	};
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Pinfo) {
-      Pinfo __instance = (Pinfo)__obj;
-      __result = true;
-      __result = __result && (this.getPinfoID() == __instance.getPinfoID()) ;
-    } else {
-      __result = false;
+
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Pinfo) {
+            Pinfo __instance = (Pinfo)__obj;
+            __result = true;
+            __result = __result && (this.getPinfoID() == __instance.getPinfoID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getPinfoID())).hashCode();
+    }
 
 // EXP  Field:pinfoid | Table: pad_pinfodata | Type: 0  
 
@@ -233,12 +277,15 @@ public class PinfoJPA implements Pinfo {
     PinfoJPA __tmp = new PinfoJPA();
     __tmp.setPinfoID(__bean.getPinfoID());
     __tmp.setIncidenciaID(__bean.getIncidenciaID());
+    __tmp.setEntitat(__bean.getEntitat());
     __tmp.setSolicitantNIF(__bean.getSolicitantNIF());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setFitxerfirmatID(__bean.getFitxerfirmatID());
     __tmp.setPortafibid(__bean.getPortafibid());
     __tmp.setDestinatariNIF(__bean.getDestinatariNIF());
+    __tmp.setDestinatariNom(__bean.getDestinatariNom());
+    __tmp.setMissatgePinbal(__bean.getMissatgePinbal());
     // Fitxer
     __tmp.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer

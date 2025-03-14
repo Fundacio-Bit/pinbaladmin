@@ -86,6 +86,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.ENTITAT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.entitat" var="entitat" />
+              <fmt:message key="genapp.form.searchby" var="cercaperentitat" >                
+                 <fmt:param value="${entitat}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${entitat}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperentitat}" path="entitat" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.SOLICITANTNIF)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -148,6 +161,32 @@
               </fmt:message>
               <span class="add-on"><c:out value="${destinatariNIF}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinatariNIF}" path="destinatariNIF" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.DESTINATARINOM)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.destinatariNom" var="destinatariNom" />
+              <fmt:message key="genapp.form.searchby" var="cercaperdestinatariNom" >                
+                 <fmt:param value="${destinatariNom}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${destinatariNom}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperdestinatariNom}" path="destinatariNom" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.MISSATGEPINBAL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.missatgePinbal" var="missatgePinbal" />
+              <fmt:message key="genapp.form.searchby" var="cercapermissatgePinbal" >                
+                 <fmt:param value="${missatgePinbal}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${missatgePinbal}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapermissatgePinbal}" path="missatgePinbal" />
             </div>
 
 

@@ -98,18 +98,23 @@ public class FormulariJPA implements Formulari {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof Formulari) {
-      Formulari __instance = (Formulari)__obj;
-      __result = true;
-      __result = __result && (this.getFormulariid() == __instance.getFormulariid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof Formulari) {
+            Formulari __instance = (Formulari)__obj;
+            __result = true;
+            __result = __result && (this.getFormulariid() == __instance.getFormulariid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getFormulariid())).hashCode();
+    }
 
 // EXP  Field:formulariid | Table: pad_campformulari | Type: 0  
 

@@ -94,18 +94,23 @@ public class TramitBDadesSoliJPA implements TramitBDadesSoli {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof TramitBDadesSoli) {
-      TramitBDadesSoli __instance = (TramitBDadesSoli)__obj;
-      __result = true;
-      __result = __result && (this.getDadessoliid() == __instance.getDadessoliid()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof TramitBDadesSoli) {
+            TramitBDadesSoli __instance = (TramitBDadesSoli)__obj;
+            __result = true;
+            __result = __result && (this.getDadessoliid() == __instance.getDadessoliid()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDadessoliid())).hashCode();
+    }
 
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 

@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.IncidenciaTecnicaWebVali
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un IncidenciaTecnica
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="incidenciaTecnica.incidenciaTecnica.plural", order=180, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/incidenciaTecnica")
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })
@@ -411,7 +413,6 @@ public class IncidenciaTecnicaController
 
     if (incidenciaTecnica == null) {
       createMessageWarning(request, "error.notfound", incidenciaTecnicaID);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, incidenciaTecnicaID), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());

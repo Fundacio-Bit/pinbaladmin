@@ -133,18 +133,23 @@ public class DocumentEntitatJPA implements DocumentEntitat {
 
 
 
-  @Override
-  public boolean equals(Object __obj) {
-  boolean __result;
-    if (__obj != null && __obj instanceof DocumentEntitat) {
-      DocumentEntitat __instance = (DocumentEntitat)__obj;
-      __result = true;
-      __result = __result && (this.getDocumentEntitatID() == __instance.getDocumentEntitatID()) ;
-    } else {
-      __result = false;
+    @Override
+    public boolean equals(Object __obj) {
+        boolean __result;
+        if (__obj != null && __obj instanceof DocumentEntitat) {
+            DocumentEntitat __instance = (DocumentEntitat)__obj;
+            __result = true;
+            __result = __result && (this.getDocumentEntitatID() == __instance.getDocumentEntitatID()) ;
+        } else {
+            __result = false;
+        }
+        return __result;
     }
-    return __result;
-  }
+
+    @Override
+    public int hashCode() {
+        return (String.valueOf(this.getDocumentEntitatID())).hashCode();
+    }
 
 // IMP Field:entitatid | Table: pad_entitat | Type: 1  
 

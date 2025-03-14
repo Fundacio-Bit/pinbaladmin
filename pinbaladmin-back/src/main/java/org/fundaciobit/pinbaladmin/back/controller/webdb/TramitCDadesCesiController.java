@@ -36,6 +36,7 @@ import org.fundaciobit.pinbaladmin.back.validator.webdb.TramitCDadesCesiWebValid
 import org.fundaciobit.pinbaladmin.persistence.TramitCDadesCesiJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.fields.*;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
 
 /**
  * Controller per gestionar un TramitCDadesCesi
@@ -43,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.fields.*;
  * 
  * @author GenApp
  */
+@MenuOption(labelCode="tramitCDadesCesi.tramitCDadesCesi.plural", order=320, group="WEBDB")
 @Controller
 @RequestMapping(value = "/webdb/tramitCDadesCesi")
 @SessionAttributes(types = { TramitCDadesCesiForm.class, TramitCDadesCesiFilterForm.class })
@@ -371,7 +373,6 @@ public class TramitCDadesCesiController
 
     if (tramitCDadesCesi == null) {
       createMessageWarning(request, "error.notfound", dadescesiid);
-      new ModelAndView(new RedirectView(getRedirectWhenCancel(request, dadescesiid), true));
       return llistatPaginat(request, response, 1);
     } else {
       ModelAndView mav = new ModelAndView(getTileForm());
