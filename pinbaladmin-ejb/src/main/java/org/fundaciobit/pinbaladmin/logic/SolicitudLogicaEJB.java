@@ -24,6 +24,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.query.selectcolumn.Select2Columns;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
@@ -799,5 +800,5 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		return estadoActualStr;
 	}
 
-
+	
 }

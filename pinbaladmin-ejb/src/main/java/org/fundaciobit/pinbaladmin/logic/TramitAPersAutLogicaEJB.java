@@ -437,25 +437,22 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         log.info("SolicitudID de la solicitud creada: " + soliID);
 
         try {
-//        	log.info("Enviem event de creació de la sol·licitud");
-//			eventSolicitudCreada(creador, soliID);
-			log.info("Enviem mail al sol·licitant");
-			
+			log.info("Enviem mail al sol·licitant. De moment no enviam.");
 //			String destinatariMail = solicitud.getPersonaContacteEmail();
 			String destinatariMail = null;
 			enviarMailSolicitant(solicitud, destinatariMail);
-			
+
 			log.info("Generem documents de la sol·licitud");
 			generarDocumentsSolicitud(soliID, organid, prop);
-			log.info("Afegim serveis a la sol·licitud");
 			
+			log.info("Afegim document de consentiment");
+			afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
+			
+			log.info("Afegim serveis a la sol·licitud");
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
 			soli.setSolicitudServeis(solicitudServeis);
 			log.info("Generem Excel de Serveis");
 			generarExcelDeServeis(solicitud);
-			
-			log.info("Afegim document de consentiment");
-			afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 			
 			log.info("S'ha creat la sol·licitud: " + soliID);
         } catch (Exception e) {
@@ -855,6 +852,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String[] excels = { "locals", "estatals" };
 
 		for (String excel : excels) {
+			log.info("Generant Excel de Serveis: " + excel);
 			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
 
 			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx

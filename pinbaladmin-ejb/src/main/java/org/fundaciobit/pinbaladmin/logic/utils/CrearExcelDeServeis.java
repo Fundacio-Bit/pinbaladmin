@@ -7,9 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.xml.parsers.ParserConfigurationException;
 
 import java.util.Set;
@@ -20,12 +23,17 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.xml.sax.SAXException;
@@ -39,6 +47,13 @@ public class CrearExcelDeServeis {
 
   protected static final Logger log = Logger.getLogger(CrearExcelDeServeis.class);
 
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService.JNDI_NAME)
+  protected static org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService documentSolicitudLogicEjb;
+
+  @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentLogicaService.JNDI_NAME)
+  protected static org.fundaciobit.pinbaladmin.logic.DocumentLogicaService documentLogicEjb;
+
+  
   public static final String[] CAMPS_EXCEL = {
           "Código del Procedimiento", //0
           "Nombre del Procedimiento", //1
@@ -78,6 +93,14 @@ public class CrearExcelDeServeis {
     String tipusProcediment = soli.getProcedimentTipus();
     String descripcio = soli.getCodiDescriptiu(); // values.get("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
 
+	String origen = soli.getConsentiment();
+	String consentiment = "";
+	if (origen.equals("noop")) consentiment = "NO_OPOSICION";
+	if (origen.equals("si")) consentiment = "Si";
+	if (origen.equals("llei")) consentiment = "Ley";
+	
+	log.info("Consentiment. Abans: " + origen + " Despres: " + consentiment);
+	
     String periodo = "10 años";
     String automatizado = "NO"; //soli.getAutomatizado(); // values.get("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
     String periodico = "NO"; //soli.getPeriodico(); // values.get("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
@@ -106,7 +129,7 @@ public class CrearExcelDeServeis {
 
       // A 0 FORMULARIO.DATOS_SOLICITUD.CODIPROC
       dades[0] = codiProc;
-      // B 1 FORMULARIO.DATOS_SOLICITUD.NOMBREPROC => Traduir CATALA ????
+      // B 1 FORMULARIO.DATOS_SOLICITUD.NOMBREPROC
       dades[1] = nomProc;
 
       // C 2 Cercar el cedent de (SVDDGPCIWS02 => DGP)
@@ -130,45 +153,38 @@ public class CrearExcelDeServeis {
       dades[6] = tipusProcediment;
 
       // H 7 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.CONSENTIMIENTO No
-      // oposición => NO_OPOSICION
+      dades[7] = consentiment;
+
       {
-        String origen = ss.getConsentiment(); // values.get(base +
-                                              // "LDECONSENTIMIENTO");
-        // Sí => Si
-        // No oposición => NO_OPOSICION
-        // Ley => Ley
+		List<String> strNormes = new ArrayList<>();
+		List<String> strArticles = new ArrayList<>();
+		List<String> strUrls = new ArrayList<>();
 
-        log.info("Consentiment: " + origen);
-        
-        final String consentiment;
-        if(origen.equals("noop")) {
-            consentiment = "NO_OPOSICION";
-        } else if (origen.equals("si")) {
-            consentiment = "Si";
-        } else if (origen.equals("llei")) {
-            consentiment = "Ley";
-        } else {
-            consentiment = null;
-        }
+		// Array de métodos para obtener las normas y los ficheros
+		String[] articles = { ss.getArticles(), ss.getArticles2(), ss.getArticles3() };
+		String[] normes = { ss.getNormaLegal(), ss.getNorma2(), ss.getNorma3() };
+		FitxerJPA[] fitxersNormes = { ss.getFitxernorma(), ss.getFitxernorma2(), ss.getFitxernorma3() };
 
-        // values.get(base + "CONSENTIMIENTO");
-        dades[7] = consentiment;
+		// Validamos si existe cada fichero antes de agregarlo
+		for (int i = 0; i < fitxersNormes.length; i++) {
+			if (fitxersNormes[i] != null && normes[i] != null && articles[i] != null) {
+				strNormes.add(normes[i]);
+				strArticles.add(articles[i]);
+				strUrls.add(generarURLDownload(fitxersNormes[i]));
+			}
+		}
+
+		// Verificación y asignación a dades
+		if (!strNormes.isEmpty()) {
+			dades[8] = String.join("\n", strNormes);
+			dades[9] = String.join("\n", strArticles);
+			dades[10] = String.join("\n", strUrls);
+		} else {
+			dades[8] = "";
+			dades[9] = "";
+			dades[10] = "";
+		}
       }
-
-      // I 8 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.NORMALEGAL
-      dades[8] = ss.getNormaLegal(); // values.get(base + "NORMALEGAL");
-      // J 9 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ARTICULOS
-      dades[9] = ss.getArticles(); // values.get(base + "ARTICULOS");
-      //dades[10] = ss.getEnllazNormaLegal(); // values.get(base + "ENLACENOR");
-      
-      // K 10 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR
-      //TODO: Controlar que pot haver multiples normes
-      Fitxer fitxerNorma = ss.getFitxernorma();
-      if (fitxerNorma == null) {
-    	  dades[10] = ss.getEnllazNormaLegal();
-      } else {
-    	  dades[10] = generarURLDownload(fitxerNorma);
-      }      
       
       // L 11 L'Enllaç de Consentiment
       {
@@ -176,30 +192,39 @@ public class CrearExcelDeServeis {
     	  
     	if (soli.getConsentiment().equals("llei")) {
             dades[11] = "Ley";
-		}else {
-	        String urlConsentiment = soli.getUrlconsentiment();
-	        if (urlConsentiment != null ) {
-	        	dades[11] = urlConsentiment;
-	        }else {
-				for (DocumentSolicitudJPA docSol : soli.getDocumentSolicituds()) {
-					DocumentJPA doc = docSol.getDocument();
-					if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-							|| doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
-						dades[11] = generarURLDownload(doc.getFitxerOriginal());
-						break;
+		} else {
+			String urlConsentiment = soli.getUrlconsentiment();
+			if (urlConsentiment != null) {
+				dades[11] = urlConsentiment;
+			} else {
+				// Coger todos los documentos de la solicitud y buscar el de consentimiento.
+				try {
+
+					Where wSoli = DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID());
+					List<DocumentSolicitud> docsSoli = documentSolicitudLogicEjb.select(wSoli);
+
+					// Buscar el documento de consentimiento
+					for (DocumentSolicitud docSol : docsSoli) {
+						Document doc = documentLogicEjb.findByPrimaryKey(docSol.getDocumentID());
+						if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+								|| doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
+							log.info("Encontrado el documento de consentimiento");
+							String url = generarURLDownload(doc.getFitxerOriginal());
+							log.info(url);
+							dades[11] = url;
+							break;
+						}
 					}
+				} catch (Exception e) {
+					String msg = "Error generant plantilla excel: " + e.getMessage();
+					log.error(msg, e);
 				}
-	        }
+			}
 		}
-    	  
-    	  
-        String urlConsentiment = soli.getUrlconsentiment();
-        
-        if (urlConsentiment == null ) {
-          dades[11] = "Ley";
-        } else {
-          dades[11] = urlConsentiment;
-        }
+    	
+    	if (dades[11] == null) {
+    		dades[11] = "";
+    	}
       }
 
       // M 12 FORMULARIO.DATOS_SOLICITUD.CADUCA o
