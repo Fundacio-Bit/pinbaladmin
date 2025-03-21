@@ -42,6 +42,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiQueryPath;
@@ -289,11 +290,24 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
             //File dest = new File(baseFile, "generat.xlsx");
 
+            Fitxer docConsentiment = null;
+			List<Long> documentsSolicitud = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+					DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
+			
+			for (Long docSoli : documentsSolicitud) {
+				Document doc = documentEjb.findByPrimaryKey(docSoli);
+				if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP || doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) {
+					docConsentiment = fitxerEjb.findByPrimaryKey(doc.getFitxerOriginalID());
+					break;
+				}
+			}
+            
+            
 			String[] excels = { "locals", "estatals" };
 
 			for (String excel : excels) {
 
-				byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
+				byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel, docConsentiment);
 				if (data == null) {
 					String msg = "No hi ha serveis " + excel + " per a la sol·licitud";
 					HtmlUtils.saveMessageInfo(request, msg);

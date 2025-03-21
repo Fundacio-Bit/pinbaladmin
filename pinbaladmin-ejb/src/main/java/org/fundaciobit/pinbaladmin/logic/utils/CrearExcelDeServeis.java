@@ -73,7 +73,7 @@ public class CrearExcelDeServeis {
           "Peticiones al dia" // 15 
   };
 
-  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli, String tipusExcel)
+  protected static Map<Long, String[]> getDadesExcelBySoliServeiID(SolicitudJPA soli, String tipusExcel, Fitxer docConsentiment)
       throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
     /*
      * Properties prop = getPropertiesFromFormulario(xml);
@@ -188,8 +188,6 @@ public class CrearExcelDeServeis {
       
       // L 11 L'Enllaç de Consentiment
       {
-    	//Conseguir el fitxerID del doc de consentiment adj, i generar la url de descarrega.
-    	  
     	if (soli.getConsentiment().equals("llei")) {
             dades[11] = "Ley";
 		} else {
@@ -198,33 +196,14 @@ public class CrearExcelDeServeis {
 				dades[11] = urlConsentiment;
 			} else {
 				// Coger todos los documentos de la solicitud y buscar el de consentimiento.
-				try {
-
-					Where wSoli = DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID());
-					List<DocumentSolicitud> docsSoli = documentSolicitudLogicEjb.select(wSoli);
-
-					// Buscar el documento de consentimiento
-					for (DocumentSolicitud docSol : docsSoli) {
-						Document doc = documentLogicEjb.findByPrimaryKey(docSol.getDocumentID());
-						if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-								|| doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
-							log.info("Encontrado el documento de consentimiento");
-							String url = generarURLDownload(doc.getFitxerOriginal());
-							log.info(url);
-							dades[11] = url;
-							break;
-						}
-					}
-				} catch (Exception e) {
-					String msg = "Error generant plantilla excel: " + e.getMessage();
-					log.error(msg, e);
+				if (docConsentiment != null) {
+					String url = generarURLDownload(docConsentiment);
+					dades[11] = url;
+				}else {
+					dades[11] = "";
 				}
 			}
 		}
-    	
-    	if (dades[11] == null) {
-    		dades[11] = "";
-    	}
       }
 
       // M 12 FORMULARIO.DATOS_SOLICITUD.CADUCA o
@@ -251,14 +230,14 @@ public class CrearExcelDeServeis {
     return dadesByServeiSolicitudID;
   }
 
-  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli, String tipusExcel)
+  public static byte[] crearExcelDeServeis(File plantillaXLSX, SolicitudJPA soli, String tipusExcel, Fitxer docConsentiment)
       throws I18NException {
 
     XSSFWorkbook my_xlsx_workbook = null;
     FileInputStream input_document = null;
     try {
       Long soliID = soli.getSolicitudID();
-      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel);
+      Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel, docConsentiment);
 
       // Read Excel document first
       input_document = new FileInputStream(plantillaXLSX);

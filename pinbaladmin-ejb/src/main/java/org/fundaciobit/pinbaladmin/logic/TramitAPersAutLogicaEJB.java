@@ -446,13 +446,13 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			generarDocumentsSolicitud(soliID, organid, prop);
 			
 			log.info("Afegim document de consentiment");
-			afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
+			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 			
 			log.info("Afegim serveis a la sol·licitud");
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
 			soli.setSolicitudServeis(solicitudServeis);
 			log.info("Generem Excel de Serveis");
-			generarExcelDeServeis(solicitud);
+			generarExcelDeServeis(solicitud, docConsentiment);
 			
 			log.info("S'ha creat la sol·licitud: " + soliID);
         } catch (Exception e) {
@@ -486,7 +486,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     }
     
-    private void afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
+    private Fitxer afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
 
         if (fitxerConsentimentID != null) {
 
@@ -505,9 +505,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
         	String nom = "Document Consentiment";
         	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
-        	
+        	return fitxerCopia;
         }else {
         	log.info("No tenim document de consentiment");
+        	return null;
         }
 
     }
@@ -595,20 +596,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 					ss.setArticles3(articles3);
 				}
 				
-				
-
-//				// Gestio consentiment
-//				{
-//					String tipusConsentiment = J.getConsentimentadjunt();
-//					String consentiment = J.getConsentiment();
-//					String enllazConsentiment = J.getUrlconsentiment();
-//
-//					// XXX CONSENT: Esborrar
-//					ss.setConsentiment(consentiment);
-//					ss.setEnllazConsentiment(enllazConsentiment);
-//					ss.setTipusConsentiment(tipusConsentiment);
-//				}
-
 				log.info("Norma Legal:" + ss.getNormaLegal());
 
 				SolicitudServeiJPA solicitudServei = (SolicitudServeiJPA) solicitudServeiLogicaEjb.create(ss);
@@ -619,33 +606,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		return serveisDeLaSolicitud;
 	}
 
-//    private void eventSolicitudCreada(String creador, Long solicitudID) {
-//        // Afegir event de creació de la solicitud.
-//
-//        try {
-//            java.lang.Long _solicitudID_ = solicitudID;
-//            java.lang.Long _incidenciaTecnicaID_ = null;
-//            java.sql.Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-//            java.lang.String _persona_ = creador;
-//            
-//            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-//            java.lang.String _comentari_ = "S'ha creat la sol·licitud a partir del formulari Sistra de PinbalAdmin";
-//            
-//            java.lang.Long _fitxerID_ = null;
-//            boolean _noLlegit_ = true;
-//            java.lang.String _destinatari_ = null;
-//            java.lang.String _destinatariMail_ = null;
-//            java.lang.String _caidConsulta_ = null;
-//            java.lang.String _caidSeguiment_ = null;
-//            
-//			eventLogicEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-//					_destinatariMail_, _comentari_, _fitxerID_, _noLlegit_, _caidConsulta_, _caidSeguiment_);            
-//        } catch (Throwable th) {
-//            log.error("Error creant el primer event de la solicitud: " + th.getMessage(), th);
-//        }
-//    }
-//    
-    
 	private void enviarMailSolicitant(SolicitudJPA solicitud, String destinatariMail) {
         // Afegir event de creació de la solicitud.
         try {
@@ -686,85 +646,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
 				+ "</div>";
 		return msg;
-		
-//		return 	"Bon dia,<br />"
-//				+ "<div id=\"titol\">Nova solicitud rebuda: " + soli.getSolicitudID() +  "</div>"
-//
-//				+ "<div id=\"missatge\">"
-//				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
-//				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />"
-//				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
-//				+ "</div>"
-//				+ ""
-//				+ "<div id=\"reObrir\">"
-//				+ "    Podrà reobrir aquesta incidència o aportar més informació utilitzant el següent enllaç: <a"
-//				+ "        href=\"" + getLinkPublic(soli.getSolicitudID())  + "\"> Accedir a solicitud</a><br />"
-//				+ "</div>"
-//
-//				+ "<div id=\"firma\">"
-//				+ "    Salutacions<br />"
-//				+ "    <i>Àrea de Govern Digital - Fundació BIT</i><br />"
-//				+ "</div>"
-//				
-//				+ "<div id=\"noContestar\">"
-//				+ "    Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la incidència accediu a l'enllaç"
-//				+ "    aportat en aquest correu.<br />"
-//				+ "</div>"
-//
-//				+ "<style>"
-//				+ "    div{"
-//				+ "        padding: 10px;"
-//				+ "        margin-top: 10px;"
-//				+ "    }"
-//				+ ""
-//				+ "    #missatge {"
-//				+ "        background-color: #f0f0f0;"
-//				+ "    }"
-//				+ ""
-//				+ "    #titol{"
-//				+ "        font-size: 20px;"
-//				+ "        text-align: center;"
-//				+ "        font-weight: bold;"
-//				+ "    }"
-//				+ "    #noContestar {"
-//				+ "        color: #868686;"
-//				+ "        border: 4px double #868686;"
-//				+ "        border-left: none;"
-//				+ "        border-right: none;"
-//				+ "    }"
-//				+ "</style>";
 	}
-//	
-//	public static String getPeuCorreu(Long soliID) {
-//		String tipus = "soicitud";
-//		String url = Configuracio.getAppBackUrl() + "/public/event" + tipus + "/veureevents/"
-//				+ HibernateFileUtil.encryptFileID(soliID);
-//		
-//		String msg = ""
-//				+ "<div id=\"peu_correu\" style=\"margin: .5rem;\">"
-//				
-//				+ "  <div id=\"reObrir\">"
-//				+ "     Per respondre, contesteu, per favor, utilitzant el següent enllaç: <a"
-//				+ "     href=\"" + url + "\"> Accedir a solicitud</a>"
-//				+ "  </div>"
-//
-//				+ "  <div id=\"firma\">"
-//				+ "		Salutacions<br /> <i>Àrea de Govern Digital - Fundació BIT</i>"
-//				+ "  </div>"
-//
-//				+ "  <div id=\"noContestar\">"
-//				+ "		Per favor, NO CONTESTEU directament aquest correu, per fer qualsevol consulta sobre la " + tipus
-//				+ " accediu a l'enllaç aportat en aquest correu."
-//				+ "  </div>" 
-//				
-//				+ "  <style>" 
-//				+ "     #peu_correu div {padding: .5rem 0;}"
-//				+ "     #noContestar {color: #868686; border: 4px double #868686; border-left: none; border-right: none;}" 
-//				+ "  </style>"
-//				
-//				+ "</div>";
-//		return msg;
-//	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
 		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
@@ -792,22 +674,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		
         prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", organGestor.getNom());
         prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", organGestor.getDir3());
-
-		
-		
-//		
-//        EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
-//        String nifArrel = entitatArrel.getCIF();
-//
-//		if (nifArrel.equals("S0711001H")) {
-//	        String dir3Dgtic = "A04027005";
-//	        List<Organ> organ = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
-//	        if (organ.size() == 1) {
-//	            Organ dgtic = organ.get(0);
-//	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-//	            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
-//	        }
-//	    }
 
 		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
 		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
@@ -841,7 +707,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		}
 	}
 
-    public void generarExcelDeServeis(SolicitudJPA soli) throws Exception, I18NException {
+    public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
 
         Long solicitudID = soli.getSolicitudID();
         log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
@@ -853,7 +719,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 		for (String excel : excels) {
 			log.info("Generant Excel de Serveis: " + excel);
-			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel);
+			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel, docConsentiment);
 
 			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx
 			String nom = excel + "_" + SDF.format(new Date()) + "_" + plantillaXLSX.getName();
