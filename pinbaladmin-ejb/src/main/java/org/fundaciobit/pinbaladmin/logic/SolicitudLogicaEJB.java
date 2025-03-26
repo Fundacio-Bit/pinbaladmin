@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,14 +36,18 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAlta;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsulta;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacio;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -89,6 +94,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	@EJB(mappedName = ServeiLogicaService.JNDI_NAME)
 	protected ServeiLogicaService serveiLogicaEjb;
 
+    @EJB(mappedName = TramitJConsentLogicaService.JNDI_NAME)
+    protected TramitJConsentLogicaService tramitJEjb;
+    
     @Override
     public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
 
@@ -487,7 +495,6 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			throws Exception {
 
 		SolicitudJPA solicitud = this.findByPrimaryKey(soliID);
-		
 		PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
 		
 		Retorno retorno = cons.consultaEstatApiPinbal(titular, funcionario, solicitud.getProcedimentCodi());
@@ -800,5 +807,112 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		return estadoActualStr;
 	}
 
+	public void updateDocumentsConsentiment() {
+
+		try {
+			// Obtenir totes les solicituds locals amb consentiment adjunt.
+			Where wLocal = SolicitudFields.ORGANID.isNotNull();
+			Where wConsAdj = SolicitudFields.CONSENTIMENTADJUNT.equal(Constants.CONSENTIMENT_ADJUNT);
+			Where wFetAmbTramit = SolicitudFields.NOTES.isNotNull();
+			
+			List<Solicitud> llistat = this.select(Where.AND(wLocal, wConsAdj, wFetAmbTramit));
+			
+			Where wTramitConsAdj = TramitJConsentFields.ADJUNTID.isNotNull();
+			
+			//Comprovar si realment tenen el consentiment als documents.
+			for(Solicitud soli : llistat) {
+				boolean teDocument = false;
+				List<DocumentSolicitud> documentsSoli = documentSolicitudLogicaEjb.select(DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID()));
+				for (DocumentSolicitud docSol :documentsSoli ) {
+					Document doc = documentLogicaEjb.findByPrimaryKey(docSol.getDocumentID());
+					
+					if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI || doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP ) {
+						teDocument = true;
+						break;
+					}
+				}
+				
+				if (teDocument) {
+					log.info("Solicitud " + soli.getSolicitudID() + " ja te consentiment. No feim res");
+				}else {
+					//Hem d'obtenir el tramitJ i crear una copia del document de consentiment.
+					List<TramitJConsent> tramitsJ = tramitJEjb.select(Where.AND(wTramitConsAdj));
+					TramitJConsent consentiment = null;
+					
+					for (TramitJConsent tramitJ : tramitsJ) {
+						if (soli.getNotes().indexOf("[" + tramitJ.getTramitid() + "]") > 0) {
+							consentiment = tramitJ;
+							break;
+						}
+					}
+					
+					if (consentiment != null) {
+						Long fitxerConsentimentID = consentiment.getAdjuntID();
+						String tipusCons = soli.getConsentiment();
+						Long soliID = soli.getSolicitudID();
+						log.info("Farem una copia del document de consentiment (" + fitxerConsentimentID + ") a la soliciud " + soliID + ". TramitID: " + consentiment.getTramitid());
+						
+						afegirDocumentConsentiment(fitxerConsentimentID,tipusCons, soliID);
+						
+						
+					}else {
+						log.warn("Solicitud " + soli.getSolicitudID() + "no te tramitJ. No feim res");
+					}
+					
+					
+				}
+				
+				
+			}
+			
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	
+	private Fitxer afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment, Long soliID)
+			throws I18NException {
+
+		if (fitxerConsentimentID != null) {
+
+			log.info("Tenim document de consentiment: " + fitxerConsentimentID + " - " + consentiment);
+
+			FitxerJPA cons = fitxerEjb.findByPrimaryKey(fitxerConsentimentID);
+			File consFile = FileSystemManager.getFile(cons.getFitxerID());
+
+			// Copiar fitxer de consentiment
+			FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(),
+					cons.getDescripcio());
+			fitxerCopia = (FitxerJPA) fitxerEjb.create(fitxerCopia);
+
+			File consFilePdf = FileSystemManager.getFile(fitxerCopia.getFitxerID());
+			FileSystemManager.copy(consFile, consFilePdf);
+
+			Long tipus = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI)
+					? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+					: Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
+			String nom = "Document Consentiment";
+			afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
+			return fitxerCopia;
+		} else {
+			log.info("No tenim document de consentiment");
+			return null;
+		}
+
+	}
+
+	private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID)
+			throws I18NException {
+
+		Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+
+		DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+
+		documentSolicitudLogicaEjb.create(ds);
+		log.info("Afegit document: " + nom + " a la solicitud: " + soliID);
+
+	}
+
 }

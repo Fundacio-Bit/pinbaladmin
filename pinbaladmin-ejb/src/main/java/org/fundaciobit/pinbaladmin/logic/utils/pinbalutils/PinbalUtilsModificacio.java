@@ -280,6 +280,8 @@ public class PinbalUtilsModificacio extends PinbalUtilsCommon {
 
 					File fileConsentiment = FileSystemManager.getFile(consentimentID);
 					contingut = FileUtils.readFromFile(fileConsentiment);
+				}else {
+					throw new Exception("Falta el document de consentiment.");
 				}
 			}
 		} catch (Exception e) {

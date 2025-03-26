@@ -531,6 +531,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
                     getContextWeb() + "/fullexport", AdditionalButtonStyle.INFO));
 
+            
+//            solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "updateDocumentConsentiment",
+//                    getContextWeb() + "/updateDocConsentiment", AdditionalButtonStyle.INFO));
+
+            
+            
             solicitudFilterForm
                     .addAdditionalButtonForEachItem(new AdditionalButton(
                             "fas fa-bullhorn", "events.titol", EventSolicitudOperadorController.CONTEXTWEB
@@ -585,6 +591,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          */
     }
 
+	@RequestMapping(value = "/updateDocConsentiment", method = RequestMethod.GET)
+	public String updateDocConsentiment(HttpServletRequest request, HttpServletResponse response,
+			SolicitudFilterForm filterForm) throws Exception, I18NException {
+
+		
+		solicitudLogicaEjb.updateDocumentsConsentiment();
+		
+		
+		// Tornar al llistat
+		return "redirect:" + getContextWeb() + "/list";
+	}
+    
     @Override
     public void postList(HttpServletRequest request, ModelAndView mav, SolicitudFilterForm filterForm,
             List<Solicitud> list) throws I18NException {

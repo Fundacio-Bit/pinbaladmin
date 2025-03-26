@@ -283,7 +283,10 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 					File fileConsentiment = FileSystemManager.getFile(consentimentID);
 					contingut = FileUtils.readFromFile(fileConsentiment);
+				}else {
+					throw new Exception("Falta el document de consentiment.");
 				}
+				
 			}
 		} catch (Exception e) {
 			String msg = "CONS: Error obtenint el PDF de Consentiment: " + e.getMessage();
