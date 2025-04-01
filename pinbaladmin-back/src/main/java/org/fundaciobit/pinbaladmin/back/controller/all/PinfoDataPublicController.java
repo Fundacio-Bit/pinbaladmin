@@ -15,6 +15,7 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
@@ -347,6 +348,30 @@ public class PinfoDataPublicController extends PinfoDataController {
 		Long alta_baixa = (Long) request.getSession().getAttribute(ALTA_BAIXA);
 		
 		for (String u : usuaris) {
+			
+	        try {
+	        	log.info("Intentarem obtenir dades d'estructura organitzativa de l'usuari: " + u);
+	        	boolean debug = true;
+	        	IEstructuraOrganitzativaPlugin plugin = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
+
+//	        	String president = plugin.getGerentPresidentName();
+//	        	log.info("Nom del presidente: " + president);
+	        	String codiDG = plugin.getCodeDepartamentDireccioGeneral(u);
+				String usernameDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
+				String nomDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
+
+				log.info("Director general de " + u + ": " + codiDG + " - "+ nomDG + " (" + usernameDG + ")");
+				
+				
+//				String capDepartamentDG = plugin.getCapDepartamentDirectorGeneralName(u);
+//				log.info("El capDepartamentDG  es: " + capDepartamentDG  );
+
+	        } catch (Exception e) {
+				log.error("NO HA ANAT BE: " + e.getMessage(), e);
+				HtmlUtils.saveMessageError(request, "NO HA ANAT BE: " + e.getMessage());
+			}
+			
+			
 			for (String solSer : solicitudServeis) {
 				SolicitudServei ss = solicitudServeiLogicaEjb.findByPrimaryKey(Long.parseLong(solSer));
 				Long procedimentID = ss.getSolicitudID();
@@ -622,54 +647,58 @@ public class PinfoDataPublicController extends PinfoDataController {
 	private List<Responsable> getLlistaResponsablesProcediments(Long pinfoID) throws I18NException {
 
 		List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
-		try {
-
-			// Obtenir els procediments dels PinfoDatas:
-			List<Long> procedimentsList = new java.util.ArrayList<Long>();
-			List<String> listaNifs = new java.util.ArrayList<String>();
-			List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));
-			for (PinfoData pinfoData : pinfoDataList) {
-				if (!procedimentsList.contains(pinfoData.getProcedimentID())) {
-					procedimentsList.add(pinfoData.getProcedimentID());
-				}
-			}
-
-			for (Long procedimentID : procedimentsList) {
-				Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
-				Long xmlSolicitud = solicitud.getSolicitudXmlID();
-				
-				log.error( procedimentID +  ": xmlSolicitud " + xmlSolicitud);
-				if (xmlSolicitud == null) {
-					continue;
-				}
-				
-				Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xmlSolicitud);
-
-				String nif = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECD");
-				nif = nif.toUpperCase();
-				String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
-				String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
-				String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
-				String cargo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CARGOSECD");
-				String telefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
-				String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
-				String nomOcult = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECD");
-
-				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + cargo + " - " + telefon + " - " + mail
-						+ " - " + nomOcult);
-
-				Responsable responsable = new Responsable(nif, nom, ape1, ape2, cargo, telefon, mail, nomOcult);				
-				
-				if (!listaNifs.contains(nif)) {
-                    responsablesList.add(responsable);
-                    listaNifs.add(nif);
-				}
-				
-			}
-
-		} catch (Exception e) {
-			log.error("Error getLlistaResponsablesProcediments: " + e.getMessage());
-		}
+		
+		
+		
+		
+//		try {
+//
+//			// Obtenir els procediments dels PinfoDatas:
+//			List<Long> procedimentsList = new java.util.ArrayList<Long>();
+//			List<String> listaNifs = new java.util.ArrayList<String>();
+//			List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));
+//			for (PinfoData pinfoData : pinfoDataList) {
+//				if (!procedimentsList.contains(pinfoData.getProcedimentID())) {
+//					procedimentsList.add(pinfoData.getProcedimentID());
+//				}
+//			}
+//
+//			for (Long procedimentID : procedimentsList) {
+//				Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
+//				Long xmlSolicitud = solicitud.getSolicitudXmlID();
+//				
+//				log.error( procedimentID +  ": xmlSolicitud " + xmlSolicitud);
+//				if (xmlSolicitud == null) {
+//					continue;
+//				}
+//				
+//				Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xmlSolicitud);
+//
+//				String nif = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECD");
+//				nif = nif.toUpperCase();
+//				String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
+//				String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
+//				String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
+//				String cargo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CARGOSECD");
+//				String telefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
+//				String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
+//				String nomOcult = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECD");
+//
+//				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + cargo + " - " + telefon + " - " + mail
+//						+ " - " + nomOcult);
+//
+//				Responsable responsable = new Responsable(nif, nom, ape1, ape2, cargo, telefon, mail, nomOcult);				
+//				
+//				if (!listaNifs.contains(nif)) {
+//                    responsablesList.add(responsable);
+//                    listaNifs.add(nif);
+//				}
+//				
+//			}
+//
+//		} catch (Exception e) {
+//			log.error("Error getLlistaResponsablesProcediments: " + e.getMessage());
+//		}
 		return responsablesList;
 	}
 	
@@ -780,7 +809,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 //        IEstructuraOrganitzativaPlugin instance = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
 //		String cap = instance.getCapAreaConsellerName(user);
-		
+//		
 //		log.info("El cap de " + user + " es " + cap);
         
 		UsuariData usuari;
@@ -863,5 +892,43 @@ public class PinfoDataPublicController extends PinfoDataController {
 			log.info("loginPlugin ja existeix. " + loginPlugin.getClass().getName());
         }
         return loginPlugin;
+    }
+    
+    
+    public static final String LOGIN_PLUGIN_KEY_estructuraOrganitzativa = Constants.PINBALADMIN_PROPERTY_BASE + "pluginsib.estructuraorganitzativa.ldapcaib";
+
+    public static IEstructuraOrganitzativaPlugin estructuraOrganitzativaPlugin = null;
+    
+    public static IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa(boolean debug) throws I18NException{
+    	
+        if (estructuraOrganitzativaPlugin == null) {
+        	 Properties propTmp = Configuracio.getSystemAndFileProperties();
+
+ 			if (debug) {
+ 				log.info("Propietats de sistema i fitxer de configuració:");
+ 				Set<Object> set = propTmp.keySet();
+ 				for (Object object : set) {
+ 					String key = (String) object;
+ 					String value = propTmp.getProperty(key);
+ 					log.info(key + ": " + value);
+ 				}
+ 			}
+             
+             String className = propTmp.getProperty(LOGIN_PLUGIN_KEY_estructuraOrganitzativa + ".class");
+             
+             log.info("className: " + className);
+             Object pluginInstance = PluginsManager.instancePluginByClassName(className,
+                     Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
+
+             if (pluginInstance == null) {
+                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");
+             }
+             estructuraOrganitzativaPlugin = (IEstructuraOrganitzativaPlugin) pluginInstance;
+        	
+        }else {
+			log.info("estructuraOrganitzativaPlugin ja existeix. " + estructuraOrganitzativaPlugin.getClass().getName());
+        }
+        return estructuraOrganitzativaPlugin;
+			
     }
 }

@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitEOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudForm;
@@ -79,6 +80,14 @@ public class TramitEPublicController extends TramitEOperadorController {
     		carrec = "---";
 		}
     	tramitForm.getTramitECteAud().setCarrec(carrec);
+    	
+		String telefon = tramitForm.getTramitECteAud().getTelefon();
+		if (telefon != null && !telefon.matches("\\d{9,10}")) {
+			result.rejectValue(get(TELEFON), "genapp.validation.invalidFormat",
+					new Object[] { I18NUtils.tradueix(TELEFON.fullName) },
+					"El número de teléfono debe tener 9 o 10 dígitos.");
+		}
+
     }
 
 }

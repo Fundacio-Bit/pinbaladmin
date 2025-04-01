@@ -3,10 +3,12 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitDOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudForm;
+import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -72,13 +74,20 @@ public class TramitDPublicController extends TramitDOperadorController {
     
     @Override
     public void preValidate(HttpServletRequest request, TramitDCteAutForm tramitForm, BindingResult result)
-    		throws I18NException {
-    	super.preValidate(request, tramitForm, result);
-    	
-    	String carrec = tramitForm.getTramitDCteAut().getCarrec();
-    	if (carrec != null && carrec.trim().length() > 0) {
-    		carrec = "---";
+			throws I18NException {
+		super.preValidate(request, tramitForm, result);
+
+		String carrec = tramitForm.getTramitDCteAut().getCarrec();
+		if (carrec != null && carrec.trim().length() > 0) {
+			carrec = "---";
 		}
-    	tramitForm.getTramitDCteAut().setCarrec(carrec);
-    }
+		tramitForm.getTramitDCteAut().setCarrec(carrec);
+
+		String telefon = tramitForm.getTramitDCteAut().getTelefon();
+		if (telefon != null && !telefon.matches("\\d{9,10}")) {
+			result.rejectValue(get(TELEFON), "genapp.validation.invalidFormat",
+					new Object[] { I18NUtils.tradueix(TELEFON.fullName) },
+					"El número de teléfono debe tener 9 o 10 dígitos.");
+		}
+	}
 }
