@@ -33,6 +33,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -76,6 +77,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentService.JNDI_NAME)
   protected org.fundaciobit.pinbaladmin.ejb.DocumentService documentEjb;
 
+  @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+  protected OrganLogicaService organLogicaEjb;
+  
   @Override
   public String getTileForm() {
     return "solicitudListWebDB_FullView_operador";
@@ -495,24 +499,26 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
     SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
     
-    Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
-	while (organGestor.getDir3pare() != null && !organGestor.getDir3pare().equals(organGestor.getDir3())) {
-        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
-        if (organ.size() == 1) {
-            organGestor = organ.get(0);
-        }
-    }
-    
-    if (organGestor.getCif().equals("S0711001H")) {
-        String dir3Dgtic = "A04027005";
-        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
-        if (organ.size() == 1) {
-            Organ dgtic = organ.get(0);
-            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
-        }
-        
-    }
+	setOrganGestorProperties(soli.getOrganid(), prop);		
+
+//    Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
+//	while (organGestor.getDir3pare() != null && !organGestor.getDir3pare().equals(organGestor.getDir3())) {
+//        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
+//        if (organ.size() == 1) {
+//            organGestor = organ.get(0);
+//        }
+//    }
+//    
+//    if (organGestor.getCif().equals("S0711001H")) {
+//        String dir3Dgtic = "A04027005";
+//        List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+//        if (organ.size() == 1) {
+//            Organ dgtic = organ.get(0);
+//            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
+//            prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
+//        }
+//        
+//    }
 
     //Validador de apellido2 mientras en Madrid no funcione.
     String propApe2Base = "FORMULARIO.DATOS_SOLICITUD.APE2SEC";
@@ -833,4 +839,62 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			return null;
 		}
 	}
+	
+	private void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
+		String denomincaion;
+		String cif;
+		String UR;
+		String dir3UR;
+		String dir3Raiz;
+
+		/*
+		 * Denominació: Organ Gestor
+		 * CIF: Primer CIF que trobi cercant als pares.
+		 * Unitat Responsable: Si el CIF es el de Govern, posar DGTIC, sino, la del CIF trobat.
+		 * DIR3 RESPONSABLE: DIR3 UR
+		 * DIR3 RAIZ: Dir3 pare mes alt.
+		 */
+		
+		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
+		Organ unitatResponsable = null; 
+		Organ arrel = null; 
+
+		Organ organTest = organGestor;
+		boolean end = false;
+		while (!end) {
+			if (unitatResponsable == null && organTest.getCif() != null) {
+				unitatResponsable = organTest;
+			}
+			if (arrel == null && organTest.getDir3pare() == null) {
+				arrel = organTest;
+			}
+			
+			if (organTest.getDir3pare() != null) {
+				List<Organ> pares = organLogicaEjb.select(OrganFields.DIR3.equal(organTest.getDir3pare()));
+				organTest = pares.get(0);
+			}else {
+				end = true;
+			}
+		}
+		
+		
+		denomincaion = organGestor.getNom();
+		cif = unitatResponsable.getCif();
+		UR = unitatResponsable.getNom();
+		dir3UR = unitatResponsable.getDir3();
+		dir3Raiz = arrel.getDir3();
+
+		log.info("denomincaion: " + denomincaion);
+		log.info("cif: " + cif);
+		log.info("UR: " + UR);
+		log.info("dir3UR: " + dir3UR);
+		log.info("dir3Raiz: " + dir3Raiz);
+
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION", denomincaion);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CIF", cif);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dir3UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
+	}
+
 }

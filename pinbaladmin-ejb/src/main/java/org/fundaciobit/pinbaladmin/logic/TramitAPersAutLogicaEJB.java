@@ -649,32 +649,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 	}
 
 	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
-		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
 		
-		while (organGestor.getEntitatid() == null) {
-			List<Organ> pare = organLogicaEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
-	        if (pare.size() == 1) {
-	        	organGestor = pare.get(0);
-	        }else if (pare.size() == 0) {
-	        	log.error("No s'ha trobat l'entitat pare de l'organ: " + organGestor.getNom());
-            	break;
-	        }else {
-	        	//Si hi ha mes d'un pare, miram el qui tengui CIF o dir3pare.
-				for (Organ o : pare) {
-					if (o.getCif() != null) {
-						organGestor = o;
-						break;
-					}
-					if (o.getDir3pare() != null) {
-						organGestor = o;
-					}
-				}
-	        }
-		}
+		setOrganGestorProperties(organID, prop);		
 		
-        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", organGestor.getNom());
-        prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", organGestor.getDir3());
-
 		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
 		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
@@ -706,6 +683,64 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (ODT)", tipus, solicitudID);
 		}
 	}
+
+	private void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
+		String denomincaion;
+		String cif;
+		String UR;
+		String dir3UR;
+		String dir3Raiz;
+
+		/*
+		 * Denominació: Organ Gestor
+		 * CIF: Primer CIF que trobi cercant als pares.
+		 * Unitat Responsable: Si el CIF es el de Govern, posar DGTIC, sino, la del CIF trobat.
+		 * DIR3 RESPONSABLE: DIR3 UR
+		 * DIR3 RAIZ: Dir3 pare mes alt.
+		 */
+		
+		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
+		Organ unitatResponsable = null; 
+		Organ arrel = null; 
+
+		Organ organTest = organGestor;
+		boolean end = false;
+		while (!end) {
+			if (unitatResponsable == null && organTest.getCif() != null) {
+				unitatResponsable = organTest;
+			}
+			if (arrel == null && organTest.getDir3pare() == null) {
+				arrel = organTest;
+			}
+			
+			if (organTest.getDir3pare() != null) {
+				List<Organ> pares = organLogicaEjb.select(OrganFields.DIR3.equal(organTest.getDir3pare()));
+				organTest = pares.get(0);
+			}else {
+				end = true;
+			}
+		}
+		
+		
+		denomincaion = organGestor.getNom();
+		cif = unitatResponsable.getCif();
+		UR = unitatResponsable.getNom();
+		dir3UR = unitatResponsable.getDir3();
+		dir3Raiz = arrel.getDir3();
+
+		log.info("denomincaion: " + denomincaion);
+		log.info("cif: " + cif);
+		log.info("UR: " + UR);
+		log.info("dir3UR: " + dir3UR);
+		log.info("dir3Raiz: " + dir3Raiz);
+
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION", denomincaion);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CIF", cif);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dir3UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
+	}
+
 
     public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
 
