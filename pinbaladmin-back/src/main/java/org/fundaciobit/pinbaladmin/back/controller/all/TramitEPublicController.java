@@ -76,8 +76,8 @@ public class TramitEPublicController extends TramitEOperadorController {
     	super.preValidate(request, tramitForm, result);
     	
     	String carrec = tramitForm.getTramitECteAud().getCarrec();
-    	if (carrec != null && carrec.trim().length() > 0) {
-    		carrec = "---";
+		if (carrec == null || carrec.trim().length() == 0) {
+			carrec = "---";
 		}
     	tramitForm.getTramitECteAud().setCarrec(carrec);
     	

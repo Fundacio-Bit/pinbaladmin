@@ -665,12 +665,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         for (Solicitud soli : list) {
 
             if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO || soli.getProcedimentCodi().startsWith("CODI_")) {
+            	String proc = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
+            	proc = proc.replace("'", "´");
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite("fas fa-cog"), "solicitud.senseestat",
 //								"javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
 //										+ " ha arribat a DISTRIBUCIÓ.')",
                         		
-								"javascript:openModalSolicitudDistribucio(" + soli.getSolicitudID() + ", '" + soli.getProcedimentCodi() + " - " + soli.getProcedimentNom() + "')",
+								"javascript:openModalSolicitudDistribucio(" + soli.getSolicitudID() + ", '" + proc + "')",
 
 										
 								AdditionalButtonStyle.PRIMARY));
