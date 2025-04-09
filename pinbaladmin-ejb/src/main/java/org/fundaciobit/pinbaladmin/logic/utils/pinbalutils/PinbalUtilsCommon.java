@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ public class PinbalUtilsCommon {
 
 	final static Logger log = Logger.getLogger(PinbalUtilsCommon.class);
 
+	public final static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+	
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerLogicEjb;
 

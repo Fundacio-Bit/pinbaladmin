@@ -153,12 +153,18 @@ public interface Constants {
     public static final Long PINFO_ALTA = 1L;
     public static final Long PINFO_BAIXA = 0L;
 
+    public static final Long ESTAT_PINFO_INICIANT = -2L;
     public static final Long ESTAT_PINFO_ERROR = -1L;
     public static final Long ESTAT_PINFO_CREANT = 0L;
     public static final Long ESTAT_PINFO_PENDENT_FIRMA = 1L;
     public static final Long ESTAT_PINFO_PENDENT_TRAMITAR = 2L;
     public static final Long ESTAT_PINFO_TRAMITAT = 3L;
     public static final Long ESTAT_PINFO_NOTIFICAT= 4L;
+    
+    public static final Long ESTAT_INCIDENCIA_PINFO_PENDENT_FIRMA = 10 + ESTAT_PINFO_PENDENT_FIRMA;
+    public static final Long ESTAT_INCIDENCIA_PINFO_PENDENT_TRAMITAR = 10 + ESTAT_PINFO_PENDENT_TRAMITAR;
+    public static final Long ESTAT_INCIDENCIA_PINFO_TRAMITAT = 10 + ESTAT_PINFO_TRAMITAT;
+    public static final Long ESTAT_INCIDENCIA_PINFO_NOTIFICAT = 10 + ESTAT_PINFO_NOTIFICAT;
     
     public static final Long[] ESTATS_PINFO = { ESTAT_PINFO_ERROR, ESTAT_PINFO_CREANT, ESTAT_PINFO_PENDENT_FIRMA, ESTAT_PINFO_PENDENT_TRAMITAR, ESTAT_PINFO_TRAMITAT, ESTAT_PINFO_NOTIFICAT };
 }

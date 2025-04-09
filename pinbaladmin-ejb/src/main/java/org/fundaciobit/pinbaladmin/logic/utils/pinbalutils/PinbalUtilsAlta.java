@@ -2,6 +2,7 @@ package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -69,6 +70,26 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		return solicitud;
 	}
 
+	//getContactosActualizado
+	private Contactos getContactosNew() {
+		Contactos contactos = new Contactos();
+
+		String ape1 = "Govern Digital";
+		String ape2 = "";
+		String mail = "governdigital.pinbal@fundaviobit.org";
+		String nombre = "Fundacio BIT";
+		String telf = "971971971";
+		
+		Contacto contacto = createContacto(ape1, ape2, mail, nombre, telf);
+		
+		contactos.getContacto().add(contacto);
+
+		
+		return contactos;
+	}
+	
+	
+	
 	private Contactos getContactos(Properties prop) {
 
 		String base = "FORMULARIO.DATOS_SOLICITUD.";
@@ -161,7 +182,10 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		String _Observaciones = null;// soli.getNotes();
 
 		Timestamp dataCaducitat = soli.getDataFi();
-		XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat); // parseTimestampToXMLGregorian(dataCaducitat);
+//		XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat); // parseTimestampToXMLGregorian(dataCaducitat);
+//		_FechaCaducidad.xml
+		final String currentStr = SDF.format(dataCaducitat);
+		String _FechaCaducidad = currentStr;
 
 		Fitxer fitxerConsentiment = null;
 		// Aquí son el excel de servicios y el documento PDF del Director General.

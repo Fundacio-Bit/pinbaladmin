@@ -389,6 +389,13 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_OBERTA), "Oberta"));
         __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_PENDENT_DE_TERCER), "Pendent de Tercer"));
         __tmp.add(new StringKeyValue(String.valueOf(ESTAT_INCIDENCIA_TANCADA), "Tancada"));
+        
+        Long[] estatsPinfo = Constants.ESTATS_PINFO;
+		for (Long estat : estatsPinfo) {
+			StringKeyValue skv = new StringKeyValue(String.valueOf(estat + 10),
+					I18NUtils.tradueix("estat.pinfo." + estat));
+			__tmp.add(skv);
+		}
         return __tmp;
     }
 

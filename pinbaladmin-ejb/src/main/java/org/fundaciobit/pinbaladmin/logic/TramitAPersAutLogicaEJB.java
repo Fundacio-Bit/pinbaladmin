@@ -360,6 +360,13 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         
                         consentiment = J.getConsentiment();
 
+						if ((J.getAdjuntID() == null) && (J.getUrlconsentiment() == null)) {
+							fitxerConsentimentID = null;
+
+							map.put("urlConsentiment", "---");
+							map.put("adjConsentiment", "---");
+						}
+                        
 						if (J.getAdjuntID() != null) {
 							consentimentadjunt = Constants.CONSENTIMENT_ADJUNT;
 							nomFitxerAdjunt = J.getAdjunt().getNom();

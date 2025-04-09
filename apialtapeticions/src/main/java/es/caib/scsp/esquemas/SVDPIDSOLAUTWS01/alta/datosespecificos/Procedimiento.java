@@ -84,7 +84,7 @@ public class Procedimiento {
     protected String periodico;
     @XmlElement(name = "FechaCaducidad")
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar fechaCaducidad;
+    protected String fechaCaducidad;
     @XmlElement(name = "Automatizado", required = true)
     protected String automatizado;
     @XmlElement(name = "Consentimiento", required = true)
@@ -232,7 +232,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getFechaCaducidad() {
+    public String getFechaCaducidad() {
         return fechaCaducidad;
     }
 
@@ -244,7 +244,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setFechaCaducidad(XMLGregorianCalendar value) {
+    public void setFechaCaducidad(String value) {
         this.fechaCaducidad = value;
     }
 

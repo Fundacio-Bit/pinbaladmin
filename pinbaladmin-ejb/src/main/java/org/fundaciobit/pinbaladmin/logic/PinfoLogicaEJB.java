@@ -332,6 +332,8 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			pinfo.setPortafibid(String.valueOf(idPortafib));
 			pinfo.setDestinatariNIF(destinatariNIF);
 			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_FIRMA);
+			in.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_PENDENT_FIRMA.intValue());
+			incidenciaLogicaEjb.update(in);
 
 		} catch (Throwable e) {
 			log.error("Error al crear la petició de firma", e);
@@ -447,11 +449,14 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 		log.info("Peticio de firma creada: " + idPortafib);
 
-		pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_FIRMA);
 		pinfo.setPortafibid(String.valueOf(idPortafib));
 
+		pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_FIRMA);
 		this.update(pinfo);
 		
+		incidencia.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_PENDENT_FIRMA.intValue());
+		incidenciaLogicaEjb.update(incidencia);
+
 		afegirEventPinfoEnviat(incidencia, pinfo);
 	}
 
@@ -578,9 +583,16 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 			PinfoJPA pinfo = findByPrimaryKey(pinfoID);
 			pinfo.setFitxerfirmatID(fitxerFirmatID);
-			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_TRAMITAR);
-			update(pinfo);
 			
+
+			pinfo.setEstat(Constants.ESTAT_PINFO_PENDENT_TRAMITAR);
+			this.update(pinfo);
+			
+			IncidenciaTecnica in = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+			in.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_PENDENT_TRAMITAR.intValue());
+			incidenciaLogicaEjb.update(in);
+
+
 			//El document de l'event ha de ser una copia del document original.
 			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(fitxerFirmat, fitxerPublicEjb);
 			crearEventPinfoFirmat(pinfo, fitxerFirmatIDCopia);			
@@ -669,7 +681,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		this.update(pinfo);
 		
 		incidencia.setOperador(operador.getUsername());
-		incidencia.setEstat(Constants.ESTAT_INCIDENCIA_TANCADA);
+		incidencia.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_NOTIFICAT.intValue());
 		incidenciaLogicaEjb.update(incidencia);
 
 	}
