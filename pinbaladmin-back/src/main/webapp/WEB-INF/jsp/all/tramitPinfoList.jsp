@@ -215,7 +215,7 @@
 												<c:forEach var="servei" items="${altes}" varStatus="status">
 													<div class="llista-serveis">
 														<div class="servei-item tipus${servei.alta}">
-															${servei.servei}
+															${servei.nom} 
 														</div>
 														<div class="btn-delete-container">
 															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
@@ -230,7 +230,7 @@
 												<c:forEach var="servei" items="${baixes}" varStatus="status">
 													<div class="llista-serveis">
 														<div class="servei-item tipus${servei.alta}">
-															${servei.servei}
+															${servei.nom} 
 														</div>
 														<div class="btn-delete-container">
 															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"

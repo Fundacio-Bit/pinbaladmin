@@ -197,7 +197,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			}
 
 			ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
-			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), pinfoData.getPinfodataID(), pinfoData.getAlta());
+			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), servei.getNom(), pinfoData.getPinfodataID(), pinfoData.getAlta());
 			if (pinfoData.getAlta() == 1) {
 				altaList.add(serveiData);
 			} else {
@@ -244,13 +244,15 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	public class ServeiData {
 		private Long serveiID;
 		private String servei;
+		private String nom;
 		private Long pinfoDataID;
 		private Long alta;
 		
 
-		public ServeiData(Long serveiID, String servei, Long pinfoDataID, Long alta) {
+		public ServeiData(Long serveiID, String servei, String nom, Long pinfoDataID, Long alta) {
 			this.serveiID = serveiID;
 			this.servei = servei;
+			this.nom = nom;
 			this.pinfoDataID = pinfoDataID;
 			this.alta = alta;
 		}
@@ -261,6 +263,9 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 		public String getServei() {
 			return this.servei;
+		}
+		public String getNom() {
+			return this.nom;
 		}
 		
 		public Long getPinfoDataID() {
@@ -277,6 +282,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 		public void setServei(String servei) {
 			this.servei = servei;
+		}
+
+		public void setNom (String nom) {
+			this.nom = nom;
 		}
 		
 		public void setPinfoDataID(Long pinfoDataID) {

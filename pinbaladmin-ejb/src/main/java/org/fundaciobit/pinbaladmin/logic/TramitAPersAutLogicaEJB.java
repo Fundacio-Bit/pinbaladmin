@@ -691,7 +691,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		}
 	}
 
-	private void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
+	@Override
+	public void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
 		String denomincaion;
 		String cif;
 		String UR;
@@ -715,6 +716,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		while (!end) {
 			if (unitatResponsable == null && organTest.getCif() != null) {
 				unitatResponsable = organTest;
+				organGestor = organTest;
 			}
 			if (arrel == null && organTest.getDir3pare() == null) {
 				arrel = organTest;
@@ -728,11 +730,23 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			}
 		}
 		
+		if (unitatResponsable.getCif().equals("S0711001H")) {
+			String dir3Dgtic = "A04027005";
+			List<Organ> organs = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+			if (organs.size() == 1) {
+				Organ dgtic = organs.get(0);
+				unitatResponsable = dgtic;
+				organGestor = arrel;
+			}
+		}
+
 		
 		denomincaion = organGestor.getNom();
-		cif = unitatResponsable.getCif();
+		cif = organGestor.getCif();
+		
 		UR = unitatResponsable.getNom();
 		dir3UR = unitatResponsable.getDir3();
+		
 		dir3Raiz = arrel.getDir3();
 
 		log.info("denomincaion: " + denomincaion);

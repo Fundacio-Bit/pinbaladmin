@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.util.Properties;
+
 import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 
@@ -27,6 +29,9 @@ public interface TramitAPersAutLogicaService extends TramitAPersAutService {
     public Long[] getPartsTramitIDs(Long tramitID) throws I18NException;
 
     public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException;
+
+	void setOrganGestorProperties(Long organID, Properties prop) throws I18NException;
+	
     
 
 }
