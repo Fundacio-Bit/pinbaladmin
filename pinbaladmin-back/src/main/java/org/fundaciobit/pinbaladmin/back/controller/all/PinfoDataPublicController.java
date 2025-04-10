@@ -728,13 +728,13 @@ public class PinfoDataPublicController extends PinfoDataController {
 				}
 			}
 		}		
-		
-		log.info("responsable: " + responsable.getNif());
+		String nifResponsable = responsable.getNif().toUpperCase();
+		log.info("responsable: " + nifResponsable);
 		
 		//Guardar responsable a destinatariNIF del Pinfo, i redireccionar a PDF
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
-		pinfo.setDestinatariNIF(responsable.getNif());
+		pinfo.setDestinatariNIF(nifResponsable);
 		pinfo.setDestinatariNom(responsable.getNomOcult());
 		pinfoLogicEjb.update(pinfo);
 

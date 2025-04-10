@@ -40,7 +40,7 @@ canvas {
 </head>
 <body>
 
-    <h3 id="title">PINFO ${pinfo.pinfoID}</h3>
+    <h3 id="title">PINFO ${pinfo.incidenciaID}</h3>
 
 	<div class="botonera">
 		<a href="${urlFirmarPinfo}" class="btn btn-primary">Enviar a firmar</a>

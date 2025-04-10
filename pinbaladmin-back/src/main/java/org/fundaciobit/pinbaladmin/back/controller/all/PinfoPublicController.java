@@ -132,6 +132,9 @@ public class PinfoPublicController extends PinfoController {
 			
 			pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-sign", "Enviar a firmar",
 					CONTEXT_WEB + "/enviarPinfoPortaFIB/" + pinfoID , AdditionalButtonStyle.PRIMARY));
+		}else if (pinfo.getEstat() == Constants.ESTAT_PINFO_INICIANT) {
+			//Primera vista del pinfo.
+			
 		}
 
 		String urlPinfoPDF = "/pinbaladmin" + FileDownloadController.fileUrl(pinfo.getFitxer());

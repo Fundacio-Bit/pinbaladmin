@@ -157,7 +157,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		}
 		data.put("organGestor", organGestor);
 		
-		String fileName = "PINFO_" + pinfoID + ".pdf";
+		String fileName = "PINFO_" + incidencia.getIncidenciaTecnicaID() + ".pdf";
 		File outputPDF = File.createTempFile("pinbaladmin_formulari_pinfo", ".pdf");
 		FileOutputStream fosPDF = new FileOutputStream(outputPDF);
 
@@ -553,7 +553,8 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			evPinfo.setPersona(_persona_);
 			evPinfo.setNoLlegit(_noLlegit_);
 			
-			Long pinfoID = pinfo.getPinfoID();
+//			Long pinfoID = pinfo.getPinfoID();
+			Long pinfoID = it.getIncidenciaTecnicaID();
 			String msgPinfoEnviat = 
 					"PINFO " + pinfoID + " enviat a Portafib.\n" 
 					+ "Remitent: " + _persona_ + " (" + pinfo.getSolicitantNIF() + ")\n" 

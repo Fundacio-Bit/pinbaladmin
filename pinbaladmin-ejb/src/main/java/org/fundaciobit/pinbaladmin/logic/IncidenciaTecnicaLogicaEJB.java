@@ -43,6 +43,12 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         return super.create(instance);
     }
 
+	@Override
+	@PermitAll
+	public IncidenciaTecnica update(IncidenciaTecnica instance) throws I18NException {
+		return super.update(instance);
+	}
+    
     @Override
     public void deleteFull(Long _ID) throws I18NException {
 

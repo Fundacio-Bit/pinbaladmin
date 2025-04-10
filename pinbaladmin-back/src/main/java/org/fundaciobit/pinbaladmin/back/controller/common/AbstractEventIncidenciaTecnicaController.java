@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.ejb.EJB;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.EventIncidenciaTecnicaPublicController;
 import org.fundaciobit.pinbaladmin.back.controller.operador.IncidenciaTecnicaOperadorController;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
@@ -120,6 +121,12 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
                 return "Pendent de Tercer";
 
         }
+        
+        if (item.getTipus() == Constants.INCIDENCIA_TIPUS_ROLEPERMISOS) {
+			//Es un PINFO. Cercar estats del pinfo.
+        	return I18NUtils.tradueix("estat.pinfo." + (item.getEstat() - 10));
+        }
+        
         return "Estat desconegut " + item.getEstat();
     }
 

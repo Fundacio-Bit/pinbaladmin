@@ -175,7 +175,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		String destinatariNom = null;
 		String missatgePinbal = null;
 		
-		PinfoJPA pinfo = new PinfoJPA(incidenciaID, incidenciaID, entitat, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal);
+		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal);
 		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
 		
 		log.info("Creant Pinfo " + Pinfo.getPinfoID());
