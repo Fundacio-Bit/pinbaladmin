@@ -44,6 +44,7 @@ import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -277,6 +278,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 				Long pinfoID = pinfos.get(0).getPinfoID();
 				log.info("pinfoID: " + pinfoID);
 				request.getSession().setAttribute("pinfoID", pinfoID);
+				request.getSession().setAttribute("incidenciaId", incidenciaID);
+
 				where = Where.AND(where, PinfoDataFields.PINFOID.equal(pinfoID));
 			}
 		}
@@ -519,7 +522,15 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		Where wProcediment = Where.OR(SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%"),
 				SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%"));
-		Where wLocal = SolicitudFields.ORGANID.isNotNull();
+		
+		Long incidenciaId = (Long) request.getSession().getAttribute("incidenciaId");
+		log.info("incidenciaId: " + incidenciaId);
+		
+		Long organID = incidenciaTecnicaLogicaEjb.executeQueryOne(IncidenciaTecnicaFields.ORGANID,
+				IncidenciaTecnicaFields.INCIDENCIATECNICAID.equal(incidenciaId));
+		log.info("organID: " + organID);
+
+		Where wLocal = SolicitudFields.ORGANID.equal(organID);
 
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wLocal));
 
