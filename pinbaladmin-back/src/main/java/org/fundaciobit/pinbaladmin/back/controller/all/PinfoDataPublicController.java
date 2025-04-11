@@ -349,27 +349,27 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 		for (String u : usuaris) {
 			
-	        try {
-	        	log.info("Intentarem obtenir dades d'estructura organitzativa de l'usuari: " + u);
-	        	boolean debug = true;
-	        	IEstructuraOrganitzativaPlugin plugin = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
-
-//	        	String president = plugin.getGerentPresidentName();
-//	        	log.info("Nom del presidente: " + president);
-	        	String codiDG = plugin.getCodeDepartamentDireccioGeneral(u);
-				String usernameDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
-				String nomDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
-
-				log.info("Director general de " + u + ": " + codiDG + " - "+ nomDG + " (" + usernameDG + ")");
-				
-				
-//				String capDepartamentDG = plugin.getCapDepartamentDirectorGeneralName(u);
-//				log.info("El capDepartamentDG  es: " + capDepartamentDG  );
-
-	        } catch (Exception e) {
-				log.error("NO HA ANAT BE: " + e.getMessage(), e);
-				HtmlUtils.saveMessageError(request, "NO HA ANAT BE: " + e.getMessage());
-			}
+//	        try {
+//	        	log.info("Intentarem obtenir dades d'estructura organitzativa de l'usuari: " + u);
+//	        	boolean debug = true;
+//	        	IEstructuraOrganitzativaPlugin plugin = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
+//
+////	        	String president = plugin.getGerentPresidentName();
+////	        	log.info("Nom del presidente: " + president);
+//	        	String codiDG = plugin.getCodeDepartamentDireccioGeneral(u);
+//				String usernameDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
+//				String nomDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
+//
+//				log.info("Director general de " + u + ": " + codiDG + " - "+ nomDG + " (" + usernameDG + ")");
+//				
+//				
+////				String capDepartamentDG = plugin.getCapDepartamentDirectorGeneralName(u);
+////				log.info("El capDepartamentDG  es: " + capDepartamentDG  );
+//
+//	        } catch (Exception e) {
+//				log.error("NO HA ANAT BE: " + e.getMessage(), e);
+//				HtmlUtils.saveMessageError(request, "NO HA ANAT BE: " + e.getMessage());
+//			}
 			
 			
 			for (String solSer : solicitudServeis) {
@@ -895,40 +895,40 @@ public class PinfoDataPublicController extends PinfoDataController {
     }
     
     
-    public static final String LOGIN_PLUGIN_KEY_estructuraOrganitzativa = Constants.PINBALADMIN_PROPERTY_BASE + "pluginsib.estructuraorganitzativa.ldapcaib";
-
-    public static IEstructuraOrganitzativaPlugin estructuraOrganitzativaPlugin = null;
-    
-    public static IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa(boolean debug) throws I18NException{
-    	
-        if (estructuraOrganitzativaPlugin == null) {
-        	 Properties propTmp = Configuracio.getSystemAndFileProperties();
-
- 			if (debug) {
- 				log.info("Propietats de sistema i fitxer de configuració:");
- 				Set<Object> set = propTmp.keySet();
- 				for (Object object : set) {
- 					String key = (String) object;
- 					String value = propTmp.getProperty(key);
- 					log.info(key + ": " + value);
- 				}
- 			}
-             
-             String className = propTmp.getProperty(LOGIN_PLUGIN_KEY_estructuraOrganitzativa + ".class");
-             
-             log.info("className: " + className);
-             Object pluginInstance = PluginsManager.instancePluginByClassName(className,
-                     Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
-
-             if (pluginInstance == null) {
-                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");
-             }
-             estructuraOrganitzativaPlugin = (IEstructuraOrganitzativaPlugin) pluginInstance;
-        	
-        }else {
-			log.info("estructuraOrganitzativaPlugin ja existeix. " + estructuraOrganitzativaPlugin.getClass().getName());
-        }
-        return estructuraOrganitzativaPlugin;
-			
-    }
+//    public static final String LOGIN_PLUGIN_KEY_estructuraOrganitzativa = Constants.PINBALADMIN_PROPERTY_BASE + "pluginsib.estructuraorganitzativa.ldapcaib";
+//
+//    public static IEstructuraOrganitzativaPlugin estructuraOrganitzativaPlugin = null;
+//    
+//    public static IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa(boolean debug) throws I18NException{
+//    	
+//        if (estructuraOrganitzativaPlugin == null) {
+//        	 Properties propTmp = Configuracio.getSystemAndFileProperties();
+//
+// 			if (debug) {
+// 				log.info("Propietats de sistema i fitxer de configuració:");
+// 				Set<Object> set = propTmp.keySet();
+// 				for (Object object : set) {
+// 					String key = (String) object;
+// 					String value = propTmp.getProperty(key);
+// 					log.info(key + ": " + value);
+// 				}
+// 			}
+//             
+//             String className = propTmp.getProperty(LOGIN_PLUGIN_KEY_estructuraOrganitzativa + ".class");
+//             
+//             log.info("className: " + className);
+//             Object pluginInstance = PluginsManager.instancePluginByClassName(className,
+//                     Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
+//
+//             if (pluginInstance == null) {
+//                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");
+//             }
+//             estructuraOrganitzativaPlugin = (IEstructuraOrganitzativaPlugin) pluginInstance;
+//        	
+//        }else {
+//			log.info("estructuraOrganitzativaPlugin ja existeix. " + estructuraOrganitzativaPlugin.getClass().getName());
+//        }
+//        return estructuraOrganitzativaPlugin;
+//			
+//    }
 }

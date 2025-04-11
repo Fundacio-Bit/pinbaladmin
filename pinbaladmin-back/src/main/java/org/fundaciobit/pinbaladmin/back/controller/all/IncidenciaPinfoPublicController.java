@@ -23,6 +23,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
@@ -30,6 +31,7 @@ import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
+import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -56,6 +58,9 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
 	protected PinfoLogicaService pinfoLogicEjb;
+
+	@EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
+	protected PinfoDataLogicaService pinfoDataLogicEjb;
 	
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicEjb;
@@ -116,14 +121,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			incidencia.setContacteNom(nomComplet);
 			form.addReadOnlyField(IncidenciaTecnicaFields.CONTACTENOM);
 
-			incidencia.setDescripcio("Descripció de test");
-			incidencia.setContacteTelefon("971971971");
-			incidencia.setContacteEmail("ptrias@fundaciobit.org");
-			
 			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
-			incidencia.setNomEntitat("Govern Digital");
-
-			incidencia.setTitol("Titol de test");
+			setDadesTest(incidencia);
 			
 			String usuariNIF = properties.getProperty("NIF");
 			String username = properties.getProperty("Username");
@@ -132,6 +131,12 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			request.getSession().setAttribute("usuariNom", nomComplet);
 			request.getSession().setAttribute("usuariUsername", username);
 		
+			String dir3Solicitant = getCodiDIR3(username);
+			Long organID = organLogicEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3Solicitant));
+			if (organID != null) {
+				incidencia.setOrganid(organID);
+				form.addReadOnlyField(IncidenciaTecnicaFields.ORGANID);
+			}
 			
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
 			request.getSession().setAttribute("entitats", pinfoLogicEjb.getEntitats());
@@ -142,6 +147,34 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 		return form;
 	}
+
+	private void setDadesTest(IncidenciaTecnicaJPA incidencia){
+		incidencia.setDescripcio("Descripció de test");
+		incidencia.setContacteTelefon("971971971");
+		incidencia.setContacteEmail("ptrias@fundaciobit.org");
+		
+		incidencia.setNomEntitat("Govern Digital");
+		incidencia.setTitol("Titol de test");
+	}
+    public String getCodiDIR3(String username) throws I18NException {
+
+        IEstructuraOrganitzativaPlugin instance = pinfoDataLogicEjb.getPluginEstructuraOrganitzativa();
+
+        String codiDIR3;
+        try {
+            codiDIR3 = instance.getDir3DepartamentDireccioGeneral(username);
+            
+            if (codiDIR3 != null && codiDIR3.trim().length() > 0) {
+				log.info("Codi DIR3 de " + username + " es: " + codiDIR3);
+                return codiDIR3;
+            }else {
+                throw new Exception ("El codi DIR3 de l'usuari " + username + " es null o buit ]" + codiDIR3 + "[");
+            }
+
+        } catch (Exception e) {
+            throw new I18NException("error.plugin.estructuraorganitzativa.dir3notfount", e.getMessage());
+        }
+    }
 
 	@Override
 	public IncidenciaTecnicaFilterForm getIncidenciaTecnicaFilterForm(Integer pagina, ModelAndView mav,
