@@ -72,11 +72,6 @@ public class EstatTiquetJPA implements EstatTiquet {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getEstatTiquetID())).hashCode();
-    }
-
 // EXP  Field:estattiquetid | Table: pad_tiquet | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "estatTiquet")

@@ -157,11 +157,6 @@ public class EntitatJPA implements Entitat {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getEntitatID())).hashCode();
-    }
-
 // EXP  Field:entitatid | Table: pad_area | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "entitat")

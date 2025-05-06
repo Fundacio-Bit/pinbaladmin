@@ -210,11 +210,6 @@ public class PinfoJPA implements Pinfo {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getPinfoID())).hashCode();
-    }
-
 // EXP  Field:pinfoid | Table: pad_pinfodata | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pinfo")

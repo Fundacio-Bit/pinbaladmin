@@ -94,11 +94,6 @@ public class DocumentSolicitudJPA implements DocumentSolicitud {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getDocumentSolicitudID())).hashCode();
-    }
-
 // IMP Field:documentid | Table: pad_document | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

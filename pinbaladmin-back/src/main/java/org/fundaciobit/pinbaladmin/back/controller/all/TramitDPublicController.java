@@ -7,8 +7,6 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitDOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitDCteAutForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.TramitECteAudForm;
-import org.fundaciobit.pinbaladmin.model.fields.TramitDCteAutFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitDCteAutJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

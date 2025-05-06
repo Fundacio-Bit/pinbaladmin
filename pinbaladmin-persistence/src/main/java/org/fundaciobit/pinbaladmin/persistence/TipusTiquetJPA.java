@@ -72,11 +72,6 @@ public class TipusTiquetJPA implements TipusTiquet {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getTipusTiquetID())).hashCode();
-    }
-
 // EXP  Field:tipustiquetid | Table: pad_tiquet | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tipusTiquet")

@@ -225,11 +225,6 @@ public class TramitAPersAutJPA implements TramitAPersAut {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getPersautid())).hashCode();
-    }
-
 // EXP  Field:tramitid | Table: pad_tramit_b_dades_soli | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tramitAPersAut")

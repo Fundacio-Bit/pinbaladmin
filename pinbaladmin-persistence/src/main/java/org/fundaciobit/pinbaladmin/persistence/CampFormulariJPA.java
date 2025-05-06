@@ -109,11 +109,6 @@ public class CampFormulariJPA implements CampFormulari {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getCampFormulariID())).hashCode();
-    }
-
 // EXP  Field:campformulariid | Table: pad_campsolicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "campFormulari")

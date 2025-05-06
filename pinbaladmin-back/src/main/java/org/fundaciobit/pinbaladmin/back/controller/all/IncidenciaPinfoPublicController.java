@@ -112,7 +112,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA);
 
 			
-			String token = (String) request.getSession().getAttribute("token");
+//			String token = (String) request.getSession().getAttribute("token");
 //			incidencia.setDescripcio("El meu Token es: " + token);
 //			incidencia.setNomEntitat(token);
 			

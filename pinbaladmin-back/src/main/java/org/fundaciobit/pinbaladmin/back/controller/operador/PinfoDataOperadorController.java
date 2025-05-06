@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController;
-import org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController.UsuariData;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
@@ -86,6 +85,7 @@ public class PinfoDataOperadorController extends PinfoDataController {
 	    String usuariTrobat = null;
 	    if (info != null) {
 	        String nom = info.getFullName() + " - " + info.getAdministrationID();
+	        /*
 	        String nif = info.getAddress() + " - " + 
 	                     info.getCompany() + " - " + 
 	                     info.getCompanyArea() + " - " + 
@@ -98,11 +98,11 @@ public class PinfoDataOperadorController extends PinfoDataController {
 	                     info.getBirthDate() + " - " + 
 	                     info.getCreationDate() + " - " + 
 	                     info.getGender() + " - " + 
-	                     info.getEmail();
+	                     info.getEmail();*/
 	        usuariTrobat = nom; // + " - " + nif;
 	    }
 
-	    Map<String, Object> result = new HashMap();
+	    Map<String, Object> result = new HashMap<String, Object>();
 	    result.put("exists", info != null);
 	    result.put("data", usuariTrobat);
 

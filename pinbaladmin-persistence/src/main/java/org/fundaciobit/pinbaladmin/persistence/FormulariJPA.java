@@ -111,11 +111,6 @@ public class FormulariJPA implements Formulari {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getFormulariid())).hashCode();
-    }
-
 // EXP  Field:formulariid | Table: pad_campformulari | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "formulari")

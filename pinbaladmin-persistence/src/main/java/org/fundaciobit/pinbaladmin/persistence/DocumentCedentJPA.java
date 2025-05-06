@@ -146,11 +146,6 @@ public class DocumentCedentJPA implements DocumentCedent {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getDocumentCedentID())).hashCode();
-    }
-
 // IMP Field:entitatserveiid | Table: pad_entitatservei | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
