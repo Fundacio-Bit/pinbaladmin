@@ -484,11 +484,6 @@ public class SolicitudJPA implements Solicitud {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getSolicitudID())).hashCode();
-    }
-
 // EXP  Field:solicitudid | Table: pad_documentsolicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitud")

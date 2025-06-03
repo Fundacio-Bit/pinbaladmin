@@ -107,11 +107,6 @@ public class CampSolicitudJPA implements CampSolicitud {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getCampSolicitudID())).hashCode();
-    }
-
 // IMP Field:campformulariid | Table: pad_campformulari | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

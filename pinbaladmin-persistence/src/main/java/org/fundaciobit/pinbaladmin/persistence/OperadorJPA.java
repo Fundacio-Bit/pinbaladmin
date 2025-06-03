@@ -101,11 +101,6 @@ public class OperadorJPA implements Operador {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getOperadorID())).hashCode();
-    }
-
 
  // ---------------  STATIC METHODS ------------------
   public static OperadorJPA toJPA(Operador __bean) {

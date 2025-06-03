@@ -147,11 +147,6 @@ public class DocumentJPA implements Document {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getDocumentID())).hashCode();
-    }
-
 // EXP  Field:documentid | Table: pad_documentsolicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "document")

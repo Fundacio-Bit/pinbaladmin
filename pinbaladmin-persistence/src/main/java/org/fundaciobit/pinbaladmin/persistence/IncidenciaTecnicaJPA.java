@@ -284,11 +284,6 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getIncidenciaTecnicaID())).hashCode();
-    }
-
 // EXP  Field:incidenciatecnicaid | Table: pad_event | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "incidenciaTecnica")

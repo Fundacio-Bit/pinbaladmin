@@ -28,7 +28,6 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaContro
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
-import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
@@ -38,7 +37,6 @@ import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OperadorFields;
-import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.springframework.stereotype.Controller;

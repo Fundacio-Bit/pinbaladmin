@@ -141,11 +141,6 @@ public class OrganJPA implements Organ {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getOrganid())).hashCode();
-    }
-
 // EXP  Field:organid | Table: pad_incidenciatecnica | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organ")

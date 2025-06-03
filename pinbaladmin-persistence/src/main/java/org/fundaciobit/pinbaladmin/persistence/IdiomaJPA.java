@@ -98,11 +98,6 @@ public class IdiomaJPA implements Idioma {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getIdiomaID())).hashCode();
-    }
-
 
  // ---------------  STATIC METHODS ------------------
   public static IdiomaJPA toJPA(Idioma __bean) {

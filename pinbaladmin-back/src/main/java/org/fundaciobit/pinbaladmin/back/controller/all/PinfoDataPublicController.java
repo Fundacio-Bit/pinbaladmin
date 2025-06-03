@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Properties;
@@ -16,15 +15,12 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
-import org.fundaciobit.pinbaladmin.back.security.AuthenticationSuccessListener;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
@@ -38,7 +34,6 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
-import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
@@ -52,9 +47,7 @@ import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
-import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -70,11 +63,9 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.comu.Page;
-import es.caib.pinbal.client.serveis.ServeiClient;
 import es.caib.pinbal.client.usuaris.FiltreUsuaris;
 import es.caib.pinbal.client.usuaris.UsuariClient;
 import es.caib.pinbal.client.usuaris.UsuariEntitat;
-import com.sun.jersey.api.client.ClientResponse;
 
 /**
  * 
@@ -671,7 +662,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 		for (Servei servei : serveis) {
             String key =String.valueOf(servei.getServeiID());
-            EntitatServei entitatServei = entitatLogicaEjb.findByPrimaryKey(servei.getEntitatServeiID());
+//            EntitatServei entitatServei = entitatLogicaEjb.findByPrimaryKey(servei.getEntitatServeiID());
 //            String value = "(" + entitatServei.getNom()+ ") " + servei.getNom();
             String value = servei.getCodi();
             

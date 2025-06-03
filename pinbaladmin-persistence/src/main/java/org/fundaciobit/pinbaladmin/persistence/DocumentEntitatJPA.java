@@ -146,11 +146,6 @@ public class DocumentEntitatJPA implements DocumentEntitat {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getDocumentEntitatID())).hashCode();
-    }
-
 // IMP Field:entitatid | Table: pad_entitat | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

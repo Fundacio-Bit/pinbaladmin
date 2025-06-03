@@ -97,11 +97,6 @@ public class GrupEntitatCedentJPA implements GrupEntitatCedent {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getGrupEntitatCedentID())).hashCode();
-    }
-
 // IMP Field:grupentitatid | Table: pad_grupentitat | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

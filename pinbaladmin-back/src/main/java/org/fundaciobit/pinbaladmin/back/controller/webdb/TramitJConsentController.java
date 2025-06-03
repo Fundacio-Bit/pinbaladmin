@@ -18,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.fundaciobit.pinbaladmin.back.form.webdb.*;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitJConsentForm;
@@ -40,6 +40,10 @@ import org.fundaciobit.pinbaladmin.persistence.TramitJConsentJPA;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.*;
 import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
+import org.fundaciobit.genapp.common.web.tiles.Tile;
+import org.fundaciobit.genapp.common.web.tiles.TileAttribute;
+import org.fundaciobit.genapp.common.web.tiles.TileType;
+import org.fundaciobit.pinbaladmin.back.utils.Tab;
 
 /**
  * Controller per gestionar un TramitJConsent
@@ -47,10 +51,14 @@ import org.fundaciobit.genapp.common.web.menuoptions.MenuOption;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitJConsent.tramitJConsent.plural", order=390, group="WEBDB")
+@MenuOption(labelCode="tramitJConsent.tramitJConsent.plural", order=390, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitJConsent")
 @SessionAttributes(types = { TramitJConsentForm.class, TramitJConsentFilterForm.class })
+@Tile(name="tramitJConsentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp", extendsTile=Tab.MENU_WEBDB,
+      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent")})
+@Tile(name="tramitJConsentListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitJConsentList.jsp", extendsTile=Tab.MENU_WEBDB,
+       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent") })
 public class TramitJConsentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<TramitJConsent, java.lang.Long, TramitJConsentForm> implements TramitJConsentFields {
 
@@ -795,12 +803,46 @@ public java.lang.Long stringToPK(String value) {
   }
 
   public String getTileForm() {
+        try {
+            Set<Tile> rm;
+            rm=AnnotationUtils.getDeclaredRepeatableAnnotations(this.getClass(), Tile.class);
+            if (rm != null && !rm.isEmpty()) {
+                String trobada = null;
+                for (Tile tile : rm) {
+                    if (tile.type() == TileType.WEBDB_FORM) {
+                        trobada = tile.name();
+                    }
+                }
+                if (trobada != null) {
+                    return trobada;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error en el getTileForm: " + e.getMessage(), e);
+        }
     return "tramitJConsentFormWebDB";
   }
 
-  public String getTileList() {
-    return "tramitJConsentListWebDB";
-  }
+    public String getTileList() {
+        try {
+            Set<Tile> rm;
+            rm=AnnotationUtils.getDeclaredRepeatableAnnotations(this.getClass(), Tile.class);
+            if (rm != null && !rm.isEmpty()) {
+                String trobada = null;
+                for (Tile tile : rm) {
+                    if (tile.type() == TileType.WEBDB_LIST) {
+                        trobada = tile.name();
+                    }
+                }
+                if (trobada != null) {
+                    return trobada;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error en el getTileList: " + e.getMessage(), e);
+        }
+        return "tramitJConsentListWebDB";
+    }
 
   public String getSessionAttributeFilterForm() {
     return "TramitJConsent_FilterForm_" + this.getClass().getName();

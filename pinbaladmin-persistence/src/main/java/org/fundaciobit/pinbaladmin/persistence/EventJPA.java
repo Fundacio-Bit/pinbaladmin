@@ -252,11 +252,6 @@ public class EventJPA implements Event {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getEventID())).hashCode();
-    }
-
 // IMP Field:solicitudid | Table: pad_solicitud | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

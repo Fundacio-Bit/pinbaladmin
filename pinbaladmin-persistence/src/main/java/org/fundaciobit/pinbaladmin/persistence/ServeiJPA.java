@@ -187,11 +187,6 @@ public class ServeiJPA implements Servei {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getServeiID())).hashCode();
-    }
-
 // EXP  Field:serveiid | Table: pad_pinfodata | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "servei")

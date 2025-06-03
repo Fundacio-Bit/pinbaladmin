@@ -16,6 +16,8 @@ import org.fundaciobit.genapp.common.crypt.FileIDEncrypter;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.web.exportdata.DataExporterManager;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.genapp.common.web.menuoptions.DiscoverMenuOptionAnnotations;
+import org.fundaciobit.genapp.common.web.menuoptions.MenuOptionManager;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.exportdata.IExportDataPlugin;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -25,6 +27,7 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 
 //import org.fundaciobit.pluginsib.core.utils.PluginsManager;
 //import org.fundaciobit.pluginsib.exportdata.IExportDataPlugin;
@@ -44,12 +47,26 @@ public class InitServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
 
+        super.init(config);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MenuOptionManager.setDiscoverMenuOptionAnnotations(
+                            new DiscoverMenuOptionAnnotations(Constants.PINBALADMIN_PROPERTY_BASE + "back.controller"));
+                } catch (Throwable th) {
+                    log.error("Error inicialitzant sistema de menus: " + th.getMessage(), th);
+                }
+            }
+        }).start();
+
         // Sistema de Fitxers
         try {
             File fd = Configuracio.getFilesDirectory();
             if (fd == null) {
                 throw new Exception("No s'ha definit la propietat de la ubicació dels fitxers ("
-                        +  "org.fundaciobit.pinbaladmin.filesdirectory)") ;
+                        + "org.fundaciobit.pinbaladmin.filesdirectory)");
             }
             if (!fd.exists()) {
                 throw new Exception("El directori " + fd.getAbsolutePath() + " no existeix.");
@@ -105,13 +122,13 @@ public class InitServlet extends HttpServlet {
                     "org.fundaciobit.pluginsib.exportdata.ods.ODSPlugin",
                     "org.fundaciobit.pluginsib.exportdata.excel.ExcelPlugin" };
             plugins = new HashSet<Class<? extends IExportDataPlugin>>();
-            
+
             for (String str : classes) {
                 try {
                     Class<?> cls = Class.forName(str);
                     plugins.add((Class<? extends IExportDataPlugin>) cls);
                 } catch (Throwable e) {
-					log.error("Error instanciant DataExporter: " + e.getMessage(), e);
+                    log.error("Error instanciant DataExporter: " + e.getMessage(), e);
                 }
             }
 
@@ -125,7 +142,8 @@ public class InitServlet extends HttpServlet {
                         log.warn("No s'ha pogut instanciar Plugin associat a la classe " + class1.getName());
                     } else {
                         log.warn("Registrant DataExporter: " + class1.getName());
-                        DataExporterManager.addDataExporter(new org.fundaciobit.pinbaladmin.back.utils.PinbalAdminDataExporter(edp));
+                        DataExporterManager.addDataExporter(
+                                new org.fundaciobit.pinbaladmin.back.utils.PinbalAdminDataExporter(edp));
                     }
                 }
             }

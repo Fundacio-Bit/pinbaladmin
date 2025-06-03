@@ -127,11 +127,6 @@ public class EmailJPA implements Email {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getEmailID())).hashCode();
-    }
-
 
  // ---------------  STATIC METHODS ------------------
   public static EmailJPA toJPA(Email __bean) {

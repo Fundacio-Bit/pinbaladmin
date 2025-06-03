@@ -20,11 +20,8 @@ import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
-import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
-import org.fundaciobit.pinbaladmin.model.fields.PinfoQueryPath;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
@@ -150,7 +147,7 @@ public class PinfoOperadorController extends PinfoController {
 		try {
 			pinfoDataLogicaEjb.procesarPermisosPinfo(pinfoID);
 			
-			String operador = LoginInfo.getInstance().getUsername();
+			//String operador = LoginInfo.getInstance().getUsername();
 			
 			String msg = "PINFO " + pinfoID + " processat correctament";
 			HtmlUtils.saveMessageSuccess(request, msg);

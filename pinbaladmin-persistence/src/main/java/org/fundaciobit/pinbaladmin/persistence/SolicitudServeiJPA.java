@@ -339,11 +339,6 @@ public class SolicitudServeiJPA implements SolicitudServei {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getId())).hashCode();
-    }
-
 // EXP  Field:solicitudserveiid | Table: pad_campsolicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitudServei")

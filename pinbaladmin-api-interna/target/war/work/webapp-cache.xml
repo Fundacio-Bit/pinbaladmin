@@ -25,7 +25,7 @@
           <string>WEB-INF/lib/jboss-jaxb-api_2.3_spec-1.0.1.Final-redhat-1.jar</string>
           <string>WEB-INF/lib/genapp-core-2.0.0-SNAPSHOT.jar</string>
           <string>WEB-INF/lib/portafib-callback-beans-1.1.jar</string>
-          <string>WEB-INF/lib/portafib-commons-2.2.0.jar</string>
+          <string>WEB-INF/lib/portafib-commons-3.0.6.jar</string>
           <string>WEB-INF/lib/swagger-annotations-2.1.13.jar</string>
           <string>WEB-INF/lib/commons-lang3-3.6.0.redhat-1.jar</string>
           <string>WEB-INF/lib/pluginsib-utils-rest-3.0.0-SNAPSHOT.jar</string>
@@ -48,7 +48,7 @@
           <columnNumber>21</columnNumber>
           <source>
             <modelId>org.fundaciobit.pinbaladmin:pinbaladmin-api-interna:2.0.0</modelId>
-            <location>D:\Projectes\pinbaladmin\pinbaladmin-api-interna\pom.xml</location>
+            <location>D:\dades\dades\CarpetesPersonals\ProgramacioPortaFIB3\pinbaladmin2\pinbaladmin-api-interna\pom.xml</location>
           </source>
         </location>
         <groupIdLocation>
@@ -62,11 +62,11 @@
           <source reference="../../location/source"/>
         </artifactIdLocation>
         <versionLocation>
-          <lineNumber>134</lineNumber>
+          <lineNumber>133</lineNumber>
           <columnNumber>26</columnNumber>
           <source>
             <modelId>es.caib.maven:caib-artifacts-jdk11-jboss72:1.0.0-SNAPSHOT</modelId>
-            <location>D:\Programs\.m2\repository\es\caib\maven\caib-artifacts-jdk11-jboss72\1.0.0-SNAPSHOT\caib-artifacts-jdk11-jboss72-1.0.0-SNAPSHOT.pom</location>
+            <location>D:\programs\.m2\repository\es\caib\maven\caib-artifacts-jdk11-jboss72\1.0.0-SNAPSHOT\caib-artifacts-jdk11-jboss72-1.0.0-SNAPSHOT.pom</location>
           </source>
         </versionLocation>
         <typeLocation>
@@ -111,7 +111,7 @@
           <columnNumber>26</columnNumber>
           <source>
             <modelId>org.fundaciobit.pinbaladmin:pinbaladmin:2.0.0</modelId>
-            <location>D:\Projectes\pinbaladmin\pom.xml</location>
+            <location>D:\dades\dades\CarpetesPersonals\ProgramacioPortaFIB3\pinbaladmin2\pom.xml</location>
           </source>
         </versionLocation>
         <scopeLocation>
@@ -169,42 +169,42 @@
         <scope>provided</scope>
         <exclusions>
           <org.apache.maven.model.Exclusion>
-            <groupId>javax.activation</groupId>
             <artifactId>javax.activation-api</artifactId>
+            <groupId>javax.activation</groupId>
             <location>
               <lineNumber>43</lineNumber>
               <columnNumber>28</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </location>
-            <groupIdLocation>
-              <lineNumber>44</lineNumber>
-              <columnNumber>30</columnNumber>
-              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-            </groupIdLocation>
             <artifactIdLocation>
               <lineNumber>45</lineNumber>
               <columnNumber>33</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </artifactIdLocation>
+            <groupIdLocation>
+              <lineNumber>44</lineNumber>
+              <columnNumber>30</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </groupIdLocation>
           </org.apache.maven.model.Exclusion>
           <org.apache.maven.model.Exclusion>
-            <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
+            <groupId>javax.xml.bind</groupId>
             <location>
               <lineNumber>47</lineNumber>
               <columnNumber>28</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </location>
-            <groupIdLocation>
-              <lineNumber>48</lineNumber>
-              <columnNumber>30</columnNumber>
-              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
-            </groupIdLocation>
             <artifactIdLocation>
               <lineNumber>49</lineNumber>
               <columnNumber>33</columnNumber>
               <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
             </artifactIdLocation>
+            <groupIdLocation>
+              <lineNumber>48</lineNumber>
+              <columnNumber>30</columnNumber>
+              <source reference="../../../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/location/source"/>
+            </groupIdLocation>
           </org.apache.maven.model.Exclusion>
         </exclusions>
         <location>
@@ -402,7 +402,7 @@
           <columnNumber>18</columnNumber>
           <source>
             <modelId>org.jboss.bom:eap-runtime-artifacts:7.2.0.GA</modelId>
-            <location>D:\Programs\.m2\repository\org\jboss\bom\eap-runtime-artifacts\7.2.0.GA\eap-runtime-artifacts-7.2.0.GA.pom</location>
+            <location>D:\programs\.m2\repository\org\jboss\bom\eap-runtime-artifacts\7.2.0.GA\eap-runtime-artifacts-7.2.0.GA.pom</location>
           </source>
         </versionLocation>
         <managementKey>org.apache.commons:commons-lang3:jar</managementKey>
@@ -470,6 +470,7 @@
         </versionLocation>
         <managementKey>org.fundaciobit.pluginsib.utils:pluginsib-utils-swagger-ui-configurable-webjar:jar</managementKey>
       </dependency>
+      <targetFileName>pluginsib-utils-swagger-ui-configurable-webjar-3.0.0-SNAPSHOT.jar</targetFileName>
     </org.apache.maven.plugins.war.util.DependencyInfo>
     <org.apache.maven.plugins.war.util.DependencyInfo>
       <dependency>
@@ -553,17 +554,17 @@
         <scope>test</scope>
         <exclusions/>
         <location>
-          <lineNumber>157</lineNumber>
+          <lineNumber>155</lineNumber>
           <columnNumber>21</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </location>
         <groupIdLocation>
-          <lineNumber>158</lineNumber>
+          <lineNumber>156</lineNumber>
           <columnNumber>22</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </groupIdLocation>
         <artifactIdLocation>
-          <lineNumber>159</lineNumber>
+          <lineNumber>157</lineNumber>
           <columnNumber>25</columnNumber>
           <source reference="../../../../org.apache.maven.plugins.war.util.DependencyInfo/dependency/versionLocation/source"/>
         </artifactIdLocation>

@@ -107,11 +107,6 @@ public class TramitBDadesSoliJPA implements TramitBDadesSoli {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getDadessoliid())).hashCode();
-    }
-
 // IMP Field:tramitid | Table: pad_tramit_a_pers_aut | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

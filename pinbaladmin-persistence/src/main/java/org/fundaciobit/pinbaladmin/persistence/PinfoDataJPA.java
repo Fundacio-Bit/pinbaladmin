@@ -151,11 +151,6 @@ public class PinfoDataJPA implements PinfoData {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getPinfodataID())).hashCode();
-    }
-
 // IMP Field:pinfoid | Table: pad_pinfo | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -282,11 +282,6 @@ public class TiquetJPA implements Tiquet {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getTiquetID())).hashCode();
-    }
-
 // IMP Field:estattiquetid | Table: pad_estattiquet | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)

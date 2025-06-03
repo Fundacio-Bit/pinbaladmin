@@ -96,11 +96,6 @@ public class AreaJPA implements Area {
         return __result;
     }
 
-    @Override
-    public int hashCode() {
-        return (String.valueOf(this.getAreaID())).hashCode();
-    }
-
 // EXP  Field:areaid | Table: pad_departament | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "area")

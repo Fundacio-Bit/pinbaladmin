@@ -21,7 +21,6 @@ import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Idioma;
-import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.IdiomaFields;
