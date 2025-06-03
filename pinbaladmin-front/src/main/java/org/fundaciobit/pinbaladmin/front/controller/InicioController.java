@@ -41,17 +41,27 @@ public class InicioController {
 	protected final Log log = LogFactory.getLog(getClass());
 
 	public final static String CONTEXT_ARRAMCAR_AUTH = "/arrancarpinfoauth";
+	public final static String CONTEXT_MODIFICAR_AUTH = "/modificarsolicitudauth";
 
-	@RequestMapping(value = { "/", "/arrancarpinfo" }, method = { RequestMethod.GET, RequestMethod.POST })
+	
+	@RequestMapping(value = { "/"}, method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView root(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		log.info("Entra a ROOT");
+		
+		return new ModelAndView(new RedirectView("/arrancarpinfo", true));
+		
+	}
+	
+	@RequestMapping(value = {"/arrancarpinfo" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView inicio(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
 
-		log.info("entram a arrel");
-
+		log.info("entram a arrancarpinfo");
+//		session.setAttribute(CONTEXT_ARRAMCAR_AUTH, session)
+		
 		Authentication i = SecurityContextHolder.getContext().getAuthentication();
 		ModelAndView mav;
 		log.info("auth: " + i);
-		log.info("auth ppal: " + i.getPrincipal());
 		if (i == null || i.getPrincipal() == null || i.getPrincipal().equals("anonymousUser")) {
 
 			String urlFront = Configuracio.getAppFrontUrl();
@@ -67,12 +77,52 @@ public class InicioController {
 					new RedirectView(PluginLoginController.MAPPING_PRELOGIN + "?urlbase=" + urlbase, true));
 //			mav = new ModelAndView("inici");
 		} else {
+			log.info("auth ppal: " + i.getPrincipal());
 			mav = new ModelAndView(new RedirectView(CONTEXT_ARRAMCAR_AUTH, true));
 
 		}
 
 		return mav;
+	}
 
+	@RequestMapping(value = { "/modificarsolicitud" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView modificarsolicitud(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+			{
+		
+		log.info("entram a modificarsolicitud");
+		
+		try {
+
+			Authentication i = SecurityContextHolder.getContext().getAuthentication();
+			ModelAndView mav;
+			log.info("auth: " + i);
+			if (i == null || i.getPrincipal() == null || i.getPrincipal().equals("anonymousUser")) {
+
+				String urlFront = Configuracio.getAppFrontUrl();
+				URL url = new URL(urlFront);
+
+				String urlbase = url.getProtocol() + "://" + url.getHost()
+						+ (url.getPort() == -1 ? "" : (":" + url.getPort()));
+				log.info("urlbase: " + urlbase);
+				String urlRedirect = urlbase + request.getContextPath() + CONTEXT_MODIFICAR_AUTH;
+
+				request.getSession().setAttribute(PluginLoginController.SESSION_RETURN_URL_POST_LOGIN, urlRedirect);
+				mav = new ModelAndView(
+						new RedirectView(PluginLoginController.MAPPING_PRELOGIN + "?urlbase=" + urlbase, true));
+//			mav = new ModelAndView("inici");
+			} else {
+				log.info("auth ppal: " + i.getPrincipal());
+				mav = new ModelAndView(new RedirectView(CONTEXT_MODIFICAR_AUTH, true));
+
+			}
+
+			return mav;
+		} catch (Exception e) {
+			String error = "Error a /modificarsolicitud " + e.getMessage();
+			log.error(error, e);
+			return new ModelAndView(new RedirectView("https://www.google.com"));
+		}
+		
 	}
 
 	@RequestMapping(value = { "/error" }, method = RequestMethod.GET)
@@ -80,6 +130,8 @@ public class InicioController {
 
 		ModelAndView mav = new ModelAndView("error");
 
+		log.info("XXXXXXX ENTRAM A /error");
+		
 		try {
 
 			mav.addObject("error", e.getMessage());
@@ -166,6 +218,74 @@ public class InicioController {
 
 		String url = Configuracio.getAppBackUrl() + "/public/incidenciapinfo" + "/new/" + token;
 
+		ModelAndView mav = new ModelAndView(new RedirectView(url));
+		return mav;
+	}
+	
+	@RequestMapping(value = { CONTEXT_MODIFICAR_AUTH }, method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView modificarsolicitudauth(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		log.info("modificar solicitud auth");
+		
+		// añadir token
+		
+		UUID uuid = UUID.randomUUID();
+		String token = uuid.toString();
+		
+		// crear un fitxer amb el token i totes les propietats de Authentication.
+		
+		File file = new File(token + ".front");
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+		
+		if (principal instanceof PluginLoginUserDetails) {
+			
+			PluginLoginUserDetails usuarioAutenticado = (PluginLoginUserDetails) principal;
+			LoginInfo loginInfo = usuarioAutenticado.getUsuario();
+			
+			//Escribir todos los datos en el fichero.
+			String nif = loginInfo.getAdministrationID();
+			String nom = loginInfo.getName();
+			String ape1 = loginInfo.getSurname1();
+			String ape2 = loginInfo.getSurname2();
+			String authMethod = loginInfo.getAuthenticationMethod();
+			String identityProvider = loginInfo.getIdentityProvider();
+			String loginID = loginInfo.getLoginID();
+			String username = loginInfo.getUsername();
+			int  qaa = loginInfo.getQaa();
+			
+			// Escribir en el fichero.
+			
+			try {
+				FileWriter myWriter = new FileWriter(file);
+				myWriter.write("NIF=" + nif + "\n");
+				myWriter.write("Nom=" + nom + "\n");
+				myWriter.write("Cognom1=" + ape1 + "\n");
+				myWriter.write("Cognom2=" + ape2 + "\n");
+				myWriter.write("AuthMethod=" + authMethod + "\n");
+				myWriter.write("IdentityProvider=" + identityProvider + "\n");
+				myWriter.write("LoginID=" + loginID + "\n");
+				myWriter.write("Username=" + username + "\n");
+				myWriter.write("QAA=" + qaa + "\n");
+				
+				myWriter.close();
+				
+				File newFile = new File(FileSystemManager.getFilesPath(), token + ".front");
+				FileSystemManager.copy(file, newFile);
+				
+				log.info("Successfully wrote to the file.");
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		String url = Configuracio.getAppBackUrl() + "/public/modificarsolicitud" + "/new/" + token;
+		
 		ModelAndView mav = new ModelAndView(new RedirectView(url));
 		return mav;
 	}

@@ -41,7 +41,7 @@ public class PinbalAdminSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/", "/public/**", "/inici", "/arrancarpinfo",
+                .antMatchers("/", "/public/**", "/inici", "/arrancarpinfo", "/modificarsolicitud",
                         // Plugin Login
                         PluginLoginController.MAPPING_PRELOGIN + "/**", PluginLoginController.MAPPING_LOGOUT, 
                         "/js/**", "/error", "/css/**", "/images/**", "/fonts/**").permitAll()
