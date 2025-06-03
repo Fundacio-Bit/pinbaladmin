@@ -8,6 +8,7 @@
 
 package es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.peticion;
 
+import javax.persistence.Lob;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,6 +45,7 @@ public class SolicitudTransmision {
 
     @XmlElement(name = "DatosGenericos", namespace = "http://intermediacion.redsara.es/scsp/esquemas/V3/peticion", required = true)
     protected DatosGenericos datosGenericos;
+    @Lob
     @XmlElement(name = "DatosEspecificos", required = true)
     protected DatosEspecificos datosEspecificos;
 

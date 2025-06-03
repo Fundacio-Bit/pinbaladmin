@@ -8,6 +8,8 @@
 
 package es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -84,7 +86,7 @@ public class Procedimiento {
     protected String periodico;
     @XmlElement(name = "FechaCaducidad")
     @XmlSchemaType(name = "date")
-    protected String fechaCaducidad;
+    protected XMLGregorianCalendar  fechaCaducidad;
     @XmlElement(name = "Automatizado", required = true)
     protected String automatizado;
     @XmlElement(name = "Consentimiento", required = true)
@@ -232,7 +234,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getFechaCaducidad() {
+    public XMLGregorianCalendar getFechaCaducidad() {
         return fechaCaducidad;
     }
 
@@ -244,7 +246,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setFechaCaducidad(String value) {
+    public void setFechaCaducidad(XMLGregorianCalendar value) {
         this.fechaCaducidad = value;
     }
 

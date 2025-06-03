@@ -2,11 +2,15 @@ package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
@@ -181,12 +185,34 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		}
 		String _Observaciones = null;// soli.getNotes();
 
-		Timestamp dataCaducitat = soli.getDataFi();
 //		XMLGregorianCalendar _FechaCaducidad = GregorianCalendars.timestampToXMLGregorianCalendar(dataCaducitat); // parseTimestampToXMLGregorian(dataCaducitat);
-//		_FechaCaducidad.xml
-		final String currentStr = SDF.format(dataCaducitat);
-		String _FechaCaducidad = currentStr;
+//		Timestamp dataCaducitat = soli.getDataFi();
+//		String _FechaCaducidad = null;
+//
+//		if (dataCaducitat != null) {
+//		    _FechaCaducidad = SDF.format(dataCaducitat);
+//		}
+//
+//		Date _FechaCaducidad = null;
+//		if (dataCaducitat != null) {
+//	    _FechaCaducidad = ;
+//	}
+		
+		
+		Date dataCaducitat = soli.getDataFi();
+		XMLGregorianCalendar _FechaCaducidad = null;
 
+		if (dataCaducitat != null) {
+		    GregorianCalendar gc = new GregorianCalendar();
+		    gc.setTime(dataCaducitat);
+		    _FechaCaducidad = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+		        gc.get(GregorianCalendar.YEAR),
+		        gc.get(GregorianCalendar.MONTH) + 1,
+		        gc.get(GregorianCalendar.DAY_OF_MONTH),
+		        DatatypeConstants.FIELD_UNDEFINED // sin timezone
+		    );
+		}
+		
 		Fitxer fitxerConsentiment = null;
 		// Aquí son el excel de servicios y el documento PDF del Director General.
 		Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
@@ -322,6 +348,12 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 		doc.setNombre(nom);
 		doc.setDescripcion(descripcio);
+//		contingut = "hola3".getBytes();
+
+		if (contingut != null) {
+		    System.out.println("Tamaño del contenido (bytes): " + contingut.length);
+		    System.out.println("Base64 length: " + Base64.getEncoder().encodeToString(contingut).length());
+		}
 		doc.setContenido(contingut);
 
 		cons.setDocumento(doc);
@@ -349,6 +381,7 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 			File file = FileSystemManager.getFile(fitxerID);
 			byte[] contingut = FileUtils.readFromFile(file);
 
+//			contingut = "hola".getBytes();
 			DocumentoAutorizacion docAut = new DocumentoAutorizacion();
 			// AUT - FORMULARIO AUTORIZACION: FicherFirmart09.pdf (124562 bytes)
 			log.info("AUT - " + tipo + ": " + nom + " (" + contingut.length + " bytes)");
@@ -359,6 +392,11 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 			docAut.setContenido(contingut);
 
 			docs.getDocumentoAutorizacion().add(docAut);
+			
+			if (contingut != null) {
+			    System.out.println("Tamaño del contenido (bytes): " + contingut.length);
+			    System.out.println("Base64 length: " + Base64.getEncoder().encodeToString(contingut).length());
+			}
 		}
 		return docs;
 	}
@@ -460,6 +498,12 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 					docNorma.setNombre(nom);
 					docNorma.setDescripcion(descripcio);
+//					contingut = "hola2".getBytes();
+
+					if (contingut != null) {
+					    System.out.println("Tamaño del contenido (bytes): " + contingut.length);
+					    System.out.println("Base64 length: " + Base64.getEncoder().encodeToString(contingut).length());
+					}
 					docNorma.setContenido(contingut);
 					docNorma.setEnlace(enlace);
 

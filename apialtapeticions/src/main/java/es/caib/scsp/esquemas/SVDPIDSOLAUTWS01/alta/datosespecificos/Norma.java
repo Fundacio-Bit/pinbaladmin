@@ -8,6 +8,7 @@
 
 package es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos;
 
+import javax.persistence.Lob;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -186,6 +187,8 @@ public class Norma {
         protected String nombre;
         @XmlElement(name = "Descripcion", required = true)
         protected String descripcion;
+
+        @Lob
         @XmlElement(name = "Contenido", required = true)
         protected byte[] contenido;
         @XmlElement(name = "Enlace")
