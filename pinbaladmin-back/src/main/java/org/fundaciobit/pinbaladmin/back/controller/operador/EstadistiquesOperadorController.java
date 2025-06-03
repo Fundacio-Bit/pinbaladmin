@@ -40,7 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class EstadistiquesOperadorController {
 
-    protected static final Logger log = Logger.getLogger(QueEsticFentOperadorController.class);
+    protected static final Logger log = Logger.getLogger(EstadistiquesOperadorController.class);
 
     public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
     public static final SimpleDateFormat SDF2 = new SimpleDateFormat("EEEE d/MM/yyyy" ,  Locale.forLanguageTag("ca-ES"));
