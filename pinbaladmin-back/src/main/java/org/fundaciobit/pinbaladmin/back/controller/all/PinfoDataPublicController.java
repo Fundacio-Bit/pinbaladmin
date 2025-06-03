@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -54,6 +56,7 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -433,6 +436,87 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 	UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 	
+//	@RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
+//	public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//
+////		String param = (String) request.getParameter("query");
+////		log.info("param: ]" + param + "[");
+//
+//		String nom = (String) request.getParameter("nom");
+//		log.info("nom: ]" + nom + "[");
+//		String nif = (String) request.getParameter("nif");
+//		log.info("nif: ]" + nif + "[");
+//
+////		final String baseUrl = Configuracio.getApiPinbalClientUrl();
+////		final String username = Configuracio.getApiPinbalClientUsername();
+////		final String password = Configuracio.getApiPinbalClientPassword();
+////		final LogLevel logLevel = LogLevel.INFO;
+////
+////		log.info("Creant Clients");
+////		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+////		log.info("Clients creats");
+//
+//		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
+//		final String ENTITAT_CIF = pinfoLogicEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
+//		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
+//
+//		final int page = 0;
+//		final int size = 10;
+//		String sort = null;
+//		FiltreUsuaris filter = new FiltreUsuaris();
+//		filter.setIsDelegat(true);
+//		
+//		
+//		try {
+//			
+//			filter.setNom(nom);
+//			filter.setNif(nif);
+//			
+//			Page<UsuariEntitat> usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, size, sort);
+//			log.info("Elems: " + usuariPage.getTotalElements());
+//			log.info("Pages: " + usuariPage.getTotalPages());
+//			log.info("ContentSize: " + usuariPage.getContent().size());
+//			
+//			log.info(usuariPage.getContent());
+//			
+////			usuariPage.getContent().get(0).get
+//			
+//			
+//			Gson g = new Gson();
+//			String usuarisJson = g.toJson(usuariPage.getContent());
+//
+//			
+//			 log.info(usuarisJson );
+//
+//			PrintWriter out = response.getWriter();
+//			response.setContentType("application/json");
+//			response.setCharacterEncoding("UTF-8");
+//			out.print(usuarisJson);
+//			out.flush();
+//		}catch (ClientHandlerException | UniformInterfaceException e) {
+//            log.error("Error obtenirJsonUsuaris: " + e.getMessage());
+//            
+//            PrintWriter out = response.getWriter();
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            out.print("[]");
+//            out.flush();
+//        }
+//		
+//
+////		usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, usuariPage.getTotalElements()-1, sort);
+//		
+////		List<UsuariEntitat> llistatFiltrar = new java.util.ArrayList<UsuariEntitat>();
+////		for (UsuariEntitat usuari : usuariPage.getContent()) {
+////			if (usuari.getNif().contains(param) || usuari.getNom().contains(param)) {
+////				llistatFiltrar.add(usuari);
+////			}
+////		}
+//		
+//		
+//		
+//	}
+
 	@RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
 	public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -444,74 +528,55 @@ public class PinfoDataPublicController extends PinfoDataController {
 		String nif = (String) request.getParameter("nif");
 		log.info("nif: ]" + nif + "[");
 
-//		final String baseUrl = Configuracio.getApiPinbalClientUrl();
-//		final String username = Configuracio.getApiPinbalClientUsername();
-//		final String password = Configuracio.getApiPinbalClientPassword();
-//		final LogLevel logLevel = LogLevel.INFO;
-//
-//		log.info("Creant Clients");
-//		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
-//		log.info("Clients creats");
-
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
-		final String ENTITAT_CIF = pinfoLogicEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
-		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
+		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
 
-		final int page = 0;
-		final int size = 10;
-		String sort = null;
-		FiltreUsuaris filter = new FiltreUsuaris();
-		filter.setIsDelegat(true);
+		final boolean debug = false;
+    	boolean caib = true;
+		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
 		
+		UserInfo solicitantInfo = null;
+		solicitantInfo = pluginUserInfo.getUserInfoByAdministrationID(pinfo.getSolicitantNIF());
 		
+		String soliUsername = solicitantInfo.getUsername();
+
+		IEstructuraOrganitzativaPlugin pluginEstrOrg = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
+		String codiDepartament = pluginEstrOrg.getCodeDepartamentDireccioGeneral(soliUsername);
+		log.info("El codiDepartament de " + soliUsername + " es " + codiDepartament);
+		
+		SearchUsersResult searchUsuarisDepartament = pluginUserInfo.getUsersByDepartment(codiDepartament);
+		List<UserInfo> usuarisDepartament = searchUsuarisDepartament.getUsers();
+
+		final String param = nom != null ? nom.toLowerCase() : "";
+
+		List<UserInfo> usuarisFiltrats = usuarisDepartament.stream()
+		    .filter(u -> param.isEmpty()
+		        || u.getFullName().toLowerCase().contains(param)
+		        || u .getAdministrationID().toLowerCase().contains(param)
+		        || u.getUsername().toLowerCase().contains(param)
+		    )
+		    .collect(Collectors.toList());
+
 		try {
-			
-			filter.setNom(nom);
-			filter.setNif(nif);
-			
-			Page<UsuariEntitat> usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, size, sort);
-			log.info("Elems: " + usuariPage.getTotalElements());
-			log.info("Pages: " + usuariPage.getTotalPages());
-			log.info("ContentSize: " + usuariPage.getContent().size());
-			
-			log.info(usuariPage.getContent());
-			
-//			usuariPage.getContent().get(0).get
-			
-			
 			Gson g = new Gson();
-			String usuarisJson = g.toJson(usuariPage.getContent());
+			String usuarisJson = g.toJson(usuarisFiltrats);
 
-			
-			 log.info(usuarisJson );
+			log.info(usuarisJson);
 
 			PrintWriter out = response.getWriter();
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			out.print(usuarisJson);
 			out.flush();
-		}catch (ClientHandlerException | UniformInterfaceException e) {
-            log.error("Error obtenirJsonUsuaris: " + e.getMessage());
-            
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print("[]");
-            out.flush();
-        }
-		
+		} catch (Exception e) {
+			log.error("Error obtenirJsonUsuaris: " + e.getMessage());
 
-//		usuariPage = usuariClient.getUsuaris(ENTITAT_CIF, filter, page, usuariPage.getTotalElements()-1, sort);
-		
-//		List<UsuariEntitat> llistatFiltrar = new java.util.ArrayList<UsuariEntitat>();
-//		for (UsuariEntitat usuari : usuariPage.getContent()) {
-//			if (usuari.getNif().contains(param) || usuari.getNom().contains(param)) {
-//				llistatFiltrar.add(usuari);
-//			}
-//		}
-		
-		
-		
+			PrintWriter out = response.getWriter();
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			out.print("[]");
+			out.flush();
+		}
 	}
 
 	@RequestMapping(value = { "/jsonProcediments" }, method = RequestMethod.GET)
@@ -658,61 +723,75 @@ public class PinfoDataPublicController extends PinfoDataController {
 	private List<Responsable> getLlistaResponsablesProcediments(Long pinfoID) throws I18NException {
 
 		List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
-		
-		
-		
-		
-//		try {
-//
-//			// Obtenir els procediments dels PinfoDatas:
-//			List<Long> procedimentsList = new java.util.ArrayList<Long>();
-//			List<String> listaNifs = new java.util.ArrayList<String>();
-//			List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(PinfoDataFields.PINFOID.equal(pinfoID));
-//			for (PinfoData pinfoData : pinfoDataList) {
-//				if (!procedimentsList.contains(pinfoData.getProcedimentID())) {
-//					procedimentsList.add(pinfoData.getProcedimentID());
-//				}
-//			}
-//
-//			for (Long procedimentID : procedimentsList) {
-//				Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
-//				Long xmlSolicitud = solicitud.getSolicitudXmlID();
-//				
-//				log.error( procedimentID +  ": xmlSolicitud " + xmlSolicitud);
-//				if (xmlSolicitud == null) {
-//					continue;
-//				}
-//				
-//				Properties prop = ParserFormulariXML.getPropertiesFromFormulario(xmlSolicitud);
-//
-//				String nif = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECD");
-//				nif = nif.toUpperCase();
-//				String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECD");
-//				String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECD");
-//				String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECD");
-//				String cargo = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CARGOSECD");
-//				String telefon = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TELEFONOSECD");
-//				String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECD");
-//				String nomOcult = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECD");
-//
-//				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + cargo + " - " + telefon + " - " + mail
-//						+ " - " + nomOcult);
-//
-//				Responsable responsable = new Responsable(nif, nom, ape1, ape2, cargo, telefon, mail, nomOcult);				
-//				
-//				if (!listaNifs.contains(nif)) {
-//                    responsablesList.add(responsable);
-//                    listaNifs.add(nif);
-//				}
-//				
-//			}
-//
-//		} catch (Exception e) {
-//			log.error("Error getLlistaResponsablesProcediments: " + e.getMessage());
-//		}
+
+		Pinfo pinfo = pinfoLogicEjb.findByPrimaryKey(pinfoID);
+
+		UserInfo solicitantInfo = null;
+		final boolean debug = false;
+    	boolean caib = true;
+		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+
+		try {
+			solicitantInfo = pluginUserInfo.getUserInfoByAdministrationID(pinfo.getSolicitantNIF());
+		} catch (Exception e) {
+			log.error("No hem trobat informació del solicitant (" + pinfo.getSolicitantNIF()
+					+ ") a Plugin de UserInformation: " + e.getMessage());
+		}
+
+		IEstructuraOrganitzativaPlugin pluginEstrOrg = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
+		String username = solicitantInfo.getUsername();
+
+		try {
+			String usernameDG = pluginEstrOrg.getCapDepartamentDirectorGeneralUsername(username);
+			usernameDG = "atrobat";
+			log.info("El Director General de " + username + " es " + usernameDG);
+
+			afegirResponsableAmbUsername(usernameDG, "Director General", responsablesList, pluginUserInfo);
+
+		} catch (Exception e) {
+			log.error("No hem trobat el Director General: " + e.getMessage());
+		}
+
+		try {
+			String usernameSG = pluginEstrOrg.getSecretariUsername(username);
+			usernameSG = "anadal";
+			log.info("El Secretari General de " + username + " es " + usernameSG);
+
+			afegirResponsableAmbUsername(usernameSG, "Secretari", responsablesList, pluginUserInfo);
+		} catch (Exception e) {
+			log.error("No hem trobat el Secretari: " + e.getMessage());
+		}
 		return responsablesList;
 	}
 	
+	private void afegirResponsableAmbUsername(String username, String carrec, List<Responsable> responsablesList,
+			 IUserInformationPlugin plugin) throws Exception {
+		if (username == null) {
+			return;
+		}
+		
+		UserInfo info = plugin.getUserInfoByUserName(username);
+
+		if (info != null) {
+			String nif = info.getAdministrationID();
+			String nom = info.getName();
+			String ape1 = info.getSurname1();
+			String ape2 = info.getSurname2();
+			String telefon = info.getPhoneNumber();
+			String mail = info.getEmail();
+			String nomOcult = info.getFullName();
+
+			log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + carrec + " - " + telefon + " - " + mail
+					+ " - " + nomOcult);
+
+			Responsable responsable = new Responsable(nif, nom, ape1, ape2, carrec, telefon, mail, nomOcult);
+
+			responsablesList.add(responsable);
+		} else {
+			log.error("No hem trobat Info del " + carrec + " (" + username + ")");
+		}
+	}
+
 	@RequestMapping(value = "/seleccionarResponsable", method = RequestMethod.POST)
 	public String seleccionarResponsablePost(HttpServletRequest request) throws I18NException {
 		log.info("seleccionarResponsable POST");
@@ -826,7 +905,9 @@ public class PinfoDataPublicController extends PinfoDataController {
 		UsuariData usuari;
 		
 		boolean debug = false;
-        IUserInformationPlugin plugin = getUserInformationPluginInstance(debug);
+    	boolean caib = true;
+
+		IUserInformationPlugin plugin =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
         UserInfo info = plugin.getUserInfoByUserName(user);
         
         if (info == null) {
@@ -864,46 +945,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		out.flush();
 	}
 
-    public static final String LOGIN_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "userinformationplugin";
-
-    public static IUserInformationPlugin loginPlugin = null;
-
-    protected final static Logger log = Logger.getLogger(PinfoDataController.class);
-
-    public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug) throws I18NException {
-        if (loginPlugin == null) {
-//            final String propertyPlugin = LOGIN_PLUGIN_KEY;
-
-            Properties propTmp = Configuracio.getSystemAndFileProperties();
-
-			if (debug) {
-				log.info("Propietats de sistema i fitxer de configuració:");
-				Set<Object> set = propTmp.keySet();
-				for (Object object : set) {
-					String key = (String) object;
-					String value = propTmp.getProperty(key);
-					log.info(key + ": " + value);
-				}
-			}
-            
-            String className = propTmp.getProperty(LOGIN_PLUGIN_KEY);
-            
-            log.info("className: " + className);
-            Object pluginInstance = PluginsManager.instancePluginByClassName(className,
-                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
-
-//            Object pluginInstance = PluginsManager.instancePluginByProperty(propertyPlugin,
-//                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
-
-            if (pluginInstance == null) {
-                throw new I18NException("plugin.donotinstantiateplugin.userinfo");
-            }
-            loginPlugin = (IUserInformationPlugin) pluginInstance;
-        }else {
-			log.info("loginPlugin ja existeix. " + loginPlugin.getClass().getName());
-        }
-        return loginPlugin;
-    }
+    
     
     
 //    public static final String LOGIN_PLUGIN_KEY_estructuraOrganitzativa = Constants.PINBALADMIN_PROPERTY_BASE + "pluginsib.estructuraorganitzativa.ldapcaib";

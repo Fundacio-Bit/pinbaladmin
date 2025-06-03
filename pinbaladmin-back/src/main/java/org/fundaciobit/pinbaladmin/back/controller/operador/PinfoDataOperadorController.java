@@ -14,6 +14,7 @@ import org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoDataController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -80,7 +81,10 @@ public class PinfoDataOperadorController extends PinfoDataController {
 	    String username = request.getParameter("username");
 	    log.info("username: ]" + username + "[");
 
-	    IUserInformationPlugin plugin = PinfoDataPublicController.getUserInformationPluginInstance(false);
+	    boolean debug = false;
+    	boolean caib = true;
+
+		IUserInformationPlugin plugin =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
 	    UserInfo info = plugin.getUserInfoByUserName(username);
 
 	    String usuariTrobat = null;
