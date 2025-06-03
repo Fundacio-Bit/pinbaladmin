@@ -343,7 +343,7 @@ section .title {
                 var nif = $("#usuariNif").val();
                 
                 console.log("nom: " + nom + ", nif: " + nif );
-                if (nom.length < 1 && nif.length < 1) {
+                if (nom.length < 3 && nif.length < 3) {
                     $("#autocomplete-usuaris").empty();
                     return;
                 }
@@ -382,7 +382,7 @@ section .title {
 		function afegirUsuari(usuari) {
             var usuariDiv = document.createElement("div");
             usuariDiv.classList.add("usuari-item");
-            usuariDiv.innerHTML = usuari.nif + " - " + usuari.nom;
+            usuariDiv.innerHTML = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1 + " " + usuari.surname2;
             usuariDiv.onclick = function() {
                 elegirUsuari(usuari);
             };
@@ -422,7 +422,7 @@ section .title {
 		
 		function elegirUsuari(usuari) {
             for (let i = 0; i < usuaris.length; i++) {
-                if (usuaris[i].codi == usuari.codi) {
+                if (usuaris[i].username == usuari.username) {
                     alert("Ja el tenim a la llista");
                     return;
                 }
@@ -433,7 +433,7 @@ section .title {
             let li = $("<li></li>").addClass("usuari-li");
             let container = $("<div></div>").addClass("usuari-data-container");
             
-            let text = usuari.nif + " - " + usuari.nom + " - " + usuari.codi;
+            let text = usuari.administrationID + " - " + usuari.name + " " +  usuari.surname1 + " " + usuari.surname2 + " - " + usuari.username;
             let spanText = $("<span></span>").addClass("usuari-data-text").text(text);
             
             let spanDelete = $("<span></span>").addClass("usuari-data-delete").html('<i class="fas fa-times"></i>').click(function() {
