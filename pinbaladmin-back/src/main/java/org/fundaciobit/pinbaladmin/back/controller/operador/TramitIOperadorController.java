@@ -478,13 +478,6 @@ public class TramitIOperadorController extends TramitIServController {
 		}
 	}
 	
-	
-//	@RequestMapping(value = "/{servid}/jsonServeis", method = RequestMethod.GET)
-//	public void obtenirJsonServeis(HttpServletRequest request, HttpServletResponse response,
-//			@PathVariable("servid") java.lang.Long servid) throws Exception {
-//		obtenirJsonServeis(request, response);
-//	}
-	
 	@RequestMapping(value = {"/jsonServeis", "/{servid}/jsonServeis"}, method = RequestMethod.GET)
 	public void obtenirJsonServeis(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -492,11 +485,12 @@ public class TramitIOperadorController extends TramitIServController {
 		String param = (String) request.getParameter("query");
 		log.info("param: ]" + param + "[");
 
-//		Long firstResult = 0L;
-//		Long maxResults = 10L;
-//		List<Servei> serveis = serveiEjb.select(ServeiFields.NOM.like("%" + param + "%"), firstResult, maxResults, null);
+		Where wVisible = ServeiFields.OCULT.equal(false);
 		
-		List<Servei> serveis = serveiEjb.select(Where.OR(ServeiFields.NOM.like("%" + param + "%"), ServeiFields.CODI.like("%" + param + "%")));
+		Where wNom = ServeiFields.NOM.like("%" + param + "%");
+		Where wCodi = ServeiFields.CODI.like("%" + param + "%");
+		
+		List<Servei> serveis = serveiEjb.select(Where.AND(wVisible, Where.OR(wNom, wCodi)));
 		List<Item> items = new java.util.ArrayList<Item>();
 
 		log.info("serveis: " + serveis.size());
