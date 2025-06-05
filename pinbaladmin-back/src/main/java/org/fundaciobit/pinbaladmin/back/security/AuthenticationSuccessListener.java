@@ -79,7 +79,7 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         UserInfo info = null;
         // Si no interessa gestionar informació personal d'usuari, comentar aquest bloc.
         try {
-        	boolean debug = false;
+        	boolean debug = true;
         	boolean caib = false;
         	log.info("Instanciarem plugin");
 //        	username = "e45186147w";

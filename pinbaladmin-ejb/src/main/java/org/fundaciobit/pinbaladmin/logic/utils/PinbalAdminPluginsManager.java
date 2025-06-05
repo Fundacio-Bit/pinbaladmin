@@ -22,6 +22,7 @@ public class PinbalAdminPluginsManager {
 
 	public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug, boolean caib) throws I18NException {
 
+		log.info("Plugin UserInformation: caib=" + caib);
 		IUserInformationPlugin loginPlugin = caib ? loginPluginCaib : loginPluginOtae;
 		
         if (loginPlugin == null) {
