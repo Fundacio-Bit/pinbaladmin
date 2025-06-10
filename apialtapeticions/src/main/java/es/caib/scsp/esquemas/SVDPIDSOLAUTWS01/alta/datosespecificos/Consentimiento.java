@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.persistence.Lob;  // Asegúrate de que esta importación esté presente
 
 
 /**
@@ -192,6 +193,7 @@ public class Consentimiento {
         protected String nombre;
         @XmlElement(name = "Descripcion", required = true)
         protected String descripcion;
+        @Lob
         @XmlElement(name = "Contenido", required = true)
         protected byte[] contenido;
 

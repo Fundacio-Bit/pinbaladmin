@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 //import org.fundaciobit.genapp.common.i18n.I18NArgumentCode;
 //import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -42,8 +43,6 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
     protected final static Logger log = Logger.getLogger(AuthenticationSuccessListener.class);
     
     public static final String LOGIN_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "userinformationplugin";
-
-    public static IUserInformationPlugin loginPlugin = null;
 
 
     @Override
@@ -80,9 +79,14 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         UserInfo info = null;
         // Si no interessa gestionar informació personal d'usuari, comentar aquest bloc.
         try {
-        	boolean debug = false;
-            IUserInformationPlugin plugin = getUserInformationPluginInstance(debug);
+        	boolean debug = true;
+        	boolean caib = false;
+        	log.info("Instanciarem plugin");
+//        	username = "e45186147w";
+        	IUserInformationPlugin plugin =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+        	log.info("Plugin instanciat, provam getUserInfoByUserName: " + username);
             info = plugin.getUserInfoByUserName(username);
+            log.info(info);
         } catch (Throwable e) {
             String msg;
             if (e instanceof I18NException) {
@@ -141,40 +145,6 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
 
     }
     
-    public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug) throws I18NException {
-        if (loginPlugin == null) {
-//            final String propertyPlugin = LOGIN_PLUGIN_KEY;
-
-            Properties propTmp = Configuracio.getSystemAndFileProperties();
-
-			if (debug) {
-				log.info("Propietats de sistema i fitxer de configuració:");
-				Set<Object> set = propTmp.keySet();
-				for (Object object : set) {
-					String key = (String) object;
-					String value = propTmp.getProperty(key);
-					log.info(key + ": " + value);
-				}
-			}
-            
-            String className = propTmp.getProperty(LOGIN_PLUGIN_KEY);
-            
-            log.info("className: " + className);
-            Object pluginInstance = PluginsManager.instancePluginByClassName(className,
-                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
-
-//            Object pluginInstance = PluginsManager.instancePluginByProperty(propertyPlugin,
-//                    Constants.PINBALADMIN_PROPERTY_BASE, propTmp);
-
-            if (pluginInstance == null) {
-                throw new I18NException("plugin.donotinstantiateplugin.userinfo");
-            }
-            loginPlugin = (IUserInformationPlugin) pluginInstance;
-        }else {
-			log.info("loginPlugin ja existeix. " + loginPlugin.getClass().getName());
-        }
-        return loginPlugin;
-    }
 
     public static final Comparator<GrantedAuthority> GRANTEDAUTHORITYCOMPARATOR=new Comparator<GrantedAuthority>(){@Override public int compare(GrantedAuthority o1,GrantedAuthority o2){return-o1.getAuthority().compareTo(o2.getAuthority());}};
 

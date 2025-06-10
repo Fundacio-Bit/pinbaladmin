@@ -40,6 +40,14 @@
     <definition name="homepublic" extends="all">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/homepublic.jsp" />
     </definition>
+    
+    <definition name="seleccionarProcediment" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/seleccionarProcediment.jsp" />
+    </definition>
+    
+    <definition name="editarProcedimentAll" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/editarProcedimentAll.jsp" />
+    </definition>
     <!--  ===========  COMMON  ================== -->
 
     <definition name="common" extends="base.definition">

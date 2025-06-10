@@ -716,7 +716,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		while (!end) {
 			if (unitatResponsable == null && organTest.getCif() != null) {
 				unitatResponsable = organTest;
-				organGestor = organTest;
 			}
 			if (arrel == null && organTest.getDir3pare() == null) {
 				arrel = organTest;
@@ -730,19 +729,18 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			}
 		}
 		
-		if (unitatResponsable.getCif().equals("S0711001H")) {
+		
+		denomincaion = organGestor.getNom();
+		cif = unitatResponsable.getCif();
+		
+		if (arrel.getCif().equals("S0711001H")) {
 			String dir3Dgtic = "A04027005";
 			List<Organ> organs = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
 			if (organs.size() == 1) {
 				Organ dgtic = organs.get(0);
 				unitatResponsable = dgtic;
-				organGestor = arrel;
 			}
 		}
-
-		
-		denomincaion = organGestor.getNom();
-		cif = organGestor.getCif();
 		
 		UR = unitatResponsable.getNom();
 		dir3UR = unitatResponsable.getDir3();
