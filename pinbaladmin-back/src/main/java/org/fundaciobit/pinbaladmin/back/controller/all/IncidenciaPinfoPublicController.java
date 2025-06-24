@@ -123,14 +123,14 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
 			setDadesTest(incidencia);
-			
+
 			String usuariNIF = properties.getProperty("NIF");
 			String username = properties.getProperty("Username");
-			
+
 			request.getSession().setAttribute("usuariNIF", usuariNIF);
 			request.getSession().setAttribute("usuariNom", nomComplet);
 			request.getSession().setAttribute("usuariUsername", username);
-		
+
 			String dir3Solicitant = getCodiDIR3(username);
 			Long organID = organLogicEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3Solicitant));
 			if (organID != null) {
