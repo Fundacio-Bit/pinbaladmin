@@ -48,6 +48,32 @@
     <definition name="editarProcedimentAll" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/editarProcedimentAll.jsp" />
     </definition>
+    
+    <definition name="modificacioSolicitudFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSolicitudForm.jsp" />
+    </definition>
+    
+    <definition name="modificacioSolicitudListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSolicitudList.jsp" />
+    </definition>
+    
+    <definition name="modificacioSoliServFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSoliServForm.jsp" />
+    </definition>
+    
+    <definition name="modificacioSoliServListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSoliServList.jsp" />
+    </definition>
+    
+     <definition name="solicitudServeiFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="titol" value="solicitudServei.solicitudServei" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudServeiForm.jsp" />
+    </definition>
+    
+    <definition name="solicitudServeiListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudServeiList.jsp" />
+    </definition>
+    
     <!--  ===========  COMMON  ================== -->
 
     <definition name="common" extends="base.definition">
@@ -756,6 +782,26 @@
     
     <definition name="incidenciaTecnicaListWebDB" extends="webdb">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
+    </definition>
+
+
+    <definition name="modificacioSolicitudFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="modificacioSolicitud.modificacioSolicitud" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSolicitudForm.jsp" />
+    </definition>
+    
+    <definition name="modificacioSolicitudListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSolicitudList.jsp" />
+    </definition>
+
+
+    <definition name="modificacioSoliServFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="modificacioSoliServ.modificacioSoliServ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSoliServForm.jsp" />
+    </definition>
+    
+    <definition name="modificacioSoliServListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSoliServList.jsp" />
     </definition>
 
 

@@ -411,6 +411,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		}
 		
         soli.setProcedimentCodi(procedimentCodi); 
+        soli.setCodiSiaConv(procedimentCodi);
         soli.setCodiDescriptiu(codiDescriptiu);
         soli.setProcedimentNom(procedimentNom);
         soli.setProcedimentTipus(procedimentTipus);
@@ -438,12 +439,12 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setConsentimentadjunt(consentimentadjunt);
         
 
-        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soli);
-
-        Long soliID = solicitud.getSolicitudID();
-        log.info("SolicitudID de la solicitud creada: " + soliID);
-
         try {
+	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soli);
+	
+	        Long soliID = solicitud.getSolicitudID();
+	        log.info("SolicitudID de la solicitud creada: " + soliID);
+
 			log.info("Enviem mail al sol·licitant. De moment no enviam.");
 //			String destinatariMail = solicitud.getPersonaContacteEmail();
 			String destinatariMail = null;
@@ -456,12 +457,13 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 			
 			log.info("Afegim serveis a la sol·licitud");
-			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID, tramitJ);
+			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID);
 			soli.setSolicitudServeis(solicitudServeis);
 			log.info("Generem Excel de Serveis");
 			generarExcelDeServeis(solicitud, docConsentiment);
 			
 			log.info("S'ha creat la sol·licitud: " + soliID);
+			return solicitud;
         } catch (Exception e) {
 			String msg = "Error generant documents de la sol·licitud: " + e.getMessage();
 			log.error(msg, e);
@@ -479,7 +481,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 	        
 
         
-        return solicitud;
     }
 
     private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
@@ -521,7 +522,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     }
 
 	private Set<SolicitudServeiJPA> afegirServeisSolicitud(List<TramitIServ> listaTramitsI, Timestamp dataFi,
-			Long soliID, TramitJConsent J) throws I18NException {
+			Long soliID) throws I18NException {
 
 		Set<SolicitudServeiJPA> serveisDeLaSolicitud = new HashSet<SolicitudServeiJPA>();
 

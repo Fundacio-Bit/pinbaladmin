@@ -4,10 +4,16 @@
 	
 
 
-	var botonsPerPujar = [ "/altapinbal/vistaprevia/alta/",
-			"/altapinbal/consultaestado/",
-			"/altapinbal/vistaprevia/modificacio/", "/enviarAFirmar/",
-			"/afegirFormulariFirmat/", "/solicitudestatal/enviarcorreucedents/" ]
+	var botonsPerPujar = [ 
+		"/altapinbal/vistaprevia/alta/",
+		"/altapinbal/consultaestado/",
+		"/altapinbal/vistaprevia/modificacio/",
+		"/enviarAFirmar/",
+		"/afegirFormulariFirmat/", 
+		"/solicitudestatal/enviarcorreucedents/",
+		"/acceptarModificacio"
+		
+		]
 
 	for (var i = 0; i < botonsPerPujar.length; i++) {
 		var elem = $('a[href*="' + botonsPerPujar[i] + '"]');

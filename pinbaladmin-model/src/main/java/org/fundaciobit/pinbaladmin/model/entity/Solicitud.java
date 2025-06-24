@@ -11,20 +11,23 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getCodiDescriptiu();
 	public void setCodiDescriptiu(java.lang.String _codiDescriptiu_);
 
+	public java.lang.String getCodiSiaConv();
+	public void setCodiSiaConv(java.lang.String _codiSiaConv_);
+
 	public java.lang.String getProcedimentNom();
 	public void setProcedimentNom(java.lang.String _procedimentNom_);
 
 	public java.lang.String getProcedimentTipus();
 	public void setProcedimentTipus(java.lang.String _procedimentTipus_);
 
-	public java.lang.String getExpedientPid();
-	public void setExpedientPid(java.lang.String _expedientPid_);
+	public java.lang.Long getOrganid();
+	public void setOrganid(java.lang.Long _organid_);
 
 	public java.lang.Long getEstatID();
 	public void setEstatID(java.lang.Long _estatID_);
 
-	public java.lang.Long getOrganid();
-	public void setOrganid(java.lang.Long _organid_);
+	public java.lang.String getExpedientPid();
+	public void setExpedientPid(java.lang.String _expedientPid_);
 
 	public java.lang.String getEntitatEstatal();
 	public void setEntitatEstatal(java.lang.String _entitatEstatal_);

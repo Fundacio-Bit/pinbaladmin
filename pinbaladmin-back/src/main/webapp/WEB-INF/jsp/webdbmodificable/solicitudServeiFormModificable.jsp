@@ -1,4 +1,26 @@
 
+
+<c:if test="${not empty isPublic}">
+	<%@ include
+		file="/WEB-INF/jsp/all/tramitModificacioSolicitudsPublic.jsp"%>
+		
+<style>
+#solicitudServeiForm {
+	background: #fff;
+	padding: 2rem;
+	padding-top: 2rem;
+	border-radius: 12px;
+	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+	position: absolute;
+	left: 20rem;
+	right: 20rem;
+}
+
+</style>		
+		
+</c:if>
+
+
 <!-- AFEGIR NORMES A UN SERVEI -->
 <div id="botones-normas">
 	<div id="afegirNorma" class="btn-norma btn">Afegir una altra norma</div>
@@ -85,14 +107,78 @@
 		});
 		
 		
-		
-		//onsubmit, poner vacios los campos de normas que no esten visibles
-		$("form").submit(function() {
+		function preValidate() {
+			  const fileInput = document.getElementById("fitxernormaID");
+			  const caducaSelect = document.getElementById("solicitudServei_caduca");
+			  const fechaCaducaInput = document.getElementById("solicitudServei.fechaCaduca");
+			  const normaLegalTextarea = document.getElementById("solicitudServei.normaLegal");
+
+			  // Verificar si hay un fichero cargado o existente
+			  const hasNewFile = fileInput.files.length > 0;
+			  const existingFileLink = document.querySelector("#solicitudServei_fitxernormaID_columnvalueid a");
+			  const hasExistingFile = existingFileLink !== null && existingFileLink.href !== "";
+			  const hasFile = hasNewFile || hasExistingFile;
+
+			  // Verificar si norma legal tiene contenido
+			  const hasNormaLegal = normaLegalTextarea.value.trim() !== "";
+
+			  // Verificar campo fecha si caduca = "Caduca"
+			  const caducaValue = caducaSelect.value.trim();
+			  const hasCaducaDate = caducaValue === "Caduca" ? fechaCaducaInput.value.trim() !== "" : true;
+
+			  // Si falta algo, construir el mensaje de error
+			  if (!hasFile || !hasNormaLegal || !hasCaducaDate) {
+			    const missingFields = [];
+			    if (!hasFile) missingFields.push("Fichero");
+			    if (!hasNormaLegal) missingFields.push("Norma legal");
+			    if (!hasCaducaDate) missingFields.push("Fecha de caducidad");
+
+			    alert("El formulario está sin rellenar. Faltan: " + missingFields.join(", "));
+			    return false;
+			  }
+
+			  return true;
+			}
+
+
+		// onsubmit, poner vacíos los campos de normas que no estén visibles
+		$("form").submit(function(event) {
 			console.log("submit");
-		
-			for (var i = normesAfegides+1; i <= totalNormes; i++) {
+
+			if (!preValidate()) {
+				event.preventDefault(); // Detener el envío
+				return false;
+			}
+
+			for (var i = normesAfegides + 1; i <= totalNormes; i++) {
 				document.getElementById("solicitudServei.norma" + i).value = "none";
 			}
 		});
+
+		  const $selectCaduca = $("#solicitudServei_caduca");
+		  const $fechaInput = $("#solicitudServei\\.fechaCaduca");
+	
+		  function actualizarCampoFecha() {
+		    const valor = $selectCaduca.val().trim();
+	
+		    if (valor === "Caduca") {
+		      $fechaInput.attr("type", "date");
+		      $fechaInput.prop("disabled", false);
+		      $fechaInput.show();
+		    } else {
+		      $fechaInput.val("");
+		      $fechaInput.attr("type", "text");
+		      $fechaInput.prop("disabled", true);
+		      $fechaInput.hide();
+		    }
+		  }
+	
+		  // Asignar función al cambio del select SIN borrar otros handlers
+		  $selectCaduca.on("change", actualizarCampoFecha);
+	
+		  // Ejecutar al cargar para establecer el estado inicial
+		  actualizarCampoFecha();
+
+
     });
 </script>

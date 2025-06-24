@@ -91,6 +91,11 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
     
+
+    public boolean isPublic() {
+    	return false;
+    }
+    
     @Override
     public String getTileForm() {
         return "solicitudServeiFormWebDB_operador";
@@ -137,9 +142,10 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 		solicitudServeiForm.addSection(norma3);
 		
         if (solicitudServeiForm.isNou()) {
-            Long soli = getSolicitudID(request);
+            Long soliID = getSolicitudID(request);
+            log.info("soliID: " + soliID);
 
-            if (soli == null) {
+            if (soliID == null) {
 
                 // TODO traduir
                 HtmlUtils.saveMessageError(request, "No puc associar el servei a la solicitud ja que no s'ha passat "
@@ -150,8 +156,12 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
             }
 
-            solicitudServeiForm.getSolicitudServei().setSolicitudID(soli);
-            solicitudServeiForm.getSolicitudServei().setEstatSolicitudServeiID(10L); // REBUT
+            SolicitudServeiJPA soliServ = solicitudServeiForm.getSolicitudServei();
+            
+            log.info("SoliServ: " + soliServ);
+            
+            soliServ.setSolicitudID(soliID);
+            soliServ.setEstatSolicitudServeiID(10L); // REBUT
 
         } else {
             // Edicio
@@ -165,6 +175,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
     }
 
     public Long getSolicitudID(HttpServletRequest request) {
+		log.info("XXXXXXXXXX: Estamos usando getSolicitudID de OPERADOR");
+
         Long soli;
         // Ens han de passar la sol·licitud per paràmetre o ja ha d'estar en sessio
         String soliStr = request.getParameter(SolicitudFields.SOLICITUDID.javaName);
@@ -497,10 +509,14 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             } else {
             	
                 if (solicitudServei.getEstatSolicitudServeiID() != Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT) {
-                    filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
-                            new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
-                                    "solicitudservei.autoritzarservei",
-                                    getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(), AdditionalButtonStyle.PRIMARY));
+                	
+					if (!isPublic()) {
+						filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
+								new AdditionalButton(IconUtils.getWhite(IconUtils.ICON_CHECK),
+										"solicitudservei.autoritzarservei",
+										getContextWeb() + "/autoritzarservei/" + solicitudServei.getId(),
+										AdditionalButtonStyle.PRIMARY));
+					}
 					
 					if (estatal) {
 						filterForm.addAdditionalButtonByPK(solicitudServei.getId(),

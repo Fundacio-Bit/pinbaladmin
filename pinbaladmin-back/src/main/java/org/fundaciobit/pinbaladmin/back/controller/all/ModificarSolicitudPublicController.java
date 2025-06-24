@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.all;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,71 +9,72 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.i18n.I18NValidationException;
+import org.fundaciobit.genapp.common.query.Field;
+import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
+import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
-import org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController.Item;
-import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
+import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
+import org.fundaciobit.pinbaladmin.back.controller.webdb.ModificacioSolicitudController;
+import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudFilterForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudForm;
+import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
-import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaEJB;
+import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
-import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
+import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
-import org.fundaciobit.pinbaladmin.logic.utils.QueEsticFentUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
-import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
+import org.fundaciobit.pinbaladmin.model.entity.ModificacioSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.EventFields;
-import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
+import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.springframework.core.annotation.AnnotationUtils;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -84,14 +86,17 @@ import com.google.gson.Gson;
  */
 @Controller
 @RequestMapping(value = ModificarSolicitudPublicController.CONTEXT_WEB)
-@SessionAttributes(types = { EventForm.class, EventFilterForm.class })
-public class ModificarSolicitudPublicController {
+@SessionAttributes(types = { ModificacioSolicitudForm.class, ModificacioSolicitudFilterForm.class })
+public class ModificarSolicitudPublicController extends ModificacioSolicitudController {
 
 	public static final String CONTEXT_WEB = "/public/modificarsolicitud";
-
-	protected static final Logger log = Logger.getLogger(ModificarSolicitudPublicController.class);
+	public static final String MOD_SOLI_ID = "modsoliID";
+	public static final String SOLICITUD_ID = "solicitudID";
 
 	public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+
+	@EJB(mappedName = ModificacioSolicitudLogicaService.JNDI_NAME)
+	protected ModificacioSolicitudLogicaService modificacioSolicitudLogicaEjb;
 
 	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
 	protected SolicitudLogicaService solicitudLogicaEjb;
@@ -114,9 +119,15 @@ public class ModificarSolicitudPublicController {
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicEjb;
 
-	public String getContextWeb() {
-		RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);
-		return rm.value()[0];
+	@EJB(mappedName = EventLogicaService.JNDI_NAME)
+	protected EventLogicaService eventLogicaEjb;
+
+	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+	protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+
+	@Override
+	protected FilesFormManager<Fitxer> getFilesFormManager() {
+		return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
 	}
 
 	@RequestMapping(value = "/new/{token}", method = RequestMethod.GET)
@@ -159,49 +170,61 @@ public class ModificarSolicitudPublicController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/seleccionarProcediment", method = RequestMethod.POST)
-	public ModelAndView seleccionarProcedimentPost(HttpServletRequest request, HttpServletResponse response)
-			throws I18NException {
-		log.info("Entra a seleccionarProcediment POST");
-		ModelAndView mav = new ModelAndView("editarProcedimentAll");
+	@Override
+	public String getTileForm() {
+		return "modificacioSolicitudFormPublic";
+	}
 
-		Long solicitudID = Long.valueOf(request.getParameter("solicitudID"));
-		
-		SolicitudInfo solicitudInfo; 
-		{
+	@Override
+	public ModificacioSolicitudForm getModificacioSolicitudForm(ModificacioSolicitudJPA _jpa, boolean __isView,
+			HttpServletRequest request, ModelAndView mav) throws I18NException {
 
-			Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+		ModificacioSolicitudForm form = super.getModificacioSolicitudForm(_jpa, __isView, request, mav);
 
-			Organ organ = organLogicEjb.findByPrimaryKey(soli.getOrganid());
-			String organGestor = "(" + organ.getDir3() + ") " + organ.getNom();
+		log.info("Esteim a ModificacioSolicitudForm");
 
-			String estat = I18NUtils.tradueix("solicitud.estat." + soli.getEstatID());
-			
-			String dataInici = SDF.format(soli.getDataInici());
+		if (!form.isNou() && !__isView) {
+			form.addHiddenField(ModificacioSolicitudFields.SOLICITUDID);
+			form.addHiddenField(ModificacioSolicitudFields.NOTES);
+			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTNOM);
+			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTNIF);
+			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTUSERNAME);
+			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTMAIL);
+			form.addHiddenField(ModificacioSolicitudFields.ESTATMODIFICACIO);
 
-			String dataFi = null;
-			if (soli.getDataFi() != null) {
-				dataFi = SDF.format(soli.getDataFi());
-			}
-			
-			String consentiment = null;
-			if (soli.getConsentiment() != null) {
-				consentiment = I18NUtils.tradueix("consentiment.tipus." + soli.getConsentiment());
-			}
-					
-			if (soli.getConsentimentadjunt() != null) {
-				consentiment += " (" + I18NUtils.tradueix("consentiment." + soli.getConsentimentadjunt()) + ") ";
-			}
+			form.setTitleCode("=");
+			form.setAttachedAdditionalJspCode(true);
 
-			solicitudInfo = new SolicitudInfo(solicitudID, soli.getProcedimentNom(), soli.getProcedimentCodi(), estat,
-					organGestor, soli.getResponsableProcNom(), soli.getResponsableProcEmail(), dataInici, dataFi,
-					consentiment, soli.getNotes());
+			form.setDeleteButtonVisible(false);
+
+			Long solicitudID = form.getModificacioSolicitud().getSolicitudID();
+
+			List<ServeiInfo> serveis = getServeisSolicitud(solicitudID);
+			mav.addObject("serveis", serveis);
+
+			Long modsoliID = form.getModificacioSolicitud().getModsoliID();
+			log.info("modSoli: " + modsoliID);
+			request.getSession().setAttribute(MOD_SOLI_ID, modsoliID);
+			request.getSession().setAttribute(SOLICITUD_ID, solicitudID);
 		}
-		
+
+		return form;
+	}
+
+	private List<ServeiInfo> getServeisSolicitud(Long solicitudID) throws I18NException {
+
+		log.info("Test serveis Solicitud " + solicitudID);
 
 		List<ServeiInfo> serveis = new ArrayList<ModificarSolicitudPublicController.ServeiInfo>();
 		Where wSoliID = SolicitudServeiFields.SOLICITUDID.equal(solicitudID);
-		List<SolicitudServei> solicitudServeiList = solicitudServeiLogicaEjb.select(wSoliID);
+
+		Long[] estatsNoAfegir = { Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA,
+				Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_SERVEI };
+
+		Where wEstatNoPerAfegir = SolicitudServeiFields.ESTATSOLICITUDSERVEIID.notIn(estatsNoAfegir);
+
+		List<SolicitudServei> solicitudServeiList = solicitudServeiLogicaEjb
+				.select(Where.AND(wSoliID, wEstatNoPerAfegir));
 
 		for (SolicitudServei ss : solicitudServeiList) {
 			Servei servei = serveiLogicaEjb.findByPrimaryKey(ss.getServeiID());
@@ -225,13 +248,49 @@ public class ModificarSolicitudPublicController {
 					normes.add(normaToHref(ss.getFitxernorma3(), ss.getNorma3()));
 				}
 
-				ServeiInfo sInfo = new ServeiInfo(servei.getServeiID(), servei.getCodi(), servei.getNom(), estat,
+				ServeiInfo sInfo = new ServeiInfo(ss.getId(), servei.getCodi(), servei.getNom(), estat,
 						String.join("<br>", normes));
 
 				serveis.add(sInfo);
 			}
 		}
+		return serveis;
+	}
 
+	@RequestMapping(value = "/seleccionarProcediment", method = RequestMethod.POST)
+	public String seleccionarProcedimentPost(HttpServletRequest request, HttpServletResponse response)
+			throws I18NException {
+		log.info("Entra a seleccionarProcediment POST");
+		ModelAndView mav = new ModelAndView("editarProcedimentAll");
+
+		Long solicitudID = Long.valueOf(request.getParameter("solicitudID"));
+		// Aqui creamos el objeto de ModifSoli con los datos de la solicitud, y luego
+		// redirigimos a edit.
+
+		ModificacioSolicitudJPA modSolicitud = new ModificacioSolicitudJPA();
+
+		Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+		modSolicitud.setSolicitudID(solicitud.getSolicitudID());
+		modSolicitud.setProcedimentCodi(solicitud.getProcedimentCodi());
+		modSolicitud.setProcedimentNom(solicitud.getProcedimentNom());
+		modSolicitud.setEstatID(solicitud.getEstatID());
+		modSolicitud.setDataInici(solicitud.getDataInici());
+		modSolicitud.setDataFi(solicitud.getDataFi());
+		modSolicitud.setNotes(solicitud.getPinfo()); // o el campo correcto
+
+		modSolicitud.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_CREACIO); // o el campo correcto
+		
+		modSolicitud.setOrganID(solicitud.getOrganid());
+		modSolicitud.setResponsableProcNom(solicitud.getResponsableProcNom());
+		modSolicitud.setResponsableProceMail(solicitud.getResponsableProcEmail());
+		modSolicitud.setConsentiment(solicitud.getConsentiment());
+
+		modSolicitud.setSolicitantNif((String) request.getSession().getAttribute("usuariNIF"));
+		modSolicitud.setSolicitantNom((String)request.getSession().getAttribute("usuariNom"));
+		modSolicitud.setSolicitantUsername((String)request.getSession().getAttribute("usuariUsername"));
+		
+		
+		
 		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
 				DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
 
@@ -242,30 +301,62 @@ public class ModificarSolicitudPublicController {
 		List<Document> documents = documentLogicaEjb.select(Where
 				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
 
-		List<DocumentConsentimentInfo> docInfos = new ArrayList<ModificarSolicitudPublicController.DocumentConsentimentInfo>();
+		log.info("Tenim " + documents + " posibles documents de consentiment.");
 		for (Document document : documents) {
-			String tipus = document.getTipus().equals(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) ? "Si"
-					: "No Oposició";
-			String nom = document.getNom();
+			modSolicitud.setDoCconsentimentID(document.getFitxerOriginalID());
+			break;
 
-			log.info("CONS: " + tipus + " | " + nom);
-
-			Fitxer f = fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());
-			String nomFitxer = f.getNom();
-
-			String urlDownload = normaToHref(f, nomFitxer);
-
-			DocumentConsentimentInfo docInfo = new DocumentConsentimentInfo(tipus, nom, nomFitxer, urlDownload);
-			docInfos.add(docInfo);
+//			String tipus = document.getTipus().equals(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) ? "Si"
+//					: "No Oposició";
+//			String nom = document.getNom();
+//
+//			log.info("CONS: " + tipus + " | " + nom);
+//
+//			Fitxer f = fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());
+//			String nomFitxer = f.getNom();
+//
+//			String urlDownload = normaToHref(f, nomFitxer);
 		}
 
-		mav.addObject("solicitud", solicitudInfo);
-		mav.addObject("serveis", serveis);
-		mav.addObject("docInfos", docInfos);
-//		http://ptrias:8080/pinbaladmin/public/arxiu/bvVxqDnjDvNCgwe_EV4Kzg==?nom=12239+%281%29.pdf&mime=application%2Fpdf
-//		http://ptrias:8080/pinbaladmin/public/arxiu/bvVxqDnjDvNCgwe_EV4Kzg==?nom=12239+%281%29.pdf&mime=application%2Fpdf	
+		ModificacioSolicitud mod = modificacioSolicitudLogicaEjb.create(modSolicitud);
 
-		return mav;
+//		List<ServeiInfo> serveis = new ArrayList<ModificarSolicitudPublicController.ServeiInfo>();
+//		Where wSoliID = SolicitudServeiFields.SOLICITUDID.equal(solicitudID);
+//		List<SolicitudServei> solicitudServeiList = solicitudServeiLogicaEjb.select(wSoliID);
+//
+//		for (SolicitudServei ss : solicitudServeiList) {
+//			Servei servei = serveiLogicaEjb.findByPrimaryKey(ss.getServeiID());
+//
+//			if (servei != null) {
+//
+//				String estat = I18NUtils.tradueix("estat.solicitudservei." + ss.getEstatSolicitudServeiID());
+//
+//				List<String> normes = new ArrayList<String>();
+//
+//				if (ss.getFitxernorma() != null) {
+//					normes.add(normaToHref(ss.getFitxernorma(), ss.getNormaLegal()));
+//				} else if (ss.getEnllazNormaLegal() != null && isValidURL(ss.getEnllazNormaLegal())) {
+//					normes.add("<a href=\"" + ss.getEnllazNormaLegal() + "\">" + ss.getNormaLegal() + "</a>");
+//
+//				}
+//				if (ss.getFitxernorma2() != null) {
+//					normes.add(normaToHref(ss.getFitxernorma2(), ss.getNorma2()));
+//				}
+//				if (ss.getFitxernorma3() != null) {
+//					normes.add(normaToHref(ss.getFitxernorma3(), ss.getNorma3()));
+//				}
+//
+//				ServeiInfo sInfo = new ServeiInfo(servei.getServeiID(), servei.getCodi(), servei.getNom(), estat,
+//						String.join("<br>", normes));
+//
+//				serveis.add(sInfo);
+//			}
+//		}
+
+		return "redirect:" + getContextWeb() + "/" + mod.getModsoliID() + "/edit";
+
+//		mav.addObject("serveis", serveis);
+//		return mav;
 	}
 
 	private String normaToHref(Fitxer f, String norma) {
@@ -275,7 +366,7 @@ public class ModificarSolicitudPublicController {
 		return "<a href=\"" + url + "\">" + norma + "</a>";
 
 	}
-	
+
 	boolean isValidURL(String url) {
 		try {
 			new URL(url).toURI();
@@ -433,13 +524,6 @@ public class ModificarSolicitudPublicController {
 
 	}
 
-	@RequestMapping(value = "/afegirEntrada/{usuari}/{dateStr}/{msgEnc}", method = RequestMethod.GET)
-	public void afegeixEntrada(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("usuari") String usuari, @PathVariable("dateStr") String dateStr,
-			@PathVariable("msgEnc") String msgEnc) {
-
-	}
-
 	public class Item {
 		private String id;
 		private String key;
@@ -514,43 +598,387 @@ public class ModificarSolicitudPublicController {
 		out.flush();
 	}
 
-	@RequestMapping(value = "/modificarSolicitud/{solicitudID}", method = RequestMethod.GET)
-	public ModelAndView modificarSolicitud(HttpServletRequest request, HttpServletResponse response,
-	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+//	@RequestMapping(value = "/modificarSolicitud/{solicitudID}", method = RequestMethod.GET)
+//	public ModelAndView modificarSolicitud(HttpServletRequest request, HttpServletResponse response,
+//	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+//
+//	    log.info("Entra a modificarSolicitud GET");
+//	    ModelAndView mav = new ModelAndView("modificarSolicitudEdit");
+//
+//	    mav.addObject("solicitudID", solicitudID);
+//	    return mav;
+//	}
+//
+//	@RequestMapping(value = "/modificarServeis/{solicitudID}", method = RequestMethod.GET)
+//	public ModelAndView modificarServeis(HttpServletRequest request, HttpServletResponse response,
+//	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+//
+//	    log.info("Entra a modificarServeis GET");
+//	    String serveis = request.getParameter("serveis");
+//
+//	    ModelAndView mav = new ModelAndView("modificarServeisEdit");
+//	    mav.addObject("solicitudID", solicitudID);
+//	    mav.addObject("serveis", serveis);
+//
+//	    return mav;
+//	}
+//
+//	@RequestMapping(value = "/modificarConsentiment/{solicitudID}", method = RequestMethod.GET)
+//	public ModelAndView modificarConsentiment(HttpServletRequest request, HttpServletResponse response,
+//	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+//
+//	    log.info("Entra a modificarConsentiment GET");
+//	    String docInfos = request.getParameter("docInfos");
+//
+//	    ModelAndView mav = new ModelAndView("modificarConsentimentEdit");
+//	    mav.addObject("solicitudID", solicitudID);
+//	    mav.addObject("docInfos", docInfos);
+//
+//	    return mav;
+//	}
 
-	    log.info("Entra a modificarSolicitud GET");
-	    ModelAndView mav = new ModelAndView("modificarSolicitudEdit");
-
-	    mav.addObject("solicitudID", solicitudID);
-	    return mav;
+	public ModificacioSolicitudJPA findByPrimaryKey(HttpServletRequest request, java.lang.Long modsoliID)
+			throws I18NException {
+		return (ModificacioSolicitudJPA) modificacioSolicitudLogicaEjb.findByPrimaryKey(modsoliID);
 	}
 
-	@RequestMapping(value = "/modificarServeis/{solicitudID}", method = RequestMethod.GET)
-	public ModelAndView modificarServeis(HttpServletRequest request, HttpServletResponse response,
-	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+	public ModificacioSolicitudJPA update(HttpServletRequest request, ModificacioSolicitudJPA modificacio)
+			throws I18NException, I18NValidationException {
 
-	    log.info("Entra a modificarServeis GET");
-	    String serveis = request.getParameter("serveis");
+		
+		Long soliID = modificacio.getSolicitudID();
+		SolicitudJPA solicitudOriginal = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
-	    ModelAndView mav = new ModelAndView("modificarServeisEdit");
-	    mav.addObject("solicitudID", solicitudID);
-	    mav.addObject("serveis", serveis);
+		// Afegir evet amb els canvis.
+//		
+//		Solicitud de modificació del procediment 2411062666.
+//		
+//		L'usuari Juan Pablo Trias Segura amb NIF 45186147W (ptrias) ha tramitat la modificació de la solicitud 2411062666:
+//		
+//		Canvis realitzats:
+//			
+//		Nom Procediment:
+//			Reconocimiento del grado de discapacidad y de dependencia -> Reconocimiento del grado de discapacidad y de dependencia 2025
+//		Responsable procediment:
+//			Margarita Munar -> Margalita Munar
+//		Document de Consentiment:
+//			 FitxerProves5.pdf -> FitxerProves10.pdf 
+//			
+//		Serveis amb normes modificades (3):
+//			DGSFP0003
+//			DGSFP0001
+//			
+//		Serveis afegits (1):
+//			SVDCTITWS02
 
-	    return mav;
+		String nomUsuari = modificacio.getSolicitantNom();
+		String nifUsuari = modificacio.getSolicitantNif();
+		String loginUsuari = modificacio.getSolicitantUsername();
+
+		StringBuilder msg = new StringBuilder();
+
+		String codiProcediment = solicitudOriginal.getProcedimentCodi();
+		String asumpte = "Solicitud de modificació del procediment " + codiProcediment;
+
+		msg.append("<div style='font-family: sans-serif;'>");
+
+		msg.append("<p><strong>Solicitud de modificació del procediment ").append(codiProcediment)
+				.append(".</strong></p>");
+
+		msg.append("<p>L'usuari <strong>").append(nomUsuari).append("</strong> amb NIF <strong>").append(nifUsuari)
+				.append("</strong> (").append(loginUsuari)
+				.append(") ha tramitat la modificació de la solicitud <strong>").append(codiProcediment)
+				.append("</strong>:</p>");
+
+		msg.append("<p><strong>Canvis realitzats:</strong></p><ul>");
+
+		// Comparaciones
+		appendSiModificat(msg, "Nom Procediment", solicitudOriginal.getProcedimentNom(),
+				modificacio.getProcedimentNom());
+		
+		// Afegir CODI SIA NOU si no es null.
+		if (modificacio.getCodiSiaNou() != null && modificacio.getCodiSiaNou().trim().length() > 0) {
+			// StringBuilder msg, String label, Object original, Object modificado
+			msg.append("<li><strong>").append("Nou Codi SIA").append(":</strong><br>")
+					.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(modificacio.getCodiSiaNou()).append("</li>");
+		}
+		
+		appendSiModificat(msg, "Responsable procediment", solicitudOriginal.getResponsableProcNom(),
+				modificacio.getResponsableProcNom());
+		appendSiModificat(msg, "Mail Responsable", solicitudOriginal.getResponsableProcEmail(),
+				modificacio.getResponsableProceMail());
+		appendSiModificat(msg, "Consentiment", solicitudOriginal.getConsentiment(), modificacio.getConsentiment());
+
+		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+				DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+
+		List<Long> tipusDocuments = new ArrayList<Long>();
+		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
+		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
+
+		List<Document> documents = documentLogicaEjb.select(Where
+				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
+
+		Long docConsentimentOriginalID = null;
+		Document consentimentOriginal = null;
+
+		log.info("Tenim " + documents.size() + " possibles documents de consentiment.");
+
+		// Obtenim el primer document de consentiment original
+		for (Document document : documents) {
+			docConsentimentOriginalID = document.getFitxerOriginalID();
+			consentimentOriginal = document;
+			break;
+		}
+
+		// Document nou de la modificació
+		Long docConsentimentNouID = modificacio.getDoCconsentimentID();
+		FitxerJPA docConsentimentNou = modificacio.getDoCconsentiment();
+
+		// Comparació per ID
+		if (!Objects.equals(docConsentimentOriginalID, docConsentimentNouID)) {
+			msg.append("<li><strong>Document de Consentiment:</strong><br>").append("&nbsp;&nbsp;&nbsp;&nbsp;")
+					.append(consentimentOriginal != null ? consentimentOriginal.getNom() : "(buit)").append(" &rarr; ")
+					.append(docConsentimentNou != null ? docConsentimentNou.getNom() : "(buit)").append("</li>");
+		}
+
+		msg.append("</ul>");
+
+		Where wSoli = SolicitudServeiFields.SOLICITUDID.equal(soliID);
+		Long[] estats = { Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA,
+				Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_SERVEI };
+		Where wEstats = SolicitudServeiFields.ESTATSOLICITUDSERVEIID.in(estats);
+
+		List<SolicitudServei> serveisPerModificar = solicitudServeiLogicaEjb.select(Where.AND(wSoli, wEstats));
+
+		List<String> serveisModificats = new ArrayList<String>();
+		List<String> serveisAfegits = new ArrayList<String>();
+
+		for (SolicitudServei soliServ : serveisPerModificar) {
+			Servei s = serveiLogicaEjb.findByPrimaryKey(soliServ.getServeiID());
+
+			if (soliServ.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA) {
+				serveisModificats.add(s.getCodi());
+			} else {
+				serveisAfegits.add(s.getCodi());
+			}
+		}
+
+		// Servicios modificados
+		if (!serveisModificats.isEmpty()) {
+			msg.append("<p><strong>Serveis amb normes modificades (").append(serveisModificats.size())
+					.append("):</strong></p><ul>");
+			for (String codi : serveisModificats) {
+				msg.append("<li>").append(codi).append("</li>");
+			}
+			msg.append("</ul>");
+		}
+
+		// Servicios añadidos
+		if (!serveisAfegits.isEmpty()) {
+			msg.append("<p><strong>Serveis afegits (").append(serveisAfegits.size()).append("):</strong></p><ul>");
+			for (String codi : serveisAfegits) {
+				msg.append("<li>").append(codi).append("</li>");
+			}
+			msg.append("</ul>");
+		}
+
+		msg.append("</div>");
+
+//		log.info(msg.toString());
+
+		crearEventModificacio(modificacio, nomUsuari, asumpte, msg.toString());
+
+		// Actualitzar estat solicitud a PENDENT_REVISIO_MODIFICACIO
+		solicitudOriginal.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO);
+		solicitudLogicaEjb.update(solicitudOriginal);
+		
+		modificacio.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
+		ModificacioSolicitudJPA modificacioSolicitud = (ModificacioSolicitudJPA) modificacioSolicitudLogicaEjb
+				.update(modificacio);
+		return modificacioSolicitud;
 	}
 
-	@RequestMapping(value = "/modificarConsentiment/{solicitudID}", method = RequestMethod.GET)
-	public ModelAndView modificarConsentiment(HttpServletRequest request, HttpServletResponse response,
-	        @PathVariable("solicitudID") String solicitudID) throws I18NException {
+	private void appendSiModificat(StringBuilder msg, String label, Object original, Object modificado) {
+		if (!Objects.equals(original, modificado)) {
+			msg.append("<li><strong>").append(label).append(":</strong><br>").append("&nbsp;&nbsp;&nbsp;&nbsp;")
+					.append(original != null ? original : "(buit)").append(" &rarr; ")
+					.append(modificado != null ? modificado : "(buit)").append("</li>");
+		}
+	}
 
-	    log.info("Entra a modificarConsentiment GET");
-	    String docInfos = request.getParameter("docInfos");
+	// Quien envia el mensaje
+	private void crearEventModificacio(ModificacioSolicitudJPA modificacio, String usuari, String asumpte, String msg)
+			throws I18NException {
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		final String caidIdentificadorConsulta = null;
+		final String caidNumeroSeguiment = null;
 
-	    ModelAndView mav = new ModelAndView("modificarConsentimentEdit");
-	    mav.addObject("solicitudID", solicitudID);
-	    mav.addObject("docInfos", docInfos);
+		Long _fitxerID_ = null;
+		boolean _noLlegit_ = true;
 
-	    return mav;
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(modificacio.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(Constants.EVENT_TIPUS_COMENTARI_CONTACTE);
+		event.setFitxerID(_fitxerID_);
+		event.setNoLlegit(_noLlegit_);
+		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
+		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
+
+		event.setPersona(usuari);
+		event.setAsumpte(asumpte);
+		event.setComentari(msg);
+
+		// Es un comentari de contacte, no te destinatari.
+		event.setDestinatari(null);
+		event.setDestinatarimail(null);
+
+		eventLogicaEjb.create(event);
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForOrganID(HttpServletRequest request, ModelAndView mav, Where where)
+			throws I18NException {
+
+		List<StringKeyValue> _tmp = new ArrayList<StringKeyValue>();
+
+		List<Organ> organs = organLogicEjb.select(where);
+		for (Organ organ : organs) {
+			_tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()),
+					"(" + organ.getDir3() + ") " + organ.getNom()));
+		}
+
+		return _tmp;
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
+			Where where) throws I18NException {
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+		for (String consentimentTipus : Constants.CONSENTIMENTS_TIPUS) {
+			String key = consentimentTipus;
+			String value = I18NUtils.tradueix("consentiment.tipus." + key);
+
+			__tmp.add(new StringKeyValue(key, value));
+		}
+
+		return __tmp;
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav, Where where)
+			throws I18NException {
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+		for (long estat : Constants.ESTATS_SOLICITUD) {
+			String key = String.valueOf(estat);
+			__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
+		}
+
+		return __tmp;
+	}
+
+	@Override
+	public String getRedirectWhenCancel(HttpServletRequest request, Long modsoliID) {
+
+		return "redirect:" + ModificarSolicitudPublicController.CONTEXT_WEB + "/seleccionarProcediment";
+//		return "redirect:" + ModificarSolicitudPublicController.CONTEXT_WEB + "/" + modsoliID + "/edit";
+	}
+
+	@Override
+	public String getRedirectWhenModified(HttpServletRequest request, ModificacioSolicitudForm modificacioSolicitudForm,
+			Throwable __e) {
+
+		// Redirigir al llistat d'events de la Solicitut que es modifica.
+
+		Long soliID = modificacioSolicitudForm.getModificacioSolicitud().getSolicitudID();
+//		String destinatari = "Margarita Munar Florit";
+		String destinatari = modificacioSolicitudForm.getModificacioSolicitud().getSolicitantNom();
+		String cadenaDestinatari = "CONTACTE|" + destinatari;
+
+		String id = HibernateFileUtil.encryptFileID(soliID);
+		String dest = destinatari == null ? "" : ("/" + HibernateFileUtil.encryptString(cadenaDestinatari));
+
+		String url = EventSolicitudPublicController.CONTEXT_PATH + "/veureevents/" + id + dest;
+
+		log.info("redirectToEventsPinfo: " + url);
+		return "redirect:" + url;
+	}
+
+	@RequestMapping(value = "/afegirNorma", method = RequestMethod.POST)
+	public String afegirNorma(HttpServletRequest request, @RequestParam("serveiId") Long ID,
+			@RequestParam("norma") String norma, @RequestParam("articles") String articles,
+			@RequestParam("fitxer") MultipartFile fitxer) throws I18NException {
+
+		log.info("Buenas");
+
+		if (fitxer != null && !fitxer.isEmpty()) {
+			String nombreFichero = fitxer.getOriginalFilename();
+			log.info("nombreFichero: " + nombreFichero);
+
+			// TODO: Guardar el fichero
+			SolicitudServeiJPA ss = solicitudServeiLogicaEjb.findByPrimaryKey(ID);
+
+			if (ss.getNormaLegal() == null) {
+				log.info("Afegim norma 1");
+				ss.setNormaLegal(norma);
+				ss.setArticles(articles);
+				ss.setFitxernormaID(fitxerIDFromMultipartFile(fitxer));
+				ss.setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA);
+			} else if (ss.getNorma2() == null) {
+				log.info("Afegim norma 2");
+				ss.setNorma2(norma);
+				ss.setArticles2(articles);
+				ss.setFitxernorma2ID(fitxerIDFromMultipartFile(fitxer));
+				ss.setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA);
+			} else if (ss.getNorma3() == null) {
+				log.info("Afegim norma 3");
+				ss.setNorma3(norma);
+				ss.setArticles3(articles);
+				ss.setFitxernorma3ID(fitxerIDFromMultipartFile(fitxer));
+				ss.setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_NORMA);
+			} else {
+				HtmlUtils.saveMessageError(request, "Aquest servei ja te 3 normes. No es poden afegir mes");
+			}
+
+			solicitudServeiLogicaEjb.update(ss);
+
+		} else {
+			log.warn("No se ha subido ningún fichero.");
+			// TODO: Manejar el error si es obligatorio
+		}
+
+		log.info("tardes");
+
+		// Obtener ID de solicitud desde sesión
+		Long modSoliID = (Long) request.getSession().getAttribute(ModificarSolicitudPublicController.MOD_SOLI_ID);
+
+		// Redirigir a la edición de la solicitud correspondiente
+		return "redirect:" + CONTEXT_WEB + "/" + modSoliID + "/edit";
+	}
+
+	private Long fitxerIDFromMultipartFile(MultipartFile fitxer) throws I18NException {
+		// Crear fitxer Fisic, logic, i tornar ID.
+
+		byte[] data;
+		try {
+			data = fitxer.getBytes();
+		} catch (IOException e) {
+			throw new I18NException("genapp.comodi",
+					new I18NArgumentString("Error obtenint dades del fitxer. " + e.getMessage()));
+
+		}
+		String mime = fitxer.getContentType();
+		String nom = fitxer.getOriginalFilename();
+
+		Fitxer f = fitxerLogicEjb.create(nom, data.length, mime, null);
+		FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
+
+		return f.getFitxerID();
+
 	}
 
 }

@@ -48,7 +48,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitBDadesSoli.tramitBDadesSoli.plural", order=310, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tramitBDadesSoli.tramitBDadesSoli.plural", order=330, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitBDadesSoli")
 @SessionAttributes(types = { TramitBDadesSoliForm.class, TramitBDadesSoliFilterForm.class })

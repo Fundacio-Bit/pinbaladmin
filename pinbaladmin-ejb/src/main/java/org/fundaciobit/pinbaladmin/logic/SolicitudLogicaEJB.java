@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -614,8 +615,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
         final String likeStr = "%TramitID[" + tramitID + "]%";
 
         Where w = SolicitudFields.NOTES.like(likeStr);
-        
-        log.info("Where: "  + w.toSQL());
+
+        Long[] estats = {Constants.SOLICITUD_ESTAT_TANCAT};
+        Where wEstat = SolicitudFields.ESTATID.notIn(estats);
+        log.info("Where: "  + w.toSQL() + " - " + likeStr);
         
         OrderBy order = new OrderBy(SolicitudFields.DATAINICI);
         

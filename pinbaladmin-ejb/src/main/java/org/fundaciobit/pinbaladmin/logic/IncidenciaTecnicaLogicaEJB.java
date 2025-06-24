@@ -161,7 +161,11 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
     @Override
     public IncidenciaTecnica afegirMailAIncidencia(EmailMessageInfo emi, Long incidenciaID) throws I18NException {
 
-    	java.lang.String asumpte = emi.getSubject();
+    	String asumpte = emi.getSubject();
+    	if (asumpte != null && asumpte.length() > 255) {
+    	    asumpte = asumpte.substring(0, 255);
+    	}
+    	
         java.lang.String missatge = emi.getBody(); // TODO limit tamany
 
         java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
@@ -174,7 +178,9 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         IncidenciaTecnica it = this.findByPrimaryKey(incidenciaID);
         
 		if (it == null) {
-            throw new I18NException("genapp.comodi", "Incidencia " + incidenciaID + " no trobada" );
+			String msg = "Incidencia " + incidenciaID + " no trobada";
+			log.error(msg);
+			throw new I18NException("genapp.comodi", msg);
 		}
         
         java.lang.Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();

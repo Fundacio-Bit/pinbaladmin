@@ -18,7 +18,7 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Modificació Solicituds</div>
+	<div id="titol-tramit" class="third">Modificació Procediments</div>
 	<div id="button-menu" class="third">
 		<a href="www.google.com"/></a>
 	</div>

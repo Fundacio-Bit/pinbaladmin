@@ -114,6 +114,20 @@ public class SolicitudServeiQueryPath extends org.fundaciobit.genapp.common.quer
   }
 */
 
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public ModificacioSoliServQueryPath MODIFICACIOSOLISERVS() {
+    return new ModificacioSoliServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudServeiQueryPath.this.getQueryPath() + "modificacioSoliServs" + ".";
+      }
+    });
+  }
+*/
+
   public SolicitudQueryPath SOLICITUD() {
     return new SolicitudQueryPath(new QueryPath() {
       public String getQueryPath() {

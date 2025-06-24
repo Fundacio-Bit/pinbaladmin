@@ -29,8 +29,8 @@ public class SolicitudForm extends PinbalAdminBaseForm {
     super(__toClone);
       this.solicitud = __toClone.solicitud;
     this.listOfValuesForProcedimentTipus = __toClone.listOfValuesForProcedimentTipus;
-    this.listOfValuesForEstatID = __toClone.listOfValuesForEstatID;
     this.listOfOrganForOrganid = __toClone.listOfOrganForOrganid;
+    this.listOfValuesForEstatID = __toClone.listOfValuesForEstatID;
     this.listOfValuesForCreador = __toClone.listOfValuesForCreador;
     this.listOfValuesForOperador = __toClone.listOfValuesForOperador;
     this.listOfValuesForEstatpinbal = __toClone.listOfValuesForEstatpinbal;
@@ -91,18 +91,6 @@ public class SolicitudForm extends PinbalAdminBaseForm {
 
 
 
-  private List<StringKeyValue> listOfValuesForEstatID;
-
-  public List<StringKeyValue> getListOfValuesForEstatID() {
-    return this.listOfValuesForEstatID;
-  }
-
-  public void setListOfValuesForEstatID(List<StringKeyValue> listOfValuesForEstatID) {
-    this.listOfValuesForEstatID = listOfValuesForEstatID;
-  }
-
-
-
   private List<StringKeyValue> listOfOrganForOrganid;
 
   public List<StringKeyValue> getListOfOrganForOrganid() {
@@ -111,6 +99,18 @@ public class SolicitudForm extends PinbalAdminBaseForm {
 
   public void setListOfOrganForOrganid(List<StringKeyValue> listOfOrganForOrganid) {
     this.listOfOrganForOrganid = listOfOrganForOrganid;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForEstatID;
+
+  public List<StringKeyValue> getListOfValuesForEstatID() {
+    return this.listOfValuesForEstatID;
+  }
+
+  public void setListOfValuesForEstatID(List<StringKeyValue> listOfValuesForEstatID) {
+    this.listOfValuesForEstatID = listOfValuesForEstatID;
   }
 
 

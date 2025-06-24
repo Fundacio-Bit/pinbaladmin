@@ -142,7 +142,9 @@ public class TramitAPublicController extends TramitAOperadorController {
         	SolicitudJPA soli = tramitAPersAutLogicEjb.crearSolicitudAmbTramit(tramitID);
         	log.info("Solicitud Creada a BBDD: " + soli.getSolicitudID());
         } catch (Exception e) {
-            HtmlUtils.saveMessageError(request, "Error creant incidencia amb tramit Sistra: " + e.getMessage());
+			String msg = "Error creant solicitud amb TramitID: " + tramitID + ": " + e.getMessage();
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
         }
     }
 }

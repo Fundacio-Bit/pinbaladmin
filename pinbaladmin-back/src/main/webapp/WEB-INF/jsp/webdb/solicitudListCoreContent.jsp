@@ -39,6 +39,11 @@
           ${solicitud.codiDescriptiu}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CODISIACONV)}">
+          <td>
+          ${solicitud.codiSiaConv}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PROCEDIMENTNOM)}">
           <td>
           ${solicitud.procedimentNom}
@@ -52,9 +57,12 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
           <td>
-          ${solicitud.expedientPid}
+          <c:set var="tmp">${solicitud.organid}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfOrganForOrganid[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
@@ -65,12 +73,9 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ORGANID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
           <td>
-          <c:set var="tmp">${solicitud.organid}</c:set>
-          <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfOrganForOrganid[tmp]}
-          </c:if>
+          ${solicitud.expedientPid}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ENTITATESTATAL)}">

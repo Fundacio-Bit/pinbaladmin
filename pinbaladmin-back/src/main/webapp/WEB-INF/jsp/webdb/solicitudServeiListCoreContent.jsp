@@ -92,7 +92,10 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.CADUCA)}">
           <td>
-          ${solicitudServei.caduca}
+          <c:set var="tmp">${solicitudServei.caduca}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForCaduca[tmp]}
+          </c:if>
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudServeiFields.FECHACADUCA)}">

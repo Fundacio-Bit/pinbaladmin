@@ -271,6 +271,7 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
     this.mapOfValuesForEstatSolicitudServeiID = __toClone.mapOfValuesForEstatSolicitudServeiID;
     this.mapOfValuesForTipusConsentiment = __toClone.mapOfValuesForTipusConsentiment;
     this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
+    this.mapOfValuesForCaduca = __toClone.mapOfValuesForCaduca;
   }
   
   /* ========= UTILS ========== */
@@ -361,6 +362,18 @@ public class SolicitudServeiFilterForm extends PinbalAdminBaseFilterForm impleme
 
   public void setMapOfValuesForConsentiment(Map<String, String> mapOfValuesForConsentiment) {
     this.mapOfValuesForConsentiment = mapOfValuesForConsentiment;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForCaduca;
+
+  public Map<String, String> getMapOfValuesForCaduca() {
+    return this.mapOfValuesForCaduca;
+  }
+
+  public void setMapOfValuesForCaduca(Map<String, String> mapOfValuesForCaduca) {
+    this.mapOfValuesForCaduca = mapOfValuesForCaduca;
   }
 
 

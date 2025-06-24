@@ -2423,6 +2423,30 @@
               "type": 0
             },
             {
+              "name": "pad_modsoli_fitxer_docconse_fk",
+              "table": "pad_mod_solicitud",
+              "field": "docconsentiment",
+              "type": 0
+            },
+            {
+              "name": "pad_modsolser_fitxer_n1_fk",
+              "table": "pad_mod_soliserv",
+              "field": "fitxernorma1id",
+              "type": 0
+            },
+            {
+              "name": "pad_modsolser_fitxer_n2_fk",
+              "table": "pad_mod_soliserv",
+              "field": "fitxernorma2id",
+              "type": 0
+            },
+            {
+              "name": "pad_modsolser_fitxer_n3_fk",
+              "table": "pad_mod_soliserv",
+              "field": "fitxernorma3id",
+              "type": 0
+            },
+            {
               "name": "pad_pinfo_fitxer_fitxerfirm_fk",
               "table": "pad_pinfo",
               "field": "fitxerfirmatid",
@@ -3591,6 +3615,977 @@
       ]
     },
     {
+      "name": "pad_mod_solicitud",
+      "nameJava": "ModificacioSolicitud",
+      "shortName": "modsoli",
+      "labels": {
+        "ca": "Modificació Solicitud",
+        "es": "Modificacion Solicitud"
+      },
+      "labelsPlural": {
+        "ca": "Modificacions Solicituds",
+        "es": "Modificaciones Solicitudes"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_mod_solicitud_pk",
+          "index": "pad_mod_solicitud_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "modsoliid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "modsoliid",
+            "es": "modsoliid"
+          },
+          "javaName": "modsoliID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_mod_solicitud_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_modsoli_modso_fk",
+              "table": "pad_mod_soliserv",
+              "field": "modsoliid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "index": "pad_modsoli_solicitudid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "solicitudid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "solicitudid",
+            "es": "solicitudid"
+          },
+          "javaName": "solicitudID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsolicitud_solicitud_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsoli_solicitud_solic_fk",
+              "table": "pad_solicitud",
+              "field": "solicitudid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimentcodi",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Codi Procediment",
+            "es": "Código Procedimiento"
+          },
+          "javaName": "procedimentCodi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimentnom",
+          "sqlType": 12,
+          "size": 2000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Nom Procediment",
+            "es": "Nombre Procedimiento"
+          },
+          "javaName": "procedimentNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codisianou",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Codi SIA Nou",
+            "es": "Código SIA Nuevo"
+          },
+          "javaName": "codiSiaNou",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Estat",
+            "es": "Estado"
+          },
+          "javaName": "estatID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "30,20",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datainici",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data Inici",
+            "es": "Fecha Inicio"
+          },
+          "javaName": "dataInici",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "datafi",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data Fi",
+            "es": "Fecha final"
+          },
+          "javaName": "dataFi",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "notes",
+          "sqlType": 12,
+          "size": 2000,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Notes",
+            "es": "Notas"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_mod_solicitud_organid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "organid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Organ Gestor",
+            "es": "Organo Gestor"
+          },
+          "javaName": "organID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsolicitud_organ_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsoli_organ_organid_fk",
+              "table": "pad_organ",
+              "field": "organid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocnom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Responsable procediment",
+            "es": "Responsable procedimiento"
+          },
+          "javaName": "responsableProcNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocemail",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Mail Responsable",
+            "es": "Mail Responsable"
+          },
+          "javaName": "responsableProceMail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consentiment",
+          "sqlType": 12,
+          "size": 80,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Consentiment",
+            "es": "Consentimiento"
+          },
+          "javaName": "consentiment",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "noop,si,llei",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_modsoli_docconsent_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "docconsentiment",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Document Consentiment",
+            "es": "Documento Consentimiento"
+          },
+          "javaName": "doCconsentimentID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsolicitud_docconsentiment_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsoli_fitxer_docconse_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solicitantnom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Nom Solicitant",
+            "es": "Nombre Solicitante"
+          },
+          "javaName": "solicitantNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solicitantnif",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "NIF Solicitant",
+            "es": "NIF Solicitante"
+          },
+          "javaName": "solicitantNif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solicitantmail",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Mail Solicitant",
+            "es": "Mail Solicitante"
+          },
+          "javaName": "solicitantMail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "solicitantusername",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Username Solicitant",
+            "es": "Username Solicitante"
+          },
+          "javaName": "solicitantUsername",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estatmodificacio",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Estat Modificació",
+            "es": "Estado Modificación"
+          },
+          "javaName": "estatModificacio",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "creacion,enviada,aceptada,rechazada",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
+      "name": "pad_mod_soliserv",
+      "nameJava": "ModificacioSoliServ",
+      "shortName": "modsolser",
+      "labels": {
+        "ca": "Modificacio Servei Solicitud",
+        "es": "Modificación Servicio Solicitud"
+      },
+      "labelsPlural": {
+        "ca": "Modificacions Serveis Solicituds",
+        "es": "Modificaciones Servicios Solicitudes"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_mod_soliserv_pk",
+          "index": "pad_mod_soliserv_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "modsoliservid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "modsoliservid",
+            "es": "modsoliservid"
+          },
+          "javaName": "modsoliservid",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_mod_soliserv_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_modsolser_soliservid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "soliservid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "soliservid",
+            "es": "soliservid"
+          },
+          "javaName": "soliServID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsoliserv_soliser_fk",
+              "table": "pad_solicitudservei",
+              "field": "id",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_soliservei_id_fk",
+              "table": "pad_solicitudservei",
+              "field": "id",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_modsolser_modsoliid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "modsoliid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "modsoliid",
+            "es": "modsoliid"
+          },
+          "javaName": "modSoliID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsoliserv_modsoli_fk",
+              "table": "pad_mod_solicitud",
+              "field": "modsoliid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_modsoli_modso_fk",
+              "table": "pad_mod_solicitud",
+              "field": "modsoliid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estat",
+          "sqlType": 12,
+          "size": 2550,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "estat",
+            "es": "estat"
+          },
+          "javaName": "estat",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "norma1",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "norma1",
+            "es": "norma1"
+          },
+          "javaName": "norma1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles1",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "articles1",
+            "es": "articles1"
+          },
+          "javaName": "articles1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_modsolser_fitxern1id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxernorma1id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Norma 1",
+            "es": "Fichero norma 1"
+          },
+          "javaName": "fitxerNorma1ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsoliserv_fitxer_n1_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_fitxer_n1_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "norma2",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "norma2",
+            "es": "norma2"
+          },
+          "javaName": "norma2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles2",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "articles2",
+            "es": "articles2"
+          },
+          "javaName": "articles2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_modsolser_fitxern2id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxernorma2id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Norma 2",
+            "es": "Fichero norma 2"
+          },
+          "javaName": "fitxerNorma2ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsoliserv_fitxer_n2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_fitxer_n2_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "norma3",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "norma3",
+            "es": "norma3"
+          },
+          "javaName": "norma3",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "articles3",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "articles3",
+            "es": "articles3"
+          },
+          "javaName": "articles3",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "index": "pad_modsolser_fitxern3id_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxernorma3id",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Norma 3",
+            "es": "Fichero norma 3"
+          },
+          "javaName": "fitxerNorma3ID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_modsoliserv_fitxer_n3_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_modsolser_fitxer_n3_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "pad_operador",
       "nameJava": "Operador",
       "shortName": "operador",
@@ -3764,6 +4759,12 @@
             {
               "name": "pad_inctecnica_organ_organi_fk",
               "table": "pad_incidenciatecnica",
+              "field": "organid",
+              "type": 0
+            },
+            {
+              "name": "pad_modsoli_organ_organid_fk",
+              "table": "pad_mod_solicitud",
               "field": "organid",
               "type": 0
             },
@@ -4866,6 +5867,12 @@
               "type": 0
             },
             {
+              "name": "pad_modsoli_solicitud_solic_fk",
+              "table": "pad_mod_solicitud",
+              "field": "solicitudid",
+              "type": 0
+            },
+            {
               "name": "pad_pfdat_solicitud_id_fk",
               "table": "pad_pinfodata",
               "field": "procedimentid",
@@ -4931,6 +5938,31 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "codisiaconv",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Codi SIA Convocatories",
+            "es": "Código SIA Convocatorias"
+          },
+          "javaName": "codiSiaConv",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "procedimentnom",
           "sqlType": 12,
           "size": 2000,
@@ -4981,58 +6013,6 @@
           "foreignKeys": []
         },
         {
-          "isAutoIncrement": false,
-          "sqlName": "expedientpid",
-          "sqlType": 12,
-          "size": 2147483647,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Expedient PID",
-            "es": "Expediente PID"
-          },
-          "javaName": "expedientPid",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": true,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "index": "pad_solicitud_estatid_fk_i",
-          "isAutoIncrement": false,
-          "sqlName": "estatid",
-          "sqlType": -5,
-          "size": 19,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "es": "Estado",
-            "ca": "Estat"
-          },
-          "javaName": "estatID",
-          "javaType": "java.lang.Long",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "minAllowedValue": "-1,10,15,20,30,40,50,60 ",
-          "filter": true,
-          "orderBy": 2,
-          "groupBy": true,
-          "webFieldInfo": {
-            "webtype": 16
-          },
-          "foreignKeys": []
-        },
-        {
           "index": "pad_solicitud_organid_fk_i",
           "isAutoIncrement": false,
           "sqlName": "organid",
@@ -5070,6 +6050,58 @@
               "type": 1
             }
           ]
+        },
+        {
+          "index": "pad_solicitud_estatid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "estatid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Estado",
+            "ca": "Estat"
+          },
+          "javaName": "estatID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "-1,10,15,20,30,40,50,60 ",
+          "filter": true,
+          "orderBy": 2,
+          "groupBy": true,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "expedientpid",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Expedient PID",
+            "es": "Expediente PID"
+          },
+          "javaName": "expedientPid",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
         },
         {
           "isAutoIncrement": false,
@@ -5736,6 +6768,12 @@
               "table": "pad_campsolicitud",
               "field": "solicitudserveiid",
               "type": 0
+            },
+            {
+              "name": "pad_modsolser_soliservei_id_fk",
+              "table": "pad_mod_soliserv",
+              "field": "soliservid",
+              "type": 0
             }
           ]
         },
@@ -5988,11 +7026,12 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
+          "minAllowedValue": "Caduca, No Caduca",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
-            "webtype": 1
+            "webtype": 16
           },
           "foreignKeys": []
         },

@@ -81,6 +81,14 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(CODISIACONV) == 0) {
+      java.lang.String __codisiaconv = __target__.getCodiSiaConv();
+      if (__codisiaconv!= null && __codisiaconv.length() > 255) {
+        __vr.rejectValue(CODISIACONV, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CODISIACONV)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(PROCEDIMENTNOM) == 0) {
       java.lang.String __procedimentnom = __target__.getProcedimentNom();
       if (__procedimentnom!= null && __procedimentnom.length() > 2000) {

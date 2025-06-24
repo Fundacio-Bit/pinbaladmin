@@ -129,6 +129,62 @@ public class FitxerQueryPath extends org.fundaciobit.genapp.common.query.QueryPa
 
  // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
 
+  public ModificacioSolicitudQueryPath MODIFICACIOSOLICITUDS() {
+    return new ModificacioSolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "modificacioSolicituds" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public ModificacioSoliServQueryPath MODIFICACIOSOLISERV_FITXERNORMA1IDS() {
+    return new ModificacioSoliServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "modificacioSoliServ_fitxernorma1ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public ModificacioSoliServQueryPath MODIFICACIOSOLISERV_FITXERNORMA2IDS() {
+    return new ModificacioSoliServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "modificacioSoliServ_fitxernorma2ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public ModificacioSoliServQueryPath MODIFICACIOSOLISERV_FITXERNORMA3IDS() {
+    return new ModificacioSoliServQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return FitxerQueryPath.this.getQueryPath() + "modificacioSoliServ_fitxernorma3ids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
   public PinfoQueryPath PINFO_FITXERFIRMATIDS() {
     return new PinfoQueryPath(new QueryPath() {
       public String getQueryPath() {

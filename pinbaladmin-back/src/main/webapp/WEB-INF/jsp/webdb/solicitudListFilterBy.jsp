@@ -94,6 +94,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.CODISIACONV)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.codiSiaConv" var="codiSiaConv" />
+              <fmt:message key="genapp.form.searchby" var="cercapercodiSiaConv" >                
+                 <fmt:param value="${codiSiaConv}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${codiSiaConv}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercodiSiaConv}" path="codiSiaConv" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.PROCEDIMENTNOM)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -120,15 +133,20 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.EXPEDIENTPID)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitud.expedientPid" var="expedientPid" />
-              <fmt:message key="genapp.form.searchby" var="cercaperexpedientPid" >                
-                 <fmt:param value="${expedientPid}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${expedientPid}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperexpedientPid}" path="expedientPid" />
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ORGANID)}">
+            <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
+            <%-- FILTRE NUMERO DESDE-FINS --%>
+              <span class="add-on"><fmt:message key="solicitud.organid" />:</span>
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
+              
+              <form:input cssClass="input-append input-small" path="organidDesde" />
+
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
+
+              <form:input cssClass="input-append input-small search-query" path="organidFins" />
+
             </div>
 
 
@@ -160,20 +178,15 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ORGANID)}">
-            <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
-            <%-- FILTRE NUMERO DESDE-FINS --%>
-              <span class="add-on"><fmt:message key="solicitud.organid" />:</span>
-
-              <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
-              
-              <form:input cssClass="input-append input-small" path="organidDesde" />
-
-
-              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
-
-              <form:input cssClass="input-append input-small search-query" path="organidFins" />
-
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.EXPEDIENTPID)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.expedientPid" var="expedientPid" />
+              <fmt:message key="genapp.form.searchby" var="cercaperexpedientPid" >                
+                 <fmt:param value="${expedientPid}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${expedientPid}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperexpedientPid}" path="expedientPid" />
             </div>
 
 

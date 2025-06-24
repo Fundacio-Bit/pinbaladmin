@@ -15,11 +15,12 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final LongField SOLICITUDID = new LongField(_TABLE_MODEL, "solicitudID", "solicitudid");  // PK
 	 public static final StringField PROCEDIMENTCODI = new StringField(_TABLE_MODEL, "procedimentCodi", "procedimentcodi");
 	 public static final StringField CODIDESCRIPTIU = new StringField(_TABLE_MODEL, "codiDescriptiu", "codidescriptiu");
+	 public static final StringField CODISIACONV = new StringField(_TABLE_MODEL, "codiSiaConv", "codisiaconv");
 	 public static final StringField PROCEDIMENTNOM = new StringField(_TABLE_MODEL, "procedimentNom", "procedimentnom");
 	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
-	 public static final StringField EXPEDIENTPID = new StringField(_TABLE_MODEL, "expedientPid", "expedientpid");
-	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
 	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
+	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
+	 public static final StringField EXPEDIENTPID = new StringField(_TABLE_MODEL, "expedientPid", "expedientpid");
 	 public static final StringField ENTITATESTATAL = new StringField(_TABLE_MODEL, "entitatEstatal", "entitatestatal");
 	 public static final StringField PINFO = new StringField(_TABLE_MODEL, "pinfo", "pinfo");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
@@ -49,11 +50,12 @@ public interface SolicitudFields extends java.io.Serializable {
     SOLICITUDID,
     PROCEDIMENTCODI,
     CODIDESCRIPTIU,
+    CODISIACONV,
     PROCEDIMENTNOM,
     PROCEDIMENTTIPUS,
-    EXPEDIENTPID,
-    ESTATID,
     ORGANID,
+    ESTATID,
+    EXPEDIENTPID,
     ENTITATESTATAL,
     PINFO,
     DATAINICI,

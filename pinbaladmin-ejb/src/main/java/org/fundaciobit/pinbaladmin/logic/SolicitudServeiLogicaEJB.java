@@ -16,6 +16,7 @@ import org.fundaciobit.pinbaladmin.ejb.SolicitudServeiEJB;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.CampSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 
 /**
  * 
@@ -69,4 +70,13 @@ public class SolicitudServeiLogicaEJB extends SolicitudServeiEJB implements Soli
 		return super.update(instance);
 	}
 
+	
+	@Override
+	@PermitAll
+	public SolicitudServeiJPA findByPrimaryKey(Long _ID_) {
+		return super.findByPrimaryKey(_ID_);
+	}
+	
+	
 }
+

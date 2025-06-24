@@ -38,6 +38,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CODISIACONV)}">
+        <tr id="solicitud_codiSiaConv_rowid">
+          <td id="solicitud_codiSiaConv_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CODISIACONV])?'solicitud.codiSiaConv':__theForm.labels[SolicitudFields.CODISIACONV]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CODISIACONV]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CODISIACONV]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_codiSiaConv_columnvalueid">
+            <form:errors path="solicitud.codiSiaConv" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.CODISIACONV)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CODISIACONV)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.codiSiaConv"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PROCEDIMENTNOM)}">
         <tr id="solicitud_procedimentNom_rowid">
           <td id="solicitud_procedimentNom_columnlabelid">
@@ -96,55 +114,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
-        <tr id="solicitud_expedientPid_rowid">
-          <td id="solicitud_expedientPid_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.EXPEDIENTPID])?'solicitud.expedientPid':__theForm.labels[SolicitudFields.EXPEDIENTPID]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.EXPEDIENTPID]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.EXPEDIENTPID]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_expedientPid_columnvalueid">
-            <form:errors path="solicitud.expedientPid" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? ' uneditable-input' : ''}"  style="" maxlength="2147483647" path="solicitud.expedientPid"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATID)}">
-        <tr id="solicitud_estatID_rowid">
-          <td id="solicitud_estatID_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.ESTATID])?'solicitud.estatID':__theForm.labels[SolicitudFields.ESTATID]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.ESTATID]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.ESTATID]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_estatID_columnvalueid">
-          <form:errors path="solicitud.estatID" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
-          <form:hidden path="solicitud.estatID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatID,__theForm.listOfValuesForEstatID)}"  />
-          </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
-          <c:set var="containEmptyValue"  value="false" />
-          <form:select id="solicitud_estatID"  onchange="if(typeof onChangeEstatID == 'function') {  onChangeEstatID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatID">
-            <c:forEach items="${__theForm.listOfValuesForEstatID}" var="tmp">
-                <form:option value="${tmp.key}">${tmp.value}</form:option>
-                <c:if test="${empty tmp.key}">
-                  <c:set var="containEmptyValue"  value="true" />
-                </c:if>
-            </c:forEach>
-          </form:select>
-          </c:if>
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ORGANID)}">
         <tr id="solicitud_organid_rowid">
           <td id="solicitud_organid_columnlabelid">
@@ -181,6 +150,55 @@
             </c:if>
           </form:select>
           </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATID)}">
+        <tr id="solicitud_estatID_rowid">
+          <td id="solicitud_estatID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.ESTATID])?'solicitud.estatID':__theForm.labels[SolicitudFields.ESTATID]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.ESTATID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.ESTATID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_estatID_columnvalueid">
+          <form:errors path="solicitud.estatID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
+          <form:hidden path="solicitud.estatID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatID,__theForm.listOfValuesForEstatID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_estatID"  onchange="if(typeof onChangeEstatID == 'function') {  onChangeEstatID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatID">
+            <c:forEach items="${__theForm.listOfValuesForEstatID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.EXPEDIENTPID)}">
+        <tr id="solicitud_expedientPid_rowid">
+          <td id="solicitud_expedientPid_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.EXPEDIENTPID])?'solicitud.expedientPid':__theForm.labels[SolicitudFields.EXPEDIENTPID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.EXPEDIENTPID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.EXPEDIENTPID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_expedientPid_columnvalueid">
+            <form:errors path="solicitud.expedientPid" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.EXPEDIENTPID)? ' uneditable-input' : ''}"  style="" maxlength="2147483647" path="solicitud.expedientPid"   />
+
            </td>
         </tr>
         </c:if>

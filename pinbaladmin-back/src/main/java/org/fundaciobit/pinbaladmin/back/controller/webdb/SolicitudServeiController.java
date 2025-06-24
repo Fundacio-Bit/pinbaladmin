@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="solicitudServei.solicitudServei.plural", order=250, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="solicitudServei.solicitudServei.plural", order=270, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/solicitudServei")
 @SessionAttributes(types = { SolicitudServeiForm.class, SolicitudServeiFilterForm.class })
@@ -249,6 +249,16 @@ public class SolicitudServeiController
       };
     }
 
+    // Field caduca
+    {
+      _listSKV = getReferenceListForCaduca(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForCaduca(_tmp);
+      if (filterForm.getGroupByFields().contains(CADUCA)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CADUCA, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -269,6 +279,7 @@ public class SolicitudServeiController
     __mapping.put(ESTATSOLICITUDSERVEIID, filterForm.getMapOfValuesForEstatSolicitudServeiID());
     __mapping.put(TIPUSCONSENTIMENT, filterForm.getMapOfValuesForTipusConsentiment());
     __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
+    __mapping.put(CADUCA, filterForm.getMapOfValuesForCaduca());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -360,6 +371,15 @@ public class SolicitudServeiController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudServeiForm.setListOfValuesForConsentiment(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudServeiForm.getListOfValuesForCaduca() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForCaduca(request, mav, solicitudServeiForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudServeiForm.setListOfValuesForCaduca(_listSKV);
     }
     
   }
@@ -903,6 +923,37 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("si" , "si"));
     __tmp.add(new StringKeyValue("llei" , "llei"));
     __tmp.add(new StringKeyValue("noop" , "noop"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCaduca(HttpServletRequest request,
+       ModelAndView mav, SolicitudServeiForm solicitudServeiForm, Where where)  throws I18NException {
+    if (solicitudServeiForm.isHiddenField(CADUCA)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForCaduca(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCaduca(HttpServletRequest request,
+       ModelAndView mav, SolicitudServeiFilterForm solicitudServeiFilterForm,
+       List<SolicitudServei> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudServeiFilterForm.isHiddenField(CADUCA)
+       && !solicitudServeiFilterForm.isGroupByField(CADUCA)
+       && !solicitudServeiFilterForm.isFilterByField(CADUCA)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForCaduca(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForCaduca(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("Caduca" , "Caduca"));
+    __tmp.add(new StringKeyValue(" No Caduca" , " No Caduca"));
     return __tmp;
   }
 

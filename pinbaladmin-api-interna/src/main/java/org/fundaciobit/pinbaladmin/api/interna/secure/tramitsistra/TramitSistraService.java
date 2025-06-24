@@ -256,6 +256,8 @@ public class TramitSistraService {
 				Solicitud soli = llista.get(0);
 				try {
 					
+					//Esborrarem aquesta solicitud.
+					log.info("Esborrarem la solicitud " + soli.getSolicitudID() + " - " + soli.getProcedimentCodi() + " - " + soli.getDataInici() + " - " + soli.getNotes());
 					Set<Long> deleteFiles = solicitudLogicaEjb.deleteFull(soli.getSolicitudID(), true);
 
 			        // Si tot ha anat be llavors borram els fitxers
@@ -264,6 +266,7 @@ public class TramitSistraService {
 			        }
 			        llista.remove(0);
 			        
+			        log.info("Solicitud Esborrada. " + soli.getSolicitudID());
 				} catch (I18NException e) {
 					log.error("Error Esborrant Solicitud " + soli.getSolicitudID() + " " + e.getMessage(), e);
 				}
@@ -271,6 +274,7 @@ public class TramitSistraService {
 
 			if (llista.size() == 1) {
 				Solicitud soli = llista.get(0);
+				log.info("Solicitud que mantenim: " + soli.getSolicitudID() + " - " + soli.getProcedimentCodi() + " - " + soli.getDataInici() + " - " + soli.getNotes());
 
 				try {
 					pdf = fileToBase64(soli.getDocumentSolicitudID());

@@ -23,6 +23,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.CODIDESCRIPTIU);
   }
 
+  public StringField CODISIACONV() {
+    return new StringField(getQueryPath(), SolicitudFields.CODISIACONV);
+  }
+
   public StringField PROCEDIMENTNOM() {
     return new StringField(getQueryPath(), SolicitudFields.PROCEDIMENTNOM);
   }
@@ -31,16 +35,16 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.PROCEDIMENTTIPUS);
   }
 
-  public StringField EXPEDIENTPID() {
-    return new StringField(getQueryPath(), SolicitudFields.EXPEDIENTPID);
+  public LongField ORGANID() {
+    return new LongField(getQueryPath(), SolicitudFields.ORGANID);
   }
 
   public LongField ESTATID() {
     return new LongField(getQueryPath(), SolicitudFields.ESTATID);
   }
 
-  public LongField ORGANID() {
-    return new LongField(getQueryPath(), SolicitudFields.ORGANID);
+  public StringField EXPEDIENTPID() {
+    return new StringField(getQueryPath(), SolicitudFields.EXPEDIENTPID);
   }
 
   public StringField ENTITATESTATAL() {
@@ -167,6 +171,20 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new EventQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "events" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public ModificacioSolicitudQueryPath MODIFICACIOSOLICITUDS() {
+    return new ModificacioSolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "modificacioSolicituds" + ".";
       }
     });
   }

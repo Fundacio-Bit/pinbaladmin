@@ -65,6 +65,17 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String codiSiaConv;
+
+  public java.lang.String getCodiSiaConv() {
+    return this.codiSiaConv;
+  }
+
+  public void setCodiSiaConv(java.lang.String codiSiaConv) {
+    this.codiSiaConv = codiSiaConv;
+  }
+
+
   private java.lang.String procedimentNom;
 
   public java.lang.String getProcedimentNom() {
@@ -87,28 +98,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.String expedientPid;
-
-  public java.lang.String getExpedientPid() {
-    return this.expedientPid;
-  }
-
-  public void setExpedientPid(java.lang.String expedientPid) {
-    this.expedientPid = expedientPid;
-  }
-
-
-  private java.util.List<java.lang.Long> estatIDSelect;
-
-  public java.util.List<java.lang.Long> getEstatIDSelect() {
-    return this.estatIDSelect;
-  }
-
-  public void setEstatIDSelect(java.util.List<java.lang.Long> estatIDSelect) {
-    this.estatIDSelect = estatIDSelect;
-  }
-
-
   private java.lang.Long organidDesde;
 
   public java.lang.Long getOrganidDesde() {
@@ -128,6 +117,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setOrganidFins(java.lang.Long organidFins) {
     this.organidFins = organidFins;
+  }
+
+
+  private java.util.List<java.lang.Long> estatIDSelect;
+
+  public java.util.List<java.lang.Long> getEstatIDSelect() {
+    return this.estatIDSelect;
+  }
+
+  public void setEstatIDSelect(java.util.List<java.lang.Long> estatIDSelect) {
+    this.estatIDSelect = estatIDSelect;
+  }
+
+
+  private java.lang.String expedientPid;
+
+  public java.lang.String getExpedientPid() {
+    return this.expedientPid;
+  }
+
+  public void setExpedientPid(java.lang.String expedientPid) {
+    this.expedientPid = expedientPid;
   }
 
 
@@ -382,12 +393,13 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.solicitudIDFins = __toClone.solicitudIDFins;
     this.procedimentCodi = __toClone.procedimentCodi;
     this.codiDescriptiu = __toClone.codiDescriptiu;
+    this.codiSiaConv = __toClone.codiSiaConv;
     this.procedimentNom = __toClone.procedimentNom;
     this.procedimentTipus = __toClone.procedimentTipus;
-    this.expedientPid = __toClone.expedientPid;
-    this.estatIDSelect = __toClone.estatIDSelect;
     this.organidDesde = __toClone.organidDesde;
     this.organidFins = __toClone.organidFins;
+    this.estatIDSelect = __toClone.estatIDSelect;
+    this.expedientPid = __toClone.expedientPid;
     this.entitatEstatal = __toClone.entitatEstatal;
     this.pinfo = __toClone.pinfo;
     this.dataIniciDesde = __toClone.dataIniciDesde;
@@ -411,8 +423,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.portafibIDDesde = __toClone.portafibIDDesde;
     this.portafibIDFins = __toClone.portafibIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
-    this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
+    this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfValuesForCreador = __toClone.mapOfValuesForCreador;
     this.mapOfValuesForOperador = __toClone.mapOfValuesForOperador;
     this.mapOfValuesForEstatpinbal = __toClone.mapOfValuesForEstatpinbal;
@@ -424,7 +436,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   @Override
   public List<Field<?>> getDefaultFilterByFields() {
-    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,EXPEDIENTPID ,ESTATID ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
+    return new java.util.ArrayList<Field<?>>(Arrays.asList(new Field<?>[] { PROCEDIMENTCODI ,PROCEDIMENTNOM ,ESTATID ,EXPEDIENTPID ,ENTITATESTATAL ,PINFO ,DATAINICI ,DATAFI }));
   }
 
   @Override
@@ -464,18 +476,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
 
 
-  private Map<String, String> mapOfValuesForEstatID;
-
-  public Map<String, String> getMapOfValuesForEstatID() {
-    return this.mapOfValuesForEstatID;
-  }
-
-  public void setMapOfValuesForEstatID(Map<String, String> mapOfValuesForEstatID) {
-    this.mapOfValuesForEstatID = mapOfValuesForEstatID;
-  }
-
-
-
   private Map<String, String> mapOfOrganForOrganid;
 
   public Map<String, String> getMapOfOrganForOrganid() {
@@ -484,6 +484,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfOrganForOrganid(Map<String, String> mapOfOrganForOrganid) {
     this.mapOfOrganForOrganid = mapOfOrganForOrganid;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForEstatID;
+
+  public Map<String, String> getMapOfValuesForEstatID() {
+    return this.mapOfValuesForEstatID;
+  }
+
+  public void setMapOfValuesForEstatID(Map<String, String> mapOfValuesForEstatID) {
+    this.mapOfValuesForEstatID = mapOfValuesForEstatID;
   }
 
 

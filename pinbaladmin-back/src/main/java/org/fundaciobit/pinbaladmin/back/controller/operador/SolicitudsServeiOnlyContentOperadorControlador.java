@@ -67,7 +67,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
     public String getSessionAttributeFilterForm() {
         return "SolicitudServeiWebDB_FilterForm_OnlyContent_Operador";
     }
-
+    
     public static final int SOLSERID = -3;
     public static final int CODISERVEI = -2;
     public static final int NOMSERVEI = -1;
@@ -90,12 +90,14 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.ID);
             solicitudServeiFilterForm.addHiddenField(SolicitudServeiFields.SERVEIID);
 
-            AdditionalField<Long, String> SolSerIDField = new AdditionalField<Long, String>();
-            SolSerIDField.setCodeName("=ID");
-            SolSerIDField.setPosition(SOLSERID);
-            SolSerIDField.setValueMap(new HashMap<Long, String>());
-            SolSerIDField.setEscapeXml(false);
-            solicitudServeiFilterForm.addAdditionalField(SolSerIDField);
+            if (!isPublic()) {
+	            AdditionalField<Long, String> SolSerIDField = new AdditionalField<Long, String>();
+	            SolSerIDField.setCodeName("=ID");
+	            SolSerIDField.setPosition(SOLSERID);
+	            SolSerIDField.setValueMap(new HashMap<Long, String>());
+	            SolSerIDField.setEscapeXml(false);
+	            solicitudServeiFilterForm.addAdditionalField(SolSerIDField);
+            }
 
             AdditionalField<Long, String> codiServeiField = new AdditionalField<Long, String>();
             codiServeiField.setCodeName("=Codi Servei");
@@ -144,10 +146,13 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             List<SolicitudServei> list) throws I18NException {
 
         super.postList(request, mav, filterForm, list);
-        
-        Map<Long, String> mapSolSerID;
-        mapSolSerID = (Map<Long, String>) filterForm.getAdditionalField(SOLSERID).getValueMap();
-        mapSolSerID.clear();
+
+        Map<Long, String> mapSolSerID = null;
+		if (!isPublic()) {
+			mapSolSerID = (Map<Long, String>) filterForm.getAdditionalField(SOLSERID).getValueMap();
+			mapSolSerID.clear();
+
+		}
 
         Map<Long, String> mapCodiServei;
         mapCodiServei = (Map<Long, String>) filterForm.getAdditionalField(CODISERVEI).getValueMap();
@@ -173,7 +178,9 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
             String codiServei = servei.getCodi();
             String nomServei = servei.getNom();
 
-            mapSolSerID.put(SolSerID, String.valueOf(SolSerID));
+            if (!isPublic()) {
+            	mapSolSerID.put(SolSerID, String.valueOf(SolSerID));
+			}
             mapCodiServei.put(SolSerID, codiServei);
             mapNomServei.put(SolSerID, nomServei);
         }

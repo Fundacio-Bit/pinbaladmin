@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tiquet.tiquet.plural", order=270, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tiquet.tiquet.plural", order=290, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tiquet")
 @SessionAttributes(types = { TiquetForm.class, TiquetFilterForm.class })

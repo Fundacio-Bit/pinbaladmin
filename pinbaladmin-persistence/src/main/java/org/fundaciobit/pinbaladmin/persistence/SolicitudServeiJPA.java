@@ -352,6 +352,19 @@ public class SolicitudServeiJPA implements SolicitudServei {
     }
 
 
+// EXP  Field:soliservid | Table: pad_mod_soliserv | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "solicitudServei")
+    private Set<ModificacioSoliServJPA> modificacioSoliServs = new HashSet<ModificacioSoliServJPA>(0);
+    public  Set<ModificacioSoliServJPA> getModificacioSoliServs() {
+    return this.modificacioSoliServs;
+  }
+
+    public void setModificacioSoliServs(Set<ModificacioSoliServJPA> modificacioSoliServs) {
+      this.modificacioSoliServs = modificacioSoliServs;
+    }
+
+
 // IMP Field:solicitudid | Table: pad_solicitud | Type: 1  
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -482,6 +495,10 @@ public class SolicitudServeiJPA implements SolicitudServei {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
+    if(!"ModificacioSoliServJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.modificacioSoliServs) || org.hibernate.Hibernate.isInitialized(__jpa.getModificacioSoliServs())) ) {
+      __tmp.setModificacioSoliServs(ModificacioSoliServJPA.copyJPA(__jpa.getModificacioSoliServs(), __alreadyCopied,"SolicitudServeiJPA"));
+    }
     if(!"CampSolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.campSolicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getCampSolicituds())) ) {
       __tmp.setCampSolicituds(CampSolicitudJPA.copyJPA(__jpa.getCampSolicituds(), __alreadyCopied,"SolicitudServeiJPA"));

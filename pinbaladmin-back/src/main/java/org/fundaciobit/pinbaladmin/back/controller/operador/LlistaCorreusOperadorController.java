@@ -949,22 +949,35 @@ public class LlistaCorreusOperadorController extends EmailController {
 		}
 		
 		List<Long> correusPendentsEsborrar = (List<Long>) request.getSession().getAttribute(CORREUS_PENDENTS_ESBORRAR);
+		List<Long> correusError = new ArrayList<Long>();
+
+		int correusPerEsborrar = correusPendentsEsborrar.size() ;
 		
-		if (correusPendentsEsborrar != null && correusPendentsEsborrar.size() > 0) {
-			//Ordener al array de emailID al reves para borrar desde abajo.
+		if (correusPendentsEsborrar != null && correusPerEsborrar > 0) {
+			log.info("S'han d'esborrar " + correusPerEsborrar + " correus.");
+
+			// Ordener al array de emailID al reves para borrar desde abajo.
 			Collections.sort(correusPendentsEsborrar, Collections.reverseOrder());
 			for (Long emailID : correusPendentsEsborrar) {
-					try {
-						log.info("Esborrarem correu: " + emailID);
-						er.deleteMessage((int) (long) emailID);
-					} catch (Exception e) {
-						String msg = "Error esborrant correu: " + e.getMessage();
-						log.error(msg, e);
-						throw new I18NException("genapp.comodi", msg);
-					}
+				try {
+					log.info("Esborrarem correu: " + emailID);
+					er.deleteMessage((int) (long) emailID);
+				} catch (Exception e) {
+					String msg = "Error esborrant correu: " + e.getMessage();
+					log.error(msg, e);
+					correusError.add(emailID);
+				}
 			}
-			correusPendentsEsborrar.clear();
-			request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusPendentsEsborrar);
+
+			if (correusError.size() == 0) {
+				// Ha ido bien.
+				log.info("Tots els correus s'han borrar correctament ");
+				request.getSession().removeAttribute(CORREUS_PENDENTS_ESBORRAR);
+			} else {
+				// La nueva lista de correos para borrar, será la de los correos que no han ido
+				// bien.
+				request.getSession().setAttribute(CORREUS_PENDENTS_ESBORRAR, correusError);
+			}
 		}
 		
 		//retornar al llistat de correus.

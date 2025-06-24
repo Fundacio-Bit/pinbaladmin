@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="solicitud.solicitud.plural", order=240, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="solicitud.solicitud.plural", order=260, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/solicitud")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
@@ -205,16 +205,6 @@ public class SolicitudController
       };
     }
 
-    // Field estatID
-    {
-      _listSKV = getReferenceListForEstatID(request, mav, filterForm, list, groupByItemsMap, null);
-      _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfValuesForEstatID(_tmp);
-      if (filterForm.getGroupByFields().contains(ESTATID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATID, false);
-      };
-    }
-
     // Field organid
     {
       _listSKV = getReferenceListForOrganid(request, mav, filterForm, list, groupByItemsMap, null);
@@ -222,6 +212,16 @@ public class SolicitudController
       filterForm.setMapOfOrganForOrganid(_tmp);
       if (filterForm.getGroupByFields().contains(ORGANID)) {
         fillValuesToGroupByItems(_tmp, groupByItemsMap, ORGANID, false);
+      };
+    }
+
+    // Field estatID
+    {
+      _listSKV = getReferenceListForEstatID(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForEstatID(_tmp);
+      if (filterForm.getGroupByFields().contains(ESTATID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATID, false);
       };
     }
 
@@ -297,8 +297,8 @@ public class SolicitudController
     java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
-    __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
     __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
+    __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
     __mapping.put(ESTATPINBAL, filterForm.getMapOfValuesForEstatpinbal());
@@ -361,15 +361,6 @@ public class SolicitudController
       solicitudForm.setListOfValuesForProcedimentTipus(_listSKV);
     }
     // Comprovam si ja esta definida la llista
-    if (solicitudForm.getListOfValuesForEstatID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForEstatID(request, mav, solicitudForm, null);
-
-      if(_listSKV != null && !_listSKV.isEmpty()) { 
-          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
-      }
-      solicitudForm.setListOfValuesForEstatID(_listSKV);
-    }
-    // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfOrganForOrganid() == null) {
       List<StringKeyValue> _listSKV = getReferenceListForOrganid(request, mav, solicitudForm, null);
 
@@ -377,6 +368,15 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfOrganForOrganid(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfValuesForEstatID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEstatID(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfValuesForEstatID(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfValuesForCreador() == null) {
@@ -812,43 +812,6 @@ public java.lang.Long stringToPK(String value) {
   }
 
 
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
-       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
-    if (solicitudForm.isHiddenField(ESTATID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    return getReferenceListForEstatID(request, mav, where);
-  }
-
-
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
-       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
-       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (solicitudFilterForm.isHiddenField(ESTATID)
-       && !solicitudFilterForm.isGroupByField(ESTATID)
-       && !solicitudFilterForm.isFilterByField(ESTATID)) {
-      return EMPTY_STRINGKEYVALUE_LIST;
-    }
-    Where _w = null;
-    return getReferenceListForEstatID(request, mav, Where.AND(where,_w));
-  }
-
-
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
-       ModelAndView mav, Where where)  throws I18NException {
-    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    __tmp.add(new StringKeyValue("-1" , "-1"));
-    __tmp.add(new StringKeyValue("10" , "10"));
-    __tmp.add(new StringKeyValue("15" , "15"));
-    __tmp.add(new StringKeyValue("20" , "20"));
-    __tmp.add(new StringKeyValue("30" , "30"));
-    __tmp.add(new StringKeyValue("40" , "40"));
-    __tmp.add(new StringKeyValue("50" , "50"));
-    __tmp.add(new StringKeyValue("60 " , "60 "));
-    return __tmp;
-  }
-
-
   public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
        ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
     if (solicitudForm.isHiddenField(ORGANID)) {
@@ -886,6 +849,43 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return organRefList.getReferenceList(OrganFields.ORGANID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(ESTATID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForEstatID(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(ESTATID)
+       && !solicitudFilterForm.isGroupByField(ESTATID)
+       && !solicitudFilterForm.isFilterByField(ESTATID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForEstatID(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("-1" , "-1"));
+    __tmp.add(new StringKeyValue("10" , "10"));
+    __tmp.add(new StringKeyValue("15" , "15"));
+    __tmp.add(new StringKeyValue("20" , "20"));
+    __tmp.add(new StringKeyValue("30" , "30"));
+    __tmp.add(new StringKeyValue("40" , "40"));
+    __tmp.add(new StringKeyValue("50" , "50"));
+    __tmp.add(new StringKeyValue("60 " , "60 "));
+    return __tmp;
   }
 
 

@@ -1372,7 +1372,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents
 						|| estat == Constants.SOLICITUD_ESTAT_TANCAT
 						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR) {
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
+
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+						
+						
+						) {
             		String key = String.valueOf(estat);
             		__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
             	}

@@ -33,6 +33,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
@@ -42,11 +43,13 @@ import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.springframework.stereotype.Controller;
@@ -81,6 +84,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
   
   @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
   protected TramitAPersAutLogicaService tramitALogicEjb;
+  
+  @EJB(mappedName = ModificacioSolicitudLogicaService.JNDI_NAME)
+  protected ModificacioSolicitudLogicaService modificacioSolicitudLogicaEjb;
   
   
   @Override
@@ -162,12 +168,17 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
 			}
-
-			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_ESMENES 
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_AUTORITZAT
-					|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT
+			
+			
+			Long estatID = solicitud.getEstatID();
+			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
+					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID
+					|| estatID == Constants.SOLICITUD_ESTAT_ESMENES 
+					|| estatID == Constants.SOLICITUD_ESTAT_AUTORITZAT
+					|| estatID == Constants.SOLICITUD_ESTAT_TANCAT
+					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO
+					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
 					) {
 				
 				Integer estatPbl = solicitud.getEstatpinbal();
@@ -197,15 +208,16 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				case Constants.ESTAT_PINBAL_NO_APROVAT:
 				case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
 				case Constants.ESTAT_PINBAL_DESESTIMAT:
+					
 					solicitudForm.addAdditionalButton(alta);
 					break;
 
-				case Constants.ESTAT_PINBAL_APROVAT:
-				case Constants.ESTAT_PINBAL_SUBSANAT:
-				case Constants.ESTAT_PINBAL_AUTORITZAT:
-				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-					solicitudForm.addAdditionalButton(modificacio);
-					break;
+//				case Constants.ESTAT_PINBAL_APROVAT:
+//				case Constants.ESTAT_PINBAL_SUBSANAT:
+//				case Constants.ESTAT_PINBAL_AUTORITZAT:
+//				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+//					solicitudForm.addAdditionalButton(modificacio);
+//					break;
 
 				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
 				case Constants.ESTAT_PINBAL_DESISTIT:
@@ -217,6 +229,23 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				}
 			}
 			
+			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID) {
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS));
+			}
+			
+			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
+				Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID, ModificacioSolicitudFields.SOLICITUDID.equal(soliID));
+				
+				log.info("ModSoli: " + modSoliID);
+				if (modSoliID != null) {
+					solicitudForm
+							.addAdditionalButton(new AdditionalButton("fas fa-jedi", "solicitud.modificacio.aceptar",
+									"/operador/solicitudfullview/acceptarModificacio/" + modSoliID,
+									AdditionalButtonStyle.PRIMARY));
+				}
+			}
+
 			solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
 			solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
 			
@@ -847,4 +876,25 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		tramitALogicEjb.setOrganGestorProperties(organID, prop);
 	}
 
+	@RequestMapping(value = "/acceptarModificacio/{modSoliID}", method = RequestMethod.GET)
+	public String acceptarModificacio(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable Long modSoliID) throws I18NException {
+		
+		ModificacioSolicitudJPA modSoli = modificacioSolicitudLogicaEjb.findByPrimaryKey(modSoliID);
+		Long soliID = modSoli.getSolicitudID();
+		try {
+			log.info("Acceptarem la modificació " + modSoliID +" de la solicitud [" + soliID + "]");
+			
+			modificacioSolicitudLogicaEjb.acceptarModificacio(modSoli);
+			
+			log.info("Canvis de la solicitud [" + soliID + "] aceptats");
+			HtmlUtils.saveMessageInfo(request, "S'han modificat les dades de la sol·licitud [" + soliID + "]");
+		} catch (Exception e) {
+			String msg = "Error acceptant la modificacio de la solicitud: " + e.getMessage();
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
+		}
+		return "redirect:" + getContextWeb() + "/view/" + soliID;
+	}
+  
 }

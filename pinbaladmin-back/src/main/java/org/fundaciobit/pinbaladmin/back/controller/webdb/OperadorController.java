@@ -46,7 +46,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="operador.operador.plural", order=190, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="operador.operador.plural", order=210, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/operador")
 @SessionAttributes(types = { OperadorForm.class, OperadorFilterForm.class })

@@ -154,6 +154,19 @@ public class OrganJPA implements Organ {
     }
 
 
+// EXP  Field:organid | Table: pad_mod_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organ")
+    private Set<ModificacioSolicitudJPA> modificacioSolicituds = new HashSet<ModificacioSolicitudJPA>(0);
+    public  Set<ModificacioSolicitudJPA> getModificacioSolicituds() {
+    return this.modificacioSolicituds;
+  }
+
+    public void setModificacioSolicituds(Set<ModificacioSolicitudJPA> modificacioSolicituds) {
+      this.modificacioSolicituds = modificacioSolicituds;
+    }
+
+
 // EXP  Field:organid | Table: pad_solicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organ")
@@ -221,6 +234,10 @@ public class OrganJPA implements Organ {
     __tmp = toJPA(__jpa);
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
+    if(!"ModificacioSolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.modificacioSolicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getModificacioSolicituds())) ) {
+      __tmp.setModificacioSolicituds(ModificacioSolicitudJPA.copyJPA(__jpa.getModificacioSolicituds(), __alreadyCopied,"OrganJPA"));
+    }
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
       __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"OrganJPA"));

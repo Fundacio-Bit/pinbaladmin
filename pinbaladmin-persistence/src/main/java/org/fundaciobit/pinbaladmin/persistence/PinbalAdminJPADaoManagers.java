@@ -25,6 +25,8 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final GrupEntitatCedentJPAManager pad_grupentitatcedent;
    private final IdiomaJPAManager pad_idioma;
    private final IncidenciaTecnicaJPAManager pad_incidenciatecnica;
+   private final ModificacioSolicitudJPAManager pad_mod_solicitud;
+   private final ModificacioSoliServJPAManager pad_mod_soliserv;
    private final OperadorJPAManager pad_operador;
    private final OrganJPAManager pad_organ;
    private final PinfoJPAManager pad_pinfo;
@@ -66,6 +68,8 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_grupentitatcedent = new GrupEntitatCedentJPAManager(__em);
     this.pad_idioma = new IdiomaJPAManager(__em);
     this.pad_incidenciatecnica = new IncidenciaTecnicaJPAManager(__em);
+    this.pad_mod_solicitud = new ModificacioSolicitudJPAManager(__em);
+    this.pad_mod_soliserv = new ModificacioSoliServJPAManager(__em);
     this.pad_operador = new OperadorJPAManager(__em);
     this.pad_organ = new OrganJPAManager(__em);
     this.pad_pinfo = new PinfoJPAManager(__em);
@@ -162,6 +166,14 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public IIncidenciaTecnicaManager getIncidenciaTecnicaManager() {
         return this.pad_incidenciatecnica;
+    };
+
+    public IModificacioSolicitudManager getModificacioSolicitudManager() {
+        return this.pad_mod_solicitud;
+    };
+
+    public IModificacioSoliServManager getModificacioSoliServManager() {
+        return this.pad_mod_soliserv;
     };
 
     public IOperadorManager getOperadorManager() {

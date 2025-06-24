@@ -48,7 +48,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitDCteAut.tramitDCteAut.plural", order=330, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tramitDCteAut.tramitDCteAut.plural", order=350, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitDCteAut")
 @SessionAttributes(types = { TramitDCteAutForm.class, TramitDCteAutFilterForm.class })

@@ -276,9 +276,31 @@
               </c:if>
             </td>
           <td id="solicitudServei_caduca_columnvalueid">
-            <form:errors path="solicitudServei.caduca" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.caduca"   />
-
+          <form:errors path="solicitudServei.caduca" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)}" >
+          <form:hidden path="solicitudServei.caduca"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitudServei.caduca,__theForm.listOfValuesForCaduca)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.CADUCA)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitudServei_caduca"  onchange="if(typeof onChangeCaduca == 'function') {  onChangeCaduca(this); };"  cssClass="form-control col-md-9-optional" path="solicitudServei.caduca">
+            <c:forEach items="${__theForm.listOfValuesForCaduca}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitudServei.caduca }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitudServei.caduca }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
            </td>
         </tr>
         </c:if>
