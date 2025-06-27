@@ -41,6 +41,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
@@ -1198,15 +1199,25 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * StringKeyValue("Tributario", "Tributario"));
          */
 
-        Set<String> tp = TipusProcediments.getAllTipusDeProcediment();
+//        Set<String> tp = TipusProcediments.getAllTipusDeProcediment();
 
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        for (String s : tp) {
-            String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
-            __tmp.add(new StringKeyValue(s, tipus));
-        }
-
+//        for (String s : tp) {
+//            String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
+//            __tmp.add(new StringKeyValue(s, tipus));
+//        }
+        String lang = "ca";        
+        List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+		for (TipusProcediment tp : tipus) {
+			String text;
+			if (lang.equals("es")) {
+				text = tp.castella;
+			} else {
+				text = tp.catala;
+			}
+          __tmp.add(new StringKeyValue(String.valueOf(tp.id),text));
+		}
         return __tmp;
     }
 

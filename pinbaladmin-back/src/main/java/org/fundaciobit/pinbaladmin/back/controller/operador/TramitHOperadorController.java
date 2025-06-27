@@ -186,9 +186,9 @@ public class TramitHOperadorController extends TramitHProcController {
         return __tmp;
     }
 
-    public String getTipusProcediment(Long key) {
+    public String getTipusProcediment(Long key, String lang) {
         String tp = null;
-        String lang = "es";
+//        String lang = "es";
 
         List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
         for (TipusProcediment tipusProcediment : tipus) {

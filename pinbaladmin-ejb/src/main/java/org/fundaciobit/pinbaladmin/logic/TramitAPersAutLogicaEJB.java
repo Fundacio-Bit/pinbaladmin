@@ -314,9 +314,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         procedimentCodi = H.getCodi();
                         codiDescriptiu = H.getDescripcio();
                         procedimentNom = H.getNom();
-                        Long tipus = Long.parseLong(H.getTipus());
-                        procedimentTipus = getTipusProcediment(tipus);
-                        map.put("tipusProcedimentNom", procedimentTipus);
+                        procedimentTipus = H.getTipus();
+                        
+                        String tipusProcedimentNom = getTipusProcediment(Long.valueOf(procedimentTipus));
+                        map.put("tipusProcedimentNom", tipusProcedimentNom );
                         
                         if(H.getUrlseu() == null || H.getUrlseu().trim().length() == 0) {
                         	H.setUrlseu("---");
@@ -409,7 +410,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			log.error(msg, e);
 			throw new I18NException(msg);
 		}
-		
         soli.setProcedimentCodi(procedimentCodi); 
         soli.setCodiSiaConv(procedimentCodi);
         soli.setCodiDescriptiu(codiDescriptiu);
