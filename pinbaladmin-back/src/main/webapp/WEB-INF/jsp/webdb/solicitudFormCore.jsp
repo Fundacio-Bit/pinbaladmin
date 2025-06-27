@@ -154,26 +154,26 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATID)}">
-        <tr id="solicitud_estatID_rowid">
-          <td id="solicitud_estatID_columnlabelid">
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.ESTATSOLICITUD)}">
+        <tr id="solicitud_estatSolicitud_rowid">
+          <td id="solicitud_estatSolicitud_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.ESTATID])?'solicitud.estatID':__theForm.labels[SolicitudFields.ESTATID]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.ESTATSOLICITUD])?'solicitud.estatSolicitud':__theForm.labels[SolicitudFields.ESTATSOLICITUD]}" /> &nbsp;(*)
              </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.ESTATID]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.ESTATID]}" ></i>
+              <c:if test="${not empty __theForm.help[SolicitudFields.ESTATSOLICITUD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.ESTATSOLICITUD]}" ></i>
               </c:if>
             </td>
-          <td id="solicitud_estatID_columnvalueid">
-          <form:errors path="solicitud.estatID" cssClass="errorField alert alert-danger" />
-          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
-          <form:hidden path="solicitud.estatID"/>
-          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatID,__theForm.listOfValuesForEstatID)}"  />
+          <td id="solicitud_estatSolicitud_columnvalueid">
+          <form:errors path="solicitud.estatSolicitud" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATSOLICITUD)}" >
+          <form:hidden path="solicitud.estatSolicitud"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.estatSolicitud,__theForm.listOfValuesForEstatSolicitud)}"  />
           </c:if>
-          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATID)}" >
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.ESTATSOLICITUD)}" >
           <c:set var="containEmptyValue"  value="false" />
-          <form:select id="solicitud_estatID"  onchange="if(typeof onChangeEstatID == 'function') {  onChangeEstatID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatID">
-            <c:forEach items="${__theForm.listOfValuesForEstatID}" var="tmp">
+          <form:select id="solicitud_estatSolicitud"  onchange="if(typeof onChangeEstatSolicitud == 'function') {  onChangeEstatSolicitud(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.estatSolicitud">
+            <c:forEach items="${__theForm.listOfValuesForEstatSolicitud}" var="tmp">
                 <form:option value="${tmp.key}">${tmp.value}</form:option>
                 <c:if test="${empty tmp.key}">
                   <c:set var="containEmptyValue"  value="true" />

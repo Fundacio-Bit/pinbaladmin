@@ -40,9 +40,9 @@ public class SolicitudValidator<I extends Solicitud>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PROCEDIMENTNOM)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,ESTATID, 
+    __vr.rejectIfEmptyOrWhitespace(__target__,ESTATSOLICITUD, 
         "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTATID)));
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTATSOLICITUD)));
 
     __vr.rejectIfEmptyOrWhitespace(__target__,DATAINICI, 
         "genapp.validation.required",

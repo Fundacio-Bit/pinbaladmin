@@ -42,7 +42,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 	@Override
 	public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
-		return SolicitudFields.ESTATID.lessThan(60L); // 60 == ESTAT TANCAT
+		return super.getAdditionaConditionAdvancedFilter(request);
+//		return SolicitudFields.ESTATSOLICITUD.lessThan(60L); // 60 == ESTAT TANCAT
 	}
 
 	@Override
@@ -84,102 +85,102 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		return solicitudFilterForm;
 	}
 
-//  /actualitzarEstats
-	@RequestMapping(value = "/actualitzarEstats", method = RequestMethod.GET)
-	public String actualitzarEstats(HttpServletRequest request, HttpServletResponse response) throws I18NException {
-
-		// Actualitzar estat de les sol·licituds
-		log.info("Actualizaremos el estado de las solicitudes pendientes");
-
-		long anticEstatPendent = 10;
-
-		Long[] estatsAProcesar = {Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director,
-				Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID, Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director,
-				Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
-				Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent, anticEstatPendent };
-
-		List<Solicitud> list = solicitudLogicaEjb.select(SolicitudFields.ESTATID.in(estatsAProcesar));
-
-		log.info("Sol·licituds a actualitzar: " + list.size());
-		int updates = 0;
-		for (Solicitud soli : list) {
-			Long nouEstat;
-			Long soliID = soli.getSolicitudID();
-			if (soli.getOrganid() != null) {
-				// Si es local, veure si está pendent d'enviar a DG, pendent de DG, pendent
-				// d'enviar a Madrid, o pendent d'autoritzar
-
-				if (isFirmatPelDirector(soli.getSolicitudID())) {
-					// Vuere si ja s'ha enviat a Madrid. Utilitzar l'estat Pinbal
-					Integer estatPinbal = soli.getEstatpinbal();
-					if (estatPinbal == null) {
-						soli.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
-					}
-
-					if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_NO_SOLICITAT) {
-						log.info("LOCAL - SoliID :" + soliID + " firmada director i no enviada a Madrid");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID;
-					} else if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR) {
-						log.info("LOCAL - SoliID :" + soliID + " enviada a Madrid amb ERROR");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-					} else {
-						log.info("LOCAL - SoliID :" + soliID + " firmada director i enviada a Madrid");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-					}
-				} else {
-					// No te el document firmat. Comprovar si s'ha enviat o no.
-					if (isEnviatAFirmar(soliID)) {
-						log.info("LOCAL - SoliID :" + soliID + " no firmada director, pero enviada a firmar");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director;
-					} else {
-						log.info("LOCAL - SoliID :" + soliID + " no enviada a firmar al director");
-						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director;
-					}
-				}
-
-			} else {
-				// Solicituts estatals
-				// S'ha de veure si s'han enviat correus de consulta a cedents. Si no n'hi ha,
-				// pendent d'enviar a cedents. Si n'hi ha, pendent firma_cedents. Si hi ha
-				// tantes consultes a cedents com respostes, penent autoritzar
-
-				List<Event> eventsSoliEstatal = eventLogicaEjb.select(EventFields.SOLICITUDID.equal(soliID));
-				int numConsultes = 0;
-				int numRespostes = 0;
-
-				for (Event event : eventsSoliEstatal) {
-					if (event.getTipus() == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
-						numConsultes++;
-					} else if (event.getTipus() == Constants.EVENT_TIPUS_CEDENT_RESPOSTA) {
-						numRespostes++;
-					}
-				}
-
-				if (numConsultes == 0) {
-					log.info("ESTATAL - SoliID :" + soliID + " no hi ha consultes a cedents");
-					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents;
-				} else if (numConsultes == numRespostes) {
-					log.info("ESTATAL - SoliID :" + soliID + " Totes les consultes a cedents respostes (" + numRespostes
-							+ "/" + numConsultes + ")");
-					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-				} else {
-					log.info("ESTATAL - SoliID :" + soliID + " Consultes a cedents pendents de resposta ("
-							+ numRespostes + "/" + numConsultes + ")");
-					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent;
-				}
-			}
-
-			if (nouEstat != soli.getEstatID()) {
-				updates ++;
-                soli.setEstatID(nouEstat);
-                solicitudLogicaEjb.update(soli);
-			}
-		}
-
-		HtmlUtils.saveMessageSuccess(request, "Estat de les " + updates + " sol·licituds actualitzat correctament.");
-		return "redirect:" + getContextWeb() + "/list";
-
-	}
+////  /actualitzarEstats
+//	@RequestMapping(value = "/actualitzarEstats", method = RequestMethod.GET)
+//	public String actualitzarEstats(HttpServletRequest request, HttpServletResponse response) throws I18NException {
+//
+//		// Actualitzar estat de les sol·licituds
+//		log.info("Actualizaremos el estado de las solicitudes pendientes");
+//
+//		long anticEstatPendent = 10;
+//
+//		Long[] estatsAProcesar = {Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director,
+//				Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID, Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director,
+//				Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR, Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
+//				Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent, anticEstatPendent };
+//
+//		List<Solicitud> list = solicitudLogicaEjb.select(SolicitudFields.ESTATID.in(estatsAProcesar));
+//
+//		log.info("Sol·licituds a actualitzar: " + list.size());
+//		int updates = 0;
+//		for (Solicitud soli : list) {
+//			Long nouEstat;
+//			Long soliID = soli.getSolicitudID();
+//			if (soli.getOrganid() != null) {
+//				// Si es local, veure si está pendent d'enviar a DG, pendent de DG, pendent
+//				// d'enviar a Madrid, o pendent d'autoritzar
+//
+//				if (isFirmatPelDirector(soli.getSolicitudID())) {
+//					// Vuere si ja s'ha enviat a Madrid. Utilitzar l'estat Pinbal
+//					Integer estatPinbal = soli.getEstatpinbal();
+//					if (estatPinbal == null) {
+//						soli.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+//					}
+//
+//					if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_NO_SOLICITAT) {
+//						log.info("LOCAL - SoliID :" + soliID + " firmada director i no enviada a Madrid");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID;
+//					} else if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR) {
+//						log.info("LOCAL - SoliID :" + soliID + " enviada a Madrid amb ERROR");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+//					} else {
+//						log.info("LOCAL - SoliID :" + soliID + " firmada director i enviada a Madrid");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+//					}
+//				} else {
+//					// No te el document firmat. Comprovar si s'ha enviat o no.
+//					if (isEnviatAFirmar(soliID)) {
+//						log.info("LOCAL - SoliID :" + soliID + " no firmada director, pero enviada a firmar");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director;
+//					} else {
+//						log.info("LOCAL - SoliID :" + soliID + " no enviada a firmar al director");
+//						nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director;
+//					}
+//				}
+//
+//			} else {
+//				// Solicituts estatals
+//				// S'ha de veure si s'han enviat correus de consulta a cedents. Si no n'hi ha,
+//				// pendent d'enviar a cedents. Si n'hi ha, pendent firma_cedents. Si hi ha
+//				// tantes consultes a cedents com respostes, penent autoritzar
+//
+//				List<Event> eventsSoliEstatal = eventLogicaEjb.select(EventFields.SOLICITUDID.equal(soliID));
+//				int numConsultes = 0;
+//				int numRespostes = 0;
+//
+//				for (Event event : eventsSoliEstatal) {
+//					if (event.getTipus() == Constants.EVENT_TIPUS_CONSULTA_A_CEDENT) {
+//						numConsultes++;
+//					} else if (event.getTipus() == Constants.EVENT_TIPUS_CEDENT_RESPOSTA) {
+//						numRespostes++;
+//					}
+//				}
+//
+//				if (numConsultes == 0) {
+//					log.info("ESTATAL - SoliID :" + soliID + " no hi ha consultes a cedents");
+//					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents;
+//				} else if (numConsultes == numRespostes) {
+//					log.info("ESTATAL - SoliID :" + soliID + " Totes les consultes a cedents respostes (" + numRespostes
+//							+ "/" + numConsultes + ")");
+//					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
+//				} else {
+//					log.info("ESTATAL - SoliID :" + soliID + " Consultes a cedents pendents de resposta ("
+//							+ numRespostes + "/" + numConsultes + ")");
+//					nouEstat = Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent;
+//				}
+//			}
+//
+//			if (nouEstat != soli.getEstatID()) {
+//				updates ++;
+//                soli.setEstatID(nouEstat);
+//                solicitudLogicaEjb.update(soli);
+//			}
+//		}
+//
+//		HtmlUtils.saveMessageSuccess(request, "Estat de les " + updates + " sol·licituds actualitzat correctament.");
+//		return "redirect:" + getContextWeb() + "/list";
+//
+//	}
 
 	@EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService.JNDI_NAME)
 	protected org.fundaciobit.pinbaladmin.ejb.DocumentSolicitudService documentSolicitudEjb;

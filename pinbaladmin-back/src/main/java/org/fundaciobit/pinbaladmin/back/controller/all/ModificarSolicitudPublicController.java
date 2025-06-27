@@ -273,7 +273,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		modSolicitud.setSolicitudID(solicitud.getSolicitudID());
 		modSolicitud.setProcedimentCodi(solicitud.getProcedimentCodi());
 		modSolicitud.setProcedimentNom(solicitud.getProcedimentNom());
-		modSolicitud.setEstatID(solicitud.getEstatID());
+		modSolicitud.setEstatID(solicitud.getEstatSolicitud());
 		modSolicitud.setDataInici(solicitud.getDataInici());
 		modSolicitud.setDataFi(solicitud.getDataFi());
 		modSolicitud.setNotes(solicitud.getPinfo()); // o el campo correcto
@@ -790,7 +790,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		crearEventModificacio(modificacio, nomUsuari, asumpte, msg.toString());
 
 		// Actualitzar estat solicitud a PENDENT_REVISIO_MODIFICACIO
-		solicitudOriginal.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO);
+		solicitudOriginal.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO);
 		solicitudLogicaEjb.update(solicitudOriginal);
 		
 		modificacio.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
@@ -873,7 +873,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			throws I18NException {
 		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-		for (long estat : Constants.ESTATS_SOLICITUD) {
+		for (long estat : Constants.ESTATS_SOLI) {
 			String key = String.valueOf(estat);
 			__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
 		}

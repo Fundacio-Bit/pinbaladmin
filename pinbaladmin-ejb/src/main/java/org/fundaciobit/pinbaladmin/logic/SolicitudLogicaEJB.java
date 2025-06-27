@@ -432,7 +432,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 		documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, destinatariNif, remitent);
 		
-		soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director);
+		soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
 		this.update(soli);
 		
 //		try {
@@ -616,8 +616,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         Where w = SolicitudFields.NOTES.like(likeStr);
 
-        Long[] estats = {Constants.SOLICITUD_ESTAT_TANCAT};
-        Where wEstat = SolicitudFields.ESTATID.notIn(estats);
+        Long[] estats = {Constants.SOLI_ESTAT_TANCAT};
+        Where wEstat = SolicitudFields.ESTATSOLICITUD.notIn(estats);
         log.info("Where: "  + w.toSQL() + " - " + likeStr);
         
         OrderBy order = new OrderBy(SolicitudFields.DATAINICI);
@@ -677,10 +677,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			Where wEstatsPinbal = SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT);
 			
 			//Solicituds enviades a madrid, pendents de tramitar
-			Long[] estatsPerComprovar = {Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR, Constants.SOLICITUD_ESTAT_AUTORITZAT}; //,  Constants.SOLICITUD_ESTAT_ESMENES};
-			Where wPendentMadrid = SolicitudFields.ESTATID.in(estatsPerComprovar);
+			Long[] estatsPerComprovar = {Constants.SOLI_ESTAT_PENDENT_AUTORITZAR, Constants.SOLI_ESTAT_AUTORITZAT, Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID, Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID}; //,  Constants.SOLICITUD_ESTAT_ESMENES};
+			Where wPendentMadrid = SolicitudFields.ESTATSOLICITUD.in(estatsPerComprovar);
 			
-			OrderBy order = new OrderBy(SolicitudFields.ESTATID, OrderType.DESC);
+			OrderBy order = new OrderBy(SolicitudFields.ESTATSOLICITUD, OrderType.DESC);
 			
 			List<Solicitud> solicituds = this.select(Where.AND(wSolicitudLocals, Where.OR(wPendentMadrid, wEstatsPinbal)), order);
 			log.info("Solicituds a procesasr: " + solicituds.size());

@@ -215,13 +215,13 @@ public class SolicitudController
       };
     }
 
-    // Field estatID
+    // Field estatSolicitud
     {
-      _listSKV = getReferenceListForEstatID(request, mav, filterForm, list, groupByItemsMap, null);
+      _listSKV = getReferenceListForEstatSolicitud(request, mav, filterForm, list, groupByItemsMap, null);
       _tmp = Utils.listToMap(_listSKV);
-      filterForm.setMapOfValuesForEstatID(_tmp);
-      if (filterForm.getGroupByFields().contains(ESTATID)) {
-        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATID, false);
+      filterForm.setMapOfValuesForEstatSolicitud(_tmp);
+      if (filterForm.getGroupByFields().contains(ESTATSOLICITUD)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, ESTATSOLICITUD, false);
       };
     }
 
@@ -298,7 +298,7 @@ public class SolicitudController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganid());
-    __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
+    __mapping.put(ESTATSOLICITUD, filterForm.getMapOfValuesForEstatSolicitud());
     __mapping.put(CREADOR, filterForm.getMapOfValuesForCreador());
     __mapping.put(OPERADOR, filterForm.getMapOfValuesForOperador());
     __mapping.put(ESTATPINBAL, filterForm.getMapOfValuesForEstatpinbal());
@@ -370,13 +370,13 @@ public class SolicitudController
       solicitudForm.setListOfOrganForOrganid(_listSKV);
     }
     // Comprovam si ja esta definida la llista
-    if (solicitudForm.getListOfValuesForEstatID() == null) {
-      List<StringKeyValue> _listSKV = getReferenceListForEstatID(request, mav, solicitudForm, null);
+    if (solicitudForm.getListOfValuesForEstatSolicitud() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForEstatSolicitud(request, mav, solicitudForm, null);
 
       if(_listSKV != null && !_listSKV.isEmpty()) { 
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
-      solicitudForm.setListOfValuesForEstatID(_listSKV);
+      solicitudForm.setListOfValuesForEstatSolicitud(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (solicitudForm.getListOfValuesForCreador() == null) {
@@ -852,29 +852,29 @@ public java.lang.Long stringToPK(String value) {
   }
 
 
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+  public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request,
        ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
-    if (solicitudForm.isHiddenField(ESTATID)) {
+    if (solicitudForm.isHiddenField(ESTATSOLICITUD)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
-    return getReferenceListForEstatID(request, mav, where);
+    return getReferenceListForEstatSolicitud(request, mav, where);
   }
 
 
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+  public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request,
        ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
        List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
-    if (solicitudFilterForm.isHiddenField(ESTATID)
-       && !solicitudFilterForm.isGroupByField(ESTATID)
-       && !solicitudFilterForm.isFilterByField(ESTATID)) {
+    if (solicitudFilterForm.isHiddenField(ESTATSOLICITUD)
+       && !solicitudFilterForm.isGroupByField(ESTATSOLICITUD)
+       && !solicitudFilterForm.isFilterByField(ESTATSOLICITUD)) {
       return EMPTY_STRINGKEYVALUE_LIST;
     }
     Where _w = null;
-    return getReferenceListForEstatID(request, mav, Where.AND(where,_w));
+    return getReferenceListForEstatSolicitud(request, mav, Where.AND(where,_w));
   }
 
 
-  public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request,
+  public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
     __tmp.add(new StringKeyValue("-1" , "-1"));

@@ -188,7 +188,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         SolicitudJPA soli = new SolicitudJPA();
 
         //Constants
-        Long estatID = Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO;
+        Long estatID = Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO;
         String notesSoli = "Procediment creat amb Formulari. TramitID[" + tramitID + "]";
         Timestamp dataInici = new Timestamp(System.currentTimeMillis());
         Integer estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
@@ -415,7 +415,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setCodiDescriptiu(codiDescriptiu);
         soli.setProcedimentNom(procedimentNom);
         soli.setProcedimentTipus(procedimentTipus);
-        soli.setEstatID(estatID);
+        soli.setEstatSolicitud(estatID);
         soli.setOrganid(organid);
         soli.setEntitatEstatal(entitatEstatal);
         soli.setPinfo(pinfo);

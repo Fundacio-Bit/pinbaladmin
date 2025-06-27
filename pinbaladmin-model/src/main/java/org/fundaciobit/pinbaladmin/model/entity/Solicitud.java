@@ -23,8 +23,8 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getOrganid();
 	public void setOrganid(java.lang.Long _organid_);
 
-	public java.lang.Long getEstatID();
-	public void setEstatID(java.lang.Long _estatID_);
+	public java.lang.Long getEstatSolicitud();
+	public void setEstatSolicitud(java.lang.Long _estatSolicitud_);
 
 	public java.lang.String getExpedientPid();
 	public void setExpedientPid(java.lang.String _expedientPid_);

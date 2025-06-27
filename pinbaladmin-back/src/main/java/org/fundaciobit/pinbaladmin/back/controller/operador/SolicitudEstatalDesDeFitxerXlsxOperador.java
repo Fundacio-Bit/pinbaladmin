@@ -73,7 +73,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
                 Set<Field<?>> all = new HashSet<Field<?>>(Arrays.asList(SolicitudFields.ALL_SOLICITUD_FIELDS));
                 all.remove(SOLICITUDXMLID);
                 all.remove(DOCUMENTSOLICITUDID);
-                all.remove(ESTATID);
+                all.remove(ESTATSOLICITUD);
                 //all.remove(PROCEDIMENTTIPUS);
                 //all.remove(DEPARTAMENTID);
 
@@ -159,7 +159,7 @@ public class SolicitudEstatalDesDeFitxerXlsxOperador extends SolicitudEstatalOpe
 
         solicitud.setProcedimentNom(proc.getNom());
 
-        solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents);
+        solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents);
         solicitud.setEntitatEstatal(info.getEntitat());
         solicitud.setExpedientPid(info.getExpedientPID());
         

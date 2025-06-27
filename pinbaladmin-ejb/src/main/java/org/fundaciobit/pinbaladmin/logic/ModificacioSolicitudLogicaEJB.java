@@ -105,7 +105,7 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 		}
 
 		// 3. Cambiar estado de la solicitud
-		solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID);
+		solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID);
 
 		// 4. Guardar cambios de la solicitud
 		solicitudLogicaEjb.update(solicitud);

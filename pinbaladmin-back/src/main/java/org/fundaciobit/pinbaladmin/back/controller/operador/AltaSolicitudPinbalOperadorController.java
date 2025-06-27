@@ -174,7 +174,7 @@ public class AltaSolicitudPinbalOperadorController {
 
 				// Actualitzar estat solicitut a pendent autoritzar:
                 log.info("Actualitzam solicitud amb ID= " + soliID);
-				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
+				soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 				soli.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
                 
 			} else {
@@ -195,7 +195,7 @@ public class AltaSolicitudPinbalOperadorController {
 
 				if (procdedimentDuplicat) {
 					// Actualitzar estat solicitut a pendent autoritzar:
-					solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR,
+					solicitudLogicaEjb.update(SolicitudFields.ESTATSOLICITUD, Constants.SOLI_ESTAT_PENDENT_AUTORITZAR,
 							SolicitudFields.SOLICITUDID.equal(soliID));
 
 					Consulta consultaEstat = new Consulta();
@@ -213,7 +213,7 @@ public class AltaSolicitudPinbalOperadorController {
 				} else {
 //					solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID,
 //							SolicitudFields.SOLICITUDID.equal(soliID));
-					soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
+					soli.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
 				}
 			}
             

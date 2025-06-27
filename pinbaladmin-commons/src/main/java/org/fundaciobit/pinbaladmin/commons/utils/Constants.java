@@ -67,32 +67,43 @@ public interface Constants {
 			INCIDENCIA_TIPUS_INTEGRACIONS, INCIDENCIA_TIPUS_ROLEPERMISOS };
 
     // Estats de una solicitud
-    public static final long SOLICITUD_ESTAT_SENSE_ESTAT = -1;
+    public static final long SOLI_ESTAT_SENSE_ESTAT = -1;
     
-    public static final long SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO = 5;
+    public static final long SOLI_ESTAT_PENDENT_DISTRIBUCIO = 5;
     
- //   public static final long SOLICITUD_ESTAT_PENDENT = 10;
-    public static final long SOLICITUD_ESTAT_PENDENT_Enviar_Director = 11;
-    public static final long SOLICITUD_ESTAT_PENDENT_Enviar_Cedents = 12;
+ //   public static final long SOLI_ESTAT_PENDENT = 10;
+    public static final long SOLI_ESTAT_PENDENT_Enviar_Director = 11;
+    public static final long SOLI_ESTAT_PENDENT_Enviar_Cedents = 12;
     
-    public static final long SOLICITUD_ESTAT_PENDENT_Firma_Director = 15;
-    public static final long SOLICITUD_ESTAT_PENDENT_Firma_Cedent = 16;
-    public static final long SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID = 19;
-    public static final long SOLICITUD_ESTAT_PENDENT_AUTORITZAR = 20;
-    public static final long SOLICITUD_ESTAT_ESMENES = 30;
-    public static final long SOLICITUD_ESTAT_AUTORITZAT = 40;
-    public static final long SOLICITUD_ESTAT_PENDENT_PINFO = 50;
-    public static final long SOLICITUD_ESTAT_TANCAT = 60;
-    
-    public static final long SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO = 70;
-    public static final long SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID = 80;
-    public static final long SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO= 90;
+    public static final long SOLI_ESTAT_PENDENT_Firma_Director = 15;
+    public static final long SOLI_ESTAT_PENDENT_Firma_Cedent = 16;
+    public static final long SOLI_ESTAT_PENDENT_ENVIAR_MADRID = 19;
+    public static final long SOLI_ESTAT_PENDENT_AUTORITZAR = 20;
+    public static final long SOLI_ESTAT_ESMENES = 30;
+    public static final long SOLI_ESTAT_AUTORITZAT = 40;
+    public static final long SOLI_ESTAT_AUTORITZAT_ESMENES = 42;
+    public static final long SOLI_ESTAT_ERROR_ENVIANT_MADRID = 44;
     
     
+    public static final long SOLI_ESTAT_PENDENT_PINFO = 50;
+    public static final long SOLI_ESTAT_TANCAT = 60;
+
+
     
-	public static final long[] ESTATS_SOLICITUD = { SOLICITUD_ESTAT_SENSE_ESTAT, SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO, SOLICITUD_ESTAT_PENDENT_Enviar_Director, SOLICITUD_ESTAT_PENDENT_Enviar_Cedents,
-			SOLICITUD_ESTAT_PENDENT_Firma_Director, SOLICITUD_ESTAT_PENDENT_Firma_Cedent, SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID, SOLICITUD_ESTAT_PENDENT_AUTORITZAR, SOLICITUD_ESTAT_ESMENES,
-			SOLICITUD_ESTAT_AUTORITZAT, SOLICITUD_ESTAT_PENDENT_PINFO, SOLICITUD_ESTAT_TANCAT, SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO, SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID,  SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO};
+    public static final long SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO = 70;
+    public static final long SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID = 80;
+    public static final long SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO= 90;
+    public static final long SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID= 92;
+    
+    
+    
+	public static final long[] ESTATS_SOLI = { SOLI_ESTAT_SENSE_ESTAT, SOLI_ESTAT_PENDENT_DISTRIBUCIO,
+			SOLI_ESTAT_PENDENT_Enviar_Director, SOLI_ESTAT_PENDENT_Enviar_Cedents, SOLI_ESTAT_PENDENT_Firma_Director,
+			SOLI_ESTAT_PENDENT_Firma_Cedent, SOLI_ESTAT_PENDENT_ENVIAR_MADRID, SOLI_ESTAT_PENDENT_AUTORITZAR,
+			SOLI_ESTAT_ESMENES, SOLI_ESTAT_AUTORITZAT, SOLI_ESTAT_AUTORITZAT_ESMENES, SOLI_ESTAT_ERROR_ENVIANT_MADRID,
+			SOLI_ESTAT_PENDENT_PINFO, SOLI_ESTAT_TANCAT, SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO,
+			SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID, SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO,
+			SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID };
     
 	//Estats Soliciud Servei
     public static final long ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT = -1L;

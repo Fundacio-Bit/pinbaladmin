@@ -103,7 +103,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		this.update(doc);
 
 		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director);
+			soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
 			soli.setPortafibID(idPortafib);
 			solicitudLogicaEjb.update(soli);
 		}
@@ -248,10 +248,10 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 
 		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
 			// Si el document es un formulari de director, canviar l'estat de la sol·licitud
-			// a PENDENT_AUTORITZAR
+			// a PENDENT_Enviar a Madrid
 
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-			soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
+			soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
 			solicitudLogicaEjb.update(soli);
 		}
 

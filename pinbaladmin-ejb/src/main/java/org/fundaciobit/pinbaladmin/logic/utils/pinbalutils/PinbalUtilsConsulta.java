@@ -71,63 +71,55 @@ public class PinbalUtilsConsulta extends PinbalUtilsCommon {
 	}
 
 	private void actualitzarEstatSolicitud(EstadoProcedimiento estado, Solicitud solicitud) {
-		int estadoAnterior = solicitud.getEstatpinbal();
-		int estadoActual = estado.getEstado();
+	    int estatPinbalAnterior = solicitud.getEstatpinbal();
+	    int estatPinbalNou = estado.getEstado();
 
-		String estadoSolicitud;
-		long estatSoli = solicitud.getEstatID();
-		if (estatSoli == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR)
-			estadoSolicitud = "Pendent autoritzar";
-		else if (estatSoli == Constants.SOLICITUD_ESTAT_AUTORITZAT)
-			estadoSolicitud = "Autoritzat";
-		else if (estatSoli == Constants.SOLICITUD_ESTAT_ESMENES)
-			estadoSolicitud = "Esmenes";
-		else
-			estadoSolicitud = "Desconegut";
+	    long estatSoli = solicitud.getEstatSolicitud();
+	    boolean jaAutoritzada = estatSoli == Constants.SOLI_ESTAT_AUTORITZAT
+	                         || estatSoli == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
+	                         || estatSoli == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID;
 
-		String msg = "Solicitud " + solicitud.getProcedimentCodi() + "\t[" + estadoSolicitud + "]:\t(" + estadoAnterior
-				+ " -> " + estadoActual + ") " + estado.getDescripcion();
-		log.info(msg);
+	    String estatNom;
+	    if (estatSoli == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) estatNom = "Pendent autoritzar";
+	    else if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) estatNom = "Autoritzat";
+	    else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) estatNom = "Esmenes";
+	    else estatNom = "Desconegut";
 
-		solicitud.setEstatpinbal(estadoActual);
-		switch (estadoActual) {
-		// case Constants.ESTAT_PINBAL_ERROR:
-		// solicitud.setEstatID(Constants.SOLICITUD_ESTAT_);
-		// break;
-		// case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-		// solicitud.setEstatID(Constants.SOLICITUD_ESTAT_);
-		// break;
-		case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
-			break;
-		case Constants.ESTAT_PINBAL_DESISTIT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_TANCAT);
-			break;
-		case Constants.ESTAT_PINBAL_APROVAT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
-			break;
-		case Constants.ESTAT_PINBAL_NO_APROVAT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
-			break;
-		case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_ESMENES);
-			break;
-		case Constants.ESTAT_PINBAL_SUBSANAT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_ESMENES);
-			break;
-		case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR);
-			break;
-		case Constants.ESTAT_PINBAL_AUTORITZAT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_AUTORITZAT);
-			break;
-		case Constants.ESTAT_PINBAL_DESESTIMAT:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_TANCAT);
-			break;
-		case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-			solicitud.setEstatID(Constants.SOLICITUD_ESTAT_ESMENES);
-			break;
-		}
+	    log.info("Solicitud " + solicitud.getProcedimentCodi() + "\t[" + estatNom + "]:\t(" 
+	             + estatPinbalAnterior + " -> " + estatPinbalNou + ") " + estado.getDescripcion());
+
+	    solicitud.setEstatpinbal(estatPinbalNou);
+
+	    switch (estatPinbalNou) {
+	        case Constants.ESTAT_PINBAL_ERROR:
+//	        case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+	            solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
+	            break;
+
+	        case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+	        case Constants.ESTAT_PINBAL_DESISTIT:
+	        case Constants.ESTAT_PINBAL_APROVAT:
+	        case Constants.ESTAT_PINBAL_SUBSANAT:
+	        case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+	            solicitud.setEstatSolicitud(jaAutoritzada 
+	                ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO 
+	                : Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+	            break;
+
+	        case Constants.ESTAT_PINBAL_NO_APROVAT:
+	        case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+	        case Constants.ESTAT_PINBAL_DESESTIMAT:
+	            solicitud.setEstatSolicitud(jaAutoritzada 
+	                ? Constants.SOLI_ESTAT_AUTORITZAT_ESMENES 
+	                : Constants.SOLI_ESTAT_ESMENES);
+	            break;
+
+	        case Constants.ESTAT_PINBAL_AUTORITZAT:
+	        case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+	            solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_AUTORITZAT);
+	            break;
+	    }
 	}
+
 
 }

@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.front.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pluginsib.login.api.LoginInfo;
 import org.fundaciobit.pluginsib.login.springutils.PluginLoginController;
@@ -161,14 +162,10 @@ public class InicioController {
 		log.info("arrancarpinfo auth");
 
 		// añadir token
-
 		UUID uuid = UUID.randomUUID();
 		String token = uuid.toString();
 
 		// crear un fitxer amb el token i totes les propietats de Authentication.
-
-		File file = new File(token + ".front");
-
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = auth.getPrincipal();
 
@@ -177,49 +174,53 @@ public class InicioController {
 			PluginLoginUserDetails usuarioAutenticado = (PluginLoginUserDetails) principal;
 			LoginInfo loginInfo = usuarioAutenticado.getUsuario();
 
-			//Escribir todos los datos en el fichero.
-			String nif = loginInfo.getAdministrationID();
-			String nom = loginInfo.getName();
-			String ape1 = loginInfo.getSurname1();
-			String ape2 = loginInfo.getSurname2();
-			String authMethod = loginInfo.getAuthenticationMethod();
-			String identityProvider = loginInfo.getIdentityProvider();
-			String loginID = loginInfo.getLoginID();
-			String username = loginInfo.getUsername();
-			int  qaa = loginInfo.getQaa();
-			
-			// Escribir en el fichero.
-			 
-			try {
-				FileWriter myWriter = new FileWriter(file);
-				myWriter.write("NIF=" + nif + "\n");
-				myWriter.write("Nom=" + nom + "\n");
-				myWriter.write("Cognom1=" + ape1 + "\n");
-				myWriter.write("Cognom2=" + ape2 + "\n");
-				myWriter.write("AuthMethod=" + authMethod + "\n");
-				myWriter.write("IdentityProvider=" + identityProvider + "\n");
-				myWriter.write("LoginID=" + loginID + "\n");
-				myWriter.write("Username=" + username + "\n");
-				myWriter.write("QAA=" + qaa + "\n");
-
-				myWriter.close();
-
-				File newFile = new File(FileSystemManager.getFilesPath(), token + ".front");
-			    FileSystemManager.copy(file, newFile);
-				
-				log.info("Successfully wrote to the file.");
-			} catch (IOException e) {
-			      System.out.println("An error occurred.");
-			      e.printStackTrace();
-			    }
-			
-
+			loginInfoToFile(token, loginInfo);
 		}
 
 		String url = Configuracio.getAppBackUrl() + "/public/incidenciapinfo" + "/new/" + token;
 
 		ModelAndView mav = new ModelAndView(new RedirectView(url));
 		return mav;
+	}
+
+	private void loginInfoToFile(String token, LoginInfo loginInfo) throws I18NException {
+		File file = new File(token + ".front");
+
+		// Escribir todos los datos en el fichero.
+		String nif = loginInfo.getAdministrationID();
+		String nom = loginInfo.getName();
+		String ape1 = loginInfo.getSurname1();
+		String ape2 = loginInfo.getSurname2();
+		String authMethod = loginInfo.getAuthenticationMethod();
+		String identityProvider = loginInfo.getIdentityProvider();
+		String loginID = loginInfo.getLoginID();
+		String username = loginInfo.getUsername();
+		int qaa = loginInfo.getQaa();
+
+		// Escribir en el fichero.
+
+		try {
+			FileWriter myWriter = new FileWriter(file);
+			myWriter.write("NIF=" + nif + "\n");
+			myWriter.write("Nom=" + nom + "\n");
+			myWriter.write("Cognom1=" + ape1 + "\n");
+			myWriter.write("Cognom2=" + ape2 + "\n");
+			myWriter.write("AuthMethod=" + authMethod + "\n");
+			myWriter.write("IdentityProvider=" + identityProvider + "\n");
+			myWriter.write("LoginID=" + loginID + "\n");
+			myWriter.write("Username=" + username + "\n");
+			myWriter.write("QAA=" + qaa + "\n");
+
+			myWriter.close();
+
+			File newFile = new File(FileSystemManager.getFilesPath(), token + ".front");
+			FileSystemManager.copy(file, newFile);
+
+			log.info("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
 	}
 	
 	@RequestMapping(value = { CONTEXT_MODIFICAR_AUTH }, method = { RequestMethod.GET, RequestMethod.POST })
@@ -235,8 +236,6 @@ public class InicioController {
 		
 		// crear un fitxer amb el token i totes les propietats de Authentication.
 		
-		File file = new File(token + ".front");
-		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = auth.getPrincipal();
 		
@@ -245,41 +244,11 @@ public class InicioController {
 			PluginLoginUserDetails usuarioAutenticado = (PluginLoginUserDetails) principal;
 			LoginInfo loginInfo = usuarioAutenticado.getUsuario();
 			
-			//Escribir todos los datos en el fichero.
-			String nif = loginInfo.getAdministrationID();
-			String nom = loginInfo.getName();
-			String ape1 = loginInfo.getSurname1();
-			String ape2 = loginInfo.getSurname2();
-			String authMethod = loginInfo.getAuthenticationMethod();
-			String identityProvider = loginInfo.getIdentityProvider();
-			String loginID = loginInfo.getLoginID();
-			String username = loginInfo.getUsername();
-			int  qaa = loginInfo.getQaa();
+			
 			
 			// Escribir en el fichero.
 			
-			try {
-				FileWriter myWriter = new FileWriter(file);
-				myWriter.write("NIF=" + nif + "\n");
-				myWriter.write("Nom=" + nom + "\n");
-				myWriter.write("Cognom1=" + ape1 + "\n");
-				myWriter.write("Cognom2=" + ape2 + "\n");
-				myWriter.write("AuthMethod=" + authMethod + "\n");
-				myWriter.write("IdentityProvider=" + identityProvider + "\n");
-				myWriter.write("LoginID=" + loginID + "\n");
-				myWriter.write("Username=" + username + "\n");
-				myWriter.write("QAA=" + qaa + "\n");
-				
-				myWriter.close();
-				
-				File newFile = new File(FileSystemManager.getFilesPath(), token + ".front");
-				FileSystemManager.copy(file, newFile);
-				
-				log.info("Successfully wrote to the file.");
-			} catch (IOException e) {
-				System.out.println("An error occurred.");
-				e.printStackTrace();
-			}
+			loginInfoToFile(token, loginInfo);
 			
 			
 		}

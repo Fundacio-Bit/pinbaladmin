@@ -756,7 +756,7 @@ public abstract class AbstractEventController<T> extends EventController impleme
         {
             List<StringKeyValue> estatSolicituds = new java.util.ArrayList<StringKeyValue>();
 
-            long[] estats = Constants.ESTATS_SOLICITUD;
+            long[] estats = Constants.ESTATS_SOLI;
 			for (long estatID : estats) {
 				String key = String.valueOf(estatID);
 				String value = I18NUtils.tradueix("solicitud.estat." + estatID);

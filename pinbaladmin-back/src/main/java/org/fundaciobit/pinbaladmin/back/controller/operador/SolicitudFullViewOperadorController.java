@@ -157,86 +157,111 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
 							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
 			
-			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director) {
+			if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Enviar_Director) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
 						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
 			}
 			//Si no te el document firmat pel DG, i está pendent d'enviar o de rebre firma, mostrar el botó. (Pot ser que s'envii manual)
 			if (!isFirmatPelDirector(solicitud)
-					&& (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director
-							|| solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Firma_Director)) {
+					&& (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
+							|| solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Firma_Director)) {
 				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
 						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
 			}
 			
 			
-			Long estatID = solicitud.getEstatID();
-			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
-					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID
-					|| estatID == Constants.SOLICITUD_ESTAT_ESMENES 
-					|| estatID == Constants.SOLICITUD_ESTAT_AUTORITZAT
-					|| estatID == Constants.SOLICITUD_ESTAT_TANCAT
-					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO
-					|| estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-					) {
-				
-				Integer estatPbl = solicitud.getEstatpinbal();
-				
-				log.info("Estat PBL: " + estatPbl);
+			
+			Long estatID = solicitud.getEstatSolicitud();
+			// Botones según el estatID
+			if (estatID != null) {
+			    if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
+		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
+		    		|| estatID == Constants.SOLI_ESTAT_ESMENES
+			        || estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
 
-				AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-						"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-
-				AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-						"/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
-
-				AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
-
-				if (estatPbl == null) {
-					estatPbl = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-				}
-
-				if (estatPbl != Constants.ESTAT_PINBAL_NO_SOLICITAT) {
-					solicitudForm.addAdditionalButton(consulta);
-				}
-
-				switch (estatPbl) {
-				case Constants.ESTAT_PINBAL_ERROR:
-				case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-				case Constants.ESTAT_PINBAL_NO_APROVAT:
-				case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-				case Constants.ESTAT_PINBAL_DESESTIMAT:
-					
+			        // ALTA permitida
+			        AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+			            "/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
 					solicitudForm.addAdditionalButton(alta);
-					break;
+			    }
 
-//				case Constants.ESTAT_PINBAL_APROVAT:
-//				case Constants.ESTAT_PINBAL_SUBSANAT:
-//				case Constants.ESTAT_PINBAL_AUTORITZAT:
-//				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-//					solicitudForm.addAdditionalButton(modificacio);
-//					break;
+			    if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
+			        || estatID == Constants.SOLI_ESTAT_ESMENES
+			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT
+			        || estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
+			        || estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+			        || estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+			        || estatID == Constants.SOLI_ESTAT_TANCAT
+			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
+			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
 
-				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-				case Constants.ESTAT_PINBAL_DESISTIT:
-				case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-					break;
+			        // CONSULTA permitida
+			        AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+			            "/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
+					solicitudForm.addAdditionalButton(consulta);
+			    }
 
-				default:
-					break;
-				}
+			    if (estatID == Constants.SOLI_ESTAT_AUTORITZAT
+			        || estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+			        || estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
+			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
+
+			        // MODIFICACIO permitida
+			        AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+			            "/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
+					solicitudForm.addAdditionalButton(modificacio);
+			    }
 			}
-			
-			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID) {
-				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-						"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS));
-			}
-			
-			if (estatID == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
-				Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID, ModificacioSolicitudFields.SOLICITUDID.equal(soliID));
+
 				
+				
+				
+//				
+//				Integer estatPbl = solicitud.getEstatpinbal();
+//				
+//				log.info("Estat PBL: " + estatPbl);
+//
+//				
+//				if (estatPbl == null) {
+//					estatPbl = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+//				}
+//
+//				if (estatPbl != Constants.ESTAT_PINBAL_NO_SOLICITAT) {
+//					solicitudForm.addAdditionalButton(consulta);
+//				}
+//
+//				switch (estatPbl) {
+//				case Constants.ESTAT_PINBAL_ERROR:
+//				case Constants.ESTAT_PINBAL_NO_SOLICITAT:
+//				case Constants.ESTAT_PINBAL_NO_APROVAT:
+//				case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
+//				case Constants.ESTAT_PINBAL_DESESTIMAT:
+//					
+//					solicitudForm.addAdditionalButton(alta);
+//					break;
+//
+////				case Constants.ESTAT_PINBAL_APROVAT:
+////				case Constants.ESTAT_PINBAL_SUBSANAT:
+////				case Constants.ESTAT_PINBAL_AUTORITZAT:
+////				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
+////					solicitudForm.addAdditionalButton(modificacio);
+////					break;
+//
+//				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
+//				case Constants.ESTAT_PINBAL_DESISTIT:
+//				case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+//					break;
+//
+//				default:
+//					break;
+//				}
+//			}
+
+			if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
+				Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
+						ModificacioSolicitudFields.SOLICITUDID.equal(soliID));
+
 				log.info("ModSoli: " + modSoliID);
 				if (modSoliID != null) {
 					solicitudForm
@@ -252,7 +277,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		} else {
 			// Si és estatal
 			
-//			if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
+//			if (solicitud.getEstatSolicitud() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
 //				// Boto per enviar correus als cedents
 //				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
 //						"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));

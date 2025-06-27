@@ -432,7 +432,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             hiddenFields.remove(SolicitudFields.PROCEDIMENTCODI);
             hiddenFields.remove(SolicitudFields.PROCEDIMENTNOM);
-            hiddenFields.remove(SolicitudFields.ESTATID);
+            hiddenFields.remove(SolicitudFields.ESTATSOLICITUD);
             hiddenFields.remove(SolicitudFields.DATAINICI);
 
             // hiddenFields.remove(SolicitudFields.AREAID);
@@ -458,7 +458,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 filterList.remove(PINFO);
                 filterList.remove(DATAINICI);
                 filterList.remove(DATAFI);
-                filterList.remove(ESTATID);
+                filterList.remove(ESTATSOLICITUD);
                 
                 if (isestatal) {
                     hiddenFields.remove(ENTITATESTATAL);
@@ -581,8 +581,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * 
          * java.util.Map<Field<?>, java.util.Map<String, String>> __mapping;
          * __mapping = new java.util.HashMap<Field<?>, java.util.Map<String,
-         * String>>(); __mapping.put(ESTATID,
-         * filterForm.getMapOfEstatSolicitudForEstatID());
+         * String>>(); __mapping.put(setEstatSolicitud,
+         * filterForm.getMapOfEstatSolicitudForsetEstatSolicitud());
          * __mapping.put(ENTITATLOCALID,
          * filterForm.getMapOfEntitatForEntitatLocalID()); exportData(request,
          * response, dataExporterID, filterForm, list, allFields, __mapping,
@@ -664,7 +664,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         for (Solicitud soli : list) {
 
-            if (soli.getEstatID() == Constants.SOLICITUD_ESTAT_PENDENT_DISTRIBUCIO || soli.getProcedimentCodi().startsWith("CODI_")) {
+            if (soli.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO || soli.getProcedimentCodi().startsWith("CODI_")) {
             	String proc = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
             	proc = proc.replace("'", "´");
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
@@ -1216,7 +1216,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
 
-        soli.setEstatID(Constants.SOLICITUD_ESTAT_TANCAT);
+        soli.setEstatSolicitud(Constants.SOLI_ESTAT_TANCAT);
         soli.setDataFi(new Timestamp(System.currentTimeMillis()));
 
         try {
@@ -1309,7 +1309,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     public SolicitudJPA update(HttpServletRequest request, SolicitudJPA solicitud)
             throws I18NException, I18NValidationException {
 
-        if (solicitud.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT) {
+        if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_TANCAT) {
             solicitud.setDataFi(new Timestamp(System.currentTimeMillis()));
         }
 
@@ -1355,7 +1355,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 	}
     
     @Override
-    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav,
+    public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav,
             SolicitudForm solicitudForm, Where where) throws I18NException {
 
         Boolean estatal = isEstatal();
@@ -1367,17 +1367,20 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         List<StringKeyValue> __tmp;
         if (estatal) {
             __tmp = new java.util.ArrayList<StringKeyValue>();
-            for (long estat : Constants.ESTATS_SOLICITUD) {
-				if (estat == Constants.SOLICITUD_ESTAT_AUTORITZAT 
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents
-						|| estat == Constants.SOLICITUD_ESTAT_TANCAT
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_Firma_Cedent
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR
+            for (long estat : Constants.ESTATS_SOLI) {
+				if (estat == Constants.SOLI_ESTAT_AUTORITZAT 
+						|| estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
+						|| estat == Constants.SOLI_ESTAT_TANCAT
+						|| estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
+						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
 
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_REVISAR_MODIFICACIO
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-						|| estat == Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+						|| estat == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
+						|| estat == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
 						
+						|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
+						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID
+						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
 						
 						) {
             		String key = String.valueOf(estat);
@@ -1385,19 +1388,19 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             	}
             }
         } else {
-            __tmp = getReferenceListForEstatID(request, mav, where);
+            __tmp = getReferenceListForEstatSolicitud(request, mav, where);
         }
 
         return __tmp;
     }
 
     @Override
-    public List<StringKeyValue> getReferenceListForEstatID(HttpServletRequest request, ModelAndView mav, Where where)
+    public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
         
-        for (long estat : Constants.ESTATS_SOLICITUD) {
+        for (long estat : Constants.ESTATS_SOLI) {
             String key = String.valueOf(estat);
             __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
         }
@@ -1522,7 +1525,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     	//Actualitzar l'estat de la sol·licitud a Pendent enviar director.
     	
     	SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-    	soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Director);
+    	soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Enviar_Director);
     	soli.setOperador(request.getRemoteUser());
     	
     	solicitudLogicaEjb.update(soli);

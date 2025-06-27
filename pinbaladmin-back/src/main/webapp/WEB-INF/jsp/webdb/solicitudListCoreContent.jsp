@@ -65,11 +65,11 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATID)}">
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.ESTATSOLICITUD)}">
           <td>
-          <c:set var="tmp">${solicitud.estatID}</c:set>
+          <c:set var="tmp">${solicitud.estatSolicitud}</c:set>
           <c:if test="${not empty tmp}">
-          ${__theFilterForm.mapOfValuesForEstatID[tmp]}
+          ${__theFilterForm.mapOfValuesForEstatSolicitud[tmp]}
           </c:if>
           </td>
         </c:if>

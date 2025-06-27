@@ -255,7 +255,7 @@ public class ExportFullSolicitudServeiInfoOperatorController extends SolicitudSe
 
             // mapData.put(id, df.format(solicitud.getDataInici()));
 
-            mapEstatSoli.put(id, I18NUtils.tradueix("solicitud.estat." + solicitud.getEstatID()));
+            mapEstatSoli.put(id, I18NUtils.tradueix("solicitud.estat." + solicitud.getEstatSolicitud()));
 
         }
 

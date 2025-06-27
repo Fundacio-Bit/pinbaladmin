@@ -128,13 +128,13 @@ public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDoc
 						_destinatariMail_, _asumpte_, _comentari_, _fitxerID_, _noLlegit_, null, null);
 
 				// Actualitzar la solicitud del docmuent i posar estat PENDENT_AUTORITZACIÓ
-				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
+				soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
 
 				HtmlUtils.saveMessageInfo(request, "S'ha afegit el fitxer firmat per el Director General");
 			}
 			
 			if (fitxerFirmat == null && TENIM_FIRMAT && tipusDoc == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-				soli.setEstatID(Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID);
+				soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
 			}
 
 			solicitudLogicaEjb.update(soli);

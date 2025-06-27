@@ -15,7 +15,7 @@ public class SolicitudBean implements Solicitud {
 	java.lang.String procedimentNom;
 	java.lang.String procedimentTipus;
 	java.lang.Long organid;
-	java.lang.Long estatID;
+	java.lang.Long estatSolicitud;
 	java.lang.String expedientPid;
 	java.lang.String entitatEstatal;
 	java.lang.String pinfo;
@@ -47,7 +47,7 @@ public class SolicitudBean implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatID , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -55,7 +55,7 @@ public class SolicitudBean implements Solicitud {
     this.procedimentNom=procedimentNom;
     this.procedimentTipus=procedimentTipus;
     this.organid=organid;
-    this.estatID=estatID;
+    this.estatSolicitud=estatSolicitud;
     this.expedientPid=expedientPid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
@@ -82,14 +82,14 @@ public class SolicitudBean implements Solicitud {
     this.portafibID=portafibID;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatID , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
+  public SolicitudBean(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Integer estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.codiSiaConv=codiSiaConv;
     this.procedimentNom=procedimentNom;
     this.procedimentTipus=procedimentTipus;
     this.organid=organid;
-    this.estatID=estatID;
+    this.estatSolicitud=estatSolicitud;
     this.expedientPid=expedientPid;
     this.entitatEstatal=entitatEstatal;
     this.pinfo=pinfo;
@@ -116,11 +116,11 @@ public class SolicitudBean implements Solicitud {
     this.portafibID=portafibID;
 }
   /** Constructor dels valors Not Null */
-  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatID , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
+  public SolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatSolicitud , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.procedimentNom=procedimentNom;
-    this.estatID=estatID;
+    this.estatSolicitud=estatSolicitud;
     this.dataInici=dataInici;
     this.firmatDocSolicitud=firmatDocSolicitud;
     this.produccio=produccio;
@@ -135,7 +135,7 @@ public class SolicitudBean implements Solicitud {
     this.setProcedimentNom(__bean.getProcedimentNom());
     this.setProcedimentTipus(__bean.getProcedimentTipus());
     this.setOrganid(__bean.getOrganid());
-    this.setEstatID(__bean.getEstatID());
+    this.setEstatSolicitud(__bean.getEstatSolicitud());
     this.setExpedientPid(__bean.getExpedientPid());
     this.setEntitatEstatal(__bean.getEntitatEstatal());
     this.setPinfo(__bean.getPinfo());
@@ -215,11 +215,11 @@ public class SolicitudBean implements Solicitud {
 		this.organid = _organid_;
 	};
 
-	public java.lang.Long getEstatID() {
-		return(estatID);
+	public java.lang.Long getEstatSolicitud() {
+		return(estatSolicitud);
 	};
-	public void setEstatID(java.lang.Long _estatID_) {
-		this.estatID = _estatID_;
+	public void setEstatSolicitud(java.lang.Long _estatSolicitud_) {
+		this.estatSolicitud = _estatSolicitud_;
 	};
 
 	public java.lang.String getExpedientPid() {
@@ -404,7 +404,7 @@ public class SolicitudBean implements Solicitud {
     __tmp.setProcedimentNom(__bean.getProcedimentNom());
     __tmp.setProcedimentTipus(__bean.getProcedimentTipus());
     __tmp.setOrganid(__bean.getOrganid());
-    __tmp.setEstatID(__bean.getEstatID());
+    __tmp.setEstatSolicitud(__bean.getEstatSolicitud());
     __tmp.setExpedientPid(__bean.getExpedientPid());
     __tmp.setEntitatEstatal(__bean.getEntitatEstatal());
     __tmp.setPinfo(__bean.getPinfo());

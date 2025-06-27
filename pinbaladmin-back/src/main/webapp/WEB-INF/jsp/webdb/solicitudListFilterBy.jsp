@@ -151,24 +151,24 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ESTATID)}">
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.ESTATSOLICITUD)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
               <%-- FILTRE NUMERO SELECT MULTIPLE --%>
               <div class="input-group-prepend" style="padding-top: 5px;padding-right: 5px;">
-                 <span class="add-on"><fmt:message key="solicitud.estatID" />:</span>
+                 <span class="add-on"><fmt:message key="solicitud.estatSolicitud" />:</span>
               </div>
 
               <div class="input-group-prepend" style="min-width:200px">
-                <form:select id="solicitud_estatID_select" path="estatIDSelect" cssClass="search-query input-medium form-control select2 select2-hidden-accessible" multiple="true" style="width:100%;" tabindex="-1" aria-hidden="true">
-                    <c:forEach var="_entry" items="${__theFilterForm.mapOfValuesForEstatID}">
-                      <option value="${_entry.key}" ${fn:contains(__theFilterForm.estatIDSelect, _entry.key)?'selected':''} >${_entry.value}</option>
+                <form:select id="solicitud_estatSolicitud_select" path="estatSolicitudSelect" cssClass="search-query input-medium form-control select2 select2-hidden-accessible" multiple="true" style="width:100%;" tabindex="-1" aria-hidden="true">
+                    <c:forEach var="_entry" items="${__theFilterForm.mapOfValuesForEstatSolicitud}">
+                      <option value="${_entry.key}" ${fn:contains(__theFilterForm.estatSolicitudSelect, _entry.key)?'selected':''} >${_entry.value}</option>
                     </c:forEach>
                 </form:select>
               </div>
 
               <script type="text/javascript">
                 $(document).ready(function() {
-                    $('#solicitud_estatID_select').select2({
+                    $('#solicitud_estatSolicitud_select').select2({
                         closeOnSelect: false
                     });
                     $('.select2-selection__rendered').css('padding-bottom','5px');

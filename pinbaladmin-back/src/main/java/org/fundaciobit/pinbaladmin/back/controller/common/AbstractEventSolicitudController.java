@@ -88,7 +88,7 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
     }
     @Override
     public boolean isClosed(Solicitud item) {
-        return item.getEstatID() == Constants.SOLICITUD_ESTAT_TANCAT;
+        return item.getEstatSolicitud() == Constants.SOLI_ESTAT_TANCAT;
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @Override
     public String getEstat(Solicitud item) throws I18NException {
-    	return I18NUtils.tradueix("solicitud.estat." + item.getEstatID());
+    	return I18NUtils.tradueix("solicitud.estat." + item.getEstatSolicitud());
     }
     
     @Override

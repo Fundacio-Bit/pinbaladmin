@@ -6063,7 +6063,7 @@
             "es": "Estado",
             "ca": "Estat"
           },
-          "javaName": "estatID",
+          "javaName": "estatSolicitud",
           "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
