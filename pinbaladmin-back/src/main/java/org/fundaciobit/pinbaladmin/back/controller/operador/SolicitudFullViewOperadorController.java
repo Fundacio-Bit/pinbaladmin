@@ -259,8 +259,14 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 //			}
 
 			if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
+				
+				Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
+				
+				Where wEstatMod = ModificacioSolicitudFields.ESTATMODIFICACIO
+						.equal(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
+				
 				Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
-						ModificacioSolicitudFields.SOLICITUDID.equal(soliID));
+						Where.AND(wSoli, wEstatMod));
 
 				log.info("ModSoli: " + modSoliID);
 				if (modSoliID != null) {
