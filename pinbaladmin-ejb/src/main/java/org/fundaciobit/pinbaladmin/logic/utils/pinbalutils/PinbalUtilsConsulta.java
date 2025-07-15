@@ -101,6 +101,7 @@ public class PinbalUtilsConsulta extends PinbalUtilsCommon {
 	        case Constants.ESTAT_PINBAL_APROVAT:
 	        case Constants.ESTAT_PINBAL_SUBSANAT:
 	        case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
+	        case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
 	            solicitud.setEstatSolicitud(jaAutoritzada 
 	                ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO 
 	                : Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
@@ -115,7 +116,6 @@ public class PinbalUtilsConsulta extends PinbalUtilsCommon {
 	            break;
 
 	        case Constants.ESTAT_PINBAL_AUTORITZAT:
-	        case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
 	            solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_AUTORITZAT);
 	            break;
 	    }

@@ -324,6 +324,9 @@ public class PinbalAdminSolicitudsApi {
 
         final String codigoCertificado = this.configuracio.getCodigoCertificado();
 
+        
+        log.info("CODIGO CERTIFICAFDO: " + codigoCertificado);
+        
         ClientGeneric clientRest = new ClientGeneric(baseUrl, username, password);
 
         resposta = clientRest.peticionSincrona(codigoCertificado, List.of(solicitud));

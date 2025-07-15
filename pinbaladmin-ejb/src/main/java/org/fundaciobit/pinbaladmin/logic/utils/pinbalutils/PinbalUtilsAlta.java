@@ -59,88 +59,81 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		return respuesta;
 	}
 
-	public Solicitud getDadesSolicitudApiPinbal(SolicitudJPA soli, Properties prop) throws Exception {
+	public Solicitud getDadesSolicitudApiPinbalAlta(SolicitudJPA soli) throws Exception {
 
 		Solicitud solicitud = new Solicitud();
 
 		String asunto = "Alta Servicios. Codigo Solicitud: " + soli.getProcedimentCodi();
 		solicitud.setAsunto(asunto);
 
-		Contactos contactos = getContactos(prop);
+		Contactos contactos = getContactos();
 		solicitud.setContactos(contactos);
 
 		Procedimiento proc = getProcedimiento(soli);
 		solicitud.setProcedimiento(proc);
 		return solicitud;
 	}
-
-	//getContactosActualizado
-	private Contactos getContactosNew() {
-		Contactos contactos = new Contactos();
-
-		String ape1 = "Govern Digital";
-		String ape2 = "";
-		String mail = "governdigital.pinbal@fundaviobit.org";
-		String nombre = "Fundacio BIT";
-		String telf = "971971971";
-		
-		Contacto contacto = createContacto(ape1, ape2, mail, nombre, telf);
-		
-		contactos.getContacto().add(contacto);
-
-		
-		return contactos;
-	}
 	
-	
-	
-	private Contactos getContactos(Properties prop) {
+	//Properties prop
+	private Contactos getContactos() {
 
-		String base = "FORMULARIO.DATOS_SOLICITUD.";
+//		String base = "FORMULARIO.DATOS_SOLICITUD.";
+		
+		InfoContacte pilar = new InfoContacte();
 
 		Contactos contactos = new Contactos();
 
-		// Contacto Aut
-		String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
-		String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
-		String contactoAutMail = prop.getProperty(base + "MAILSECD");
-		String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
-		String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
+		String Ape1 = pilar.getApe1();
+		String Ape2 = pilar.getApe2();
+		String Mail = pilar.getMail();
+		String Nombre = pilar.getNom();
+		String Telefon = pilar.getTelefon();
 
-		Contacto contactoAut = createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
-				contactoAutTelefon);
-
-		if (contactoAut != null) {
-			contactos.getContacto().add(contactoAut);
-		}
-
-		// Contacto Aud
-		String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
-		String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
-		String contactoAudMail = prop.getProperty(base + "MAILSECE");
-		String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
-		String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
-
-		Contacto contactoAud = createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
-				contactoAudTelefon);
-
-		if (contactoAud != null) {
-			contactos.getContacto().add(contactoAud);
-		}
-
-		// Contacto Tec
-		String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
-		String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
-		String contactoTecMail = prop.getProperty(base + "MAILSECF");
-		String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
-		String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
-
-		Contacto contactoTec = createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
-				contactoTecTelefon);
-
-		if (contactoTec != null) {
-			contactos.getContacto().add(contactoTec);
-		}
+		Contacto contactoPinbalAdmin = createContacto(Ape1, Ape2, Mail, Nombre, Telefon);
+		contactos.getContacto().add(contactoPinbalAdmin);
+				
+		
+//		// Contacto Aut
+//		String contactoAutApe1 = prop.getProperty(base + "APE1SECD");
+//		String contactoAutApe2 = prop.getProperty(base + "APE2SECD");
+//		String contactoAutMail = prop.getProperty(base + "MAILSECD");
+//		String contactoAutNombre = prop.getProperty(base + "NOMBRESECD");
+//		String contactoAutTelefon = prop.getProperty(base + "TELEFONOSECD");
+//
+//		Contacto contactoAut = createContacto(contactoAutApe1, contactoAutApe2, contactoAutMail, contactoAutNombre,
+//				contactoAutTelefon);
+//
+//		if (contactoAut != null) {
+//			contactos.getContacto().add(contactoAut);
+//		}
+//
+//		// Contacto Aud
+//		String contactoAudApe1 = prop.getProperty(base + "APE1SECE");
+//		String contactoAudApe2 = prop.getProperty(base + "APE2SECE");
+//		String contactoAudMail = prop.getProperty(base + "MAILSECE");
+//		String contactoAudNombre = prop.getProperty(base + "NOMBRESECE");
+//		String contactoAudTelefon = prop.getProperty(base + "TELEFONOSECE");
+//
+//		Contacto contactoAud = createContacto(contactoAudApe1, contactoAudApe2, contactoAudMail, contactoAudNombre,
+//				contactoAudTelefon);
+//
+//		if (contactoAud != null) {
+//			contactos.getContacto().add(contactoAud);
+//		}
+//
+//		// Contacto Tec
+//		String contactoTecApe1 = prop.getProperty(base + "APE1SECF");
+//		String contactoTecApe2 = prop.getProperty(base + "APE2SECF");
+//		String contactoTecMail = prop.getProperty(base + "MAILSECF");
+//		String contactoTecNombre = prop.getProperty(base + "NOMBRESECF");
+//		String contactoTecTelefon = prop.getProperty(base + "TELEFONOSECF");
+//
+//		Contacto contactoTec = createContacto(contactoTecApe1, contactoTecApe2, contactoTecMail, contactoTecNombre,
+//				contactoTecTelefon);
+//
+//		if (contactoTec != null) {
+//			contactos.getContacto().add(contactoTec);
+//		}
 
 		return contactos;
 	}

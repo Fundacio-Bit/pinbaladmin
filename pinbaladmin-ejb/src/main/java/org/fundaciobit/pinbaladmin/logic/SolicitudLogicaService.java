@@ -21,6 +21,7 @@ import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
+import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
 
 /**
  * 
@@ -55,13 +56,13 @@ public interface SolicitudLogicaService extends SolicitudService {
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs, String msg) throws I18NException;
 
-    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID) throws Exception;
 
     public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud) throws Exception;
     
     public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID) throws Exception;
     
-    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(Long solicitudID, Properties prop) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(Long solicitudID) throws Exception;
 
     public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception;
 
@@ -72,6 +73,13 @@ public interface SolicitudLogicaService extends SolicitudService {
 	public void enviarFormulariDGPortaFIB(Long soliID, String destinatariNif, String remitent) throws I18NException;
 
 	public void updateDocumentsConsentiment();
+
+	public void processarRespostaPinbalAlta(Solicitud solicitud, Respuesta resposta, ScspTitular titular,
+			ScspFuncionario funcionario) throws Exception;
+
+	public void processarRespostaPinbalModificacio(Solicitud solicitud,
+			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta,
+			ScspTitular titular, ScspFuncionario funcionario) throws Exception;
 
 //	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
 	

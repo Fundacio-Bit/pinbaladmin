@@ -84,7 +84,7 @@ public class AltaSolicitudPinbalOperadorController {
             ModelAndView mav;
             if (tipus.equals("alta")) {
                 es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitudA = solicitudLogicaEjb
-                        .getDadesAltaSolicitudApiPinbal(soliID, prop);
+                        .getDadesAltaSolicitudApiPinbal(soliID);
 
                 if (solicitudA.getProcedimiento().getConsentimiento() == null) {
                     errors.add("Fa falta un document de consentiment");
@@ -106,7 +106,7 @@ public class AltaSolicitudPinbalOperadorController {
                 mav.addObject("solicitud", solicitudA);
             } else {
                 es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudM = solicitudLogicaEjb
-                        .getDadesModificarSolicitudApiPinbal(soliID, prop);
+                        .getDadesModificarSolicitudApiPinbal(soliID);
                 
                 if (solicitudM.getProcedimiento().getServicios().getServicio().size() == 0) {
                     errors.add("No hi ha serveis pendents d'autoritzar");
@@ -142,84 +142,36 @@ public class AltaSolicitudPinbalOperadorController {
 
     @RequestMapping(value = "/altasolicitud", method = RequestMethod.POST)
     public String altaSolicitud(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("soliID") Long soliID) {
-
-    	final String errorProcedimientoDuplicado = "01";
-    	
+                                @RequestParam("soliID") Long soliID) {
         String consulta = request.getParameter("consulta");
 
         ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
         ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
-        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud = (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud) request
-                .getSession().getAttribute("solicitud");
+
+        es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud =
+            (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud)
+            request.getSession().getAttribute("solicitud");
 
         solicitud.setConsulta(consulta);
         log.info("consulta: " + solicitud.getConsulta());
 
         try {
-            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = solicitudLogicaEjb
-                    .altaSolicitudApiPinbal(titular, funcionario, solicitud);
+            // 1. Enviar a PINBAL
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta =
+                solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
+            // 2. Obtener JPA
             SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-//            int nouEstatPinbal;
-            
-            if (resposta.getErrores() == null) {
-                System.out.println(" # Errors: 0");
 
-                //Si ha anat be, guardam missatge d'exit i actualitzam l'estat pinbal a pendent de tramitar, perque l'han de revisar.
-                //Afegir event de solicitud enviada a Pinbal.
-                String mensaje = resposta.getEstado().getDescripcion();
-        		afegirEventSolicitudEnviada(soli, mensaje);
-        		HtmlUtils.saveMessageSuccess(request, "Ha anat be: " + mensaje);
+            // 3. Procesar respuesta + mensajes usuario
+            solicitudLogicaEjb.processarRespostaPinbalAlta(soli, resposta, titular, funcionario);
+            mostrarMissatgesUsuariAlta(request, resposta, soliID);
 
-				// Actualitzar estat solicitut a pendent autoritzar:
-                log.info("Actualitzam solicitud amb ID= " + soliID);
-				soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-				soli.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
-                
-			} else {
-				boolean procdedimentDuplicat = false;
-				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
-						.getError()) {
-
-					String errorMsg = "PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")";
-
-					if (error.getCodigo().equals(errorProcedimientoDuplicado)) {
-						// Ja esta donaada d'alta la solicitud. Cercam el seu estat i l'assignam
-						procdedimentDuplicat = true;
-						HtmlUtils.saveMessageWarning(request, errorMsg);
-						break;
-					}
-					HtmlUtils.saveMessageError(request, errorMsg);
-				}
-
-				if (procdedimentDuplicat) {
-					// Actualitzar estat solicitut a pendent autoritzar:
-					solicitudLogicaEjb.update(SolicitudFields.ESTATSOLICITUD, Constants.SOLI_ESTAT_PENDENT_AUTORITZAR,
-							SolicitudFields.SOLICITUDID.equal(soliID));
-
-					Consulta consultaEstat = new Consulta();
-					consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
-
-					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
-					
-					es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estat = retorno
-							.getProcedimiento().getEstadoProcedimiento();
-
-//					nouEstatPinbal = estat.getEstado();
-					log.info("estado procedimiento: " + estat.getEstado() + " - " + estat.getDescripcion());
-
-					HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
-				} else {
-//					solicitudLogicaEjb.update(SolicitudFields.ESTATID, Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID,
-//							SolicitudFields.SOLICITUDID.equal(soliID));
-					soli.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
-				}
-			}
-            
+            // 4. Guardar
             solicitudLogicaEjb.update(soli);
-            
+
         } catch (Exception e) {
+            log.error("Error fent la cridada a la API de PINBAL", e);
             HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
         }
 
@@ -228,29 +180,40 @@ public class AltaSolicitudPinbalOperadorController {
         return "redirect:" + returnUrl;
     }
 
-	private void afegirEventSolicitudEnviada(SolicitudJPA soli, String mensaje) {
-		
-		final Timestamp data = new Timestamp(System.currentTimeMillis());
-		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-		String persona = soli.getOperador();
-		String subject = "Solicitud enviada a PINBAL. " + soli.getProcedimentCodi();		
-		String msg = "S'ha enviat la sol·licitud a PINBAL. " + mensaje;
-		
-		EventJPA event = new EventJPA();
-		event.setSolicitudID(soli.getSolicitudID());
-		event.setIncidenciaTecnicaID(null);
-		event.setDataEvent(data);
-		event.setTipus(tipus);
-		event.setPersona(persona );
-		event.setDestinatari(null);
-		event.setDestinatarimail(null);
-		event.setAsumpte(subject);
-		event.setComentari(msg);
-		event.setFitxerID(null);
-		event.setNoLlegit(true);
-		event.setCaidIdentificadorConsulta(null);
-		event.setCaidNumeroSeguiment(null);
-	}
+    @RequestMapping(value = "/modificaciosolicitud", method = RequestMethod.POST)
+    public String modificaSolicitud(HttpServletRequest request, HttpServletResponse response,
+                                    @RequestParam("soliID") Long soliID) {
+        ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
+        ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
+
+        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud =
+            (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud)
+            request.getSession().getAttribute("solicitud");
+
+        try {
+            // 1. Enviar a PINBAL
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta =
+                solicitudLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
+
+            // 2. Obtener JPA
+            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+
+            // 3. Procesar respuesta + mensajes usuario
+            solicitudLogicaEjb.processarRespostaPinbalModificacio(soli, resposta, titular, funcionario);
+            mostrarMissatgesUsuariModificacio(request, resposta, soliID);
+
+            // 4. Guardar
+            solicitudLogicaEjb.update(soli);
+
+        } catch (Exception e) {
+            log.error("Error fent la cridada a la API de PINBAL (modificació)", e);
+            HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
+        }
+
+        String returnUrl = (String) request.getSession().getAttribute(RETURN_URL);
+        log.info("returnUrl :" + returnUrl);
+        return "redirect:" + returnUrl;
+    }
 
     @RequestMapping(value = "/consultaestado/{soliID}", method = RequestMethod.GET)
     public ModelAndView consultaEstado(HttpServletRequest request, HttpServletResponse response,
@@ -281,61 +244,6 @@ public class AltaSolicitudPinbalOperadorController {
 			String returnUrl = "/pinbaladmin" + SolicitudFullViewOperadorController.CONTEXTWEB + "/view/" + soliID;
             mav.addObject("returnUrl",returnUrl);
 
-            
-//			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento estado = retorno
-//					.getProcedimiento().getEstadoProcedimiento();
-
-//			int estatPinbal = estado.getEstado();
-//			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
-
-            
-//			Long nouEstatID = null;
-//			
-//			switch (estatPinbal) {
-//			case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-//			case Constants.ESTAT_PINBAL_ERROR:
-//			case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-//				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_ENVIAR_MADRID;
-//				break;
-//
-//			case Constants.ESTAT_PINBAL_SUBSANAT:
-//			case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-//				nouEstatID = Constants.SOLICITUD_ESTAT_PENDENT_AUTORITZAR;
-//				break;
-//				
-//			case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-//			case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-//				nouEstatID = Constants.SOLICITUD_ESTAT_ESMENES;
-//				break;
-//				
-//			case Constants.ESTAT_PINBAL_DESISTIT:
-//			case Constants.ESTAT_PINBAL_NO_APROVAT:
-//			case Constants.ESTAT_PINBAL_DESESTIMAT:
-//				nouEstatID = Constants.SOLICITUD_ESTAT_TANCAT;
-//				break;
-//			
-//			case Constants.ESTAT_PINBAL_APROVAT:
-//			case Constants.ESTAT_PINBAL_AUTORITZAT:
-//				nouEstatID = Constants.SOLICITUD_ESTAT_AUTORITZAT;
-//			    break;
-//
-//			}
-//
-//			String observaciones = estado.getObservaciones();
-//			log.info("observaciones: " + observaciones);
-//
-//			soli.setEstatpinbal(estatPinbal);
-//			if (nouEstatID != null) {
-//				soli.setEstatID(nouEstatID);
-//			}
-//			
-//			if (observaciones != null) {
-////				soli.setObservacions(observaciones);
-//			}
-//			
-//			
-//			solicitudLogicaEjb.update(soli);
-
             HtmlUtils.saveMessageSuccess(request, "Dades de la consutla:");
             return mav;
         } catch (Exception e) {
@@ -348,54 +256,53 @@ public class AltaSolicitudPinbalOperadorController {
         }
     }
 
-    @RequestMapping(value = "/modificaciosolicitud", method = RequestMethod.POST)
-    public String modificacioSolicitud(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("soliID") Long soliID) {
+	private void mostrarMissatgesUsuariAlta(HttpServletRequest request,
+			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta, Long solicitudId) {
 
-        ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
-        ScspFuncionario funcionario = (ScspFuncionario) request.getSession().getAttribute("funcionario");
-        es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud = (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud) request
-                .getSession().getAttribute("solicitud");
+		if (resposta.getErrores() == null) {
+			HtmlUtils.saveMessageSuccess(request, "Ha anat bé: " + resposta.getEstado().getDescripcion());
+			return;
+		}
 
-        try {
-            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta = solicitudLogicaEjb
-                    .modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
+		boolean duplicat = false;
+		for (var error : resposta.getErrores().getError()) {
+			HtmlUtils.saveMessageError(request,
+					"PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")");
+			if ("01".equals(error.getCodigo()))
+				duplicat = true;
+		}
 
-            if (resposta.getErrores() == null) {
-                System.out.println(" # Errors: 0");
+		if (duplicat) {
+			HtmlUtils.saveMessageWarning(request, "La solicitud ja està donada d’alta. Consultat estat actual.");
+			HtmlUtils.saveMessageInfo(request, "Estat PINBAL actualitzat per a la solicitud: " + solicitudId);
+		}
+	}
 
-                //Quan hem enviat la modificació, hem de veure quin es el nou estat a Pinbal.
-                Consulta consultaEstat = new Consulta();
-                consultaEstat.setCodigoProcedimiento(solicitud.getProcedimiento().getCodigo());
+	private void mostrarMissatgesUsuariModificacio(HttpServletRequest request,
+			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta, Long solicitudId) {
 
-				Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
+		if (resposta.getErrores() == null) {
+			HtmlUtils.saveMessageSuccess(request,
+					"Modificació realitzada correctament: " + resposta.getEstado().getDescripcion());
+			return;
+		}
 
-                int estatPinbal = retorno.getProcedimiento().getEstadoProcedimiento().getEstado();
-                log.info("estado procedimiento: " + estatPinbal + " - "
-                        + retorno.getProcedimiento().getEstadoProcedimiento().getDescripcion());
+		boolean duplicat = false;
+		for (var error : resposta.getErrores().getError()) {
+			HtmlUtils.saveMessageError(request,
+					"PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")");
+			if ("01".equals(error.getCodigo()))
+				duplicat = true;
+		}
 
-//                solicitudLogicaEjb.update(SolicitudFields.ESTATPINBAL, estatPinbal,
-//                        SolicitudFields.SOLICITUDID.equal(soliID));
-
-                HtmlUtils.saveMessageInfo(request, "Actualitzat l'estat PINBAL de la solicitud: " + soliID);
-
-            } else {
-                for (es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Error error : resposta
-                        .getErrores().getError()) {
-
-                    String errorMsg = "PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")";
-                    HtmlUtils.saveMessageError(request, errorMsg);
-                }
-            }
-        } catch (Exception e) {
-            HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
-        }
-
-        String returnUrl = (String) request.getSession().getAttribute(RETURN_URL);
-        log.info("returnUrl :" + returnUrl);
-        return "redirect:" + returnUrl;
-    }
-
+		if (duplicat) {
+			HtmlUtils.saveMessageWarning(request, "El procediment ja estava modificat. Estat PINBAL consultat.");
+			HtmlUtils.saveMessageInfo(request, "Estat PINBAL actualitzat per a la solicitud: " + solicitudId);
+		}
+	}
+	    
+	
+	
     public String getContextWeb() {
         RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);
         return rm.value()[0];

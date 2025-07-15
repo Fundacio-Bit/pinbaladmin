@@ -18,6 +18,7 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto;
 
 public class PinbalUtilsCommon {
 
@@ -57,6 +58,44 @@ public class PinbalUtilsCommon {
 			this.tipo = tipo;
 		}
 	}
+	
+	public class InfoContacte {
+		private String nom;
+		private String ape1;
+		private String ape2;
+		private String mail;
+		private String telefon;
+
+		public InfoContacte() {
+			this.ape1 = "Pilar";
+			this.ape2 = "Vico";
+			this.mail = "pinbal@fundaciobit.org";
+			this.nom = "Govern Digital - Fundació BIT";
+			this.telefon = "971176529";
+		}
+
+		public String getNom() {
+			return nom;
+		}
+
+		public String getApe1() {
+			return ape1;
+		}
+
+		public String getApe2() {
+			return ape2;
+		}
+
+		public String getMail() {
+			return mail;
+		}
+
+		public String getTelefon() {
+			return telefon;
+		}
+		
+		
+	}
 
 	public PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus)
 			throws Exception {
@@ -67,7 +106,7 @@ public class PinbalUtilsCommon {
 		String username = Configuracio.getApiPinbalUsername();
 		String password = Configuracio.getApiPinbalPassword();
 		
-		log.info("URL: ]" + url + "[ Username: ]" + username + "[ Password: ]" + password + "[");
+		//log.info("URL: ]" + url + "[ Username: ]" + username + "[ Password: ]" + password + "[");
 
 		config.setUrlBase(Configuracio.getApiPinbalUrl());
 		config.setUsername(Configuracio.getApiPinbalUsername());
@@ -106,7 +145,9 @@ public class PinbalUtilsCommon {
 	}
 
 	public int getIdentificadorNuevoPorId(String tipoProcedimiento) {
-		int idTipoProcedimiento = TipusProcediments.getIdentificadorTipoProcedimiento(tipoProcedimiento);
+		//tipoProcedimiento es un numero en string "5"
+		
+		int idTipoProcedimiento = Integer.valueOf(tipoProcedimiento);  //TipusProcediments.getIdentificadorTipoProcedimiento(tipoProcedimiento);
 
 		// Mapeo de identificadores en la lista actual a identificadores en la nueva
 		// lista
@@ -114,25 +155,25 @@ public class PinbalUtilsCommon {
 
 		// Mapeo de identificadores en la lista actual a identificadores en la nueva
 		// lista
-		mapeoIdentificadores.put(1, 34); // Aduanero
-		mapeoIdentificadores.put(2, 19); // Afiliación y cotización a la Seguridad Social
-		mapeoIdentificadores.put(3, 20); // Autorizaciones, licencias, concesiones y homologaciones
-		mapeoIdentificadores.put(4, 21); // Ayudas, Becas y Subvenciones
-		mapeoIdentificadores.put(5, 22); // Certificados
-		mapeoIdentificadores.put(6, 23); // Contratación pública
-		mapeoIdentificadores.put(7, 24); // Convenios de Colaboración y Comunicaciones administrativas
-		mapeoIdentificadores.put(8, 25); // Gestión Económica y Patrimonial
-		mapeoIdentificadores.put(9, 26); // Declaraciones y comunicaciones de los interesados
+		mapeoIdentificadores.put(1, 34);  // Aduanero
+		mapeoIdentificadores.put(2, 19);  // Afiliación y cotización a la Seguridad Social
+		mapeoIdentificadores.put(3, 20);  // Autorizaciones, licencias, concesiones y homologaciones
+		mapeoIdentificadores.put(4, 21);  // Ayudas, Becas y Subvenciones
+		mapeoIdentificadores.put(5, 22);  // Certificados
+		mapeoIdentificadores.put(6, 23);  // Contratación pública
+		mapeoIdentificadores.put(7, 24);  // Convenios de Colaboración y Comunicaciones administrativas
+		mapeoIdentificadores.put(8, 25);  // Gestión Económica y Patrimonial
+		mapeoIdentificadores.put(9, 26);  // Declaraciones y comunicaciones de los interesados
 		mapeoIdentificadores.put(10, 27); // Inspectora
 		mapeoIdentificadores.put(11, 28); // Premios
 		mapeoIdentificadores.put(12, 29); // Prestaciones
-		mapeoIdentificadores.put(13, 2); // Recursos Humanos
+		mapeoIdentificadores.put(13, 2);  // Recursos Humanos
 		mapeoIdentificadores.put(14, 30); // Registros y Censos
 		mapeoIdentificadores.put(15, 31); // Responsabilidad patrimonial y otras solicitudes de indemnización
 		mapeoIdentificadores.put(16, 32); // Revisión de Actos administrativos y Recursos
 		mapeoIdentificadores.put(17, 14); // Sancionador
 		mapeoIdentificadores.put(18, 33); // Sugerencias, Quejas, Denuncias e Información a los ciudadanos
-		mapeoIdentificadores.put(19, 3); // Tributario
+		mapeoIdentificadores.put(19, 3);  // Tributario
 
 		// Busca el identificador en el nuevo mapeo
 		Integer identificadorNuevo = mapeoIdentificadores.get(idTipoProcedimiento);
