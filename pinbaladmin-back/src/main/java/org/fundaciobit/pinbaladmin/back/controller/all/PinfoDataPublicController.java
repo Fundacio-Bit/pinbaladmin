@@ -539,16 +539,37 @@ public class PinfoDataPublicController extends PinfoDataController {
 		SearchUsersResult searchUsuarisDepartament = pluginUserInfo.getUsersByDepartment(codiDepartament);
 		List<UserInfo> usuarisDepartament = searchUsuarisDepartament.getUsers();
 
-		final String param = nom != null ? nom.toLowerCase() : "";
+		final String param = nom != null ? nom.trim().toLowerCase() : "";
+
+//		final String toCompare = u.getFullName()
+		
+//		List<UserInfo> usuarisFiltrats = usuarisDepartament.stream()
+//		    .filter(u -> param.isEmpty()
+//		        || u.getFullName().toLowerCase().contains(param)
+//		        || u.getAdministrationID().toLowerCase().contains(param)
+//		        || u.getUsername().toLowerCase().contains(param)
+//		    )
+//		    .collect(Collectors.toList());
 
 		List<UserInfo> usuarisFiltrats = usuarisDepartament.stream()
-		    .filter(u -> param.isEmpty()
-		        || u.getFullName().toLowerCase().contains(param)
-		        || u .getAdministrationID().toLowerCase().contains(param)
-		        || u.getUsername().toLowerCase().contains(param)
-		    )
-		    .collect(Collectors.toList());
+			    .filter(u -> {
+			        if (param == null || param.isEmpty()) {
+			            return true; // No hay filtro, incluir todos
+			        }
+			        String paramLower = param.toLowerCase();
 
+			        // Usamos valores vacíos como fallback para evitar NullPointerException
+			        String fullName = u.getFullName() != null ? u.getFullName().toLowerCase() : "";
+			        String adminId = u.getAdministrationID() != null ? u.getAdministrationID().toLowerCase() : "";
+			        String username = u.getUsername() != null ? u.getUsername().toLowerCase() : "";
+
+			        return fullName.contains(paramLower)
+			            || adminId.contains(paramLower)
+			            || username.contains(paramLower);
+			    })
+			    .collect(Collectors.toList());
+
+		
 		try {
 			Gson g = new Gson();
 			String usuarisJson = g.toJson(usuarisFiltrats);
@@ -735,7 +756,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		try {
 			String usernameDG = pluginEstrOrg.getCapDepartamentDirectorGeneralUsername(username);
-			usernameDG = "atrobat";
+			//usernameDG = "atrobat";//u81599
+			usernameDG = "u81599";//atrobat
 			log.info("El Director General de " + username + " es " + usernameDG);
 
 			afegirResponsableAmbUsername(usernameDG, "Director General", responsablesList, pluginUserInfo);
@@ -746,7 +768,10 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		try {
 			String usernameSG = pluginEstrOrg.getSecretariUsername(username);
-			usernameSG = "anadal";
+			//usernameSG = "acuevas";//u109105
+			usernameSG = "u109105";//acuevas
+			
+			
 			log.info("El Secretari General de " + username + " es " + usernameSG);
 
 			afegirResponsableAmbUsername(usernameSG, "Secretari", responsablesList, pluginUserInfo);
