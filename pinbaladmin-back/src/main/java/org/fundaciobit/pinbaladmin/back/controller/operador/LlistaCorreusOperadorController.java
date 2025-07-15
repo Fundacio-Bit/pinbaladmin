@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.mail.Message;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,7 +32,9 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.EmailFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EmailForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.RegexUtils;
+import org.fundaciobit.pinbaladmin.back.utils.email.EmailEmlFormatParser;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
+import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader.EmailSession;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
@@ -549,17 +552,27 @@ public class LlistaCorreusOperadorController extends EmailController {
             final int end = Math.min(size, itemsPerPage);
             Boolean includeAttachments = (Boolean) request.getSession().getAttribute(MOSTRAR_MISSATGE_ARXIU);
 
-            List<EmailMessageInfo> emails = er.list(start, end, includeAttachments);
+            EmailSession session = er.getSession();
+            
+            Message[] messages = session.getFolder().getMessages(start,end);
 
-            for (EmailMessageInfo emi : emails) {
-                EmailJPA e = message2email(emi);
-            	log.info("emi " + emi.getNumber() + " - from: " + e.getEnviador());
+			for (int i = 0; i < messages.length; i++) {
+				Message msg = messages[i];
 
-                list.add(e);
+				try {
+					EmailMessageInfo emi = EmailEmlFormatParser.parseEml(msg, includeAttachments);
+					EmailJPA e = message2email(emi);
+					log.info("emi " + emi.getNumber() + " - from: " + e.getEnviador());
+					list.add(e);
+					cache.put((long) emi.getNumber(), emi);
 
-                cache.put((long) emi.getNumber(), emi);
-
-            }
+				} catch (Exception e) {
+					String errorMsg = "Error processant correu " + msg.getMessageNumber() + " amb asumpte: "
+							+ msg.getSubject();
+					log.error(errorMsg, e);
+		            HtmlUtils.saveMessageError(request, errorMsg );
+				}
+			}
 
         } catch (Exception e) {
 

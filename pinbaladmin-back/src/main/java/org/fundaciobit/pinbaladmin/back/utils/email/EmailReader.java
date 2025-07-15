@@ -105,21 +105,33 @@ public class EmailReader {
     }
   }
 
+	public EmailSession getSession() throws Exception {
+		EmailSession session = null;
+		final boolean readOnly = true;
+
+		session = EmailSession.connectToServer(this.properties, readOnly);
+
+		return session;
+	}
+  
   public List<EmailMessageInfo> list(int start, int end, boolean includeAttachements) throws Exception {
 
-    EmailSession session = null;
-    final boolean readOnly = true;
+    EmailSession session = getSession();
     try {
-
-      session = EmailSession.connectToServer(this.properties, readOnly);
 
       Message[] messages = session.getFolder().getMessages(start,end);
 
       List<EmailMessageInfo> list = new ArrayList<EmailMessageInfo>();
       for (int i = 0; i < messages.length; i++) {
         Message msg = messages[i];
-        EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg, includeAttachements);
-        list.add(e);
+        
+        try {
+        	EmailMessageInfo e = EmailEmlFormatParser.parseEml(msg, includeAttachements);
+        	list.add(e);
+        	
+        } catch (Exception e) {
+        	System.out.println("Error processant correu: ");
+        }
       }
 
       return list;
@@ -138,7 +150,7 @@ public class EmailReader {
    * @author anadal
    *
    */
-  protected static class EmailSession {
+  public static class EmailSession {
 
     final Store store;
 

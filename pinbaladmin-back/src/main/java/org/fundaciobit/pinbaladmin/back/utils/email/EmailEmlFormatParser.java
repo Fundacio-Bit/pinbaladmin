@@ -240,8 +240,17 @@ public class EmailEmlFormatParser {
 				String mime = part.getContentType(); //MimeUtility.decodeText(part.getContentType());
 				byte[] data = IOUtils.toByteArray(part.getInputStream());
 
-				if (mime.startsWith("image")) {
-					String cid = part.getHeader("Content-Id")[0].replaceAll("[<>]", "");
+				log.info(part);
+				String[] header =  part.getHeader("Content-Id");
+				log.info(header);
+				if (mime.startsWith("image") && header != null) {
+					
+					log.info("header length: " + header.length);
+					String contentId = header[0];
+					log.info(contentId);
+					String cid = contentId.replaceAll("[<>]", "");
+					log.info(cid);
+					
 					log.info("rePart: Imagen incrustada. " + part.getFileName() + "cid: " + cid);
 //					log.info("rePart: cid: " + cid);
 					
