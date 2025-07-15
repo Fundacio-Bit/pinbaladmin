@@ -338,29 +338,36 @@ section .title {
 								
 			});
 			
+			let debounceTimer;
+
 			$(".campsUsuari").on("input", function() {
-                var nom = $("#usuariNom").val();
-                var nif = $("#usuariNif").val();
-                
-                console.log("nom: " + nom + ", nif: " + nif );
-                if (nom.length < 3 && nif.length < 3) {
-                    $("#autocomplete-usuaris").empty();
-                    return;
-                }
-                
-                $.ajax({
-                    url : "jsonUsuaris",
-                    type : "GET",
-                    data : { nom : nom, nif : nif },
-                    success : function(data) {
-                        $("#autocomplete-usuaris").empty();
-                        data.forEach(function(usuari) {
-                            //Si el usuari ja esta a la llista, no el mostri
-                            afegirUsuari(usuari);
-                        });
-                    }
-                });
-	        });
+			    clearTimeout(debounceTimer); // Limpiar el anterior
+
+			    debounceTimer = setTimeout(function() {
+			        var nom = $("#usuariNom").val();
+			        var nif = $("#usuariNif").val();
+
+			        console.log("nom: " + nom + ", nif: " + nif );
+			        if ((nom.length < 3) && (nif.length < 3)) {
+			            $("#autocomplete-usuaris").empty();
+			            return;
+			        }
+
+			        $.ajax({
+			            url : "jsonUsuaris",
+			            type : "GET",
+			            data : { nom : nom, nif : nif },
+			            success : function(data) {
+			                $("#autocomplete-usuaris").empty();
+			                data.forEach(function(usuari) {
+			                    // Si el usuari ja està a la llista, no el mostri
+			                    afegirUsuari(usuari);
+			                });
+			            }
+			        });
+			    }, 500); // Espera 1 segon abans de fer la petició
+			});
+
 			
 		});
 		
