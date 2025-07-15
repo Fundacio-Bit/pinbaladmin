@@ -114,6 +114,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 
 
 
@@ -168,7 +169,7 @@
 			input.autocomplete = "off";
 			input.name = "solicitud.organid";
 
-			//Asigna valor actual (per si es edició i no creació)
+			//Asigna valor actual (per si es ediciÃ³ i no creaciÃ³)
 			const selected = select.selectedOptions[0];
 			if (selected.value.length > 0) {
 				input.value = selected.innerHTML;
@@ -182,7 +183,7 @@
 			dropdown.className = "autocomplete-dropdown";
 			dropdown.style.zIndex = 5;
 
-			// Agregar el campo de entrada de texto y el desplegable después del select
+			// Agregar el campo de entrada de texto y el desplegable despuÃ©s del select
 			select.parentNode.insertBefore(dropdown, select.nextSibling);
 			select.parentNode.insertBefore(input, select.nextSibling);
 
@@ -200,7 +201,7 @@
 								// Limpiar el desplegable
 								dropdown.innerHTML = "";
 
-								// Mostrar todas las opciones si el campo de entrada está vacío
+								// Mostrar todas las opciones si el campo de entrada estÃ¡ vacÃ­o
 								if (value === "") {
 									for (let i = 0; i < options.length; i++) {
 										dropdown
@@ -218,7 +219,7 @@
 									}
 								}
 
-								// Mostrar u ocultar el desplegable según las opciones disponibles
+								// Mostrar u ocultar el desplegable segÃºn las opciones disponibles
 								if (dropdown.children.length > 0) {
 									dropdown.style.display = "block";
 								} else {
@@ -226,7 +227,7 @@
 								}
 							});
 
-			// Controlador de clic en el desplegable para seleccionar la opción
+			// Controlador de clic en el desplegable para seleccionar la opciÃ³n
 			dropdown.addEventListener("click", function(e) {
 				if (e.target && e.target.tagName === "DIV") {
 					const optionText = e.target.textContent;
@@ -255,7 +256,7 @@
 								}
 							});
 
-			// Función para crear una opción en el desplegable
+			// FunciÃ³n para crear una opciÃ³n en el desplegable
 			function createDropdownOption(option) {
 				const div = document.createElement("div");
 				div.textContent = option.textContent;
@@ -324,7 +325,7 @@
 
 
 
-<!--  RENOVACIÓ ESTETICA FILTRES -->
+<!--  RENOVACIÃ“ ESTETICA FILTRES -->
 <style>
 .form-inline{
 	margin: 0px 2rem;
@@ -353,8 +354,8 @@
 	function openModalSolicitudDistribucio(soliID, procediment) {
 		//Crear missatges amb les dades de la solicitud.
 
-		let titol = "Revisar Solicitud a Distribució: ";
-		let mmissatge = "Si la solicitud està a DISTRIBUCIÓ, fer click a ACCEPTAR per canviar l'estat.";
+		let titol = "Revisar Solicitud a DistribuciÃ³: ";
+		let mmissatge = "Si la solicitud estÃ  a DISTRIBUCIÃ“, fer click a ACCEPTAR per canviar l'estat.";
 		
 		let result = confirm(titol + "\n\n" + procediment + "\n\n" + mmissatge);
         if (result === true) {
@@ -367,3 +368,295 @@
 		//Si accepta, redirigir a /canviarEstatSoli, sino, no fer res.
 	}
 </script>
+
+
+
+<!--  MODAL PER ASSIGNAR ESTATS A SOLICITUDS -->
+
+
+<div id="modalSolicitudes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 id=titolModalEstatsSoli class="modal-title">Modal Visible</h5>
+
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        
+      </div>
+      <div class="modal-body">
+      	<div id="botoneraEstatsSolicitud">
+      	
+
+        <button type="button" class="back" onclick="anterior() " >Atras</button>
+        <button type="button" class="mostrarUpdates" onclick="mostrarUpdates() " >Finalizar</button>
+        
+      	
+      	</div>
+      
+					<div style="display: flex;">
+						<div id="accionesEstados">
+							<button class="btn-estado" data-estado="40">Autorizada</button>
+							<button class="btn-estado" data-estado="31">Esmena Solicitada. Pendent Contacte</button>
+							<button class="btn-estado" data-estado="32">Madrid Esmena. Avisar Contacte</button>
+							<button class="btn-estado" data-estado="19">Resposta Contacte. Pendent Re-enviar a Madrid</button>
+							<button class="btn-estado" data-estado="60">Tancar</button>
+
+							<button class="btn-estado" data-estado="21">Pendent Autoritzar. Revisar despres</button>
+
+						</div>
+						<div id="detalleEventos">
+							<!-- AquÃ­ se mostrarÃ¡n los eventos -->
+						</div>
+					</div>
+				</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+	<script type="text/javascript">
+
+    let solicitudes = [];
+    let updates = [];
+    let currentIndex = 0;
+
+    function checkEstatSolicitudManual() {
+
+	    const contextPath = '<%= request.getContextPath() %>';
+	    
+	    if (solicitudes.length == 0) {
+	    	$.ajax({
+	            url: contextPath + '/operador/solicitudlocal/jsonSolicitudEvents',
+	            method: 'GET',
+	           success: function (data) {
+	                if (!data || data.length === 0) {
+	                    alert("No hay solicitudes pendientes.");
+	                    return;
+	                }
+	
+	                solicitudes = data;
+	    			console.log("Tenemos solicitudes");
+	    			console.log(solicitudes);
+	    			
+	    			iniciarModal();
+	            },
+	            error: function () {
+	                alert("Error al obtener las solicitudes.");
+	            }
+	        });
+		}else{
+			iniciarModal();
+		}
+    }
+    
+    function mostrarModal() {
+        $('#modalSolicitudes').modal('show');  // <-- esta lÃ­nea
+    }
+
+
+    function cargarSolicitudActual() {
+        if (currentIndex >= solicitudes.length) {
+            // Ya no quedan solicitudes, mostramos los updates en el modal
+            mostrarUpdates();
+            return;
+        }
+        $('#accionesEstados').show()
+
+        const solicitud = solicitudes[currentIndex];
+        // AquÃ­ cargas la info de la solicitud en el modal, por ejemplo:
+        $('#titolModalEstatsSoli').html(solicitud.codi + " - " + solicitud.nom);
+        $('#detalleEventos').html(renderizarEventos(solicitud.events));
+        
+    }
+    function renderizarEventos(eventos) {
+        if (!eventos || eventos.length === 0) {
+            return "<p>No hay eventos.</p>";
+        }
+
+        var html = '<div class="chat-container">';
+
+        for (var i = 0; i < eventos.length; i++) {
+            var evento = eventos[i];
+            var tipo = parseInt(evento.tipus, 10);
+            var esTramitador = (tipo === -1 || tipo === 1 || tipo === -2 || tipo === -3);
+            var alineacion = esTramitador ? "izquierda" : "derecha";
+
+            var tipoTexto = interpretarTipusComentari(tipo);
+
+            var persona = evento.persona ? evento.persona : "Sin nombre";
+            var destinatari = evento.destinatari ? evento.destinatari : "Sin destinatari";
+            var comentari = evento.comentari ? evento.comentari : "Sin comentario";
+			var fecha = evento.dataEvent;
+            
+            html += '<div class="mensaje ' + alineacion + '">';
+            html += '  <div class="cabecera">';
+            html += '    <div class="dataEvent">' + fecha + '</div>';
+            html += '    <div class="persona">Persona: ' + persona + '</div>';
+            html += '    <div class="destinatari">Destinatari: ' + destinatari + '</div>';
+            html += '  </div>';
+            html += '  <div class="contenido">' + comentari + '</div>';
+            html += '</div>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+
+
+    function interpretarTipusComentari(tipus) {
+        switch (parseInt(tipus, 10)) {
+            case -1: return "Comentari privat tramitador";
+            case 1:  return "Comentari public tramitador";
+            case 2:  return "Comentari public contacte";
+            case -2: return "Comentari suport";
+            case -3: return "Consulta a cedent";
+            case 3:  return "Resposta de cedent";
+            default: return "Comentari desconegut";
+        }
+    }
+
+
+
+    function mostrarUpdates() {
+        let html = '<h4>Updates realizados:</h4><ul>';
+        updates.forEach(u => {
+            html += '<li>UPDATE pad_solicitud SET estatid = ' + u.nuevoEstado+ ' WHERE solicitudid= ' + u.solicitudId  + '; </li>';
+        });
+        html += '</ul>';
+
+        $('#titolModalEstatsSoli').html('Final');
+        $('#detalleEventos').html(html);
+        $('#accionesEstados').hide();  // Ocultamos los botones
+        
+    }
+
+    $('.btn-estado').off('click').on('click', function (e) {
+        e.preventDefault();  // ðŸ‘ˆ Evita que se envÃ­e el formulario
+        e.stopPropagation(); // ðŸ‘ˆ Evita burbujeo por si acaso
+
+        const nuevoEstado = $(this).data('estado');
+        const solicitud = solicitudes[currentIndex];
+
+        console.log(solicitud.soliID +  " " + nuevoEstado );
+        
+        updates.push({
+            solicitudId: solicitud.soliID,
+            nuevoEstado: nuevoEstado
+        });
+
+        currentIndex++;
+        if (currentIndex < solicitudes.length) {
+            cargarSolicitudActual();
+        } else {
+            mostrarUpdates();
+        }
+    });
+
+    function anterior(){
+		if (currentIndex != 0) {
+	        currentIndex--;
+	        cargarSolicitudActual();
+		}
+    }
+    
+    // Al iniciar, llama:
+    function iniciarModal() {
+        $('#accionesEstados').show();
+        cargarSolicitudActual();
+        $('#modalSolicitudes').modal('show');
+    }
+
+
+
+</script>
+
+<style>
+.chat-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.mensaje {
+	max-width: 70%;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #f1f1f1;
+	position: relative;
+}
+
+.mensaje.izquierda {
+	align-self: flex-start;
+	background-color: #aee4ff;
+}
+
+.mensaje.derecha {
+	align-self: flex-end;
+	background-color: #c8e6c9;
+}
+
+.cabecera {
+	font-weight: bold;
+	font-size: 0.85em;
+	margin-bottom: 5px;
+	color: #333;
+}
+
+.contenido {
+	font-size: 0.95em;
+	border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
+  
+      overflow: auto;
+}
+
+.modal-dialog {
+    max-width: none;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+#accionesEstados {
+  padding: 8px;
+  width: 100%;
+  max-width: 12rem;
+  min-width: 10rem;
+      margin-right: 20px;
+  
+}
+
+.btn-estado {
+  width: 100%;
+  min-height: 3rem;
+  margin: 6px 0;
+}
+
+#botoneraEstatsSolicitud{
+  text-align: right;
+    margin: 6px 12px;
+}
+
+#botoneraEstatsSolicitud button{
+  margin-left: 2rem;
+  width: 6rem;
+  height: 2rem;
+}
+
+#detalleEventos {
+  width: -moz-available;
+/*   background-color: #e6e6e663; */ 
+ padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+</style>
+
+
+
+
+
+

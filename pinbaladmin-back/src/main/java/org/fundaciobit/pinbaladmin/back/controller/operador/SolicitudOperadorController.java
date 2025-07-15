@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.TramitIOperadorController.Item;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.AreaRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
@@ -47,6 +49,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DepartamentFields;
@@ -65,13 +68,17 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.google.gson.Gson;
 
 
 /**
@@ -535,6 +542,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             
 //            solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "updateDocumentConsentiment",
 //                    getContextWeb() + "/updateDocConsentiment", AdditionalButtonStyle.INFO));
+
+            solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_CHECK, "checkEstatSolicitudManual",
+            		"javascript:checkEstatSolicitudManual()", AdditionalButtonStyle.INFO));
 
             
             
@@ -1385,13 +1395,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 						|| estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
 						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
 
-						|| estat == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
-						|| estat == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-						
-						|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
-						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID
-						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
+//						|| estat == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
+//						|| estat == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+//						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+//						
+//						|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
+//						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID
+//						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
 						
 						) {
             		String key = String.valueOf(estat);

@@ -77,30 +77,41 @@ public interface Constants {
     
     public static final long SOLI_ESTAT_PENDENT_Firma_Director = 15;
     public static final long SOLI_ESTAT_PENDENT_Firma_Cedent = 16;
+
     public static final long SOLI_ESTAT_PENDENT_ENVIAR_MADRID = 19;
+    public static final long SOLI_ESTAT_PENDENT_AUTORITZAR_Manual = 21;
+
+    //-------  ENVIAM ALTA A MADRID --------------
     public static final long SOLI_ESTAT_PENDENT_AUTORITZAR = 20;
-    public static final long SOLI_ESTAT_ESMENES = 30;
-    public static final long SOLI_ESTAT_AUTORITZAT = 40;
-    public static final long SOLI_ESTAT_AUTORITZAT_ESMENES = 42;
     public static final long SOLI_ESTAT_ERROR_ENVIANT_MADRID = 44;
+    //PENDENT ESMENAR ALTA
+    //PENDENT REVISAR ESMENA ALTA
+    public static final long SOLI_ESTAT_AUTORITZAT = 40;
     
-    
-    public static final long SOLI_ESTAT_PENDENT_PINFO = 50;
-    public static final long SOLI_ESTAT_TANCAT = 60;
-
-
-    
+    //------ ENVIAM MODIFICACIO A MADRID --------
     public static final long SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO = 70;
     public static final long SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID = 80;
     public static final long SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO= 90;
     public static final long SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID= 92;
+    //PENDENT ESMENAR MODIFICACIO
+    //PENDENT REVISAR ESMENA MODIFICACIO
+    
+    //Antic estat esmenes. Solicitants han d'arreglar coses.
+    public static final long SOLI_ESTAT_ESMENES = 30;
+    public static final long SOLI_ESTAT_PENDENT_ESMENA = 31;
+    public static final long SOLI_ESTAT_SOLICITAR_ESMENA = 32;
+    public static final long SOLI_ESTAT_AUTORITZAT_ESMENES = 42;
+    
+    //Estats que no s'utilitzen.
+    public static final long SOLI_ESTAT_PENDENT_PINFO = 50;
+    public static final long SOLI_ESTAT_TANCAT = 60;
     
     
     
 	public static final long[] ESTATS_SOLI = { SOLI_ESTAT_SENSE_ESTAT, SOLI_ESTAT_PENDENT_DISTRIBUCIO,
 			SOLI_ESTAT_PENDENT_Enviar_Director, SOLI_ESTAT_PENDENT_Enviar_Cedents, SOLI_ESTAT_PENDENT_Firma_Director,
-			SOLI_ESTAT_PENDENT_Firma_Cedent, SOLI_ESTAT_PENDENT_ENVIAR_MADRID, SOLI_ESTAT_PENDENT_AUTORITZAR,
-			SOLI_ESTAT_ESMENES, SOLI_ESTAT_AUTORITZAT, SOLI_ESTAT_AUTORITZAT_ESMENES, SOLI_ESTAT_ERROR_ENVIANT_MADRID,
+			SOLI_ESTAT_PENDENT_Firma_Cedent, SOLI_ESTAT_PENDENT_ENVIAR_MADRID, SOLI_ESTAT_PENDENT_AUTORITZAR, SOLI_ESTAT_PENDENT_AUTORITZAR_Manual,
+			SOLI_ESTAT_ESMENES, SOLI_ESTAT_PENDENT_ESMENA, SOLI_ESTAT_SOLICITAR_ESMENA, SOLI_ESTAT_AUTORITZAT, SOLI_ESTAT_AUTORITZAT_ESMENES, SOLI_ESTAT_ERROR_ENVIANT_MADRID,
 			SOLI_ESTAT_PENDENT_PINFO, SOLI_ESTAT_TANCAT, SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO,
 			SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID, SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO,
 			SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID };

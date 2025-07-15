@@ -176,6 +176,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			if (estatID != null) {
 			    if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
 		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
+		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
 		    		|| estatID == Constants.SOLI_ESTAT_ESMENES
 			        || estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
 
@@ -186,6 +187,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			    }
 
 			    if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
+		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
 			        || estatID == Constants.SOLI_ESTAT_ESMENES
 			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT
 			        || estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO

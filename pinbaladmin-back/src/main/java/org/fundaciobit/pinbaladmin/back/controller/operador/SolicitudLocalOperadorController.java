@@ -1,25 +1,38 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 /**
  * 
@@ -229,4 +242,167 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
         response.getWriter().flush();
         response.getWriter().close();
     }
+    
+//	@GetMapping("/jsonSolicitudEvents")
+//	@ResponseBody
+//	public List<SolicitudConEventos> obtenirJsonSolicitudEvents() throws I18NException {
+//		log.info("jsonSolicitudEvents: INICIO");
+//
+//		
+//	    List<Long> solicitudsIDs = solicitudLogicaEjb.executeQuery(
+//	        SolicitudFields.SOLICITUDID,
+//	        SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual)
+//	    );
+//		log.info("solicitudsIDs: " + solicitudsIDs.size());
+//
+//	    
+//
+//	    List<SolicitudConEventos> items = new ArrayList<>();
+//
+//	    for (Long soliID : solicitudsIDs) {
+//	        List<Event> events = eventLogicaEjb.select(EventFields.SOLICITUDID.equal(soliID));
+//			log.info("Solicitud " + soliID + " amb " + events.size() + " events");
+//
+//	        items.add(new SolicitudConEventos(soliID, events));
+//	    }
+//
+//		log.info("Items totals: " + items.size());
+//
+//	    
+//	    return items;
+//	}
+
+	public class SolicitudConEventos {
+
+		private Long soliID;
+		private String codi;
+		private String nom;
+		
+		private List<MyEvent> events;
+
+		public Long getSoliID() {
+			return soliID;
+		}
+
+		public void setSoliID(Long soliID) {
+			this.soliID = soliID;
+		}
+
+		public List<MyEvent> getEvents() {
+			return events;
+		}
+
+		public void setEvents(List<MyEvent> events) {
+			this.events = events;
+		}
+
+		public String getCodi() {
+			return codi;
+		}
+
+		public String getNom() {
+			return nom;
+		}
+
+		public SolicitudConEventos(Solicitud soli, List<MyEvent> events) {
+			this.soliID = soli.getSolicitudID();
+			this.nom = soli.getProcedimentNom();
+			this.codi = soli.getProcedimentCodi();
+			this.events = events;
+		}
+	}
+	
+	public class MyEvent{
+		
+		Long id;
+		int tipus;
+		String persona;
+		String destinatari;
+		String comentari;
+		Timestamp dataEvent;
+		
+		
+		public MyEvent(Event evt) {
+			this.id = evt.getEventID();
+			this.tipus = evt.getTipus();
+			this.persona = evt.getPersona();
+			this.destinatari = evt.getDestinatari();
+			this.comentari = evt.getComentari();
+			this.dataEvent = evt.getDataEvent();
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public int getTipus() {
+			return tipus;
+		}
+
+		public String getPersona() {
+			return persona;
+		}
+
+		public String getDestinatari() {
+			return destinatari;
+		}
+
+		public String getComentari() {
+			return comentari;
+		}
+
+		public Timestamp getDataEvent() {
+			return dataEvent;
+		}
+
+	}
+	
+    
+	@RequestMapping(value = {"/jsonSolicitudEvents"},  method = RequestMethod.GET)
+	public void obtenirJsonSolicitudEvents(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		log.info("jsonSolicitudEvents: INICIO");
+		
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual));		
+		
+		log.info("solicitudsIDs: " + solicituds.size());
+
+		List<SolicitudConEventos> items = new java.util.ArrayList<SolicitudConEventos>();
+
+		Integer[] tipusEvents = {Constants.EVENT_TIPUS_COMENTARI_CONTACTE, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC};
+		
+		Where wTipusEvents = EventFields.TIPUS.in(tipusEvents);
+		OrderBy order = new OrderBy(EventFields.DATAEVENT, OrderType.DESC);
+		
+		for (Solicitud soli : solicituds) {
+//, wTipusEvents
+			List<Event> events = eventLogicaEjb.select(Where.AND(EventFields.SOLICITUDID.equal(soli.getSolicitudID())), order);
+	
+			List<MyEvent> myEvents = new ArrayList<SolicitudLocalOperadorController.MyEvent>();
+			for (Event event : events) {
+				myEvents.add(new MyEvent(event));
+			}
+			
+			log.info("Solicitud " + soli.getSolicitudID() + " amb " + events.size() + " events");
+			
+			SolicitudConEventos item = new SolicitudConEventos(soli, myEvents);
+			items.add(item);
+		}
+
+		log.info("Items totals: " + items.size());
+		
+		Gson g = new Gson();
+		String serveisJsonString = g.toJson(items);
+
+//		log.info(serveisJsonString );
+
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(serveisJsonString );
+		out.flush();
+	}
+    
+	
 }
