@@ -46,7 +46,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tipusTiquet.tipusTiquet.plural", order=280, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tipusTiquet.tipusTiquet.plural", order=290, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tipusTiquet")
 @SessionAttributes(types = { TipusTiquetForm.class, TipusTiquetFilterForm.class })

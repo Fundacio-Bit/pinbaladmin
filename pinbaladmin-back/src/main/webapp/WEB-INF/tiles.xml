@@ -785,6 +785,16 @@
     </definition>
 
 
+    <definition name="infoMadridFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="infoMadrid.infoMadrid" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/infoMadridForm.jsp" />
+    </definition>
+    
+    <definition name="infoMadridListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/infoMadridList.jsp" />
+    </definition>
+
+
     <definition name="modificacioSolicitudFormWebDB" extends="webdb">
         <put-attribute name="titol" value="modificacioSolicitud.modificacioSolicitud" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/modificacioSolicitudForm.jsp" />

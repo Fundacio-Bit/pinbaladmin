@@ -29,6 +29,7 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.GrupEntitatCedentJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.IdiomaJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.ModificacioSoliServJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.OperadorJPA</class>

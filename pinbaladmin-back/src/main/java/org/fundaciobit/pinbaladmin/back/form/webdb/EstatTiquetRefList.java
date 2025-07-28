@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class EstatTiquetRefList extends RefListBase
-    implements EstatTiquetFields {
+public class EstatTiquetRefList extends RefListBase implements EstatTiquetFields {
 
-  @EJB(mappedName = EstatTiquetService.JNDI_NAME)
-  private EstatTiquetService estatTiquetEjb;
+    @EJB(mappedName = EstatTiquetService.JNDI_NAME)
+    private EstatTiquetService estatTiquetEjb;
 
-  public EstatTiquetRefList(EstatTiquetRefList __clone) {
-    super(__clone);
-    this.estatTiquetEjb = __clone.estatTiquetEjb;
-  }
-  public EstatTiquetRefList() {
-    setSelects(new Select<?>[] { NOM.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = estatTiquetEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public EstatTiquetRefList(EstatTiquetRefList __clone) {
+        super(__clone);
+        this.estatTiquetEjb = __clone.estatTiquetEjb;
+    }
+
+    public EstatTiquetRefList() {
+        setSelects(new Select<?>[] { NOM.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = estatTiquetEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

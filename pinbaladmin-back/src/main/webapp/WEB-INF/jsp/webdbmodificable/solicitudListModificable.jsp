@@ -396,13 +396,17 @@
       
 					<div style="display: flex;">
 						<div id="accionesEstados">
+							<button class="btn-estado" data-estado="60">Tancada</button>
 							<button class="btn-estado" data-estado="40">Autorizada</button>
-							<button class="btn-estado" data-estado="31">Esmena Solicitada. Pendent Contacte</button>
+							<button class="btn-estado" data-estado="39">Parcialment Autorizada</button>
 							<button class="btn-estado" data-estado="32">Madrid Esmena. Avisar Contacte</button>
-							<button class="btn-estado" data-estado="19">Resposta Contacte. Pendent Re-enviar a Madrid</button>
-							<button class="btn-estado" data-estado="60">Tancar</button>
-
-							<button class="btn-estado" data-estado="21">Pendent Autoritzar. Revisar despres</button>
+							<button class="btn-estado" data-estado="31">Esmena Solicitada. Pendent Contacte</button>
+							
+							<button class="btn-estado" data-estado="33">Resposta Contacte. Revisar Esmena</button>
+							<button class="btn-estado" data-estado="19">Pendent Enviar Madrid</button>
+							
+							<button class="btn-estado" data-estado="21">Pendent Autoritzar (Enviat a Madrid)</button>
+							<button class="btn-estado" data-estado="100">Revisar despres</button>
 
 						</div>
 						<div id="detalleEventos">
@@ -608,50 +612,48 @@
 .contenido {
 	font-size: 0.95em;
 	border: 1px solid black;
-  padding: 5px;
-  border-radius: 5px;
-  
-      overflow: auto;
+	padding: 5px;
+	border-radius: 5px;
+	overflow: auto;
 }
 
 .modal-dialog {
-    max-width: none;
-    margin-left: 5rem;
-    margin-right: 5rem;
+	max-width: none;
+	margin-left: 5rem;
+	margin-right: 5rem;
 }
 
 #accionesEstados {
-  padding: 8px;
-  width: 100%;
-  max-width: 12rem;
-  min-width: 10rem;
-      margin-right: 20px;
-  
+	padding: 8px;
+	width: 100%;
+	max-width: 12rem;
+	min-width: 10rem;
+	margin-right: 20px;
 }
 
 .btn-estado {
-  width: 100%;
-  min-height: 3rem;
-  margin: 6px 0;
+	width: 100%;
+	min-height: 3rem;
+	margin: 6px 0;
 }
 
-#botoneraEstatsSolicitud{
-  text-align: right;
-    margin: 6px 12px;
+#botoneraEstatsSolicitud {
+	text-align: right;
+	margin: 6px 12px;
 }
 
-#botoneraEstatsSolicitud button{
-  margin-left: 2rem;
-  width: 6rem;
-  height: 2rem;
+#botoneraEstatsSolicitud button {
+	margin-left: 2rem;
+	width: 6rem;
+	height: 2rem;
 }
 
 #detalleEventos {
-  width: -moz-available;
-/*   background-color: #e6e6e663; */ 
- padding: 10px;
-  border: 1px solid gray;
-  border-radius: 5px;
+	width: -moz-available;
+	/*   background-color: #e6e6e663; */
+	padding: 10px;
+	border: 1px solid gray;
+	border-radius: 5px;
 }
 </style>
 

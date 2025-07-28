@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class IncidenciaTecnicaRefList extends RefListBase
-    implements IncidenciaTecnicaFields {
+public class IncidenciaTecnicaRefList extends RefListBase implements IncidenciaTecnicaFields {
 
-  @EJB(mappedName = IncidenciaTecnicaService.JNDI_NAME)
-  private IncidenciaTecnicaService incidenciaTecnicaEjb;
+    @EJB(mappedName = IncidenciaTecnicaService.JNDI_NAME)
+    private IncidenciaTecnicaService incidenciaTecnicaEjb;
 
-  public IncidenciaTecnicaRefList(IncidenciaTecnicaRefList __clone) {
-    super(__clone);
-    this.incidenciaTecnicaEjb = __clone.incidenciaTecnicaEjb;
-  }
-  public IncidenciaTecnicaRefList() {
-    setSelects(new Select<?>[] { TITOL.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = incidenciaTecnicaEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public IncidenciaTecnicaRefList(IncidenciaTecnicaRefList __clone) {
+        super(__clone);
+        this.incidenciaTecnicaEjb = __clone.incidenciaTecnicaEjb;
+    }
+
+    public IncidenciaTecnicaRefList() {
+        setSelects(new Select<?>[] { TITOL.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = incidenciaTecnicaEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

@@ -81,6 +81,9 @@ public interface SolicitudLogicaService extends SolicitudService {
 			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta,
 			ScspTitular titular, ScspFuncionario funcionario) throws Exception;
 
+	void crearInfoMadridFromSolicitud(Solicitud solicitud);
+	
+
 //	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
 	
 //	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;

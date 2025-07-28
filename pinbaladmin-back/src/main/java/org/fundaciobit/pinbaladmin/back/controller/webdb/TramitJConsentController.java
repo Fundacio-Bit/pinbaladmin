@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitJConsent.tramitJConsent.plural", order=410, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tramitJConsent.tramitJConsent.plural", order=420, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitJConsent")
 @SessionAttributes(types = { TramitJConsentForm.class, TramitJConsentFilterForm.class })

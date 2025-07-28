@@ -83,8 +83,8 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getOperador();
 	public void setOperador(java.lang.String _operador_);
 
-	public java.lang.Integer getEstatpinbal();
-	public void setEstatpinbal(java.lang.Integer _estatpinbal_);
+	public java.lang.Long getEstatpinbal();
+	public void setEstatpinbal(java.lang.Long _estatpinbal_);
 
 	public java.lang.String getConsentiment();
 	public void setConsentiment(java.lang.String _consentiment_);
@@ -97,6 +97,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.Long getPortafibID();
 	public void setPortafibID(java.lang.Long _portafibID_);
+
+	public java.lang.Long getInfomadridid();
+	public void setInfomadridid(java.lang.Long _infomadridid_);
 
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();

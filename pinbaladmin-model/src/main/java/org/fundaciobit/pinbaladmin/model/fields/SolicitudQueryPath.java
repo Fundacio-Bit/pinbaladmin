@@ -119,8 +119,8 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.OPERADOR);
   }
 
-  public IntegerField ESTATPINBAL() {
-    return new IntegerField(getQueryPath(), SolicitudFields.ESTATPINBAL);
+  public LongField ESTATPINBAL() {
+    return new LongField(getQueryPath(), SolicitudFields.ESTATPINBAL);
   }
 
   public StringField CONSENTIMENT() {
@@ -137,6 +137,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
   public LongField PORTAFIBID() {
     return new LongField(getQueryPath(), SolicitudFields.PORTAFIBID);
+  }
+
+  public LongField INFOMADRIDID() {
+    return new LongField(getQueryPath(), SolicitudFields.INFOMADRIDID);
   }
 
 
@@ -238,6 +242,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "solicitudXml" + ".";
+      }
+    });
+  }
+
+  public InfoMadridQueryPath INFOMADRID() {
+    return new InfoMadridQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "infoMadrid" + ".";
       }
     });
   }

@@ -36,6 +36,7 @@ public class SolicitudForm extends PinbalAdminBaseForm {
     this.listOfValuesForEstatpinbal = __toClone.listOfValuesForEstatpinbal;
     this.listOfValuesForConsentiment = __toClone.listOfValuesForConsentiment;
     this.listOfValuesForConsentimentadjunt = __toClone.listOfValuesForConsentimentadjunt;
+    this.listOfInfoMadridForInfomadridid = __toClone.listOfInfoMadridForInfomadridid;
   }
   
   public SolicitudForm(SolicitudJPA solicitud, boolean nou) {
@@ -171,6 +172,18 @@ public class SolicitudForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForConsentimentadjunt(List<StringKeyValue> listOfValuesForConsentimentadjunt) {
     this.listOfValuesForConsentimentadjunt = listOfValuesForConsentimentadjunt;
+  }
+
+
+
+  private List<StringKeyValue> listOfInfoMadridForInfomadridid;
+
+  public List<StringKeyValue> getListOfInfoMadridForInfomadridid() {
+    return this.listOfInfoMadridForInfomadridid;
+  }
+
+  public void setListOfInfoMadridForInfomadridid(List<StringKeyValue> listOfInfoMadridForInfomadridid) {
+    this.listOfInfoMadridForInfomadridid = listOfInfoMadridForInfomadridid;
   }
 
 

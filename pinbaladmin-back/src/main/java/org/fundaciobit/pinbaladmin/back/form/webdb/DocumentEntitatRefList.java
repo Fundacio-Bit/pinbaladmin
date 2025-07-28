@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class DocumentEntitatRefList extends RefListBase
-    implements DocumentEntitatFields {
+public class DocumentEntitatRefList extends RefListBase implements DocumentEntitatFields {
 
-  @EJB(mappedName = DocumentEntitatService.JNDI_NAME)
-  private DocumentEntitatService documentEntitatEjb;
+    @EJB(mappedName = DocumentEntitatService.JNDI_NAME)
+    private DocumentEntitatService documentEntitatEjb;
 
-  public DocumentEntitatRefList(DocumentEntitatRefList __clone) {
-    super(__clone);
-    this.documentEntitatEjb = __clone.documentEntitatEjb;
-  }
-  public DocumentEntitatRefList() {
-    setSelects(new Select<?>[] { TITOL.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = documentEntitatEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public DocumentEntitatRefList(DocumentEntitatRefList __clone) {
+        super(__clone);
+        this.documentEntitatEjb = __clone.documentEntitatEjb;
+    }
+
+    public DocumentEntitatRefList() {
+        setSelects(new Select<?>[] { TITOL.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = documentEntitatEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

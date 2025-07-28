@@ -173,19 +173,21 @@ public class SchedulerConsultaEstatSolicitudPID {
 				}
 				
 				try {
-					int estatPinbalOld = solicitud.getEstatpinbal();
+					Long estatPinbalOld = solicitud.getEstatpinbal();
 					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
 
 					final String SOLICITUD_TROBADA = "0";
 					if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 
 						EstadoProcedimiento estadoActual = retorno.getProcedimiento().getEstadoProcedimiento();
-						if (estatPinbalOld != estadoActual.getEstado()) {
-							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR && estadoActual.getEstado() != Constants.ESTAT_PINBAL_ERROR) {
+						Long estatPinbalNou = Long.valueOf(estadoActual.getEstado());
+						
+						if (estatPinbalOld != estatPinbalNou) {
+							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR && estatPinbalNou != Constants.ESTAT_PINBAL_ERROR) {
 								crearMissatgeCanviEstat(solicitud.getSolicitudID(), estatPinbalOld, estadoActual);
 							}
 						}
-						solicitud.setEstatpinbal(estadoActual.getEstado());
+						solicitud.setEstatpinbal(estatPinbalNou);
 					} else {
 						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: " + retorno.getEstado().getCodigoEstado() + " - " + retorno.getEstado().getLiteralError() );
 					}
@@ -216,9 +218,10 @@ public class SchedulerConsultaEstatSolicitudPID {
 		log.info("Acaba obtenirEstatsSolicitudsPinbal()");
 	}
 	
-	private void crearMissatgeCanviEstat(Long solicitudID, int estadoAnterior, EstadoProcedimiento estadoActual) throws I18NException {
-    	String estadoAnteriorStr = getEstatString(estadoAnterior);
-    	String estadoActualStr = getEstatString(estadoActual.getEstado());
+	private void crearMissatgeCanviEstat(Long solicitudID, Long estadoAnterior, EstadoProcedimiento estadoActual) throws I18NException {
+		String estadoAnteriorStr = getEstatString(estadoAnterior);
+		Long estatActual = Long.valueOf(estadoActual.getEstado());
+		String estadoActualStr = getEstatString(estatActual);
 
     	String msgPinbal = estadoActual.getDescripcion();
     	if (estadoActual.getObservaciones() != null && !estadoActual.getObservaciones().isEmpty()) {
@@ -257,7 +260,7 @@ public class SchedulerConsultaEstatSolicitudPID {
 	}
     
 
-	private String getEstatString(int estado) {
+	private String getEstatString(Long estado) {
 		String estadoActualStr;
 		if (estado == Constants.ESTAT_PINBAL_NO_SOLICITAT)
 			estadoActualStr = "NO_SOLICITAT";

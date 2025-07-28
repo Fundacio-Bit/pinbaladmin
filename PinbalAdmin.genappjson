@@ -3615,6 +3615,316 @@
       ]
     },
     {
+      "name": "pad_infomadrid",
+      "nameJava": "InfoMadrid",
+      "shortName": "infomad",
+      "labels": {
+        "ca": "Info Madrid",
+        "es": "Info Madrid"
+      },
+      "labelsPlural": {
+        "ca": "Info Madrid",
+        "es": "Info Madrid"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_infomadrid_pk",
+          "index": "pad_infomadrid_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "infomadridid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "InfoMadridID",
+            "es": "InfoMadridID"
+          },
+          "javaName": "infoMadridID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_infomadrid_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_infomad_id_fk",
+              "table": "pad_solicitud",
+              "field": "infomadridid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "codi",
+          "sqlType": 12,
+          "size": 20,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Codi",
+            "es": "Código"
+          },
+          "javaName": "codi",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estatprocediment",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Estat Procediment",
+            "es": "Estado Procedimiento"
+          },
+          "javaName": "estatProcediment",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "0,1,2",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "estatautoritzacio",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Estat Autorització",
+            "es": "Estado Autorización"
+          },
+          "javaName": "estatAutoritzacio",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "0,1,2",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "missatge",
+          "sqlType": 12,
+          "size": 1024,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Missatge",
+            "es": "Mensaje"
+          },
+          "javaName": "missatge",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "consulta",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Consulta",
+            "es": "Consulta"
+          },
+          "javaName": "consulta",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularnom",
+          "sqlType": 12,
+          "size": 240,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom Titular",
+            "es": "Nombre Titular"
+          },
+          "javaName": "titularNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularnif",
+          "sqlType": 12,
+          "size": 20,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF titular",
+            "es": "NIF titular"
+          },
+          "javaName": "titularNif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataautoritzacio",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data Autortizació",
+            "es": "Fecha Autorización"
+          },
+          "javaName": "dataAutoritzacio",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataenviament",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Data Enviament",
+            "es": "Fecha Envío"
+          },
+          "javaName": "dataEnviament",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "intents",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Intents",
+            "es": "Intentos"
+          },
+          "javaName": "intents",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 14
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
       "name": "pad_mod_solicitud",
       "nameJava": "ModificacioSolicitud",
       "shortName": "modsoli",
@@ -6591,8 +6901,8 @@
         {
           "isAutoIncrement": false,
           "sqlName": "estatpinbal",
-          "sqlType": 4,
-          "size": 10,
+          "sqlType": -5,
+          "size": 19,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -6600,7 +6910,7 @@
             "es": "Estado PINBAL"
           },
           "javaName": "estatpinbal",
-          "javaType": "java.lang.Integer",
+          "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
           "showInReferenceList": false,
@@ -6715,6 +7025,45 @@
             "webtype": 1
           },
           "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_infomadid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "infomadridid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "infomadridid",
+            "es": "infomadridid"
+          },
+          "javaName": "infomadridid",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_infomadrid_id_fk",
+              "table": "pad_infomadrid",
+              "field": "infomadridid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_infomad_id_fk",
+              "table": "pad_infomadrid",
+              "field": "infomadridid",
+              "type": 1
+            }
+          ]
         }
       ]
     },

@@ -364,13 +364,15 @@ public class SolicitudLocalOperadorController extends SolicitudOperadorControlle
 
 		log.info("jsonSolicitudEvents: INICIO");
 		
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual));		
+		
+		
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_REVISIO));		
 		
 		log.info("solicitudsIDs: " + solicituds.size());
 
 		List<SolicitudConEventos> items = new java.util.ArrayList<SolicitudConEventos>();
 
-		Integer[] tipusEvents = {Constants.EVENT_TIPUS_COMENTARI_CONTACTE, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC};
+		Integer[] tipusEvents = {Constants.EVENT_TIPUS_COMENTARI_CONTACTE, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT};
 		
 		Where wTipusEvents = EventFields.TIPUS.in(tipusEvents);
 		OrderBy order = new OrderBy(EventFields.DATAEVENT, OrderType.DESC);

@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class OrganRefList extends RefListBase
-    implements OrganFields {
+public class OrganRefList extends RefListBase implements OrganFields {
 
-  @EJB(mappedName = OrganService.JNDI_NAME)
-  private OrganService organEjb;
+    @EJB(mappedName = OrganService.JNDI_NAME)
+    private OrganService organEjb;
 
-  public OrganRefList(OrganRefList __clone) {
-    super(__clone);
-    this.organEjb = __clone.organEjb;
-  }
-  public OrganRefList() {
-    setSelects(new Select<?>[] { ORGANID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = organEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public OrganRefList(OrganRefList __clone) {
+        super(__clone);
+        this.organEjb = __clone.organEjb;
+    }
+
+    public OrganRefList() {
+        setSelects(new Select<?>[] { ORGANID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = organEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

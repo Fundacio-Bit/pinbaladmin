@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class TramitIServRefList extends RefListBase
-    implements TramitIServFields {
+public class TramitIServRefList extends RefListBase implements TramitIServFields {
 
-  @EJB(mappedName = TramitIServService.JNDI_NAME)
-  private TramitIServService tramitIServEjb;
+    @EJB(mappedName = TramitIServService.JNDI_NAME)
+    private TramitIServService tramitIServEjb;
 
-  public TramitIServRefList(TramitIServRefList __clone) {
-    super(__clone);
-    this.tramitIServEjb = __clone.tramitIServEjb;
-  }
-  public TramitIServRefList() {
-    setSelects(new Select<?>[] { SERVID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = tramitIServEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public TramitIServRefList(TramitIServRefList __clone) {
+        super(__clone);
+        this.tramitIServEjb = __clone.tramitIServEjb;
+    }
+
+    public TramitIServRefList() {
+        setSelects(new Select<?>[] { SERVID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = tramitIServEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

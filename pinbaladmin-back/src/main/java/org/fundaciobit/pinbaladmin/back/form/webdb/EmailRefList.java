@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class EmailRefList extends RefListBase
-    implements EmailFields {
+public class EmailRefList extends RefListBase implements EmailFields {
 
-  @EJB(mappedName = EmailService.JNDI_NAME)
-  private EmailService emailEjb;
+    @EJB(mappedName = EmailService.JNDI_NAME)
+    private EmailService emailEjb;
 
-  public EmailRefList(EmailRefList __clone) {
-    super(__clone);
-    this.emailEjb = __clone.emailEjb;
-  }
-  public EmailRefList() {
-    setSelects(new Select<?>[] { SUBJECT.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = emailEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public EmailRefList(EmailRefList __clone) {
+        super(__clone);
+        this.emailEjb = __clone.emailEjb;
+    }
+
+    public EmailRefList() {
+        setSelects(new Select<?>[] { SUBJECT.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = emailEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

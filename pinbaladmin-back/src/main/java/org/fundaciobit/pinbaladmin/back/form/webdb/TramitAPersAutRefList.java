@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class TramitAPersAutRefList extends RefListBase
-    implements TramitAPersAutFields {
+public class TramitAPersAutRefList extends RefListBase implements TramitAPersAutFields {
 
-  @EJB(mappedName = TramitAPersAutService.JNDI_NAME)
-  private TramitAPersAutService tramitAPersAutEjb;
+    @EJB(mappedName = TramitAPersAutService.JNDI_NAME)
+    private TramitAPersAutService tramitAPersAutEjb;
 
-  public TramitAPersAutRefList(TramitAPersAutRefList __clone) {
-    super(__clone);
-    this.tramitAPersAutEjb = __clone.tramitAPersAutEjb;
-  }
-  public TramitAPersAutRefList() {
-    setSelects(new Select<?>[] { PERSAUTID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = tramitAPersAutEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public TramitAPersAutRefList(TramitAPersAutRefList __clone) {
+        super(__clone);
+        this.tramitAPersAutEjb = __clone.tramitAPersAutEjb;
+    }
+
+    public TramitAPersAutRefList() {
+        setSelects(new Select<?>[] { PERSAUTID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = tramitAPersAutEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

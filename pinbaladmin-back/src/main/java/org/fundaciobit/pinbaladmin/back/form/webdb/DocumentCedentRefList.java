@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class DocumentCedentRefList extends RefListBase
-    implements DocumentCedentFields {
+public class DocumentCedentRefList extends RefListBase implements DocumentCedentFields {
 
-  @EJB(mappedName = DocumentCedentService.JNDI_NAME)
-  private DocumentCedentService documentCedentEjb;
+    @EJB(mappedName = DocumentCedentService.JNDI_NAME)
+    private DocumentCedentService documentCedentEjb;
 
-  public DocumentCedentRefList(DocumentCedentRefList __clone) {
-    super(__clone);
-    this.documentCedentEjb = __clone.documentCedentEjb;
-  }
-  public DocumentCedentRefList() {
-    setSelects(new Select<?>[] { TITOL.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = documentCedentEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public DocumentCedentRefList(DocumentCedentRefList __clone) {
+        super(__clone);
+        this.documentCedentEjb = __clone.documentCedentEjb;
+    }
+
+    public DocumentCedentRefList() {
+        setSelects(new Select<?>[] { TITOL.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = documentCedentEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

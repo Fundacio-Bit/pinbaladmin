@@ -887,3 +887,43 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.INFOMADRIDID)}">
+        <tr id="solicitud_infomadridid_rowid">
+          <td id="solicitud_infomadridid_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.INFOMADRIDID])?'solicitud.infomadridid':__theForm.labels[SolicitudFields.INFOMADRIDID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.INFOMADRIDID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.INFOMADRIDID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_infomadridid_columnvalueid">
+          <form:errors path="solicitud.infomadridid" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.INFOMADRIDID)}" >
+          <form:hidden path="solicitud.infomadridid"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.infomadridid,__theForm.listOfInfoMadridForInfomadridid)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.INFOMADRIDID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_infomadridid"  onchange="if(typeof onChangeInfomadridid == 'function') {  onChangeInfomadridid(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.infomadridid">
+            <c:forEach items="${__theForm.listOfInfoMadridForInfomadridid}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.infomadridid }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.infomadridid }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

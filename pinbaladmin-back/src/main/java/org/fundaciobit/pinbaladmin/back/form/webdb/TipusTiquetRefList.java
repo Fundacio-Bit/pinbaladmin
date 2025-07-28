@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class TipusTiquetRefList extends RefListBase
-    implements TipusTiquetFields {
+public class TipusTiquetRefList extends RefListBase implements TipusTiquetFields {
 
-  @EJB(mappedName = TipusTiquetService.JNDI_NAME)
-  private TipusTiquetService tipusTiquetEjb;
+    @EJB(mappedName = TipusTiquetService.JNDI_NAME)
+    private TipusTiquetService tipusTiquetEjb;
 
-  public TipusTiquetRefList(TipusTiquetRefList __clone) {
-    super(__clone);
-    this.tipusTiquetEjb = __clone.tipusTiquetEjb;
-  }
-  public TipusTiquetRefList() {
-    setSelects(new Select<?>[] { NOM.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = tipusTiquetEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public TipusTiquetRefList(TipusTiquetRefList __clone) {
+        super(__clone);
+        this.tipusTiquetEjb = __clone.tipusTiquetEjb;
+    }
+
+    public TipusTiquetRefList() {
+        setSelects(new Select<?>[] { NOM.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = tipusTiquetEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

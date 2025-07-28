@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class CampSolicitudRefList extends RefListBase
-    implements CampSolicitudFields {
+public class CampSolicitudRefList extends RefListBase implements CampSolicitudFields {
 
-  @EJB(mappedName = CampSolicitudService.JNDI_NAME)
-  private CampSolicitudService campSolicitudEjb;
+    @EJB(mappedName = CampSolicitudService.JNDI_NAME)
+    private CampSolicitudService campSolicitudEjb;
 
-  public CampSolicitudRefList(CampSolicitudRefList __clone) {
-    super(__clone);
-    this.campSolicitudEjb = __clone.campSolicitudEjb;
-  }
-  public CampSolicitudRefList() {
-    setSelects(new Select<?>[] { CAMPFORMULARIID.select, SOLICITUDSERVEIID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = campSolicitudEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public CampSolicitudRefList(CampSolicitudRefList __clone) {
+        super(__clone);
+        this.campSolicitudEjb = __clone.campSolicitudEjb;
+    }
+
+    public CampSolicitudRefList() {
+        setSelects(new Select<?>[] { CAMPFORMULARIID.select, SOLICITUDSERVEIID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = campSolicitudEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

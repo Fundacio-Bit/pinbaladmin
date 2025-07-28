@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 
 import org.fundaciobit.genapp.common.validation.IValidatorResult;
@@ -28,6 +29,7 @@ public class SolicitudValidator<I extends Solicitud>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
+    ,org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager
     ,org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
 
@@ -259,6 +261,20 @@ public class SolicitudValidator<I extends Solicitud>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organ"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("organ.organid"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__organid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(INFOMADRIDID) == 0) {
+      java.lang.Long __infomadridid = __target__.getInfomadridid();
+      if (__infomadridid != null ) {
+        Long __count_ = null;
+        try { __count_ = __infoMadridManager.count(InfoMadridFields.INFOMADRIDID.equal(__infomadridid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(INFOMADRIDID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("infoMadrid.infoMadrid"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("infoMadrid.infoMadridID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__infomadridid)));
         }
       }
     }

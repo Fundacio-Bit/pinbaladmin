@@ -228,7 +228,7 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 
                 // Gestió del estat Pinbal -- Per defecte no sol·licitat
 				{
-					int estat = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+					Long estat = Constants.ESTAT_PINBAL_NO_SOLICITAT;
 					solicitud.setEstatpinbal(estat);
 				}
                 

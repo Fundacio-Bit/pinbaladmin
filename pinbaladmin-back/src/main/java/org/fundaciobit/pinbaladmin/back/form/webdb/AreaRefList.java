@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class AreaRefList extends RefListBase
-    implements AreaFields {
+public class AreaRefList extends RefListBase implements AreaFields {
 
-  @EJB(mappedName = AreaService.JNDI_NAME)
-  private AreaService areaEjb;
+    @EJB(mappedName = AreaService.JNDI_NAME)
+    private AreaService areaEjb;
 
-  public AreaRefList(AreaRefList __clone) {
-    super(__clone);
-    this.areaEjb = __clone.areaEjb;
-  }
-  public AreaRefList() {
-    setSelects(new Select<?>[] { NOM.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = areaEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public AreaRefList(AreaRefList __clone) {
+        super(__clone);
+        this.areaEjb = __clone.areaEjb;
+    }
+
+    public AreaRefList() {
+        setSelects(new Select<?>[] { NOM.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = areaEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

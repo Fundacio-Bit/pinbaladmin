@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class GrupEntitatCedentRefList extends RefListBase
-    implements GrupEntitatCedentFields {
+public class GrupEntitatCedentRefList extends RefListBase implements GrupEntitatCedentFields {
 
-  @EJB(mappedName = GrupEntitatCedentService.JNDI_NAME)
-  private GrupEntitatCedentService grupEntitatCedentEjb;
+    @EJB(mappedName = GrupEntitatCedentService.JNDI_NAME)
+    private GrupEntitatCedentService grupEntitatCedentEjb;
 
-  public GrupEntitatCedentRefList(GrupEntitatCedentRefList __clone) {
-    super(__clone);
-    this.grupEntitatCedentEjb = __clone.grupEntitatCedentEjb;
-  }
-  public GrupEntitatCedentRefList() {
-    setSelects(new Select<?>[] { GRUPENTITATID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = grupEntitatCedentEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public GrupEntitatCedentRefList(GrupEntitatCedentRefList __clone) {
+        super(__clone);
+        this.grupEntitatCedentEjb = __clone.grupEntitatCedentEjb;
+    }
+
+    public GrupEntitatCedentRefList() {
+        setSelects(new Select<?>[] { GRUPENTITATID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = grupEntitatCedentEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

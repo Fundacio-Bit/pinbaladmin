@@ -1,6 +1,8 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -14,19 +16,33 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
+import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
+import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
+import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 /**
  * 
@@ -40,6 +56,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 	public static final String CONTEXTWEB = "/operador/solicitudactiva";
 
+    @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+    protected InfoMadridLogicaService infoMadridLogicaEjb;
+	
+	
 	@Override
 	public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
 		return super.getAdditionaConditionAdvancedFilter(request);
@@ -80,11 +100,354 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		if (solicitudFilterForm.isNou()) {
 			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "solicitud.actualitzarestats",
 					getContextWeb() + "/actualitzarEstats", AdditionalButtonStyle.WARNING));
+			
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Consulta Estat PID",
+//					getContextWeb() + "/consultaMadrid", AdditionalButtonStyle.WARNING));
+
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Crear Info Madrid",
+					getContextWeb() + "/crearInfoMadrid", AdditionalButtonStyle.WARNING));
 		}
 
 		return solicitudFilterForm;
 	}
 
+	// crearInfoMadrid
+	@RequestMapping(value = "/crearInfoMadrid", method = RequestMethod.GET)
+	public String crearInfoMadrid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		// Actualitzar estat de les sol·licituds
+		log.info("crearInfoMadrid:: HOLA");
+		final String SOLICITUD_TROBADA = "0";
+		final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
+		
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		Where wEstatPinbal = Where.AND(SolicitudFields.ESTATPINBAL.isNotNull(),
+				SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT));
+		
+		
+//		Long[] estatsSoliOk =  {Constants.soli_estat_};
+//		Where wEstatSoli = SolicitudFields.ESTATSOLICITUD.in(estatsSoliOk );
+//		Where wEstatSoli = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_REVISIO);
+		
+		
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals));  //, wEstatPinbal , wEstatSoli));
+
+		log.info(solicituds.size() + " solicituds");
+		
+		
+		int solis = 0;
+		for (Solicitud soli : solicituds) {
+			
+			log.info("Volem procesar la solicitud " + soli.getProcedimentCodi() + " [" + soli.getSolicitudID() + "]");
+
+			if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_MANUAL) {
+				log.info("Fichada Manual (" + soli.getProcedimentCodi() + ")");
+				continue;
+			}
+			
+			if (soli.getEstatpinbal() == Constants.ESTAT_PINBAL_null) {
+				log.info("Fichada Null (" + soli.getProcedimentCodi() + ")");
+				continue;
+			}
+			
+			
+			if (soli.getProcedimentCodi().length() > 20) {
+				log.info("Procediment Llarg. Descartat");
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+			
+			Long solisProc = infoMadridLogicaEjb.count(InfoMadridFields.CODI.equal(soli.getProcedimentCodi()));
+			if (solisProc > 0) {
+				log.info("Solicitud ja te un InfoMad");
+				continue;
+			}
+			
+			//Si llega aquí la vamos a procesar.
+			
+			Long fitxerID = soli.getSolicitudXmlID();
+
+			if (fitxerID == null) {
+				log.info("fitxerID: " + fitxerID);
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+
+			Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+			if (prop == null) {
+				log.info("prop: " + prop);
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+
+			ScspTitular titular = getTitular(prop);
+			if (titular == null) {
+				log.info("titular: " + titular);
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+			ScspFuncionario funcionario = getFuncionari();
+			if (funcionario == null) {
+				log.info("funcionario: " + funcionario);
+				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+
+			Consulta consulta = new Consulta();
+			consulta.setCodigoProcedimiento(soli.getProcedimentCodi());
+
+			log.info("Cridam métode CONSULTA");
+
+			Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soli.getSolicitudID());
+			if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_ENVIADA_MANUALMENTE)) {
+				log.info("Solicitud no trobada. Enviada Manual (" + soli.getProcedimentCodi() + ")");
+				continue;
+			}else if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
+				log.info("Solicitud Trobada. S'hauria d'haver creat InfoMad");
+			}
+			
+//			String codi = soli.getProcedimentCodi();
+//			long estatProc = soli.getEstatSolicitud();
+//
+//			EstadoProcedimiento estadoProc = retorno.getProcedimiento().getEstadoProcedimiento();
+//			
+//			int estatAut = estadoProc.getEstado();
+//			String missatge = estadoProc.getObservaciones();
+//			
+//			String consultaTexto = "Buenos días,\n"
+//					+ "Enviamos solicitud para dar servicios de alta en el procedimiento "
+//					+ codi + "\n\n" + "Quedamos a la espera de su respuesta.\n"
+//					+ "Un saludo.";
+//			
+//			String titularNom = titular.getNombreCompleto();
+//			String titularNif = titular.getDocumentacion();
+//
+//			Timestamp now = new Timestamp(System.currentTimeMillis());
+//			
+//			Timestamp dataAuth = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? now : null;
+//			Timestamp dataEnviament = now;
+//			
+//			long reintents = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0;
+//			
+//			InfoMadridJPA infoMadJPA = new InfoMadridJPA(codi, estatProc, estatAut, missatge, consultaTexto, titularNom,
+//					titularNif, dataAuth, dataEnviament, reintents);
+//
+//			log.info("Crearem InfoMad");
+//			
+//			InfoMadrid infoMad =  infoMadridLogicaEjb.create(infoMadJPA);
+//			log.info("InfoMad creado: " + infoMad.getInfoMadridID());
+//
+//			soli.setInfomadridid(infoMad.getInfoMadridID());
+//			solicitudLogicaEjb.update(soli);
+//			
+			solis++;
+			
+			log.info("Final");
+//			if (solis == 5) {
+//				break;
+//			}
+		}
+		
+		HtmlUtils.saveMessageSuccess(request, "Estat de les sol·licituds actualitzat correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+
+	}
+	
+	  private ScspTitular getTitular(Properties prop) {
+
+	        ScspTitular titular = new ScspTitular();
+
+	        ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+	        String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECE");
+	        String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
+	        String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
+	        String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
+	        String fullName = toFullName(nombre, ape1, ape2);
+
+	        titular.setTipoDocumentacion(tipoDocumentacion);
+	        titular.setDocumentacion(documentacion);
+	        titular.setNombre(nombre);
+	        titular.setApellido1(ape1);
+	        titular.setApellido2(ape2);
+	        titular.setNombreCompleto(fullName);
+
+	        return titular;
+	    }
+
+	    private ScspFuncionario getFuncionari() {
+
+	        ScspFuncionario funcionario = new ScspFuncionario();
+
+//	        UserInfo ui = LoginInfo.getInstance().getUserInfo();
+
+			String nif = null;
+			String fullName = null;
+	        
+//	        if (ui != null) {
+//	            nif = ui.getAdministrationID();
+//	            fullName = ui.getFullName();
+//	        	if (fullName == null) {
+//					fullName = ui.getName() + " " + ui.getSurname1() + " " + ui.getSurname2();
+//				}
+//	        }else {
+//	        	String username = LoginInfo.getInstance().getUsername();
+//	        	
+//	        	switch (username) {
+//	        	case "ptrias":
+//	        		nif = "45186147W";
+//	        		fullName = "Juan Pablo Trias";
+//	        		break;
+//	        	case "pvico":
+//	        		nif = "43084402C";
+//	        		fullName = "Pilar Vico Hervas";
+//	        		break;
+//	        	case "atrobat":
+//	        		nif = "43120476F";
+//	        		fullName = "Toni Trobat Obrador";
+//	        		break;
+//				default:
+//					nif = "00000000T";
+//					fullName = "Usuari Anonim 00000000T";
+//	        	}
+//	        	
+//	        }
+	        
+	    	String username = LoginInfo.getInstance().getUsername();
+	    	switch (username) {
+	    	case "ptrias":
+	    		nif = "45186147W";
+	    		fullName = "Juan Pablo Trias";
+	    		break;
+	    	case "pvico":
+	    		nif = "43084402C";
+	    		fullName = "Pilar Vico Hervas";
+	    		break;
+	    	case "atrobat":
+	    		nif = "43120476F";
+	    		fullName = "Toni Trobat Obrador";
+	    		break;
+			default:
+				nif = "00000000T";
+				fullName = "Usuari Anonim 00000000T";
+	    	}
+
+	        
+	        log.info("NIF: " + nif);
+	        log.info("Nombre completo: " + fullName);
+
+	        funcionario.setNifFuncionario(nif);
+	        funcionario.setNombreCompletoFuncionario(fullName);
+	        return funcionario;
+	    }
+	    
+	    private String toFullName(String nom, String l1, String l2) {
+	        String fullName = nom + " " + l1 + (l2 == "" ? "" : " " + l2);
+	        return fullName;
+	    }
+
+	    
+	    
+//	    @RequestMapping(value = "/consultaMadrid", method = RequestMethod.GET)
+//		public String consultaMadrid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//
+//			// Actualitzar estat de les sol·licituds
+//			log.info("crearInfoMadrid:: HOLA");
+//			final String SOLICITUD_TROBADA = "0";
+//			final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
+//			
+//			Where wLocals = SolicitudFields.ORGANID.isNotNull();
+//			Where wEstatPinbal = Where.AND(SolicitudFields.ESTATPINBAL.isNotNull(),
+//					SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT));
+//			
+//			
+////			Long[] estatsSoliOk =  {Constants.soli_estat_};
+////			Where wEstatSoli = SolicitudFields.ESTATSOLICITUD.in(estatsSoliOk );
+//			Where wEstatSoli = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual);
+//			
+//			
+//			List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wEstatPinbal, wEstatSoli));
+//
+//			log.info(solicituds.size() + " solicituds");
+//			
+//			
+//			int solis = 0;
+//			for (Solicitud soli : solicituds) {
+//				
+//				Long solisProc = infoMadridLogicaEjb.count(InfoMadridFields.CODI.equal(soli.getProcedimentCodi()));
+//				if (solisProc > 0) {
+//					log.info("Solicitud ja te un InfoMad");
+//					continue;
+//				}
+//				
+//				
+//				Long fitxerID = soli.getSolicitudXmlID();
+//				Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//
+//				ScspTitular titular = getTitular(prop);
+//				ScspFuncionario funcionario = getFuncionari();
+//
+//				Consulta consulta = new Consulta();
+//				consulta.setCodigoProcedimiento(soli.getProcedimentCodi());
+//
+//				Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soli.getSolicitudID());
+//				if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_ENVIADA_MANUALMENTE)) {
+//					log.info("Solicitud no trobada. Enviada Manual (" + soli.getProcedimentCodi() + ")");
+//					continue;
+//				}
+//				
+//				String codi = soli.getProcedimentCodi();
+//				long estatProc = soli.getEstatSolicitud();
+//
+//				EstadoProcedimiento estadoProc = retorno.getProcedimiento().getEstadoProcedimiento();
+//				
+//				int estatAut = estadoProc.getEstado();
+//				String missatge = estadoProc.getObservaciones();
+//				
+//				String consultaTexto = "Buenos días,\n"
+//						+ "Enviamos solicitud para dar servicios de alta en el procedimiento "
+//						+ codi + "\n\n" + "Quedamos a la espera de su respuesta.\n"
+//						+ "Un saludo.";
+//				
+//				String titularNom = titular.getNombreCompleto();
+//				String titularNif = titular.getDocumentacion();
+//
+//				Timestamp now = new Timestamp(System.currentTimeMillis());
+//				
+//				Timestamp dataAuth = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? now : null;
+//				Timestamp dataEnviament = now;
+//				
+//				long reintents = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0;
+//				
+//				InfoMadridJPA infoMadJPA = new InfoMadridJPA(codi, estatProc, estatAut, missatge, consultaTexto, titularNom,
+//						titularNif, dataAuth, dataEnviament, reintents);
+//
+//				log.info("Crearem InfoMad");
+//				
+//				InfoMadrid infoMad =  infoMadridLogicaEjb.create(infoMadJPA);
+//				log.info("InfoMad creado: " + infoMad.getInfoMadridID());
+//
+//				soli.setInfomadridid(infoMad.getInfoMadridID());
+//				solicitudLogicaEjb.update(soli);
+//				
+//				solis++;
+//				
+//				log.info("Final");
+////				if (solis == 5) {
+////					break;
+////				}
+//			}
+//			
+//			HtmlUtils.saveMessageSuccess(request, "Estat de les sol·licituds actualitzat correctament.");
+//			return "redirect:" + getContextWeb() + "/list";
+//
+//		}
+	    
+	    
 ////  /actualitzarEstats
 //	@RequestMapping(value = "/actualitzarEstats", method = RequestMethod.GET)
 //	public String actualitzarEstats(HttpServletRequest request, HttpServletResponse response) throws I18NException {

@@ -25,6 +25,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final GrupEntitatCedentJPAManager pad_grupentitatcedent;
    private final IdiomaJPAManager pad_idioma;
    private final IncidenciaTecnicaJPAManager pad_incidenciatecnica;
+   private final InfoMadridJPAManager pad_infomadrid;
    private final ModificacioSolicitudJPAManager pad_mod_solicitud;
    private final ModificacioSoliServJPAManager pad_mod_soliserv;
    private final OperadorJPAManager pad_operador;
@@ -68,6 +69,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_grupentitatcedent = new GrupEntitatCedentJPAManager(__em);
     this.pad_idioma = new IdiomaJPAManager(__em);
     this.pad_incidenciatecnica = new IncidenciaTecnicaJPAManager(__em);
+    this.pad_infomadrid = new InfoMadridJPAManager(__em);
     this.pad_mod_solicitud = new ModificacioSolicitudJPAManager(__em);
     this.pad_mod_soliserv = new ModificacioSoliServJPAManager(__em);
     this.pad_operador = new OperadorJPAManager(__em);
@@ -166,6 +168,10 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public IIncidenciaTecnicaManager getIncidenciaTecnicaManager() {
         return this.pad_incidenciatecnica;
+    };
+
+    public IInfoMadridManager getInfoMadridManager() {
+        return this.pad_infomadrid;
     };
 
     public IModificacioSolicitudManager getModificacioSolicitudManager() {

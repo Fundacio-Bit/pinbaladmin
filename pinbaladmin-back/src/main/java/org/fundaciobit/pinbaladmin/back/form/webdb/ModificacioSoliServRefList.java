@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class ModificacioSoliServRefList extends RefListBase
-    implements ModificacioSoliServFields {
+public class ModificacioSoliServRefList extends RefListBase implements ModificacioSoliServFields {
 
-  @EJB(mappedName = ModificacioSoliServService.JNDI_NAME)
-  private ModificacioSoliServService modificacioSoliServEjb;
+    @EJB(mappedName = ModificacioSoliServService.JNDI_NAME)
+    private ModificacioSoliServService modificacioSoliServEjb;
 
-  public ModificacioSoliServRefList(ModificacioSoliServRefList __clone) {
-    super(__clone);
-    this.modificacioSoliServEjb = __clone.modificacioSoliServEjb;
-  }
-  public ModificacioSoliServRefList() {
-    setSelects(new Select<?>[] { MODSOLISERVID.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = modificacioSoliServEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public ModificacioSoliServRefList(ModificacioSoliServRefList __clone) {
+        super(__clone);
+        this.modificacioSoliServEjb = __clone.modificacioSoliServEjb;
+    }
+
+    public ModificacioSoliServRefList() {
+        setSelects(new Select<?>[] { MODSOLISERVID.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = modificacioSoliServEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

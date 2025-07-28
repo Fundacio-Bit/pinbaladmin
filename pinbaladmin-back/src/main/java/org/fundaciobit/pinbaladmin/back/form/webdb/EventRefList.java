@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class EventRefList extends RefListBase
-    implements EventFields {
+public class EventRefList extends RefListBase implements EventFields {
 
-  @EJB(mappedName = EventService.JNDI_NAME)
-  private EventService eventEjb;
+    @EJB(mappedName = EventService.JNDI_NAME)
+    private EventService eventEjb;
 
-  public EventRefList(EventRefList __clone) {
-    super(__clone);
-    this.eventEjb = __clone.eventEjb;
-  }
-  public EventRefList() {
-    setSelects(new Select<?>[] { EVENTID.select, COMENTARI.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = eventEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public EventRefList(EventRefList __clone) {
+        super(__clone);
+        this.eventEjb = __clone.eventEjb;
+    }
+
+    public EventRefList() {
+        setSelects(new Select<?>[] { EVENTID.select, COMENTARI.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = eventEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

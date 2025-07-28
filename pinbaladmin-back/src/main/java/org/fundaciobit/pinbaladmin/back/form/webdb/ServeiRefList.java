@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class ServeiRefList extends RefListBase
-    implements ServeiFields {
+public class ServeiRefList extends RefListBase implements ServeiFields {
 
-  @EJB(mappedName = ServeiService.JNDI_NAME)
-  private ServeiService serveiEjb;
+    @EJB(mappedName = ServeiService.JNDI_NAME)
+    private ServeiService serveiEjb;
 
-  public ServeiRefList(ServeiRefList __clone) {
-    super(__clone);
-    this.serveiEjb = __clone.serveiEjb;
-  }
-  public ServeiRefList() {
-    setSelects(new Select<?>[] { CODI.select, NOM.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = serveiEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public ServeiRefList(ServeiRefList __clone) {
+        super(__clone);
+        this.serveiEjb = __clone.serveiEjb;
+    }
+
+    public ServeiRefList() {
+        setSelects(new Select<?>[] { CODI.select, NOM.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = serveiEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

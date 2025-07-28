@@ -1231,27 +1231,27 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
     }
 
-    @RequestMapping(value = "/close/{solicitudID}", method = RequestMethod.GET)
-    public String closeSolicitudGet(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
-            HttpServletResponse response) throws I18NException {
-
-        SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
-
-        soli.setEstatSolicitud(Constants.SOLI_ESTAT_TANCAT);
-        soli.setDataFi(new Timestamp(System.currentTimeMillis()));
-
-        try {
-            this.update(request, soli);
-
-            HtmlUtils.saveMessageSuccess(request, "Tancada Sol·licitud correctament.");
-        } catch (Throwable e) {
-            String msg = "Error tancant Sol·licitud: " + e.getMessage();
-            log.error(msg, e);
-            HtmlUtils.saveMessageError(request, msg);
-        }
-
-        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
-    }
+//    @RequestMapping(value = "/close/{solicitudID}", method = RequestMethod.GET)
+//    public String closeSolicitudGet(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
+//            HttpServletResponse response) throws I18NException {
+//
+//        SolicitudJPA soli = this.findByPrimaryKey(request, solicitudID);
+//
+//        soli.setEstatSolicitud(Constants.SOLI_ESTAT_CADUCADA);
+//        soli.setDataFi(new Timestamp(System.currentTimeMillis()));
+//
+//        try {
+//            this.update(request, soli);
+//
+//            HtmlUtils.saveMessageSuccess(request, "Tancada Sol·licitud correctament.");
+//        } catch (Throwable e) {
+//            String msg = "Error tancant Sol·licitud: " + e.getMessage();
+//            log.error(msg, e);
+//            HtmlUtils.saveMessageError(request, msg);
+//        }
+//
+//        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
+//    }
 
     @RequestMapping(value = "/changeOperador/{solicitudID}/{operador}", method = RequestMethod.GET)
     public String changeOperadorIncidenciaTecnicaGet(@PathVariable("solicitudID") java.lang.Long solicitudID,
@@ -1530,7 +1530,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             Where where) throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        for (int estat : Constants.ESTATS_PINBAL) {
+        for (Long estat : Constants.ESTATS_PINBAL) {
             String key = String.valueOf(estat);
             __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("estat.pinbal." + key)));
         }

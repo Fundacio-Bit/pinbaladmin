@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="solicitud.solicitud.plural", order=260, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="solicitud.solicitud.plural", order=270, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/solicitud")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
@@ -74,6 +74,10 @@ public class SolicitudController
   // References 
   @Autowired
   protected OrganRefList organRefList;
+
+  // References 
+  @Autowired
+  protected InfoMadridRefList infoMadridRefList;
 
   /**
    * Llistat de totes Solicitud
@@ -281,6 +285,16 @@ public class SolicitudController
       };
     }
 
+    // Field infomadridid
+    {
+      _listSKV = getReferenceListForInfomadridid(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfInfoMadridForInfomadridid(_tmp);
+      if (filterForm.getGroupByFields().contains(INFOMADRIDID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, INFOMADRIDID, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -304,6 +318,7 @@ public class SolicitudController
     __mapping.put(ESTATPINBAL, filterForm.getMapOfValuesForEstatpinbal());
     __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
     __mapping.put(CONSENTIMENTADJUNT, filterForm.getMapOfValuesForConsentimentadjunt());
+    __mapping.put(INFOMADRIDID, filterForm.getMapOfInfoMadridForInfomadridid());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -422,6 +437,15 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfValuesForConsentimentadjunt(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfInfoMadridForInfomadridid() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForInfomadridid(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfInfoMadridForInfomadridid(_listSKV);
     }
     
   }
@@ -1063,6 +1087,46 @@ public java.lang.Long stringToPK(String value) {
     __tmp.add(new StringKeyValue("adjunt" , "adjunt"));
     __tmp.add(new StringKeyValue("publicat" , "publicat"));
     return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForInfomadridid(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(INFOMADRIDID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (solicitudForm.isReadOnlyField(INFOMADRIDID)) {
+      _where = InfoMadridFields.INFOMADRIDID.equal(solicitudForm.getSolicitud().getInfomadridid());
+    }
+    return getReferenceListForInfomadridid(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForInfomadridid(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(INFOMADRIDID)
+       && !solicitudFilterForm.isGroupByField(INFOMADRIDID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(INFOMADRIDID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Solicitud _item : list) {
+        if(_item.getInfomadridid() == null) { continue; };
+        _pkList.add(_item.getInfomadridid());
+        }
+        _w = InfoMadridFields.INFOMADRIDID.in(_pkList);
+      }
+    return getReferenceListForInfomadridid(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForInfomadridid(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return infoMadridRefList.getReferenceList(InfoMadridFields.INFOMADRIDID, where );
   }
 
 

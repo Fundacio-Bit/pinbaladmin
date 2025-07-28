@@ -40,6 +40,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificaci
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -53,6 +54,7 @@ import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.hibernate.Hibernate;
@@ -99,6 +101,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     @EJB(mappedName = TramitJConsentLogicaService.JNDI_NAME)
     protected TramitJConsentLogicaService tramitJEjb;
+
+    @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+    protected InfoMadridLogicaService infoMadridLogicaJEjb;
+
     
     @Override
     public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
@@ -529,17 +535,31 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 		SolicitudJPA solicitud = this.findByPrimaryKey(soliID);
 		PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
-		
-		Retorno retorno = cons.consultaEstatApiPinbal(titular, funcionario, solicitud.getProcedimentCodi());
+		Retorno retorno = null;
+		try {
+			retorno = cons.consultaEstatApiPinbal(titular, funcionario, solicitud.getProcedimentCodi());
+			InfoMadridJPA infoMadJpa = cons.actualitzarSolicitud(retorno, titular, solicitud);
+			
+			if (infoMadJpa != null) {
 
-		String estado = cons.actualitzarSolicitud(retorno, solicitud);
-		final String SOLICITUD_TROBADA = "0";
-		final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
+				InfoMadrid infoMad = infoMadridLogicaJEjb.create(infoMadJpa);
 
-		if (estado.equals(SOLICITUD_TROBADA)) {
-			actualitzarDadesServeisSolicitud(solicitud, retorno);
-		} else if (estado.equals(SOLICITUD_ENVIADA_MANUALMENTE)) {
-			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual);
+				Long id = infoMad.getInfoMadridID();
+				log.info("Info Mad Creat: " + id);
+				solicitud.setInfomadridid(id);
+			}
+			
+			String estado = retorno.getEstado().getCodigoEstado();
+
+			final String SOLICITUD_TROBADA = "0";
+
+			if (estado.equals(SOLICITUD_TROBADA)) {
+				actualitzarDadesServeisSolicitud(solicitud, retorno);
+			}
+			
+		} catch (Throwable e) {
+			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+			log.error("Error fent consulta: " + e.getMessage(), e);
 		}
 		
 		this.update(solicitud);
@@ -791,8 +811,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 
 			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
-			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
-			solicitud.setEstatpinbal(estat.getEstado());
+//			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
+//			solicitud.setEstatpinbal(estat.getEstado());
 
 			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
 			break;
@@ -814,8 +834,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			if (duplicat) {
 				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 				Retorno retornoDup = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
-				EstadoProcedimiento estatDup = retornoDup.getProcedimiento().getEstadoProcedimiento();
-				solicitud.setEstatpinbal(estatDup.getEstado());
+//				EstadoProcedimiento estatDup = retornoDup.getProcedimiento().getEstadoProcedimiento();
+//				solicitud.setEstatpinbal(estatDup.getEstado());
 
 				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
 			} else {
@@ -857,8 +877,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 
 			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
-			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
-			solicitud.setEstatpinbal(estat.getEstado());
+//			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
+//			solicitud.setEstatpinbal(estat.getEstado());
 
 			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
 			break;
@@ -900,6 +920,14 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			// TODO Auto-generated catch block
 			log.error("No s'ha pogut crear l'event de solicitud enviada: " + e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void crearInfoMadridFromSolicitud(Solicitud solicitud) {
+		
+		
+
+	
 	}
     
     

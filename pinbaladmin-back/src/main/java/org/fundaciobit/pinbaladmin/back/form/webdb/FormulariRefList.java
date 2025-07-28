@@ -22,22 +22,23 @@ import org.fundaciobit.genapp.common.web.controller.RefListBase;
  * 
  */
 @Component
-public class FormulariRefList extends RefListBase
-    implements FormulariFields {
+public class FormulariRefList extends RefListBase implements FormulariFields {
 
-  @EJB(mappedName = FormulariService.JNDI_NAME)
-  private FormulariService formulariEjb;
+    @EJB(mappedName = FormulariService.JNDI_NAME)
+    private FormulariService formulariEjb;
 
-  public FormulariRefList(FormulariRefList __clone) {
-    super(__clone);
-    this.formulariEjb = __clone.formulariEjb;
-  }
-  public FormulariRefList() {
-    setSelects(new Select<?>[] { NOM.select });
-  }
-  public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
-    Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
-    List<StringKeyValue> list = formulariEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
+    public FormulariRefList(FormulariRefList __clone) {
+        super(__clone);
+        this.formulariEjb = __clone.formulariEjb;
+    }
+
+    public FormulariRefList() {
+        setSelects(new Select<?>[] { NOM.select });
+    }
+
+    public List<StringKeyValue> getReferenceList(Field<?> keyField, Where where, OrderBy ... orderBy) throws I18NException {
+        Select<StringKeyValue> select =  new org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue(keyField.select, getSeparator(), getSelects());
+        List<StringKeyValue> list = formulariEjb.executeQuery(select, where, (orderBy==null || orderBy.length == 0) ? getOrderBy() : orderBy);
     return list;
-  }
+    }
 }

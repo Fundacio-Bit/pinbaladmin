@@ -191,7 +191,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long estatID = Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO;
         String notesSoli = "Procediment creat amb Formulari. TramitID[" + tramitID + "]";
         Timestamp dataInici = new Timestamp(System.currentTimeMillis());
-        Integer estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+        Long estatpinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
         String creador = "pinbaladmin";
         String operador = "pinbaladmin";
         boolean firmatDocSolicitud = false;

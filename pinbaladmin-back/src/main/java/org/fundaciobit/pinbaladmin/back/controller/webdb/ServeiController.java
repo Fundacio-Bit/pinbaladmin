@@ -48,7 +48,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="servei.servei.plural", order=250, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="servei.servei.plural", order=260, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/servei")
 @SessionAttributes(types = { ServeiForm.class, ServeiFilterForm.class })

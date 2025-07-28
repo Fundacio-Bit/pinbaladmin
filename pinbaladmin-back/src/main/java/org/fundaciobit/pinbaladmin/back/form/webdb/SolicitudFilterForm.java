@@ -318,13 +318,13 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.util.List<java.lang.Integer> estatpinbalSelect;
+  private java.util.List<java.lang.Long> estatpinbalSelect;
 
-  public java.util.List<java.lang.Integer> getEstatpinbalSelect() {
+  public java.util.List<java.lang.Long> getEstatpinbalSelect() {
     return this.estatpinbalSelect;
   }
 
-  public void setEstatpinbalSelect(java.util.List<java.lang.Integer> estatpinbalSelect) {
+  public void setEstatpinbalSelect(java.util.List<java.lang.Long> estatpinbalSelect) {
     this.estatpinbalSelect = estatpinbalSelect;
   }
 
@@ -384,6 +384,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long infomadrididDesde;
+
+  public java.lang.Long getInfomadrididDesde() {
+    return this.infomadrididDesde;
+  }
+
+  public void setInfomadrididDesde(java.lang.Long infomadrididDesde) {
+    this.infomadrididDesde = infomadrididDesde;
+  }
+
+
+  private java.lang.Long infomadrididFins;
+
+  public java.lang.Long getInfomadrididFins() {
+    return this.infomadrididFins;
+  }
+
+  public void setInfomadrididFins(java.lang.Long infomadrididFins) {
+    this.infomadrididFins = infomadrididFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -422,6 +444,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.consentimentadjunt = __toClone.consentimentadjunt;
     this.portafibIDDesde = __toClone.portafibIDDesde;
     this.portafibIDFins = __toClone.portafibIDFins;
+    this.infomadrididDesde = __toClone.infomadrididDesde;
+    this.infomadrididFins = __toClone.infomadrididFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;
@@ -430,6 +454,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfValuesForEstatpinbal = __toClone.mapOfValuesForEstatpinbal;
     this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
     this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;
+    this.mapOfInfoMadridForInfomadridid = __toClone.mapOfInfoMadridForInfomadridid;
   }
   
   /* ========= UTILS ========== */
@@ -556,6 +581,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfValuesForConsentimentadjunt(Map<String, String> mapOfValuesForConsentimentadjunt) {
     this.mapOfValuesForConsentimentadjunt = mapOfValuesForConsentimentadjunt;
+  }
+
+
+
+  private Map<String, String> mapOfInfoMadridForInfomadridid;
+
+  public Map<String, String> getMapOfInfoMadridForInfomadridid() {
+    return this.mapOfInfoMadridForInfomadridid;
+  }
+
+  public void setMapOfInfoMadridForInfomadridid(Map<String, String> mapOfInfoMadridForInfomadridid) {
+    this.mapOfInfoMadridForInfomadridid = mapOfInfoMadridForInfomadridid;
   }
 
 
