@@ -398,14 +398,15 @@
 						<div id="accionesEstados">
 							<button class="btn-estado" data-estado="60">Tancada</button>
 							<button class="btn-estado" data-estado="40">Autorizada</button>
-							<button class="btn-estado" data-estado="39">Parcialment Autorizada</button>
+							<button class="btn-estado" data-estado="101">Denegada</button>
+							
+<!-- 							<button class="btn-estado" data-estado="39">Parcialment Autorizada</button> -->
+							<button class="btn-estado" data-estado="19">Pendent Enviar Madrid</button>
+							<button class="btn-estado" data-estado="21">Pendent Autoritzar (Enviat a Madrid)</button>
 							<button class="btn-estado" data-estado="32">Madrid Esmena. Avisar Contacte</button>
 							<button class="btn-estado" data-estado="31">Esmena Solicitada. Pendent Contacte</button>
-							
 							<button class="btn-estado" data-estado="33">Resposta Contacte. Revisar Esmena</button>
-							<button class="btn-estado" data-estado="19">Pendent Enviar Madrid</button>
-							
-							<button class="btn-estado" data-estado="21">Pendent Autoritzar (Enviat a Madrid)</button>
+
 							<button class="btn-estado" data-estado="100">Revisar despres</button>
 
 						</div>

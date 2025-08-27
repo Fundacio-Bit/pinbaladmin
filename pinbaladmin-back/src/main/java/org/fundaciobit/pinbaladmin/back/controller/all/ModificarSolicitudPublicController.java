@@ -191,7 +191,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTUSERNAME);
 			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTMAIL);
 			form.addHiddenField(ModificacioSolicitudFields.ESTATMODIFICACIO);
-
+			
 			form.setTitleCode("=");
 			form.setAttachedAdditionalJspCode(true);
 
@@ -571,7 +571,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 		Where wLocal = SolicitudFields.ORGANID.isNotNull();
 		
-		Long[] estats = {Constants.SOLI_ESTAT_AUTORITZAT};
+		Long[] estats = {Constants.SOLI_ESTAT_AUTORITZAT, Constants.SOLI_ESTAT_TANCAT};
 		Where wEstats = SolicitudFields.ESTATSOLICITUD.in(estats);
 		
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wLocal, wEstats));
