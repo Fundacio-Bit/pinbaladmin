@@ -4077,8 +4077,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "Codi SIA Nou",
-            "es": "Código SIA Nuevo"
+            "ca": "Codi SIA Nova Convocatòria",
+            "es": "Código SIA Nueva Convocatoria"
           },
           "javaName": "codiSiaNou",
           "javaType": "java.lang.String",

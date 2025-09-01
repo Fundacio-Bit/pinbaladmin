@@ -32,6 +32,7 @@ import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
+import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
@@ -69,6 +70,7 @@ import org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -191,18 +193,31 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTUSERNAME);
 			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTMAIL);
 			form.addHiddenField(ModificacioSolicitudFields.ESTATMODIFICACIO);
+			form.addHiddenField(ModificacioSolicitudFields.ESTATID);
+			form.addHiddenField(ModificacioSolicitudFields.DATAINICI);
 			
-			form.setTitleCode("=");
+			
+//			Section secProcediment = new Section("secProcediment", "procediment", ModificacioSolicitudFields.PROCEDIMENTCODI, ModificacioSolicitudFields.PROCEDIMENTNOM, ModificacioSolicitudFields.CODISIANOU, ModificacioSolicitudFields.DATAINICI, ModificacioSolicitudFields.DATAFI, ModificacioSolicitudFields.ORGANID );
+//			Section secResponsable = new Section("secResponsable", "responsable", ModificacioSolicitudFields.RESPONSABLEPROCNOM, ModificacioSolicitudFields.RESPONSABLEPROCEMAIL);
+//			Section secConstentiment = new Section("secConstentiment", "constentiment", ModificacioSolicitudFields.CONSENTIMENT, ModificacioSolicitudFields.DOCCONSENTIMENTID);
+//			
+//			form.addSection(secProcediment);
+//			form.addSection(secResponsable);
+//			form.addSection(secConstentiment);
+			
+			ModificacioSolicitud mod = form.getModificacioSolicitud(); 
+			
+			form.setTitleCode("=" + mod.getProcedimentCodi() + " - " + mod.getProcedimentNom());
 			form.setAttachedAdditionalJspCode(true);
 
 			form.setDeleteButtonVisible(false);
 
-			Long solicitudID = form.getModificacioSolicitud().getSolicitudID();
+			Long solicitudID = mod.getSolicitudID();
 
 			List<ServeiInfo> serveis = getServeisSolicitud(solicitudID);
 			mav.addObject("serveis", serveis);
 
-			Long modsoliID = form.getModificacioSolicitud().getModsoliID();
+			Long modsoliID = mod.getModsoliID();
 			log.info("modSoli: " + modsoliID);
 			request.getSession().setAttribute(MOD_SOLI_ID, modsoliID);
 			request.getSession().setAttribute(SOLICITUD_ID, solicitudID);
@@ -210,6 +225,20 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 		return form;
 	}
+	
+	@Override
+		public void postValidate(HttpServletRequest request, ModificacioSolicitudForm modificacioSolicitudForm,
+				BindingResult result) throws I18NException {
+
+			super.postValidate(request, modificacioSolicitudForm, result);
+
+			if (modificacioSolicitudForm.getModificacioSolicitud().getConsentiment() == null) {
+
+				result.rejectValue(get(CONSENTIMENT), "genapp.validation.malformed",
+						new String[] { I18NUtils.tradueix(CONSENTIMENT.fullName) }, null);
+			}
+
+		}
 
 	private List<ServeiInfo> getServeisSolicitud(Long solicitudID) throws I18NException {
 
@@ -275,7 +304,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		modSolicitud.setProcedimentNom(solicitud.getProcedimentNom());
 		modSolicitud.setEstatID(solicitud.getEstatSolicitud());
 		modSolicitud.setDataInici(solicitud.getDataInici());
-		modSolicitud.setDataFi(solicitud.getDataFi());
+//		modSolicitud.setDataFi(solicitud.getDataFi());
 		modSolicitud.setNotes(solicitud.getPinfo()); // o el campo correcto
 
 		modSolicitud.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_CREACIO); // o el campo correcto
@@ -702,10 +731,13 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		// Afegir CODI SIA NOU si no es null.
 		if (modificacio.getCodiSiaNou() != null && modificacio.getCodiSiaNou().trim().length() > 0) {
 			// StringBuilder msg, String label, Object original, Object modificado
-			msg.append("<li><strong>").append("Nou Codi SIA").append(":</strong><br>")
+			msg.append("<li><strong>").append("Codi SIA Nova Convocatoria").append(":</strong><br>")
 					.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(modificacio.getCodiSiaNou()).append("</li>");
 		}
-		
+
+		appendSiModificat(msg, "Data Caducitat", solicitudOriginal.getDataFi(),
+				modificacio.getDataFi());
+
 		appendSiModificat(msg, "Responsable procediment", solicitudOriginal.getResponsableProcNom(),
 				modificacio.getResponsableProcNom());
 		appendSiModificat(msg, "Mail Responsable", solicitudOriginal.getResponsableProcEmail(),

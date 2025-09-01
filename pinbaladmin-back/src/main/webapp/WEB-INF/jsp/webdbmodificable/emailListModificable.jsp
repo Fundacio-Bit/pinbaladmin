@@ -65,6 +65,53 @@
         $("#modelSeleccioTramitador").modal();
     }
     
+    function testSolicitud() {
+        var param = $("#solicitudID").val();
+
+        $.ajax({
+            url: "<%= request.getContextPath() + LlistaCorreusOperadorController.CONTEXT_WEB %>/testExistent",
+            type: "GET",
+            data: { param: param },
+            dataType: "json",
+            success: function(data) {
+                console.log("Solicitudes encontradas:", data);
+
+                var container = $("#testSolicitud");
+                container.empty();
+
+                if (data && data.length > 0) {
+                    var list = $("<ul></ul>");
+                    data.forEach(function(soli) {
+                        var li = $("<li></li>")
+                            .text("ID: " + soli.id + " - " + soli.nom + " (" + soli.codi+ ")")
+                            .css("cursor", "pointer")
+                            .on("click", function() {
+                                seleccionarSolicitud(soli);
+                            });
+                        list.append(li);
+                    });
+                    container.append(list);
+                } else {
+                    container.text("No s'han trobat sol·licituds.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en AJAX:", error);
+                $("#testSolicitud").text("Error cercant sol·licituds.");
+            }
+        });
+    }
+
+    function seleccionarSolicitud(soli) {
+        // Guardamos la selección
+        $("#solicitudID").val(soli.id); 
+        $("#testSolicitud").html(
+            "<p>Seleccionada: solicitud " + soli.codi + " (" + soli.nom + ")</p>"
+        );
+    }
+
+    
+    
     function cleanModalCorreu() {
     	$("#visorCorreu").empty();
     	
@@ -404,9 +451,12 @@
 						<input type="text" id="incidenciaID" />
 					</div>
 					<div class="solicitud-info">
-						<label for="solicitudid" style="font-size: 1.15rem;">Solicitud ID:</label> 
-						<input type="text" id="solicitudID" />
+					    <label for="solicitudid" style="font-size: 1.15rem;">Solicitud:</label> 
+					    <input type="text" id="solicitudID">
+					    <button id="btnTest" type="button" onclick="testSolicitud()">Cercar</button>
+					    <div id="testSolicitud"></div> <!-- aquí pintaremos la lista -->
 					</div>
+					
 				</div>
 
 				<div class="modal-footer">

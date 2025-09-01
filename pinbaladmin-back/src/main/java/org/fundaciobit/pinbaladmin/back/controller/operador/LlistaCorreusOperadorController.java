@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.mail.Message;
@@ -464,6 +465,7 @@ public class LlistaCorreusOperadorController extends EmailController {
         return "redirect:" + getContextWeb() + "/list";
     }
 
+    
 	@RequestMapping(value = "/solicitudExistent/{emailID}/{solicitudID}", method = RequestMethod.GET)
 	public String solicitudExistent(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("emailID") Long emailID, @PathVariable("solicitudID") Long solicitudID) {
@@ -493,6 +495,75 @@ public class LlistaCorreusOperadorController extends EmailController {
             HtmlUtils.saveMessageError(request, msg);
         }
 		return "redirect:" + getContextWeb() + "/list";
+	}
+
+	public class SolicitudDTO {
+	    private Long id;
+	    private String codi;
+	    private String nom;
+	    // lo que quieras mostrar en la lista
+
+	    public SolicitudDTO(Solicitud s) {
+	        this.id = s.getSolicitudID();
+	        this.codi = s.getProcedimentCodi();
+	        this.nom = s.getProcedimentNom();
+	    }
+	}
+
+	
+	@RequestMapping(value = "/testExistent", method = RequestMethod.GET)
+	private void testExistent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		try {
+			String param = request.getParameter("param");
+
+			List<Solicitud> results = new ArrayList<>();
+
+			// 1. Buscar por ID si es número
+			try {
+				Long id = Long.parseLong(param);
+				List<Solicitud> byId = solicitudLogicaEjb.select(SolicitudFields.SOLICITUDID.equal(id));
+				results.addAll(byId);
+			} catch (NumberFormatException ignored) {
+				// param no es un número → no se busca por ID
+			}
+
+			// 2. Buscar por CODI
+			List<Solicitud> byCodi = solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%"));
+			results.addAll(byCodi);
+
+			// 3. Buscar por NOM
+			List<Solicitud> byNom = solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%"));
+			results.addAll(byNom);
+
+			// Eliminar duplicados manteniendo orden (ID → Codi → Nom)
+			List<Solicitud> distinctResults = results.stream().distinct().collect(Collectors.toList());
+
+			// Convertir a DTOs
+			List<SolicitudDTO> dtoList = distinctResults.stream().map(SolicitudDTO::new).collect(Collectors.toList());
+
+			// Responder en JSON
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+
+			Gson g = new Gson();
+			response.getWriter().print(g.toJson(dtoList));
+
+		} catch (Throwable e) {
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+
+			String msg;
+			if (e instanceof I18NException) {
+				msg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				msg = "Error assignant a item: " + e.getMessage();
+			}
+
+			log.error(msg, e);
+
+			Gson g = new Gson();
+			response.getWriter().print(g.toJson(Collections.singletonMap("error", msg)));
+		}
 	}
 
 	

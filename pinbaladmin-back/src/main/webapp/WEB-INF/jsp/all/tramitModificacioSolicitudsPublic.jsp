@@ -18,7 +18,7 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Modificació Procediments</div>
+	<div id="titol-tramit" ><fmt:message key='tramit.modificacions.title'/></div>
 	<div id="button-menu" class="third">
 		<a href="www.google.com"/></a>
 	</div>
@@ -89,8 +89,8 @@
 }
 
 .third {
-	flex: 1;
-}
+/* 	flex: 1;
+ */}
 
 #footer {
 	padding: 1rem;

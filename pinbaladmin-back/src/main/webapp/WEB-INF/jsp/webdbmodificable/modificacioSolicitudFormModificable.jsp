@@ -37,44 +37,62 @@
 	color: white;
 	border: none;
 	border-radius: 50%;
-    width: 25px;
-    height: 25px;
+	width: 25px;
+	height: 25px;
 	font-weight: bold;
 	text-align: center;
 	cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-
 
 .btn-add-norma:hover {
 	background-color: #218838;
 }
 
 #modalNorma {
-  display: none; /* Ya lo tienes */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
-  z-index: 999; /* Asegura que esté encima */
+	display: none; /* Ya lo tienes */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	/* Fondo oscuro semitransparente */
+	z-index: 999; /* Asegura que esté encima */
 }
 
 .modal-content {
-  background: white;
-  border-radius: 6px;
-  max-width: 500px;
-  padding: 20px;
-  margin: 10% auto;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+	background: white;
+	border-radius: 6px;
+	max-width: 500px;
+	padding: 20px;
+	margin: 10% auto;
+	position: relative;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
+.titolSection {
+	text-align: left !important;
+	padding-top: 2rem !important;
+	font-size: 1.25rem !important;
+	font-weight: bold !important;
+}
 
+.lead:first-child {
+	text-align: center;
+	margin: 10px;
+}
+
+.navbar-form {
+	margin-top: 3rem;
+}
+
+#titolModifServ {
+	font-size: 1.25rem !important;
+	font-weight: bold !important;
+}
 </style>
 
 
@@ -82,11 +100,11 @@
 	document.getElementById("modificacioSolicitud_tableid").classList = "tdformlabel table-sm";
 
 	document.getElementById("modificacioSolicitud.procedimentCodi").readOnly = "readOnly";
-	document.getElementById("modificacioSolicitud.dataInici").readOnly = "readOnly";
+/* 	document.getElementById("modificacioSolicitud.dataInici").readOnly = "readOnly";
 	document.getElementById("modificacioSolicitud.dataFi").readOnly = "readOnly";
-
-	document.getElementById("modificacioSolicitud_estatID").setAttribute(
-			"disabled", "disabled");
+ */
+/* 	document.getElementById("modificacioSolicitud_estatID").setAttribute(
+			"disabled", "disabled"); */
 	document.getElementById("modificacioSolicitud_organID").setAttribute(
 			"disabled", "disabled");
 
@@ -107,7 +125,7 @@
 
 <div id="llistatServeisActuals">
 	<!-- Tabla de Servicios -->
-	<h4>Modificar Serveis</h4>
+	<div id="titolModifServ">Modificar Serveis</div>
 	<c:if test="${empty serveis}">
 		<p>No hi ha serveis disponibles.</p>
 	</c:if>
@@ -140,6 +158,20 @@
 
 		
 
+<table>
+<tr id="titolProcediment" class="titolRow">
+	<td colspan="2" class="titolSection">Dades Procediment</td>
+</tr>
+
+<tr id="titolResponsable" class="titolRow">
+	<td colspan="2" class="titolSection">Dades Responsable</td>
+</tr>
+
+<tr id="titolConsentiment" class="titolRow">
+	<td colspan="2" class="titolSection">Dades Consentiment</td>
+</tr>
+</table>
+
 
 		<script>
   $(document).ready(function () {
@@ -164,17 +196,26 @@
         $("#modalNorma").fadeOut();
       }
     });
+    
+
+    $("#titolProcediment").insertBefore("#modificacioSolicitud_procedimentCodi_rowid");
+    $("#titolResponsable").insertBefore("#modificacioSolicitud_responsableProcNom_rowid");
+    $("#titolConsentiment").insertBefore("#modificacioSolicitud_consentiment_rowid");
+
   });
 </script>
 
 <script>
-$(document).ready(function () {
+/* $(document).ready(function () {
 	  const $selectCaduca = $("#solicitudServei_caduca");
 	  const $fechaInput = $("#solicitudServei\\.fechaCaduca");
 
 	  function actualizarCampoFecha() {
-	    const valor = $selectCaduca.val().trim();
+	    const valor = $selectCaduca.val();
 
+	    console.log(valor);
+	    console.log
+	    
 	    if (valor === "Caduca") {
 	      $fechaInput.attr("type", "date");
 	      $fechaInput.prop("disabled", false);
@@ -193,7 +234,7 @@ $(document).ready(function () {
 	  // Ejecutar al cargar para establecer el estado inicial
 	  actualizarCampoFecha();
 	});
-
+ */
 </script>
 
 
@@ -217,22 +258,21 @@ $(document).ready(function () {
 					<input type="hidden" name="serveiId" id="serveiId" value="">
 
 					<div class="form-group">
-						<label for="norma">Norma</label> <input type="text" name="norma"
+						<label for="norma"><fmt:message key="solicitudServei.normaLegal" /></label> <input type="text" name="norma"
 							class="form-control" required>
 					</div>
 
 					<div class="form-group">
-						<label for="fitxer">Fichero</label> <input type="file"
+						<label for="fitxer"><fmt:message key="solicitudServei.fitxernormaID" /></label> <input type="file"
 							name="fitxer" class="form-control" required>
 					</div>
 
 					<div class="form-group">
-						<label for="articles">Artículos</label> <input type="text"
+						<label for="articles"><fmt:message key="solicitudServei.articles" /></label> <input type="text"
 							name="articles" class="form-control" required>
 					</div>
 
-					<button type="button" id="submitNormaBtn" class="btn btn-primary">Añadir
-						norma</button>
+					<button type="button" id="submitNormaBtn" class="btn btn-primary"><fmt:message key="afegirnorma" /></button>
 				
 			</div>
 		</div>

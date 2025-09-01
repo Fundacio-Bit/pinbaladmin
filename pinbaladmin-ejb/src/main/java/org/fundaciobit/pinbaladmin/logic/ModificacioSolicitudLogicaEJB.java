@@ -81,6 +81,8 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 		solicitud.setResponsableProcEmail(modSoli.getResponsableProceMail());
 		solicitud.setConsentiment(modSoli.getConsentiment());
 		
+		solicitud.setDataFi(modSoli.getDataFi());
+		
 		//Afegir el nou codi SIA a la Convocatoria, si no es null.
 		log.info("Codi SIA Anterior: " + solicitud.getCodiSiaConv());
 		String codiSia =modSoli.getCodiSiaNou() ; 

@@ -21,8 +21,11 @@ import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.Section;
+import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
@@ -104,13 +107,21 @@ public class SolicitudServeiPublicController extends SolicitudsServeiOnlyContent
 		filterForm.getAdditionalButtonsByPK().clear();
 		
 		log.info("Pasam per aqui, bones");
+		
+		filterForm.getAdditionalButtons().clear();
+		
+		filterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN, "tramit.i.afegir.servei",
+				CONTEXT_WEB + "/new", AdditionalButtonStyle.SUCCESS));
+		
 		if (filterForm.isNou()) {
 			log.info("Si, es nou");
 
-			filterForm.setAddButtonVisible(true);
+			filterForm.setAddButtonVisible(false);
 			filterForm.setFooterListVisible(false);
 			filterForm.setVisibleExportList(false);
+
 			
+
 			Set<Field<?>> hiddenFields = new HashSet<Field<?>>(
 					Arrays.asList(SolicitudServeiFields.ALL_SOLICITUDSERVEI_FIELDS));
 
@@ -147,6 +158,9 @@ public class SolicitudServeiPublicController extends SolicitudsServeiOnlyContent
 			log.info("solicitudID: " + solicitudID);
 			solSer.setSolicitudID(solicitudID);
 			solSer.setCaduca("No Caduca");
+			
+			form.addHiddenField(CADUCA);
+			form.addHiddenField(FECHACADUCA);
 			
 			form.getSolicitudServei().setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_MODIFICACIO_SERVEI);
 		}
