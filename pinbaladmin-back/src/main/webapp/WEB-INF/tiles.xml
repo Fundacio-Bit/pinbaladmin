@@ -230,6 +230,14 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organList.jsp" />
     </definition>
 
+    <definition name="infoMadridFormOperador" extends="operador_base">
+        <put-attribute name="titol" value="infoMadrid.infoMadrid" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/infoMadridForm.jsp" />
+    </definition>
+
+    <definition name="infoMadridListOperador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/infoMadridList.jsp" />
+    </definition>
 
 
     <definition name="grupEntitatCedentFormOperador" extends="operador_base">

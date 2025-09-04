@@ -172,51 +172,46 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			
 			
 			Long estatID = solicitud.getEstatSolicitud();
+			
 			// Botones según el estatID
 			if (estatID != null) {
-			    if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
-		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
-		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
-		    		|| estatID == Constants.SOLI_ESTAT_ESMENES
-			        || estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
+				if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
+						|| estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
 
-			        // ALTA permitida
-			        AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-			            "/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+					// ALTA permitida
+					AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+							"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
 					solicitudForm.addAdditionalButton(alta);
-			    }
+				}
 
-			    if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
-		    		|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
-			        || estatID == Constants.SOLI_ESTAT_ESMENES
-			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT
-			        || estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
-			        || estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-			        || estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-			        || estatID == Constants.SOLI_ESTAT_TANCAT
-			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
-			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
+				// Si està pendent d'autoritzar, utilitza CONSULTA. Si no, tenim resposta, la
+				// cercam de InfoMad, si es != null
+				if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) {
 
-			        // CONSULTA permitida
-			        AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-			            "/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
+					// CONSULTA permitida
+					AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+							"/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
 					solicitudForm.addAdditionalButton(consulta);
-			    }
+				} else {
+					Long infoMadID = solicitud.getInfomadridid();
 
-			    if (estatID == Constants.SOLI_ESTAT_AUTORITZAT
-			        || estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-			        || estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
-			        || estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
+					if (infoMadID != null) {
+						AdditionalButton infoMadBtn = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+								"/operador/infoMadrid/view/" + infoMadID, AdditionalButtonStyle.SECONDARY);
+						solicitudForm.addAdditionalButton(infoMadBtn);
+					}
 
-			        // MODIFICACIO permitida
-			        AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-			            "/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
+				}
+
+				if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+						|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
+
+					// MODIFICACIO permitida
+					AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+							"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
 					solicitudForm.addAdditionalButton(modificacio);
-			    }
+				}
 			}
-
-				
 				
 				
 //				

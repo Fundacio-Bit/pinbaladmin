@@ -3701,7 +3701,7 @@
           "sqlType": -5,
           "size": 19,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Estat Procediment",
             "es": "Estado Procedimiento"
@@ -3727,7 +3727,7 @@
           "sqlType": -5,
           "size": 19,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Estat Autorització",
             "es": "Estado Autorización"
@@ -3778,7 +3778,7 @@
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Consulta",
             "es": "Consulta"
@@ -3803,7 +3803,7 @@
           "sqlType": 12,
           "size": 240,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Nom Titular",
             "es": "Nombre Titular"
@@ -3828,7 +3828,7 @@
           "sqlType": 12,
           "size": 20,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "NIF titular",
             "es": "NIF titular"

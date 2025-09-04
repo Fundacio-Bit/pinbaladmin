@@ -30,22 +30,22 @@ public class InfoMadridJPA implements InfoMadrid {
     @Column(name="codi",nullable = false,length = 20)
     java.lang.String codi;
 
-    @Column(name="estatprocediment",nullable = false,length = 19)
+    @Column(name="estatprocediment",length = 19)
     long estatProcediment;
 
-    @Column(name="estatautoritzacio",nullable = false,length = 19)
+    @Column(name="estatautoritzacio",length = 19)
     long estatAutoritzacio;
 
     @Column(name="missatge",length = 1024)
     java.lang.String missatge;
 
-    @Column(name="consulta",nullable = false,length = 240)
+    @Column(name="consulta",length = 240)
     java.lang.String consulta;
 
-    @Column(name="titularnom",nullable = false,length = 240)
+    @Column(name="titularnom",length = 240)
     java.lang.String titularNom;
 
-    @Column(name="titularnif",nullable = false,length = 20)
+    @Column(name="titularnif",length = 20)
     java.lang.String titularNif;
 
     @Column(name="dataautoritzacio",length = 29,precision = 6)
@@ -91,14 +91,9 @@ public class InfoMadridJPA implements InfoMadrid {
     this.intents=intents;
 }
   /** Constructor dels valors Not Null */
-  public InfoMadridJPA(long infoMadridID , java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , long intents) {
+  public InfoMadridJPA(long infoMadridID , java.lang.String codi , long intents) {
     this.infoMadridID=infoMadridID;
     this.codi=codi;
-    this.estatProcediment=estatProcediment;
-    this.estatAutoritzacio=estatAutoritzacio;
-    this.consulta=consulta;
-    this.titularNom=titularNom;
-    this.titularNif=titularNif;
     this.intents=intents;
 }
   public InfoMadridJPA(InfoMadrid __bean) {

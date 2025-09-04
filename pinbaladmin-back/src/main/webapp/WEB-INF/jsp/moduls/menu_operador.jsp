@@ -45,6 +45,13 @@
 				</a>
 			</c:if></li>
 
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/infoMadrid/list/1"/>">
+				<span
+				style="${(fn:contains(url, '/infoMadrid'))? "font-weight:bold;" : ""}">Info Madrid</span>
+		</a></li>
+
+
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 		
 		<li style="list-style-type: disc; list-style-position: inside;"><a

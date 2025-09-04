@@ -53,14 +53,9 @@ public class InfoMadridBean implements InfoMadrid {
     this.intents=intents;
 }
   /** Constructor dels valors Not Null */
-  public InfoMadridBean(long infoMadridID , java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , long intents) {
+  public InfoMadridBean(long infoMadridID , java.lang.String codi , long intents) {
     this.infoMadridID=infoMadridID;
     this.codi=codi;
-    this.estatProcediment=estatProcediment;
-    this.estatAutoritzacio=estatAutoritzacio;
-    this.consulta=consulta;
-    this.titularNom=titularNom;
-    this.titularNif=titularNif;
     this.intents=intents;
 }
   public InfoMadridBean(InfoMadrid __bean) {

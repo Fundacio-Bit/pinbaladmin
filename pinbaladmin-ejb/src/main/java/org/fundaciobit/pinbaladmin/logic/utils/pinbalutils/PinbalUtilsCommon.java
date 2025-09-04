@@ -14,6 +14,8 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
+import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
@@ -21,7 +23,7 @@ import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto;
 
-public class PinbalUtilsCommon {
+public abstract class PinbalUtilsCommon {
 
 	final static Logger log = Logger.getLogger(PinbalUtilsCommon.class);
 
@@ -31,6 +33,15 @@ public class PinbalUtilsCommon {
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerLogicEjb;
 
+	@EJB(mappedName = SolicitudServeiLogicaService.JNDI_NAME)
+	protected SolicitudServeiLogicaService solicitudServeiLogicaEjb;
+
+	@EJB(mappedName = ServeiLogicaService.JNDI_NAME)
+	protected ServeiLogicaService serveiLogicaEjb;
+	
+	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+	protected InfoMadridLogicaService infoMadridLogicaEjb2;
+	
 	public PinbalUtilsCommon() {
 	}
 

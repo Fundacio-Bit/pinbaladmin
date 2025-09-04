@@ -24,7 +24,7 @@
         <tr id="infoMadrid_estatProcediment_rowid">
           <td id="infoMadrid_estatProcediment_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.ESTATPROCEDIMENT])?'infoMadrid.estatProcediment':__theForm.labels[InfoMadridFields.ESTATPROCEDIMENT]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.ESTATPROCEDIMENT])?'infoMadrid.estatProcediment':__theForm.labels[InfoMadridFields.ESTATPROCEDIMENT]}" />
              </label>
               <c:if test="${not empty __theForm.help[InfoMadridFields.ESTATPROCEDIMENT]}">
               <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.ESTATPROCEDIMENT]}" ></i>
@@ -45,6 +45,15 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.infoMadrid.estatProcediment }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.infoMadrid.estatProcediment }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
           </form:select>
           </c:if>
            </td>
@@ -55,7 +64,7 @@
         <tr id="infoMadrid_estatAutoritzacio_rowid">
           <td id="infoMadrid_estatAutoritzacio_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.ESTATAUTORITZACIO])?'infoMadrid.estatAutoritzacio':__theForm.labels[InfoMadridFields.ESTATAUTORITZACIO]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.ESTATAUTORITZACIO])?'infoMadrid.estatAutoritzacio':__theForm.labels[InfoMadridFields.ESTATAUTORITZACIO]}" />
              </label>
               <c:if test="${not empty __theForm.help[InfoMadridFields.ESTATAUTORITZACIO]}">
               <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.ESTATAUTORITZACIO]}" ></i>
@@ -76,6 +85,15 @@
                   <c:set var="containEmptyValue"  value="true" />
                 </c:if>
             </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.infoMadrid.estatAutoritzacio }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.infoMadrid.estatAutoritzacio }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
           </form:select>
           </c:if>
            </td>
@@ -125,7 +143,7 @@
         <tr id="infoMadrid_consulta_rowid">
           <td id="infoMadrid_consulta_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.CONSULTA])?'infoMadrid.consulta':__theForm.labels[InfoMadridFields.CONSULTA]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.CONSULTA])?'infoMadrid.consulta':__theForm.labels[InfoMadridFields.CONSULTA]}" />
              </label>
               <c:if test="${not empty __theForm.help[InfoMadridFields.CONSULTA]}">
               <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.CONSULTA]}" ></i>
@@ -164,7 +182,7 @@
         <tr id="infoMadrid_titularNom_rowid">
           <td id="infoMadrid_titularNom_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.TITULARNOM])?'infoMadrid.titularNom':__theForm.labels[InfoMadridFields.TITULARNOM]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.TITULARNOM])?'infoMadrid.titularNom':__theForm.labels[InfoMadridFields.TITULARNOM]}" />
              </label>
               <c:if test="${not empty __theForm.help[InfoMadridFields.TITULARNOM]}">
               <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.TITULARNOM]}" ></i>
@@ -182,7 +200,7 @@
         <tr id="infoMadrid_titularNif_rowid">
           <td id="infoMadrid_titularNif_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.TITULARNIF])?'infoMadrid.titularNif':__theForm.labels[InfoMadridFields.TITULARNIF]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.TITULARNIF])?'infoMadrid.titularNif':__theForm.labels[InfoMadridFields.TITULARNIF]}" />
              </label>
               <c:if test="${not empty __theForm.help[InfoMadridFields.TITULARNIF]}">
               <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.TITULARNIF]}" ></i>

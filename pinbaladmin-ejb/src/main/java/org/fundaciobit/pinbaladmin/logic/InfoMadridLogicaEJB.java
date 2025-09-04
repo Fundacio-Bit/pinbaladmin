@@ -28,6 +28,8 @@ public class InfoMadridLogicaEJB extends InfoMadridEJB implements InfoMadridLogi
     @Override
     @PermitAll
     public InfoMadridJPA findByPrimaryKey(Long _ID_) {
+    	
+    	log.info("Farem un findByPK -- " + _ID_);
         return (InfoMadridJPA)super.findByPrimaryKey(_ID_);
     }
     

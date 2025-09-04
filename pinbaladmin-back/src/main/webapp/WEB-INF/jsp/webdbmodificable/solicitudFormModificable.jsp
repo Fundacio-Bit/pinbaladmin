@@ -11,7 +11,8 @@
 		"/enviarAFirmar/",
 		"/afegirFormulariFirmat/", 
 		"/solicitudestatal/enviarcorreucedents/",
-		"/acceptarModificacio"
+		"/acceptarModificacio",
+		"/infoMadrid/view"
 		
 		]
 
@@ -37,7 +38,7 @@
 	}
 </script>
 
-<!-- Canviar visualitzaci� de la jerarquia -->
+<!-- Canviar visualitzacio de la jerarquia -->
 
 <c:if test="${isView == 'true'}">
 	<script>

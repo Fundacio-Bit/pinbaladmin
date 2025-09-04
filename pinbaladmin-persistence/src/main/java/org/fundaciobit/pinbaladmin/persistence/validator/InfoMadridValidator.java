@@ -34,26 +34,6 @@ public class InfoMadridValidator<I extends InfoMadrid>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CODI)));
 
-    __vr.rejectIfEmptyOrWhitespace(__target__,ESTATPROCEDIMENT, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTATPROCEDIMENT)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,ESTATAUTORITZACIO, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESTATAUTORITZACIO)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,CONSULTA, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSULTA)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,TITULARNOM, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARNOM)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,TITULARNIF, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARNIF)));
-
     __vr.rejectIfEmptyOrWhitespace(__target__,INTENTS, 
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(INTENTS)));

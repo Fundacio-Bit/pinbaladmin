@@ -8,25 +8,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Schedules;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
-import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.query.selectcolumn.Select2Columns;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
@@ -35,15 +29,12 @@ import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAlta;
-import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsulta;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsultaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacio;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
-import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
-import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -54,19 +45,13 @@ import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
-import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.hibernate.Hibernate;
-import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
-import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Consulta;
-import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.EstadoProcedimiento;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
-import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Servicio;
 
 /**
  * 
@@ -105,6 +90,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
     protected InfoMadridLogicaService infoMadridLogicaJEjb;
 
+    @EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
+    protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+
+//    PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
     
     @Override
     public Map<Long, List<SolicitudDTO>> getSolicitudsByServei(Collection<Long> serveiIds) {
@@ -529,44 +518,73 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		return mod.getDadesSolicitudApiPinbalMod(soli);
 	}
 
+	
 	@Override
 	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
-			throws Exception {
+	        throws Exception {
 
 		SolicitudJPA solicitud = this.findByPrimaryKey(soliID);
-		PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
 		Retorno retorno = null;
-		try {
-			retorno = cons.consultaEstatApiPinbal(titular, funcionario, solicitud.getProcedimentCodi());
-			InfoMadridJPA infoMadJpa = cons.actualitzarSolicitud(retorno, titular, solicitud);
-			
-			if (infoMadJpa != null) {
-
-				InfoMadrid infoMad = infoMadridLogicaJEjb.create(infoMadJpa);
-
-				Long id = infoMad.getInfoMadridID();
-				log.info("Info Mad Creat: " + id);
-				solicitud.setInfomadridid(id);
-			}
-			
-			String estado = retorno.getEstado().getCodigoEstado();
-
-			final String SOLICITUD_TROBADA = "0";
-
-			if (estado.equals(SOLICITUD_TROBADA)) {
-				actualitzarDadesServeisSolicitud(solicitud, retorno);
-			}
-			
-		} catch (Throwable e) {
-			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
-			log.error("Error fent consulta: " + e.getMessage(), e);
-		}
 		
-		this.update(solicitud);
+	    try {
 
-		
-		return retorno;
+	    	
+	    	log.info("Iniciamos consulta con Solicitud " + soliID);
+	        // 1. Consultar PINBAL (Madrid)
+	    	retorno  = pinbalConsultaLogicaEjb.consultaEstatApiPinbal(titular, funcionario,  solicitud.getProcedimentCodi());
+	    	log.info("Consulta PINBAL completada. Estado recibido:" + retorno.getEstado() != null ? retorno.getEstado().getCodigoEstado() : "N/A");
+
+	        // 2. Procesar respuesta
+	    	pinbalConsultaLogicaEjb.procesarRetornoPinbal(retorno, titular, solicitud);
+	        log.info("Respuesta procesada. InfoMad: " + solicitud.getInfomadridid());
+	        
+	        // 3. Informar al contacto si hay cambios.
+	        
+	        
+	    } catch (Throwable e) {
+	        solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+	        log.error("Error consultando PINBAL: " + e.getMessage(), e);
+	    }
+
+	    // 3. Guardar cambios de la solicitud
+	    this.update(solicitud);
+
+	    return retorno;
 	}
+//
+//	
+//	
+//	
+//	
+//	@Override
+//	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
+//			throws Exception {
+//
+//		SolicitudJPA solicitud = this.findByPrimaryKey(soliID);
+//		PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
+//		Retorno retorno = null;
+//		try {
+//			retorno = cons.consultaEstatApiPinbal(titular, funcionario, solicitud.getProcedimentCodi());
+//			InfoMadridJPA infoMadJpa = cons.actualitzarSolicitud(retorno, titular, solicitud);
+//			
+//			if (infoMadJpa != null) {
+//
+//				InfoMadrid infoMad = infoMadridLogicaJEjb.create(infoMadJpa);
+//
+//				Long id = infoMad.getInfoMadridID();
+//				log.info("Info Mad Creat: " + id);
+//				solicitud.setInfomadridid(id);
+//			}
+//		} catch (Throwable e) {
+//			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+//			log.error("Error fent consulta: " + e.getMessage(), e);
+//		}
+//		
+//		this.update(solicitud);
+//
+//		
+//		return retorno;
+//	}
 
 	/*
 	 * 
@@ -583,69 +601,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 	 */
 	
-	public final int ESTADO_SOLI_SERV_PENDIENTE = 0;
-	public final int ESTADO_SOLI_SERV_DESISTIDO = 1;
-	public final int ESTADO_SOLI_SERV_APROBADO = 2;
-	public final int ESTADO_SOLI_SERV_NO_APROBADO = 3;
-	public final int ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE = 6;
-	public final int ESTADO_SOLI_SERV_AUTORIZADO = 7;
-	public final int ESTADO_SOLI_SERV_DESESTIMADO = 8;
 
-	private void actualitzarDadesServeisSolicitud(Solicitud solicitud,
-			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno retorno) throws I18NException {
-
-		// Agafar els serveis de la solicitud, i assignar a cada un l'estat que hi ha a
-		// retorno.
-
-		List<SolicitudServei> listSoliServ = solicitudServeiLogicaEjb
-				.select(SolicitudServeiFields.SOLICITUDID.equal(solicitud.getSolicitudID()));
-
-		List<Servicio> listServeis = retorno.getProcedimiento().getServicios().getServicio();
-
-		for (Servicio servicio : listServeis) {
-			for (SolicitudServei soliServ : listSoliServ) {
-
-				Long serveiId = soliServ.getServeiID();
-				Servei servei = serveiLogicaEjb.findByPrimaryKey(serveiId);
-
-//				log.info("Test servei: " + servei.getCodi() + " -> " + servicio.getCodigoCertificado());
-
-				if (servei.getCodi().equals(servicio.getCodigoCertificado())) {
-//					log.info("Servei trobat: " + servei.getCodi());
-					Long nouEstat = null;
-
-					int nouEstatPinbal = servicio.getEstadoAutorizacion().getEstado();
-					switch (nouEstatPinbal) {
-					case ESTADO_SOLI_SERV_PENDIENTE:
-					case ESTADO_SOLI_SERV_DESISTIDO:
-					case ESTADO_SOLI_SERV_APROBADO:
-					case ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE:
-						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
-						break;
-
-					case ESTADO_SOLI_SERV_NO_APROBADO:
-					case ESTADO_SOLI_SERV_DESESTIMADO:
-						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_DESESTIMAT;
-						break;
-
-					case ESTADO_SOLI_SERV_AUTORIZADO:
-						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT;
-						break;
-
-					default:
-						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE;
-
-					}
-
-					soliServ.setEstatSolicitudServeiID(nouEstat);
-					solicitudServeiLogicaEjb.update(soliServ);
-				} else {
-//					log.info("Servei no trobat: " + servei.getCodi());
-				}
-			}
-		}
-	}
-	
     @Override
     public List<Solicitud> getSolicitudFromTramitID(String ticketGFE) {
         
@@ -875,7 +831,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 		case ESTAT_SUBSANAR:
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-
+			
 			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
 //			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
 //			solicitud.setEstatpinbal(estat.getEstado());
