@@ -119,23 +119,58 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		
 		version2CrearInfoMad();
 		
+//		actualizarTitulares();
+		
 		HtmlUtils.saveMessageSuccess(request, "Estat de les sol·licituds actualitzat correctament.");
 		return "redirect:" + getContextWeb() + "/list";
 
 	}
 	
-	private void version2CrearInfoMad() throws Exception {
+	
+	private void actualizarTitulares() throws Exception{
 		
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
+		Where wInfoMad= SolicitudFields.INFOMADRIDID.isNotNull();
+
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wInfoMad)); // , wEstatPinbal , wEstatSoli));
 		
 		log.info("Solicituds: " + solicituds.size());
 		
 		
 		for (Solicitud soli : solicituds) {
+			InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(soli.getInfomadridid());
 			
 			log.info("Solicitud: " + soli.getSolicitudID());
 			
+			ScspTitular titular = getTitular(soli);
+			if (titular == null) {
+				continue;
+			}
+
+			infoMad.setTitularNif(titular.getDocumentacion());
+			infoMad.setTitularNom(titular.getNombre() + "|" + titular.getApellido1() + "|" + titular.getApellido2());
+			
+			infoMadridLogicaEjb.update(infoMad);
+		}
+	}
+	
+	private void version2CrearInfoMad() throws Exception {
+
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		Where wInfoMad = SolicitudFields.INFOMADRIDID.isNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wInfoMad)); // , wEstatPinbal , wEstatSoli));
+
+		log.info("Solicituds: " + solicituds.size());
+
+		for (Solicitud soli : solicituds) {
+
+			log.info("Solicitud: " + soli.getSolicitudID());
+
+			if (soli.getProcedimentCodi().length() > 20) {
+				log.info("Procediment Llarg. Descartat");
+				continue;
+			}
+
 			long reintents = 0;
 			int estatAutNou = -1000;
 
@@ -146,85 +181,86 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 			int estatID = Long.valueOf(soli.getEstatSolicitud()).intValue();
 
-			if (estatID == Constants.SOLI_ESTAT_SENSE_ESTAT
-				|| estatID == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO	
-				|| estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
-				|| estatID == Constants.SOLI_ESTAT_PENDENT_Firma_Director) {
+			if (estatID == Constants.SOLI_ESTAT_SENSE_ESTAT || estatID == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO
+					|| estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
+					|| estatID == Constants.SOLI_ESTAT_PENDENT_Firma_Director) {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
-				
-			}else if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID) {
-				//Encara no s'han fet modificacions. pendent d'enviar es que no s'ha enviat.
+
+			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID) {
+				// Encara no s'han fet modificacions. pendent d'enviar es que no s'ha enviat.
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
-				
-			}else if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual) {
+
+			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual) {
 				crear = true;
-				
-				//Crear amb dades manuals.
+
+				// Crear amb dades manuals.
 				dataEnviament = null;
-				dataAuth = soli.getDataFi();
+				dataAuth = null;
 				missatge = "Solicitud Enviada a Madrid manualment.";
-			
-			}else if  (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) {
+
+			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) {
 				crear = true;
-				//Cridar CONSULTA per saber si ha estat manual o no.
-				
+				// Cridar CONSULTA per saber si ha estat manual o no.
+
 				Retorno ret = consulta(soli);
-				
+
 				if (ret == null) {
-					//Ha sido Manual.
+					// Ha sido Manual.
 					dataEnviament = null;
 					dataAuth = null;
 					missatge = "Solicitud Enviada a Madrid manualment.";
-				}else {
+				} else {
 					dataEnviament = new Timestamp(System.currentTimeMillis());
-					dataAuth = null;
 					missatge = ret.getProcedimiento().getEstadoProcedimiento().getObservaciones();
 					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
+					if (estatAutNou == Constants.ESTAT_PINBAL_AUTORITZAT) {
+						dataAuth = new Timestamp(System.currentTimeMillis());
+					} else {
+						dataAuth = null;
+					}
 				}
 
-			}else if (estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
+			} else if (estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
 				crear = true;
 
 				dataEnviament = null;
 				dataAuth = null;
 				reintents = 1;
 				missatge = null;
-				
-			}else if  (estatID == Constants.SOLI_ESTAT_AUTORITZAT
-					|| estatID == Constants.SOLI_ESTAT_TANCAT) {
+
+			} else if (estatID == Constants.SOLI_ESTAT_AUTORITZAT || estatID == Constants.SOLI_ESTAT_TANCAT) {
 				crear = true;
-				
-				//Cridar CONSULTA per saber si ha estat manual o no.
+
+				// Cridar CONSULTA per saber si ha estat manual o no.
 				Retorno ret = consulta(soli);
-				
+
 				if (ret == null) {
-					//Ha sido Manual.
+					// Ha sido Manual.
 					dataEnviament = null;
 					dataAuth = soli.getDataFi();
 					missatge = "Solicitud Enviada a Madrid manualment, i AUTORITZADA.";
-				}else {
+				} else {
 					dataEnviament = soli.getDataFi();
 					dataAuth = soli.getDataFi();
 					missatge = ret.getProcedimiento().getEstadoProcedimiento().getObservaciones();
 					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
-
 				}
-				
-			}else if (estatID == Constants.SOLI_ESTAT_AUTORITZAT_Manual) {
+
+			} else if (estatID == Constants.SOLI_ESTAT_AUTORITZAT_Manual) {
 				crear = true;
 
 				dataEnviament = null;
 				dataAuth = soli.getDataFi();
 				missatge = "Solicitud Enviada a Madrid manualment, i AUTORITZADA.";
-			}else if (estatID == Constants.SOLI_ESTAT_AUTORITZAT_Parcial) {
+			} else if (estatID == Constants.SOLI_ESTAT_AUTORITZAT_Parcial) {
 				crear = true;
-				
+
 				dataEnviament = null;
 				dataAuth = soli.getDataFi();
 				missatge = "Solicitud Enviada a Madrid manualment, i autoritzada PARCIALMENT.";
@@ -232,81 +268,79 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 					|| estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
 					|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
 					|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
-				//Ja les han autoritzat abans. I totes les de modificacions també. CONSULTA per veure estat.
+				// Ja les han autoritzat abans. I totes les de modificacions també. CONSULTA per
+				// veure estat.
 				crear = true;
 
-				//Cridar CONSULTA per saber si ha estat manual o no.
+				// Cridar CONSULTA per saber si ha estat manual o no.
 				Retorno ret = consulta(soli);
-				
+
 				if (ret == null) {
-					//Ha sido Manual.
+					// Ha sido Manual.
 					dataEnviament = null;
 					dataAuth = soli.getDataFi();
 					missatge = "Solicitud Enviada a Madrid manualment. Pendent Esmena";
-				}else {
+				} else {
 					dataEnviament = soli.getDataFi();
 					dataAuth = soli.getDataFi();
 					missatge = ret.getProcedimiento().getEstadoProcedimiento().getObservaciones();
 					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
 				}
-				
-			} else if (
 
-			estatID == Constants.SOLI_ESTAT_ESMENES || estatID == Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE
+			} else if (estatID == Constants.SOLI_ESTAT_ESMENES || estatID == Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE
 					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_RESPOSTA
 					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_REVISAR
 					|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES) {
 				crear = true;
-			
-				//En tots els casos de esmenes, cridar consulta per si hi algun missatge, i guardar estat real.
-				//Cridar CONSULTA 
+
+				// En tots els casos de esmenes, cridar consulta per si hi algun missatge, i
+				// guardar estat real.
+				// Cridar CONSULTA
 				Retorno ret = consulta(soli);
-				
+
 				if (ret == null) {
-					//Ha sido Manual.
+					// Ha sido Manual.
 					dataEnviament = null;
 					dataAuth = null;
 					missatge = "Solicitud Enviada a Madrid manualment. Pendent Esmena";
-				}else {
+				} else {
 					dataEnviament = null;
 					dataAuth = null;
 					missatge = ret.getProcedimiento().getEstadoProcedimiento().getObservaciones();
 					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
 				}
-				
-			}else if (estatID == Constants.SOLI_ESTAT_REVISIO) {
+
+			} else if (estatID == Constants.SOLI_ESTAT_REVISIO) {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
-			}else if  (estatID == Constants.SOLI_ESTAT_DENEGADA) {
+			} else if (estatID == Constants.SOLI_ESTAT_DENEGADA) {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
-			}else if (estatID == Constants.SOLI_ESTAT_PENDENT_PINFO) {
+			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_PINFO) {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
-			}else {
+			} else {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;
 				missatge = null;
 			}
 
-			
 			log.info("Missatge: " + missatge);
-			
+
 			log.info("EstatSoli: " + estatID + ". crear=" + crear + ". InfoMadrid: " + soli.getInfomadridid());
-			
+
 			if (crear) {
 				String codi = soli.getProcedimentCodi();
 				if (soli.getInfomadridid() == null) {
 
 					log.info("Intentarem Crear InfoMad");
-
 
 					String consultaTexto = "Buenos días,\n"
 							+ "Enviamos solicitud para dar servicios de alta en el procedimiento " + codi + "\n\n"
@@ -341,48 +375,46 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 							titularNom, titularNif, dataAuth, dataEnviament, reintents);
 
 					log.info("CREAM InfoMad per solicitud: " + codi);
-					InfoMadrid infoMad =  infoMadridLogicaEjb.create(infoMadJPA);
-					
+					InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJPA);
+
 					log.info("Creat InfoMad amb id = " + infoMad.getInfoMadridID());
 					soli.setInfomadridid(infoMad.getInfoMadridID());
 					solicitudLogicaEjb.update(soli);
 
 				} else {
 					log.info("Ja tenim InfoMadrid. Asssignam a tots els procediments d'aquest codi. " + codi);
-					List<Solicitud> solicitudIguals = solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTCODI.equal(codi));
-					for (Solicitud solicitud : solicitudIguals) {
-						solicitud.setInfomadridid(soli.getInfomadridid());
-						log.info("UPDATE soli " + solicitud.getSolicitudID());
-						solicitudLogicaEjb.update(solicitud);
+					List<Solicitud> solicitudIguals = solicitudLogicaEjb
+							.select(SolicitudFields.PROCEDIMENTCODI.equal(codi));
+
+					if (solicitudIguals.size() > 0) {
+						log.info("SOLICITUD REPETIDA " + solicitudIguals.size() + " VEGADES");
+
+//						for (Solicitud solicitud : solicitudIguals) {
+//							solicitud.setInfomadridid(soli.getInfomadridid());
+//							log.info("UPDATE soli " + solicitud.getSolicitudID());
+//							solicitudLogicaEjb.update(solicitud);
+//						}
+
 					}
 
 				}
 			}
-		}		
+		}
 	}
 	
 	private String[] dadesTitular(Solicitud soli) throws Exception {
 		
-		
-		
-		Long fitxerID = soli.getSolicitudXmlID();
+		ScspTitular titular = getTitular(soli);
 
-		if (fitxerID == null) {
-			log.info("fitxerID: " + fitxerID);
-			return null;
-		}
-
-		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-		if (prop == null) {
-			log.info("prop: " + prop);
+		if (titular == null) {
 			return null;
 		}
 		
-		ScspTitular titular = getTitular(prop);
-
 		String[] datosTitular = new String[2];
 		
-		datosTitular[0] = titular.getNombreCompleto();
+//		datosTitular[0] = titular.getNombreCompleto();
+		datosTitular[0] = titular.getNombre() + "|" + titular.getApellido1() + "|" + titular.getApellido2() == null ? ""
+				: titular.getApellido2();
 		datosTitular[1] = titular.getDocumentacion();
 		
 		return datosTitular;
@@ -391,25 +423,15 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	private Retorno consulta(Solicitud soli) throws Exception {
 		final String SOLICITUD_TROBADA = "0";
 		final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
-		
-		Long fitxerID = soli.getSolicitudXmlID();
 
-		if (fitxerID == null) {
-			log.info("fitxerID: " + fitxerID);
-			return null;
-		}
+		ScspTitular titular;
 
-		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-		if (prop == null) {
-			log.info("prop: " + prop);
-			return null;
-		}
-		
-		ScspTitular titular = getTitular(prop);
+		titular = getTitular(soli);
 		if (titular == null) {
 			log.info("titular: " + titular);
 			return null;
 		}
+
 		ScspFuncionario funcionario = getFuncionari();
 		if (funcionario == null) {
 			log.info("funcionario: " + funcionario);
@@ -422,17 +444,17 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		log.info("Cridam métode CONSULTA");
 
 		Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soli.getSolicitudID());
-		
+
 		if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 			return retorno;
-			
+
 		} else if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_ENVIADA_MANUALMENTE)) {
 			log.info("Solicitud no trobada. Enviada Manual (" + soli.getProcedimentCodi() + ")");
 			return null;
-		}else {
+		} else {
 			return null;
 		}
-		
+
 	}
 	
 	
@@ -503,7 +525,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 				continue;
 			}
 
-			ScspTitular titular = getTitular(prop);
+			ScspTitular titular = getTitular(soli);
 			if (titular == null) {
 				log.info("titular: " + titular);
 				soli.setEstatpinbal(Constants.ESTAT_PINBAL_null);
@@ -573,8 +595,64 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		}
 	}
 	
+    private ScspTitular getTitular(Solicitud soli) throws Exception {
 
-	  private ScspTitular getTitular(Properties prop) {
+    	Long infoMadridID = soli.getInfomadridid();
+    	
+    	if (infoMadridID == null) {
+    		Long fitxerID = soli.getSolicitudXmlID();
+
+    		if (fitxerID == null) {
+    			log.info("fitxerID: " + fitxerID);
+    			return null;
+    		}
+
+    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+    		if (prop == null) {
+    			log.info("prop: " + prop);
+    			return null;
+    		}
+
+            return getTitularFromProperties(prop);
+		}
+    	
+    	InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+    	
+    	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+    	
+    	String documentacion = infoMad.getTitularNif();
+    	String titularNom = infoMad.getTitularNom();
+    	
+    	if (documentacion == null || titularNom == null) {
+			return null;
+		}
+    	
+
+    	String[] fullName = titularNom.split("|");
+    	
+        ScspTitular titular = new ScspTitular();
+
+        String nombre = fullName[0];
+        String ape1 = fullName[1];
+        String ape2 = fullName[2];
+        
+        if (ape2 == null) {
+			ape2 = "---";
+		}
+        
+        String nombreCompleto = toFullName(nombre, ape1, ape2);
+
+        titular.setTipoDocumentacion(tipoDocumentacion);
+        titular.setDocumentacion(documentacion);
+        titular.setNombre(nombre);
+        titular.setApellido1(ape1);
+        titular.setApellido2(ape2);
+        titular.setNombreCompleto(nombreCompleto);
+
+        return titular;
+    }
+    
+	  private ScspTitular getTitularFromProperties(Properties prop) {
 
 	        ScspTitular titular = new ScspTitular();
 
@@ -583,6 +661,11 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	        String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
 	        String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
 	        String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
+	        
+	        if (ape2 == null) {
+				ape2 = "---";
+			}
+	        
 	        String fullName = toFullName(nombre, ape1, ape2);
 
 	        titular.setTipoDocumentacion(tipoDocumentacion);

@@ -79,11 +79,13 @@ public interface Constants {
     public static final long SOLI_ESTAT_PENDENT_Firma_Cedent = 16;
 
     public static final long SOLI_ESTAT_PENDENT_ENVIAR_MADRID = 19;
-    public static final long SOLI_ESTAT_PENDENT_AUTORITZAR_Manual = 21;
 
     //-------  ENVIAM ALTA A MADRID --------------
     public static final long SOLI_ESTAT_PENDENT_AUTORITZAR = 20;
     public static final long SOLI_ESTAT_ERROR_ENVIANT_MADRID = 44;
+
+    public static final long SOLI_ESTAT_PENDENT_AUTORITZAR_Manual = 21;
+
     //PENDENT ESMENAR ALTA
     //PENDENT REVISAR ESMENA ALTA
     public static final long SOLI_ESTAT_AUTORITZAT = 40;
