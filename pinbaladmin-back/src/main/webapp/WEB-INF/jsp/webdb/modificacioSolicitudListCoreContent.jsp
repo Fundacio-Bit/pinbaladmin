@@ -132,6 +132,16 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.CONTACTENOM)}">
+          <td>
+          ${modificacioSolicitud.contactenom}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.CONTACTEMAIL)}">
+          <td>
+          ${modificacioSolicitud.contactemail}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

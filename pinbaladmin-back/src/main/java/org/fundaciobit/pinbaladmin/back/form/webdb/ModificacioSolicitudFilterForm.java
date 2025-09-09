@@ -274,6 +274,28 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
   }
 
 
+  private java.lang.String contactenom;
+
+  public java.lang.String getContactenom() {
+    return this.contactenom;
+  }
+
+  public void setContactenom(java.lang.String contactenom) {
+    this.contactenom = contactenom;
+  }
+
+
+  private java.lang.String contactemail;
+
+  public java.lang.String getContactemail() {
+    return this.contactemail;
+  }
+
+  public void setContactemail(java.lang.String contactemail) {
+    this.contactemail = contactemail;
+  }
+
+
   public ModificacioSolicitudFilterForm() {
   }
   
@@ -302,6 +324,8 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
     this.solicitantMail = __toClone.solicitantMail;
     this.solicitantUsername = __toClone.solicitantUsername;
     this.estatModificacioSelect = __toClone.estatModificacioSelect;
+    this.contactenom = __toClone.contactenom;
+    this.contactemail = __toClone.contactemail;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
     this.mapOfOrganForOrganID = __toClone.mapOfOrganForOrganID;

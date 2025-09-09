@@ -87,6 +87,12 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
     @Column(name="estatmodificacio",length = 19)
     java.lang.Long estatModificacio;
 
+    @Column(name="contactenom",length = 255)
+    java.lang.String contactenom;
+
+    @Column(name="contactemail",length = 255)
+    java.lang.String contactemail;
+
 
 
   /** Constructor Buit */
@@ -94,7 +100,7 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public ModificacioSolicitudJPA(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio) {
+  public ModificacioSolicitudJPA(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
     this.modsoliID=modsoliID;
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
@@ -114,9 +120,11 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
     this.solicitantMail=solicitantMail;
     this.solicitantUsername=solicitantUsername;
     this.estatModificacio=estatModificacio;
+    this.contactenom=contactenom;
+    this.contactemail=contactemail;
 }
   /** Constructor sense valors autoincrementals */
-  public ModificacioSolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio) {
+  public ModificacioSolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.procedimentNom=procedimentNom;
@@ -135,6 +143,8 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
     this.solicitantMail=solicitantMail;
     this.solicitantUsername=solicitantUsername;
     this.estatModificacio=estatModificacio;
+    this.contactenom=contactenom;
+    this.contactemail=contactemail;
 }
   /** Constructor dels valors Not Null */
   public ModificacioSolicitudJPA(long modsoliID , long solicitudID) {
@@ -161,6 +171,8 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
     this.setSolicitantMail(__bean.getSolicitantMail());
     this.setSolicitantUsername(__bean.getSolicitantUsername());
     this.setEstatModificacio(__bean.getEstatModificacio());
+    this.setContactenom(__bean.getContactenom());
+    this.setContactemail(__bean.getContactemail());
     // Fitxer
     this.setDoCconsentiment(FitxerJPA.toJPA(__bean.getDoCconsentiment()));
 	}
@@ -298,6 +310,20 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
 		this.estatModificacio = _estatModificacio_;
 	};
 
+	public java.lang.String getContactenom() {
+		return(contactenom);
+	};
+	public void setContactenom(java.lang.String _contactenom_) {
+		this.contactenom = _contactenom_;
+	};
+
+	public java.lang.String getContactemail() {
+		return(contactemail);
+	};
+	public void setContactemail(java.lang.String _contactemail_) {
+		this.contactemail = _contactemail_;
+	};
+
 
 
     @Override
@@ -392,6 +418,8 @@ public class ModificacioSolicitudJPA implements ModificacioSolicitud {
     __tmp.setSolicitantMail(__bean.getSolicitantMail());
     __tmp.setSolicitantUsername(__bean.getSolicitantUsername());
     __tmp.setEstatModificacio(__bean.getEstatModificacio());
+    __tmp.setContactenom(__bean.getContactenom());
+    __tmp.setContactemail(__bean.getContactemail());
     // Fitxer
     __tmp.setDoCconsentiment(FitxerJPA.toJPA(__bean.getDoCconsentiment()));
 		return __tmp;

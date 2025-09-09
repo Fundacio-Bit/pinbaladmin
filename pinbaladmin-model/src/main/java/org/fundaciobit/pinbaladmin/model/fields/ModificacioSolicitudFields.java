@@ -31,6 +31,8 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
 	 public static final StringField SOLICITANTMAIL = new StringField(_TABLE_MODEL, "solicitantMail", "solicitantmail");
 	 public static final StringField SOLICITANTUSERNAME = new StringField(_TABLE_MODEL, "solicitantUsername", "solicitantusername");
 	 public static final LongField ESTATMODIFICACIO = new LongField(_TABLE_MODEL, "estatModificacio", "estatmodificacio");
+	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contactenom", "contactenom");
+	 public static final StringField CONTACTEMAIL = new StringField(_TABLE_MODEL, "contactemail", "contactemail");
 
 
   public static final Field<?>[] ALL_MODIFICACIOSOLICITUD_FIELDS = {
@@ -52,7 +54,9 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
     SOLICITANTNIF,
     SOLICITANTMAIL,
     SOLICITANTUSERNAME,
-    ESTATMODIFICACIO
+    ESTATMODIFICACIO,
+    CONTACTENOM,
+    CONTACTEMAIL
   };
 
 

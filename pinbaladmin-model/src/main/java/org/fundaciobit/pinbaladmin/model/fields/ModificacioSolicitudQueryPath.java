@@ -87,6 +87,14 @@ public class ModificacioSolicitudQueryPath extends org.fundaciobit.genapp.common
     return new LongField(getQueryPath(), ModificacioSolicitudFields.ESTATMODIFICACIO);
   }
 
+  public StringField CONTACTENOM() {
+    return new StringField(getQueryPath(), ModificacioSolicitudFields.CONTACTENOM);
+  }
+
+  public StringField CONTACTEMAIL() {
+    return new StringField(getQueryPath(), ModificacioSolicitudFields.CONTACTEMAIL);
+  }
+
 
 
   @Override

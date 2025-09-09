@@ -127,6 +127,22 @@ public class ModificacioSolicitudValidator<I extends ModificacioSolicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(CONTACTENOM) == 0) {
+      java.lang.String __contactenom = __target__.getContactenom();
+      if (__contactenom!= null && __contactenom.length() > 255) {
+        __vr.rejectValue(CONTACTENOM, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONTACTENOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTEMAIL) == 0) {
+      java.lang.String __contactemail = __target__.getContactemail();
+      if (__contactemail!= null && __contactemail.length() > 255) {
+        __vr.rejectValue(CONTACTEMAIL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONTACTEMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

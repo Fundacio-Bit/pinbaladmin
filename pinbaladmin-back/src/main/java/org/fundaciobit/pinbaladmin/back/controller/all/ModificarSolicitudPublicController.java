@@ -293,10 +293,19 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		ModelAndView mav = new ModelAndView("editarProcedimentAll");
 
 		Long solicitudID = Long.valueOf(request.getParameter("solicitudID"));
+		
+		String nomContacte = request.getParameter("nomContacte");
+		String mailContacte = request.getParameter("mailContacte");
+		
+		log.info("nom: " + nomContacte);
+		log.info("mail: " + mailContacte);
+		
 		// Aqui creamos el objeto de ModifSoli con los datos de la solicitud, y luego
 		// redirigimos a edit.
 
 		ModificacioSolicitudJPA modSolicitud = new ModificacioSolicitudJPA();
+		modSolicitud.setContactenom(nomContacte);
+		modSolicitud.setContactemail(mailContacte);
 
 		Solicitud solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 		modSolicitud.setSolicitudID(solicitud.getSolicitudID());

@@ -59,6 +59,12 @@ public interface ModificacioSolicitud extends org.fundaciobit.genapp.common.IGen
 	public java.lang.Long getEstatModificacio();
 	public void setEstatModificacio(java.lang.Long _estatModificacio_);
 
+	public java.lang.String getContactenom();
+	public void setContactenom(java.lang.String _contactenom_);
+
+	public java.lang.String getContactemail();
+	public void setContactemail(java.lang.String _contactemail_);
+
   // Fitxer
   public <F extends Fitxer> F getDoCconsentiment();
 

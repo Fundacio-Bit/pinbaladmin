@@ -522,3 +522,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ModificacioSolicitudFields.CONTACTENOM)}">
+        <tr id="modificacioSolicitud_contactenom_rowid">
+          <td id="modificacioSolicitud_contactenom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ModificacioSolicitudFields.CONTACTENOM])?'modificacioSolicitud.contactenom':__theForm.labels[ModificacioSolicitudFields.CONTACTENOM]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ModificacioSolicitudFields.CONTACTENOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ModificacioSolicitudFields.CONTACTENOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="modificacioSolicitud_contactenom_columnvalueid">
+            <form:errors path="modificacioSolicitud.contactenom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.CONTACTENOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.CONTACTENOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="modificacioSolicitud.contactenom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ModificacioSolicitudFields.CONTACTEMAIL)}">
+        <tr id="modificacioSolicitud_contactemail_rowid">
+          <td id="modificacioSolicitud_contactemail_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ModificacioSolicitudFields.CONTACTEMAIL])?'modificacioSolicitud.contactemail':__theForm.labels[ModificacioSolicitudFields.CONTACTEMAIL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ModificacioSolicitudFields.CONTACTEMAIL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ModificacioSolicitudFields.CONTACTEMAIL]}" ></i>
+              </c:if>
+            </td>
+          <td id="modificacioSolicitud_contactemail_columnvalueid">
+            <form:errors path="modificacioSolicitud.contactemail" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.CONTACTEMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.CONTACTEMAIL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="modificacioSolicitud.contactemail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

@@ -69,6 +69,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.ESTATMODIFICACIO)}">
         <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.ESTATMODIFICACIO)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.CONTACTENOM)}">
+        <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.CONTACTENOM)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.CONTACTEMAIL)}">
+        <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.CONTACTEMAIL)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

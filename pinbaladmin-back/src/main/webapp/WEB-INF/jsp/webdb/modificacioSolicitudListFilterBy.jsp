@@ -401,6 +401,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,ModificacioSolicitudFields.CONTACTENOM)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="modificacioSolicitud.contactenom" var="contactenom" />
+              <fmt:message key="genapp.form.searchby" var="cercapercontactenom" >                
+                 <fmt:param value="${contactenom}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${contactenom}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercontactenom}" path="contactenom" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,ModificacioSolicitudFields.CONTACTEMAIL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="modificacioSolicitud.contactemail" var="contactemail" />
+              <fmt:message key="genapp.form.searchby" var="cercapercontactemail" >                
+                 <fmt:param value="${contactemail}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${contactemail}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercontactemail}" path="contactemail" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">
