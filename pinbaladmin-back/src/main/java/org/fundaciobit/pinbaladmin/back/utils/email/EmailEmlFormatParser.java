@@ -264,16 +264,25 @@ public class EmailEmlFormatParser {
 		            String newBody = body.replace("cid:"+cid, "data:" + mime + ";base64, " + base64Image);
 	                emi.setBody(newBody);
 				} else {
-					log.info("rePart: Adjunto incrustado, no imagen. " + mime);
-					
-					List<EmailAttachmentInfo> attachments = emi.getAttachments();
-					String fileName = "internal-" + MimeUtility.decodeText(part.getFileName());
-					int pos = mime.indexOf(';');
-					if (pos != -1) {
-						mime = mime.substring(0, pos);
+					try {
+						log.info("rePart: Adjunto incrustado, no imagen. " + mime);
+						log.info("rePart: Nombre del part: " + part.getFileName());
+						List<EmailAttachmentInfo> attachments = emi.getAttachments();
+
+						String fileName = "internal-";
+						fileName += MimeUtility.decodeText(part.getFileName());
+
+						log.info("fileName: " + fileName);
+
+						int pos = mime.indexOf(';');
+						if (pos != -1) {
+							mime = mime.substring(0, pos);
+						}
+						EmailAttachmentInfo attachment = new EmailAttachmentInfo(fileName, mime, data);
+						attachments.add(attachment);
+					} catch (Throwable t) {
+						log.error("rePart. Fitxer extrany. No el consideram. " + t.getMessage());
 					}
-					EmailAttachmentInfo attachment = new EmailAttachmentInfo(fileName, mime, data);
-					attachments.add(attachment);
 				}
 			}
 			return;

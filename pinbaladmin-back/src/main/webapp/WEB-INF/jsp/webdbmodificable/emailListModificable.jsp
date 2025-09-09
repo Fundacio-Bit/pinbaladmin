@@ -652,15 +652,6 @@ table {
 }
 </style>
 
-<style>
-td:nth-child(-n+2) {
-	width: 0px;
-}
-td:last-child {
-	width: 0px;
-}
-</style>
-
 <c:if test="${__mostrarMissatgeArxiu__ == 'true'}">
 	<style>
 td:nth-child(4) {

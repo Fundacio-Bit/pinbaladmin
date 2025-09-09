@@ -497,7 +497,7 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             HtmlUtils.saveMessageError(request, msg);
         }
 
-        return "redirect:" + WEBCONTEXT + "/" + incidenciaTecnicaID + "/edit";
+        return "redirect:" + WEBCONTEXT + "/list";
     }
 
 
