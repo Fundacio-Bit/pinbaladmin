@@ -17,9 +17,13 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -54,6 +58,11 @@ public class AltaSolicitudPinbalOperadorController {
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
 
+    
+    @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+    protected InfoMadridLogicaService infoMadridLogicaEjb;
+
+    
     @RequestMapping(value = "/vistaprevia/{tipus}/{soliID}", method = RequestMethod.GET)
     public ModelAndView vistaPrevia(HttpServletRequest request, HttpServletResponse response,
             @PathVariable String tipus, @PathVariable Long soliID) {
@@ -70,10 +79,7 @@ public class AltaSolicitudPinbalOperadorController {
                 errors.add("La data de caducitat ha de ser posterior a avui");
             }
 
-            Long fitxerID = soli.getSolicitudXmlID();
-            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-
-            ScspTitular titular = getTitular(prop);
+            ScspTitular titular = getTitular(soli);
             ScspFuncionario funcionario = getFuncionari();
 
             request.getSession().setAttribute("titular", titular);
@@ -224,10 +230,7 @@ public class AltaSolicitudPinbalOperadorController {
         SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
         try {
-            Long fitxerID = soli.getSolicitudXmlID();
-            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-
-            ScspTitular titular = getTitular(prop);
+            ScspTitular titular = getTitular(soli);
             ScspFuncionario funcionario = getFuncionari();
 
             Consulta consulta = new Consulta();
@@ -314,7 +317,7 @@ public class AltaSolicitudPinbalOperadorController {
         return new String(xmlData, StandardCharsets.UTF_8);
     }
 
-    private ScspTitular getTitular(Properties prop) {
+    private ScspTitular getTitularFromProperties(Properties prop) {
 
         ScspTitular titular = new ScspTitular();
 
@@ -334,6 +337,42 @@ public class AltaSolicitudPinbalOperadorController {
 
         return titular;
     }
+    
+    private ScspTitular getTitular(Solicitud soli) throws Exception {
+
+    	Long infoMadridID = soli.getInfomadridid();
+    	
+    	if (infoMadridID == null) {
+            Long fitxerID = soli.getSolicitudXmlID();
+            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+            
+            return getTitularFromProperties(prop);
+		}
+    	
+    	InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+    	
+    	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+    	String documentacion = infoMad.getTitularNif();
+
+    	String[] fullName = infoMad.getTitularNom().split("|");
+    	
+        ScspTitular titular = new ScspTitular();
+
+        String nombre = fullName[0];
+        String ape1 = fullName[1];
+        String ape2 = fullName[2];
+        String nombreCompleto = toFullName(nombre, ape1, ape2);
+
+        titular.setTipoDocumentacion(tipoDocumentacion);
+        titular.setDocumentacion(documentacion);
+        titular.setNombre(nombre);
+        titular.setApellido1(ape1);
+        titular.setApellido2(ape2);
+        titular.setNombreCompleto(nombreCompleto);
+
+        return titular;
+    }
+    
 
     private ScspFuncionario getFuncionari() {
 
