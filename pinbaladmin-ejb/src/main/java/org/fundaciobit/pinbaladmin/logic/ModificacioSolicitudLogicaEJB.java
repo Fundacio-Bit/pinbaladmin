@@ -80,7 +80,7 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 		solicitud.setResponsableProcNom(modSoli.getResponsableProcNom());
 		solicitud.setResponsableProcEmail(modSoli.getResponsableProceMail());
 		solicitud.setConsentiment(modSoli.getConsentiment());
-		
+		solicitud.setProcedimentTipus(modSoli.getProcedimentTipus());
 		solicitud.setDataFi(modSoli.getDataFi());
 		
 		//Afegir el nou codi SIA a la Convocatoria, si no es null.

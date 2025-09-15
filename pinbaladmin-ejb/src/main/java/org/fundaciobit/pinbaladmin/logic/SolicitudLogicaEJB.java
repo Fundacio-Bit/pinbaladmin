@@ -28,7 +28,8 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
-import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAlta;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaEJB;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsultaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacio;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -45,6 +46,7 @@ import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.hibernate.Hibernate;
@@ -92,6 +94,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     @EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
     protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+    
+    @EJB(mappedName = PinbalUtilsAltaLogicaService.JNDI_NAME)
+    protected PinbalUtilsAltaLogicaService pinbalAltaLogicaEjb;
+    
 
 //    PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
     
@@ -485,8 +491,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			ScspTitular titular, ScspFuncionario funcionario,
 			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud) throws Exception {
 
-		PinbalUtilsAlta alta = new PinbalUtilsAlta();
-		return alta.altaSolicitudApiPinbal(titular, funcionario, solicitud);
+//		PinbalUtilsAltaLogicaEJB alta = new PinbalUtilsAltaLogicaEJB();
+		return pinbalAltaLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
 	}
 
 	@Override
@@ -499,13 +505,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	}
 
 	@Override
-	public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(
-			Long solicitudID) throws Exception {
+	public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesSolicitudApiPinbalAlta(
+			SolicitudJPA soli) throws Exception {
 
-		PinbalUtilsAlta alta = new PinbalUtilsAlta();
-		SolicitudJPA soli = this.findByPrimaryKey(solicitudID);
-
-		return alta.getDadesSolicitudApiPinbalAlta(soli);
+		return pinbalAltaLogicaEjb.getDadesSolicitudApiPinbalAlta(soli);
 	}
 
 	@Override
@@ -522,34 +525,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	@Override
 	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
 	        throws Exception {
-
-		SolicitudJPA solicitud = this.findByPrimaryKey(soliID);
-		Retorno retorno = null;
-		
-	    try {
-
-	    	
-	    	log.info("Iniciamos consulta con Solicitud " + soliID);
-	        // 1. Consultar PINBAL (Madrid)
-	    	retorno  = pinbalConsultaLogicaEjb.consultaEstatApiPinbal(titular, funcionario,  solicitud.getProcedimentCodi());
-	    	log.info("Consulta PINBAL completada. Estado recibido:" + retorno.getEstado() != null ? retorno.getEstado().getCodigoEstado() : "N/A");
-
-	        // 2. Procesar respuesta
-	    	pinbalConsultaLogicaEjb.procesarRetornoPinbal(retorno, titular, solicitud);
-	        log.info("Respuesta procesada. InfoMad: " + solicitud.getInfomadridid());
-	        
-	        // 3. Informar al contacto si hay cambios.
-	        
-	        
-	    } catch (Throwable e) {
-	        solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
-	        log.error("Error consultando PINBAL: " + e.getMessage(), e);
-	    }
-
-	    // 3. Guardar cambios de la solicitud
-	    this.update(solicitud);
-
-	    return retorno;
+		return pinbalConsultaLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soliID);
 	}
 //
 //	
@@ -586,6 +562,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //		return retorno;
 //	}
 
+	
 	/*
 	 * 
 
@@ -743,67 +720,70 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	@Override
 	public void processarRespostaPinbalAlta(Solicitud solicitud,
 			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta, ScspTitular titular,
-			ScspFuncionario funcionario) throws Exception {
+			ScspFuncionario funcionario, InfoMadridJPA infoMadrid) throws Exception {
 
-		final String ESTAT_REGISTRADA_OK = "0";
-		final String ESTAT_NO_REGISTRADA = "1";
-		final String ESTAT_REGISTRADA_SUBSANAR = "2";
-		final String ESTAT_VALIDACION_KO = "0228";
-		final String ERROR_PROCEDIMIENTO_DUPLICADO = "01";
-
-		String codiEstat = resposta.getEstado().getCodigoEstado();
-		String descripcioEstat = resposta.getEstado().getDescripcion();
-
-		log.info("Resposta PRE-ALTA: codi=" + codiEstat + ", descripció=" + descripcioEstat);
-
-		switch (codiEstat) {
-		case ESTAT_REGISTRADA_OK:
-			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
-			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
-			break;
-
-		case ESTAT_REGISTRADA_SUBSANAR:
-			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-
-			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
-//			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
-//			solicitud.setEstatpinbal(estat.getEstado());
-
-			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
-			break;
-
-		case ESTAT_NO_REGISTRADA:
-		case ESTAT_VALIDACION_KO:
-			boolean duplicat = false;
-
-			if (resposta.getErrores() != null) {
-				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
-						.getError()) {
-					if (ERROR_PROCEDIMIENTO_DUPLICADO.equals(error.getCodigo())) {
-						duplicat = true;
-						break;
-					}
-				}
-			}
-
-			if (duplicat) {
-				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-				Retorno retornoDup = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
-//				EstadoProcedimiento estatDup = retornoDup.getProcedimiento().getEstadoProcedimiento();
-//				solicitud.setEstatpinbal(estatDup.getEstado());
-
-				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
-			} else {
-				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
-			}
-			break;
-
-		default:
-			log.warn("Codi d'estat no controlat: " + codiEstat);
-			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
-			break;
-		}
+		pinbalAltaLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario, infoMadrid);
+		
+		
+//		final String ESTAT_REGISTRADA_OK = "0";
+//		final String ESTAT_NO_REGISTRADA = "1";
+//		final String ESTAT_REGISTRADA_SUBSANAR = "2";
+//		final String ESTAT_VALIDACION_KO = "0228";
+//		final String ERROR_PROCEDIMIENTO_DUPLICADO = "01";
+//
+//		String codiEstat = resposta.getEstado().getCodigoEstado();
+//		String descripcioEstat = resposta.getEstado().getDescripcion();
+//
+//		log.info("Resposta PRE-ALTA: codi=" + codiEstat + ", descripció=" + descripcioEstat);
+//
+//		switch (codiEstat) {
+//		case ESTAT_REGISTRADA_OK:
+//			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+//			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
+//			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
+//			break;
+//
+//		case ESTAT_REGISTRADA_SUBSANAR:
+//			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+//
+//			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
+////			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
+////			solicitud.setEstatpinbal(estat.getEstado());
+//
+//			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
+//			break;
+//
+//		case ESTAT_NO_REGISTRADA:
+//		case ESTAT_VALIDACION_KO:
+//			boolean duplicat = false;
+//
+//			if (resposta.getErrores() != null) {
+//				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
+//						.getError()) {
+//					if (ERROR_PROCEDIMIENTO_DUPLICADO.equals(error.getCodigo())) {
+//						duplicat = true;
+//						break;
+//					}
+//				}
+//			}
+//
+//			if (duplicat) {
+//				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+//				Retorno retornoDup = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
+////				EstadoProcedimiento estatDup = retornoDup.getProcedimiento().getEstadoProcedimiento();
+////				solicitud.setEstatpinbal(estatDup.getEstado());
+//
+//				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
+//			} else {
+//				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
+//			}
+//			break;
+//
+//		default:
+//			log.warn("Codi d'estat no controlat: " + codiEstat);
+//			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
+//			break;
+//		}
 	}
 
 	// Para modificació
@@ -826,7 +806,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		case ESTAT_ACTUALITZADA_OK:
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR);
-			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
+			afegirEventModificacioEnviada(solicitud, descripcioEstat);
 			break;
 
 		case ESTAT_SUBSANAR:
@@ -836,7 +816,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
 //			solicitud.setEstatpinbal(estat.getEstado());
 
-			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
+			afegirEventModificacioEnviada(solicitud, descripcioEstat);
 			break;
 
 		case ESTAT_NO_REGISTRADA:
@@ -847,7 +827,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		}
 	}
 
-	private void afegirEventSolicitudEnviada(Solicitud soli, String mensaje) {
+	private void afegirEventModificacioEnviada(Solicitud soli, String mensaje) {
 
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
 		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
@@ -877,7 +857,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			log.error("No s'ha pogut crear l'event de solicitud enviada: " + e.getMessage(), e);
 		}
 	}
-
+	
 	@Override
 	public void crearInfoMadridFromSolicitud(Solicitud solicitud) {
 		

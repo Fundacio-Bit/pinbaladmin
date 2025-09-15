@@ -6,22 +6,39 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.ejb.EntitatServeiEJB;
+import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
+import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
+import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
+import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
@@ -29,6 +46,7 @@ import org.fundaciobit.pluginsib.utils.commons.GregorianCalendars;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Articulos;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Consentimiento;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Contacto;
@@ -41,15 +59,28 @@ import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Procedimient
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicio;
 import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Servicios;
-import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
+//import es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud;
 
-public class PinbalUtilsAlta extends PinbalUtilsCommon {
+@Stateless(name = "PinbalUtilsAltaLogicaEJB")
+public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements PinbalUtilsAltaLogicaService {
 
-	public PinbalUtilsAlta() {
+	@EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
+	protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
+
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService entitatServeiLogicEjb;
+
+	@EJB(mappedName = DocumentLogicaService.JNDI_NAME)
+	protected DocumentLogicaService documentLogicaEjb;
+
+    @EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
+    protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+    
+	public PinbalUtilsAltaLogicaEJB() {
 		// Constructor vacío
 	}
 
-	public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Solicitud solicitud)
+	public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud)
 			throws Exception {
 
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
@@ -58,10 +89,10 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 		return respuesta;
 	}
+	
+	public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesSolicitudApiPinbalAlta(SolicitudJPA soli) throws Exception {
 
-	public Solicitud getDadesSolicitudApiPinbalAlta(SolicitudJPA soli) throws Exception {
-
-		Solicitud solicitud = new Solicitud();
+		es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud = new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud();
 
 		String asunto = "Alta Servicios. Codigo Solicitud: " + soli.getProcedimentCodi();
 		solicitud.setAsunto(asunto);
@@ -72,6 +103,164 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		Procedimiento proc = getProcedimiento(soli);
 		solicitud.setProcedimiento(proc);
 		return solicitud;
+	}
+	
+	
+	//ACTUALIZAR SOLICITUD Y COMPLETAR INFOMADRID.
+	@Override
+	public void processarRespostaPinbalAlta(org.fundaciobit.pinbaladmin.model.entity.Solicitud solicitud,
+			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta, ScspTitular titular,
+			ScspFuncionario funcionario, InfoMadridJPA infoMadrid) throws Exception {
+
+		final String ESTAT_REGISTRADA_OK = "0";
+		final String ESTAT_NO_REGISTRADA = "1";
+		final String ESTAT_REGISTRADA_SUBSANAR = "2";
+		final String ESTAT_VALIDACION_KO = "0228";
+		final String ERROR_PROCEDIMIENTO_DUPLICADO = "01";
+
+		String codiEstat = resposta.getEstado().getCodigoEstado();
+		String descripcioEstat = resposta.getEstado().getDescripcion();
+
+		log.info("Resposta PRE-ALTA: codi=" + codiEstat + ", descripció=" + descripcioEstat);
+
+		
+//		Long estatSoli = null;
+//		Long estatAuth = null;
+//		String respostaMadrid = null;
+
+		Long estatSoli;
+		Long estatAuth;
+		String respostaMadrid ;
+
+		
+		switch (codiEstat) {
+		case ESTAT_REGISTRADA_OK:
+			
+			estatSoli = Constants.SOLI_ESTAT_PENDENT_AUTORITZAR;
+			estatAuth = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+			
+			solicitud.setEstatSolicitud(estatSoli);
+			solicitud.setEstatpinbal(estatAuth);
+			
+			respostaMadrid = "Solicitud Enviada a Madrid correcatment: " + descripcioEstat;
+			
+			afegirEventSolicitudEnviada(solicitud, respostaMadrid );
+			break;
+
+//			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+//
+//			Retorno retorno = pinbalConsultaLogicaEjb.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
+////			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
+////			solicitud.setEstatpinbal(estat.getEstado());
+//
+//			afegirEventSolicitudEnviada(solicitud, descripcioEstat);
+//			break;
+
+		case ESTAT_REGISTRADA_SUBSANAR:
+		case ESTAT_VALIDACION_KO:
+		case ESTAT_NO_REGISTRADA:
+			boolean duplicat = false;
+
+			String msg = "Errores: ";
+			
+			if (resposta.getErrores() != null) {
+				for (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Error error : resposta.getErrores()
+						.getError()) {
+					msg += "\n " + error.getDescripcion() + " (Error " + error.getCodigo() + ")";
+					
+					if (ERROR_PROCEDIMIENTO_DUPLICADO.equals(error.getCodigo())) {
+						duplicat = true;
+						break;
+					}
+				}
+			} else {
+				log.error("Errores debería no ser null");
+			}
+
+			
+			estatSoli = Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID;
+			estatAuth = Constants.ESTAT_PINBAL_ERROR;
+			
+			respostaMadrid = msg;
+			solicitud.setEstatSolicitud(estatSoli);
+			
+			if (duplicat) {
+				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
+			}
+
+			
+//			if (duplicat) {
+//				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+//				Retorno retornoDup = pinbalConsultaLogicaEjb.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
+//				
+//				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
+//			} else {
+//				estatSoli = Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID;
+//				estatAuth = Constants.ESTAT_PINBAL_ERROR;
+//
+//				respostaMadrid = msg;
+//				solicitud.setEstatSolicitud(estatSoli );
+//			}
+			break;
+		default:
+			log.warn("Codi d'estat no controlat: " + codiEstat);
+
+			estatSoli = Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID;
+			estatAuth = Constants.ESTAT_PINBAL_ERROR;
+		
+			solicitud.setEstatpinbal(estatAuth);
+			solicitud.setEstatSolicitud(estatSoli);
+			
+			respostaMadrid = "Error no controlat: " + "Codi d'estat no controlat: " + codiEstat;
+			break;
+		}
+		
+		actualizarInfoMadrdAlta(solicitud, infoMadrid, estatSoli, estatAuth, respostaMadrid);
+	} 
+	
+	private void actualizarInfoMadrdAlta(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, InfoMadridJPA infoMadJpa, Long estadoSoli, Long estadoAuth, String respuesta) throws I18NException {
+
+		infoMadJpa.setEstatProcediment(estadoSoli);
+		infoMadJpa.setEstatAutoritzacio(estadoAuth);
+		infoMadJpa.setMissatge(respuesta);
+        
+        InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJpa);
+        Long infoMadID = infoMad.getInfoMadridID();
+
+        soli.setInfomadridid(infoMadID);
+        solicitudLogicaEjb.update(soli);
+        
+	}
+	
+	private void afegirEventSolicitudEnviada(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, String mensaje) {
+
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+		String persona = soli.getOperador();
+		String subject = "Solicitud enviada a PINBAL. " + soli.getProcedimentCodi();
+		String msg = "S'ha enviat la sol·licitud a PINBAL. " + mensaje;
+
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(soli.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(tipus);
+		event.setPersona(persona);
+		event.setDestinatari(null);
+		event.setDestinatarimail(null);
+		event.setAsumpte(subject);
+		event.setComentari(msg);
+		event.setFitxerID(null);
+		event.setNoLlegit(true);
+		event.setCaidIdentificadorConsulta(null);
+		event.setCaidNumeroSeguiment(null);
+
+		try {
+			eventLogicaEjb.create(event);
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			log.error("No s'ha pogut crear l'event de solicitud enviada: " + e.getMessage(), e);
+		}
 	}
 	
 	//Properties prop
@@ -210,12 +399,15 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		// Aquí son el excel de servicios y el documento PDF del Director General.
 		Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
 
-		for (DocumentSolicitudJPA document : soli.getDocumentSolicituds()) {
+		List<DocumentSolicitud> listDocumentsSolicitud = documentSolicitudLogicaEjb.select(DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID()));
+		
+		for (DocumentSolicitud docSoli : listDocumentsSolicitud) {
+			Document document = documentLogicaEjb.findByPrimaryKey(docSoli.getDocumentID());
 
-			Long tipus = document.getDocument().getTipus();
+			Long tipus = document.getTipus();
 
 			if (tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-				FitxerJPA fitxer = document.getDocument().getFitxerFirmat();
+				FitxerJPA fitxer = fitxerLogicEjb.findByPrimaryKey(document.getFitxerFirmatID());
 				if (fitxer != null) {
 					String desc = "Formulari PDF firmat per el director";
 					String tipo = "FORMULARIO DE AUTORIZACION";
@@ -232,9 +424,9 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
 					|| tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
-				fitxerConsentiment = document.getDocument().getFitxerOriginal(); // Document consentiment
+				fitxerConsentiment = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());; // Document consentiment
 			} else {
-				FitxerJPA original = document.getDocument().getFitxerOriginal();
+				FitxerJPA original = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());
 				if (original.getMime().equals("application/pdf")) {
 					FitxerJPA fitxer = original;
 					String desc = "Fitxer PDF associat al procediment";
@@ -397,14 +589,19 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 	private Servicios getServicios(SolicitudJPA soli) throws Exception {
 
 		Servicios servicios = new Servicios();
-		Set<SolicitudServeiJPA> serveisDeLaSolicitud = soli.getSolicitudServeis();
+		List<SolicitudServei> serveisDeLaSolicitud = solicitudServeiLogicaEjb.select(SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()));//soli.getSolicitudServeis();
 
 		int MAX_NORMES_SERVEI = 3;
 		int serveisPerAfegir = 0;
 		int serveisAfegits = 0;
 
-		for (SolicitudServeiJPA ss : serveisDeLaSolicitud) {
-			boolean balear = ss.getServei().getEntitatServei().isBalears();
+		for (SolicitudServei ss : serveisDeLaSolicitud) {
+			Servei servei = serveiLogicaEjb.findByPrimaryKey(ss.getServeiID());
+			
+			EntitatServei es = entitatServeiLogicEjb.findByPrimaryKey(servei.getEntitatServeiID());
+			boolean balear = es.isBalears();
+			
+			
 			boolean estatPendentMadrid = ss
 					.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 			estatPendentMadrid |= ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_REBUT;
@@ -486,8 +683,8 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 					}
 
 					log.info("POST-NORMA " + i + " - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
-					descripcio = "Norma Legal " + i + " - " + ss.getServei().getNom();
-					// descripcio = "Norma del servicio: " + ss.getServei().getNom();
+					descripcio = "Norma Legal " + i + " - " + servei.getNom();
+					// descripcio = "Norma del servicio: " + servei.getNom();
 
 					docNorma.setNombre(nom);
 					docNorma.setDescripcion(descripcio);
@@ -516,11 +713,11 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 				}
 
 				if (normas.getNorma().size() == 0) {
-                    log.info("No s'ha pogut afegir cap norma al servei " + ss.getServei().getCodi());
+                    log.info("No s'ha pogut afegir cap norma al servei " + servei.getCodi());
                     continue;
 				}
 				
-				String codigoCertificado = ss.getServei().getCodi();
+				String codigoCertificado = servei.getCodi();
 
 				servicio.setCodigoCertificado(codigoCertificado);
 				servicio.setNormas(normas);
@@ -543,5 +740,4 @@ public class PinbalUtilsAlta extends PinbalUtilsCommon {
 		
 		return servicios;
 	}
-
 }

@@ -15,6 +15,7 @@ import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
@@ -56,7 +57,7 @@ public interface SolicitudLogicaService extends SolicitudService {
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs, String msg) throws I18NException;
 
-    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesAltaSolicitudApiPinbal(Long solicitudID) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesSolicitudApiPinbalAlta(SolicitudJPA soli) throws Exception;
 
     public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud) throws Exception;
     
@@ -75,7 +76,7 @@ public interface SolicitudLogicaService extends SolicitudService {
 	public void updateDocumentsConsentiment();
 
 	public void processarRespostaPinbalAlta(Solicitud solicitud, Respuesta resposta, ScspTitular titular,
-			ScspFuncionario funcionario) throws Exception;
+			ScspFuncionario funcionario, InfoMadridJPA infoMadrid) throws Exception;
 
 	public void processarRespostaPinbalModificacio(Solicitud solicitud,
 			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta,

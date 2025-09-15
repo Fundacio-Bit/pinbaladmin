@@ -12,11 +12,13 @@ import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfi
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
@@ -39,8 +41,14 @@ public abstract class PinbalUtilsCommon {
 	@EJB(mappedName = ServeiLogicaService.JNDI_NAME)
 	protected ServeiLogicaService serveiLogicaEjb;
 	
+	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+	protected SolicitudLogicaService solicitudLogicaEjb;
+
 	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
-	protected InfoMadridLogicaService infoMadridLogicaEjb2;
+	protected InfoMadridLogicaService infoMadridLogicaEjb;
+	
+	@EJB(mappedName = EventLogicaService.JNDI_NAME)
+	protected EventLogicaService eventLogicaEjb;
 	
 	public PinbalUtilsCommon() {
 	}

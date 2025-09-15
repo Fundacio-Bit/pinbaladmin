@@ -36,9 +36,39 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	}
 
 	@Override
-	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, String codiProcediment)
-			throws Exception {
+	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
+			throws I18NException {
+		
+		SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(soliID);
+		Retorno retorno = null;
+		
+	    try {
+	    	log.info("Iniciamos consulta con Solicitud " + soliID);
 
+	    	// 1. Consultar PINBAL (Madrid)
+	    	retorno = consultaApi(titular, funcionario, solicitud);
+
+	        // 2. Procesar respuesta
+	    	this.procesarRetornoPinbal(retorno, titular, solicitud);
+	        log.info("Respuesta procesada. InfoMad: " + solicitud.getInfomadridid());
+	        
+	        // 3. Informar al contacto si hay cambios.
+	        
+	        
+	    } catch (Throwable e) {
+	        solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
+	        log.error("Error consultando PINBAL: " + e.getMessage(), e);
+	    }
+
+	    // 4. Guardar cambios de la solicitud
+	    solicitudLogicaEjb.update(solicitud);
+		return retorno;
+	}
+
+	private Retorno consultaApi(ScspTitular titular, ScspFuncionario funcionario, SolicitudJPA solicitud)
+			throws Exception {
+		Retorno retorno;
+		String codiProcediment = solicitud.getProcedimentCodi();
 		log.info("Consulta estat de la solicitud " + codiProcediment);
 		
 		Consulta consulta = new Consulta();
@@ -47,47 +77,30 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
 				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA));
 
-		Retorno retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
+		retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
 		
-//		actualitzarSolicitud(retorno, solicitud);
-		
+		log.info("Consulta PINBAL completada. Estado recibido:" + retorno.getEstado() != null ? retorno.getEstado().getCodigoEstado() : "N/A");
 		return retorno;
 	}
 
-//	public InfoMadridJPA actualitzarSolicitud(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud) throws I18NException {
-//
-//		String codigoEstado = retorno.getEstado().getCodigoEstado();
-//		
-//		switch (codigoEstado) {
-//		case SOLICITUD_TROBADA:
-//
-//			EstadoProcedimiento estado = retorno.getProcedimiento().getEstadoProcedimiento();
-//			log.info("estado procedimiento: " + estado.getEstado() + " - " + estado.getDescripcion());
-//
-//			actualitzarEstatSolicitud(estado, solicitud);
-//			InfoMadridJPA infoMadJpa= actualizarInfoMadrid(estado, solicitud,  titular);
-//			actualitzarDadesServeisSolicitud(solicitud, retorno);
-//			
-//			return infoMadJpa;
-//		case PROCEDIMENT_NO_TROBAT:
-//			//Aixó te sentit si la solicitut está pendent d'autoritzar, sino es no solicitada.
-//			
-//			//Si está pendent d'autoritzar i no ha trobat la solicitud. S'ha enviat manualment.
-//			
-//			//Si ja està autoritzada o algun estat posterior, s'ha enviat manualment.
-//			
-//			procesarSolicitudNoTrobada(solicitud);
-//			
-//			// Aquest es el cas de solicituds canviades d'estat manualment. Enviades a
-//			// Madrid "pendents de tramitar", pero sense utilitzar api PINBAL.
-//			return null;
-//		default:
-//			String errorMsg1 = "Error al consultar l'estat de la solicitud " + solicitud.getProcedimentCodi() + ": "
-//					+ retorno.getEstado().getLiteralError();
-//			log.error(errorMsg1);
-//			return null;
-//		}
-//	}
+	@Override
+	public void procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
+			throws I18NException {
+
+		String codigoEstado = retorno.getEstado().getCodigoEstado();
+
+		switch (codigoEstado) {
+		case SOLICITUD_TROBADA:
+			procesarSolicitudTrobada(retorno, titular, solicitud);
+
+		case PROCEDIMENT_NO_TROBAT:
+			procesarSolicitudNoTrobada(solicitud);
+
+		default:
+			log.error("Error en consulta de solicitud " + solicitud.getProcedimentCodi() + ": "
+					+ retorno.getEstado().getLiteralError());
+		}
+	}
 
 	private void procesarSolicitudNoTrobada(SolicitudJPA solicitud) {
 
@@ -109,228 +122,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_NO_SOLICITAT);
 		}
 	}
-
-//	private void actualitzarEstatSolicitud(EstadoProcedimiento estado, Solicitud solicitud) {
-//	    Long estatPinbalAnterior = solicitud.getEstatpinbal();
-//	    Long estatPinbalNou = Long.valueOf(estado.getEstado());
-//
-//	    long estatSoli = solicitud.getEstatSolicitud();
-//	    boolean jaAutoritzada = estatSoli == Constants.SOLI_ESTAT_AUTORITZAT
-//	                         || estatSoli == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
-//	                         || estatSoli == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID;
-//
-//	    String estatNom;
-//	    if (estatSoli == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) estatNom = "Pendent autoritzar";
-//	    else if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) estatNom = "Autoritzat";
-//	    else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) estatNom = "Esmenes";
-//	    else estatNom = "Desconegut";
-//
-//	    log.info("Solicitud " + solicitud.getProcedimentCodi() + "\t[" + estatNom + "]:\t(" 
-//	             + estatPinbalAnterior + " -> " + estatPinbalNou + ") " + estado.getDescripcion());
-//
-//	    solicitud.setEstatpinbal(estatPinbalNou);
-//
-//	    if (estatPinbalNou.equals(Constants.ESTAT_PINBAL_ERROR)) {
-//	        // caso ESTAT_PINBAL_ERROR
-//	        solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
-//	    }
-//	    // else if (estatPinbalNou == Constants.ESTAT_PINBAL_NO_SOLICITAT) {
-//	    //     // estaba comentado en el switch original
-//	    // }
-//	    else if (estatPinbalNou.equals(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_DESISTIT)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_APROVAT)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_SUBSANAT)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO)) {
-//	        solicitud.setEstatSolicitud(jaAutoritzada 
-//	            ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO 
-//	            : Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-//	    }
-//	    else if (estatPinbalNou.equals(Constants.ESTAT_PINBAL_NO_APROVAT)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO)
-//	          || estatPinbalNou.equals(Constants.ESTAT_PINBAL_DESESTIMAT)) {
-//	        solicitud.setEstatSolicitud(jaAutoritzada 
-//	            ? Constants.SOLI_ESTAT_AUTORITZAT_ESMENES 
-//	            : Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE);
-//	    }
-//	    else if (estatPinbalNou.equals(Constants.ESTAT_PINBAL_AUTORITZAT)) {
-//	        solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_AUTORITZAT);
-//	    }
-//	}
-//
-//	private void print(String camp, Object o) {
-//		log.info(camp + ": " + o);
-//
-//	}
-//	
-////	private InfoMadridJPA actualizarInfoMadrid(EstadoProcedimiento estadoProc, SolicitudJPA soli, ScspTitular titular) throws I18NException {
-////		
-////		Long infoMadID = soli.getInfomadridid();
-////		
-////		if (infoMadID == null) {
-////			String codi = soli.getProcedimentCodi();
-////			Long estatProc = soli.getEstatSolicitud();
-////
-////
-////			int estatAut = estadoProc.getEstado();
-////			String missatge = estadoProc.getObservaciones();
-////
-////			String consultaTexto = "Buenos días,\n"
-////					+ "Enviamos solicitud para dar servicios de alta en el procedimiento " + codi + "\n\n"
-////					+ "Quedamos a la espera de su respuesta.\n" + "Un saludo.";
-////
-////			String titularNom = titular.getNombreCompleto();
-////			String titularNif = titular.getDocumentacion();
-////
-////			Timestamp now = new Timestamp(System.currentTimeMillis());
-////
-////			Timestamp dataAuth = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? now : null;
-////			Timestamp dataEnviament = now;
-////
-////			long reintents = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0;
-////
-////			InfoMadridJPA infoMadJPA = new InfoMadridJPA(codi, estatProc, estatAut, missatge, consultaTexto, titularNom,
-////					titularNif, dataAuth, dataEnviament, reintents);
-////
-////			print("codi", codi);
-////			print("estatProc", estatProc);
-////			print("estatAut", estatAut);
-////			print("missatge", missatge);
-////			print("consultaTexto", consultaTexto);
-////			print("titularNom", titularNom);
-////			print("titularNif", titularNif);
-////			print("dataAuth", dataAuth);
-////			print("dataEnviament", dataEnviament);
-////			print("reintents", reintents);
-////		
-////			return infoMadJPA;
-////	//		print("infoMadridLogicaEjb", infoMadridLogicaEjb);
-////			
-//////			log.info("Crearem InfoMad");
-////
-//////			InfoMadrid infoMad =  infoMadridLogicaEjb.create(infoMadJPA);
-//////			log.info("InfoMad creado: " + infoMad.getInfoMadridID());
-////
-//////			soli.setInfomadridid(infoMad.getInfoMadridID());
-////
-////		}else {
-////			InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);	
-////			
-////			if (infoMad != null) {
-////				//Si l'acaven d'autoritzar, actualitzar data.
-////
-////				if (estadoProc.getEstado() == Constants.ESTAT_PINBAL_AUTORITZAT
-////						&& infoMad.getEstatProcediment() != Constants.ESTAT_AUTORITZACIO_AUTORITZAT) {
-////					infoMad.setDataAutoritzacio(new Timestamp(System.currentTimeMillis()));
-////				}
-////				
-////				infoMad.setEstatProcediment(soli.getEstatSolicitud());
-////				infoMad.setEstatAutoritzacio(estadoProc.getEstado());
-////				infoMad.setMissatge(estadoProc.getObservaciones());
-////			}
-////			return infoMad;
-////		}
-////	};
-////	
-//	
-	public final int ESTADO_SOLI_SERV_PENDIENTE = 0;
-	public final int ESTADO_SOLI_SERV_DESISTIDO = 1;
-	public final int ESTADO_SOLI_SERV_APROBADO = 2;
-	public final int ESTADO_SOLI_SERV_NO_APROBADO = 3;
-	public final int ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE = 6;
-	public final int ESTADO_SOLI_SERV_AUTORIZADO = 7;
-	public final int ESTADO_SOLI_SERV_DESESTIMADO = 8;
-//
-//	private void actualitzarDadesServeisSolicitud(Solicitud solicitud,
-//			es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno retorno) throws I18NException {
-//
-//		// Agafar els serveis de la solicitud, i assignar a cada un l'estat que hi ha a
-//		// retorno.
-//
-//		List<SolicitudServei> listSoliServ = solicitudServeiLogicaEjb
-//				.select(SolicitudServeiFields.SOLICITUDID.equal(solicitud.getSolicitudID()));
-//
-//		List<Servicio> listServeis = retorno.getProcedimiento().getServicios().getServicio();
-//
-//		for (Servicio servicio : listServeis) {
-//			for (SolicitudServei soliServ : listSoliServ) {
-//
-//				Long serveiId = soliServ.getServeiID();
-//				Servei servei = serveiLogicaEjb.findByPrimaryKey(serveiId);
-//
-////				log.info("Test servei: " + servei.getCodi() + " -> " + servicio.getCodigoCertificado());
-//
-//				if (servei.getCodi().equals(servicio.getCodigoCertificado())) {
-////					log.info("Servei trobat: " + servei.getCodi());
-//					Long nouEstat = null;
-//
-//					int nouEstatPinbal = servicio.getEstadoAutorizacion().getEstado();
-//					switch (nouEstatPinbal) {
-//					case ESTADO_SOLI_SERV_PENDIENTE:
-//					case ESTADO_SOLI_SERV_DESISTIDO:
-//					case ESTADO_SOLI_SERV_APROBADO:
-//					case ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE:
-//						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
-//						break;
-//
-//					case ESTADO_SOLI_SERV_NO_APROBADO:
-//					case ESTADO_SOLI_SERV_DESESTIMADO:
-//						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_DESESTIMAT;
-//						break;
-//
-//					case ESTADO_SOLI_SERV_AUTORIZADO:
-//						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT;
-//						break;
-//
-//					default:
-//						nouEstat = Constants.ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE;
-//
-//					}
-//
-//					soliServ.setEstatSolicitudServeiID(nouEstat);
-//					solicitudServeiLogicaEjb.update(soliServ);
-//				} else {
-////					log.info("Servei no trobat: " + servei.getCodi());
-//				}
-//			}
-//		}
-//	}
-//
-//	
-//	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	@Override
-	public void procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
-			throws I18NException {
-
-		String codigoEstado = retorno.getEstado().getCodigoEstado();
-
-		switch (codigoEstado) {
-		case SOLICITUD_TROBADA:
-			procesarSolicitudTrobada(retorno, titular, solicitud);
-
-		case PROCEDIMENT_NO_TROBAT:
-			procesarSolicitudNoTrobada(solicitud);
-
-		default:
-			log.error("Error en consulta de solicitud " + solicitud.getProcedimentCodi() + ": "
-					+ retorno.getEstado().getLiteralError());
-		}
-	}
-
 	public void procesarSolicitudTrobada(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
 	        throws I18NException {
 		
@@ -368,6 +160,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	    
 	    Timestamp ahora = new Timestamp(System.currentTimeMillis());
 
+	    //Normalmente no debería entrar aquí. InfoMadrid se crea en el Alta, y si encuentra la solicitud, ha ido bien, y hay una alta hecha.
 	    if (infoMadID == null) {
 	    	log.info("Creamos infoMadrid");
 	    	
@@ -385,10 +178,11 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	                titular.getDocumentacion(),
 	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? ahora : null,
 	                ahora,                                   // Fecha de envío
-	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0
+	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0,
+	                ahora
 	        );
 	        
-	        InfoMadrid infoMad = infoMadridLogicaEjb2.create(infoMadJpa);
+	        InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJpa);
 	        infoMadJpa.setInfoMadridID(infoMad.getInfoMadridID());
 	        
             soli.setInfomadridid(infoMad.getInfoMadridID());
@@ -399,7 +193,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	        
 	    	// Actualizar InfoMadrid existente
 	    	log.info("Haremos el findByPK: " + infoMadID);
-	        InfoMadridJPA infoMad = infoMadridLogicaEjb2.findByPrimaryKey(infoMadID);
+	        InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
 	        log.info("Tenemos InfoMadrid: " + + infoMad.getInfoMadridID());
 	        
 
@@ -460,36 +254,6 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			infoMadrid.setEstatProcediment(yaAutorizada ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
 					: Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 		}
-		
-
-//		log.info("yaAutorizada: " + yaAutorizada);
-//		log.info("CodiProc: " + solicitud.getProcedimentCodi());
-//		log.info("estadoPinbalAnterior: " + estadoPinbalAnterior);
-//		log.info("estadoPinbalNuevo: " + estadoPinbalNuevo);
-//		log.info("missatge: " + infoMadrid.getMissatge());
-//
-//		// Guardar nuevo estado PINBAL
-//		solicitud.setEstatpinbal(estadoPinbalNuevo);
-//
-//		// === MAPEO PINBAL → ESTADOS INTERNOS ===
-//		if (estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_DESISTIT)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_APROVAT)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_SUBSANAT)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO)) {
-//
-//			solicitud.setEstatSolicitud(yaAutorizada ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-//					: Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-//		} else if (estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_NO_APROVAT)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO)
-//				|| estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_DESESTIMAT)) {
-//
-//			solicitud.setEstatSolicitud(yaAutorizada ? Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
-//					: Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE);
-//		} else if (estadoPinbalNuevo.equals(Constants.ESTAT_PINBAL_AUTORITZAT)) {
-//			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_AUTORITZAT);
-//		}
 	}
 
 	public void actualizarServiciosSolicitud(Solicitud solicitud, Retorno retorno) throws I18NException {
@@ -512,23 +276,32 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	}
 
 	public Long mapEstadoServicio(int estadoMadrid) {
-	    switch (estadoMadrid) {
-	        case ESTADO_SOLI_SERV_PENDIENTE:
-	        case ESTADO_SOLI_SERV_DESISTIDO:
-	        case ESTADO_SOLI_SERV_APROBADO:
-	        case ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE:
-	            return Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 
-	        case ESTADO_SOLI_SERV_NO_APROBADO:
-	        case ESTADO_SOLI_SERV_DESESTIMADO:
-	            return Constants.ESTAT_SOLICITUD_SERVEI_DESESTIMAT;
+		final int ESTADO_SOLI_SERV_PENDIENTE = 0;
+		final int ESTADO_SOLI_SERV_DESISTIDO = 1;
+		final int ESTADO_SOLI_SERV_APROBADO = 2;
+		final int ESTADO_SOLI_SERV_NO_APROBADO = 3;
+		final int ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE = 6;
+		final int ESTADO_SOLI_SERV_AUTORIZADO = 7;
+		final int ESTADO_SOLI_SERV_DESESTIMADO = 8;
 
-	        case ESTADO_SOLI_SERV_AUTORIZADO:
-	            return Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT;
+		switch (estadoMadrid) {
+		case ESTADO_SOLI_SERV_PENDIENTE:
+		case ESTADO_SOLI_SERV_DESISTIDO:
+		case ESTADO_SOLI_SERV_APROBADO:
+		case ESTADO_SOLI_SERV_PENDIENTE_AUTORIZACION_CEDENTE:
+			return Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 
-	        default:
-	            return Constants.ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE;
-	    }
+		case ESTADO_SOLI_SERV_NO_APROBADO:
+		case ESTADO_SOLI_SERV_DESESTIMADO:
+			return Constants.ESTAT_SOLICITUD_SERVEI_DESESTIMAT;
+
+		case ESTADO_SOLI_SERV_AUTORIZADO:
+			return Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT;
+
+		default:
+			return Constants.ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE;
+		}
 	}
 
 }

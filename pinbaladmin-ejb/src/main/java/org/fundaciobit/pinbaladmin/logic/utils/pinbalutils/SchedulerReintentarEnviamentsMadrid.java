@@ -20,9 +20,12 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
+import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
@@ -38,6 +41,9 @@ public class SchedulerReintentarEnviamentsMadrid {
 
 	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
 	protected SolicitudLogicaService solicitudLogicaEjb;
+
+    @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+    protected InfoMadridLogicaService infoMadridLogicaEjb;
 
 	@Resource
 	private TimerService timerService;
@@ -112,7 +118,7 @@ public class SchedulerReintentarEnviamentsMadrid {
 
 			List<String> codisConsultats = new ArrayList<>();
 
-			PinbalUtilsAlta alta = new PinbalUtilsAlta();
+			PinbalUtilsAltaLogicaEJB alta = new PinbalUtilsAltaLogicaEJB();
 			PinbalUtilsModificacio modificacio = new PinbalUtilsModificacio();
 
 			for (Solicitud solicitud : solicituds) {
@@ -134,7 +140,7 @@ public class SchedulerReintentarEnviamentsMadrid {
 
 						// Obtener la solicitud para alta con la consulta configurada
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitudAlta = solicitudLogicaEjb
-								.getDadesAltaSolicitudApiPinbal(solicitud.getSolicitudID());
+								.getDadesSolicitudApiPinbalAlta((SolicitudJPA) solicitud);
 
 						solicitudAlta.setConsulta(consultaTexto);
 
@@ -142,7 +148,12 @@ public class SchedulerReintentarEnviamentsMadrid {
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = alta
 								.altaSolicitudApiPinbal(titular, funcionario, solicitudAlta);
 
-						solicitudLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario);
+			            InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+			            
+			            // 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
+			            solicitudLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario, infoMad);
+			            
+			            
 					} else if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
 						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudMod = solicitudLogicaEjb
 								.getDadesModificarSolicitudApiPinbal(solicitud.getSolicitudID());

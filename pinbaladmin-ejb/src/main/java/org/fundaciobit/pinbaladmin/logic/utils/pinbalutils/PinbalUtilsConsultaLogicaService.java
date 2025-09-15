@@ -21,7 +21,7 @@ public interface PinbalUtilsConsultaLogicaService {
 	public void procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
 			throws I18NException;
 
-	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, String codiProcediment)
+	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
 			throws Exception;    
     
 
