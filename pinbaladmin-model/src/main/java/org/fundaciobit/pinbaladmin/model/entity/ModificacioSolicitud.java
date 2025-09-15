@@ -26,6 +26,9 @@ public interface ModificacioSolicitud extends org.fundaciobit.genapp.common.IGen
 	public java.sql.Timestamp getDataFi();
 	public void setDataFi(java.sql.Timestamp _dataFi_);
 
+	public java.lang.String getProcedimentTipus();
+	public void setProcedimentTipus(java.lang.String _procedimentTipus_);
+
 	public java.lang.String getNotes();
 	public void setNotes(java.lang.String _notes_);
 

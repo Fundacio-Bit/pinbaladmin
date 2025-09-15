@@ -252,6 +252,19 @@
 
     
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,ModificacioSolicitudFields.PROCEDIMENTTIPUS)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="modificacioSolicitud.procedimentTipus" var="procedimentTipus" />
+              <fmt:message key="genapp.form.searchby" var="cercaperprocedimentTipus" >                
+                 <fmt:param value="${procedimentTipus}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${procedimentTipus}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperprocedimentTipus}" path="procedimentTipus" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,ModificacioSolicitudFields.NOTES)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">

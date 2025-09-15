@@ -153,6 +153,17 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
   }
 
 
+  private java.lang.String procedimentTipus;
+
+  public java.lang.String getProcedimentTipus() {
+    return this.procedimentTipus;
+  }
+
+  public void setProcedimentTipus(java.lang.String procedimentTipus) {
+    this.procedimentTipus = procedimentTipus;
+  }
+
+
   private java.lang.String notes;
 
   public java.lang.String getNotes() {
@@ -313,6 +324,7 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
     this.dataIniciFins = __toClone.dataIniciFins;
     this.dataFiDesde = __toClone.dataFiDesde;
     this.dataFiFins = __toClone.dataFiFins;
+    this.procedimentTipus = __toClone.procedimentTipus;
     this.notes = __toClone.notes;
     this.organIDDesde = __toClone.organIDDesde;
     this.organIDFins = __toClone.organIDFins;
@@ -328,6 +340,7 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
     this.contactemail = __toClone.contactemail;
     this.mapOfSolicitudForSolicitudID = __toClone.mapOfSolicitudForSolicitudID;
     this.mapOfValuesForEstatID = __toClone.mapOfValuesForEstatID;
+    this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganID = __toClone.mapOfOrganForOrganID;
     this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
     this.mapOfValuesForEstatModificacio = __toClone.mapOfValuesForEstatModificacio;
@@ -385,6 +398,18 @@ public class ModificacioSolicitudFilterForm extends PinbalAdminBaseFilterForm im
 
   public void setMapOfValuesForEstatID(Map<String, String> mapOfValuesForEstatID) {
     this.mapOfValuesForEstatID = mapOfValuesForEstatID;
+  }
+
+
+
+  private Map<String, String> mapOfValuesForProcedimentTipus;
+
+  public Map<String, String> getMapOfValuesForProcedimentTipus() {
+    return this.mapOfValuesForProcedimentTipus;
+  }
+
+  public void setMapOfValuesForProcedimentTipus(Map<String, String> mapOfValuesForProcedimentTipus) {
+    this.mapOfValuesForProcedimentTipus = mapOfValuesForProcedimentTipus;
   }
 
 

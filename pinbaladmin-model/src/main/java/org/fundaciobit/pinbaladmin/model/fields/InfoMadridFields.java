@@ -23,6 +23,7 @@ public interface InfoMadridFields extends java.io.Serializable {
 	 public static final TimestampField DATAAUTORITZACIO = new TimestampField(_TABLE_MODEL, "dataAutoritzacio", "dataautoritzacio");
 	 public static final TimestampField DATAENVIAMENT = new TimestampField(_TABLE_MODEL, "dataEnviament", "dataenviament");
 	 public static final LongField INTENTS = new LongField(_TABLE_MODEL, "intents", "intents");
+	 public static final TimestampField DATACONSULTA = new TimestampField(_TABLE_MODEL, "dataConsulta", "dataconsulta");
 
 
   public static final Field<?>[] ALL_INFOMADRID_FIELDS = {
@@ -36,7 +37,8 @@ public interface InfoMadridFields extends java.io.Serializable {
     TITULARNIF,
     DATAAUTORITZACIO,
     DATAENVIAMENT,
-    INTENTS
+    INTENTS,
+    DATACONSULTA
   };
 
 

@@ -55,8 +55,8 @@ public class InfoMadridJPAManager
         return list.toArray(new InfoMadrid[list.size()]);
     };
 
-    public InfoMadrid create( java.lang.String _codi_, long _estatProcediment_, long _estatAutoritzacio_, java.lang.String _missatge_, java.lang.String _consulta_, java.lang.String _titularNom_, java.lang.String _titularNif_, java.sql.Timestamp _dataAutoritzacio_, java.sql.Timestamp _dataEnviament_, long _intents_) throws I18NException {
-        InfoMadridJPA __bean =  new InfoMadridJPA(_codi_,_estatProcediment_,_estatAutoritzacio_,_missatge_,_consulta_,_titularNom_,_titularNif_,_dataAutoritzacio_,_dataEnviament_,_intents_);
+    public InfoMadrid create( java.lang.String _codi_, long _estatProcediment_, long _estatAutoritzacio_, java.lang.String _missatge_, java.lang.String _consulta_, java.lang.String _titularNom_, java.lang.String _titularNif_, java.sql.Timestamp _dataAutoritzacio_, java.sql.Timestamp _dataEnviament_, long _intents_, java.sql.Timestamp _dataConsulta_) throws I18NException {
+        InfoMadridJPA __bean =  new InfoMadridJPA(_codi_,_estatProcediment_,_estatAutoritzacio_,_missatge_,_consulta_,_titularNom_,_titularNif_,_dataAutoritzacio_,_dataEnviament_,_intents_,_dataConsulta_);
         return create(__bean);
     }
 

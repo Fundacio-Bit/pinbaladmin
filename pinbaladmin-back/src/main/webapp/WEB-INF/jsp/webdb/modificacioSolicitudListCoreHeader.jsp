@@ -36,6 +36,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.DATAFI)}">
         <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.DATAFI)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.PROCEDIMENTTIPUS)}">
+        <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.PROCEDIMENTTIPUS)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.NOTES)}">
         <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.NOTES)}</th>
         </c:if>

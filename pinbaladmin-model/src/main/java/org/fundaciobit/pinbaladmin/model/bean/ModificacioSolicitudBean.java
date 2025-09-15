@@ -16,6 +16,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
 	java.lang.Long estatID;
 	java.sql.Timestamp dataInici;
 	java.sql.Timestamp dataFi;
+	java.lang.String procedimentTipus;
 	java.lang.String notes;
 	java.lang.Long organID;
 	java.lang.String responsableProcNom;
@@ -36,7 +37,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public ModificacioSolicitudBean(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
+  public ModificacioSolicitudBean(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
     this.modsoliID=modsoliID;
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
@@ -45,6 +46,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.estatID=estatID;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
+    this.procedimentTipus=procedimentTipus;
     this.notes=notes;
     this.organID=organID;
     this.responsableProcNom=responsableProcNom;
@@ -60,7 +62,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.contactemail=contactemail;
 }
   /** Constructor sense valors autoincrementals */
-  public ModificacioSolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
+  public ModificacioSolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.procedimentNom=procedimentNom;
@@ -68,6 +70,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.estatID=estatID;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
+    this.procedimentTipus=procedimentTipus;
     this.notes=notes;
     this.organID=organID;
     this.responsableProcNom=responsableProcNom;
@@ -96,6 +99,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.setEstatID(__bean.getEstatID());
     this.setDataInici(__bean.getDataInici());
     this.setDataFi(__bean.getDataFi());
+    this.setProcedimentTipus(__bean.getProcedimentTipus());
     this.setNotes(__bean.getNotes());
     this.setOrganID(__bean.getOrganID());
     this.setResponsableProcNom(__bean.getResponsableProcNom());
@@ -167,6 +171,13 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
 	};
 	public void setDataFi(java.sql.Timestamp _dataFi_) {
 		this.dataFi = _dataFi_;
+	};
+
+	public java.lang.String getProcedimentTipus() {
+		return(procedimentTipus);
+	};
+	public void setProcedimentTipus(java.lang.String _procedimentTipus_) {
+		this.procedimentTipus = _procedimentTipus_;
 	};
 
 	public java.lang.String getNotes() {
@@ -275,6 +286,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     __tmp.setEstatID(__bean.getEstatID());
     __tmp.setDataInici(__bean.getDataInici());
     __tmp.setDataFi(__bean.getDataFi());
+    __tmp.setProcedimentTipus(__bean.getProcedimentTipus());
     __tmp.setNotes(__bean.getNotes());
     __tmp.setOrganID(__bean.getOrganID());
     __tmp.setResponsableProcNom(__bean.getResponsableProcNom());

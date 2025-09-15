@@ -3921,6 +3921,31 @@
             "webtype": 14
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "dataconsulta",
+          "sqlType": 93,
+          "size": 29,
+          "digits": 6,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "dataConsulta",
+            "es": "dataConsulta"
+          },
+          "javaName": "dataConsulta",
+          "javaType": "java.sql.Timestamp",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 7
+          },
+          "foreignKeys": []
         }
       ]
     },
@@ -4167,6 +4192,32 @@
           "groupBy": false,
           "webFieldInfo": {
             "webtype": 7
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "procedimenttipus",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Tipus Procediment",
+            "es": "Tipo Procedimiento"
+          },
+          "javaName": "procedimentTipus",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "1,2,3",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 16
           },
           "foreignKeys": []
         },

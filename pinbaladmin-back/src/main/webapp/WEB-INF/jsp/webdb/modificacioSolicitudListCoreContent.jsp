@@ -66,6 +66,14 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.DATAFI)}">
           <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${modificacioSolicitud.dataFi}" /></td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.PROCEDIMENTTIPUS)}">
+          <td>
+          <c:set var="tmp">${modificacioSolicitud.procedimentTipus}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfValuesForProcedimentTipus[tmp]}
+          </c:if>
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.NOTES)}">
           <td>
           ${modificacioSolicitud.notes}

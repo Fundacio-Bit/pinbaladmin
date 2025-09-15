@@ -222,6 +222,16 @@ public class ModificacioSolicitudController
       };
     }
 
+    // Field procedimentTipus
+    {
+      _listSKV = getReferenceListForProcedimentTipus(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfValuesForProcedimentTipus(_tmp);
+      if (filterForm.getGroupByFields().contains(PROCEDIMENTTIPUS)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, PROCEDIMENTTIPUS, false);
+      };
+    }
+
     // Field organID
     {
       _listSKV = getReferenceListForOrganID(request, mav, filterForm, list, groupByItemsMap, null);
@@ -269,6 +279,7 @@ public class ModificacioSolicitudController
     __mapping = new java.util.HashMap<Field<?>, java.util.Map<String, String>>();
     __mapping.put(SOLICITUDID, filterForm.getMapOfSolicitudForSolicitudID());
     __mapping.put(ESTATID, filterForm.getMapOfValuesForEstatID());
+    __mapping.put(PROCEDIMENTTIPUS, filterForm.getMapOfValuesForProcedimentTipus());
     __mapping.put(ORGANID, filterForm.getMapOfOrganForOrganID());
     __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
     __mapping.put(ESTATMODIFICACIO, filterForm.getMapOfValuesForEstatModificacio());
@@ -336,6 +347,15 @@ public class ModificacioSolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       modificacioSolicitudForm.setListOfValuesForEstatID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (modificacioSolicitudForm.getListOfValuesForProcedimentTipus() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForProcedimentTipus(request, mav, modificacioSolicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      modificacioSolicitudForm.setListOfValuesForProcedimentTipus(_listSKV);
     }
     // Comprovam si ja esta definida la llista
     if (modificacioSolicitudForm.getListOfOrganForOrganID() == null) {
@@ -774,6 +794,38 @@ public java.lang.Long stringToPK(String value) {
     List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
     __tmp.add(new StringKeyValue("30" , "30"));
     __tmp.add(new StringKeyValue("20" , "20"));
+    return __tmp;
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, ModificacioSolicitudForm modificacioSolicitudForm, Where where)  throws I18NException {
+    if (modificacioSolicitudForm.isHiddenField(PROCEDIMENTTIPUS)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    return getReferenceListForProcedimentTipus(request, mav, where);
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, ModificacioSolicitudFilterForm modificacioSolicitudFilterForm,
+       List<ModificacioSolicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (modificacioSolicitudFilterForm.isHiddenField(PROCEDIMENTTIPUS)
+       && !modificacioSolicitudFilterForm.isGroupByField(PROCEDIMENTTIPUS)
+       && !modificacioSolicitudFilterForm.isFilterByField(PROCEDIMENTTIPUS)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    return getReferenceListForProcedimentTipus(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+    __tmp.add(new StringKeyValue("1" , "1"));
+    __tmp.add(new StringKeyValue("2" , "2"));
+    __tmp.add(new StringKeyValue("3" , "3"));
     return __tmp;
   }
 

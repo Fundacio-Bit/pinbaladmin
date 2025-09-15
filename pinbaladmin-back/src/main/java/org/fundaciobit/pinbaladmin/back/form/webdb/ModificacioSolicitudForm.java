@@ -26,6 +26,7 @@ public class ModificacioSolicitudForm extends PinbalAdminBaseForm {
       this.modificacioSolicitud = __toClone.modificacioSolicitud;
     this.listOfSolicitudForSolicitudID = __toClone.listOfSolicitudForSolicitudID;
     this.listOfValuesForEstatID = __toClone.listOfValuesForEstatID;
+    this.listOfValuesForProcedimentTipus = __toClone.listOfValuesForProcedimentTipus;
     this.listOfOrganForOrganID = __toClone.listOfOrganForOrganID;
     this.listOfValuesForConsentiment = __toClone.listOfValuesForConsentiment;
     this.listOfValuesForEstatModificacio = __toClone.listOfValuesForEstatModificacio;
@@ -78,6 +79,18 @@ public class ModificacioSolicitudForm extends PinbalAdminBaseForm {
 
   public void setListOfValuesForEstatID(List<StringKeyValue> listOfValuesForEstatID) {
     this.listOfValuesForEstatID = listOfValuesForEstatID;
+  }
+
+
+
+  private List<StringKeyValue> listOfValuesForProcedimentTipus;
+
+  public List<StringKeyValue> getListOfValuesForProcedimentTipus() {
+    return this.listOfValuesForProcedimentTipus;
+  }
+
+  public void setListOfValuesForProcedimentTipus(List<StringKeyValue> listOfValuesForProcedimentTipus) {
+    this.listOfValuesForProcedimentTipus = listOfValuesForProcedimentTipus;
   }
 
 

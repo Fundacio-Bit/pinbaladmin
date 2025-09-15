@@ -20,6 +20,7 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
 	 public static final LongField ESTATID = new LongField(_TABLE_MODEL, "estatID", "estatid");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
+	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
 	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "notes");
 	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organID", "organid");
 	 public static final StringField RESPONSABLEPROCNOM = new StringField(_TABLE_MODEL, "responsableProcNom", "responsableprocnom");
@@ -44,6 +45,7 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
     ESTATID,
     DATAINICI,
     DATAFI,
+    PROCEDIMENTTIPUS,
     NOTES,
     ORGANID,
     RESPONSABLEPROCNOM,

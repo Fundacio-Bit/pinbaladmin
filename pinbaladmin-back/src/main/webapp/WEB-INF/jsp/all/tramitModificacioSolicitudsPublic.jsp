@@ -18,7 +18,7 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" ><fmt:message key='tramit.modificacions.title'/></div>
+	<div id="titol-tramit" class="third"><fmt:message key='tramit.modificacions.title'/></div>
 	<div id="button-menu" class="third">
 		<a href="www.google.com"/></a>
 	</div>
@@ -54,14 +54,14 @@
 }
 
 #titol-tramit {
-	font-size: 35px;
+	font-size: 34px;
 	font-weight: lighter;
 }
 
 #logo-caib {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+	display: flex;
+	gap: 10px;
+	align-items: center;
 }
 
 #user-info {
@@ -75,8 +75,8 @@
 }
 
 #button-menu a {
-	background-color: #265d3c;
-	color: white;
+/* 	background-color: #265d3c;
+ */	color: white;
 	border: none;
 	padding: 0.5rem 1rem;
 	border-radius: 5px;
@@ -85,12 +85,12 @@
 }
 
 #button-menu a:hover {
-	background-color: #000;
-}
+/* 	background-color: #000;
+ */}
 
 .third {
-/* 	flex: 1;
- */}
+	flex: 1;
+}
 
 #footer {
 	padding: 1rem;

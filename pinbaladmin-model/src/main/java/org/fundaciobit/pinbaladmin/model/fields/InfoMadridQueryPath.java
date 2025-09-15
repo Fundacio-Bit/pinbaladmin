@@ -55,6 +55,10 @@ public class InfoMadridQueryPath extends org.fundaciobit.genapp.common.query.Que
     return new LongField(getQueryPath(), InfoMadridFields.INTENTS);
   }
 
+  public TimestampField DATACONSULTA() {
+    return new TimestampField(getQueryPath(), InfoMadridFields.DATACONSULTA);
+  }
+
 
 
   @Override

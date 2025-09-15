@@ -43,6 +43,10 @@ public class ModificacioSolicitudQueryPath extends org.fundaciobit.genapp.common
     return new TimestampField(getQueryPath(), ModificacioSolicitudFields.DATAFI);
   }
 
+  public StringField PROCEDIMENTTIPUS() {
+    return new StringField(getQueryPath(), ModificacioSolicitudFields.PROCEDIMENTTIPUS);
+  }
+
   public StringField NOTES() {
     return new StringField(getQueryPath(), ModificacioSolicitudFields.NOTES);
   }

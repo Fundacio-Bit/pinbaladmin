@@ -63,6 +63,14 @@ public class ModificacioSolicitudValidator<I extends ModificacioSolicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(PROCEDIMENTTIPUS) == 0) {
+      java.lang.String __procedimenttipus = __target__.getProcedimentTipus();
+      if (__procedimenttipus!= null && __procedimenttipus.length() > 255) {
+        __vr.rejectValue(PROCEDIMENTTIPUS, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PROCEDIMENTTIPUS)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(NOTES) == 0) {
       java.lang.String __notes = __target__.getNotes();
       if (__notes!= null && __notes.length() > 2000) {
