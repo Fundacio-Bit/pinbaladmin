@@ -150,3 +150,7 @@ hs_err_pid*
 /backfront.bat
 /front.bat
 /genapp/genapp.log.2
+/checkcode.bat
+/genapp/genapp.log.3
+/pinbaladmin-back/src/main/webapp/WEB-INF/jsp/.project
+/scripts/.project
