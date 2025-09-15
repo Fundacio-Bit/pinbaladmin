@@ -19,6 +19,7 @@ public class InfoMadridBean implements InfoMadrid {
 	java.sql.Timestamp dataAutoritzacio;
 	java.sql.Timestamp dataEnviament;
 	long intents;
+	java.sql.Timestamp dataConsulta;
 
 
   /** Constructor Buit */
@@ -26,7 +27,7 @@ public class InfoMadridBean implements InfoMadrid {
   }
 
   /** Constructor amb tots els camps  */
-  public InfoMadridBean(long infoMadridID , java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents) {
+  public InfoMadridBean(long infoMadridID , java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents , java.sql.Timestamp dataConsulta) {
     this.infoMadridID=infoMadridID;
     this.codi=codi;
     this.estatProcediment=estatProcediment;
@@ -38,9 +39,10 @@ public class InfoMadridBean implements InfoMadrid {
     this.dataAutoritzacio=dataAutoritzacio;
     this.dataEnviament=dataEnviament;
     this.intents=intents;
+    this.dataConsulta=dataConsulta;
 }
   /** Constructor sense valors autoincrementals */
-  public InfoMadridBean(java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents) {
+  public InfoMadridBean(java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents , java.sql.Timestamp dataConsulta) {
     this.codi=codi;
     this.estatProcediment=estatProcediment;
     this.estatAutoritzacio=estatAutoritzacio;
@@ -51,6 +53,7 @@ public class InfoMadridBean implements InfoMadrid {
     this.dataAutoritzacio=dataAutoritzacio;
     this.dataEnviament=dataEnviament;
     this.intents=intents;
+    this.dataConsulta=dataConsulta;
 }
   /** Constructor dels valors Not Null */
   public InfoMadridBean(long infoMadridID , java.lang.String codi , long intents) {
@@ -70,6 +73,7 @@ public class InfoMadridBean implements InfoMadrid {
     this.setDataAutoritzacio(__bean.getDataAutoritzacio());
     this.setDataEnviament(__bean.getDataEnviament());
     this.setIntents(__bean.getIntents());
+    this.setDataConsulta(__bean.getDataConsulta());
 	}
 
 	public long getInfoMadridID() {
@@ -149,6 +153,13 @@ public class InfoMadridBean implements InfoMadrid {
 		this.intents = _intents_;
 	};
 
+	public java.sql.Timestamp getDataConsulta() {
+		return(dataConsulta);
+	};
+	public void setDataConsulta(java.sql.Timestamp _dataConsulta_) {
+		this.dataConsulta = _dataConsulta_;
+	};
+
 
 
   // ======================================
@@ -167,6 +178,7 @@ public class InfoMadridBean implements InfoMadrid {
     __tmp.setDataAutoritzacio(__bean.getDataAutoritzacio());
     __tmp.setDataEnviament(__bean.getDataEnviament());
     __tmp.setIntents(__bean.getIntents());
+    __tmp.setDataConsulta(__bean.getDataConsulta());
 		return __tmp;
 	}
 

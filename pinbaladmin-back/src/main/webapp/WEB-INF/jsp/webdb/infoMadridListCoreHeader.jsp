@@ -45,6 +45,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,InfoMadridFields.INTENTS)}">
         <th>${pad:getSortIcons(__theFilterForm,InfoMadridFields.INTENTS)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,InfoMadridFields.DATACONSULTA)}">
+        <th>${pad:getSortIcons(__theFilterForm,InfoMadridFields.DATACONSULTA)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

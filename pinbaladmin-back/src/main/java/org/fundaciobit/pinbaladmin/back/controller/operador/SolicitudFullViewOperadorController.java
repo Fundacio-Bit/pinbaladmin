@@ -183,23 +183,28 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				
 				Long infoMadID = solicitud.getInfomadridid();
 				
-
 				//S'ha de poder enviar a Madrid quan està pendent, i quan s'està en ESMENES, perque s'ha de poder canviar facil i enviar una altra vegada.
 				if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
 						|| estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
 						|| estatID == Constants.SOLI_ESTAT_ESMENES) {
-					InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
+
 					
-					//Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
-					if (infoMad.getDataAutoritzacio() == null) {
-						AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-								"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-						solicitudForm.addAdditionalButton(alta);
-					}else {
-						AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-								"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
-						solicitudForm.addAdditionalButton(modificacio);
-					}
+					AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+							"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+					solicitudForm.addAdditionalButton(alta);
+					
+//					InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
+//					
+//					//Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
+//					if (infoMad.getDataAutoritzacio() == null) {
+//						AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+//								"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+//						solicitudForm.addAdditionalButton(alta);
+//					}else {
+//						AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+//								"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
+//						solicitudForm.addAdditionalButton(modificacio);
+//					}
 				}
 
 				// Si està pendent d'autoritzar, s'ha enviat a Madrid i volem resposta. Utilitzam CONSULTA. Si no, tenim resposta, la

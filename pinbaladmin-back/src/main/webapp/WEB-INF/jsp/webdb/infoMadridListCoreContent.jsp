@@ -81,6 +81,9 @@
           ${infoMadrid.intents}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,InfoMadridFields.DATACONSULTA)}">
+          <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${infoMadrid.dataConsulta}" /></td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

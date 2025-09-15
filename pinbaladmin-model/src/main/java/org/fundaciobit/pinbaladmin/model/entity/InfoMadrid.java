@@ -35,6 +35,9 @@ public interface InfoMadrid extends org.fundaciobit.genapp.common.IGenAppEntity 
 	public long getIntents();
 	public void setIntents(long _intents_);
 
+	public java.sql.Timestamp getDataConsulta();
+	public void setDataConsulta(java.sql.Timestamp _dataConsulta_);
+
 
 
   // ======================================

@@ -117,9 +117,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 //		version1CrearInfoMad();
 		
-		version2CrearInfoMad();
+//		version2CrearInfoMad();
 		
-//		actualizarTitulares();
+		actualizarTitulares();
 		
 		HtmlUtils.saveMessageSuccess(request, "Estat de les sol·licituds actualitzat correctament.");
 		return "redirect:" + getContextWeb() + "/list";
@@ -142,7 +142,20 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			
 			log.info("Solicitud: " + soli.getSolicitudID());
 			
-			ScspTitular titular = getTitular(soli);
+			Long fitxerID = soli.getSolicitudXmlID();
+
+    		if (fitxerID == null) {
+    			log.info("fitxerID: " + fitxerID);
+    			continue;
+    		}
+
+    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+    		if (prop == null) {
+    			log.info("prop: " + prop);
+    			continue;
+    		}
+
+    		ScspTitular titular =  getTitularFromProperties(prop);
 			if (titular == null) {
 				continue;
 			}
@@ -157,8 +170,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	private void version2CrearInfoMad() throws Exception {
 
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-		Where wInfoMad = SolicitudFields.INFOMADRIDID.isNull();
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wInfoMad)); // , wEstatPinbal , wEstatSoli));
+//		Where wInfoMad = SolicitudFields.INFOMADRIDID.isNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals));// ,, wInfoMad));  wEstatPinbal , wEstatSoli));
 
 		log.info("Solicituds: " + solicituds.size());
 
@@ -166,6 +179,34 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 			log.info("Solicitud: " + soli.getSolicitudID());
 
+			
+			// Revisam la darrera Consulta d'aquesta solicitud. 
+			// Si te infoMadrid i s'ha consultat fa menys d'una hora, botarse-la. 
+			// Sino, indicar que la darreraConsulta es ara.
+			Long infoMadId = soli.getInfomadridid();
+
+			if (infoMadId != null) {
+			    InfoMadrid infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadId);
+			    Timestamp dataConsulta = infoMad.getDataConsulta();
+
+			    if (dataConsulta != null) {
+			        // Calcular fa una hora
+			        Timestamp faTresHora = new Timestamp(System.currentTimeMillis() - 3600 * 1000 * 3);
+
+			        if (dataConsulta.after(faTresHora)) {
+			            // S'ha consultat fa menys d'una hora -> botar-se-la
+			        	log.info("Solicitud consultada recent");
+			            continue;
+			        }
+			    }
+
+			    // Sino, indicar que la darreraConsulta es ara
+			    log.info("Solicitud consultada fa temps. Tornar a consultar.");
+			    infoMad.setDataConsulta(new Timestamp(System.currentTimeMillis()));
+			    infoMadridLogicaEjb.update(infoMad);
+			}
+
+			
 			if (soli.getProcedimentCodi().length() > 20) {
 				log.info("Procediment Llarg. Descartat");
 				continue;
@@ -371,9 +412,12 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 						estatAut = (long) estatAutNou;
 					}
 
-					InfoMadridJPA infoMadJPA = new InfoMadridJPA(codi, estatProc, estatAut, missatge, consultaTexto,
-							titularNom, titularNif, dataAuth, dataEnviament, reintents);
+					Timestamp dataConsulta = new Timestamp(System.currentTimeMillis());
 
+				    
+					InfoMadridJPA infoMadJPA = new InfoMadridJPA(codi, estatProc, estatAut, missatge, consultaTexto,
+							titularNom, titularNif, dataAuth, dataEnviament, reintents, dataConsulta);
+ 
 					log.info("CREAM InfoMad per solicitud: " + codi);
 					InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJPA);
 
@@ -420,13 +464,17 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		return datosTitular;
 	}
 	
-	private Retorno consulta(Solicitud soli) throws Exception {
+	private Retorno consulta(Solicitud soli) {
 		final String SOLICITUD_TROBADA = "0";
 		final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
 
-		ScspTitular titular;
+		ScspTitular titular = null;
 
-		titular = getTitular(soli);
+		try {
+			titular = getTitular(soli);
+		} catch (Exception e) {
+			log.error("ERROR OBTENINT TITULAR: " + soli.getSolicitudID() + ". " + e.getMessage());
+		}
 		if (titular == null) {
 			log.info("titular: " + titular);
 			return null;
@@ -443,7 +491,13 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		log.info("Cridam métode CONSULTA");
 
-		Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soli.getSolicitudID());
+		Retorno retorno;
+		try {
+			retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, soli.getSolicitudID());
+		} catch (Exception e) {
+			log.error("ERROR CRIDANT CONSULTA: " + soli.getSolicitudID() + ". " + e.getMessage());
+			return null;
+		}
 
 		if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 			return retorno;

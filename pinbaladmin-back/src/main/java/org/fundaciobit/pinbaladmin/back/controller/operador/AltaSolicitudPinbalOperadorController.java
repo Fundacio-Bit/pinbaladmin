@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
+import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
@@ -90,7 +91,7 @@ public class AltaSolicitudPinbalOperadorController {
             ModelAndView mav;
             if (tipus.equals("alta")) {
                 es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitudA = solicitudLogicaEjb
-                        .getDadesAltaSolicitudApiPinbal(soliID);
+                        .getDadesSolicitudApiPinbalAlta(soli);
 
                 if (solicitudA.getProcedimiento().getConsentimiento() == null) {
                     errors.add("Fa falta un document de consentiment");
@@ -148,7 +149,7 @@ public class AltaSolicitudPinbalOperadorController {
 
     @RequestMapping(value = "/altasolicitud", method = RequestMethod.POST)
     public String altaSolicitud(HttpServletRequest request, HttpServletResponse response,
-                                @RequestParam("soliID") Long soliID) {
+                                @RequestParam("soliID") Long soliID) throws I18NException {
         String consulta = request.getParameter("consulta");
 
         ScspTitular titular = (ScspTitular) request.getSession().getAttribute("titular");
@@ -161,25 +162,31 @@ public class AltaSolicitudPinbalOperadorController {
         solicitud.setConsulta(consulta);
         log.info("consulta: " + solicitud.getConsulta());
 
+        // Obtener JPA
+        SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
         try {
             // 1. Enviar a PINBAL
             es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta =
                 solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
-            // 2. Obtener JPA
-            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-
-            // 3. Procesar respuesta + mensajes usuario
-            solicitudLogicaEjb.processarRespostaPinbalAlta(soli, resposta, titular, funcionario);
+            // 2. CREAR INFO MADRID BASIC
+            InfoMadridJPA infoMad = crearInfoMadrid(consulta, consulta, titular);
+            
+            // 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
+            solicitudLogicaEjb.processarRespostaPinbalAlta(soli, resposta, titular, funcionario, infoMad);
+            
+            //4. mensajes usuario
             mostrarMissatgesUsuariAlta(request, resposta, soliID);
 
-            // 4. Guardar
-            solicitudLogicaEjb.update(soli);
 
         } catch (Exception e) {
+        	soli.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
             log.error("Error fent la cridada a la API de PINBAL", e);
             HtmlUtils.saveMessageError(request, "Error fent la cridada a la API de PINBAL: " + e.getMessage());
         }
+        
+        // 4. Guardar
+        solicitudLogicaEjb.update(soli);
 
         String returnUrl = (String) request.getSession().getAttribute(RETURN_URL);
         log.info("returnUrl :" + returnUrl);
@@ -270,7 +277,7 @@ public class AltaSolicitudPinbalOperadorController {
 		boolean duplicat = false;
 		for (var error : resposta.getErrores().getError()) {
 			HtmlUtils.saveMessageError(request,
-					"PINBAL: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")");
+					"MADRID: " + error.getDescripcion() + " (Error " + error.getCodigo() + ")");
 			if ("01".equals(error.getCodigo()))
 				duplicat = true;
 		}
@@ -354,14 +361,21 @@ public class AltaSolicitudPinbalOperadorController {
     	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
     	String documentacion = infoMad.getTitularNif();
 
-    	String[] fullName = infoMad.getTitularNom().split("|");
+		log.info("Titular Nom: " + infoMad.getTitularNom());
+    	
+		String[] fullName = infoMad.getTitularNom().split("\\|");
+    	log.info("FullName: " + fullName);
     	
         ScspTitular titular = new ScspTitular();
 
         String nombre = fullName[0];
+        log.info("nombre: " + nombre);
         String ape1 = fullName[1];
+        log.info("ape1: " + ape1);
         String ape2 = fullName[2];
+        log.info("ape2: " + ape2);
         String nombreCompleto = toFullName(nombre, ape1, ape2);
+        log.info("nombreCompleto: " + nombreCompleto);
 
         titular.setTipoDocumentacion(tipoDocumentacion);
         titular.setDocumentacion(documentacion);
@@ -443,6 +457,38 @@ public class AltaSolicitudPinbalOperadorController {
     private String toFullName(String nom, String l1, String l2) {
         String fullName = nom + " " + l1 + (l2 == "" ? "" : " " + l2);
         return fullName;
+    }
+    
+    
+    private InfoMadridJPA crearInfoMadrid(String codi, String consulta, ScspTitular titular) {
+    	
+		Long estatSoli = null;
+		Long estatAuth = null;
+		String resposta = null;
+		
+	    Timestamp ahora = new Timestamp(System.currentTimeMillis());
+
+	    Timestamp dataAuth = null;
+	    Timestamp dataEnviament = ahora;
+	    Timestamp dataConsulta = ahora;
+	    
+		
+    	InfoMadridJPA infoMadJpa = new InfoMadridJPA(
+    			codi,
+    			estatSoli,                // Estado interno de la solicitud
+    			estatAuth,                // Estado que devuelve Madrid
+    			resposta,         // Mensaje de Madrid
+    			consulta, // Texto enviado
+                titular.getNombreCompleto(),
+                titular.getDocumentacion(),
+                dataAuth,
+                dataEnviament,                                   // Fecha de envío
+                0,
+                dataEnviament
+        );
+    	
+    	return infoMadJpa;
+    	
     }
 
 }

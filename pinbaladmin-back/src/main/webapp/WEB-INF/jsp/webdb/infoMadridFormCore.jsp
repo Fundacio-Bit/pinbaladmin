@@ -304,3 +304,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,InfoMadridFields.DATACONSULTA)}">
+        <tr id="infoMadrid_dataConsulta_rowid">
+          <td id="infoMadrid_dataConsulta_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[InfoMadridFields.DATACONSULTA])?'infoMadrid.dataConsulta':__theForm.labels[InfoMadridFields.DATACONSULTA]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[InfoMadridFields.DATACONSULTA]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[InfoMadridFields.DATACONSULTA]}" ></i>
+              </c:if>
+            </td>
+          <td id="infoMadrid_dataConsulta_columnvalueid">
+    <form:errors path="infoMadrid.dataConsulta" cssClass="errorField alert alert-danger" />
+            <div class="form-group"  style="margin-bottom: 0px;" >
+                <div class="input-group date" id="infoMadrid_dataConsulta" data-target-input="nearest">
+                      <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,InfoMadridFields.DATACONSULTA)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#infoMadrid_dataConsulta" path="infoMadrid.dataConsulta" />
+                    <c:if test="${!gen:contains(__theForm.readOnlyFields ,InfoMadridFields.DATACONSULTA)}" >
+                    <div class="input-group-append"  data-target="#infoMadrid_dataConsulta"  data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </c:if>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#infoMadrid_dataConsulta').datetimepicker({
+                    format: '${gen:getJSDateTimePattern()}',
+                    locale: '${lang}',
+                    icons: {
+                       time: 'far fa-clock'
+                    }
+                });
+            });
+        </script>           </td>
+        </tr>
+        </c:if>
+        

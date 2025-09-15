@@ -186,6 +186,28 @@ public class InfoMadridFilterForm extends PinbalAdminBaseFilterForm implements I
   }
 
 
+  private java.sql.Timestamp dataConsultaDesde;
+
+  public java.sql.Timestamp getDataConsultaDesde() {
+    return this.dataConsultaDesde;
+  }
+
+  public void setDataConsultaDesde(java.sql.Timestamp dataConsultaDesde) {
+    this.dataConsultaDesde = dataConsultaDesde;
+  }
+
+
+  private java.sql.Timestamp dataConsultaFins;
+
+  public java.sql.Timestamp getDataConsultaFins() {
+    return this.dataConsultaFins;
+  }
+
+  public void setDataConsultaFins(java.sql.Timestamp dataConsultaFins) {
+    this.dataConsultaFins = dataConsultaFins;
+  }
+
+
   public InfoMadridFilterForm() {
   }
   
@@ -206,6 +228,8 @@ public class InfoMadridFilterForm extends PinbalAdminBaseFilterForm implements I
     this.dataEnviamentFins = __toClone.dataEnviamentFins;
     this.intentsDesde = __toClone.intentsDesde;
     this.intentsFins = __toClone.intentsFins;
+    this.dataConsultaDesde = __toClone.dataConsultaDesde;
+    this.dataConsultaFins = __toClone.dataConsultaFins;
     this.mapOfValuesForEstatProcediment = __toClone.mapOfValuesForEstatProcediment;
     this.mapOfValuesForEstatAutoritzacio = __toClone.mapOfValuesForEstatAutoritzacio;
   }
