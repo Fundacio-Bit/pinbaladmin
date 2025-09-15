@@ -11,9 +11,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -21,26 +19,25 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
-import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.GroupByItem;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
-import org.fundaciobit.genapp.common.web.form.Section;
+import org.fundaciobit.genapp.common.web.form.AdditionalButton;
+import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.ModificacioSolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
@@ -61,7 +58,6 @@ import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
-import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
@@ -76,6 +72,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -194,8 +191,11 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			form.addHiddenField(ModificacioSolicitudFields.SOLICITANTMAIL);
 			form.addHiddenField(ModificacioSolicitudFields.ESTATMODIFICACIO);
 			form.addHiddenField(ModificacioSolicitudFields.ESTATID);
-			form.addHiddenField(ModificacioSolicitudFields.DATAINICI);
-			
+//			form.addHiddenField(ModificacioSolicitudFields.DATAINICI);
+
+			form.addHiddenField(ModificacioSolicitudFields.CONTACTENOM);
+			form.addHiddenField(ModificacioSolicitudFields.CONTACTEMAIL);
+
 			
 //			Section secProcediment = new Section("secProcediment", "procediment", ModificacioSolicitudFields.PROCEDIMENTCODI, ModificacioSolicitudFields.PROCEDIMENTNOM, ModificacioSolicitudFields.CODISIANOU, ModificacioSolicitudFields.DATAINICI, ModificacioSolicitudFields.DATAFI, ModificacioSolicitudFields.ORGANID );
 //			Section secResponsable = new Section("secResponsable", "responsable", ModificacioSolicitudFields.RESPONSABLEPROCNOM, ModificacioSolicitudFields.RESPONSABLEPROCEMAIL);
@@ -221,6 +221,16 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			log.info("modSoli: " + modsoliID);
 			request.getSession().setAttribute(MOD_SOLI_ID, modsoliID);
 			request.getSession().setAttribute(SOLICITUD_ID, solicitudID);
+			
+
+			form.setSaveButtonVisible(false);
+			form.addAdditionalButton(new AdditionalButton("", "tramit.modificacions.finalitzar",
+					"javascript:submitForm();", AdditionalButtonStyle.PRIMARY));
+
+			form.setCancelButtonVisible(false);
+			form.addAdditionalButton(new AdditionalButton("", "genapp.cancel",
+					"javascript:cancelarForm();", AdditionalButtonStyle.SECONDARY));
+
 		}
 
 		return form;
@@ -313,8 +323,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		modSolicitud.setProcedimentNom(solicitud.getProcedimentNom());
 		modSolicitud.setEstatID(solicitud.getEstatSolicitud());
 		modSolicitud.setDataInici(solicitud.getDataInici());
-//		modSolicitud.setDataFi(solicitud.getDataFi());
+		modSolicitud.setDataFi(solicitud.getDataFi());
 		modSolicitud.setNotes(solicitud.getPinfo()); // o el campo correcto
+		modSolicitud.setProcedimentTipus(solicitud.getProcedimentTipus());
 
 		modSolicitud.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_CREACIO); // o el campo correcto
 		
@@ -416,81 +427,81 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		}
 	}
 
-	public class SolicitudInfo {
-		private Long solicitudID;
-		private String nom;
-		private String codi;
-		private String estat;
-		private String organGestor;
-		private String responsable;
-		private String responsableMail;
-		private String dataInici;
-		private String dataFi;
-		private String consentiment;
-		private String notes;
-
-		public SolicitudInfo(Long solicitudID, String nom, String codi, String estat, String organGestor,
-				String responsable, String responsableMail, String dataInici, String dataFi, String consentiment,
-				String notes) {
-			super();
-			this.solicitudID = solicitudID;
-			this.nom = nom;
-			this.codi = codi;
-			this.estat = estat;
-			this.organGestor = organGestor;
-			this.responsable = responsable;
-			this.responsableMail = responsableMail;
-			this.dataInici = dataInici;
-			this.dataFi = dataFi;
-			this.consentiment = consentiment;
-			this.notes = notes;
-		}
-
-		public Long getSolicitudID() {
-			return solicitudID;
-		}
-
-		public String getNom() {
-			return nom;
-		}
-
-		public String getCodi() {
-			return codi;
-		}
-
-		public String getEstat() {
-			return estat;
-		}
-
-		public String getOrganGestor() {
-			return organGestor;
-		}
-
-		public String getResponsable() {
-			return responsable;
-		}
-
-		public String getResponsableMail() {
-			return responsableMail;
-		}
-
-		public String getDataInici() {
-			return dataInici;
-		}
-
-		public String getDataFi() {
-			return dataFi;
-		}
-
-		public String getConsentiment() {
-			return consentiment;
-		}
-
-		public String getNotes() {
-			return notes;
-		}
-
-	}
+//	public class SolicitudInfo {
+//		private Long solicitudID;
+//		private String nom;
+//		private String codi;
+//		private String estat;
+//		private String organGestor;
+//		private String responsable;
+//		private String responsableMail;
+//		private String dataInici;
+//		private String dataFi;
+//		private String consentiment;
+//		private String notes;
+//
+//		public SolicitudInfo(Long solicitudID, String nom, String codi, String estat, String organGestor,
+//				String responsable, String responsableMail, String dataInici, String dataFi, String consentiment,
+//				String notes) {
+//			super();
+//			this.solicitudID = solicitudID;
+//			this.nom = nom;
+//			this.codi = codi;
+//			this.estat = estat;
+//			this.organGestor = organGestor;
+//			this.responsable = responsable;
+//			this.responsableMail = responsableMail;
+//			this.dataInici = dataInici;
+//			this.dataFi = dataFi;
+//			this.consentiment = consentiment;
+//			this.notes = notes;
+//		}
+//
+//		public Long getSolicitudID() {
+//			return solicitudID;
+//		}
+//
+//		public String getNom() {
+//			return nom;
+//		}
+//
+//		public String getCodi() {
+//			return codi;
+//		}
+//
+//		public String getEstat() {
+//			return estat;
+//		}
+//
+//		public String getOrganGestor() {
+//			return organGestor;
+//		}
+//
+//		public String getResponsable() {
+//			return responsable;
+//		}
+//
+//		public String getResponsableMail() {
+//			return responsableMail;
+//		}
+//
+//		public String getDataInici() {
+//			return dataInici;
+//		}
+//
+//		public String getDataFi() {
+//			return dataFi;
+//		}
+//
+//		public String getConsentiment() {
+//			return consentiment;
+//		}
+//
+//		public String getNotes() {
+//			return notes;
+//		}
+//
+//	}
 
 	public class ServeiInfo {
 		private Long id;
@@ -566,11 +577,13 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		private String id;
 		private String key;
 		private String value;
+		private Long estat;
 
-		public Item(String id, String key, String value) {
+		public Item(String id, String key, String value, Long estat) {
 			this.setId(id);
 			this.setKey(key);
 			this.setValue(value);
+			this.setEstat(estat);
 		}
 
 		public String getId() {
@@ -596,6 +609,14 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		public void setValue(String value) {
 			this.value = value;
 		}
+
+		public Long getEstat() {
+			return estat;
+		}
+
+		public void setEstat(Long estat) {
+			this.estat = estat;
+		}
 	}
 
 	@RequestMapping(value = { "/jsonProcediments" }, method = RequestMethod.GET)
@@ -609,10 +630,10 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 		Where wLocal = SolicitudFields.ORGANID.isNotNull();
 		
-		Long[] estats = {Constants.SOLI_ESTAT_AUTORITZAT, Constants.SOLI_ESTAT_TANCAT};
-		Where wEstats = SolicitudFields.ESTATSOLICITUD.in(estats);
+//		Long[] estats = {Constants.SOLI_ESTAT_AUTORITZAT, Constants.SOLI_ESTAT_TANCAT};
+//		Where wEstats = SolicitudFields.ESTATSOLICITUD.in(estats);
 		
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wLocal, wEstats));
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wLocal));//, wEstats));
 
 		List<Item> items = new java.util.ArrayList<Item>();
 
@@ -622,8 +643,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			String id = String.valueOf(soli.getSolicitudID());
 			String key = soli.getProcedimentCodi();
 			String value = soli.getProcedimentNom();
+			Long estat = soli.getEstatSolicitud();
 
-			Item item = new Item(id, key, value);
+			Item item = new Item(id, key, value, estat);
 			items.add(item);
 		}
 
@@ -719,7 +741,6 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		StringBuilder msg = new StringBuilder();
 
 		String codiProcediment = solicitudOriginal.getProcedimentCodi();
-		String asumpte = "Solicitud de modificació del procediment " + codiProcediment;
 
 		msg.append("<div style='font-family: sans-serif;'>");
 
@@ -744,6 +765,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 					.append("&nbsp;&nbsp;&nbsp;&nbsp;").append(modificacio.getCodiSiaNou()).append("</li>");
 		}
 
+		appendSiModificat(msg, "Tipus Procediment", getTipusDocFromID(solicitudOriginal.getProcedimentTipus()),
+				getTipusDocFromID(modificacio.getProcedimentTipus()));
+		
 		appendSiModificat(msg, "Data Caducitat", solicitudOriginal.getDataFi(),
 				modificacio.getDataFi());
 
@@ -831,7 +855,8 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 //		log.info(msg.toString());
 
-		crearEventModificacio(modificacio, nomUsuari, asumpte, msg.toString());
+		crearEventModificacio(modificacio, msg.toString());
+		enviarMissatgeAlSolicitant(modificacio);
 
 		// Actualitzar estat solicitud a PENDENT_REVISIO_MODIFICACIO
 		solicitudOriginal.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO);
@@ -851,8 +876,33 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		}
 	}
 
+	private String getTipusDocFromID(String id) {
+		log.info("getTipusDocFromID: " + id);
+		
+		if (id == null) {
+			return null;
+		}
+		
+		String lang = "ca";        
+        List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+		for (TipusProcediment tp : tipus) {
+			if (tp.id == Long.valueOf(id)) {
+				String text;
+				if (lang.equals("es")) {
+					text = tp.castella;
+				} else {
+					text = tp.catala;
+				}
+				return text;
+			}
+		}
+        return null;
+        
+	}
+	
+	
 	// Quien envia el mensaje
-	private void crearEventModificacio(ModificacioSolicitudJPA modificacio, String usuari, String asumpte, String msg)
+	private void crearEventModificacio(ModificacioSolicitudJPA modificacio, String msg)
 			throws I18NException {
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
 		final String caidIdentificadorConsulta = null;
@@ -871,13 +921,47 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
 		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
 
-		event.setPersona(usuari);
+		String asumpte = "Solicitud de modificació del procediment " + modificacio.getProcedimentCodi();
+
+		event.setPersona(modificacio.getSolicitantNom());
 		event.setAsumpte(asumpte);
 		event.setComentari(msg);
 
 		// Es un comentari de contacte, no te destinatari.
 		event.setDestinatari(null);
 		event.setDestinatarimail(null);
+
+		eventLogicaEjb.create(event);
+	}
+
+	// Quien envia el mensaje
+	private void enviarMissatgeAlSolicitant(ModificacioSolicitudJPA modificacio) throws I18NException {
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		final String caidIdentificadorConsulta = null;
+		final String caidNumeroSeguiment = null;
+
+		Long _fitxerID_ = null;
+		boolean _noLlegit_ = false;
+
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(modificacio.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+		event.setFitxerID(_fitxerID_);
+		event.setNoLlegit(_noLlegit_);
+		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
+		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
+
+		String missatge = "<div>Bon dia, <br> Hem rebut la seva sol·licitud, li respondrem al més aviat possible.</div>";
+		String asumpte = "Sol·licitud de modificació rebuta. Procediment: " + modificacio.getProcedimentCodi();
+		event.setPersona("PinbalAdmin");
+		event.setAsumpte(asumpte);
+		event.setComentari(missatge);
+
+		// Es un comentari de contacte, no te destinatari.
+		event.setDestinatari(modificacio.getContactenom());
+		event.setDestinatarimail(modificacio.getContactemail());
 
 		eventLogicaEjb.create(event);
 	}
@@ -926,9 +1010,35 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 	}
 
 	@Override
-	public String getRedirectWhenCancel(HttpServletRequest request, Long modsoliID) {
+	public List<StringKeyValue> getReferenceListForProcedimentTipus(HttpServletRequest request, ModelAndView mav,
+			Where where) throws I18NException {
 
-		return "redirect:" + ModificarSolicitudPublicController.CONTEXT_WEB + "/seleccionarProcediment";
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+//        for (String s : tp) {
+//            String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
+//            __tmp.add(new StringKeyValue(s, tipus));
+//        }
+        String lang = "ca";        
+        List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+		for (TipusProcediment tp : tipus) {
+			String text;
+			if (lang.equals("es")) {
+				text = tp.castella;
+			} else {
+				text = tp.catala;
+			}
+          __tmp.add(new StringKeyValue(String.valueOf(tp.id),text));
+		}
+        return __tmp;
+        
+        //return super.getReferenceListForProcedimentTipus(request, mav, where);
+	}
+	
+	@Override
+	public String getRedirectWhenCancel(HttpServletRequest request, Long modsoliID) {
+		return "https://www.google.com/?hl=es" ;
+//		return "redirect:" + ModificarSolicitudPublicController.CONTEXT_WEB + "/seleccionarProcediment";
 //		return "redirect:" + ModificarSolicitudPublicController.CONTEXT_WEB + "/" + modsoliID + "/edit";
 	}
 
@@ -1025,4 +1135,23 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 	}
 
+	
+	@Override
+	public String editarModificacioSolicitudPost(ModificacioSolicitudForm modificacioSolicitudForm,
+			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response)
+			throws I18NException {
+		// TODO Auto-generated method stub
+		String ret = super.editarModificacioSolicitudPost(modificacioSolicitudForm, result, status, request, response);
+
+		if (result.hasErrors()) {
+			
+			log.info("editarModificacioSolicitudPost:: amb errors");
+			
+			modificacioSolicitudForm.setAttachedAdditionalJspCode(true);
+		}else {
+			log.info("editarModificacioSolicitudPost:: tot correcte");
+
+		}
+		return ret;
+	}
 }

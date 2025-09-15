@@ -97,51 +97,63 @@
 <body>
 
 	<div class="container">
-		<h3>Seleccionar Procediment</h3>
+		<form id="seleccionarProcediment" action="seleccionarProcediment" method="POST" novalidate>
 
+			<!-- Paso 1: Datos de contacto -->
+			<div id="dadesContacte" aria-hidden="false">
+			
+				<h3>Dades Contacte</h3>
+			
+				<div class="field">
+					<label for="nomContacte">Nombre</label><br> 
+					<input id="nomContacte" class="w-50 form-control" name="nomContacte"
+						type="text" autocomplete="name" value="${usuariNom}" readonly="readonly"/>
+				</div>
 
+				<div class="field">
+					<label for="mailContacte">Email</label><br> <input
+						id="mailContacte" class="w-50 form-control" name="mailContacte"
+						type="email" autocomplete="email" />
+				</div>
 
-  <form id="seleccionarProcediment" action="seleccionarProcediment" method="POST" novalidate>
-    <!-- Paso 1: Datos de contacto -->
-    <div id="dadesContacte" aria-hidden="false">
-      <div class="field">
-        <label for="nomContacte">Nombre</label><br>
-        <input id="nomContacte" name="nomContacte" type="text" autocomplete="name" />
-      </div>
+				<div>
+					<button type="button" id="btnSiguiente" class="btn btn-primary">Siguiente
+						<i class="fas fa-arrow-right"></i></button>
+				</div>
 
-      <div class="field">
-        <label for="mailContacte">Email</label><br>
-        <input id="mailContacte" name="mailContacte" type="email" autocomplete="email" />
-      </div>
+				<div id="errorMsg" class="error" role="alert" aria-live="polite"></div>
+			</div>
 
-      <div>
-        <button type="button" id="btnSiguiente" class="btn btn-primary">Siguiente →</button>
-      </div>
+			<!-- Paso 2: Procedimiento -->
+			<div id="dadesProcediment" aria-hidden="true">
+			
+				<h3>Seleccionar Procediment</h3>
 
-      <div id="errorMsg" class="error" role="alert" aria-live="polite"></div>
-    </div>
+				<div id="instructions">
+					<p><fmt:message key="tramit.modificacions.instructions" /></p>
+				</div>
 
-    <!-- Paso 2: Procedimiento -->
-    <div id="dadesProcediment" aria-hidden="true">
-      <div class="input-container procediment">
-        <div id="cercador-procediments">
-          <label for="cercadorProcediment">Procediment</label><br>
-          <input id="cercadorProcediment" name="cercadorProcediment" type="text"
-                 autocomplete="off" placeholder="Procediment. Mínim 2 caracters..." />
-          <div id="autocomplete-procediments" aria-hidden="true"></div>
-        </div>
+				<div class="input-container procediment">
+					<div id="cercador-procediments">
+						<input
+							id="cercadorProcediment" class="w-100 form-control"
+							name="cercadorProcediment" type="text" autocomplete="off"
+							placeholder="Codi o nom del procediment. Mínim 2 caracters..." />
+						<div id="autocomplete-procediments" aria-hidden="true"></div>
+					</div>
 
-        <div id="llistat-procediments">
-          <ul></ul>
-        </div>
-      </div>
+					<div id="llistat-procediments">
+						<ul></ul>
+					</div>
+				</div>
 
-      <div id="btn-container" style="margin-top:12px;">
-        <button type="button" id="btnAnterior" class="btn btn-secondary">← Anterior</button>
-        <button type="submit" class="btn btn-primary">Continuar</button>
-      </div>
-    </div>
-  </form>
+				<div id="btn-container" style="margin-top: 12px;">
+					<button type="button" id="btnAnterior" class="btn btn-secondary">
+					<i class="fas fa-arrow-left"></i> Anterior</button>
+					<button type="submit" class="btn btn-primary">Continuar</button>
+				</div>
+			</div>
+		</form>
   
   
   
@@ -172,7 +184,7 @@
 				<div id="btn-container">
 					<div class="btn btn-sm btn-primary" onclick="submitForm();"
 						title="<fmt:message key="genapp.continue"/>"> <i
-						class="fas fa-arrow-right"></i> <fmt:message key="genapp.continue" />
+						class="fas fa-arrow-right"></i> 
 					</div>
 				</div>
 			</div>
@@ -210,13 +222,22 @@
 				procedimentDiv.classList.add("procediment-item");
 				procedimentDiv.innerHTML = proc.key + " - " + proc.value;
 				procedimentDiv.onclick = function() {
-					elegirProcediment(proc);
+
+					console.log("Estat: " + proc.estat);
+					
+					if (proc.estat == 60 || proc.estat == 50) {
+						elegirProcediment(proc);
+					}else{
+						procedimentInvalid(proc);
+					}
+					
 				};
 				$("#autocomplete-procediments").append(procedimentDiv);
 			}
 
 			function elegirProcediment(proc) {
 				let li = $("<li></li>").addClass("procediment-li");
+				
 				let container = $("<div></div>").addClass(
 						"procediment-data-container");
 
@@ -250,6 +271,19 @@
 			    $("#autocomplete-procediments").empty();
 			}
 			
+			function procedimentInvalid(proc) {
+				  var el = document.getElementById('procedimentErrorTemplate');
+				  // usamos textContent para evitar HTML/escape y mantener el texto puro
+				  var msg = el ? (el.textContent || el.innerText).trim() : null;
+
+				  if (!msg) {
+				    // fallback si algo fue mal en el servidor
+				    msg = "El procediment ### no pot ser modificat.";
+				  }
+
+				  msg = msg.replace('###', proc.key);
+				  alert(msg);
+				}
 
 			function submitForm() {
 				console.log('submitForm');
@@ -257,10 +291,16 @@
 			}
 		</script>
 
+		<!-- plantilla renderizada en servidor; contiene ### como placeholder -->
+		<span id="procedimentErrorTemplate" style="display: none"> <fmt:message
+				key="tramit.modificacions.procedimenterror">
+				<fmt:param value="###" />
+			</fmt:message>
+		</span>
 
 
 
-  <script>
+		<script>
     const form = document.getElementById('seleccionarProcediment');
     const dadesContacte = document.getElementById('dadesContacte');
     const dadesProcediment = document.getElementById('dadesProcediment');

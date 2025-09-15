@@ -33,18 +33,17 @@
 }
 
 .btn-add-norma {
-	background-color: #28a745; /* verde */
+	background-color: #28a745;
 	color: white;
 	border: none;
-	border-radius: 50%;
-	width: 25px;
-	height: 25px;
-	font-weight: bold;
-	text-align: center;
+	border-radius: 100%;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	font-size: 12px;
 }
 
 .btn-add-norma:hover {
@@ -95,12 +94,12 @@
 }
 </style>
 
-
 <script type="text/javascript">
 	document.getElementById("modificacioSolicitud_tableid").classList = "tdformlabel table-sm";
 
 	document.getElementById("modificacioSolicitud.procedimentCodi").readOnly = "readOnly";
-/* 	document.getElementById("modificacioSolicitud.dataInici").readOnly = "readOnly";
+	document.getElementById("modificacioSolicitud.dataInici").readOnly = "readOnly";
+/* 	
 	document.getElementById("modificacioSolicitud.dataFi").readOnly = "readOnly";
  */
 /* 	document.getElementById("modificacioSolicitud_estatID").setAttribute(
@@ -110,13 +109,11 @@
 
 	$(function() {
 
-		$(".module_content").append($("#llistatServeisActuals"))
-		$(".module_content").append($("#includedContentSolicitudServei"))
+		$(".module_content").prepend($("#instructions"));
 
-		/* $("#includedContentSolicitudServei").load(
-				"<c:url value="/public/solicitudservei/list/1/" />");
-		 */
-		
+		$(".module_content").append($("#llistatServeisActuals"));
+		$(".module_content").append($("#includedContentSolicitudServei"));
+
 		$("#includedContentSolicitudServei").load("<c:url value="/public/solicitudservei/list/1?solicitudID=${modificacioSolicitudForm.modificacioSolicitud.solicitudID}" />");
 
 	});
@@ -149,7 +146,7 @@
 						<td>${servei.normes}</td>
 						<td>
 							<button class="btn-add-norma" type="button"
-								data-servei-id="${servei.id}">+</button>
+								data-servei-id="${servei.id}"><i class="fas fa-plus"></i></button>
 						</td>
 					</tr>
 				</c:forEach>
@@ -203,6 +200,26 @@
     $("#titolConsentiment").insertBefore("#modificacioSolicitud_consentiment_rowid");
 
   });
+  
+	function submitForm() {
+		console.log('submitForm');
+
+	    const consentiment = document.getElementById('modificacioSolicitud_consentiment').value;
+
+	    if (!consentiment) {
+	      alert("S'ha de selecionar un tipus de consentiment.");
+	      return false; // evita el submit
+	    }else{
+		}
+
+	    document.getElementById('modificacioSolicitudForm').submit();
+	  }
+
+	function cancelarForm() {
+		  console.log('cancelarForm');
+		  window.location.href = "https://www.caib.es/sites/interoperabilitat/ca/inici_interoperabilitat/?campa=yes";
+		}
+
 </script>
 
 <script>
