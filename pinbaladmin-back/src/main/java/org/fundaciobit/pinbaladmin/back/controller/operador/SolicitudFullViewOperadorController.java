@@ -188,23 +188,29 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 						|| estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
 						|| estatID == Constants.SOLI_ESTAT_ESMENES) {
 
+//					AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+//							"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+//					solicitudForm.addAdditionalButton(alta);
 					
-					AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-							"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-					solicitudForm.addAdditionalButton(alta);
-					
-//					InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
-//					
-//					//Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
-//					if (infoMad.getDataAutoritzacio() == null) {
-//						AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-//								"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-//						solicitudForm.addAdditionalButton(alta);
-//					}else {
-//						AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-//								"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
-//						solicitudForm.addAdditionalButton(modificacio);
-//					}
+					//Peticio no enviada a madrid. Enviar ALTA.
+					if (infoMadID == null) {
+						AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+								"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+						solicitudForm.addAdditionalButton(alta);
+					}else {
+						InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
+						
+						//Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
+						if (infoMad.getDataAutoritzacio() == null) {
+							AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+									"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+							solicitudForm.addAdditionalButton(alta);
+						}else {
+							AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+									"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
+							solicitudForm.addAdditionalButton(modificacio);
+						}
+					}
 				}
 
 				// Si està pendent d'autoritzar, s'ha enviat a Madrid i volem resposta. Utilitzam CONSULTA. Si no, tenim resposta, la
@@ -222,66 +228,25 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 						solicitudForm.addAdditionalButton(infoMadBtn);
 					}
 				}
-			}
 				
 				
-//				
-//				Integer estatPbl = solicitud.getEstatpinbal();
-//				
-//				log.info("Estat PBL: " + estatPbl);
-//
-//				
-//				if (estatPbl == null) {
-//					estatPbl = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-//				}
-//
-//				if (estatPbl != Constants.ESTAT_PINBAL_NO_SOLICITAT) {
-//					solicitudForm.addAdditionalButton(consulta);
-//				}
-//
-//				switch (estatPbl) {
-//				case Constants.ESTAT_PINBAL_ERROR:
-//				case Constants.ESTAT_PINBAL_NO_SOLICITAT:
-//				case Constants.ESTAT_PINBAL_NO_APROVAT:
-//				case Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO:
-//				case Constants.ESTAT_PINBAL_DESESTIMAT:
-//					
-//					solicitudForm.addAdditionalButton(alta);
-//					break;
-//
-////				case Constants.ESTAT_PINBAL_APROVAT:
-////				case Constants.ESTAT_PINBAL_SUBSANAT:
-////				case Constants.ESTAT_PINBAL_AUTORITZAT:
-////				case Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO:
-////					solicitudForm.addAdditionalButton(modificacio);
-////					break;
-//
-//				case Constants.ESTAT_PINBAL_PENDENT_TRAMITAR:
-//				case Constants.ESTAT_PINBAL_DESISTIT:
-//				case Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT:
-//					break;
-//
-//				default:
-//					break;
-//				}
-//			}
+				if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
 
-			if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
-				
-				Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
-				
-				Where wEstatMod = ModificacioSolicitudFields.ESTATMODIFICACIO
-						.equal(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
-				
-				Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
-						Where.AND(wSoli, wEstatMod));
+					Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
 
-				log.info("ModSoli: " + modSoliID);
-				if (modSoliID != null) {
-					solicitudForm
-							.addAdditionalButton(new AdditionalButton("fas fa-jedi", "solicitud.modificacio.aceptar",
-									"/operador/solicitudfullview/acceptarModificacio/" + modSoliID,
-									AdditionalButtonStyle.PRIMARY));
+					Where wEstatMod = ModificacioSolicitudFields.ESTATMODIFICACIO
+							.equal(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
+
+					Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
+							Where.AND(wSoli, wEstatMod));
+
+					log.info("ModSoli: " + modSoliID);
+					if (modSoliID != null) {
+						solicitudForm.addAdditionalButton(
+								new AdditionalButton("fas fa-jedi", "solicitud.modificacio.aceptar",
+										"/operador/solicitudfullview/acceptarModificacio/" + modSoliID,
+										AdditionalButtonStyle.PRIMARY));
+					}
 				}
 			}
 
@@ -301,8 +266,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
 					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
 		}
-      
-      
       
       solicitudForm.setAttachedAdditionalJspCode(true);
     }

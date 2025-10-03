@@ -117,6 +117,8 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		final String ESTAT_REGISTRADA_SUBSANAR = "2";
 		final String ESTAT_VALIDACION_KO = "0228";
 		final String ERROR_PROCEDIMIENTO_DUPLICADO = "01";
+		final String ERROR_PROCEDIMIENTO_YA_DE_ALTA = "27";
+		
 
 		String codiEstat = resposta.getEstado().getCodigoEstado();
 		String descripcioEstat = resposta.getEstado().getDescripcion();
@@ -157,10 +159,11 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 //			break;
 
 		case ESTAT_REGISTRADA_SUBSANAR:
-		case ESTAT_VALIDACION_KO:
 		case ESTAT_NO_REGISTRADA:
+		case ESTAT_VALIDACION_KO:
 			boolean duplicat = false;
-
+			boolean dadoDeAlta = false;
+			
 			String msg = "Errores: ";
 			
 			if (resposta.getErrores() != null) {
@@ -172,22 +175,42 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 						duplicat = true;
 						break;
 					}
+					if (ERROR_PROCEDIMIENTO_YA_DE_ALTA.equals(error.getCodigo())) {
+						dadoDeAlta = true;
+						msg += "S'ha de fer una MODIFICACIÓ";
+						break;
+					}
 				}
 			} else {
 				log.error("Errores debería no ser null");
 			}
 
 			
-			estatSoli = Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID;
-			estatAuth = Constants.ESTAT_PINBAL_ERROR;
-			
-			respostaMadrid = msg;
-			solicitud.setEstatSolicitud(estatSoli);
+			if (codiEstat.equals(ESTAT_VALIDACION_KO)) {
+				//Si es un problema de validació, la podem desestimar directament.
+				
+				estatSoli = Constants.SOLI_ESTAT_ESMENES;
+				estatAuth = Constants.ESTAT_PINBAL_DESESTIMAT;
+				infoMadrid.setEstatAutoritzacio(Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE);
+			}else {
+				//Si es qualsevol altre error. Marcam com error
+				
+				estatSoli = Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID;
+				estatAuth = Constants.ESTAT_PINBAL_ERROR;
+			}
 			
 			if (duplicat) {
 				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
 			}
+			
+			if (dadoDeAlta) {
+				estatSoli = Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID;
+				estatAuth = Constants.ESTAT_PINBAL_AUTORITZAT;
+				infoMadrid.setDataAutoritzacio(new Timestamp(System.currentTimeMillis()));
+			}
 
+			respostaMadrid = msg;
+			solicitud.setEstatSolicitud(estatSoli);
 			
 //			if (duplicat) {
 //				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
@@ -199,9 +222,11 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 //				estatAuth = Constants.ESTAT_PINBAL_ERROR;
 //
 //				respostaMadrid = msg;
-//				solicitud.setEstatSolicitud(estatSoli );
+//				solicitud.setE statSolicitud(estatSoli );
 //			}
 			break;
+			
+			
 		default:
 			log.warn("Codi d'estat no controlat: " + codiEstat);
 
@@ -220,6 +245,13 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 	
 	private void actualizarInfoMadrdAlta(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, InfoMadridJPA infoMadJpa, Long estadoSoli, Long estadoAuth, String respuesta) throws I18NException {
 
+		Long infoMadridIDOld = soli.getInfomadridid();
+		if (infoMadridIDOld != null) {
+			InfoMadrid infoMadridOld = infoMadridLogicaEjb.findByPrimaryKey(infoMadridIDOld);
+			
+			infoMadJpa.setIntents(infoMadridOld.getIntents() + 1);
+		}
+		
 		infoMadJpa.setEstatProcediment(estadoSoli);
 		infoMadJpa.setEstatAutoritzacio(estadoAuth);
 		infoMadJpa.setMissatge(respuesta);
@@ -683,10 +715,10 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 					}
 
 					log.info("POST-NORMA " + i + " - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
-					descripcio = "Norma Legal " + i + " - " + servei.getNom();
+					descripcio = "Norma Legal " + i + " - Servei: " + servei.getNom();
 					// descripcio = "Norma del servicio: " + servei.getNom();
 
-					docNorma.setNombre(nom);
+					docNorma.setNombre(servei.getCodi() + "_" + nom);
 					docNorma.setDescripcion(descripcio);
 //					contingut = "hola2".getBytes();
 

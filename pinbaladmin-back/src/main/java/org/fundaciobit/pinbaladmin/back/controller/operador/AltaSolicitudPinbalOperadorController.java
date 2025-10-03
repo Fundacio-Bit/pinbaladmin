@@ -170,7 +170,7 @@ public class AltaSolicitudPinbalOperadorController {
                 solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
 
             // 2. CREAR INFO MADRID BASIC
-            InfoMadridJPA infoMad = crearInfoMadrid(consulta, consulta, titular);
+            InfoMadridJPA infoMad = crearInfoMadrid(soli.getProcedimentCodi(), consulta, titular);
             
             // 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
             solicitudLogicaEjb.processarRespostaPinbalAlta(soli, resposta, titular, funcionario, infoMad);
@@ -459,11 +459,10 @@ public class AltaSolicitudPinbalOperadorController {
         return fullName;
     }
     
-    
-    private InfoMadridJPA crearInfoMadrid(String codi, String consulta, ScspTitular titular) {
+	private InfoMadridJPA crearInfoMadrid(String codi, String consulta, ScspTitular titular) {
     	
-		Long estatSoli = null;
-		Long estatAuth = null;
+		Long estatSoli = Constants.SOLI_ESTAT_PENDENT_AUTORITZAR;
+		Long estatAuth = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
 		String resposta = null;
 		
 	    Timestamp ahora = new Timestamp(System.currentTimeMillis());
@@ -471,24 +470,35 @@ public class AltaSolicitudPinbalOperadorController {
 	    Timestamp dataAuth = null;
 	    Timestamp dataEnviament = ahora;
 	    Timestamp dataConsulta = ahora;
-	    
 		
-    	InfoMadridJPA infoMadJpa = new InfoMadridJPA(
-    			codi,
-    			estatSoli,                // Estado interno de la solicitud
-    			estatAuth,                // Estado que devuelve Madrid
-    			resposta,         // Mensaje de Madrid
-    			consulta, // Texto enviado
-                titular.getNombreCompleto(),
-                titular.getDocumentacion(),
-                dataAuth,
-                dataEnviament,                                   // Fecha de envío
-                0,
-                dataEnviament
-        );
-    	
-    	return infoMadJpa;
-    	
-    }
+	    String titularNom = null;
+		if (titular != null) {
+			if (titular.getNombreCompleto() != null) {
+				titularNom = titular.getNombre() + "|" + titular.getApellido1() + "|" + titular.getApellido2();
+				log.info("Documentacion: " + titularNom);
+			}
+		}
+    	String titularDoc = titular.getDocumentacion();
+    	Long numErrors = 0L;
 
+//    	InfoMadridJPA infoMadJpa = new InfoMadridJPA(
+//    			codi,
+//    			estatSoli,                // Estado interno de la solicitud
+//    			estatAuth,                // Estado que devuelve Madrid
+//    			resposta,         // Mensaje de Madrid
+//    			consulta, // Texto enviado
+//    			titularNom,               // Nombre completo del titular,
+//                titular.getDocumentacion(),
+//                dataAuth,
+//                dataEnviament,                                   // Fecha de envío
+//                0,
+//                dataConsulta
+//        );
+    	
+    	
+		InfoMadridJPA infoMadJpa = new InfoMadridJPA(codi, estatSoli, estatAuth, resposta,
+				consulta, titularNom, titularDoc, dataAuth, dataEnviament, numErrors, dataConsulta);
+		
+    	return infoMadJpa;
+    }
 }

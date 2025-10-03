@@ -100,7 +100,12 @@ public class InfoMadridOperadorController extends InfoMadridController {
 			
 		}
 		
-		String nom = form.getInfoMadrid().getTitularNom().replace("|", " ");
+		String nom = form.getInfoMadrid().getTitularNom();
+		
+		if (nom != null) {
+			nom = nom.replace("|", " ");
+		}
+		
 		form.getInfoMadrid().setTitularNom(nom);
 
 		return form;
@@ -126,7 +131,11 @@ public class InfoMadridOperadorController extends InfoMadridController {
 
 		for (long estat : Constants.ESTATS_SOLI) {
 			String key = String.valueOf(estat);
-			__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
+			String value = I18NUtils.tradueix("solicitud.estat." + key);
+			
+//			log.info("Estat PROC: " + key + " - " + value);
+			
+			__tmp.add(new StringKeyValue(key, value));
 		}
 		return __tmp;
 	}
@@ -138,7 +147,11 @@ public class InfoMadridOperadorController extends InfoMadridController {
 
 		for (Long estat : Constants.ESTATS_PINBAL) {
 			String key = String.valueOf(estat);
-			__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("estat.pinbal." + key)));
+			String value = I18NUtils.tradueix("estat.pinbal." + key);
+			
+//			log.info("Estat AUTH: " + key + " - " + value);
+			
+			__tmp.add(new StringKeyValue(key, value));
 		}
 		return __tmp;
 	}
@@ -153,7 +166,12 @@ public class InfoMadridOperadorController extends InfoMadridController {
 		for (InfoMadrid infoMadrid : list) {
 			if (infoMadrid.getTitularNom() != null) {
 
-				String nom = infoMadrid.getTitularNom().replace("|", " ");
+				String nom = infoMadrid.getTitularNom();
+				
+				if (nom != null) {
+					nom = nom.replace("|", " ");
+				}
+				
 				infoMadrid.setTitularNom(nom);
 			}
 

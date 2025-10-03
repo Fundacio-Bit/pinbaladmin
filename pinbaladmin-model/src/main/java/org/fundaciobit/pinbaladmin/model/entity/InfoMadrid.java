@@ -8,11 +8,11 @@ public interface InfoMadrid extends org.fundaciobit.genapp.common.IGenAppEntity 
 	public java.lang.String getCodi();
 	public void setCodi(java.lang.String _codi_);
 
-	public long getEstatProcediment();
-	public void setEstatProcediment(long _estatProcediment_);
+	public java.lang.Long getEstatProcediment();
+	public void setEstatProcediment(java.lang.Long _estatProcediment_);
 
-	public long getEstatAutoritzacio();
-	public void setEstatAutoritzacio(long _estatAutoritzacio_);
+	public java.lang.Long getEstatAutoritzacio();
+	public void setEstatAutoritzacio(java.lang.Long _estatAutoritzacio_);
 
 	public java.lang.String getMissatge();
 	public void setMissatge(java.lang.String _missatge_);
@@ -32,8 +32,8 @@ public interface InfoMadrid extends org.fundaciobit.genapp.common.IGenAppEntity 
 	public java.sql.Timestamp getDataEnviament();
 	public void setDataEnviament(java.sql.Timestamp _dataEnviament_);
 
-	public long getIntents();
-	public void setIntents(long _intents_);
+	public java.lang.Long getIntents();
+	public void setIntents(java.lang.Long _intents_);
 
 	public java.sql.Timestamp getDataConsulta();
 	public void setDataConsulta(java.sql.Timestamp _dataConsulta_);

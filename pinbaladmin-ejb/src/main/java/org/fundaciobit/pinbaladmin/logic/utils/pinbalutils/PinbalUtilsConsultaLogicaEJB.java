@@ -92,13 +92,16 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		switch (codigoEstado) {
 		case SOLICITUD_TROBADA:
 			procesarSolicitudTrobada(retorno, titular, solicitud);
+			break;
 
 		case PROCEDIMENT_NO_TROBAT:
 			procesarSolicitudNoTrobada(solicitud);
+			break;
 
 		default:
 			log.error("Error en consulta de solicitud " + solicitud.getProcedimentCodi() + ": "
 					+ retorno.getEstado().getLiteralError());
+			break;
 		}
 	}
 
@@ -168,19 +171,39 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			// vez que se hace la consulta. Se entiende que la solicitud viene de PENDIENTE
 			// AUTORIZAR. Porque se envió a Madrid, y NO SE HA CONSULTADO ESTADO NINGUNA
 			// VEZ.
-	    	InfoMadridJPA infoMadJpa = new InfoMadridJPA(
-	                soli.getProcedimentCodi(),
-	                soli.getEstatSolicitud(),                // Estado interno de la solicitud
-	                estadoMadrid.getEstado(),                // Estado que devuelve Madrid
-	                estadoMadrid.getObservaciones(),         // Mensaje de Madrid
-	                generarTextoConsulta(soli.getProcedimentCodi()), // Texto enviado
-	                titular.getNombreCompleto(),
-	                titular.getDocumentacion(),
-	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? ahora : null,
-	                ahora,                                   // Fecha de envío
-	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0,
-	                ahora
-	        );
+	    	
+	    	String procedimentCodi = soli.getProcedimentCodi();
+	    	Long estatProcediment = soli.getEstatSolicitud();
+	    	Long estatAutoritzacio = Long.valueOf(estadoMadrid.getEstado());
+	    	String missatge = estadoMadrid.getObservaciones();
+	    	String consulta = generarTextoConsulta(procedimentCodi);
+	    	String titularNom = titular.getNombreCompleto();
+	    	String titularDoc = titular.getDocumentacion();
+	    	Timestamp dataAutoritzacio = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? ahora : null;
+	    	Timestamp dataEnviament = ahora;
+	    	Long numErrors = soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1L : 0L;
+	    	Timestamp dataConsulta = ahora;
+	    	
+			InfoMadridJPA infoMadJpa = new InfoMadridJPA(procedimentCodi, estatProcediment, estatAutoritzacio, missatge,
+					consulta, titularNom, titularDoc, dataAutoritzacio, dataEnviament, numErrors, dataConsulta);
+
+	    	
+	    	
+	    	
+	    	
+//	    	InfoMadridJPA infoMadJpa = new InfoMadridJPA(
+//	                soli.getProcedimentCodi(),
+//	                soli.getEstatSolicitud(),                // Estado interno de la solicitud
+//	                estadoMadrid.getEstado(),                // Estado que devuelve Madrid
+//	                estadoMadrid.getObservaciones(),         // Mensaje de Madrid
+//	                generarTextoConsulta(soli.getProcedimentCodi()), // Texto enviado
+//	                titular.getNombreCompleto(),
+//	                titular.getDocumentacion(),
+//	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_AUTORITZAT ? ahora : null,
+//	                ahora,                                   // Fecha de envío
+//	                soli.getEstatpinbal() == Constants.ESTAT_PINBAL_ERROR ? 1 : 0,
+//	                ahora
+//	        );
 	        
 	        InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJpa);
 	        infoMadJpa.setInfoMadridID(infoMad.getInfoMadridID());
@@ -203,11 +226,12 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	                    && infoMad.getEstatProcediment() != Constants.ESTAT_AUTORITZACIO_AUTORITZAT) {
 	                infoMad.setDataAutoritzacio(ahora);
 	            }
-
+	            
 //	            infoMad.setEstatProcediment(soli.getEstatSolicitud());
-	            infoMad.setEstatAutoritzacio(estadoMadrid.getEstado());
+	            infoMad.setEstatAutoritzacio(Long.valueOf(estadoMadrid.getEstado()));
 	            infoMad.setMissatge(estadoMadrid.getObservaciones());
-	        }
+	            infoMad.setDataConsulta(ahora);
+			}
 	        return infoMad;
 	    }
 	}
@@ -240,7 +264,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			// Si está en ESMENES, que busque infomad, pero no puede hacer más consultas, porque cambiará el estado.
 
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ESMENES);
-			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE);
+			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE);
 
 		}else if (estadoMadridNuevo.equals(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR) // NOT YET
 				|| estadoMadridNuevo.equals(Constants.ESTAT_PINBAL_DESISTIT)

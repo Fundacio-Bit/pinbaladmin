@@ -98,34 +98,42 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
 		if (solicitudFilterForm.isNou()) {
-			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "solicitud.actualitzarestats",
-					getContextWeb() + "/actualitzarEstats", AdditionalButtonStyle.WARNING));
-			
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "solicitud.actualitzarestats",
+//					getContextWeb() + "/actualitzarEstats", AdditionalButtonStyle.WARNING));
+//			
 //			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Consulta Estat PID",
 //					getContextWeb() + "/consultaMadrid", AdditionalButtonStyle.WARNING));
 
 			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Crear Info Madrid",
 					getContextWeb() + "/crearInfoMadrid", AdditionalButtonStyle.WARNING));
+
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualizar Titulares",
+					getContextWeb() + "/actualizarTitulares", AdditionalButtonStyle.WARNING));
 		}
 
 		return solicitudFilterForm;
 	}
 
 	// crearInfoMadrid
+	@RequestMapping(value = "/actualizarTitulares", method = RequestMethod.GET)
+	public String actualizarTitulares(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		actualizarTitulares();
+		
+		HtmlUtils.saveMessageSuccess(request, "Titulars actualitzats correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
+	
+	// crearInfoMadrid
 	@RequestMapping(value = "/crearInfoMadrid", method = RequestMethod.GET)
 	public String crearInfoMadrid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-//		version1CrearInfoMad();
+		version2CrearInfoMad();
 		
-//		version2CrearInfoMad();
-		
-		actualizarTitulares();
-		
-		HtmlUtils.saveMessageSuccess(request, "Estat de les sol·licituds actualitzat correctament.");
+		HtmlUtils.saveMessageSuccess(request, "Tots els InfoMadrid creats correctament.");
 		return "redirect:" + getContextWeb() + "/list";
-
 	}
-	
+
 	
 	private void actualizarTitulares() throws Exception{
 		
@@ -328,8 +336,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
 				}
 
-			} else if (estatID == Constants.SOLI_ESTAT_ESMENES || estatID == Constants.SOLI_ESTAT_ESMENA_ENVIAR_CONTACTE
-					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_RESPOSTA
+			} else if (estatID == Constants.SOLI_ESTAT_ESMENES || estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE
+					|| estatID == Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE
 					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_REVISAR
 					|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES) {
 				crear = true;

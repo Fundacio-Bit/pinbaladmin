@@ -31,10 +31,10 @@ public class InfoMadridJPA implements InfoMadrid {
     java.lang.String codi;
 
     @Column(name="estatprocediment",length = 19)
-    long estatProcediment;
+    java.lang.Long estatProcediment;
 
     @Column(name="estatautoritzacio",length = 19)
-    long estatAutoritzacio;
+    java.lang.Long estatAutoritzacio;
 
     @Column(name="missatge",length = 1024)
     java.lang.String missatge;
@@ -55,7 +55,7 @@ public class InfoMadridJPA implements InfoMadrid {
     java.sql.Timestamp dataEnviament;
 
     @Column(name="intents",nullable = false,length = 19)
-    long intents;
+    java.lang.Long intents;
 
     @Column(name="dataconsulta",length = 29,precision = 6)
     java.sql.Timestamp dataConsulta;
@@ -67,7 +67,7 @@ public class InfoMadridJPA implements InfoMadrid {
   }
 
   /** Constructor amb tots els camps  */
-  public InfoMadridJPA(long infoMadridID , java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents , java.sql.Timestamp dataConsulta) {
+  public InfoMadridJPA(long infoMadridID , java.lang.String codi , java.lang.Long estatProcediment , java.lang.Long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , java.lang.Long intents , java.sql.Timestamp dataConsulta) {
     this.infoMadridID=infoMadridID;
     this.codi=codi;
     this.estatProcediment=estatProcediment;
@@ -82,7 +82,7 @@ public class InfoMadridJPA implements InfoMadrid {
     this.dataConsulta=dataConsulta;
 }
   /** Constructor sense valors autoincrementals */
-  public InfoMadridJPA(java.lang.String codi , long estatProcediment , long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , long intents , java.sql.Timestamp dataConsulta) {
+  public InfoMadridJPA(java.lang.String codi , java.lang.Long estatProcediment , java.lang.Long estatAutoritzacio , java.lang.String missatge , java.lang.String consulta , java.lang.String titularNom , java.lang.String titularNif , java.sql.Timestamp dataAutoritzacio , java.sql.Timestamp dataEnviament , java.lang.Long intents , java.sql.Timestamp dataConsulta) {
     this.codi=codi;
     this.estatProcediment=estatProcediment;
     this.estatAutoritzacio=estatAutoritzacio;
@@ -96,7 +96,7 @@ public class InfoMadridJPA implements InfoMadrid {
     this.dataConsulta=dataConsulta;
 }
   /** Constructor dels valors Not Null */
-  public InfoMadridJPA(long infoMadridID , java.lang.String codi , long intents) {
+  public InfoMadridJPA(long infoMadridID , java.lang.String codi , java.lang.Long intents) {
     this.infoMadridID=infoMadridID;
     this.codi=codi;
     this.intents=intents;
@@ -130,17 +130,17 @@ public class InfoMadridJPA implements InfoMadrid {
 		this.codi = _codi_;
 	};
 
-	public long getEstatProcediment() {
+	public java.lang.Long getEstatProcediment() {
 		return(estatProcediment);
 	};
-	public void setEstatProcediment(long _estatProcediment_) {
+	public void setEstatProcediment(java.lang.Long _estatProcediment_) {
 		this.estatProcediment = _estatProcediment_;
 	};
 
-	public long getEstatAutoritzacio() {
+	public java.lang.Long getEstatAutoritzacio() {
 		return(estatAutoritzacio);
 	};
-	public void setEstatAutoritzacio(long _estatAutoritzacio_) {
+	public void setEstatAutoritzacio(java.lang.Long _estatAutoritzacio_) {
 		this.estatAutoritzacio = _estatAutoritzacio_;
 	};
 
@@ -186,10 +186,10 @@ public class InfoMadridJPA implements InfoMadrid {
 		this.dataEnviament = _dataEnviament_;
 	};
 
-	public long getIntents() {
+	public java.lang.Long getIntents() {
 		return(intents);
 	};
-	public void setIntents(long _intents_) {
+	public void setIntents(java.lang.Long _intents_) {
 		this.intents = _intents_;
 	};
 

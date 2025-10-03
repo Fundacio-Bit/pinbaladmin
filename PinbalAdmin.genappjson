@@ -3707,7 +3707,7 @@
             "es": "Estado Procedimiento"
           },
           "javaName": "estatProcediment",
-          "javaType": "long",
+          "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
           "showInReferenceList": false,
@@ -3733,7 +3733,7 @@
             "es": "Estado Autorización"
           },
           "javaName": "estatAutoritzacio",
-          "javaType": "long",
+          "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
           "showInReferenceList": false,
@@ -3909,7 +3909,7 @@
             "es": "Intentos"
           },
           "javaName": "intents",
-          "javaType": "long",
+          "javaType": "java.lang.Long",
           "traduible": false,
           "showInWebList": true,
           "showInReferenceList": false,
