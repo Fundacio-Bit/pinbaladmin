@@ -377,6 +377,12 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoDataList.jsp"/>
     </definition>
 
+    <definition name="fusionarprocediments" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/fusionarProcediments.jsp"/>
+    </definition>
+
+
+
 
 
     <!-- =====   TRAMIT SISTRA OPERADOR ===== -->

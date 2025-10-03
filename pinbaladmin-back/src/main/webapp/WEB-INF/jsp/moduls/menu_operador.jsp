@@ -21,6 +21,13 @@
 						key="solicitud.solicitudactiva.plural" /></span>
 		</a></li>
 
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/fusionarprocediments/elegirProcediments"/>"> <span
+				style="${(fn:contains(url, '/fusionarprocediments'))? "font-weight:bold;" : ""}"><fmt:message
+						key="fusionarprocediments" /></span>
+		</a></li>
+
+
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
