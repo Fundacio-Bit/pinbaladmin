@@ -67,8 +67,8 @@ public class TiquetJPA implements Tiquet {
     @Column(name="notes",length = 1000)
     java.lang.String notes;
 
-    @org.hibernate.annotations.ColumnDefault("1")
     @Column(name="entorn",nullable = false,length = 10)
+    @org.hibernate.annotations.ColumnDefault("1")
     int entorn = 1;
 
     @Column(name="adjunt1id",length = 19)

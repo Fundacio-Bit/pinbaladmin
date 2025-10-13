@@ -34,6 +34,7 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
 	 public static final LongField ESTATMODIFICACIO = new LongField(_TABLE_MODEL, "estatModificacio", "estatmodificacio");
 	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contactenom", "contactenom");
 	 public static final StringField CONTACTEMAIL = new StringField(_TABLE_MODEL, "contactemail", "contactemail");
+	 public static final BooleanField ESMENA = new BooleanField(_TABLE_MODEL, "esmena", "esmena");
 
 
   public static final Field<?>[] ALL_MODIFICACIOSOLICITUD_FIELDS = {
@@ -58,7 +59,8 @@ public interface ModificacioSolicitudFields extends java.io.Serializable {
     SOLICITANTUSERNAME,
     ESTATMODIFICACIO,
     CONTACTENOM,
-    CONTACTEMAIL
+    CONTACTEMAIL,
+    ESMENA
   };
 
 

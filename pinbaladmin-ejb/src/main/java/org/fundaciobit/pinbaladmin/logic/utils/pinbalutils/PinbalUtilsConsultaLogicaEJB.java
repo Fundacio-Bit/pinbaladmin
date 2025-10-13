@@ -7,14 +7,18 @@ import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
+import org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
@@ -53,6 +57,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	        log.info("Respuesta procesada. InfoMad: " + solicitud.getInfomadridid());
 	        
 	        // 3. Informar al contacto si hay cambios.
+	        this.informarContacteCanvisEstat(solicitud);
 	        
 	        
 	    } catch (Throwable e) {
@@ -128,7 +133,6 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	
 	public void procesarSolicitudTrobada(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
 	        throws I18NException {
-		
 		
 		/*
 		 * Despues de hacer la consulta, el nuevo estado de la solicitud será en función del estado que devuelva Madrid.
@@ -245,8 +249,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	
 	
 	public void actualizarEstatSolicitud(InfoMadrid infoMadrid, Solicitud solicitud) {
-		Long estadoMadridNuevo = Long.valueOf(infoMadrid.getEstatAutoritzacio());
-		boolean yaAutorizada = infoMadrid.getDataAutoritzacio() != null; // 👈 directo de Madrid
+		Long estadoMadridNuevo = Long.valueOf(infoMadrid.getEstatAutoritzacio());// 👈 directo de Madrid
+		boolean yaAutorizada = infoMadrid.getDataAutoritzacio() != null; 
 		
 		//Ahora, en funcion de cada estado, se asocian los otros.
 		
@@ -326,6 +330,100 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		default:
 			return Constants.ESTAT_SOLICITUD_SERVEI_NO_DISPONIBLE;
 		}
+	}
+
+	private void informarContacteCanvisEstat(SolicitudJPA solicitud) {
+		// Si estamos aqui, es que el estado anterior no era ni autorizado ni esmenes.
+		// Así que si ahora es autorizado, informamos, y si es esmenes, también. Porque
+		// antes no lo era.
+
+		Long estatSoli = solicitud.getEstatSolicitud();
+
+		String asumpte;
+		String missatge;
+
+		if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
+			asumpte = "La sol·licitud " + solicitud.getProcedimentCodi() + " ha estat autoritzada";
+
+			missatge = "La seva sol·licitud amb codi " + solicitud.getProcedimentCodi()
+					+ " ha estat autoritzada. Ja pot procedir a realitzar els tràmits que desitgi.";
+
+		} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
+			asumpte = "La sol·licitud " + solicitud.getProcedimentCodi() + " necessita esmenes";
+			missatge = generarMissatgeEsmena(solicitud);
+
+		} else {
+			// No ha cambiado de estado. No informamos. PENDENT AUTORITZAR.
+			asumpte = "TEST La sol·licitud " + solicitud.getProcedimentCodi() + " necessita esmenes";
+			missatge = "TEST " + generarMissatgeEsmena(solicitud);
+
+		}
+		try {
+			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+
+		} catch (I18NException e) {
+			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
+		}
+	}
+
+	private String generarMissatgeEsmena(SolicitudJPA solicitud) {
+		
+		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+		
+		String respostaMadrid = infoMad.getMissatge();
+
+		String missatge = "Bon dia, <br> desde el Ministeri ens han DESESTIMAT la solicitud amb codi "
+				+ solicitud.getProcedimentCodi() + " .<br>" + "El missatge rebut és el següent: <br><br><i>" + respostaMadrid
+				+ "</i><br><br>" + "Per poder tramitar aquesta esmena, si us plau, accedeixi al següent enllaç: "
+				+ "<a href='" + generarUrlEsmena(solicitud) + "'>" + "esmenar solicitud</a>" + "<br><br>" + 
+				"Salutacions.";
+		
+		
+		
+//		String missatge = "La seva sol·licitud amb codi " + solicitud.getProcedimentCodi()
+//				+ " necessita esmenes. Per tramitar aquesta esmena, si us plau, accedeixi al següent enllaç: "
+//				+ "<a href='" + generarUrlEsmena(solicitud) + "'>" + "esmenar solicitud</a>";
+
+		return missatge;
+	}
+
+	private String generarUrlEsmena(SolicitudJPA solicitud) {
+
+	//http://ptrias:8080/pinbaladmin/public/esmenarSolicitud/tramitEsmena/39990
+		
+		
+		String url = Configuracio.getAppBackUrl() + "/public/esmenarSolicitud/tramitEsmena/" + solicitud.getSolicitudID();
+
+		return url;
+	}
+
+	private void enviarMissatgeAlSolicitant(SolicitudJPA solicitud, String asumpte, String missatge) throws I18NException {
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		final String caidIdentificadorConsulta = null;
+		final String caidNumeroSeguiment = null;
+
+		Long _fitxerID_ = null;
+		boolean _noLlegit_ = false;
+
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(solicitud.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+		event.setFitxerID(_fitxerID_);
+		event.setNoLlegit(_noLlegit_);
+		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
+		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
+		
+		event.setPersona("PinbalAdmin");
+		event.setAsumpte(asumpte);
+		event.setComentari(missatge);
+
+		// Es un comentari de contacte, no te destinatari.
+		event.setDestinatari(solicitud.getPersonaContacte());
+		event.setDestinatarimail(solicitud.getPersonaContacteEmail());
+
+		eventLogicaEjb.create(event);
 	}
 
 }

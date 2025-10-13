@@ -40,8 +40,8 @@ public class EntitatJPA implements Entitat {
     @Column(name="cif",nullable = false,length = 10)
     java.lang.String CIF;
 
-    @org.hibernate.annotations.ColumnDefault("0")
     @Column(name="grupentitatid",nullable = false,length = 19)
+    @org.hibernate.annotations.ColumnDefault("0")
     long grupEntitatID = 0;
 
     @Column(name="convenipmsbae",nullable = false,length = 1)

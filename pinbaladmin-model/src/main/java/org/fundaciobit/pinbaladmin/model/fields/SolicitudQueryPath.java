@@ -143,6 +143,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.INFOMADRIDID);
   }
 
+  public TimestampField DATACADUCITAT() {
+    return new TimestampField(getQueryPath(), SolicitudFields.DATACADUCITAT);
+  }
+
 
 
   @Override

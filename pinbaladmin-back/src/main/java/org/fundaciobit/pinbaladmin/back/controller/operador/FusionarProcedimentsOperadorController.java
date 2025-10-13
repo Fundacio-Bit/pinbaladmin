@@ -480,7 +480,7 @@ public class FusionarProcedimentsOperadorController {
 		String codiSiaConv = request.getParameter("codiSiaConv");
 		String procedimentNom = request.getParameter("procedimentNom");
 		Timestamp dataInici = parseTimestamp(request.getParameter("dataInici"));
-		Timestamp dataFi = parseTimestamp(request.getParameter("dataFi"));
+		Timestamp dataCaducitat = parseTimestamp(request.getParameter("dataFi"));
 		String personaContacte = request.getParameter("personaContacte");
 		String personaContacteEmail = request.getParameter("personaContacteEmail");
 		String responsableProcNom = request.getParameter("responsableProcNom");
@@ -517,7 +517,7 @@ public class FusionarProcedimentsOperadorController {
 		log.info("codiSiaConv: " + codiSiaConv);
 		log.info("procedimentNom: " + procedimentNom);
 		log.info("dataInici: " + dataInici);
-		log.info("dataFi: " + dataFi);
+		log.info("dataFi: " + dataCaducitat);
 		log.info("personaContacte: " + personaContacte);
 		log.info("personaContacteEmail: " + personaContacteEmail);
 		log.info("responsableProcNom: " + responsableProcNom);
@@ -540,7 +540,7 @@ public class FusionarProcedimentsOperadorController {
 		solicitudNueva.setProcedimentNom(procedimentNom);
 		solicitudNueva.setProcedimentTipus(procedimentTipus);
 		solicitudNueva.setDataInici(dataInici);
-		solicitudNueva.setDataFi(dataFi);
+		solicitudNueva.setDataCaducitat(dataCaducitat);
 		solicitudNueva.setPersonaContacte(personaContacte);
 		solicitudNueva.setPersonaContacteEmail(personaContacteEmail);
 		solicitudNueva.setResponsableProcNom(responsableProcNom);

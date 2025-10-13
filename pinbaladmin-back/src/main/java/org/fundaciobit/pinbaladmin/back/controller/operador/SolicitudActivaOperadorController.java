@@ -1,6 +1,8 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,15 +23,20 @@ import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
+import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +65,12 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
     protected InfoMadridLogicaService infoMadridLogicaEjb;
-	
+    
+    @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+    protected SolicitudLogicaService solicitudLogicaEjb;
+    
+    @EJB(mappedName = TramitHProcLogicaService.JNDI_NAME)
+    protected TramitHProcLogicaService tramitHLogicaEjb;
 	
 	@Override
 	public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
@@ -109,11 +121,100 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualizar Titulares",
 					getContextWeb() + "/actualizarTitulares", AdditionalButtonStyle.WARNING));
+			
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualizar Caducidad",
+					getContextWeb() + "/actualizarCaducidad", AdditionalButtonStyle.PRIMARY));
+			
 		}
 
 		return solicitudFilterForm;
 	}
 
+	// actualizarCaducidad
+	@RequestMapping(value = "/actualizarCaducidad", method = RequestMethod.GET)
+	public String actualizarCaducidad(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
+		int actualitzades = 0;
+		for (Solicitud soli : solicituds) {
+			
+			//Buscar la caducidad con tramitH.
+			//Si no la tenemos, buscarla con los servicios.
+			//Si no tiene, es que no caduca.
+			
+			Where wProcCodi = TramitHProcFields.CODI.equal(soli.getProcedimentCodi());
+			
+			List<TramitHProc> tramitH = tramitHLogicaEjb.select(wProcCodi);
+			if (tramitH.size() == 0) {
+//				log.info("No trobat TramitH per a " + soli.getProcedimentCodi());
+			} else {
+				TramitHProc proc = tramitH.get(0);
+				if (proc.getCaducitatdata() != null) {
+					soli.setDataCaducitat(proc.getCaducitatdata());
+					log.info("[TRAMIT] Actualitzada caducitat " + soli.getSolicitudID() + " a " + proc.getCaducitatdata());
+					solicitudLogicaEjb.update(soli);
+					actualitzades++;
+					continue;
+				}
+			}
+
+			// Si arribam aqui es que no ho tenim amb tramitH. Cercam amb els serveis.
+			List<SolicitudServei> serveis = solicitudServeiEjb.select(SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()));
+			if (serveis.size() == 0) {
+//				log.info("No trobat Serveis per a " + soli.getSolicitudID());
+			} else {
+				Timestamp caducitat = null;
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+				for (SolicitudServei ss : serveis) {
+					String dataFi = ss.getFechaCaduca(); // por ejemplo "15/12/2022 11:33:35"
+
+					if (dataFi != null && !dataFi.isEmpty()) {
+						try {
+							// Si la fecha no tiene hora, se la añadimos
+							if (dataFi.length() <= 10) {
+								dataFi = dataFi.substring(0, 10) + " 23:59:59";
+							}
+
+							Date parsed = sdf.parse(dataFi);
+							Timestamp data = new Timestamp(parsed.getTime());
+
+							if (caducitat == null || caducitat.after(data)) {
+								caducitat = data;
+							}
+
+						} catch (Exception e) {
+							log.error("Error convertint data caducitat " + dataFi + " de servei " + ss.getId(), e);
+						}
+					}
+
+				}
+				if (caducitat != null) {
+					soli.setDataCaducitat(caducitat);
+					log.info("[SERVEI] Actualitzada caducitat " + soli.getSolicitudID() + " a " + caducitat);
+					solicitudLogicaEjb.update(soli);
+					actualitzades++;
+					continue;
+				}
+			}
+			
+			// Si arribam aqui es que no te caducitat.
+			log.info("[NOCADU] No te caducitat " + soli.getSolicitudID());
+			
+			
+
+		
+		}
+		
+		
+
+		HtmlUtils.saveMessageSuccess(request, "Sol·licituds actualitzades correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
+	
+	
+	
 	// crearInfoMadrid
 	@RequestMapping(value = "/actualizarTitulares", method = RequestMethod.GET)
 	public String actualizarTitulares(HttpServletRequest request, HttpServletResponse response) throws Exception {

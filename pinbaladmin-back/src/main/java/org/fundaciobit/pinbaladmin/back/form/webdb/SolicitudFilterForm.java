@@ -406,6 +406,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.sql.Timestamp dataCaducitatDesde;
+
+  public java.sql.Timestamp getDataCaducitatDesde() {
+    return this.dataCaducitatDesde;
+  }
+
+  public void setDataCaducitatDesde(java.sql.Timestamp dataCaducitatDesde) {
+    this.dataCaducitatDesde = dataCaducitatDesde;
+  }
+
+
+  private java.sql.Timestamp dataCaducitatFins;
+
+  public java.sql.Timestamp getDataCaducitatFins() {
+    return this.dataCaducitatFins;
+  }
+
+  public void setDataCaducitatFins(java.sql.Timestamp dataCaducitatFins) {
+    this.dataCaducitatFins = dataCaducitatFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -446,6 +468,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.portafibIDFins = __toClone.portafibIDFins;
     this.infomadrididDesde = __toClone.infomadrididDesde;
     this.infomadrididFins = __toClone.infomadrididFins;
+    this.dataCaducitatDesde = __toClone.dataCaducitatDesde;
+    this.dataCaducitatFins = __toClone.dataCaducitatFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;

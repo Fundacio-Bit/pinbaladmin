@@ -217,6 +217,9 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATACADUCITAT)}">
+          <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${solicitud.dataCaducitat}" /></td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

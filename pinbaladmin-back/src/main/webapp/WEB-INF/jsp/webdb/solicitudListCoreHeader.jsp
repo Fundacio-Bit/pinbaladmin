@@ -111,6 +111,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.INFOMADRIDID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.INFOMADRIDID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATACADUCITAT)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DATACADUCITAT)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

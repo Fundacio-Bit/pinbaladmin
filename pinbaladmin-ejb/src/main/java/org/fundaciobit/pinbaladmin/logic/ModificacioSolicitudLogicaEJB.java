@@ -89,7 +89,7 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 		if (codiSia!= null && codiSia.trim().length() > 0) {
 			solicitud.setCodiSiaConv(solicitud.getCodiSiaConv() + ", " + codiSia);
 		}
-		log.info("Codi SIA Anterior: " + solicitud.getCodiSiaConv());
+		log.info("Codi SIA Posterior: " + solicitud.getCodiSiaConv());
 		
 		
 		// 3. Actualizar Doc Consentimiento. Convertir un FitxerJPA en un DocumentSolicitudJPA
@@ -106,8 +106,8 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 			afegirDocumentSolicitudAmbFitxer(docConsentiment, nom, tipus, soliID);
 		}
 
-		// 3. Cambiar estado de la solicitud
-		solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID);
+		// 3. Cambiar estado de la solicitud. Despues de un cambio, hay que enviarlo a Madrid.
+		solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
 
 		// 4. Guardar cambios de la solicitud
 		solicitudLogicaEjb.update(solicitud);
@@ -123,7 +123,7 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 		List<SolicitudServei> serveisPerModificar = solicitudServeiLogicaEjb.select(Where.AND(wSoli, wEstats));
 
 		for (SolicitudServei ss : serveisPerModificar) {
-		    ss.setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_PENDENENT_ENVIAR_MODIFICACIO_MADRID);
+		    ss.setEstatSolicitudServeiID(Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR);
 		    solicitudServeiLogicaEjb.update(ss);
 		}
 		
@@ -141,7 +141,6 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 
         documentSolicitudLogicEjb.create(ds);
         log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
-
     }
 
 }

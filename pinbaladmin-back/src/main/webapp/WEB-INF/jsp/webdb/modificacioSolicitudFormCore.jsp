@@ -598,3 +598,25 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ModificacioSolicitudFields.ESMENA)}">
+        <tr id="modificacioSolicitud_esmena_rowid">
+          <td id="modificacioSolicitud_esmena_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ModificacioSolicitudFields.ESMENA])?'modificacioSolicitud.esmena':__theForm.labels[ModificacioSolicitudFields.ESMENA]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ModificacioSolicitudFields.ESMENA]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ModificacioSolicitudFields.ESMENA]}" ></i>
+              </c:if>
+            </td>
+          <td id="modificacioSolicitud_esmena_columnvalueid">
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.ESMENA)}" >
+              <form:errors path="modificacioSolicitud.esmena" cssClass="errorField alert alert-danger" />
+              <form:checkbox cssClass="" onclick="javascript:return ${ gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.ESMENA)? 'false' : 'true'}" path="modificacioSolicitud.esmena" />
+          </c:if>
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,ModificacioSolicitudFields.ESMENA)}" >
+                <fmt:message key="genapp.checkbox.${__theForm.modificacioSolicitud.esmena}" />
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

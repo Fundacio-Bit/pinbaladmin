@@ -927,3 +927,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.DATACADUCITAT)}">
+        <tr id="solicitud_dataCaducitat_rowid">
+          <td id="solicitud_dataCaducitat_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.DATACADUCITAT])?'solicitud.dataCaducitat':__theForm.labels[SolicitudFields.DATACADUCITAT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.DATACADUCITAT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.DATACADUCITAT]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_dataCaducitat_columnvalueid">
+    <form:errors path="solicitud.dataCaducitat" cssClass="errorField alert alert-danger" />
+            <div class="form-group"  style="margin-bottom: 0px;" >
+                <div class="input-group date" id="solicitud_dataCaducitat" data-target-input="nearest">
+                      <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.DATACADUCITAT)? 'true' : 'false'}" cssClass="form-control datetimepicker-input"  data-target="#solicitud_dataCaducitat" path="solicitud.dataCaducitat" />
+                    <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.DATACADUCITAT)}" >
+                    <div class="input-group-append"  data-target="#solicitud_dataCaducitat"  data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </c:if>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#solicitud_dataCaducitat').datetimepicker({
+                    format: '${gen:getJSDateTimePattern()}',
+                    locale: '${lang}',
+                    icons: {
+                       time: 'far fa-clock'
+                    }
+                });
+            });
+        </script>           </td>
+        </tr>
+        </c:if>
+        

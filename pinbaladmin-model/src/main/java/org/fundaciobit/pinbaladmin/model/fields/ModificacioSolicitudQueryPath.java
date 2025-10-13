@@ -99,6 +99,10 @@ public class ModificacioSolicitudQueryPath extends org.fundaciobit.genapp.common
     return new StringField(getQueryPath(), ModificacioSolicitudFields.CONTACTEMAIL);
   }
 
+  public BooleanField ESMENA() {
+    return new BooleanField(getQueryPath(), ModificacioSolicitudFields.ESMENA);
+  }
+
 
 
   @Override

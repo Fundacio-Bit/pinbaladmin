@@ -78,6 +78,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.CONTACTEMAIL)}">
         <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.CONTACTEMAIL)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ModificacioSolicitudFields.ESMENA)}">
+        <th>${pad:getSortIcons(__theFilterForm,ModificacioSolicitudFields.ESMENA)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

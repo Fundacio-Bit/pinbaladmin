@@ -206,7 +206,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String procedimentNom = null;
         String procedimentTipus = null;
         Long organid = null;
-        Timestamp dataFi = null;
+        Timestamp dataCaducitat = null;
         String responsableProcNom = null;
         String responsableProcEmail = null;
         String personaContacte = null;
@@ -325,8 +325,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
                         String dataFiStr;
                         if (H.isCaducitat()) {
-                        	dataFi = H.getCaducitatdata();
-                            dataFiStr = SDF.format(dataFi);
+                        	dataCaducitat = H.getCaducitatdata();
+                            dataFiStr = SDF.format(dataCaducitat);
                         } else {
                             dataFiStr = "";
                         }
@@ -420,7 +420,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setEntitatEstatal(entitatEstatal);
         soli.setPinfo(pinfo);
         soli.setDataInici(dataInici);
-        soli.setDataFi(dataFi);
+        soli.setDataFi(null);
+        soli.setDataCaducitat(dataCaducitat);
         soli.setPersonaContacte(personaContacte);
         soli.setPersonaContacteEmail(personaContacteEmail);
         soli.setResponsableProcNom(responsableProcNom);
@@ -457,7 +458,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
 			
 			log.info("Afegim serveis a la sol·licitud");
-			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataFi, soliID);
+			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataCaducitat, soliID);
 			soli.setSolicitudServeis(solicitudServeis);
 			log.info("Generem Excel de Serveis");
 			generarExcelDeServeis(solicitud, docConsentiment);

@@ -68,6 +68,9 @@ public interface ModificacioSolicitud extends org.fundaciobit.genapp.common.IGen
 	public java.lang.String getContactemail();
 	public void setContactemail(java.lang.String _contactemail_);
 
+	public boolean isEsmena();
+	public void setEsmena(boolean _esmena_);
+
   // Fitxer
   public <F extends Fitxer> F getDoCconsentiment();
 

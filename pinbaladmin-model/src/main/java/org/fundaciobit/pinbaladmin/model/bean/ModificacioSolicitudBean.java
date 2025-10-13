@@ -30,6 +30,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
 	java.lang.Long estatModificacio;
 	java.lang.String contactenom;
 	java.lang.String contactemail;
+	boolean esmena;
 
 
   /** Constructor Buit */
@@ -37,7 +38,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public ModificacioSolicitudBean(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
+  public ModificacioSolicitudBean(long modsoliID , long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail , boolean esmena) {
     this.modsoliID=modsoliID;
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
@@ -60,9 +61,10 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.estatModificacio=estatModificacio;
     this.contactenom=contactenom;
     this.contactemail=contactemail;
+    this.esmena=esmena;
 }
   /** Constructor sense valors autoincrementals */
-  public ModificacioSolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail) {
+  public ModificacioSolicitudBean(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.String codiSiaNou , java.lang.Long estatID , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String procedimentTipus , java.lang.String notes , java.lang.Long organID , java.lang.String responsableProcNom , java.lang.String responsableProceMail , java.lang.String consentiment , java.lang.Long doCconsentimentID , java.lang.String solicitantNom , java.lang.String solicitantNif , java.lang.String solicitantMail , java.lang.String solicitantUsername , java.lang.Long estatModificacio , java.lang.String contactenom , java.lang.String contactemail , boolean esmena) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.procedimentNom=procedimentNom;
@@ -84,11 +86,13 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.estatModificacio=estatModificacio;
     this.contactenom=contactenom;
     this.contactemail=contactemail;
+    this.esmena=esmena;
 }
   /** Constructor dels valors Not Null */
-  public ModificacioSolicitudBean(long modsoliID , long solicitudID) {
+  public ModificacioSolicitudBean(long modsoliID , long solicitudID , boolean esmena) {
     this.modsoliID=modsoliID;
     this.solicitudID=solicitudID;
+    this.esmena=esmena;
 }
   public ModificacioSolicitudBean(ModificacioSolicitud __bean) {
     this.setModsoliID(__bean.getModsoliID());
@@ -113,6 +117,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     this.setEstatModificacio(__bean.getEstatModificacio());
     this.setContactenom(__bean.getContactenom());
     this.setContactemail(__bean.getContactemail());
+    this.setEsmena(__bean.isEsmena());
     // Fitxer
     this.setDoCconsentiment(FitxerBean.toBean(__bean.getDoCconsentiment()));
 	}
@@ -271,6 +276,13 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
 		this.contactemail = _contactemail_;
 	};
 
+	public boolean isEsmena() {
+		return(esmena);
+	};
+	public void setEsmena(boolean _esmena_) {
+		this.esmena = _esmena_;
+	};
+
 
 
   // ======================================
@@ -300,6 +312,7 @@ public class ModificacioSolicitudBean implements ModificacioSolicitud {
     __tmp.setEstatModificacio(__bean.getEstatModificacio());
     __tmp.setContactenom(__bean.getContactenom());
     __tmp.setContactemail(__bean.getContactemail());
+    __tmp.setEsmena(__bean.isEsmena());
     // Fitxer
     __tmp.setDoCconsentiment(FitxerBean.toBean(__bean.getDoCconsentiment()));
 		return __tmp;

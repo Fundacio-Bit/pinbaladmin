@@ -38,6 +38,10 @@ public class ModificacioSolicitudValidator<I extends ModificacioSolicitud>
         "genapp.validation.required",
         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(SOLICITUDID)));
 
+    __vr.rejectIfEmptyOrWhitespace(__target__,ESMENA, 
+        "genapp.validation.required",
+        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ESMENA)));
+
     // Check size
     if (__vr.getFieldErrorCount(PROCEDIMENTCODI) == 0) {
       java.lang.String __procedimentcodi = __target__.getProcedimentCodi();

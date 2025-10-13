@@ -101,6 +101,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getInfomadridid();
 	public void setInfomadridid(java.lang.Long _infomadridid_);
 
+	public java.sql.Timestamp getDataCaducitat();
+	public void setDataCaducitat(java.sql.Timestamp _dataCaducitat_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

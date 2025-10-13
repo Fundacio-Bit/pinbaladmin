@@ -34,8 +34,8 @@ public class TramitBDadesSoliJPA implements TramitBDadesSoli {
     @Column(name="tipussolicitud",nullable = false,length = 19)
     long tipussolicitud;
 
-    @org.hibernate.annotations.ColumnDefault("false")
     @Column(name="entorn",nullable = false,length = 20)
+    @org.hibernate.annotations.ColumnDefault("false")
     java.lang.String entorn = "false";
 
 

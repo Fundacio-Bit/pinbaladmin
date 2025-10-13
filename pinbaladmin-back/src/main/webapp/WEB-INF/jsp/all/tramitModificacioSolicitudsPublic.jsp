@@ -8,17 +8,33 @@
 		<img alt="logo-caib"
 			src="https://se.caib.es/sistramitfront/resources/1/O1S9IEZ4-ZJLRBRT8-T8SVCTKJ.png"
 			width="50px">
+
 		<div id="user-info">
 			<div id="user-name">
-				<strong>Usuari: </strong>${usuariNom}
+				<strong>Usuari: </strong>
+				<c:if test="${empty usuariNIF}"><br></c:if>
+				${usuariNom}
 			</div>
-			<div id="user-nif">
-				<strong>DNI: </strong>${usuariNIF}
-			</div>
+			<c:if test="${not empty usuariNIF}">
+				<div id="user-nif">
+					<strong>DNI: </strong>${usuariNIF}
+				</div>
+			</c:if>
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third"><fmt:message key='tramit.modificacions.title'/></div>
+	<div id="titol-tramit" class="third">
+
+		<c:choose>
+		    <c:when test="${not empty isEsmena and isEsmena}">
+		        <fmt:message key="tramit.esmenes.title" />
+		    </c:when>
+		    <c:otherwise>
+		        <fmt:message key="tramit.modificacions.title" />
+		    </c:otherwise>
+		</c:choose>
+
+	</div>
 	<div id="button-menu" class="third">
 		<a href="www.google.com"/></a>
 	</div>

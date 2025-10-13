@@ -263,6 +263,9 @@ public class ModificacioSolicitudController
     }
 
 
+      fillValuesToGroupByItemsBoolean("genapp.checkbox", groupByItemsMap, ESMENA);
+
+
     return groupByItemsMap;
   }
 

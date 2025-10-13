@@ -51,8 +51,8 @@ public class ServeiJPA implements Servei {
     @Column(name="estatserveiid",nullable = false,length = 19)
     java.lang.Long estatServeiID;
 
-    @org.hibernate.annotations.ColumnDefault("0")
     @Column(name="tipusconsentiment",nullable = false,length = 10)
+    @org.hibernate.annotations.ColumnDefault("0")
     int tipusConsentiment = 0;
 
     @Column(name="ocult",nullable = false,length = 1)

@@ -50,8 +50,8 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @Column(name="estat",nullable = false,length = 10)
     int estat;
 
-    @org.hibernate.annotations.ColumnDefault("1")
     @Column(name="tipus",nullable = false,length = 10)
+    @org.hibernate.annotations.ColumnDefault("1")
     int tipus = 1;
 
     @Column(name="organid",length = 19)
@@ -75,8 +75,8 @@ public class IncidenciaTecnicaJPA implements IncidenciaTecnica {
     @Column(name="caidnumeroseguiment",length = 100)
     java.lang.String caidNumeroSeguiment;
 
-    @org.hibernate.annotations.ColumnDefault("'mcapo'")
     @Column(name="creador",nullable = false,length = 100)
+    @org.hibernate.annotations.ColumnDefault("mcapo")
     java.lang.String creador = "mcapo";
 
     @Column(name="operador",nullable = false,length = 100)
