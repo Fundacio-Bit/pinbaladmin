@@ -133,16 +133,9 @@ public class SchedulerConsultaEstatSolicitudPID {
 			 */
 			
 			// Excloure les que no s'han sol·licitat (estat per defecte)
-			Where wEstatPinbalValid = SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+//			Where wEstatPinbalValid = SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT);
 
-			// Estats de la sol·licitud que indiquen pendents d'autorització o errors d'enviament
-			Long[] estatsPendentsMadrid = {
-			    Constants.SOLI_ESTAT_PENDENT_AUTORITZAR,
-			    Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO,
-			    Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID,
-			    Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID,
-			};
-			Where wEstatSolicitudValid = SolicitudFields.ESTATSOLICITUD.in(estatsPendentsMadrid);
+			Where wEstatSolicitudValid = SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 
 			// Filtres finals: locals + (estat solicitud vàlid o estat pinbal vàlid)
 			Where whereFinal = Where.AND(wSolicitudLocals, wEstatSolicitudValid);

@@ -230,7 +230,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				}
 				
 				
-				if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO) {
+				if (estatID == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
 
 					Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
 

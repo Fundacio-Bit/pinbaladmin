@@ -692,12 +692,11 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		enviarMissatgeAlSolicitant(modificacio);
 
 		// Actualitzar estat solicitud a PENDENT_REVISIO_MODIFICACIO
-		solicitudOriginal.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO);
+		solicitudOriginal.setEstatSolicitud(Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR);
 		
 		Long infoMadridID = solicitudOriginal.getInfomadridid();
 		InfoMadrid im = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
-		long nouEstat = isEsmena() ? Constants.SOLI_ESTAT_ESMENA_PENDENT_REVISAR
-				: Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO;
+		long nouEstat = Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR;
 
 		im.setEstatProcediment(nouEstat);
 		infoMadridLogicaEjb.update(im);

@@ -192,7 +192,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 				
 				estatSoli = Constants.SOLI_ESTAT_ESMENES;
 				estatAuth = Constants.ESTAT_PINBAL_DESESTIMAT;
-				infoMadrid.setEstatAutoritzacio(Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE);
+				infoMadrid.setEstatAutoritzacio(Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE);
 				
 				avisarContacteSolicitudDesestimada((SolicitudJPA) solicitud);
 			}else {

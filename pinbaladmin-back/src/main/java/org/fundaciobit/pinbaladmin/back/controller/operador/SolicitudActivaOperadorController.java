@@ -414,33 +414,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 				dataEnviament = null;
 				dataAuth = soli.getDataFi();
 				missatge = "Solicitud Enviada a Madrid manualment, i autoritzada PARCIALMENT.";
-			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
-					|| estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-					|| estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-					|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
-				// Ja les han autoritzat abans. I totes les de modificacions també. CONSULTA per
-				// veure estat.
-				crear = true;
-
-				// Cridar CONSULTA per saber si ha estat manual o no.
-				Retorno ret = consulta(soli);
-
-				if (ret == null) {
-					// Ha sido Manual.
-					dataEnviament = null;
-					dataAuth = soli.getDataFi();
-					missatge = "Solicitud Enviada a Madrid manualment. Pendent Esmena";
-				} else {
-					dataEnviament = soli.getDataFi();
-					dataAuth = soli.getDataFi();
-					missatge = ret.getProcedimiento().getEstadoProcedimiento().getObservaciones();
-					estatAutNou = ret.getProcedimiento().getEstadoProcedimiento().getEstado();
-				}
-
 			} else if (estatID == Constants.SOLI_ESTAT_ESMENES || estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE
-					|| estatID == Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE
-					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_REVISAR
-					|| estatID == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES) {
+					|| estatID == Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE
+					|| estatID == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
 				crear = true;
 
 				// En tots els casos de esmenes, cridar consulta per si hi algun missatge, i
@@ -466,11 +442,6 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 				dataAuth = null;
 				missatge = null;
 			} else if (estatID == Constants.SOLI_ESTAT_DENEGADA) {
-				crear = false;
-				dataEnviament = null;
-				dataAuth = null;
-				missatge = null;
-			} else if (estatID == Constants.SOLI_ESTAT_PENDENT_PINFO) {
 				crear = false;
 				dataEnviament = null;
 				dataAuth = null;

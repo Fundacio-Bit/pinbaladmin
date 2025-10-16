@@ -822,7 +822,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		case ESTAT_NO_REGISTRADA:
 		case ESTAT_VALIDACION_KO:
 		default:
-			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID);
+			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
 			break;
 		}
 	}

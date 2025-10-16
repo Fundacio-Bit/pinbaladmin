@@ -268,7 +268,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			// Si está en ESMENES, que busque infomad, pero no puede hacer más consultas, porque cambiará el estado.
 
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_ESMENES);
-			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE);
+			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE);
 
 		}else if (estadoMadridNuevo.equals(Constants.ESTAT_PINBAL_PENDENT_TRAMITAR) // NOT YET
 				|| estadoMadridNuevo.equals(Constants.ESTAT_PINBAL_DESISTIT)
@@ -279,8 +279,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 
-			infoMadrid.setEstatProcediment(yaAutorizada ? Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-					: Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
+			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 		}
 	}
 

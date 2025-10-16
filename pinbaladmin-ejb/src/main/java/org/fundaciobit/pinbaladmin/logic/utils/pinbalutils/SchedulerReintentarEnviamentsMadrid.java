@@ -107,9 +107,8 @@ public class SchedulerReintentarEnviamentsMadrid {
 
 			// Filtres
 			Where wSolicitudLocals = SolicitudFields.ORGANID.isNotNull();
-			Long[] estatsErrorMadrid = { Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID,
-					Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID };
-			Where wEstatSolicitudError = SolicitudFields.ESTATSOLICITUD.in(estatsErrorMadrid);
+			
+			Where wEstatSolicitudError = SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID);
 			Where whereFinal = Where.AND(wSolicitudLocals, wEstatSolicitudError);
 
 			List<Solicitud> solicituds = solicitudLogicaEjb.select(whereFinal,
@@ -131,7 +130,11 @@ public class SchedulerReintentarEnviamentsMadrid {
 				codisConsultats.add(codi);
 
 				try {
-					if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
+					InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+
+					// Si no ha sido autorizado, enviamos una ALTA. Si ya ha sido autorizado,
+					// enviamos una MODIFICACION.
+					if (infoMad.getDataAutoritzacio() == null) {
 						// Construir el texto consulta personalizado
 						String consultaTexto = "Buenos días,\n"
 								+ "Enviamos solicitud para dar servicios de alta en el procedimiento "
@@ -148,13 +151,11 @@ public class SchedulerReintentarEnviamentsMadrid {
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = alta
 								.altaSolicitudApiPinbal(titular, funcionario, solicitudAlta);
 
-			            InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
-			            
-			            // 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
-			            solicitudLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario, infoMad);
-			            
-			            
-					} else if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID) {
+						// 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
+						solicitudLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario,
+								infoMad);
+
+					} else {
 						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudMod = solicitudLogicaEjb
 								.getDadesModificarSolicitudApiPinbal(solicitud.getSolicitudID());
 
@@ -164,8 +165,6 @@ public class SchedulerReintentarEnviamentsMadrid {
 						solicitudLogicaEjb.processarRespostaPinbalModificacio(solicitud, resposta, titular,
 								funcionario);
 
-					} else {
-						log.warn("Estat inesperat: " + solicitud.getEstatSolicitud() + " per a solicitud " + codi);
 					}
 
 					solicitudLogicaEjb.update(solicitud);
