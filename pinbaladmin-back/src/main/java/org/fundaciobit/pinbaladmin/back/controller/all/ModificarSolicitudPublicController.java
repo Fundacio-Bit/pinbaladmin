@@ -43,6 +43,7 @@ import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
@@ -50,6 +51,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.ModificacioSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -123,6 +125,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+
+	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+	protected InfoMadridLogicaService infoMadridLogicaEjb;
 
 	@Override
 	protected FilesFormManager<Fitxer> getFilesFormManager() {
@@ -230,7 +235,6 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			log.info("modSoli: " + modsoliID);
 			request.getSession().setAttribute(MOD_SOLI_ID, modsoliID);
 			request.getSession().setAttribute(SOLICITUD_ID, solicitudID);
-			
 
 			form.setSaveButtonVisible(false);
 			form.addAdditionalButton(new AdditionalButton("", "tramit.modificacions.finalitzar",
@@ -680,18 +684,30 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		Long soliID = modificacio.getSolicitudID();
 		SolicitudJPA solicitudOriginal = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
-		// Preparar missatge per enviar al sol·licitant
+		// Preparar missatge per amb informacio dels canvis fets.
 		String msg = prepararMissatge(modificacio, solicitudOriginal);
 		crearEventModificacio(modificacio, msg);
+		
+		// Missatge al solicitant indicant que hem rebut l'esmena.
 		enviarMissatgeAlSolicitant(modificacio);
 
 		// Actualitzar estat solicitud a PENDENT_REVISIO_MODIFICACIO
 		solicitudOriginal.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO);
+		
+		Long infoMadridID = solicitudOriginal.getInfomadridid();
+		InfoMadrid im = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+		long nouEstat = isEsmena() ? Constants.SOLI_ESTAT_ESMENA_PENDENT_REVISAR
+				: Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO;
+
+		im.setEstatProcediment(nouEstat);
+		infoMadridLogicaEjb.update(im);
+		
 		solicitudLogicaEjb.update(solicitudOriginal);
 		
 		modificacio.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
 		ModificacioSolicitudJPA modificacioSolicitud = (ModificacioSolicitudJPA) modificacioSolicitudLogicaEjb
 				.update(modificacio);
+		
 		return modificacioSolicitud;
 	}
 

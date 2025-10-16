@@ -343,18 +343,18 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		String missatge;
 
 		if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
-			asumpte = "La sol·licitud " + solicitud.getProcedimentCodi() + " ha estat autoritzada";
+			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Procediment Autoritzat.";
 
 			missatge = "La seva sol·licitud amb codi " + solicitud.getProcedimentCodi()
 					+ " ha estat autoritzada. Ja pot procedir a realitzar els tràmits que desitgi.";
 
 		} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
-			asumpte = "La sol·licitud " + solicitud.getProcedimentCodi() + " necessita esmenes";
+			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
 			missatge = generarMissatgeEsmena(solicitud);
 
 		} else {
 			// No ha cambiado de estado. No informamos. PENDENT AUTORITZAR.
-			asumpte = "TEST La sol·licitud " + solicitud.getProcedimentCodi() + " necessita esmenes";
+			asumpte = "TEST PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
 			missatge = "TEST " + generarMissatgeEsmena(solicitud);
 
 		}
@@ -365,65 +365,4 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
 		}
 	}
-
-	private String generarMissatgeEsmena(SolicitudJPA solicitud) {
-		
-		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
-		
-		String respostaMadrid = infoMad.getMissatge();
-
-		String missatge = "Bon dia, <br> desde el Ministeri ens han DESESTIMAT la solicitud amb codi "
-				+ solicitud.getProcedimentCodi() + " .<br>" + "El missatge rebut és el següent: <br><br><i>" + respostaMadrid
-				+ "</i><br><br>" + "Per poder tramitar aquesta esmena, si us plau, accedeixi al següent enllaç: "
-				+ "<a href='" + generarUrlEsmena(solicitud) + "'>" + "esmenar solicitud</a>" + "<br><br>" + 
-				"Salutacions.";
-		
-		
-		
-//		String missatge = "La seva sol·licitud amb codi " + solicitud.getProcedimentCodi()
-//				+ " necessita esmenes. Per tramitar aquesta esmena, si us plau, accedeixi al següent enllaç: "
-//				+ "<a href='" + generarUrlEsmena(solicitud) + "'>" + "esmenar solicitud</a>";
-
-		return missatge;
-	}
-
-	private String generarUrlEsmena(SolicitudJPA solicitud) {
-
-	//http://ptrias:8080/pinbaladmin/public/esmenarSolicitud/tramitEsmena/39990
-		
-		
-		String url = Configuracio.getAppBackUrl() + "/public/esmenarSolicitud/tramitEsmena/" + solicitud.getSolicitudID();
-
-		return url;
-	}
-
-	private void enviarMissatgeAlSolicitant(SolicitudJPA solicitud, String asumpte, String missatge) throws I18NException {
-		final Timestamp data = new Timestamp(System.currentTimeMillis());
-		final String caidIdentificadorConsulta = null;
-		final String caidNumeroSeguiment = null;
-
-		Long _fitxerID_ = null;
-		boolean _noLlegit_ = false;
-
-		EventJPA event = new EventJPA();
-		event.setSolicitudID(solicitud.getSolicitudID());
-		event.setIncidenciaTecnicaID(null);
-		event.setDataEvent(data);
-		event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
-		event.setFitxerID(_fitxerID_);
-		event.setNoLlegit(_noLlegit_);
-		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
-		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
-		
-		event.setPersona("PinbalAdmin");
-		event.setAsumpte(asumpte);
-		event.setComentari(missatge);
-
-		// Es un comentari de contacte, no te destinatari.
-		event.setDestinatari(solicitud.getPersonaContacte());
-		event.setDestinatarimail(solicitud.getPersonaContacteEmail());
-
-		eventLogicaEjb.create(event);
-	}
-
 }

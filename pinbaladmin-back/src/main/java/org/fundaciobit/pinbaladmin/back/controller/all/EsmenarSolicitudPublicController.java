@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.back.controller.all;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +13,9 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudFilterFor
 import org.fundaciobit.pinbaladmin.back.form.webdb.ModificacioSolicitudForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.ModificacioSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
@@ -35,10 +38,13 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = EsmenarSolicitudPublicController.CONTEXT_WEB)
 @SessionAttributes(types = { ModificacioSolicitudForm.class, ModificacioSolicitudFilterForm.class })
 public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicController {
-
+	
 	public static final String CONTEXT_WEB = "/public/esmenarSolicitud";
 	public static final String MOD_SOLI_ID = "modsoliID";
 	public static final String SOLICITUD_ID = "solicitudID";
+
+	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+	protected InfoMadridLogicaService infoMadridLogicaEjb;
 
 	@Override
 	public boolean isEsmena() {
@@ -78,10 +84,40 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 	@Override
 	public String[] getMissatgePerSolicitant(ModificacioSolicitudJPA modificacio) {
 
+		String asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + modificacio.getProcedimentCodi() + ". Esmena rebuda.";
 		String missatge = "<div>Bon dia, <br> Hem rebut la seva esmena, li respondrem al més aviat possible.</div>";
-		String asumpte = "Esmena rebuda. Procediment: " + modificacio.getProcedimentCodi();
+
 		
 		return new String[] { missatge, asumpte };
+	}
+	
+	
+	@Override
+	public ModificacioSolicitudForm getModificacioSolicitudForm(ModificacioSolicitudJPA _jpa, boolean __isView,
+			HttpServletRequest request, ModelAndView mav) throws I18NException {
+		ModificacioSolicitudForm form = super.getModificacioSolicitudForm(_jpa, __isView, request, mav);
+		
+		
+		if (!form.isNou() && !__isView) {
+			Long solicitudID = form.getModificacioSolicitud().getSolicitudID();
+			SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+			Long infoMadridID = solicitud.getInfomadridid();
+			if (infoMadridID != null) {
+				InfoMadrid infoMadrid = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+				String missatge = infoMadrid.getMissatge();
+				
+				missatge = missatge.replace("\n", "<br>");
+				
+				mav.addObject("instructions", missatge);
+			}
+			
+			
+			
+		}
+		
+		
+		
+		return form;
 	}
 	
 	

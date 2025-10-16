@@ -16,7 +16,7 @@
 }
 
 #modificacioSolicitud_tableid {
-	margin: 2rem auto;
+	margin: 0rem auto;
 }
 
 #llistatServeisActuals {
@@ -92,6 +92,17 @@
 	font-size: 1.25rem !important;
 	font-weight: bold !important;
 }
+
+#instructions {
+	border: 1px solid darkgray;
+	padding: 1rem;
+	border-radius: 5px;
+	background: #fbfbfb;
+	box-shadow: 2px 2px darkgray;
+	width: fit-content;
+	margin: auto;
+	max-width: 65rem;
+}
 </style>
 
 <script type="text/javascript">
@@ -118,59 +129,69 @@
 
 	});
 </script>
-<div id="includedContentSolicitudServei"></div>
-
-<div id="llistatServeisActuals">
-	<!-- Tabla de Servicios -->
-	<div id="titolModifServ">Modificar Serveis</div>
-	<c:if test="${empty serveis}">
-		<p>No hi ha serveis disponibles.</p>
+	
+	<c:if test="${not empty instructions}">
+	    <div id="instructions">
+	        <c:out value="${instructions}" escapeXml="false"/>
+	    </div>
 	</c:if>
-	<c:if test="${not empty serveis}">
-		<table border="1" class="tdformlabel table-sm">
-			<thead>
-				<tr>
-					<th>Codi</th>
-					<th>Nom</th>
-					<th>Estat</th>
-					<th>Normes</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="servei" items="${serveis}">
+
+
+	<div id="includedContentSolicitudServei"></div>
+
+	<div id="llistatServeisActuals">
+		<!-- Tabla de Servicios -->
+		<div id="titolModifServ">Modificar Serveis</div>
+		<c:if test="${empty serveis}">
+			<p>No hi ha serveis disponibles.</p>
+		</c:if>
+		<c:if test="${not empty serveis}">
+			<table border="1" class="tdformlabel table-sm">
+				<thead>
 					<tr>
-						<td>${servei.codi}</td>
-						<td>${servei.nom}</td>
-						<td>${servei.estat}</td>
-						<td>${servei.normes}</td>
-						<td>
-							<button class="btn-add-norma" type="button"
-								data-servei-id="${servei.id}"><i class="fas fa-plus"></i></button>
-						</td>
+						<th>Codi</th>
+						<th>Nom</th>
+						<th>Estat</th>
+						<th>Normes</th>
+						<th></th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<c:forEach var="servei" items="${serveis}">
+						<tr>
+							<td>${servei.codi}</td>
+							<td>${servei.nom}</td>
+							<td>${servei.estat}</td>
+							<td>${servei.normes}</td>
+							<td>
+								<button class="btn-add-norma" type="button"
+									data-servei-id="${servei.id}">
+									<i class="fas fa-plus"></i>
+								</button>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
 
-		
-
-<table>
-<tr id="titolProcediment" class="titolRow">
-	<td colspan="2" class="titolSection">Dades Procediment</td>
-</tr>
-
-<tr id="titolResponsable" class="titolRow">
-	<td colspan="2" class="titolSection">Dades Responsable</td>
-</tr>
-
-<tr id="titolConsentiment" class="titolRow">
-	<td colspan="2" class="titolSection">Dades Consentiment</td>
-</tr>
-</table>
 
 
-		<script>
+			<table>
+				<tr id="titolProcediment" class="titolRow">
+					<td colspan="2" class="titolSection">Dades Procediment</td>
+				</tr>
+
+				<tr id="titolResponsable" class="titolRow">
+					<td colspan="2" class="titolSection">Dades Responsable</td>
+				</tr>
+
+				<tr id="titolConsentiment" class="titolRow">
+					<td colspan="2" class="titolSection">Dades Consentiment</td>
+				</tr>
+			</table>
+
+
+			<script>
   $(document).ready(function () {
 
 	  $("#submitNormaBtn").click(function (e) {
@@ -222,7 +243,7 @@
 
 </script>
 
-<script>
+			<script>
 /* $(document).ready(function () {
 	  const $selectCaduca = $("#solicitudServei_caduca");
 	  const $fechaInput = $("#solicitudServei\\.fechaCaduca");
@@ -255,41 +276,46 @@
 </script>
 
 
-	</c:if>
-</div>
+		</c:if>
+	</div>
 
 
-</form>
+	</form>
 
-<form id="formNorma" method="post" enctype="multipart/form-data"
-					action="/pinbaladmin/public/modificarsolicitud/afegirNorma">
+	<form id="formNorma" method="post" enctype="multipart/form-data"
+		action="/pinbaladmin/public/modificarsolicitud/afegirNorma">
 
-<!-- Modal -->
+		<!-- Modal -->
 		<div id="modalNorma" class="modal" style="display: none;">
 			<div class="modal-content"
 				style="padding: 20px; border: 1px solid #ccc; background: white; width: 400px; margin: 100px auto; position: relative;">
 				<span id="closeModal"
 					style="position: absolute; top: 10px; right: 10px; cursor: pointer;">×</span>
 
-				
-					<input type="hidden" name="serveiId" id="serveiId" value="">
 
-					<div class="form-group">
-						<label for="norma"><fmt:message key="solicitudServei.normaLegal" /></label> <input type="text" name="norma"
-							class="form-control" required>
-					</div>
+				<input type="hidden" name="serveiId" id="serveiId" value="">
 
-					<div class="form-group">
-						<label for="fitxer"><fmt:message key="solicitudServei.fitxernormaID" /></label> <input type="file"
-							name="fitxer" class="form-control" required>
-					</div>
+				<div class="form-group">
+					<label for="norma"><fmt:message
+							key="solicitudServei.normaLegal" /></label> <input type="text"
+						name="norma" class="form-control" required>
+				</div>
 
-					<div class="form-group">
-						<label for="articles"><fmt:message key="solicitudServei.articles" /></label> <input type="text"
-							name="articles" class="form-control" required>
-					</div>
+				<div class="form-group">
+					<label for="fitxer"><fmt:message
+							key="solicitudServei.fitxernormaID" /></label> <input type="file"
+						name="fitxer" class="form-control" required>
+				</div>
 
-					<button type="button" id="submitNormaBtn" class="btn btn-primary"><fmt:message key="afegirnorma" /></button>
-				
+				<div class="form-group">
+					<label for="articles"><fmt:message
+							key="solicitudServei.articles" /></label> <input type="text"
+						name="articles" class="form-control" required>
+				</div>
+
+				<button type="button" id="submitNormaBtn" class="btn btn-primary">
+					<fmt:message key="afegirnorma" />
+				</button>
+
 			</div>
 		</div>

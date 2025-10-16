@@ -32,6 +32,7 @@ import org.fundaciobit.pinbaladmin.model.entity.EntitatServei;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
@@ -192,6 +193,8 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 				estatSoli = Constants.SOLI_ESTAT_ESMENES;
 				estatAuth = Constants.ESTAT_PINBAL_DESESTIMAT;
 				infoMadrid.setEstatAutoritzacio(Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE);
+				
+				avisarContacteSolicitudDesestimada((SolicitudJPA) solicitud);
 			}else {
 				//Si es qualsevol altre error. Marcam com error
 				
@@ -243,6 +246,19 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		actualizarInfoMadrdAlta(solicitud, infoMadrid, estatSoli, estatAuth, respostaMadrid);
 	} 
 	
+	private void avisarContacteSolicitudDesestimada(SolicitudJPA solicitud) {
+		// TODO Auto-generated method stub
+		String asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
+		String missatge = generarMissatgeEsmena(solicitud);
+
+		try {
+			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+
+		} catch (I18NException e) {
+			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
+		}
+	}
+
 	private void actualizarInfoMadrdAlta(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, InfoMadridJPA infoMadJpa, Long estadoSoli, Long estadoAuth, String respuesta) throws I18NException {
 
 		Long infoMadridIDOld = soli.getInfomadridid();
@@ -413,7 +429,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 //	}
 		
 		
-		Date dataCaducitat = soli.getDataFi();
+		Date dataCaducitat = soli.getDataCaducitat();
 		XMLGregorianCalendar _FechaCaducidad = null;
 
 		if (dataCaducitat != null) {
