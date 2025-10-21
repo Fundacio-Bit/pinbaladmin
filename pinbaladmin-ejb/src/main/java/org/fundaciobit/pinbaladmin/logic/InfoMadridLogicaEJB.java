@@ -4,6 +4,8 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Field;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.InfoMadridEJB;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
@@ -31,5 +33,11 @@ public class InfoMadridLogicaEJB extends InfoMadridEJB implements InfoMadridLogi
     	
         return (InfoMadridJPA)super.findByPrimaryKey(_ID_);
     }
+    
+	@Override
+	@PermitAll
+	public InfoMadrid update(InfoMadrid instance) throws I18NException {
+		return super.update(instance);
+	}
     
 }
