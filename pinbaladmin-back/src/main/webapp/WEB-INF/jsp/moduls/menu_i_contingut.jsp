@@ -5,7 +5,7 @@
 <tiles:importAttribute name="contingut" />
 
 
-<div class="">
+<div id="menu_i_contingut">
 
 	<div id="principal" class="mainMenu">
 		<div id="mostrarMenu" class="upper-left-corner no-disponible">
@@ -35,14 +35,12 @@
 		<!-- FINAL DIV CONTINGUT -->
 	</div>
 
-	<div class="clearfix"></div>
-
 </div>
 
 <script>
-var well = document.getElementsByClassName("well well-white")[0]
-well.firstElementChild.className = "";
-well.firstElementChild.style.display = "flex";
+//var well = document.getElementsByClassName("well well-white")[0]
+//well.firstElementChild.className = "";
+//well.firstElementChild.style.display = "flex";
 
 /* var t = document.getElementsByTagName("table")[0];
 t.parentElement.classList.remove("row"); */
@@ -80,7 +78,14 @@ $("#contingut").removeClass("col-9");
 		$(item).addClass('disponible');
 	}
 </script>
+
 <style>
+#menu_i_contingut {
+	display: flex;
+	flex-direction: row;
+	padding: 0rem 5rem;
+}
+
 .no-disponible {
 	display: none;
 	visibility: hidden;
@@ -111,7 +116,6 @@ $("#contingut").removeClass("col-9");
 	transition: all 0.2s ease-in-out;
 }
 
-
 #thumbnailmenu {
 	width: max-content;
 	padding: 5px 10px;
@@ -123,7 +127,7 @@ table {
 }
 
 #principal {
-	padding: 0 1rem;
+	padding-right: 2rem;
 }
 
 .wellgroupfilter {

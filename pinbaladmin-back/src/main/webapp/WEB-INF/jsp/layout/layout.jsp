@@ -17,9 +17,11 @@
 
 
 	<!--  PIPELLES -->
-	<div class="row-fluid container main" style="max-width: none;">
+	<%-- 	<div class="row-fluid container main" style="max-width: none;">
 
-		<ul class="nav nav-tabs custom-submenu">
+	COMENTADO POR UTILIZAR OTRO SISTEMA DE MENUS
+		
+		 <ul class="nav nav-tabs custom-submenu">
 			<%
 			//session.setAttribute("pipella", )
 			%>
@@ -29,7 +31,7 @@
 				href="<c:url value="/canviarPipella/"/>"><fmt:message
 						key="inici" /></a></li>
 
-			<%--  DRAW MENU OPTIONS  XYZ ZZZ
+			 DRAW MENU OPTIONS  XYZ ZZZ
 	    <c:forEach var="rolG" items="${loginInfo.roles}">
 	    <c:set var="rol" value="${rolG.authority}"/>
 	    <c:if test="${not(rol eq 'ROLE_USER')}">
@@ -42,21 +44,21 @@
 	    </li>
 	    </c:if>  
 	    </c:forEach>
-	    --%>
+	   
 
 			<sec:authorize access="hasRole('ROLE_USER')">
 				<li class="nav-item"><a
 					class="nav-link ${(pipella eq 'operador')?'active' : '' }"
 					href="<c:url value="/canviarPipella/operador"/>">Operador</a></li>
 			</sec:authorize>
-			<%--
+			
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <li class="nav-item"><a
                     class="nav-link ${(pipella eq 'admin')?'active' : '' }"
                     href="<c:url value="/canviarPipella/admin"/>">ROLE_ADMIN</a>
                 </li>
             </sec:authorize>
- --%>
+
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<li class="nav-item"><a
 					class="nav-link ${(pipella eq 'webdb')?'active' : '' }"
@@ -72,20 +74,20 @@
 			</c:if>
 
 		</ul>
-
+ --%>
 		<%-- INICI MENU + CONTINGUT --%>
-		<div class="well well-white" style="padding: 10px">
-			<tiles:insertAttribute name="menu_i_contingut">
+<!-- 		<div class="well well-white" style="padding: 10px">
+ -->		<tiles:insertAttribute name="menu_i_contingut">
 				<tiles:putAttribute name="menu" value="${menu_tile}" />
 				<tiles:putAttribute name="contingut" value="${contingut_tile}" />
 			</tiles:insertAttribute>
 			<%-- FINAL MENU + CONTINGUT --%>
-		</div>
+	<!-- 	</div> -->
 
 		<%-- FINAL DIV PIPELLES --%>
-	</div>
-
-	<div class="container-fluid">
+<!-- 	</div>
+ -->
+	<div id="peu-container">
 		<tiles:insertAttribute name="peu">
 		</tiles:insertAttribute>
 	</div>
