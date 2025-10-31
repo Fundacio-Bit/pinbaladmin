@@ -348,8 +348,31 @@ $("#btnFusionar").click(function() {
 
 	});
 
-
-    
+	const mapLabels = new Map();
+	
+	mapLabels.set("solicitudID", "<fmt:message key='solicitud.solicitudID'/>");
+	mapLabels.set("procedimentCodi", "<fmt:message key='solicitud.procedimentCodi'/>");
+	mapLabels.set("codiDescriptiu", "<fmt:message key='solicitud.codiDescriptiu'/>");
+	mapLabels.set("procedimentNom", "<fmt:message key='solicitud.procedimentNom'/>");
+	mapLabels.set("procedimentTipus", "<fmt:message key='solicitud.procedimentTipus'/>");
+	mapLabels.set("dataInici", "<fmt:message key='solicitud.dataInici'/>");
+	mapLabels.set("personaContacte", "<fmt:message key='solicitud.personaContacte'/>");
+	mapLabels.set("personaContacteEmail", "<fmt:message key='solicitud.personaContacteEmail'/>");
+	mapLabels.set("responsableProcNom", "<fmt:message key='solicitud.responsableProcNom'/>");
+	mapLabels.set("responsableProcEmail", "<fmt:message key='solicitud.responsableProcEmail'/>");
+	mapLabels.set("consentiment", "<fmt:message key='solicitud.consentiment'/>");
+	mapLabels.set("urlconsentiment", "<fmt:message key='solicitud.urlconsentiment'/>");
+	mapLabels.set("consentimentadjunt", "<fmt:message key='solicitud.consentimentadjunt'/>");
+	mapLabels.set("organid", "<fmt:message key='solicitud.organid'/>");
+	mapLabels.set("estatSolicitud", "<fmt:message key='solicitud.estatSolicitud'/>");
+	mapLabels.set("servicios", "<fmt:message key='solicitud.servicios'/>");
+	mapLabels.set("documentos", "<fmt:message key='solicitud.documentos'/>");
+	
+	const mapLabelsConsentiment = new Map();
+	mapLabelsConsentiment.set("tipus", "<fmt:message key='consentiment.tipus'/>");
+	mapLabelsConsentiment.set("url", "<fmt:message key='consentiment.url'/>");
+	mapLabelsConsentiment.set("nomFitxer", "<fmt:message key='consentiment.nomFitxer'/>");
+	
     function construirModalFusion(procs){
         const tbody = $("#fusionCamposTable tbody").empty();
         const thead = $("#fusionCamposTable thead").empty();
@@ -357,7 +380,14 @@ $("#btnFusionar").click(function() {
         console.log(Object.keys(procs[0]));
         console.log(procs[0]);
         
-        const campos = Object.keys(procs[0]).filter(k => !["servicios","documentos","solicitudID"].includes(k));
+        var todosLosCampos =[];
+        procs.forEach(proc => {
+			todosLosCampos = todosLosCampos.concat(Object.keys(proc));
+	    });
+		
+        const campos = [...new Set(todosLosCampos)].filter(k => !["servicios","documentos","solicitudID", "codiSiaConv", "consentiment"].includes(k));
+  	      
+//        const campos = Object.keys(procs[0]).filter(k => !["servicios","documentos","solicitudID", "codiSiaConv", "consentiment"].includes(k));
 
         // Cabeceras de procedimientos
         const ths = procs.map(p => p.procedimentCodi + " [" + p.solicitudID + "]");
@@ -374,8 +404,9 @@ $("#btnFusionar").click(function() {
         
         campos.forEach(campo => {
 		    const tr = $("<tr>");
-		    tr.append($("<td>").text(campo));
-		
+		    
+		    tr.append($("<td>").text(mapLabels.get(campo)));
+			
 		    // Mostrar los valores de cada procedimiento (columna informativa)
 		    procs.forEach(proc => {
 		        tr.append($("<td>").text(proc[campo] || ""));
@@ -403,7 +434,57 @@ $("#btnFusionar").click(function() {
 		    tr.append(tdResult);
 		    tbody.append(tr);
 		});
-
+		
+		{
+			//Añadir fila para consentimiento completo, a escoger el consentimiento según el procedimiento.
+			const tr = $("<tr>");
+			tr.append($("<td>").text(mapLabels.get("consentiment")));
+			// Mostrar los valores de cada procedimiento (columna informativa)
+			
+			procs.forEach(proc => {
+		
+                var consentiment = proc.consentiment;
+                var html = "<b>SolicitudID: " + consentiment.solicitudID +  "</b><br> Tipus: " + (consentiment.tipus || "");
+                if(consentiment.url){
+                	html +=  "<br>" + "URL: " + (consentiment.url || "");
+                }
+                
+                if(consentiment.nomFitxer){
+                	html +=  "<br>" + "Fitxer: " + (consentiment.nomFitxer || "");
+                }
+                
+                tr.append($("<td>").html(html));
+            });
+			
+			// --- consentimientosUnicos será una lista de solicitudID de todos los que tienen procedimento no nulo.
+			
+			var consentimientosUnicos = [];
+			procs.forEach(p=>{
+                if(p.consentiment){
+                	consentimientosUnicos.push(p.solicitudID);
+                }
+            });
+			
+			const tdResult = $("<td>");
+			consentimientosUnicos.forEach((valor, idx) => {
+                const radio = $("<input type='radio'>")
+                    .attr("name", "consentiment")
+                    .val(valor);
+                if (idx === 0) radio.prop("checked", true);
+                const label = $("<label class='me-2'>")
+                    .append(radio)
+                    .append("Solicitud " + valor);
+                tdResult.append(label);
+                tdResult.append($("<br>"));
+            });
+			tr.append(tdResult);
+			tbody.append(tr);
+			
+		}
+		
+		
+		
+		
 		//IDs de solicitud:
 		const idsMap = {};
 	    procs.forEach(proc=>{
@@ -426,18 +507,46 @@ $("#btnFusionar").click(function() {
             const chk = $("<input type='checkbox' checked>").attr("data-id",id);
             serviciosContainer.append($("<label class='me-3 servei-item'>").append(chk).append(" " + nombre));
         }
-
-        // Documentos: unión sin repetición
-        const docsMap = {};
-        procs.forEach(proc=>{
-			console.log(proc.documentos);
-            proc.documentos.forEach(d=>docsMap[d.id]= "[" + d.solicitudID +"] " + d.nom);
-        });
+        
+	     // Limpiamos el contenedor principal
         const docsContainer = $("#fusionDocumentosContainer").empty();
-        for(const [id,nombre] of Object.entries(docsMap)){
-            const chk = $("<input type='checkbox' checked>").attr("data-id",id);
-            docsContainer.append($("<label class='me-3 document-item'>").append(chk).append(" " + nombre));
+
+        // Agrupamos documentos por solicitudID
+        const groupedDocs = {};
+        procs.forEach(proc => {
+            if (proc.documentos && proc.documentos.length > 0) {
+
+				var key = "Procediment " + proc.procedimentCodi;
+                proc.documentos.forEach(d => {
+					
+                    if (!groupedDocs[key]) groupedDocs[key] = [];
+                    groupedDocs[key].push(d);
+                });
+            }
+        });
+
+        console.log("Documentos agrupados:", groupedDocs);
+        // Generamos el HTML agrupado
+        for (const [key, docs] of Object.entries(groupedDocs)) {
+
+            // Creamos un título de grupo (ejemplo: [50073])
+            const groupTitle = $("<h6>").addClass("mt-3 mb-2").text(key);
+
+            // Contenedor para los documentos de ese procedimiento
+            const groupDiv = $("<div>").addClass("document-group ms-3");
+
+            // Añadimos cada documento con su checkbox
+            docs.forEach(d => {
+                const label = $("<label class='me-3 document-item d-block'>");
+                const chk = $("<input type='checkbox' checked>").attr("data-id", d.id);
+                label.append(chk).append(" [" + d.id + "] " + d.nom);
+                groupDiv.append(label);
+            });
+
+            // Añadimos el grupo completo al contenedor principal
+            docsContainer.append(groupTitle).append(groupDiv);
         }
+
     }
     
     

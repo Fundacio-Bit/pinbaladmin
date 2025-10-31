@@ -147,6 +147,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new TimestampField(getQueryPath(), SolicitudFields.DATACADUCITAT);
   }
 
+  public LongField FITXERCONSENTIMENTID() {
+    return new LongField(getQueryPath(), SolicitudFields.FITXERCONSENTIMENTID);
+  }
+
 
 
   @Override
@@ -254,6 +258,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new InfoMadridQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "infoMadrid" + ".";
+      }
+    });
+  }
+
+  public FitxerQueryPath FITXERCONSENTIMENT() {
+    return new FitxerQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "fitxerConsentiment" + ".";
       }
     });
   }

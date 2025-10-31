@@ -2459,6 +2459,12 @@
               "type": 0
             },
             {
+              "name": "pad_solicitud_fitxer_cons_fk",
+              "table": "pad_solicitud",
+              "field": "fitxerconsentimentid",
+              "type": 0
+            },
+            {
               "name": "pad_solicitud_fitxer_fk",
               "table": "pad_solicitud",
               "field": "documentsolicitudid",
@@ -3687,7 +3693,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "filter": false,
+          "filter": true,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
@@ -7215,6 +7221,45 @@
             "webtype": 7
           },
           "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_consent_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "fitxerconsentimentid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Fitxer Consentiment",
+            "es": "Documento Consentimiento"
+          },
+          "javaName": "fitxerConsentimentID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_fitxer_consent_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_fitxer_cons_fk",
+              "table": "pad_fitxer",
+              "field": "fitxerid",
+              "type": 1
+            }
+          ]
         }
       ]
     },

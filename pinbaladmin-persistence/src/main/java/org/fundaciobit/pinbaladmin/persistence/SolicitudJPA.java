@@ -27,7 +27,8 @@ import javax.persistence.Id;
         @Index(name="pad_solicitud_estatid_fk_i", columnList = "estatid"),
         @Index(name="pad_solicitud_docsoli_fk_i", columnList = "documentsolicitudid"),
         @Index(name="pad_solicitud_solixml_fk_i", columnList = "solicitudxmlid"),
-        @Index(name="pad_solicitud_infomadid_fk_i", columnList = "infomadridid")})
+        @Index(name="pad_solicitud_infomadid_fk_i", columnList = "infomadridid"),
+        @Index(name="pad_solicitud_consent_fk_i", columnList = "fitxerconsentimentid")})
 @SequenceGenerator(name="SOLICITUD_SEQ", sequenceName="pad_solicitud_seq", allocationSize=1, initialValue=1000)
 @javax.xml.bind.annotation.XmlRootElement
 public class SolicitudJPA implements Solicitud {
@@ -139,6 +140,9 @@ public class SolicitudJPA implements Solicitud {
     @Column(name="datacaducitat",length = 29,precision = 6)
     java.sql.Timestamp dataCaducitat;
 
+    @Column(name="fitxerconsentimentid",length = 19)
+    java.lang.Long fitxerConsentimentID;
+
 
 
   /** Constructor Buit */
@@ -146,7 +150,7 @@ public class SolicitudJPA implements Solicitud {
   }
 
   /** Constructor amb tots els camps  */
-  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID , java.lang.Long infomadridid , java.sql.Timestamp dataCaducitat) {
+  public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID , java.lang.Long infomadridid , java.sql.Timestamp dataCaducitat , java.lang.Long fitxerConsentimentID) {
     this.solicitudID=solicitudID;
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
@@ -181,9 +185,10 @@ public class SolicitudJPA implements Solicitud {
     this.portafibID=portafibID;
     this.infomadridid=infomadridid;
     this.dataCaducitat=dataCaducitat;
+    this.fitxerConsentimentID=fitxerConsentimentID;
 }
   /** Constructor sense valors autoincrementals */
-  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID , java.lang.Long infomadridid , java.sql.Timestamp dataCaducitat) {
+  public SolicitudJPA(java.lang.String procedimentCodi , java.lang.String codiDescriptiu , java.lang.String codiSiaConv , java.lang.String procedimentNom , java.lang.String procedimentTipus , java.lang.Long organid , java.lang.Long estatSolicitud , java.lang.String expedientPid , java.lang.String entitatEstatal , java.lang.String pinfo , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , java.lang.String personaContacte , java.lang.String personaContacteEmail , java.lang.String responsableProcNom , java.lang.String responsableProcEmail , java.lang.String notes , java.lang.Long documentSolicitudID , java.lang.Long solicitudXmlID , boolean firmatDocSolicitud , boolean produccio , java.lang.String denominacio , java.lang.String dir3 , java.lang.String nif , java.lang.String creador , java.lang.String operador , java.lang.Long estatpinbal , java.lang.String consentiment , java.lang.String urlconsentiment , java.lang.String consentimentadjunt , java.lang.Long portafibID , java.lang.Long infomadridid , java.sql.Timestamp dataCaducitat , java.lang.Long fitxerConsentimentID) {
     this.procedimentCodi=procedimentCodi;
     this.codiDescriptiu=codiDescriptiu;
     this.codiSiaConv=codiSiaConv;
@@ -217,6 +222,7 @@ public class SolicitudJPA implements Solicitud {
     this.portafibID=portafibID;
     this.infomadridid=infomadridid;
     this.dataCaducitat=dataCaducitat;
+    this.fitxerConsentimentID=fitxerConsentimentID;
 }
   /** Constructor dels valors Not Null */
   public SolicitudJPA(long solicitudID , java.lang.String procedimentCodi , java.lang.String procedimentNom , java.lang.Long estatSolicitud , java.sql.Timestamp dataInici , boolean firmatDocSolicitud , boolean produccio , java.lang.String creador , java.lang.String operador) {
@@ -265,10 +271,13 @@ public class SolicitudJPA implements Solicitud {
     this.setPortafibID(__bean.getPortafibID());
     this.setInfomadridid(__bean.getInfomadridid());
     this.setDataCaducitat(__bean.getDataCaducitat());
+    this.setFitxerConsentimentID(__bean.getFitxerConsentimentID());
     // Fitxer
     this.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer
     this.setSolicitudXml(FitxerJPA.toJPA(__bean.getSolicitudXml()));
+    // Fitxer
+    this.setFitxerConsentiment(FitxerJPA.toJPA(__bean.getFitxerConsentiment()));
 	}
 
 	public long getSolicitudID() {
@@ -509,6 +518,13 @@ public class SolicitudJPA implements Solicitud {
 		this.dataCaducitat = _dataCaducitat_;
 	};
 
+	public java.lang.Long getFitxerConsentimentID() {
+		return(fitxerConsentimentID);
+	};
+	public void setFitxerConsentimentID(java.lang.Long _fitxerConsentimentID_) {
+		this.fitxerConsentimentID = _fitxerConsentimentID_;
+	};
+
 
 
     @Override
@@ -645,6 +661,20 @@ public class SolicitudJPA implements Solicitud {
     this.infoMadrid = infoMadrid;
   }
 
+// IMP Field:fitxerid | Table: pad_fitxer | Type: 1  
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fitxerconsentimentid", referencedColumnName ="fitxerID", nullable = true, insertable=false, updatable=false, foreignKey=@ForeignKey(name="pad_solicitud_fitxer_cons_fk"))
+    private FitxerJPA fitxerConsentiment;
+
+    public FitxerJPA getFitxerConsentiment() {
+    return this.fitxerConsentiment;
+  }
+
+    public  void setFitxerConsentiment(FitxerJPA fitxerConsentiment) {
+    this.fitxerConsentiment = fitxerConsentiment;
+  }
+
 
  // ---------------  STATIC METHODS ------------------
   public static SolicitudJPA toJPA(Solicitud __bean) {
@@ -684,10 +714,13 @@ public class SolicitudJPA implements Solicitud {
     __tmp.setPortafibID(__bean.getPortafibID());
     __tmp.setInfomadridid(__bean.getInfomadridid());
     __tmp.setDataCaducitat(__bean.getDataCaducitat());
+    __tmp.setFitxerConsentimentID(__bean.getFitxerConsentimentID());
     // Fitxer
     __tmp.setDocumentSolicitud(FitxerJPA.toJPA(__bean.getDocumentSolicitud()));
     // Fitxer
     __tmp.setSolicitudXml(FitxerJPA.toJPA(__bean.getSolicitudXml()));
+    // Fitxer
+    __tmp.setFitxerConsentiment(FitxerJPA.toJPA(__bean.getFitxerConsentiment()));
 		return __tmp;
 	}
 

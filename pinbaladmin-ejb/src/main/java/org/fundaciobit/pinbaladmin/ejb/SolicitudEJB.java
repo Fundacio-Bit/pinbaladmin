@@ -43,6 +43,7 @@ public class SolicitudEJB extends SolicitudJPAManager implements SolicitudServic
         java.util.ArrayList<Long> fitxers = new java.util.ArrayList<Long>();
         fitxers.add(instance.getDocumentSolicitudID());
         fitxers.add(instance.getSolicitudXmlID());
+        fitxers.add(instance.getFitxerConsentimentID());
 
         this.delete(instance);
 

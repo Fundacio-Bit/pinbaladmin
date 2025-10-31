@@ -278,6 +278,19 @@ public class FitxerJPA implements Fitxer {
     }
 
 
+// EXP  Field:fitxerconsentimentid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fitxerConsentimentID")
+    private Set<SolicitudJPA> solicitud_fitxerconsentimentids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_fitxerconsentimentids() {
+    return this.solicitud_fitxerconsentimentids;
+  }
+
+    public void setSolicitud_fitxerconsentimentids(Set<SolicitudJPA> solicitud_fitxerconsentimentids) {
+      this.solicitud_fitxerconsentimentids = solicitud_fitxerconsentimentids;
+    }
+
+
 // EXP  Field:documentsolicitudid | Table: pad_solicitud | Type: 0  
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "documentSolicitudID")
@@ -577,6 +590,10 @@ public class FitxerJPA implements Fitxer {
     if(!"EventJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.events) || org.hibernate.Hibernate.isInitialized(__jpa.getEvents())) ) {
       __tmp.setEvents(EventJPA.copyJPA(__jpa.getEvents(), __alreadyCopied,"FitxerJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_fitxerconsentimentids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_fitxerconsentimentids())) ) {
+      __tmp.setSolicitud_fitxerconsentimentids(SolicitudJPA.copyJPA(__jpa.getSolicitud_fitxerconsentimentids(), __alreadyCopied,"FitxerJPA"));
     }
     if(!"TiquetJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.tiquet_adjunt1ids) || org.hibernate.Hibernate.isInitialized(__jpa.getTiquet_adjunt1ids())) ) {

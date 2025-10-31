@@ -963,3 +963,59 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.FITXERCONSENTIMENTID)}">
+        <tr id="solicitud_fitxerConsentimentID_rowid">
+          <td id="solicitud_fitxerConsentimentID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.FITXERCONSENTIMENTID])?'solicitud.fitxerConsentimentID':__theForm.labels[SolicitudFields.FITXERCONSENTIMENTID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.FITXERCONSENTIMENTID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.FITXERCONSENTIMENTID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_fitxerConsentimentID_columnvalueid">
+              <form:errors path="solicitud.fitxerConsentimentID" cssClass="errorField alert alert-danger" />
+            <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.FITXERCONSENTIMENTID)}" >
+              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitud.fitxerConsentiment)}"/>">${__theForm.solicitud.fitxerConsentiment.nom}</a>
+            </c:if>
+            <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.FITXERCONSENTIMENTID)}" >
+              <div class="input-group col-md-9-optional" style="padding: 0px">
+                <div class="custom-file">
+                  <form:input  readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.FITXERCONSENTIMENTID)? 'true' : 'false'}" cssClass="custom-file-input form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.FITXERCONSENTIMENTID)? ' uneditable-input' : ''}"   path="fitxerConsentimentID" type="file" />
+                  <label class="custom-file-label" for="fitxerConsentimentID">
+                  </label>
+                </div>
+                <c:choose>
+                <c:when test="${not empty __theForm.solicitud.fitxerConsentiment}">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="">
+                  <small>              <a target="_blank" href="<c:url value="${pad:fileUrl(__theForm.solicitud.fitxerConsentiment)}"/>">${__theForm.solicitud.fitxerConsentiment.nom}</a>
+</small>
+                  </span>
+                  <span class="input-group-text" id="">
+                        <form:checkbox path="fitxerConsentimentIDDelete"/>
+                        <small><fmt:message key="genapp.form.file.delete"/></small>
+                  </span>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <div class="input-group-append input-group-append-file">
+                  <span class="input-group-text" id="fitxerConsentimentID-custom-file-label" style="display:none">
+                  <small></small>
+                  </span>
+                </div>
+                <script type="text/javascript">
+					$('#fitxerConsentimentID').on('change', function(){
+						var ruta = $('#fitxerConsentimentID').val(); 
+						var rutaArray = ruta.split('\\');
+						$('#fitxerConsentimentID-custom-file-label').css('display','block');
+						$('#fitxerConsentimentID-custom-file-label small').html(rutaArray[rutaArray.length - 1]);
+					});
+				</script>                </c:otherwise>
+                </c:choose>
+              </div>
+            </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

@@ -833,7 +833,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
 		String persona = soli.getOperador();
 		String subject = "Solicitud enviada a PINBAL. " + soli.getProcedimentCodi();
-		String msg = "S'ha enviat la sol·licitud a PINBAL. " + mensaje;
+		String msg = "S'ha enviat la sol·licitud a MADRID. " + mensaje;
 
 		EventJPA event = new EventJPA();
 		event.setSolicitudID(soli.getSolicitudID());

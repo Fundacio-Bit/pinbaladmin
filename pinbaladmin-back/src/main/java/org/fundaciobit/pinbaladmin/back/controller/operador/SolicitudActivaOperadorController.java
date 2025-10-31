@@ -1,8 +1,17 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,22 +19,31 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
+import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
+import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
@@ -37,6 +55,7 @@ import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +91,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
     @EJB(mappedName = TramitHProcLogicaService.JNDI_NAME)
     protected TramitHProcLogicaService tramitHLogicaEjb;
 	
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerLogicEjb;
+    
 	@Override
 	public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
 		return super.getAdditionaConditionAdvancedFilter(request);
@@ -113,12 +135,21 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 //			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "solicitud.actualitzarestats",
 //					getContextWeb() + "/actualitzarEstats", AdditionalButtonStyle.WARNING));
 //			
-//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Consulta Estat PID",
-//					getContextWeb() + "/consultaMadrid", AdditionalButtonStyle.WARNING));
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualiza Tipo Procedimeitno y Fecha Caducidad",
+//					getContextWeb() + "/updateSoli", AdditionalButtonStyle.WARNING));
 
-			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Crear Info Madrid",
-					getContextWeb() + "/crearInfoMadrid", AdditionalButtonStyle.WARNING));
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Crear Info Madrid",
+//					getContextWeb() + "/crearInfoMadrid", AdditionalButtonStyle.WARNING));
 
+			//Provar normalitzacio nom procediment
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Normalitzar Nom Procediment",
+							getContextWeb() + "/normalitzarNomProcediment", AdditionalButtonStyle.WARNING));
+			
+			
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Recuperar Consentimiento",
+					getContextWeb() + "/recuperarConsentimiento", AdditionalButtonStyle.WARNING));
+			
+			
 			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualizar Titulares",
 					getContextWeb() + "/actualizarTitulares", AdditionalButtonStyle.WARNING));
 			
@@ -129,7 +160,417 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		return solicitudFilterForm;
 	}
+	
+	
+	// normalitzarNomProcediment
+	@RequestMapping(value = "/normalitzarNomProcediment", method = RequestMethod.GET)
+	public String normalitzarNomProcediment(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
+		int idx = 0;
+		int nomsActualitzats = 0;
+
+		for (Solicitud soli : solicituds) {
+			String nom = soli.getProcedimentNom();
+			
+			String adaptat1 = adaptarNomProcediment1(nom);
+			String adaptat2 = adaptarNomProcediment2(nom);
+			
+			log.info("SoliID: " + soli.getSolicitudID() + ".\nNom:\t" + nom + ".\nAdaptat1:\t" + adaptat1 + "\nAdaptat2:\t" + adaptat2 + "\n\n");
+			
+			
+			
+
+		}
+
+		log.info("Noms actualitzats: " + nomsActualitzats);
+
+		HtmlUtils.saveMessageSuccess(request, "Noms de procediments actualitzats correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
+	
+	private String adaptarNomProcediment1(String nom) {
+		//Pasarlo a maysculas y quitar acentos.
+		
+		String nomAdaptat = nom.toUpperCase();
+		nomAdaptat = nomAdaptat.replace("À", "A");
+		nomAdaptat = nomAdaptat.replace("È", "E");
+		nomAdaptat = nomAdaptat.replace("É", "E");
+		nomAdaptat = nomAdaptat.replace("Í", "I");
+		nomAdaptat = nomAdaptat.replace("Ó", "O");
+		nomAdaptat = nomAdaptat.replace("Ò", "O");
+		nomAdaptat = nomAdaptat.replace("Ú", "U");
+		nomAdaptat = nomAdaptat.replace("Ü", "U");
+		nomAdaptat = nomAdaptat.replace("Ç", "C");
+		return nomAdaptat;
+
+    }
+	
+	private String adaptarNomProcediment2(String nom) {
+	    if (nom == null) return null;
+
+	    // Pasar a mayúsculas
+	    String nomAdaptat = nom.toUpperCase();
+
+	    // Quitar acentos y diacríticos
+	    nomAdaptat = Normalizer.normalize(nomAdaptat, Normalizer.Form.NFD);
+	    nomAdaptat = nomAdaptat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+	    // Reemplazar la ç manualmente (no la quita el normalizer)
+	    nomAdaptat = nomAdaptat.replace("Ç", "C");
+
+	    return nomAdaptat;
+	}
+	
+	
+	@RequestMapping(value = "/recuperarConsentimiento", method = RequestMethod.GET)
+	public String recuperarConsentimiento(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		Where wConsentNoNull = SolicitudFields.FITXERCONSENTIMENTID.isNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wConsentNoNull));
+
+		int idx = 0;
+		int consentimientosRecuperados = 0;
+		int docsConsentiment = 0;
+		int errors = 0;
+		int ambUrl = 0;
+		int senseConsentiment = 0;
+
+		Long[] tipusConsentimentArray = new Long[] { Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP,
+				Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI };
+
+		for (Solicitud solicitud : solicituds) {
+			// Obtener documentos de la solicitud de tipo Consentiment.
+
+			Long soliID = solicitud.getSolicitudID();
+
+			Fitxer fitxerConsentiment = null;
+
+			List<Long> documentsSoli = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+					DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+
+			List<Document> documents = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(documentsSoli),
+					DocumentFields.TIPUS.in(tipusConsentimentArray)));
+
+			log.info("SolicitudID: " + soliID + ". Consentiments: " + documents.size());
+			if (documents.size() != 0) {
+				docsConsentiment++;
+				consentimientosRecuperados++;
+
+				Document consentiment = documents.get(documents.size() - 1); // Agafam l'ultim com a vàlid.)
+//				consentiment.getFitxerOriginal();
+				consentiment.getFitxerOriginalID();
+
+				fitxerConsentiment = fitxerLogicEjb.findByPrimaryKey(consentiment.getFitxerOriginalID());
+
+			} else {
+				// No tenim el consentiment adjunt. Provar amb url.
+				String url = solicitud.getUrlconsentiment();
+
+				if (url != null && !url.isEmpty()) {
+
+					// Descarregar fitxer de la URL i guardar-lo a fitxerLogicEjb
+					try {
+						log.info("SolicitudID: " + soliID + ". Recuperant consentiment de URL: " + url);
+
+						Fitxer file = crearFitxerConsentimentFromUR2L(url);
+
+						if (file != null) {
+
+							fitxerConsentiment = file;
+							ambUrl++;
+							consentimientosRecuperados++;
+							log.info("SolicitudID: " + soliID + ". Fitxer consentiment recuperat i guardat. FitxerID: "
+									+ file.getFitxerID());
+						} else {
+							errors++;
+
+							log.info("SolicitudID: " + soliID
+									+ ". No s'ha pogut recuperar el fitxer de consentiment de la URL: " + url);
+						}
+
+					} catch (Exception ex) {
+						errors++;
+						log.error("Error descarregant fitxer de consentiment de la URL: " + url, ex);
+					}
+				} else {
+					log.info("SolicitudID: " + soliID + ". No te consentiment ni URL.");
+					senseConsentiment++;
+				}
+			}
+
+			if (fitxerConsentiment == null) {
+//				log.info("\t\tNo s'ha pogut recuperar el consentiment per a la SoliID: " + soliID);
+				continue;
+			}
+			assignarConsentimentSoli(solicitud, fitxerConsentiment);
+		}
+
+		log.info("Consentimientos recuperados: " + consentimientosRecuperados);
+		log.info("Solicitudes con documento de consentiment: " + docsConsentiment);
+		log.info("Consentimientos recuperados amb URL: " + ambUrl);
+		log.info("Errors recuperant consentimientos: " + errors);
+		log.info("Solicitudes sense consentiment ni URL: " + senseConsentiment);
+
+		HtmlUtils.saveMessageSuccess(request, "Consentiments actualitzats correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
+
+	
+	
+	public Fitxer crearFitxerConsentimentFromURL(String url) {
+		try {
+			final boolean debug = false;
+			FileInfo fileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(url, debug);
+
+			String nom = fileInfo.getFileName();
+			long tamany = fileInfo.getSize();
+			String mime = "application/pdf";
+			String descripcio = "Fitxer de consentiment descarregat de URL: " + url;
+
+			Fitxer fitxer = fitxerEjb.create(nom, tamany, mime, descripcio);
+
+			Long fitxerID = fitxer.getFitxerID();
+
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(fileInfo.getContent()), fitxerID);
+
+			return fitxer;
+		} catch (Exception e) {
+			String errorMsg;
+			if (e instanceof I18NException) {
+				errorMsg = I18NUtils.getMessage((I18NException) e);
+			}else {
+				errorMsg = e.getMessage();
+			}
+			errorMsg = "Error creant fitxer de consentiment des de URL [" + url + "]: " + errorMsg;
+			log.warn(errorMsg, e);
+			return null;
+		}
+	}
+
+
+	private void assignarConsentimentSoli(Solicitud solicitud, Fitxer fitxerConsentiment) {
+		
+		log.info("\t\tConsentiment a SoliID: " + solicitud.getSolicitudID() + ". FitxerID: "
+				+ (fitxerConsentiment != null ? fitxerConsentiment.getFitxerID() : "null"));
+		
+		//Crear copia del fitxer per a la solicitud, assignar a la solicitud, i actualitzar.
+		
+		try {
+			Long fitxerCopiaID = ferCopiaFitxer(fitxerConsentiment.getFitxerID());
+
+			solicitud.setFitxerConsentimentID(fitxerCopiaID);
+
+			solicitudLogicaEjb.update(solicitud);
+
+			log.info("\t\tFitxer de consentiment assignat correctament a SoliID: " + solicitud.getSolicitudID());
+			
+
+		} catch (Exception e) {
+			log.error("Error assignant fitxer de consentiment a SoliID: " + solicitud.getSolicitudID(), e);
+		}
+		
+		
+
+	}
+
+	   private Long ferCopiaFitxer(Long fileOriginalID) throws I18NException {
+	    	
+	    	FitxerJPA fitxerOriginal = fitxerLogicEjb.findByPrimaryKey(fileOriginalID);
+	    	File fileOriginal = FileSystemManager.getFile(fileOriginalID);
+
+	    	FitxerJPA fitxerCopia = new FitxerJPA(fitxerOriginal.getNom(), fitxerOriginal.getTamany(), fitxerOriginal.getMime(), fitxerOriginal.getDescripcio());
+	    	Fitxer nou = fitxerLogicEjb.create(fitxerCopia);
+
+	    	File fileCopia = FileSystemManager.getFile(nou.getFitxerID());
+	    	FileSystemManager.copy(fileOriginal, fileCopia);
+	    	
+	    	return fitxerCopia.getFitxerID();
+	    }
+	    
+	
+	
+	public Fitxer crearFitxerConsentimentFromUR2L(String url) {
+		
+		try {
+			byte[] data = descargarPdf(url);
+				
+			if (data == null) {
+                throw new I18NException("No s'ha pogut descarregar el fitxer de la URL: " + url);
+			}
+			
+			String nom = "consentiment.pdf";
+			String mime = "application/pdf";
+			String descripcio = "Fitxer de consentiment descarregat de URL: " + url;
+			Fitxer fitxer = fitxerEjb.create(nom, data.length, mime, descripcio);
+
+			Long fitxerID = fitxer.getFitxerID();
+
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxerID);
+			
+			return fitxer;
+			
+		} catch (Exception e) {
+			String errorMsg;
+			if (e instanceof I18NException) {
+				errorMsg = I18NUtils.getMessage((I18NException) e);
+			} else {
+				errorMsg = e.getMessage();
+			}
+			errorMsg = "Error creant fitxer de consentiment des de URL [" + url + "]: " + errorMsg;
+			log.warn(errorMsg, e);
+			return null;
+		}
+		
+		
+		
+	}
+
+	public static byte[] descargarPdf(String urlPdf) throws IOException {
+        byte[] bytesPdf = null;
+        try {
+            URL url = new URL(urlPdf);
+            URLConnection connection = url.openConnection();
+            InputStream in = connection.getInputStream();
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[1024];
+
+            while ((nRead = in.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+            bytesPdf = buffer.toByteArray();
+
+            in.close();
+            buffer.close();
+
+        } catch (IOException e) {
+            // Manejar la excepción, por ejemplo, lanzar un error personalizado o registrar
+            System.err.println("Error al descargar el PDF: " + e.getMessage());
+            throw e;
+        }
+        return bytesPdf;
+    }
+
+	
+	
+	@RequestMapping(value = "/updateSoli", method = RequestMethod.GET)
+	public String updateSoli(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
+		int idx = 0;
+		int tipusActualitzats = 0;
+		int caducitatsActualitzades = 0;
+		
+		List<String> updatedTipus = new java.util.ArrayList<>();
+		List<String> updatedCaducitats = new java.util.ArrayList<>();
+		
+		for (Solicitud soli : solicituds) {
+			Long fitxerID = soli.getSolicitudXmlID();
+
+			if (fitxerID == null) {
+				continue;
+			}
+
+			Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+			if (prop == null) {
+				continue;
+			}
+
+			String tp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
+			log.info("TIPOPROCEDIMIENTO: " + tp);
+
+			// tp puede ser un numero, o un texto.
+			Long tipusDocCorrecte = null;
+			try {
+				tipusDocCorrecte = Long.parseLong(tp);
+
+			} catch (NumberFormatException nfe) {
+				// No es un numero, es un text.
+				tipusDocCorrecte = getTipusDocIDFromText(tp);
+			}
+
+			if (tipusDocCorrecte != null) {
+				String tipusProc = String.valueOf(tipusDocCorrecte);
+				
+				String msg = soli.getProcedimentTipus() + " -> " + tipusProc + ". SoliID = " + soli.getSolicitudID();
+				updatedTipus.add(msg);
+				
+//				log.info("Actualitzant tipus. " + soli.getProcedimentTipus() + " -> " + tipusProc + ". SoliID = " + soli.getSolicitudID());
+				if (!tipusProc.equals(soli.getProcedimentTipus())) {
+					tipusActualitzats++;
+					soli.setProcedimentTipus(tipusProc);
+//					solicitudLogicaEjb.update(soli);
+				}
+				
+				
+//            	soli.setProcedimentTipus(tp);
+			}
+
+
+			String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
+			log.info("CADUCA: " + caduca);
+			
+			Timestamp dataCad;
+			if (caduca.equals("Caduca")) {
+				String dataCaduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
+				log.info("FECHACAD: " + dataCaduca);
+				//FECHACAD: 31/10/2024
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Date parsed = sdf.parse(dataCaduca);
+				dataCad = new Timestamp(parsed.getTime());
+				
+			}else {
+				dataCad = null;
+			}
+			
+			
+			String msgCad = soli.getDataCaducitat() + " -> " + dataCad + ". SoliID = " + soli.getSolicitudID();
+			updatedCaducitats.add(msgCad);
+
+			if ((soli.getDataCaducitat() == null && dataCad != null) || 
+                (soli.getDataCaducitat() != null && !soli.getDataCaducitat().equals(dataCad))) {
+				caducitatsActualitzades++;
+				soli.setDataCaducitat(dataCad);
+			}
+			
+			solicitudLogicaEjb.update(soli);
+			
+//			log.info("Actualitzant caducitat. " + soli.getDataCaducitat() + " -> " + dataCad + ". SoliID = " + soli.getSolicitudID());
+
+//			if (idx == 100) {
+//				break;
+//			}
+
+			idx++;
+		}
+		
+		log.info("Tipus actualitzats detalls: ");
+		for (String s : updatedTipus) {
+			log.info(s);
+		}
+		log.info("Caducitats actualitzades detalls: ");
+		for (String s : updatedCaducitats) {
+			log.info(s);
+		}
+		
+		
+		
+		log.info("Tipus actualitzats: " + tipusActualitzats);
+		log.info("Caducitats actualitzades: " + caducitatsActualitzades);
+		
+		HtmlUtils.saveMessageSuccess(request, "Sol·licituds actualitzades correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
+	
+	
 	// actualizarCaducidad
 	@RequestMapping(value = "/actualizarCaducidad", method = RequestMethod.GET)
 	public String actualizarCaducidad(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -1117,4 +1558,54 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		return false;
 	}
+	
+	
+	private String getTipusDocFromID(String id) {
+		log.info("getTipusDocFromID: " + id);
+		
+		if (id == null) {
+			return null;
+		}
+		
+		String lang = "ca";        
+        List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+		for (TipusProcediment tp : tipus) {
+			if (tp.id == Long.valueOf(id)) {
+				String text;
+				if (lang.equals("es")) {
+					text = tp.castella;
+				} else {
+					text = tp.catala;
+				}
+				return text;
+			}
+		}
+        return null;
+        
+	}
+	
+	private Long getTipusDocIDFromText(String text) {
+		log.info("getTipusDocIDFromText: " + text);
+
+		if (text == null) {
+			return null;
+		}
+
+		String lang = "ca";
+		List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+		for (TipusProcediment tp : tipus) {
+			String cmp;
+			if (lang.equals("es")) {
+				cmp = tp.castella;
+			} else {
+				cmp = tp.catala;
+			}
+			if (cmp.equals(text)) {
+				return tp.id;
+			}
+		}
+		return null;
+
+	}
+	
 }

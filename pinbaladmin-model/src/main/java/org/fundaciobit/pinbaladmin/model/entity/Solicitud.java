@@ -104,10 +104,15 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.sql.Timestamp getDataCaducitat();
 	public void setDataCaducitat(java.sql.Timestamp _dataCaducitat_);
 
+	public java.lang.Long getFitxerConsentimentID();
+	public void setFitxerConsentimentID(java.lang.Long _fitxerConsentimentID_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer
   public <F extends Fitxer> F getSolicitudXml();
+  // Fitxer
+  public <F extends Fitxer> F getFitxerConsentiment();
 
 
   // ======================================

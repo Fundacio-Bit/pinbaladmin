@@ -1,22 +1,17 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,12 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.all.ModificarSolicitudPublicController.Item;
-import org.fundaciobit.pinbaladmin.back.controller.operador.LlistaCorreusOperadorController.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
+import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
@@ -39,11 +34,14 @@ import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
+import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
+import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -52,9 +50,9 @@ import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.EntitatServeiJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
+import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -66,6 +64,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+
+import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
 
 @Controller
 @RequestMapping(value = FusionarProcedimentsOperadorController.CONTEXTWEB)
@@ -99,8 +100,13 @@ public class FusionarProcedimentsOperadorController {
 
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
-
 	
+	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
+	protected InfoMadridLogicaService infoMadridLogicaEjb;
+	
+    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+    
 	@RequestMapping(value = "/elegirProcediments", method = RequestMethod.GET)
 	public ModelAndView elegirProcediments(HttpServletRequest request, HttpServletResponse response) {
 		log.info("Entra a elegirProcediments");
@@ -121,19 +127,22 @@ public class FusionarProcedimentsOperadorController {
 
 			List<Solicitud> results = new ArrayList<>();
 
+			Where wLocals = SolicitudFields.ORGANID.isNotNull();
+			
+			Where wID = null;
+			Where wCodi = SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%");
+			Where wNom = SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%");
+			
 			// 1. Buscar por ID si es número
 			try {
 				Long id = Long.parseLong(param);
-				results.addAll(solicitudLogicaEjb.select(SolicitudFields.SOLICITUDID.equal(id)));
+				wID = SolicitudFields.SOLICITUDID.equal(id);
+//				results.addAll(solicitudLogicaEjb.select(SolicitudFields.SOLICITUDID.equal(id)));
 			} catch (NumberFormatException ignored) {
 			}
 
-			// 2. Buscar por Codi
-			results.addAll(solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%")));
-
-			// 3. Buscar por Nom
-			results.addAll(solicitudLogicaEjb.select(SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%")));
-
+			results.addAll(solicitudLogicaEjb.select(Where.AND(wLocals, Where.OR(wID, wCodi, wNom))));
+			
 			// Quitar duplicados
 			List<Solicitud> distinctResults = results.stream().distinct().collect(Collectors.toList());
 
@@ -223,83 +232,101 @@ public class FusionarProcedimentsOperadorController {
 		}
 	}
 
+	public class ConsentimentDTO {
+		private Long fitxerID;
+		private String nomFitxer;
+		private String tipus;
+		private Long solicitudID;
+		private String url;
+
+		public ConsentimentDTO(SolicitudJPA soli) {
+			this.fitxerID = soli.getFitxerConsentimentID();
+			
+			if (this.fitxerID != null) {
+				FitxerJPA fitxer = fitxerPublicLogicaEjb.findByPrimaryKey(this.fitxerID);
+				if (fitxer != null) {
+					this.nomFitxer = fitxer.getNom();
+				}
+			}
+			
+			this.tipus = I18NUtils.tradueix("consentiment.tipus." + soli.getConsentiment());
+
+			this.solicitudID = soli.getSolicitudID();
+			this.url = soli.getUrlconsentiment();
+		}
+	}
+	
 	public class SolicitudFullDTO {
 		private Long solicitudID;
 		private String procedimentCodi;
 		private String codiDescriptiu;
-		private String codiSiaConv;
+//		private String codiSiaConv;
 		private String procedimentNom;
 		private String procedimentTipus;
 		private Timestamp dataInici;
-		private Timestamp dataFi;
+		private Timestamp dataCaducitat;
 		private String personaContacte;
 		private String personaContacteEmail;
 		private String responsableProcNom;
 		private String responsableProcEmail;
-		private String notes;
-		private String consentiment;
-		private String urlconsentiment;
-		private String consentimentadjunt;
+//		private String notes;
+//		private String consentiment;
+//		private String urlconsentiment;
+//		private String consentimentadjunt;
 
-		private String organ;
+		private String organid;
 		private String estatSolicitud;
-		private String estatpinbal;
+//		private String estatpinbal;
 
 		private List<ServeiDTO> servicios;
 		private List<DocumentDTO> documentos;
 
+		private ConsentimentDTO consentiment;
+		
 		public SolicitudFullDTO(Long solicitudID) throws I18NException {
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 
 			this.solicitudID = soli.getSolicitudID();
 			this.procedimentCodi = soli.getProcedimentCodi();
 			this.codiDescriptiu = soli.getCodiDescriptiu();
-			this.codiSiaConv = soli.getCodiSiaConv();
+//			this.codiSiaConv = soli.getCodiSiaConv();
 			this.procedimentNom = soli.getProcedimentNom();
 			this.dataInici = soli.getDataInici();
-			this.dataFi = soli.getDataFi();
+			this.dataCaducitat = soli.getDataCaducitat();
 			this.personaContacte = soli.getPersonaContacte();
 			this.personaContacteEmail = soli.getPersonaContacteEmail();
 			this.responsableProcNom = soli.getResponsableProcNom();
 			this.responsableProcEmail = soli.getResponsableProcEmail();
-			this.notes = soli.getNotes();
-			this.consentiment = soli.getConsentiment();
-			this.urlconsentiment = soli.getUrlconsentiment();
-			this.consentimentadjunt = soli.getConsentimentadjunt();
+//			this.notes = soli.getNotes();
+//			this.consentiment = soli.getConsentiment();
+//			this.urlconsentiment = soli.getUrlconsentiment();
+//			this.consentimentadjunt = soli.getConsentimentadjunt();
 
 			OrganJPA organ = organLogicaEjb.findByPrimaryKey(soli.getOrganid());
 
-			this.organ = organ != null ? "(" + organ.getDir3() + ") " + organ.getNom() : "";
+			this.organid = organ != null ? "(" + organ.getDir3() + ") " + organ.getNom() : "";
 			this.estatSolicitud = I18NUtils.tradueix("solicitud.estat." + soli.getEstatSolicitud());
-			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
+//			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
 //			this.procedimentTipus = soli.getProcedimentTipus();
-			this.procedimentTipus = getTipusDocFromID(soli.getProcedimentTipus());
-			
-//			List<String> serveisList = solicitudServeiLogicaEjb
-//					.select(SolicitudServeiFields.SOLICITUDID.equal(solicitudID))
-//					.stream().map(ss -> serveiLogicaEjb.findByPrimaryKey(ss.getServeiID())).filter(s -> s != null)
-//					.map(s -> s.getCodi() + " - " + s.getNom()).collect(Collectors.toList());
-//			
-//			this.servicios = serveisList.toArray(new String[0]);
 
+			log.info("ProcedimentTipus ID: " + soli.getProcedimentTipus());
+			String tipusText = getTipusDocFromID(soli.getProcedimentTipus());
+			log.info("ProcedimentTipus Text: " + tipusText);
+			this.procedimentTipus = tipusText;
+			
 			List<ServeiDTO> serveisList = solicitudServeiLogicaEjb
 					.select(SolicitudServeiFields.SOLICITUDID.equal(solicitudID)).stream()
 					.map(ss -> new ServeiDTO(ss.getServeiID())).collect(Collectors.toList());
 
 			this.servicios = serveisList;
 
-//			List<String> docsList = documentSolicitudLogicaEjb
-//					.select(DocumentSolicitudFields.SOLICITUDID.equal(solicitudID))
-//					.stream().map(ds -> documentLogicaEjb.findByPrimaryKey(ds.getDocumentID())).filter(d -> d != null)
-//					.map(d -> d.getNom()).collect(Collectors.toList());
-//			
-//			this.documentos = docsList.toArray(new String[0]);
-
 			List<DocumentDTO> docsList = documentSolicitudLogicaEjb
-					.select(DocumentSolicitudFields.SOLICITUDID.equal(solicitudID)).stream()
+					.select(DocumentSolicitudFields.SOLICITUDID.equal(solicitudID), new OrderBy(DocumentSolicitudFields.DOCUMENTID)).stream()
 					.map(ds -> new DocumentDTO(ds.getDocumentID(), solicitudID)).collect(Collectors.toList());
 
 			this.documentos = docsList;
+			
+			this.consentiment = new ConsentimentDTO(soli);
 
 		}
 	}
@@ -378,27 +405,214 @@ public class FusionarProcedimentsOperadorController {
 				: Collections.emptyList();
 		log.info("Documentos seleccionados: " + documentos);
 
+		String consentimientoParam = request.getParameter("consentiment"); // El ID del procedimiento que aporta el consentimiento
+		
 		// ================================
 		// Campos simples
 		// ================================
 		SolicitudJPA solicitudNueva = crearSolicicitudCampos(request);
-		String codiSiaConvocatoria = procesarCodisProcediment(fusionados);
-		solicitudNueva.setCodiSiaConv(codiSiaConvocatoria);
+		
+		afegirConsentimentInfo(solicitudNueva, consentimientoParam);
+		
+		List<SolicitudJPA> solicitudes = procesarMultiples(fusionados, solicitudNueva);
+		
+		InfoMadridJPA infoMadrid = crearNouInfoMadrid(solicitudes, solicitudNueva);
 		
 		List<SolicitudServeiJPA> serviciosNuevos = getServiciosSolicitud(fusionados, servicios);
 		
-	//	fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos);
+//		fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos, infoMadrid);
 
 		return "redirect:/operador/fusionarprocediments/elegirProcediments";
 	}
+	
+	private void afegirConsentimentInfo(SolicitudJPA solicitudNueva, String consentimientoParam) {
+		
+		
+		log.info("Procesando consentimiento de la solicitud ID: " + consentimientoParam);
+		
+		if (consentimientoParam != null && !consentimientoParam.isEmpty()) {
+			try {
+				Long soliID = Long.parseLong(consentimientoParam);
+				SolicitudJPA soliConsentiment = solicitudLogicaEjb.findByPrimaryKey(soliID);
+				if (soliConsentiment != null) {
+					solicitudNueva.setConsentiment(soliConsentiment.getConsentiment());
+					
+					solicitudNueva.setFitxerConsentimentID(soliConsentiment.getFitxerConsentimentID());
+					solicitudNueva.setUrlconsentiment(soliConsentiment.getUrlconsentiment());
+					
+					if (soliConsentiment.getFitxerConsentimentID() != null) {
+						log.info("Consentimiento añadido de la solicitud ID " + soliID + ": fitxerID="
+								+ soliConsentiment.getFitxerConsentimentID());
+						solicitudNueva.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
+					} else {
+						log.info("Consentimiento añadido de la solicitud ID " + soliID + ": URL="
+								+ soliConsentiment.getUrlconsentiment());
+						
+						solicitudNueva.setConsentimentadjunt(Constants.CONSENTIMENT_PUBLICAT);
+					}
+					
+				}
+			} catch (NumberFormatException e) {
+				log.warn("ID de consentimiento no válido: " + consentimientoParam);
+			}
+		}
+		
+		log.info("Consentimiento procesado: " + solicitudNueva.getConsentiment() + ", fitxerID="
+				+ solicitudNueva.getFitxerConsentimentID() + ", url=" + solicitudNueva.getUrlconsentiment());
+	}
 
-	private String procesarCodisProcediment(List<Long> fusionados) {
+	private List<SolicitudJPA> procesarMultiples(List<Long> fusionados, SolicitudJPA solicitudNueva) {
+
+		List<SolicitudJPA> fusionadas = new ArrayList<>();
+
+		List<String> codis = new ArrayList<>();
+		List<String> notas = new ArrayList<>();
+
+		for (Long soliID : fusionados) {
+			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+			if (soli != null) {
+				fusionadas.add(soli);
+
+				if (soli.getCodiSiaConv() != null && !soli.getCodiSiaConv().isEmpty()) {
+					String[] parts = soli.getCodiSiaConv().split(",");
+					for (String part : parts) {
+						String trimmed = part.trim();
+						if (!trimmed.isEmpty() && !codis.contains(trimmed) && trimmed.length() <= 20) {
+							codis.add(trimmed);
+						}
+					}
+				}
+				
+				if (soli.getNotes() != null && !soli.getNotes().isEmpty()) {
+					notas.add(soli.getNotes().trim());
+				}
+
+			}
+		}
+
+		int maxLength = 255;
+
+		String codiSiaConv = String.join(", ", codis);
+		codiSiaConv = codiSiaConv.length() > maxLength ? codiSiaConv.substring(0, maxLength) : codiSiaConv;
+		log.info("Codigos SIA concatenados: " + codiSiaConv);
+
+		String notasFinal = String.join("\n----------------------\n", notas);
+		
+		log.info("Notas concatenadas: ");
+		log.info(notasFinal);
+		
+		
+		
+		solicitudNueva.setCodiSiaConv(codiSiaConv);
+		solicitudNueva.setNotes(notasFinal);
+		
+		return fusionadas;
+	}
+	
+
+	private InfoMadridJPA crearNouInfoMadrid(List<SolicitudJPA> solicitudes, SolicitudJPA solicitudNueva) {
+
+		// Revisar el estado de los infoMadrid y asignar uno nuevo con informacion
+		// correcta.
+
+		InfoMadridJPA infoMadNou = new InfoMadridJPA();
+
+		infoMadNou.setCodi(solicitudNueva.getProcedimentCodi());
+		String consultaTexto = "Buenos días,\n" + "Enviamos solicitud para dar servicios de alta en el procedimiento "
+				+ solicitudNueva.getProcedimentCodi() + "\n\n" + "Quedamos a la espera de su respuesta.\n"
+				+ "Un saludo.";
+
+		infoMadNou.setConsulta(consultaTexto);
+
+//		int autorizados = 0;
+//		int enviadosPreAltas = 0;
+//		int consultados = 0;
+
+		// Llistat d'intents per agafar el maxim
+
+		List<Long> intentsList = new ArrayList<>();
+//		List<String[]> titularsList = new ArrayList<>();
+
+		Timestamp dataAutoritzacio = null;
+		Timestamp dataEnviament = null;
+		Timestamp dataConsulta = null;
+
+		String titularNom = null;
+		String titularNif = null;
+
+		List<String> mensajes = new ArrayList<>();
+		String mensajeFinal = "";
+
+		for (SolicitudJPA soli : solicitudes) {
+			if (soli != null && soli.getInfomadridid() != null) {
+				InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(soli.getInfomadridid());
+
+				if (infoMad.getDataAutoritzacio() != null) {
+//					autorizados++;
+
+					if (dataAutoritzacio == null || infoMad.getDataAutoritzacio().before(dataAutoritzacio)) {
+						dataAutoritzacio = infoMad.getDataAutoritzacio();
+					}
+
+				}
+
+				if (infoMad.getDataEnviament() != null) {
+					if (dataEnviament == null || infoMad.getDataEnviament().before(dataEnviament)) {
+						dataEnviament = infoMad.getDataEnviament();
+					}
+//					enviadosPreAltas++;
+				}
+
+				if (infoMad.getDataConsulta() != null) {
+					if (dataConsulta == null || infoMad.getDataConsulta().before(dataConsulta)) {
+						dataConsulta = infoMad.getDataConsulta();
+					}
+//					consultados++;
+				}
+
+				intentsList.add(infoMad.getIntents());
+
+				if (soli.getResponsableProcNom() != null
+						&& soli.getResponsableProcNom().equals(solicitudNueva.getResponsableProcNom())) {
+					titularNom = infoMad.getTitularNom();
+					titularNif = infoMad.getTitularNif();
+				}
+
+				// Si el mensaje ya lo tenemos, no lo añadimos
+				if (infoMad.getMissatge() != null && !mensajes.contains(infoMad.getMissatge())) {
+					mensajes.add(infoMad.getMissatge());
+					mensajeFinal += "Procediment " + infoMad.getCodi() + " - " + infoMad.getDataConsulta() + ":\n";
+					mensajeFinal += infoMad.getMissatge() + "\n----------------------\n";
+				}
+
+			}
+		}
+
+		infoMadNou.setDataAutoritzacio(dataAutoritzacio);
+		infoMadNou.setDataEnviament(dataEnviament);
+		infoMadNou.setDataConsulta(dataConsulta);
+
+		Long maxIntents = intentsList.stream().max(Long::compare).orElse(0L);
+		infoMadNou.setIntents(maxIntents);
+
+		infoMadNou.setTitularNom(titularNom);
+		infoMadNou.setTitularNif(titularNif);
+
+		infoMadNou.setEstatProcediment(solicitudNueva.getEstatSolicitud());
+		infoMadNou.setEstatAutoritzacio(solicitudNueva.getEstatpinbal());
+
+		infoMadNou.setMissatge(mensajeFinal);
+
+		return infoMadNou;
+
+	}
+
+	private String procesarCodisProcediment(List<SolicitudJPA> solicitudes) {
 		// Coger todos los codigos SIA de los procedimientos y concater los distintos
 		
 		List<String> codis = new ArrayList<>();
 		
-		for (Long soliID : fusionados) {
-			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+		for (SolicitudJPA soli : solicitudes) {
 			if (soli != null && soli.getCodiSiaConv() != null && !soli.getCodiSiaConv().isEmpty()) {
 				String[] parts = soli.getCodiSiaConv().split(",");
 				for (String part : parts) {
@@ -420,11 +634,13 @@ public class FusionarProcedimentsOperadorController {
 	}
 
 	private void fusionar(SolicitudJPA solicitudNueva, List<Long> fusionados,
-			List<SolicitudServeiJPA> serviciosNuevos, List<Long> documentos) throws I18NException {
+			List<SolicitudServeiJPA> serviciosNuevos, List<Long> documentos, InfoMadridJPA infoMad) throws I18NException {
+		
+		InfoMadrid im = infoMadridLogicaEjb.create(infoMad);
+		solicitudNueva.setInfomadridid(im.getInfoMadridID());
 
-		solicitudLogicaEjb.create(solicitudNueva);
-
-		Long nuevaSolicitudID = solicitudNueva.getSolicitudID();
+		Solicitud soli = solicitudLogicaEjb.create(solicitudNueva);
+		Long nuevaSolicitudID = soli.getSolicitudID();
 		
 		List<Event> eventos = eventLogicaEjb.select(EventFields.SOLICITUDID.in(fusionados));
 
@@ -448,6 +664,7 @@ public class FusionarProcedimentsOperadorController {
 		
 		generarNousDocumentsSolicitud();
 		
+		//Falta borrar todas las solicitudes originales.
 		log.info("Fusión completada: nueva solicitud ID " + solicitudNueva.getSolicitudID());
 		
 
@@ -477,20 +694,20 @@ public class FusionarProcedimentsOperadorController {
 
 		String procedimentCodi = request.getParameter("procedimentCodi");
 		String codiDescriptiu = request.getParameter("codiDescriptiu");
-		String codiSiaConv = request.getParameter("codiSiaConv");
+//		String codiSiaConv = request.getParameter("codiSiaConv");
 		String procedimentNom = request.getParameter("procedimentNom");
 		Timestamp dataInici = parseTimestamp(request.getParameter("dataInici"));
-		Timestamp dataCaducitat = parseTimestamp(request.getParameter("dataFi"));
+		Timestamp dataCaducitat = parseTimestamp(request.getParameter("dataCaducitat"));
 		String personaContacte = request.getParameter("personaContacte");
 		String personaContacteEmail = request.getParameter("personaContacteEmail");
 		String responsableProcNom = request.getParameter("responsableProcNom");
 		String responsableProcEmail = request.getParameter("responsableProcEmail");
-		String notes = request.getParameter("notes");
-		String consentiment = request.getParameter("consentiment");
-		String urlconsentiment = request.getParameter("urlconsentiment");
-		String consentimentadjunt = request.getParameter("consentimentadjunt");
+//		String notes = request.getParameter("notes");
+//		String consentiment = request.getParameter("consentiment");
+//		String urlconsentiment = request.getParameter("urlconsentiment");
+//		String consentimentadjunt = request.getParameter("consentimentadjunt");
 
-		String organParam = request.getParameter("organ");
+		String organParam = request.getParameter("organid");
 		log.info("Organ recibido: " + organParam);
 
 		String dir3 = extractDir3(organParam);
@@ -500,58 +717,59 @@ public class FusionarProcedimentsOperadorController {
 		String estatSolicitud = request.getParameter("estatSolicitud");
 		Long estatSolicitudId = extratEstat("solicitud.estat.", Constants.ESTATS_SOLI, estatSolicitud);
 
-		String estatpinbal = request.getParameter("estatpinbal");
-		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
+//		String estatpinbal = request.getParameter("estatpinbal");
+//		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
 
 //		String procedimentTipus = request.getParameter("procedimentTipus");
 		
         String procedimentTipusText = request.getParameter("procedimentTipus");
         String procedimentTipus = String.valueOf(getTipusDocIDFromText(procedimentTipusText));
         
-
 		// ================================
 		// Log para depuración
 		// ================================
 		log.info("procedimentCodi: " + procedimentCodi);
 		log.info("codiDescriptiu: " + codiDescriptiu);
-		log.info("codiSiaConv: " + codiSiaConv);
+//		log.info("codiSiaConv: " + codiSiaConv);
 		log.info("procedimentNom: " + procedimentNom);
 		log.info("dataInici: " + dataInici);
-		log.info("dataFi: " + dataCaducitat);
+		log.info("dataCaducitat: " + dataCaducitat);
 		log.info("personaContacte: " + personaContacte);
 		log.info("personaContacteEmail: " + personaContacteEmail);
 		log.info("responsableProcNom: " + responsableProcNom);
 		log.info("responsableProcEmail: " + responsableProcEmail);
-		log.info("notes: " + notes);
-		log.info("consentiment: " + consentiment);
-		log.info("urlconsentiment: " + urlconsentiment);
-		log.info("consentimentadjunt: " + consentimentadjunt);
+//		log.info("notes: " + notes);
+//		log.info("consentiment: " + consentiment);
+//		log.info("urlconsentiment: " + urlconsentiment);
+//		log.info("consentimentadjunt: " + consentimentadjunt);
 
 		log.info("organId: " + organId);
 		log.info("estatSolicitud: " + estatSolicitudId);
-		log.info("estatpinbal: " + estatpinbalId);
+//		log.info("estatpinbal: " + estatpinbalId);
 		log.info("procedimentTipus: " + procedimentTipus);
 
 		SolicitudJPA solicitudNueva = new SolicitudJPA();
 
 		solicitudNueva.setProcedimentCodi(procedimentCodi);
 		solicitudNueva.setCodiDescriptiu(codiDescriptiu);
-		solicitudNueva.setCodiSiaConv(codiSiaConv);
+//		solicitudNueva.setCodiSiaConv(codiSiaConv);
 		solicitudNueva.setProcedimentNom(procedimentNom);
 		solicitudNueva.setProcedimentTipus(procedimentTipus);
 		solicitudNueva.setDataInici(dataInici);
 		solicitudNueva.setDataCaducitat(dataCaducitat);
+		solicitudNueva.setDataFi(null);
+		
 		solicitudNueva.setPersonaContacte(personaContacte);
 		solicitudNueva.setPersonaContacteEmail(personaContacteEmail);
 		solicitudNueva.setResponsableProcNom(responsableProcNom);
 		solicitudNueva.setResponsableProcEmail(responsableProcEmail);
-		solicitudNueva.setNotes(notes);
-		solicitudNueva.setConsentiment(consentiment);
-		solicitudNueva.setUrlconsentiment(urlconsentiment);
-		solicitudNueva.setConsentimentadjunt(consentimentadjunt);
+//		solicitudNueva.setNotes(notes);
+//		solicitudNueva.setConsentiment(consentiment);
+//		solicitudNueva.setUrlconsentiment(urlconsentiment);
+//		solicitudNueva.setConsentimentadjunt(consentimentadjunt);
 		solicitudNueva.setOrganid(organId);
 		solicitudNueva.setEstatSolicitud(estatSolicitudId);
-		solicitudNueva.setEstatpinbal(estatpinbalId);
+//		solicitudNueva.setEstatpinbal(estatpinbalId);
 
 		return solicitudNueva;
 	}

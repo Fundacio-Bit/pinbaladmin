@@ -338,8 +338,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 		Long estatSoli = solicitud.getEstatSolicitud();
 
-		String asumpte;
-		String missatge;
+		String asumpte = null;
+		String missatge = null;
 
 		if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
 			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Procediment Autoritzat.";
@@ -353,12 +353,15 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 		} else {
 			// No ha cambiado de estado. No informamos. PENDENT AUTORITZAR.
-			asumpte = "TEST PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
-			missatge = "TEST " + generarMissatgeEsmena(solicitud);
+//			asumpte = "TEST PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
+//			missatge = "TEST " + generarMissatgeEsmena(solicitud);
 
 		}
 		try {
-			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+			// Enviar email si hay cambio de estado.
+			if (asumpte != null && missatge != null) {
+				enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+			}
 
 		} catch (I18NException e) {
 			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);

@@ -46,6 +46,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final LongField PORTAFIBID = new LongField(_TABLE_MODEL, "portafibID", "portafibid");
 	 public static final LongField INFOMADRIDID = new LongField(_TABLE_MODEL, "infomadridid", "infomadridid");
 	 public static final TimestampField DATACADUCITAT = new TimestampField(_TABLE_MODEL, "dataCaducitat", "datacaducitat");
+	 public static final LongField FITXERCONSENTIMENTID = new LongField(_TABLE_MODEL, "fitxerConsentimentID", "fitxerconsentimentid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -82,7 +83,8 @@ public interface SolicitudFields extends java.io.Serializable {
     CONSENTIMENTADJUNT,
     PORTAFIBID,
     INFOMADRIDID,
-    DATACADUCITAT
+    DATACADUCITAT,
+    FITXERCONSENTIMENTID
   };
 
 

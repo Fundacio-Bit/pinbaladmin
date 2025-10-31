@@ -438,6 +438,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setConsentiment(consentiment);
         soli.setUrlconsentiment(urlconsentiment);
         soli.setConsentimentadjunt(consentimentadjunt);
+
         
 
         try {
@@ -455,8 +456,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			generarDocumentsSolicitud(soliID, organid, prop);
 			
 			log.info("Afegim document de consentiment");
-			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, consentiment, soliID);
-			
+			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, solicitud);
+
 			log.info("Afegim serveis a la sol·licitud");
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataCaducitat, soliID);
 			soli.setSolicitudServeis(solicitudServeis);
@@ -494,8 +495,28 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
 
     }
-    
-    private Fitxer afegirDocumentConsentiment(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
+
+    private Fitxer afegirDocumentConsentiment(Long fitxerConsentimentID, SolicitudJPA soli) throws I18NException {
+
+        if (fitxerConsentimentID != null) {
+        	log.info("Tenim document de consentiment: " + fitxerConsentimentID);
+        	Long fitxerIDCopia = ferCopiaFitxer(fitxerConsentimentID);
+        	FitxerJPA fitxerCopia = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerIDCopia);
+        	
+	        soli.setFitxerConsentimentID(fitxerIDCopia);
+
+	        
+        	return fitxerCopia;
+        }else {
+        	log.info("No tenim document de consentiment");
+	        soli.setFitxerConsentimentID(null);
+
+        	return null;
+        }
+
+    }
+
+    private Fitxer afegirDocumentConsentimentOld(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
 
         if (fitxerConsentimentID != null) {
 
@@ -522,6 +543,20 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     }
 
+    private Long ferCopiaFitxer(Long fileOriginalID) throws I18NException {
+    	
+    	FitxerJPA fitxerOriginal = fitxerPublicLogicaEjb.findByPrimaryKey(fileOriginalID);
+    	File fileOriginal = FileSystemManager.getFile(fileOriginalID);
+
+    	FitxerJPA fitxerCopia = new FitxerJPA(fitxerOriginal.getNom(), fitxerOriginal.getTamany(), fitxerOriginal.getMime(), fitxerOriginal.getDescripcio());
+    	fitxerCopia = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxerCopia);
+
+    	File fileCopia = FileSystemManager.getFile(fitxerCopia.getFitxerID());
+    	FileSystemManager.copy(fileOriginal, fileCopia);
+    	
+    	return fitxerCopia.getFitxerID();
+    }
+    
 	private Set<SolicitudServeiJPA> afegirServeisSolicitud(List<TramitIServ> listaTramitsI, Timestamp dataFi,
 			Long soliID) throws I18NException {
 

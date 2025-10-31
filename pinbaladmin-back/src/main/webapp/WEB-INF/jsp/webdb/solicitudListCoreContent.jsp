@@ -220,6 +220,13 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATACADUCITAT)}">
           <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${solicitud.dataCaducitat}" /></td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.FITXERCONSENTIMENTID)}">
+          <td>
+            <c:if test="${not empty solicitud.fitxerConsentiment}">
+              <a target="_blank" href="<c:url value="${pad:fileUrl(solicitud.fitxerConsentiment)}"/>">${solicitud.fitxerConsentiment.nom}</a>
+            </c:if>
+           </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

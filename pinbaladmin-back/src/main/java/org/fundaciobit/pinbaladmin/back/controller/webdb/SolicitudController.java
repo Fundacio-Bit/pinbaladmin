@@ -770,6 +770,16 @@ public java.lang.Long stringToPK(String value) {
     }
 
 
+    f = (FitxerJPA)afm.preProcessFile(form.getFitxerConsentimentID(), form.isFitxerConsentimentIDDelete(),
+        form.isNou()? null : solicitud.getFitxerConsentiment());
+    ((SolicitudJPA)solicitud).setFitxerConsentiment(f);
+    if (f != null) { 
+      solicitud.setFitxerConsentimentID(f.getFitxerID());
+    } else {
+      solicitud.setFitxerConsentimentID(null);
+    }
+
+
   }
 
   // FILE
@@ -777,6 +787,7 @@ public java.lang.Long stringToPK(String value) {
   public void deleteFiles(Solicitud solicitud) {
     deleteFile(solicitud.getDocumentSolicitudID());
     deleteFile(solicitud.getSolicitudXmlID());
+    deleteFile(solicitud.getFitxerConsentimentID());
   }
   // Mètodes a sobreescriure 
 

@@ -22,6 +22,10 @@ public class SolicitudForm extends PinbalAdminBaseForm {
   private CommonsMultipartFile solicitudXmlID;
   private boolean solicitudXmlIDDelete;
   
+  
+  private CommonsMultipartFile fitxerConsentimentID;
+  private boolean fitxerConsentimentIDDelete;
+  
   public SolicitudForm() {
   }
   
@@ -79,6 +83,20 @@ public class SolicitudForm extends PinbalAdminBaseForm {
   
   public void setSolicitudXmlIDDelete(boolean solicitudXmlIDDelete) {
     this.solicitudXmlIDDelete = solicitudXmlIDDelete;
+   }
+  public CommonsMultipartFile getFitxerConsentimentID() {
+    return fitxerConsentimentID;
+  }
+  
+   public void setFitxerConsentimentID(CommonsMultipartFile fitxerConsentimentID) {
+    this.fitxerConsentimentID = fitxerConsentimentID;
+  }
+  public boolean isFitxerConsentimentIDDelete() {
+    return fitxerConsentimentIDDelete;
+  }
+  
+  public void setFitxerConsentimentIDDelete(boolean fitxerConsentimentIDDelete) {
+    this.fitxerConsentimentIDDelete = fitxerConsentimentIDDelete;
    }
   private List<StringKeyValue> listOfValuesForProcedimentTipus;
 

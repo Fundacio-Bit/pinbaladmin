@@ -2,6 +2,7 @@ package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.util.Base64;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -145,7 +146,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 			solicitud.setEstatSolicitud(estatSoli);
 			solicitud.setEstatpinbal(estatAuth);
 			
-			respostaMadrid = "Solicitud Enviada a Madrid correcatment: " + descripcioEstat;
+			respostaMadrid = "Solicitud Enviada a Madrid correctament: " + descripcioEstat;
 			
 			afegirEventSolicitudEnviada(solicitud, respostaMadrid );
 			break;
@@ -285,8 +286,8 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
 		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
 		String persona = soli.getOperador();
-		String subject = "Solicitud enviada a PINBAL. " + soli.getProcedimentCodi();
-		String msg = "S'ha enviat la sol·licitud a PINBAL. " + mensaje;
+		String subject = "Solicitud enviada a MADRID. " + soli.getProcedimentCodi();
+		String msg = "S'ha enviat la sol·licitud a MADRID. " + mensaje;
 
 		EventJPA event = new EventJPA();
 		event.setSolicitudID(soli.getSolicitudID());
@@ -408,7 +409,8 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		Integer _ClaseTramite = getIdentificadorNuevoPorId(tipusProc);
 
 		String _Codigo = soli.getProcedimentCodi();
-		String _Nombre = soli.getProcedimentNom();
+		
+		String _Nombre = adaptarNomProcediment(soli.getProcedimentNom());
 		String _Descripcion = soli.getCodiDescriptiu();
 		if (_Nombre.equals(_Descripcion)) {
 			_Descripcion = "_" + _Descripcion;
@@ -443,7 +445,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		    );
 		}
 		
-		Fitxer fitxerConsentiment = null;
+//		Fitxer fitxerConsentiment = null;
 		// Aquí son el excel de servicios y el documento PDF del Director General.
 		Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
 
@@ -470,9 +472,9 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 //                String tipo = "EXCEL DE SERVICIOS";
 //                docsAuth.add(new DocAuthInfo(fitxer, desc, tipo)); 
 
-			} else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-					|| tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
-				fitxerConsentiment = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());; // Document consentiment
+//			} else if (tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+//					|| tipus == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
+//				fitxerConsentiment = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());; // Document consentiment
 			} else {
 				FitxerJPA original = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());
 				if (original.getMime().equals("application/pdf")) {
@@ -496,7 +498,8 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		proc.setFechaCaducidad(_FechaCaducidad);
 
 		DocumentosAutorizacion _DocumentosAutorizacion = getDocsAutorizacion(docsAuth);
-		Consentimiento _Consentimiento = getConsentimientoFromSoli(soli, fitxerConsentiment);
+		Consentimiento _Consentimiento = getConsentimientoFromSoli(soli);
+//		Consentimiento _Consentimiento = getConsentimientoFromSoli(soli, fitxerConsentiment);
 
 		proc.setDocumentosAutorizacion(_DocumentosAutorizacion);
 		proc.setConsentimiento(_Consentimiento);
@@ -511,7 +514,132 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		return proc;
 	}
 
-	private Consentimiento getConsentimientoFromSoli(SolicitudJPA soli, Fitxer fitxerConsentiment)
+	private String adaptarNomProcedimentOld(String nom) {
+		//Pasarlo a maysculas y quitar acentos.
+		
+		String nomAdaptat = nom.toUpperCase();
+		nomAdaptat = nomAdaptat.replace("À", "A");
+		nomAdaptat = nomAdaptat.replace("È", "E");
+		nomAdaptat = nomAdaptat.replace("É", "E");
+		nomAdaptat = nomAdaptat.replace("Í", "I");
+		nomAdaptat = nomAdaptat.replace("Ó", "O");
+		nomAdaptat = nomAdaptat.replace("Ò", "O");
+		nomAdaptat = nomAdaptat.replace("Ú", "U");
+		nomAdaptat = nomAdaptat.replace("Ü", "U");
+		nomAdaptat = nomAdaptat.replace("Ç", "C");
+		return nomAdaptat;
+
+    }
+	
+	private String adaptarNomProcediment(String nom) {
+	    if (nom == null) return null;
+
+	    // Pasar a mayúsculas
+	    String nomAdaptat = nom.toUpperCase();
+
+	    // Quitar acentos y diacríticos
+	    nomAdaptat = Normalizer.normalize(nomAdaptat, Normalizer.Form.NFD);
+	    nomAdaptat = nomAdaptat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+	    // Reemplazar la ç manualmente (no la quita el normalizer)
+	    nomAdaptat = nomAdaptat.replace("Ç", "C");
+
+	    return nomAdaptat;
+	}
+	
+	private Consentimiento getConsentimientoFromSoli(SolicitudJPA soli)
+			throws Exception {
+
+		Consentimiento cons = new Consentimiento();
+
+		final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+		final String PINBAL_CONSENTIMENT_SI = "Si";
+		final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
+
+		String consentiment = soli.getConsentiment(); // si, llei, noop
+
+		switch (consentiment) {
+		case Constants.CONSENTIMENT_TIPUS_LLEI:
+			cons.setTipo(PINBAL_CONSENTIMENT_LLEI);
+			return cons;
+		case Constants.CONSENTIMENT_TIPUS_SI:
+			cons.setTipo(PINBAL_CONSENTIMENT_SI);
+			break;
+		case Constants.CONSENTIMENT_TIPUS_NOOP:
+			cons.setTipo(PINBAL_CONSENTIMENT_NOOP);
+			break;
+		default:
+			log.info("CONS: No tenim fitxer de consentiment.");
+			return null;
+		}
+
+		// Si esta aqui es perque el consentiment es de tipus SI o NOOP, i per tant
+		// necessita un fitxer
+		Consentimiento.Documento doc = new Consentimiento.Documento();
+		
+		String nom;
+		String descripcio;
+		byte[] contingut;
+		
+		try {
+			Long consentimentID = soli.getFitxerConsentimentID();
+			
+			if (consentimentID != null) {
+				Fitxer fitxerConsentiment = fitxerLogicEjb.findByPrimaryKey(consentimentID);; // Document consentiment
+				File fileConsentiment = FileSystemManager.getFile(consentimentID);
+				
+				contingut = FileUtils.readFromFile(fileConsentiment);
+				nom = fitxerConsentiment.getNom();
+				String desc = fitxerConsentiment.getDescripcio();
+				
+				descripcio = "Fitxer de consentiment. IDFitxer: " + consentimentID +  ".";
+				if (desc != null && desc.trim().length() != 0) {
+					descripcio += "<br> Descripció: " + desc;
+					
+				}
+			}else {
+				String enlace = soli.getUrlconsentiment();
+				if (enlace != null && enlace.trim().length() != 0) {
+                    cons.setEnlace(enlace);
+
+                    FileInfo fileInfo = PdfDownloader.downloadPDFFromBoeBoibUrl(enlace, false);
+
+                    nom = fileInfo.getFileName();
+                    descripcio = "Fitxer de consentiment. Enllaç: " + enlace;
+                    contingut = fileInfo.getContent();
+				} else {
+					throw new Exception("Falta el document de consentiment.");
+				}
+			}
+			
+
+			
+		} catch (Exception e) {
+			String msg = "CONS: Error obtenint el PDF de Consentiment: " + e.getMessage();
+			log.error(msg);
+			throw new Exception(msg);
+		}
+
+		
+		
+		log.info("CONS: " + nom + " : " + contingut.length + " bytes");
+
+		doc.setNombre(nom);
+		doc.setDescripcion(descripcio);
+//		contingut = "hola3".getBytes();
+
+		if (contingut != null) {
+		    System.out.println("Tamaño del contenido (bytes): " + contingut.length);
+		    System.out.println("Base64 length: " + Base64.getEncoder().encodeToString(contingut).length());
+		}
+		doc.setContenido(contingut);
+
+		cons.setDocumento(doc);
+		return cons;
+	}
+	
+	
+	private Consentimiento getConsentimientoFromSoliOld(SolicitudJPA soli, Fitxer fitxerConsentiment)
 			throws Exception {
 		Consentimiento cons = new Consentimiento();
 

@@ -114,6 +114,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATACADUCITAT)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DATACADUCITAT)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.FITXERCONSENTIMENTID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.FITXERCONSENTIMENTID)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
