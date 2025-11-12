@@ -213,11 +213,11 @@ public abstract class PinbalUtilsCommon {
 		return 0;
 	}
 
-	public String generarMissatgeEsmena(SolicitudJPA solicitud) {
+	public String generarMissatgeEsmena(SolicitudJPA solicitud, String respostaMadrid) {
 
-		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+//		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
 
-		String respostaMadrid = infoMad.getMissatge();
+//		String respostaMadrid = infoMad.getMissatge();
 		respostaMadrid = respostaMadrid.replace("\n", "<br>");
 //		String missatge = "Bon dia, <br> desde el Ministeri ens han DESESTIMAT la solicitud amb codi "
 //				+ solicitud.getProcedimentCodi() + " .<br>" + "El missatge rebut és el següent: <br><br><i>" + respostaMadrid

@@ -93,6 +93,22 @@ public class TramitGDadesTitValidator<I extends TramitGDadesTit>
       }
     }
 
+    if (__vr.getFieldErrorCount(TELEFON) == 0) {
+      java.lang.String __telefon = __target__.getTelefon();
+      if (__telefon!= null && __telefon.length() > 10) {
+        __vr.rejectValue(TELEFON, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TELEFON)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(10)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(MAIL) == 0) {
+      java.lang.String __mail = __target__.getMail();
+      if (__mail!= null && __mail.length() > 100) {
+        __vr.rejectValue(MAIL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

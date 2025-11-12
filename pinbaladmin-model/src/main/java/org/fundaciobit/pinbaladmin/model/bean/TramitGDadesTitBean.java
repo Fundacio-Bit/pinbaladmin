@@ -15,6 +15,8 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
 	java.lang.String llinatge1;
 	java.lang.String llinatge2;
 	java.lang.String carrec;
+	java.lang.String telefon;
+	java.lang.String mail;
 
 
   /** Constructor Buit */
@@ -22,7 +24,7 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitGDadesTitBean(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec) {
+  public TramitGDadesTitBean(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
     this.dadestitid=dadestitid;
     this.tramitid=tramitid;
     this.nif=nif;
@@ -30,14 +32,27 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
     this.carrec=carrec;
+    this.telefon=telefon;
+    this.mail=mail;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitGDadesTitBean(long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec) {
+  public TramitGDadesTitBean(long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
     this.tramitid=tramitid;
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
+    this.carrec=carrec;
+    this.telefon=telefon;
+    this.mail=mail;
+}
+  /** Constructor dels valors Not Null */
+  public TramitGDadesTitBean(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String carrec) {
+    this.dadestitid=dadestitid;
+    this.tramitid=tramitid;
+    this.nif=nif;
+    this.nom=nom;
+    this.llinatge1=llinatge1;
     this.carrec=carrec;
 }
   public TramitGDadesTitBean(TramitGDadesTit __bean) {
@@ -48,6 +63,8 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
     this.setLlinatge1(__bean.getLlinatge1());
     this.setLlinatge2(__bean.getLlinatge2());
     this.setCarrec(__bean.getCarrec());
+    this.setTelefon(__bean.getTelefon());
+    this.setMail(__bean.getMail());
 	}
 
 	public long getDadestitid() {
@@ -99,6 +116,20 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
 		this.carrec = _carrec_;
 	};
 
+	public java.lang.String getTelefon() {
+		return(telefon);
+	};
+	public void setTelefon(java.lang.String _telefon_) {
+		this.telefon = _telefon_;
+	};
+
+	public java.lang.String getMail() {
+		return(mail);
+	};
+	public void setMail(java.lang.String _mail_) {
+		this.mail = _mail_;
+	};
+
 
 
   // ======================================
@@ -113,6 +144,8 @@ public class TramitGDadesTitBean implements TramitGDadesTit {
     __tmp.setLlinatge1(__bean.getLlinatge1());
     __tmp.setLlinatge2(__bean.getLlinatge2());
     __tmp.setCarrec(__bean.getCarrec());
+    __tmp.setTelefon(__bean.getTelefon());
+    __tmp.setMail(__bean.getMail());
 		return __tmp;
 	}
 

@@ -33,6 +33,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitGDadesTitFields.CARREC)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitGDadesTitFields.CARREC)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitGDadesTitFields.TELEFON)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitGDadesTitFields.TELEFON)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitGDadesTitFields.MAIL)}">
+        <th>${pad:getSortIcons(__theFilterForm,TramitGDadesTitFields.MAIL)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

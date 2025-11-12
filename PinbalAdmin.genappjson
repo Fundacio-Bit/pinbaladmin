@@ -10478,6 +10478,56 @@
             "webtype": 1
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 10,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Telèfon",
+            "es": "Teléfono"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Correu electrònic",
+            "es": "Correo electrónico"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
         }
       ]
     },

@@ -885,6 +885,27 @@ public class LlistaCorreusOperadorController extends EmailController {
 					log.info("\t " + resposta[1] + " no trobada.");
 				}
 				
+				
+				//Buscar si es una respuesta de PRE-ALTAS.
+				if (remitente.equals("soporte.intermediacion@correo.gob.es")) {
+					String codiProc = RegexUtils.extractProcedimentCode(asunto);
+					if (codiProc != null) {
+						List<Solicitud> auxSoli = solicitudLogicaEjb
+								.select(SolicitudFields.PROCEDIMENTCODI.equal(codiProc));
+
+						if (auxSoli != null && auxSoli.size() > 0) {
+							Solicitud soli = auxSoli.get(0);
+
+							log.info("\t Pre-Alta Procediment: " + codiProc);
+							emails.add(getAssignInfoSoli(emi, soli));
+							continue;
+						} else {
+							log.info("\t Pre-Alta Procediment: " + codiProc + " - No trobat.");
+						}
+					
+					
+				}
+				
 				//Si llega aqui es que no se ha asignado a nada.
 				log.info("\t No se puede asignar automatico");
 			}

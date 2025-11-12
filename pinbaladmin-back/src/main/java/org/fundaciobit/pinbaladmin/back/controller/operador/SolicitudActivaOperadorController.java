@@ -10,6 +10,7 @@ import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -48,6 +50,7 @@ import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
+import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
@@ -55,6 +58,7 @@ import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
+import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.springframework.stereotype.Controller;
@@ -90,6 +94,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
     
     @EJB(mappedName = TramitHProcLogicaService.JNDI_NAME)
     protected TramitHProcLogicaService tramitHLogicaEjb;
+    
+    @EJB(mappedName = TramitJConsentLogicaService.JNDI_NAME)
+    protected TramitJConsentLogicaService tramitJLogicaEjb;
+    
 	
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerLogicEjb;
@@ -135,21 +143,21 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 //			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "solicitud.actualitzarestats",
 //					getContextWeb() + "/actualitzarEstats", AdditionalButtonStyle.WARNING));
 //			
-//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualiza Tipo Procedimeitno y Fecha Caducidad",
-//					getContextWeb() + "/updateSoli", AdditionalButtonStyle.WARNING));
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualiza Tipo Procedimeitno y Fecha Caducidad",
+					getContextWeb() + "/updateSoli", AdditionalButtonStyle.WARNING));
 
 //			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Crear Info Madrid",
 //					getContextWeb() + "/crearInfoMadrid", AdditionalButtonStyle.WARNING));
 
-			//Provar normalitzacio nom procediment
-			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Normalitzar Nom Procediment",
-							getContextWeb() + "/normalitzarNomProcediment", AdditionalButtonStyle.WARNING));
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Recuperar Consentimiento",
+//					getContextWeb() + "/recuperarConsentimiento", AdditionalButtonStyle.WARNING));
+//			
+//			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_OK_CIRCLE, "ReBuscar Consentimiento",
+//					getContextWeb() + "/rebuscarUrlConsentimiento", AdditionalButtonStyle.INFO));
 			
-			
-			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Recuperar Consentimiento",
-					getContextWeb() + "/recuperarConsentimiento", AdditionalButtonStyle.WARNING));
-			
-			
+			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_OK_CIRCLE, "Corregir tipo y url Consentimiento",
+					getContextWeb() + "/corregirUrlConsentimento", AdditionalButtonStyle.INFO));
+
 			solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_BELL, "Actualizar Titulares",
 					getContextWeb() + "/actualizarTitulares", AdditionalButtonStyle.WARNING));
 			
@@ -162,67 +170,698 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	}
 	
 	
-	// normalitzarNomProcediment
-	@RequestMapping(value = "/normalitzarNomProcediment", method = RequestMethod.GET)
-	public String normalitzarNomProcediment(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
-		int idx = 0;
-		int nomsActualitzats = 0;
-
-		for (Solicitud soli : solicituds) {
-			String nom = soli.getProcedimentNom();
-			
-			String adaptat1 = adaptarNomProcediment1(nom);
-			String adaptat2 = adaptarNomProcediment2(nom);
-			
-			log.info("SoliID: " + soli.getSolicitudID() + ".\nNom:\t" + nom + ".\nAdaptat1:\t" + adaptat1 + "\nAdaptat2:\t" + adaptat2 + "\n\n");
-			
-			
-			
-
-		}
-
-		log.info("Noms actualitzats: " + nomsActualitzats);
-
-		HtmlUtils.saveMessageSuccess(request, "Noms de procediments actualitzats correctament.");
+	
+	
+	@RequestMapping(value = "/corregirUrlConsentimento", method = RequestMethod.GET)
+	public String corregirUrlConsentimento(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		consentimientoDefinitivo();
+		
+		HtmlUtils.saveMessageSuccess(request, "Consentiments actualitzats correctament.");
 		return "redirect:" + getContextWeb() + "/list";
 	}
 	
-	private String adaptarNomProcediment1(String nom) {
-		//Pasarlo a maysculas y quitar acentos.
-		
-		String nomAdaptat = nom.toUpperCase();
-		nomAdaptat = nomAdaptat.replace("À", "A");
-		nomAdaptat = nomAdaptat.replace("È", "E");
-		nomAdaptat = nomAdaptat.replace("É", "E");
-		nomAdaptat = nomAdaptat.replace("Í", "I");
-		nomAdaptat = nomAdaptat.replace("Ó", "O");
-		nomAdaptat = nomAdaptat.replace("Ò", "O");
-		nomAdaptat = nomAdaptat.replace("Ú", "U");
-		nomAdaptat = nomAdaptat.replace("Ü", "U");
-		nomAdaptat = nomAdaptat.replace("Ç", "C");
-		return nomAdaptat;
-
-    }
 	
-	private String adaptarNomProcediment2(String nom) {
-	    if (nom == null) return null;
+	public class InfoConsentiment{
+		String tipus;
+		String url;
+		Fitxer fitxer;
+		Long fitxerID;
+		
+		public InfoConsentiment(String tipus, String url, Fitxer fitxer, Long fitxerID) {
+			super();
+			this.tipus = tipus;
+			this.url = url;
+			this.fitxer = fitxer;
+			this.fitxerID = fitxerID;
+		}
+		
+		public String getTipus() {
+			return tipus;
+		}
 
-	    // Pasar a mayúsculas
-	    String nomAdaptat = nom.toUpperCase();
+		public String getUrl() {
+			return url;
+		}
 
-	    // Quitar acentos y diacríticos
-	    nomAdaptat = Normalizer.normalize(nomAdaptat, Normalizer.Form.NFD);
-	    nomAdaptat = nomAdaptat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		public Fitxer getFitxer() {
+			return fitxer;
+		}
 
-	    // Reemplazar la ç manualmente (no la quita el normalizer)
-	    nomAdaptat = nomAdaptat.replace("Ç", "C");
-
-	    return nomAdaptat;
+		public Long getFitxerID() {
+			return fitxerID;
+		}
+		
+		
+		
 	}
 	
+	List<String> urlsAmbError = new java.util.ArrayList<>();
+	
+	int noTeXML = 0;
+	int noTeConsentiment = 0;
+	int errorsDescarga = 0;
+	int consentimentNoRecuperat = 0;
+	
+	public void consentimientoDefinitivo() throws Exception {
+		noTeXML = 0;
+		noTeConsentiment = 0;
+		errorsDescarga = 0;
+		consentimentNoRecuperat = 0;
+		
+		//Obtener todas las solicitudes locales.
+		urlsAmbError = new java.util.ArrayList<>();
+		//Para cada solicitud, primero buscaremos el consentimiento en el tramite.
+		//Si no lo tenemos, buscamos en los documentos.
+		//Si no aparece ahí, buscamos en las URLs de los servicios.
+		//Si no aparece ahí, buscamos en el fitchero xml.
+		
+		List<Solicitud> solicituds = getSolicitudesLocales();
+
+		int total = solicituds.size();
+		int idx = 0;
+		
+		int consentimientosRecuperados = 0;
+		int tramitH = 0;
+		int docs = 0;
+		int serveis = 0;
+		int perLlei = 0;
+		int formulariXML = 0;
+		int XMLperLlei = 0;
+//		int noConsentiment = 0;
+		
+		for (Solicitud solicitud : solicituds) {
+			Long soliID = solicitud.getSolicitudID();
+			idx++;
+
+			String cadenaInfo = idx + "/" + total + " - SoliID: " + soliID + ": ";
+
+			InfoConsentiment infoCons = null;
+
+			infoCons = buscarConsentimientoTramit(solicitud);
+
+			if (infoCons != null) {
+				log.info(cadenaInfo + "Trobat en TramitH. Consent: " + infoCons.getTipus());
+				tramitH++;
+			} else {
+				log.info(cadenaInfo + "No te tramitJ. Cercant documents...");
+
+				infoCons = buscarConsentimientoDocuments(soliID);
+				//Este no puede devolver consentimiento por ley.
+				if (infoCons != null) {
+					log.info(cadenaInfo + "Trobat en Documents.");
+					docs++;
+				} else {
+					log.info(cadenaInfo + "No te documents. Cercant serveis...");
+					infoCons = buscarConsentimientoUrlServeis(soliID);
+
+					// Buscar en formulario XML.
+					if (infoCons != null) {
+						log.info(cadenaInfo + "Trobat en Serveis.");
+						if (infoCons.getTipus().equals("llei")) {
+							log.info(cadenaInfo + " Es per Llei.");
+							perLlei++;
+						}else {
+							log.info(cadenaInfo + " Tenim document amb URL.");
+							serveis++;
+						}
+						
+					} else {
+						log.info(cadenaInfo + "No te Serveis. Cercant Formulari XML...");
+						infoCons = buscarConsentimientoFormularioXML(solicitud);
+						if (infoCons != null) {
+							log.info(cadenaInfo + "Trobat en Formulari XML.");
+							
+							if (infoCons.getTipus().equals("llei")) {
+								log.info(cadenaInfo + " Es per Llei.");
+								XMLperLlei++;
+							} else {
+								log.info(cadenaInfo + " Tenim document amb URL.");
+								formulariXML++;
+							}
+						}
+					}
+				}
+			}
+
+			if (infoCons != null) {
+				//eliminarFitxerConsentimentAnterior(solicitud);
+				assignarConsentimentSoli(solicitud, infoCons);
+				consentimientosRecuperados++;
+			} else {
+				log.info("No s'ha pogut recuperar el consentiment per a la SoliID: " + soliID);
+			}
+			
+//			if (idx == 500) {
+//				break;
+//			}
+		}
+		
+		log.info("----- RESUM DE L'EXECUCIÓ -----");
+		log.info("--------------------------------");
+		log.info("Solicituds processades: " + total);
+		log.info("Consentimientos recuperados: " + consentimientosRecuperados);
+		log.info(" - De TramitH: " + tramitH);
+		log.info(" - De Documents: " + docs);
+		log.info(" - Serveis (llei): " + perLlei);
+		log.info(" - Serveis (url): " + serveis);
+		log.info(" - Sense fitxer XML: " + noTeXML);
+		log.info(" - Formulari XML (llei): " + XMLperLlei);
+		log.info(" - Formulari XML (url): " + formulariXML);
+		log.info(" - XML no es llei ni te URLs: " + noTeConsentiment);
+		log.info(" - XML te URLs pero no recuperat: " + consentimentNoRecuperat);
+		
+		int conResultado = tramitH + docs + perLlei + serveis + XMLperLlei + formulariXML + noTeConsentiment + consentimentNoRecuperat + noTeXML;
+		log.info("Consentiments amb resultat: " + conResultado + "/" + total);
+		
+//		log.info(" - Sense consentiment: " + noConsentiment);
+		
+		log.info("Llistat d'URLs amb problemes: " + urlsAmbError.size());
+		//Ordenar les URLs
+		Collections.sort(urlsAmbError);
+		String res = "URLs amb problemes:\n\n";
+		for (String url : urlsAmbError) {
+			res += url + "\n";
+		}
+		log.info(res);
+		
+		
+		/*
+		 * 
+2025-11-07 15:11:08,945 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61) Consentimientos recuperados: 796
+2025-11-07 15:11:08,945 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - De TramitH: 152
+2025-11-07 15:11:08,946 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - De Documents: 342
+2025-11-07 15:11:08,946 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - Serveis (llei): 111
+2025-11-07 15:11:08,947 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - Serveis (url): 185
+2025-11-07 15:11:08,948 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - Formulari XML (url): 6
+2025-11-07 15:11:08,949 INFO  [org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudActivaOperadorController] (default task-61)  - Sense consentiment: 849
+
+
+		 */
+		
+		
+		
+		
+	}
+	
+	public List<Solicitud> getSolicitudesLocales() {
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		List<Solicitud> solicituds = null;
+		try {
+			solicituds = solicitudLogicaEjb.select(Where.AND(wLocals));
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return solicituds;
+	}
+	
+	public InfoConsentiment buscarConsentimientoTramit(Solicitud soli) throws I18NException {
+		//Obtener tramitID con tramitH y buscar el tramitJ con tramitID.
+		
+		List<TramitHProc> tramitsH = tramitHLogicaEjb.select(TramitHProcFields.CODI.equal(soli.getProcedimentCodi()));
+		if (tramitsH.size() == 0) {
+			return null;
+		}
+		
+		Long tramitID = tramitsH.get(0).getTramitid();
+		
+		List<TramitJConsent> consents = tramitJLogicaEjb.select(TramitJConsentFields.TRAMITID.equal(tramitID));		
+		if (consents.size() == 0) {
+			return null;
+		}
+		
+		TramitJConsent consentiment = consents.get(0);
+
+		String tipus = consentiment.getConsentiment();
+		String url = consentiment.getUrlconsentiment();
+		Long fitxerID = consentiment.getAdjuntID();
+		Fitxer fitxer = null;
+		if (fitxerID != null) {
+			fitxer = fitxerLogicEjb.findByPrimaryKey(fitxerID);
+		}
+		
+		InfoConsentiment infoConsentiment = new InfoConsentiment(tipus, url, fitxer, fitxerID);
+		
+		return infoConsentiment;
+	}
+	
+	public InfoConsentiment buscarConsentimientoDocuments(Long soliID) throws I18NException {
+		// Obtener documentos de la solicitud de tipo Consentiment.
+
+		Long[] tipusConsentimentArray = new Long[] { Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP,
+				Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI };
+
+		List<Long> documentsSoli = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+				DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+
+		List<Document> documents = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(documentsSoli),
+				DocumentFields.TIPUS.in(tipusConsentimentArray)));
+
+		if (documents.size() == 0) {
+			return null;
+		}
+
+		Document consentiment = documents.get(documents.size() - 1); // Agafam l'ultim com a vàlid.)
+
+		String tipus = consentiment.getTipus().equals(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) ? "si" : "noop";
+		String url = null;
+		
+		Long fitxerID = consentiment.getFitxerOriginalID();
+		Fitxer fitxer = fitxerLogicEjb.findByPrimaryKey(fitxerID);
+		
+		InfoConsentiment infoConsentiment = new InfoConsentiment(tipus, url, fitxer, fitxerID);
+		return infoConsentiment;
+	}
+	
+	public InfoConsentiment buscarConsentimientoUrlServeis(Long soliID) throws I18NException {
+		// Buscar en las URLs de los servicios asociados a la solicitud.
+
+		List<SolicitudServei> soliServs = solicitudServeiEjb.select(SolicitudServeiFields.SOLICITUDID.equal(soliID));
+		
+		List<String> tipus = new java.util.ArrayList<>();
+		List<String> urls = new java.util.ArrayList<>();
+		
+		// Saber si tots els serveis tenen el mateix consentiment, i despres comparar
+		for (SolicitudServei solSer : soliServs) {
+			String consentiment = solSer.getConsentiment();
+			String urlSer = solSer.getEnllazConsentiment();
+
+			if (consentiment != null && !consentiment.isEmpty()) {
+				if (!tipus.contains(consentiment)) {
+					tipus.add(consentiment);
+				}
+			}
+
+			if (urlSer != null && !urlSer.isEmpty()) {
+				if (isValidURL(urlSer)) {
+					if (!urls.contains(urlSer)) {
+						urls.add(urlSer);
+					}
+				}
+			}
+		}
+		
+		return cercarConsentimentAmbDadesServeis(soliServs, tipus, urls);
+	}
+
+
+	public InfoConsentiment buscarConsentimientoFormularioXML(Solicitud soli) throws Exception {
+
+		Long fitxerID = soli.getSolicitudXmlID();
+
+		if (fitxerID == null) {
+			noTeXML++;
+			return null;
+		}
+
+		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+		if (prop == null) {
+			noTeXML++;
+			return null;
+		}
+		
+		//Aqui pueden ser dos cosas. Que sea formulario antiguo, o nuevo.
+		
+		//En el nuevo se obtiene directamente. En el antiguo, hay que revisar todos los servicios.
+		
+		/*
+		 * Nuevo
+		 * 
+		 * <VALOR codigo="CONSENTIMIENTO">noop</VALOR>
+<VALOR codigo="CONSADJ">Modelo solicitud 1860-REV1.pdf</VALOR>
+<VALOR codigo="CONSURL">---</VALOR>
+		 * 
+		 * 
+		 * 
+		 * Antiguo
+		 * 
+		 * 
+		 * <LELSERVICIOS>
+<ID1>
+<NOMSERVEI indice="SVDCCAACPASWS01">(SVDCCAACPASWS01) Corriente de pago para ayudas y subvenciones</NOMSERVEI>
+<CODISERV>SVDCCAACPASWS01</CODISERV>
+<NORMALEGAL>Resolución por la que se aprueba la convocatoria de ayudas para la emisión de bonos digitales para colectivos vulnerables</NORMALEGAL>
+<ARTICULOS>7.5</ARTICULOS>
+<CONSENTIMIENTO indice="noop">No oposició</CONSENTIMIENTO>
+<ENLACENOR>https://www.caib.es/seucaib/ca/arxiuServlet?id=5398122</ENLACENOR>
+<LDECONSENTIMIENTO indice="1">Publicat</LDECONSENTIMIENTO>
+<ENLACECON>https://www.caib.es/seucaib/ca/arxiuServlet?id=5398153</ENLACECON>
+</ID1>
+<ID2>
+<NOMSERVEI indice="Q2827003ATGSS001">(Q2827003ATGSS001) Estar al Corriente de Pago con la Seguridad Social</NOMSERVEI>
+<CODISERV>Q2827003ATGSS001</CODISERV>
+<NORMALEGAL>Resolución por la que se aprueba la convocatoria de ayudas para la emisión de bonos digitales para colectivos vulnerables</NORMALEGAL>
+<ARTICULOS>7.5</ARTICULOS>
+<CONSENTIMIENTO indice="noop">No oposició</CONSENTIMIENTO>
+<ENLACENOR>https://www.caib.es/seucaib/ca/arxiuServlet?id=5398122</ENLACENOR>
+<LDECONSENTIMIENTO indice="1">Publicat</LDECONSENTIMIENTO>
+<ENLACECON>https://www.caib.es/seucaib/ca/arxiuServlet?id=5398153</ENLACECON>
+</ID2>
+
+		 * 
+		 */
+
+		
+		String tipus = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CONSENTIMIENTO");
+		tipus = normalizarTipusConsentiment(tipus);
+
+		String url = null;
+		
+		if (tipus != null && !tipus.isEmpty()) {
+			Fitxer fitxer = null;
+			Long fitxerConsentimentID = null;
+			if (tipus.equals("si") || tipus.equals("noop")) {
+				//Cercam url:
+				url = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.ENLACENOR");
+				log.info("\t\tURL de consentiment del formulari XML: " + url);
+				
+				if (url != null && !url.isEmpty() && isValidURL(url)) {
+					Fitxer file = crearFitxerConsentimentFromUR2L(url);
+
+					if (file != null) {
+						fitxer = file;
+						fitxerConsentimentID = fitxer.getFitxerID();
+					}
+				}
+				
+			}
+			InfoConsentiment infoConsentiment = new InfoConsentiment(tipus, url, fitxer, fitxerConsentimentID);
+			return infoConsentiment;
+		} 
+		
+		//Si no es encuentra ahí, puede ser antiguo.
+		log.info("No hem trobat el consentiment. Falta provar amb l'antic format.");
+		
+//		
+//		//Antiguo.
+//		//Recorremos todos los servicios directamente en el fichero.
+		
+		List<String> tipusList = new java.util.ArrayList<>();
+		List<String> urlsList = new java.util.ArrayList<>();
+		
+		
+		
+		int idx = 1;
+		while (true) {
+			String prefix = "FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID" + idx + ".";
+			String tipusServ = prop.getProperty(prefix + "CONSENTIMIENTO");
+			tipusServ = normalizarTipusConsentiment(tipusServ);
+			
+			if (tipusServ == null) {
+				break;
+			}
+			String urlServ = prop.getProperty(prefix + "ENLACECON");
+			
+			
+			if (tipusServ != null && !tipusServ.isEmpty()) {
+				if (!tipusList.contains(tipusServ)) {
+					tipusList.add(tipusServ);
+				}
+			}
+			
+			if (urlServ != null && !urlServ.isEmpty() && isValidURL(urlServ)) {
+				if (!urlsList.contains(urlServ)) {
+					urlsList.add(urlServ);
+				}
+			}
+			
+			log.info("\t\t  Serveis ID" + idx + ": Tipus consentiment: " + tipusServ + ", URL: " + urlServ);
+			
+			idx++;
+		}
+		
+//		log.info("\t\tProvant " + urlsList.size() + " URLs de consentiment dels serveis del formulari XML...");
+//		log.info("\t\tAmb " + tipusList.size() + " tipus diferents de consentiment.");
+		
+		InfoConsentiment infoConsentiment = cercarConsentimentAmbDadesServeis(null, tipusList, urlsList);
+		
+		if (infoConsentiment == null) {
+			
+			if (urlsList.size() == 0) {
+				//Si no te URLs, es que no te consentiment.
+				noTeConsentiment++;
+			}else {
+				// Si te URLs i es null, no se ha podido recuperar.
+				consentimentNoRecuperat++;
+			}
+		}
+		
+		
+		return infoConsentiment;
+	}
+	
+	private InfoConsentiment cercarConsentimentAmbDadesServeis(List<SolicitudServei> soliServs, List<String> tipus,
+			List<String> urls) {
+		//El problema es quan hi ha diferents tipus de consentiment o diferents URLs.
+		
+		//Si todos son ley, devolvemos ley. Sin fichero ni URL.
+		
+		//Si hay alguno de ley, pero todos los demás son iguales, devolvemos ese.
+		
+		// Si no hay ley, pero todos son iguales, devolvemos ese.
+		
+		// Si no hay ley, y hay diferentes tipos, elegimos uno cualquiera.
+		
+		// Si el final no es ley, tenemos que buscar el consentimiento en alguna de las URLs.
+		
+		if (tipus.contains("llei") && tipus.size() == 1) {
+            log.info("\t\tTots els serveis tenen consentiment per llei.");
+            // Tots els serveis tenen consentiment per llei.
+            InfoConsentiment infoConsentiment = new InfoConsentiment("llei", null, null, null);
+            return infoConsentiment;
+        }
+			
+		// A partir de aqui, sabemos que hay alguno que no es ley.
+		// Si hay mas de uno, uno no es ley y hay que buscar consentimiento.
+		// y si solo hay uno, sabemos que no es ley.
+		
+		//Si hay ley, hay que descartarla
+		if (tipus.contains("llei")) {
+			tipus.remove("llei");
+		}
+		
+		//Aqui tenemos solo los que no son ley. (si i noop) Buscamos procedimiento con URLs, i asignamos el tipo de la URL que haya funcionado.
+		if (urls.size() == 0) {
+			log.info("\t\tNo hi ha URLs de consentiment als serveis.");
+            return null;
+		}
+
+		log.info("\t\tProvant " + urls.size() + " URLs de consentiment dels serveis...");
+		for (String url : urls) {
+			log.info("\t\tProvant URL de consentiment: " + url);
+			Fitxer fitxerConsentiment = crearFitxerConsentimentFromUR2L(url);
+			Long fitxerID = null;
+			if (fitxerConsentiment != null) {
+				fitxerID = fitxerConsentiment.getFitxerID();
+				log.info("\t\tFitxer de consentiment recuperat i guardat. FitxerID: " + fitxerID);
+				// Asignar este tipo.
+				String tipusFinal = null;
+				
+				if (soliServs == null) {
+					// No tenim els serveis. Agafem el primer tipus.
+					tipusFinal = tipus.get(0);
+					InfoConsentiment infoConsentiment = new InfoConsentiment(tipusFinal, url, fitxerConsentiment,
+							fitxerID);
+					return infoConsentiment;
+					
+				}
+				
+				for (SolicitudServei solSer : soliServs) {
+					String urlSer = solSer.getEnllazConsentiment();
+					if (urlSer != null && urlSer.equals(url) && solSer.getConsentiment() != null && !solSer.getConsentiment().equals("llei")) {
+						tipusFinal = solSer.getConsentiment();
+						break;
+					}
+				}
+				if (tipusFinal == null) {
+					tipusFinal = tipus.get(0); // Agafem el primer.
+				}
+				InfoConsentiment infoConsentiment = new InfoConsentiment(tipusFinal, url, fitxerConsentiment, fitxerID);
+				return infoConsentiment;
+			}
+		}
+		
+		//Si llega hasta aquí, no hemos podido descargar ningún fichero de las URLs.
+		return null;
+	}
+	
+	
+	private String normalizarTipusConsentiment(String tipus) {
+		if (tipus == null) {
+			return null;
+		}
+		tipus = tipus.toLowerCase();
+		tipus = Normalizer.normalize(tipus, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+		if (tipus.startsWith("no")) {
+			return "noop";
+		} else if (tipus.startsWith("si")) {
+			return "si";
+		} else if (tipus.startsWith("l")) {
+			return "llei";
+		}
+		return tipus;
+	}
+	
+	public void assignarConsentimentSoli(Solicitud solicitud, InfoConsentiment infoConsentiment) throws I18NException {
+
+		// Obtenir el consentiment anterior, i mostrar quin serà el nou.
+		try {
+
+			Long fitxerID = infoConsentiment.getFitxerID();
+			if (fitxerID == null) {
+				// No tenim fitxer. Assignam directament.
+				solicitud.setFitxerConsentimentID(null);
+			} else {
+				// Tenim fitxer. Fem copia.
+				Long fitxerCopiaID = ferCopiaFitxer(fitxerID);
+				solicitud.setFitxerConsentimentID(fitxerCopiaID);
+			}
+			solicitud.setUrlconsentiment(infoConsentiment.getUrl());
+			solicitud.setConsentiment(infoConsentiment.getTipus());
+
+//			solicitudLogicaEjb.update(solicitud);
+			
+			if (!solicitud.getConsentiment().equals(infoConsentiment.getTipus())) {
+				log.warn("\t\tATENCIO! El tipus de consentiment a assignar no coincideix amb el de la solicitud. ");
+				log.warn("\t\t\tSolicitud: "  + solicitud.getSolicitudID() + " - "+ solicitud.getConsentiment() + ", A assignar: " + infoConsentiment.getTipus());
+				
+			}
+			
+			
+			log.info("\t\tAssignant a la SoliID: " + solicitud.getSolicitudID() + " el consentiment: "
+					+ infoConsentiment.getTipus() + ", FitxerID: " + solicitud.getFitxerConsentimentID());
+
+			log.info("\t\tFitxer de consentiment assignat correctament a SoliID: " + solicitud.getSolicitudID());
+
+		} catch (Exception e) {
+			log.error("Error assignant fitxer de consentiment a SoliID: " + solicitud.getSolicitudID(), e);
+		}
+	}
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/rebuscarUrlConsentimiento", method = RequestMethod.GET)
+	public String rebuscarUrlConsentimiento(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		// Coger todas las solicitudes sin consentimineto y buscar en las URLs de los
+		// servicios que tiene.
+
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+		Where wSenseFitxerConsent = SolicitudFields.FITXERCONSENTIMENTID.isNull();
+		
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wSenseFitxerConsent));
+		
+		int consentimientosRecuperados = 0;
+		
+		int total = solicituds.size();
+		int idx = 0;
+		
+		//Lista de URLs con problemas.
+		List<String> urlsProblema = new java.util.ArrayList<>();
+		
+		for (Solicitud solicitud : solicituds) {
+			Long soliID = solicitud.getSolicitudID();
+			idx++;
+
+			List<SolicitudServei> soliServs = solicitudServeiEjb.select(SolicitudServeiFields.SOLICITUDID.equal(soliID));
+
+			Fitxer fitxerConsentiment = null;
+			String urlFinal = null;
+			for (SolicitudServei solSer : soliServs) {
+
+				String urlConsentiment = solSer.getEnllazConsentiment();
+				
+				if (fitxerConsentiment == null && urlConsentiment != null && !urlConsentiment.isEmpty()) {
+					
+					if (urlConsentiment.contains("www.caib.es")) {
+						//Sustituir www por intranet.
+						urlConsentiment = urlConsentiment.replace("www.caib.es", "intranet.caib.es");
+						
+					}
+
+					log.info(idx + "/" + total + " - SolicitudID: " + soliID + ". Provant URL: " + urlConsentiment);
+					// Ahora hay que ver si podemos obtener un fichero de alguna de las URLs de
+					// consentimiento.
+
+					if (urlsProblema.contains(urlConsentiment)) {
+						log.info("SolicitudID: " + soliID + ". Saltant URL repetida: " + urlConsentiment);
+						continue;
+					}
+
+					if (!isValidURL(urlConsentiment)) {
+						log.info("SolicitudID: " + soliID + ". URL NO VALIDA: " + urlConsentiment);
+						continue;
+					}
+
+					log.info("SolicitudID: " + soliID + ". URL VALIDA: " + urlConsentiment);
+
+					Fitxer file = crearFitxerConsentimentFromUR2L(urlConsentiment);
+
+					if (file == null) {
+						urlsProblema.add(urlConsentiment);
+
+						log.info("SolicitudID: " + soliID + ". Error recuperant fitxer amb URL: " + urlConsentiment);
+						continue;
+					}
+
+					fitxerConsentiment = file;
+					urlFinal = urlConsentiment;
+					consentimientosRecuperados++;
+
+					log.info("SolicitudID: " + soliID + ". Fitxer consentiment recuperat i guardat. FitxerID: "
+							+ file.getFitxerID());
+					break;
+
+				}
+			}
+			if (fitxerConsentiment == null) {
+//					log.info("\t\tNo s'ha pogut recuperar el consentiment per a la SoliID: " + soliID);
+				continue;
+			}
+			assignarConsentimentSoli(solicitud, fitxerConsentiment);
+			
+			log.info("SolicitudID: " + soliID + ". Tenim el consentiment per URL: " + urlFinal);
+
+			solicitud.setUrlconsentiment(urlFinal);
+			solicitudLogicaEjb.update(solicitud);
+		}
+		
+		log.info("Consentimientos recuperados: " + consentimientosRecuperados);
+		log.info("Errors recuperant fitxers: " + urlsProblema.size());
+		
+		log.info("URLs con problemas:");
+		Collections.sort(urlsProblema);
+
+		for (String s : urlsProblema) {
+			log.info(s);
+		}
+		
+
+		HtmlUtils.saveMessageSuccess(request, "Consentiments actualitzats correctament.");
+		return "redirect:" + getContextWeb() + "/list";
+	}
 	
 	@RequestMapping(value = "/recuperarConsentimiento", method = RequestMethod.GET)
 	public String recuperarConsentimiento(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -232,6 +871,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wConsentNoNull));
 
 		int idx = 0;
+		int total = solicituds.size();
 		int consentimientosRecuperados = 0;
 		int docsConsentiment = 0;
 		int errors = 0;
@@ -240,8 +880,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		Long[] tipusConsentimentArray = new Long[] { Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP,
 				Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI };
-
+		
 		for (Solicitud solicitud : solicituds) {
+			idx++;
 			// Obtener documentos de la solicitud de tipo Consentiment.
 
 			Long soliID = solicitud.getSolicitudID();
@@ -254,7 +895,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			List<Document> documents = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(documentsSoli),
 					DocumentFields.TIPUS.in(tipusConsentimentArray)));
 
-			log.info("SolicitudID: " + soliID + ". Consentiments: " + documents.size());
+			log.info(idx + "/" + total + " - SolicitudID: " + soliID + ". Consentiments: " + documents.size());
 			if (documents.size() != 0) {
 				docsConsentiment++;
 				consentimientosRecuperados++;
@@ -270,7 +911,16 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 				String url = solicitud.getUrlconsentiment();
 
 				if (url != null && !url.isEmpty()) {
-
+					log.info("SolicitudID: " + soliID + ". Te URL de consentiment: " + url);
+					
+					// Validar URL
+					if (!isValidURL(url)) {
+						errors++;
+						log.info("SolicitudID: " + soliID + ". URL de consentiment no vàlida: " + url);
+						continue;
+					}
+					
+					
 					// Descarregar fitxer de la URL i guardar-lo a fitxerLogicEjb
 					try {
 						log.info("SolicitudID: " + soliID + ". Recuperant consentiment de URL: " + url);
@@ -318,7 +968,14 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
-	
+	public boolean isValidURL(String url) {
+	    try {
+	        new java.net.URL(url).toURI(); // Valida tanto sintaxis como formato
+	        return true;
+	    } catch (Exception e) {
+	        return false;
+	    }
+	}
 	
 	public Fitxer crearFitxerConsentimentFromURL(String url) {
 		try {
@@ -394,10 +1051,22 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	
 	public Fitxer crearFitxerConsentimentFromUR2L(String url) {
 		
+		if (urlsAmbError.contains(url)) {
+			log.info("URL amb error conegut: " + url);
+			return null;
+		}
+		
+		
 		try {
+			if (url.contains("www.caib.es")) {
+				//Sustituir www por intranet.
+				url = url.replace("www.caib.es", "intranet.caib.es");
+				
+			}
 			byte[] data = descargarPdf(url);
 				
 			if (data == null) {
+				urlsAmbError.add(url);
                 throw new I18NException("No s'ha pogut descarregar el fitxer de la URL: " + url);
 			}
 			
@@ -413,6 +1082,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			return fitxer;
 			
 		} catch (Exception e) {
+			
+			urlsAmbError.add(url);
+			
 			String errorMsg;
 			if (e instanceof I18NException) {
 				errorMsg = I18NUtils.getMessage((I18NException) e);
@@ -428,13 +1100,17 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		
 	}
 
-	public static byte[] descargarPdf(String urlPdf) throws IOException {
+	public byte[] descargarPdf(String urlPdf) throws IOException {
         byte[] bytesPdf = null;
         try {
             URL url = new URL(urlPdf);
+            log.info("Descarregant PDF de URL: " + urlPdf);
             URLConnection connection = url.openConnection();
+            log.info("Connexió oberta.");
             InputStream in = connection.getInputStream();
+            log.info("InputStream obtingut.");
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            log.info("ByteArrayOutputStream creat.");
 
             int nRead;
             byte[] data = new byte[1024];
@@ -442,6 +1118,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
             while ((nRead = in.read(data, 0, data.length)) != -1) {
                 buffer.write(data, 0, nRead);
             }
+            
+            log.info("Dades llegides del InputStream.");
 
             buffer.flush();
             bytesPdf = buffer.toByteArray();
@@ -453,7 +1131,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
             // Manejar la excepción, por ejemplo, lanzar un error personalizado o registrar
             System.err.println("Error al descargar el PDF: " + e.getMessage());
             throw e;
-        }
+		} catch (Exception e) {
+			System.err.println("Error inesperado al descargar el PDF: " + e.getMessage());
+			throw new IOException("Error inesperado al descargar el PDF", e);
+		}
         return bytesPdf;
     }
 
@@ -484,7 +1165,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			}
 
 			String tp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.TIPOPROCEDIMIENTO");
-			log.info("TIPOPROCEDIMIENTO: " + tp);
+			log.info("Soli: " + soli.getSolicitudID() +  " - TIPOPROCEDIMIENTO: " + tp);
 
 			// tp puede ser un numero, o un texto.
 			Long tipusDocCorrecte = null;
@@ -511,34 +1192,38 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 				
 				
 //            	soli.setProcedimentTipus(tp);
-			}
-
-
-			String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
-			log.info("CADUCA: " + caduca);
-			
-			Timestamp dataCad;
-			if (caduca.equals("Caduca")) {
-				String dataCaduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
-				log.info("FECHACAD: " + dataCaduca);
-				//FECHACAD: 31/10/2024
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				Date parsed = sdf.parse(dataCaduca);
-				dataCad = new Timestamp(parsed.getTime());
-				
 			}else {
-				dataCad = null;
+				log.info("No hem trobat tipus de procediment per SoliID = " + soli.getSolicitudID() + ". Valor llegit: " + tp);
 			}
-			
-			
-			String msgCad = soli.getDataCaducitat() + " -> " + dataCad + ". SoliID = " + soli.getSolicitudID();
-			updatedCaducitats.add(msgCad);
 
-			if ((soli.getDataCaducitat() == null && dataCad != null) || 
-                (soli.getDataCaducitat() != null && !soli.getDataCaducitat().equals(dataCad))) {
-				caducitatsActualitzades++;
-				soli.setDataCaducitat(dataCad);
+			if (soli.getDataCaducitat() == null) {
+				String caduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CADUCA");
+				log.info("CADUCA: " + caduca);
+
+				Timestamp dataCad;
+				if (caduca.equals("Caduca")) {
+					String dataCaduca = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
+					log.info("FECHACAD: " + dataCaduca);
+					// FECHACAD: 31/10/2024
+
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					Date parsed = sdf.parse(dataCaduca);
+					dataCad = new Timestamp(parsed.getTime());
+
+				} else {
+					dataCad = null;
+				}
+
+				String msgCad = soli.getDataCaducitat() + " -> " + dataCad + ". SoliID = " + soli.getSolicitudID();
+				updatedCaducitats.add(msgCad);
+
+				if ((soli.getDataCaducitat() == null && dataCad != null)
+						|| (soli.getDataCaducitat() != null && !soli.getDataCaducitat().equals(dataCad))) {
+					caducitatsActualitzades++;
+					soli.setDataCaducitat(dataCad);
+				}
+			} else {
+				log.info("Caducitat actual: " + soli.getDataCaducitat().toString());
 			}
 			
 			solicitudLogicaEjb.update(soli);
@@ -576,7 +1261,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	public String actualizarCaducidad(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
+		Where wNoCaducitat = SolicitudFields.DATACADUCITAT.isNull();
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wNoCaducitat)); // , wEstatPinbal , wEstatSoli));
 		int actualitzades = 0;
 		for (Solicitud soli : solicituds) {
 			
@@ -1591,16 +2277,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			return null;
 		}
 
-		String lang = "ca";
 		List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
 		for (TipusProcediment tp : tipus) {
-			String cmp;
-			if (lang.equals("es")) {
-				cmp = tp.castella;
-			} else {
-				cmp = tp.catala;
-			}
-			if (cmp.equals(text)) {
+			
+			if (tp.catala.equals(text) || tp.castella.equals(text)) {
 				return tp.id;
 			}
 		}

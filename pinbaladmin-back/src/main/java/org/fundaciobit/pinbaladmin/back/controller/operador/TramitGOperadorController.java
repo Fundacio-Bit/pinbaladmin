@@ -14,6 +14,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitGDadesTitFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitGDadesTitForm;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
+import org.fundaciobit.pinbaladmin.logic.TramitCDadesCesiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitGDadesTitLogicaService;
 import org.fundaciobit.pinbaladmin.model.fields.TramitGDadesTitFields;
 import org.fundaciobit.pinbaladmin.persistence.TramitGDadesTitJPA;
@@ -46,6 +47,9 @@ public class TramitGOperadorController extends TramitGDadesTitController {
 
     @EJB(mappedName = TramitAPersAutLogicaService.JNDI_NAME)
     protected TramitAPersAutLogicaService tramitAPersAutLogicEjb;
+    
+    @EJB(mappedName = TramitCDadesCesiLogicaService.JNDI_NAME)
+    protected TramitCDadesCesiLogicaService tramitCDadesCesiLogicEjb;
 
     public boolean isPublic() {
         return false;

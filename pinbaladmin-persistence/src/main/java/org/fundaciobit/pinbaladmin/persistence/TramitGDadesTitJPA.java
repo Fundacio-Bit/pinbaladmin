@@ -46,6 +46,12 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
     @Column(name="carrec",nullable = false,length = 100)
     java.lang.String carrec;
 
+    @Column(name="telefon",length = 10)
+    java.lang.String telefon;
+
+    @Column(name="mail",length = 100)
+    java.lang.String mail;
+
 
 
   /** Constructor Buit */
@@ -53,7 +59,7 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitGDadesTitJPA(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec) {
+  public TramitGDadesTitJPA(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
     this.dadestitid=dadestitid;
     this.tramitid=tramitid;
     this.nif=nif;
@@ -61,14 +67,27 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
     this.carrec=carrec;
+    this.telefon=telefon;
+    this.mail=mail;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitGDadesTitJPA(long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec) {
+  public TramitGDadesTitJPA(long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
     this.tramitid=tramitid;
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
     this.llinatge2=llinatge2;
+    this.carrec=carrec;
+    this.telefon=telefon;
+    this.mail=mail;
+}
+  /** Constructor dels valors Not Null */
+  public TramitGDadesTitJPA(long dadestitid , long tramitid , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String carrec) {
+    this.dadestitid=dadestitid;
+    this.tramitid=tramitid;
+    this.nif=nif;
+    this.nom=nom;
+    this.llinatge1=llinatge1;
     this.carrec=carrec;
 }
   public TramitGDadesTitJPA(TramitGDadesTit __bean) {
@@ -79,6 +98,8 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
     this.setLlinatge1(__bean.getLlinatge1());
     this.setLlinatge2(__bean.getLlinatge2());
     this.setCarrec(__bean.getCarrec());
+    this.setTelefon(__bean.getTelefon());
+    this.setMail(__bean.getMail());
 	}
 
 	public long getDadestitid() {
@@ -130,6 +151,20 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
 		this.carrec = _carrec_;
 	};
 
+	public java.lang.String getTelefon() {
+		return(telefon);
+	};
+	public void setTelefon(java.lang.String _telefon_) {
+		this.telefon = _telefon_;
+	};
+
+	public java.lang.String getMail() {
+		return(mail);
+	};
+	public void setMail(java.lang.String _mail_) {
+		this.mail = _mail_;
+	};
+
 
 
     @Override
@@ -171,6 +206,8 @@ public class TramitGDadesTitJPA implements TramitGDadesTit {
     __tmp.setLlinatge1(__bean.getLlinatge1());
     __tmp.setLlinatge2(__bean.getLlinatge2());
     __tmp.setCarrec(__bean.getCarrec());
+    __tmp.setTelefon(__bean.getTelefon());
+    __tmp.setMail(__bean.getMail());
 		return __tmp;
 	}
 

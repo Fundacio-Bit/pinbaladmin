@@ -120,7 +120,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		final String ESTAT_VALIDACION_KO = "0228";
 		final String ERROR_PROCEDIMIENTO_DUPLICADO = "01";
 		final String ERROR_PROCEDIMIENTO_YA_DE_ALTA = "27";
-		
+//		solicitud.setInfomadridid(null);
 
 		String codiEstat = resposta.getEstado().getCodigoEstado();
 		String descripcioEstat = resposta.getEstado().getDescripcion();
@@ -194,8 +194,6 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 				estatSoli = Constants.SOLI_ESTAT_ESMENES;
 				estatAuth = Constants.ESTAT_PINBAL_DESESTIMAT;
 				infoMadrid.setEstatAutoritzacio(Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE);
-				
-				avisarContacteSolicitudDesestimada((SolicitudJPA) solicitud);
 			}else {
 				//Si es qualsevol altre error. Marcam com error
 				
@@ -204,17 +202,25 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 			}
 			
 			if (duplicat) {
-				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Estat actualitzat.");
+				estatSoli = Constants.SOLI_ESTAT_PENDENT_AUTORITZAR;
+				estatAuth = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+				afegirEventSolicitudEnviada(solicitud, "Procediment duplicat. Estat actualitzat.");
 			}
 			
 			if (dadoDeAlta) {
 				estatSoli = Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID;
 				estatAuth = Constants.ESTAT_PINBAL_AUTORITZAT;
 				infoMadrid.setDataAutoritzacio(new Timestamp(System.currentTimeMillis()));
+				afegirEventSolicitudEnviada(solicitud, "Procediment ja donat d'alta. Cal fer MODIFICACIÓ.");
 			}
-
+			
 			respostaMadrid = msg;
+
+			if (estatSoli.equals(Constants.SOLI_ESTAT_ESMENES)) {
+				avisarContacteSolicitudDesestimada((SolicitudJPA) solicitud, respostaMadrid);
+			}
 			solicitud.setEstatSolicitud(estatSoli);
+			
 			
 //			if (duplicat) {
 //				solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
@@ -247,10 +253,10 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 		actualizarInfoMadrdAlta(solicitud, infoMadrid, estatSoli, estatAuth, respostaMadrid);
 	} 
 	
-	private void avisarContacteSolicitudDesestimada(SolicitudJPA solicitud) {
+	private void avisarContacteSolicitudDesestimada(SolicitudJPA solicitud, String respostaMadrid) {
 		// TODO Auto-generated method stub
 		String asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
-		String missatge = generarMissatgeEsmena(solicitud);
+		String missatge = generarMissatgeEsmena(solicitud, respostaMadrid);
 
 		try {
 			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
@@ -285,7 +291,7 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
 		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-		String persona = soli.getOperador();
+		String persona = "pinbaladmin - " + soli.getOperador();
 		String subject = "Solicitud enviada a MADRID. " + soli.getProcedimentCodi();
 		String msg = "S'ha enviat la sol·licitud a MADRID. " + mensaje;
 

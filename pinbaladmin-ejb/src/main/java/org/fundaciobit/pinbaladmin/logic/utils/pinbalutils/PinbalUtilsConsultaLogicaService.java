@@ -17,10 +17,6 @@ public interface PinbalUtilsConsultaLogicaService {
 
     public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/PinbalUtilsConsultaLogicaEJB!org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsultaLogicaService";
     
-    
-	public void procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
-			throws I18NException;
-
 	public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
 			throws Exception;    
     

@@ -19,12 +19,14 @@ import javax.servlet.http.HttpSession;
 
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.utils.Base64;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
+import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumController;
@@ -250,9 +252,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				}
 			}
 
-			solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
-			solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
-			
 		} else {
 			// Si és estatal
 			
@@ -267,6 +266,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
 		}
       
+//		getSeccionsFullView(solicitudForm, isEstatal, request, mav);
+		
+		
       solicitudForm.setAttachedAdditionalJspCode(true);
     }
 

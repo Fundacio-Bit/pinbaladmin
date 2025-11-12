@@ -151,6 +151,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitGDadesTitFields.TELEFON)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitGDadesTit.telefon" var="telefon" />
+              <fmt:message key="genapp.form.searchby" var="cercapertelefon" >                
+                 <fmt:param value="${telefon}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${telefon}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapertelefon}" path="telefon" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitGDadesTitFields.MAIL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="tramitGDadesTit.mail" var="mail" />
+              <fmt:message key="genapp.form.searchby" var="cercapermail" >                
+                 <fmt:param value="${mail}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${mail}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapermail}" path="mail" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

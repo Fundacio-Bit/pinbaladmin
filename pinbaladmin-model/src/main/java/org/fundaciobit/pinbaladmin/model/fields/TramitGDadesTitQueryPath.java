@@ -39,6 +39,14 @@ public class TramitGDadesTitQueryPath extends org.fundaciobit.genapp.common.quer
     return new StringField(getQueryPath(), TramitGDadesTitFields.CARREC);
   }
 
+  public StringField TELEFON() {
+    return new StringField(getQueryPath(), TramitGDadesTitFields.TELEFON);
+  }
+
+  public StringField MAIL() {
+    return new StringField(getQueryPath(), TramitGDadesTitFields.MAIL);
+  }
+
 
 
   @Override

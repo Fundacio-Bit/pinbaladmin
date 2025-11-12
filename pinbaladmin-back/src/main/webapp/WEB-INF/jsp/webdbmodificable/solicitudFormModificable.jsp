@@ -27,7 +27,7 @@
 
 <!-- Canvi de tamany de les columnes de la vista d'una sol·licitud -->
 <script>
-	var tabla = document.getElementById("solicitud_tableid");
+/* 	var tabla = document.getElementById("solicitud_tableid");
 
 	var trs = tabla.children[0].children;
 
@@ -36,7 +36,20 @@
 		tds[0].style.width = "30%";
 		//  tds[1].style.width = "80%";
 	}
+ */	
+	var textArea = $("textarea")[0];
+	textArea.parentElement.style.width = "fit-content";
+
 </script>
+
+<style>
+.tdformlabel tbody td:nth-child(1){
+
+  width: 170px;
+  
+ }
+</style>
+
 
 <!-- Canviar visualitzacio de la jerarquia -->
 

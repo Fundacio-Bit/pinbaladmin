@@ -55,8 +55,8 @@ public class TramitGDadesTitJPAManager
         return list.toArray(new TramitGDadesTit[list.size()]);
     };
 
-    public TramitGDadesTit create( long _tramitid_, java.lang.String _nif_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_, java.lang.String _carrec_) throws I18NException {
-        TramitGDadesTitJPA __bean =  new TramitGDadesTitJPA(_tramitid_,_nif_,_nom_,_llinatge1_,_llinatge2_,_carrec_);
+    public TramitGDadesTit create( long _tramitid_, java.lang.String _nif_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_, java.lang.String _carrec_, java.lang.String _telefon_, java.lang.String _mail_) throws I18NException {
+        TramitGDadesTitJPA __bean =  new TramitGDadesTitJPA(_tramitid_,_nif_,_nom_,_llinatge1_,_llinatge2_,_carrec_,_telefon_,_mail_);
         return create(__bean);
     }
 

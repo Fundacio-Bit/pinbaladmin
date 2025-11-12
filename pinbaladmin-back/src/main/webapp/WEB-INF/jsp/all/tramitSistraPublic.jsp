@@ -246,9 +246,9 @@ input[type="checkbox"] {
 	<c:forEach var="tramit" items="${identificadorsTramit}"
 		varStatus="status">
 
-        <c:if test="${status.index != 6}">
-			<a id="tramitPart${status.index}"
-				class="step-container<c:if test="${not empty tramit}"> created</c:if>"
+			<a id="tramitPart${status.index}" class="step-container
+				<c:if test="${not empty tramit}"> created</c:if>"
+
 				<c:if test="${status.last}"> style="border-color: transparent;"</c:if>>
 
 				<div id="dot${status.index}" class="dot"></div>
@@ -256,7 +256,6 @@ input[type="checkbox"] {
 					<fmt:message key="tramit.wizard.step.${status.index}" />
 				</div>
 			</a>
-		</c:if>
 	</c:forEach>
 </div>
 
@@ -291,7 +290,7 @@ input[type="checkbox"] {
 	var steps = $(".step-container");
 	var uuid = "${uuid}";
 
-	var letras = "abcdefhij";
+	var letras = "abcdefghij";
 
 	var lastTramit = 0;
 	for (var i = 0; i < steps.length; i++) {

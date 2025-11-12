@@ -19,6 +19,8 @@ public interface TramitGDadesTitFields extends java.io.Serializable {
 	 public static final StringField LLINATGE1 = new StringField(_TABLE_MODEL, "llinatge1", "llinatge1");
 	 public static final StringField LLINATGE2 = new StringField(_TABLE_MODEL, "llinatge2", "llinatge2");
 	 public static final StringField CARREC = new StringField(_TABLE_MODEL, "carrec", "carrec");
+	 public static final StringField TELEFON = new StringField(_TABLE_MODEL, "telefon", "telefon");
+	 public static final StringField MAIL = new StringField(_TABLE_MODEL, "mail", "mail");
 
 
   public static final Field<?>[] ALL_TRAMITGDADESTIT_FIELDS = {
@@ -28,7 +30,9 @@ public interface TramitGDadesTitFields extends java.io.Serializable {
     NOM,
     LLINATGE1,
     LLINATGE2,
-    CARREC
+    CARREC,
+    TELEFON,
+    MAIL
   };
 
 

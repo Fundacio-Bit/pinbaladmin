@@ -62,6 +62,16 @@
           ${tramitGDadesTit.carrec}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitGDadesTitFields.TELEFON)}">
+          <td>
+          ${tramitGDadesTit.telefon}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitGDadesTitFields.MAIL)}">
+          <td>
+          ${tramitGDadesTit.mail}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

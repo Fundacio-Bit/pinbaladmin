@@ -23,6 +23,12 @@ public interface TramitGDadesTit extends org.fundaciobit.genapp.common.IGenAppEn
 	public java.lang.String getCarrec();
 	public void setCarrec(java.lang.String _carrec_);
 
+	public java.lang.String getTelefon();
+	public void setTelefon(java.lang.String _telefon_);
+
+	public java.lang.String getMail();
+	public void setMail(java.lang.String _mail_);
+
 
 
   // ======================================

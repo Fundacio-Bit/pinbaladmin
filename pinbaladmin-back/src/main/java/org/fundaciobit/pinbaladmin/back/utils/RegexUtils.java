@@ -98,6 +98,21 @@ public class RegexUtils {
 	        }
 	    }
 
+	    public static String extractProcedimentCode(String input) {
+	        // Patrón para detectar el formato del asunto y capturar el código de procedimiento
+	        String regex = "\\[pinbal] Solicitud de subsanación del procedimiento '([^']+)' - '.*?' \\(Incidencia No hay\\)";
+	        
+	        Pattern pattern = Pattern.compile(regex);
+	        Matcher matcher = pattern.matcher(input);
+	        
+	        if (matcher.find()) {
+	            // Devolver el código de procedimiento capturado
+	            return matcher.group(1);
+	        } else {
+	            return null;
+	        }
+	    }
+
 	    
 
 }

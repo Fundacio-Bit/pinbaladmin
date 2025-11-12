@@ -53,11 +53,11 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	    	retorno = consultaApi(titular, funcionario, solicitud);
 
 	        // 2. Procesar respuesta
-	    	this.procesarRetornoPinbal(retorno, titular, solicitud);
+	    	InfoMadridJPA infoMad = this.procesarRetornoPinbal(retorno, titular, solicitud);
 	        log.info("Respuesta procesada. InfoMad: " + solicitud.getInfomadridid());
 	        
 	        // 3. Informar al contacto si hay cambios.
-	        this.informarContacteCanvisEstat(solicitud);
+	        this.informarContacteCanvisEstat(solicitud, infoMad);
 	        
 	        
 	    } catch (Throwable e) {
@@ -88,15 +88,15 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		return retorno;
 	}
 
-	@Override
-	public void procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
+	public InfoMadridJPA procesarRetornoPinbal(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
 			throws I18NException {
 
 		String codigoEstado = retorno.getEstado().getCodigoEstado();
-
+		InfoMadridJPA infoMadrid = null;
+		
 		switch (codigoEstado) {
 		case SOLICITUD_TROBADA:
-			procesarSolicitudTrobada(retorno, titular, solicitud);
+			infoMadrid = procesarSolicitudTrobada(retorno, titular, solicitud);
 			break;
 
 		case PROCEDIMENT_NO_TROBAT:
@@ -108,6 +108,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 					+ retorno.getEstado().getLiteralError());
 			break;
 		}
+		
+		return infoMadrid;
 	}
 
 	private void procesarSolicitudNoTrobada(SolicitudJPA solicitud) {
@@ -131,7 +133,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		}
 	}
 	
-	public void procesarSolicitudTrobada(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
+	public InfoMadridJPA procesarSolicitudTrobada(Retorno retorno, ScspTitular titular, SolicitudJPA solicitud)
 	        throws I18NException {
 		
 		/*
@@ -155,6 +157,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 	    // 3. Actualizar servicios asociados
 	    actualizarServiciosSolicitud(solicitud, retorno);
+	    
+	    return infoMadrid;
 	}
 
 	
@@ -331,7 +335,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		}
 	}
 
-	private void informarContacteCanvisEstat(SolicitudJPA solicitud) {
+	private void informarContacteCanvisEstat(SolicitudJPA solicitud, InfoMadridJPA infoMad) {
 		// Si estamos aqui, es que el estado anterior no era ni autorizado ni esmenes.
 		// Así que si ahora es autorizado, informamos, y si es esmenes, también. Porque
 		// antes no lo era.
@@ -349,7 +353,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 		} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
 			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
-			missatge = generarMissatgeEsmena(solicitud);
+			missatge = generarMissatgeEsmena(solicitud, infoMad.getMissatge());
 
 		} else {
 			// No ha cambiado de estado. No informamos. PENDENT AUTORITZAR.

@@ -120,6 +120,28 @@ public class TramitGDadesTitFilterForm extends PinbalAdminBaseFilterForm impleme
   }
 
 
+  private java.lang.String telefon;
+
+  public java.lang.String getTelefon() {
+    return this.telefon;
+  }
+
+  public void setTelefon(java.lang.String telefon) {
+    this.telefon = telefon;
+  }
+
+
+  private java.lang.String mail;
+
+  public java.lang.String getMail() {
+    return this.mail;
+  }
+
+  public void setMail(java.lang.String mail) {
+    this.mail = mail;
+  }
+
+
   public TramitGDadesTitFilterForm() {
   }
   
@@ -134,6 +156,8 @@ public class TramitGDadesTitFilterForm extends PinbalAdminBaseFilterForm impleme
     this.llinatge1 = __toClone.llinatge1;
     this.llinatge2 = __toClone.llinatge2;
     this.carrec = __toClone.carrec;
+    this.telefon = __toClone.telefon;
+    this.mail = __toClone.mail;
     this.mapOfTramitAPersAutForTramitid = __toClone.mapOfTramitAPersAutForTramitid;
   }
   

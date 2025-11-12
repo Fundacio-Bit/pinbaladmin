@@ -33,6 +33,7 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.form.BaseFilterForm;
+import org.fundaciobit.genapp.common.web.form.Section;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitIOperadorController.Item;
@@ -298,9 +299,78 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * solicitudForm.addHiddenField( MARILEN);
          * solicitudForm.addHiddenField(DANI);
          */
+        
+        getSeccionsFullView(solicitudForm, isestatal != null ? isestatal : false, request, mav);
 
         return solicitudForm;
     }
+    
+	public void getSeccionsFullView(SolicitudForm solicitudForm, boolean isEstatal, HttpServletRequest request,
+			ModelAndView mav) throws I18NException {
+		
+		solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
+		solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
+		solicitudForm.addHiddenField(SolicitudFields.FIRMATDOCSOLICITUD);
+		solicitudForm.addHiddenField(SolicitudFields.PRODUCCIO);
+		solicitudForm.addHiddenField(SolicitudFields.PINFO);
+
+		Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
+				SolicitudFields.PROCEDIMENTCODI, 
+				SolicitudFields.CODISIACONV,
+				SolicitudFields.PROCEDIMENTNOM, 
+				SolicitudFields.PROCEDIMENTTIPUS,
+				SolicitudFields.CODIDESCRIPTIU,
+				SolicitudFields.ORGANID, 
+				SolicitudFields.DATACADUCITAT, 
+				SolicitudFields.DOCUMENTSOLICITUDID, 
+				SolicitudFields.SOLICITUDXMLID
+				);
+		
+		Section contactes = new Section("info_contactes", "section.contactes", 
+				SolicitudFields.PERSONACONTACTE,
+				SolicitudFields.PERSONACONTACTEEMAIL, 
+				SolicitudFields.RESPONSABLEPROCNOM,
+				SolicitudFields.RESPONSABLEPROCEMAIL
+				);
+		
+		Section dadesEntitat = new Section("info_entitat", "section.dadesentitat", 
+				SolicitudFields.DENOMINACIO,
+				SolicitudFields.DIR3, 
+				SolicitudFields.NIF
+				);
+		
+		Section dadesConsentiment = new Section("info_consentiment", "section.dadesconsentiment",
+				SolicitudFields.CONSENTIMENT, 
+				SolicitudFields.CONSENTIMENTADJUNT, 
+				SolicitudFields.FITXERCONSENTIMENTID, 
+				SolicitudFields.URLCONSENTIMENT
+				);
+		
+		Section dadesGestio = new Section("info_gestio", "section.dadesgestio", 
+				SolicitudFields.ESTATSOLICITUD, 
+				SolicitudFields.CREADOR, 
+				SolicitudFields.OPERADOR,
+				SolicitudFields.DATAINICI, 
+				SolicitudFields.DATAFI, 
+				SolicitudFields.PRODUCCIO,
+				SolicitudFields.NOTES
+				);
+		
+		Section dadesAutoritzacio = new Section("info_autoritzacio", "section.dadesautoritzacio",
+				SolicitudFields.ESTATPINBAL, 
+				SolicitudFields.INFOMADRIDID
+				);
+		
+		solicitudForm.addSection(dadesSoli);
+		solicitudForm.addSection(dadesConsentiment);
+		solicitudForm.addSection(dadesGestio);
+		solicitudForm.addSection(dadesAutoritzacio);
+		solicitudForm.addSection(contactes);
+		solicitudForm.addSection(dadesEntitat);
+		
+	}
+  
+  
 
     private void amagarCampsEstatal(SolicitudForm solicitudForm) {
         

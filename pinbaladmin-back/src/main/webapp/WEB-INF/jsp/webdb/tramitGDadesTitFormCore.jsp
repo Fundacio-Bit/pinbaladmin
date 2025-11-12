@@ -123,3 +123,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitGDadesTitFields.TELEFON)}">
+        <tr id="tramitGDadesTit_telefon_rowid">
+          <td id="tramitGDadesTit_telefon_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitGDadesTitFields.TELEFON])?'tramitGDadesTit.telefon':__theForm.labels[TramitGDadesTitFields.TELEFON]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitGDadesTitFields.TELEFON]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitGDadesTitFields.TELEFON]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitGDadesTit_telefon_columnvalueid">
+            <form:errors path="tramitGDadesTit.telefon" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitGDadesTitFields.TELEFON)? 'true' : 'false'}" cssClass="w-50 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitGDadesTitFields.TELEFON)? ' uneditable-input' : ''}"  style="" maxlength="10" path="tramitGDadesTit.telefon"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitGDadesTitFields.MAIL)}">
+        <tr id="tramitGDadesTit_mail_rowid">
+          <td id="tramitGDadesTit_mail_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[TramitGDadesTitFields.MAIL])?'tramitGDadesTit.mail':__theForm.labels[TramitGDadesTitFields.MAIL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[TramitGDadesTitFields.MAIL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[TramitGDadesTitFields.MAIL]}" ></i>
+              </c:if>
+            </td>
+          <td id="tramitGDadesTit_mail_columnvalueid">
+            <form:errors path="tramitGDadesTit.mail" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitGDadesTitFields.MAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitGDadesTitFields.MAIL)? ' uneditable-input' : ''}"  style="" maxlength="100" path="tramitGDadesTit.mail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
