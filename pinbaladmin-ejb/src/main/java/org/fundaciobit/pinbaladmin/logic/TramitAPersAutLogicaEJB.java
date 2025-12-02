@@ -276,7 +276,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         EntitatJPA entitatArrel = entitatLogicaEjb.findByPrimaryKey(organGestor.getEntitatid());
                         dir3arrel = entitatArrel.getDir3();
                         nifArrel = entitatArrel.getCIF();
-                        denominacio = entitatArrel.getNom();
+//                        denominacio = entitatArrel.getNom();
+                        
+                        denominacio = organGestor.getNom();
+                        
                         
                         map.put("nomArrel", denominacio);
                         map.put("dir3arrel", dir3arrel);
