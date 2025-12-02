@@ -357,11 +357,24 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
         try {
 
-            log.info("autoritzartots(); => AUTORITZARTOTS= " + solicitudID);
+            log.info("autoritzartots() => SolicitudID = " + solicitudID);
+            
+			List<SolicitudServei> llistaServeis = solicitudServeiLogicaEjb
+					.select(SolicitudServeiFields.SOLICITUDID.equal(solicitudID));            
+			
+			Long estatAuth = Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT;
+			
+			for (SolicitudServei soliSer : llistaServeis) {
+				log.info("  - serveiID: " + soliSer.getServeiID() + " estatActual: " + soliSer.getEstatSolicitudServeiID());
+				if (soliSer.getEstatSolicitudServeiID() != estatAuth) {
+					soliSer.setEstatSolicitudServeiID(estatAuth);
+					solicitudServeiLogicaEjb.update((SolicitudServeiJPA) soliSer);
+				}
+			}            
 
-            Long estatSolicitudServeiID = 50L;
-            solicitudServeiLogicaEjb.update(SolicitudServeiFields.ESTATSOLICITUDSERVEIID, estatSolicitudServeiID,
-                    SolicitudServeiFields.SOLICITUDID.equal(solicitudID));
+//            Long estatSolicitudServeiID = 50L;
+//            solicitudServeiLogicaEjb.update(SolicitudServeiFields.ESTATSOLICITUDSERVEIID, estatSolicitudServeiID,
+//                    SolicitudServeiFields.SOLICITUDID.equal(solicitudID));
 
             HtmlUtils.saveMessageSuccess(request, "S'han autoritzat tots els serveis");
 

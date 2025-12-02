@@ -902,8 +902,7 @@ public class LlistaCorreusOperadorController extends EmailController {
 						} else {
 							log.info("\t Pre-Alta Procediment: " + codiProc + " - No trobat.");
 						}
-					
-					
+					}
 				}
 				
 				//Si llega aqui es que no se ha asignado a nada.

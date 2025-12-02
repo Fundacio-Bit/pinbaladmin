@@ -76,7 +76,7 @@ public class AltaSolicitudPinbalOperadorController {
 
             List<String> errors = new ArrayList<String>();
 
-            if (soli.getDataFi() != null && soli.getDataFi().before(new Timestamp(System.currentTimeMillis()))) {
+            if (soli.getDataCaducitat() != null && soli.getDataCaducitat().before(new Timestamp(System.currentTimeMillis()))) {
                 errors.add("La data de caducitat ha de ser posterior a avui");
             }
 
@@ -124,8 +124,8 @@ public class AltaSolicitudPinbalOperadorController {
                 mav.addObject("solicitud", solicitudM);
             }
 
-            String errorBase = "Error: No es pot donar d'alta la solicitud: ";
             if (errors.size() > 0) {
+            	String errorBase = "Error: No es pot donar d'alta la solicitud: ";
                 for (String error : errors) {
                     HtmlUtils.saveMessageWarning(request, errorBase + error);
                 }
@@ -159,8 +159,8 @@ public class AltaSolicitudPinbalOperadorController {
             (es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud)
             request.getSession().getAttribute("solicitud");
 
-        solicitud.setConsulta(consulta);
-        log.info("consulta: " + solicitud.getConsulta());
+//        solicitud.setConsulta(consulta);
+//        log.info("consulta: " + solicitud.getConsulta());
 
         // Obtener JPA
         SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
