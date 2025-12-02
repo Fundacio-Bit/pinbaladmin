@@ -79,18 +79,19 @@ table.solicitud.servicio.item {
 		</table>
 	</div>
 
-	<div>
+<%--	<div>
 		<div class="solicitud item">
 			<h4>Datos de la Solicitud:</h4>
-			<div class="solicitud item">
-				<b>Asunto: </b>${solicitud.asunto}</div>
-			<div class="solicitud item">
+ 			<div class="solicitud item">
+				<b>Asunto: </b>${solicitud.asunto}
+			</div>
+ 			<div class="solicitud item">
 				<b>Consulta:</b> <br>
 				<textarea id="consulta" name="consulta" rows="6" cols="50"></textarea>
-			</div>
+			</div> 
 		</div>
 	</div>
-
+--%>
 
 	<div class="solicitud item">
 		<h4>Contactos:</h4>
@@ -114,7 +115,7 @@ table.solicitud.servicio.item {
 	<div class="solicitud item">
 		<c:set var="procedimiento" value="${solicitud.procedimiento}" />
 		<h4>Procedimiento:</h4>
-		<table border="1">
+		<table id="table_procedimiento" border="1">
 			<tr>
 				<th class="solicitud procedimiento titulo">Código</th>
 				<td class="solicitud procedimiento item">${procedimiento.codigo}</td>
@@ -274,7 +275,7 @@ table.solicitud.servicio.item {
 		elem.innerHTML = value == "N" ? "No" : "Si";
 	}
 
-	$("#consulta").html("Buenos días,\nEnviamos solicitud para dar servicios de alta en el procedimiento ${solicitud.procedimiento.codigo}\n\nQuedamos a la espera de su respuesta.\nUn saludo.");
+/* 	$("#consulta").html("Buenos días,\nEnviamos solicitud para dar servicios de alta en el procedimiento ${solicitud.procedimiento.codigo}\n\nQuedamos a la espera de su respuesta.\nUn saludo."); */
 	
 	
 	
@@ -382,7 +383,7 @@ table.solicitud.servicio.item {
 	}
 
 	function altaSolicitud() {
-		var msg = document.getElementById("consulta").value;
+//		var msg = document.getElementById("consulta").value;
 		
 		document.getElementById("formulari").submit();
 	}
