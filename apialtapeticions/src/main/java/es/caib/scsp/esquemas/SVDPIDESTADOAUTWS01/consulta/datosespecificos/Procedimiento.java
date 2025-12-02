@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.15 a las 12:17:54 PM CET 
+// Generado el: 2025.11.26 a las 12:52:21 PM CET 
 //
 
 
@@ -64,7 +64,7 @@ public class Procedimiento {
     protected String periodico;
     @XmlElement(name = "FechaCaducidad")
     @XmlSchemaType(name = "date")
-    protected String fechaCaducidad;
+    protected XMLGregorianCalendar fechaCaducidad;
     @XmlElement(name = "Automatizado", required = true)
     protected String automatizado;
     @XmlElement(name = "Consentimiento", required = true)
@@ -194,7 +194,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public String getFechaCaducidad() {
+    public XMLGregorianCalendar getFechaCaducidad() {
         return fechaCaducidad;
     }
 
@@ -206,7 +206,7 @@ public class Procedimiento {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setFechaCaducidad(String value) {
+    public void setFechaCaducidad(XMLGregorianCalendar value) {
         this.fechaCaducidad = value;
     }
 

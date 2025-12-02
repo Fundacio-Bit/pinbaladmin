@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.15 a las 12:17:56 PM CET 
+// Generado el: 2025.11.26 a las 12:52:27 PM CET 
 //
 
 
@@ -68,6 +68,7 @@ public class ObjectFactory {
     private final static QName _Tipo_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Tipo");
     private final static QName _Enlace_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Enlace");
     private final static QName _Descripcion_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Descripcion");
+    private final static QName _Observaciones_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Observaciones");
     private final static QName _NormaLegal_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "NormaLegal");
     private final static QName _Articulo_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Articulo");
     private final static QName _CodigoCertificado_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "CodigoCertificado");
@@ -295,6 +296,14 @@ public class ObjectFactory {
      */
     public Consulta createConsulta() {
         return new Consulta();
+    }
+
+    /**
+     * Create an instance of {@link AutorizacionDelegada }
+     * 
+     */
+    public AutorizacionDelegada createAutorizacionDelegada() {
+        return new AutorizacionDelegada();
     }
 
     /**
@@ -854,6 +863,19 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Descripcion")
     public JAXBElement<String> createDescripcion(String value) {
         return new JAXBElement<String>(_Descripcion_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Observaciones")
+    public JAXBElement<String> createObservaciones(String value) {
+        return new JAXBElement<String>(_Observaciones_QNAME, String.class, null, value);
     }
 
     /**

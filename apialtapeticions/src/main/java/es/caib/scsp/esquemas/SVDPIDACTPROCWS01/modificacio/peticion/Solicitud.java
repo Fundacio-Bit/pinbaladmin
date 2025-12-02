@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.22 a las 02:37:00 PM CET 
+// Generado el: 2025.11.26 a las 12:50:33 PM CET 
 //
 
 
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;all&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Contactos"/&gt;
+ *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}AutorizacionDelegada" minOccurs="0"/&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Procedimiento"/&gt;
  *       &lt;/all&gt;
  *     &lt;/restriction&gt;
@@ -44,6 +45,8 @@ public class Solicitud {
 
     @XmlElement(name = "Contactos", required = true)
     protected Contactos contactos;
+    @XmlElement(name = "AutorizacionDelegada")
+    protected AutorizacionDelegada autorizacionDelegada;
     @XmlElement(name = "Procedimiento", required = true)
     protected Procedimiento2 procedimiento;
 
@@ -69,6 +72,30 @@ public class Solicitud {
      */
     public void setContactos(Contactos value) {
         this.contactos = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad autorizacionDelegada.
+     * 
+     * @return
+     *     possible object is
+     *     {@link AutorizacionDelegada }
+     *     
+     */
+    public AutorizacionDelegada getAutorizacionDelegada() {
+        return autorizacionDelegada;
+    }
+
+    /**
+     * Define el valor de la propiedad autorizacionDelegada.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link AutorizacionDelegada }
+     *     
+     */
+    public void setAutorizacionDelegada(AutorizacionDelegada value) {
+        this.autorizacionDelegada = value;
     }
 
     /**

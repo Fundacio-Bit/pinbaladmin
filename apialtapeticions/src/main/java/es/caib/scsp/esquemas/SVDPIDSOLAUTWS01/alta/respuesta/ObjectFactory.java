@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.22 a las 03:49:24 PM CET 
+// Generado el: 2025.11.26 a las 12:01:53 PM CET 
 //
 
 
@@ -56,14 +56,10 @@ public class ObjectFactory {
     private final static QName _IdTransmision_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "IdTransmision");
     private final static QName _FechaGeneracion_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/V3/respuesta", "FechaGeneracion");
     private final static QName _DatosEspecificos_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "DatosEspecificos");
-    private final static QName _NumeroIncidencia_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "NumeroIncidencia");
-    private final static QName _NumeroSeguimiento_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "NumeroSeguimiento");
-    private final static QName _Email_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Email");
-    private final static QName _Asunto_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Asunto");
-    private final static QName _Consulta_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Consulta");
     private final static QName _Nombre_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Nombre");
     private final static QName _Apellido1_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Apellido1");
     private final static QName _Apellido2_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Apellido2");
+    private final static QName _Email_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Email");
     private final static QName _Telefono_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Telefono");
     private final static QName _Fax_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Fax");
     private final static QName _PeticionesEstimadas_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "PeticionesEstimadas");
@@ -78,7 +74,6 @@ public class ObjectFactory {
     private final static QName _Articulo_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Articulo");
     private final static QName _CodigoCertificado_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "CodigoCertificado");
     private final static QName _Descripcion_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Descripcion");
-    private final static QName _Contenido_QNAME = new QName("http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", "Contenido");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.respuesta
@@ -240,14 +235,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Incidencia }
-     * 
-     */
-    public Incidencia createIncidencia() {
-        return new Incidencia();
-    }
-
-    /**
      * Create an instance of {@link Solicitud }
      * 
      */
@@ -269,6 +256,14 @@ public class ObjectFactory {
      */
     public Contacto createContacto() {
         return new Contacto();
+    }
+
+    /**
+     * Create an instance of {@link AutorizacionDelegada }
+     * 
+     */
+    public AutorizacionDelegada createAutorizacionDelegada() {
+        return new AutorizacionDelegada();
     }
 
     /**
@@ -773,71 +768,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Long }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link Long }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "NumeroIncidencia")
-    public JAXBElement<Long> createNumeroIncidencia(Long value) {
-        return new JAXBElement<Long>(_NumeroIncidencia_QNAME, Long.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Long }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link Long }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "NumeroSeguimiento")
-    public JAXBElement<Long> createNumeroSeguimiento(Long value) {
-        return new JAXBElement<Long>(_NumeroSeguimiento_QNAME, Long.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Email")
-    public JAXBElement<String> createEmail(String value) {
-        return new JAXBElement<String>(_Email_QNAME, String.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Asunto")
-    public JAXBElement<String> createAsunto(String value) {
-        return new JAXBElement<String>(_Asunto_QNAME, String.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Consulta")
-    public JAXBElement<String> createConsulta(String value) {
-        return new JAXBElement<String>(_Consulta_QNAME, String.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * @param value
@@ -874,6 +804,19 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Apellido2")
     public JAXBElement<String> createApellido2(String value) {
         return new JAXBElement<String>(_Apellido2_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Email")
+    public JAXBElement<String> createEmail(String value) {
+        return new JAXBElement<String>(_Email_QNAME, String.class, null, value);
     }
 
     /**
@@ -1056,19 +999,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Descripcion")
     public JAXBElement<String> createDescripcion(String value) {
         return new JAXBElement<String>(_Descripcion_QNAME, String.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}
-     */
-    @XmlElementDecl(namespace = "http://intermediacion.redsara.es/scsp/esquemas/datosespecificos", name = "Contenido")
-    public JAXBElement<byte[]> createContenido(byte[] value) {
-        return new JAXBElement<byte[]>(_Contenido_QNAME, byte[].class, null, ((byte[]) value));
     }
 
 }

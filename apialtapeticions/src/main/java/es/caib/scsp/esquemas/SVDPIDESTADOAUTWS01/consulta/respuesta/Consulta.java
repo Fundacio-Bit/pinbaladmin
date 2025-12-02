@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.15 a las 12:17:56 PM CET 
+// Generado el: 2025.11.26 a las 12:52:27 PM CET 
 //
 
 
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;all&gt;
  *         &lt;element name="CodigoProcedimiento" type="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}CodigoProcedimiento"/&gt;
+ *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}AutorizacionDelegada" minOccurs="0"/&gt;
  *       &lt;/all&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -43,6 +44,8 @@ public class Consulta {
 
     @XmlElement(name = "CodigoProcedimiento", required = true)
     protected String codigoProcedimiento;
+    @XmlElement(name = "AutorizacionDelegada")
+    protected AutorizacionDelegada autorizacionDelegada;
 
     /**
      * Obtiene el valor de la propiedad codigoProcedimiento.
@@ -66,6 +69,30 @@ public class Consulta {
      */
     public void setCodigoProcedimiento(String value) {
         this.codigoProcedimiento = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad autorizacionDelegada.
+     * 
+     * @return
+     *     possible object is
+     *     {@link AutorizacionDelegada }
+     *     
+     */
+    public AutorizacionDelegada getAutorizacionDelegada() {
+        return autorizacionDelegada;
+    }
+
+    /**
+     * Define el valor de la propiedad autorizacionDelegada.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link AutorizacionDelegada }
+     *     
+     */
+    public void setAutorizacionDelegada(AutorizacionDelegada value) {
+        this.autorizacionDelegada = value;
     }
 
 }

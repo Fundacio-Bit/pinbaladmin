@@ -2,13 +2,11 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.22 a las 03:49:21 PM CET 
+// Generado el: 2025.11.26 a las 12:01:47 PM CET 
 //
 
 
 package es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos;
-
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -86,7 +84,7 @@ public class Procedimiento {
     protected String periodico;
     @XmlElement(name = "FechaCaducidad")
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar  fechaCaducidad;
+    protected XMLGregorianCalendar fechaCaducidad;
     @XmlElement(name = "Automatizado", required = true)
     protected String automatizado;
     @XmlElement(name = "Consentimiento", required = true)

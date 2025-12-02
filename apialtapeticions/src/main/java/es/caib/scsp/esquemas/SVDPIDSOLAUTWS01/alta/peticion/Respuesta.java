@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.22 a las 03:49:22 PM CET 
+// Generado el: 2025.11.26 a las 12:01:50 PM CET 
 //
 
 
@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;all&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Estado"/&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Errores" minOccurs="0"/&gt;
- *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Incidencia" minOccurs="0"/&gt;
  *       &lt;/all&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -47,8 +46,6 @@ public class Respuesta {
     protected Estado2 estado;
     @XmlElement(name = "Errores")
     protected Errores errores;
-    @XmlElement(name = "Incidencia")
-    protected Incidencia incidencia;
 
     /**
      * Obtiene el valor de la propiedad estado.
@@ -96,30 +93,6 @@ public class Respuesta {
      */
     public void setErrores(Errores value) {
         this.errores = value;
-    }
-
-    /**
-     * Obtiene el valor de la propiedad incidencia.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Incidencia }
-     *     
-     */
-    public Incidencia getIncidencia() {
-        return incidencia;
-    }
-
-    /**
-     * Define el valor de la propiedad incidencia.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Incidencia }
-     *     
-     */
-    public void setIncidencia(Incidencia value) {
-        this.incidencia = value;
     }
 
 }

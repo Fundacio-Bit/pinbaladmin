@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.15 a las 12:17:55 PM CET 
+// Generado el: 2025.11.26 a las 12:52:24 PM CET 
 //
 
 
@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}NombreServicio"/&gt;
  *         &lt;element name="Estado" type="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}EstadoServicioCedente"/&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Descripcion"/&gt;
+ *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Observaciones" minOccurs="0"/&gt;
  *       &lt;/all&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -52,6 +53,8 @@ public class EstadoAutorizacionCedente {
     protected int estado;
     @XmlElement(name = "Descripcion", required = true)
     protected String descripcion;
+    @XmlElement(name = "Observaciones")
+    protected String observaciones;
 
     /**
      * Obtiene el valor de la propiedad cedente.
@@ -139,6 +142,30 @@ public class EstadoAutorizacionCedente {
      */
     public void setDescripcion(String value) {
         this.descripcion = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad observaciones.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    /**
+     * Define el valor de la propiedad observaciones.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setObservaciones(String value) {
+        this.observaciones = value;
     }
 
 }

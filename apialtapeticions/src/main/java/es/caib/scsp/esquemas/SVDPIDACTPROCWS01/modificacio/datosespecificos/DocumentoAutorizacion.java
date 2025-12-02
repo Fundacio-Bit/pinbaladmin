@@ -2,7 +2,7 @@
 // Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
 // Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
 // Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2023.11.22 a las 02:36:58 PM CET 
+// Generado el: 2025.11.26 a las 12:50:29 PM CET 
 //
 
 
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/simpleType&gt;
  *         &lt;/element&gt;
  *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Descripcion"/&gt;
- *         &lt;element ref="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Contenido"/&gt;
+ *         &lt;element name="Contenido" type="{http://intermediacion.redsara.es/scsp/esquemas/datosespecificos}Contenido"/&gt;
  *         &lt;element name="Tipo"&gt;
  *           &lt;simpleType&gt;
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
