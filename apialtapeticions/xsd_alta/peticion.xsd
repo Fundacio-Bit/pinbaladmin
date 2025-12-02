@@ -146,7 +146,7 @@
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:minLength value="1"/>
-				<xs:maxLength value="100"/>
+				<xs:maxLength value="250"/>
 				<xs:whiteSpace value="collapse"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -260,6 +260,7 @@
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:enumeration value="S2833002E"/>
+				<xs:enumeration value="Q2802923I"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>

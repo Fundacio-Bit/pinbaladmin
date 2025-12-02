@@ -1,34 +1,47 @@
 package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
+import java.io.File;
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.EJB;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
+import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsCommon.DocAuthInfo;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
+import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
-
-import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
-import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Contacto;
+import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 
 public abstract class PinbalUtilsCommon {
 
@@ -54,6 +67,24 @@ public abstract class PinbalUtilsCommon {
 
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
+
+	@EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
+	protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
+
+	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService.JNDI_NAME)
+	protected org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService entitatServeiLogicEjb;
+
+	@EJB(mappedName = DocumentLogicaService.JNDI_NAME)
+	protected DocumentLogicaService documentLogicaEjb;
+
+	@EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
+	protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+
+	final String PINBAL_CONSENTIMENT_LLEI = "Ley";
+	final String PINBAL_CONSENTIMENT_SI = "Si";
+	final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
+	
+	final int MAX_NORMES_SERVEI = 3;
 
 	public PinbalUtilsCommon() {
 	}
@@ -125,13 +156,6 @@ public abstract class PinbalUtilsCommon {
 			throws Exception {
 
 		PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
-
-		String url = Configuracio.getApiPinbalUrl();
-		String username = Configuracio.getApiPinbalUsername();
-		String password = Configuracio.getApiPinbalPassword();
-
-		// log.info("URL: ]" + url + "[ Username: ]" + username + "[ Password: ]" +
-		// password + "[");
 
 		config.setUrlBase(Configuracio.getApiPinbalUrl());
 		config.setUsername(Configuracio.getApiPinbalUsername());
@@ -292,4 +316,201 @@ public abstract class PinbalUtilsCommon {
 
 		eventLogicaEjb.create(event);
 	}
+
+	public String adaptarNomProcedimentOld(String nom) {
+		// Pasarlo a maysculas y quitar acentos.
+
+		String nomAdaptat = nom.toUpperCase();
+		nomAdaptat = nomAdaptat.replace("À", "A");
+		nomAdaptat = nomAdaptat.replace("È", "E");
+		nomAdaptat = nomAdaptat.replace("É", "E");
+		nomAdaptat = nomAdaptat.replace("Í", "I");
+		nomAdaptat = nomAdaptat.replace("Ó", "O");
+		nomAdaptat = nomAdaptat.replace("Ò", "O");
+		nomAdaptat = nomAdaptat.replace("Ú", "U");
+		nomAdaptat = nomAdaptat.replace("Ü", "U");
+		nomAdaptat = nomAdaptat.replace("Ç", "C");
+		return nomAdaptat;
+
+	}
+
+	public String adaptarNomProcediment(String nom) {
+		if (nom == null)
+			return null;
+
+		// Pasar a mayúsculas
+		String nomAdaptat = nom.toUpperCase();
+
+		// Quitar acentos y diacríticos
+		nomAdaptat = Normalizer.normalize(nomAdaptat, Normalizer.Form.NFD);
+		nomAdaptat = nomAdaptat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+		// Reemplazar la ç manualmente (no la quita el normalizer)
+		nomAdaptat = nomAdaptat.replace("Ç", "C");
+
+		return nomAdaptat;
+	}
+
+	public byte[] getCertificadoX509() {
+
+		String certificado = "MIIB8TCCAZegAwIBAgIUJ7s5b0e4a5EKeosFVYpY8R4jtv8wCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIVGVzdENlcnQwHhcNMjUxMjAxMTAwMDAwWhcNMjYxMjAxMTAwMDAwWjATMREwDwYDVQQDDAhUZXN0Q2VydDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMX0cS5Fmw7fq0g3MzZ0MsnMd+2C7IeEhuIAH4JlTT1kkp97JQnWWhY1uCEkDp3NzVP8Lzz0JcTsPv4f9NqqWFSjUzBRMB0GA1UdDgQWBBTFo9GhlZJAew34r5TjAmdxhqS93TAfBgNVHSMEGDAWgBTFo9GhlZJAew34r5TjAmdxhqS93TAPBgNVHRMBAf8EBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQCjQGcr/5Znd7XK9LdJxgC5rmUtBk8oun3nH0D7mYYTIwIhAIpw1o6v9EYawcy+HUildGL9TEZ17KJTudYbuvVKCBKt";
+
+		byte[] consentimentBytes = certificado.getBytes();
+//		return consentimentBytes;
+		return null;
+	}	
+	
+	/**
+	 * Valida que los datos de contacto sean completos
+	 */
+	protected boolean validarDatosContacto(String contactoApe1, String contactoApe2, String contactoMail,
+			String contactoNombre, String contactoTelefono) {
+		return contactoApe1 != null && contactoMail != null && contactoNombre != null && contactoTelefono != null;
+	}
+
+	
+	/**
+	 * Convierte un Date a XMLGregorianCalendar para la fecha de caducidad
+	 */
+	protected XMLGregorianCalendar convertirDateAXMLGregorianCalendar(Date dataCaducitat) throws Exception {
+		XMLGregorianCalendar _FechaCaducidad = null;
+
+		if (dataCaducitat != null) {
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTime(dataCaducitat);
+			_FechaCaducidad = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(gc.get(GregorianCalendar.YEAR),
+					gc.get(GregorianCalendar.MONTH) + 1, gc.get(GregorianCalendar.DAY_OF_MONTH),
+					DatatypeConstants.FIELD_UNDEFINED // sin timezone
+			);
+		}
+
+		return _FechaCaducidad;
+	}
+	
+	public Set<DocAuthInfo> getDocumentsAuth(SolicitudJPA soli) throws I18NException {
+		Set<DocAuthInfo> docsAuth = new HashSet<DocAuthInfo>();
+
+		List<DocumentSolicitud> listDocumentsSolicitud = documentSolicitudLogicaEjb
+				.select(DocumentSolicitudFields.SOLICITUDID.equal(soli.getSolicitudID()));
+
+		for (DocumentSolicitud docSoli : listDocumentsSolicitud) {
+			Document document = documentLogicaEjb.findByPrimaryKey(docSoli.getDocumentID());
+
+			Long tipus = document.getTipus();
+
+			if (tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+				FitxerJPA fitxer = fitxerLogicEjb.findByPrimaryKey(document.getFitxerFirmatID());
+				if (fitxer != null) {
+					String desc = "Formulari PDF firmat per el director";
+					String tipo = "FORMULARIO DE AUTORIZACION";
+					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
+				} else {
+					log.info("Fa falta el formulari firmat per el DG");
+				}
+
+			} else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
+				// No se envía
+
+			} else {
+				FitxerJPA original = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerOriginalID());
+				if (original.getMime().equals("application/pdf")) {
+					FitxerJPA fitxer = original;
+					String desc = "Fitxer PDF associat al procediment";
+					String tipo = "FORMULARIO DE AUTORIZACION";
+					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
+				}
+			}
+		}
+		return docsAuth;
+	}
+
+	/**
+	 * Obtiene el contenido de un fichero por su ID
+	 */
+	protected byte[] obtenerContenidoFitxer(Long fitxerID) throws Exception {
+		File file = FileSystemManager.getFile(fitxerID);
+		return FileUtils.readFromFile(file);
+	}
+
+	/**
+	 * Crea una descripción para una norma legal
+	 */
+	protected String crearDescripcionNorma(int numeroNorma, String nombreServei) {
+		return "Norma Legal " + numeroNorma + " - Servei: " + nombreServei;
+	}
+
+	/**
+	 * Actualiza la información de Madrid para una solicitud
+	 */
+	protected void actualizarInfoMadrid(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli,
+			InfoMadridJPA infoMadJpa, Long estadoSoli, Long estadoAuth, String respuesta) throws I18NException {
+
+		Long infoMadridIDOld = soli.getInfomadridid();
+		if (infoMadridIDOld != null) {
+			InfoMadrid infoMadridOld = infoMadridLogicaEjb.findByPrimaryKey(infoMadridIDOld);
+			infoMadJpa.setIntents(infoMadridOld.getIntents() + 1);
+		}
+
+		infoMadJpa.setEstatProcediment(estadoSoli);
+		infoMadJpa.setEstatAutoritzacio(estadoAuth);
+		infoMadJpa.setMissatge(respuesta);
+
+		InfoMadrid infoMad = infoMadridLogicaEjb.create(infoMadJpa);
+		Long infoMadID = infoMad.getInfoMadridID();
+
+		soli.setInfomadridid(infoMadID);
+		solicitudLogicaEjb.update(soli);
+	}
+
+	/**
+	 * Añade un evento de solicitud enviada a Madrid
+	 */
+	protected void afegirEventSolicitudEnviada(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, String mensaje,
+			String tipusOperacio) {
+
+		final Timestamp data = new Timestamp(System.currentTimeMillis());
+		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+		String persona = "pinbaladmin - " + soli.getOperador();
+		String subject = tipusOperacio + " enviada a MADRID. " + soli.getProcedimentCodi();
+		String msg = "S'ha enviat la " + tipusOperacio.toLowerCase() + " a MADRID. " + mensaje;
+
+		EventJPA event = new EventJPA();
+		event.setSolicitudID(soli.getSolicitudID());
+		event.setIncidenciaTecnicaID(null);
+		event.setDataEvent(data);
+		event.setTipus(tipus);
+		event.setPersona(persona);
+		event.setDestinatari(null);
+		event.setDestinatarimail(null);
+		event.setAsumpte(subject);
+		event.setComentari(msg);
+		event.setFitxerID(null);
+		event.setNoLlegit(true);
+		event.setCaidIdentificadorConsulta(null);
+		event.setCaidNumeroSeguiment(null);
+
+		try {
+			eventLogicaEjb.create(event);
+		} catch (I18NException e) {
+			log.error("No s'ha pogut crear l'event de " + tipusOperacio.toLowerCase() + " enviada: " + e.getMessage(),
+					e);
+		}
+	}
+
+	/**
+	 * Avisa al contacto de una solicitud desestimada que requiere esmenas
+	 */
+	protected void avisarContacteSolicitudDesestimada(SolicitudJPA solicitud, String respostaMadrid,
+			String tipusProces) {
+		String asumpte = "PROCÉS " + tipusProces + " PROCEDIMENT " + solicitud.getProcedimentCodi()
+				+ ". Requereix esmenes.";
+		String missatge = generarMissatgeEsmena(solicitud, respostaMadrid);
+
+		try {
+			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+		} catch (I18NException e) {
+			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
+		}
+	}
+
 }

@@ -31,7 +31,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsultaLogicaService;
-import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacio;
+import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacioLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -92,10 +92,13 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
     protected InfoMadridLogicaService infoMadridLogicaJEjb;
 
-    @EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
-    protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
-    
-    @EJB(mappedName = PinbalUtilsAltaLogicaService.JNDI_NAME)
+	@EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
+	protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+	
+	@EJB(mappedName = PinbalUtilsModificacioLogicaService.JNDI_NAME)
+	protected PinbalUtilsModificacioLogicaService pinbalModificacioLogicaEjb;
+	
+	@EJB(mappedName = PinbalUtilsAltaLogicaService.JNDI_NAME)
     protected PinbalUtilsAltaLogicaService pinbalAltaLogicaEjb;
     
 
@@ -500,8 +503,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			ScspTitular titular, ScspFuncionario funcionario,
 			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud) throws Exception {
 
-		PinbalUtilsModificacio mod = new PinbalUtilsModificacio();
-		return mod.modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
+		return pinbalModificacioLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
 	}
 
 	@Override
@@ -517,8 +519,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 		SolicitudJPA soli = this.findByPrimaryKey(solicitudID);
 
-		PinbalUtilsModificacio mod = new PinbalUtilsModificacio();
-		return mod.getDadesSolicitudApiPinbalMod(soli);
+		return pinbalModificacioLogicaEjb.getDadesSolicitudApiPinbalMod(soli);
 	}
 
 	

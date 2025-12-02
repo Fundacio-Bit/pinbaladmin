@@ -13,7 +13,6 @@
 			<xs:all>
 				<xs:element ref="Estado"/>
 				<xs:element ref="Errores" minOccurs="0"/>
-				<xs:element ref="Incidencia" minOccurs="0"/>
 			</xs:all>
 		</xs:complexType>
 	</xs:element>
@@ -50,10 +49,23 @@
 	<xs:element name="Solicitud">
 		<xs:complexType>
 			<xs:all>
-				<xs:element ref="Asunto"/>
-				<xs:element ref="Consulta"/>
 				<xs:element ref="Contactos"/>
+				<xs:element ref="AutorizacionDelegada" minOccurs="0"/>
 				<xs:element ref="Procedimiento"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AutorizacionDelegada">
+		<xs:annotation>
+			<xs:documentation>Se rellenará para cuando una aplicación tenga que solicitar autorizaciones de otra aplicación que tenga delegada esa autorización</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="CertificadoX509" type="Contenido">
+					<xs:annotation>
+						<xs:documentation>Certificado X509 de la aplicación a la que se asociarán las autorizaciones solicitadas (Debe estar autorizado esta delegación de autorización en PID)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:all>
 		</xs:complexType>
 	</xs:element>
@@ -104,7 +116,7 @@
 	<!-- Fin Errores -->
 	<xs:element name="Contactos">
 		<xs:annotation>
-			<xs:documentation>Información de las personas de contacto que envían la solicitud. Se registrará en el gestor de incidencias.</xs:documentation>
+			<xs:documentation>Información de las personas de contacto que envían la solicitud. </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence minOccurs="1" maxOccurs="unbounded">
@@ -114,33 +126,34 @@
 	</xs:element>
 	<xs:element name="DocumentoAutorizacion">
 		<xs:annotation>
-			<xs:documentation>Documento que recoge las autorizaciones a los servicicios. Debe ser un excel</xs:documentation>
+			<xs:documentation>Formulario de autorización y/o  convenio para aquellos servicios que lo requieran para ser autorizados. Los documentos deben ser un pdf.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:all>
 				<xs:element name="Nombre">
 					<xs:annotation>
-						<xs:documentation>Nombre del archivo de la autoriazación a adjuntar. (Extensión xlsx|xls|XLSX|XLS|pdf|PDF)</xs:documentation>
+						<xs:documentation>Nombre del archivo de la autorización a adjuntar. (Extensión pdf|PDF)</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:whiteSpace value="collapse"/>
 							<xs:minLength value="1"/>
 							<xs:maxLength value="512"/>
-							<xs:pattern value=".+\.(xlsx|xls|XLSX|XLS|pdf|PDF)"/>
+							<xs:pattern value=".+\.(pdf|PDF)"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
 				<xs:element ref="Descripcion"/>
-				<xs:element ref="Contenido"/>
+				<xs:element name="Contenido" type="Contenido"/>
 				<xs:element name="Tipo">
 					<xs:annotation>
-						<xs:documentation>El tipo deberá ser FORMULARIO DE AUTORIZACION o CONVENIO.</xs:documentation>
+						<xs:documentation>El tipo deberá ser FORMULARIO DE AUTORIZACION, FORMULARIO DE AUTORIZACION CEDENTE  o CONVENIO.</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="CONVENIO"/>
 							<xs:enumeration value="FORMULARIO DE AUTORIZACION"/>
+							<xs:enumeration value="FORMULARIO DE AUTORIZACION CEDENTE"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
@@ -235,7 +248,7 @@
 								</xs:simpleType>
 							</xs:element>
 							<xs:element ref="Descripcion"/>
-							<xs:element ref="Contenido"/>
+							<xs:element name="Contenido" type="Contenido"/>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>
@@ -316,7 +329,7 @@
 								</xs:simpleType>
 							</xs:element>
 							<xs:element ref="Descripcion"/>
-							<xs:element ref="Contenido"/>
+							<xs:element name="Contenido" type="Contenido"/>
 							<xs:element ref="Enlace" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation>Enlace de la norma legal que regula el procedimiento</xs:documentation>
@@ -329,14 +342,6 @@
 			</xs:all>
 		</xs:complexType>
 	</xs:element>
-	<!--xs:element name="DocumentosNormas">
-		<xs:annotation>
-			<xs:documentation>Documentos que recogen las normas legales en la que se basa la autorización a los servicicios. Deben ser pdfs</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:all/>
-		</xs:complexType>
-	</xs:element-->
 	<xs:element name="Servicio">
 		<xs:annotation>
 			<xs:documentation>Datos de los servicios a autorizar</xs:documentation>
@@ -358,7 +363,7 @@
 	</xs:element>
 	<xs:element name="DocumentosAutorizacion">
 		<xs:annotation>
-			<xs:documentation>Documentos que contienen o bien el formulario de autorización a los servicios o bien un convenio para la autorización de acceso a los servicios que lo requieran. Ambos documentos deben ser un pdf.</xs:documentation>
+			<xs:documentation>Formulario de autorización y/o  convenio para aquellos servicios que lo requieran para ser autorizados. Los documentos deben ser un pdf.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence maxOccurs="unbounded">
@@ -521,21 +526,16 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="Contenido">
-		<xs:annotation>
-			<xs:documentation>Contenido del documento en Base64</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:base64Binary">
-				<xs:minLength value="1"/>
-				<xs:maxLength value="4194304"/>
-				<xs:whiteSpace value="collapse"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
+	<xs:simpleType name="Contenido">
+		<xs:restriction base="xs:base64Binary">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4194304"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:element name="Contacto">
 		<xs:annotation>
-			<xs:documentation>Información de contacto de la persona que envía la solicitud. Se registrará en el gestor de incidencias.</xs:documentation>
+			<xs:documentation>Información de contacto de la persona que envía la solicitud.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:all>
@@ -554,8 +554,8 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:maxLength value="40"/>
 				<xs:minLength value="1"/>
+				<xs:maxLength value="50"/>
 				<xs:whiteSpace value="collapse"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -566,8 +566,8 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:maxLength value="40"/>
 				<xs:minLength value="1"/>
+				<xs:maxLength value="50"/>
 				<xs:whiteSpace value="collapse"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -578,8 +578,8 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:maxLength value="40"/>
 				<xs:minLength value="1"/>
+				<xs:maxLength value="50"/>
 				<xs:whiteSpace value="collapse"/>
 			</xs:restriction>
 		</xs:simpleType>
@@ -617,63 +617,5 @@
 				<xs:pattern value="\d{9,10}"/>
 			</xs:restriction>
 		</xs:simpleType>
-	</xs:element>
-	<xs:element name="Asunto">
-		<xs:annotation>
-			<xs:documentation>Asunto de la solicitud. Se registrará en el gestor de incidencias. </xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:minLength value="1"/>
-				<xs:maxLength value="200"/>
-				<xs:whiteSpace value="collapse"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="Consulta">
-		<xs:annotation>
-			<xs:documentation>Consulta de la solicitud, se detallará para que servicio o servicios se quiere autorizacion y en base a que procedimiento.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:minLength value="1"/>
-				<xs:maxLength value="200"/>
-				<xs:whiteSpace value="collapse"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="NumeroSeguimiento">
-		<xs:annotation>
-			<xs:documentation>Número para realizar el seguimiento de la  incidencia creada para tramitar el alta del procedimiento.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:long">
-				<xs:minInclusive value="0"/>
-				<xs:whiteSpace value="collapse"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="NumeroIncidencia">
-		<xs:annotation>
-			<xs:documentation>Identificador de la incidencia creada para tramitar el alta del procedimiento.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:long">
-				<xs:minInclusive value="0"/>
-				<xs:whiteSpace value="collapse"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="Incidencia">
-		<xs:annotation>
-			<xs:documentation>Se devolverá si el procedimiento no está dado de alta en el sistema y, se ha dado de alta la incidencia para tramitar el alta del procedimiento solicitado.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:all>
-				<xs:element ref="NumeroIncidencia"/>
-				<xs:element ref="NumeroSeguimiento"/>
-				<xs:element ref="Email"/>
-			</xs:all>
-		</xs:complexType>
 	</xs:element>
 </xs:schema>

@@ -204,6 +204,9 @@ public class PinbalAdminSolicitudsApi {
         String datosEspecificos = resposta.getTransmisiones().get(0).getDatosEspecificos();
         datosEspecificos = parseDatosEspecificosXML(datosEspecificos);
 
+        log.info("Datos Especificos Alta PINBAL: \n");
+        log.info(datosEspecificos);
+        
         JAXBContext contexto = JAXBContext
                 .newInstance(es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos.class);
 
@@ -354,7 +357,13 @@ public class PinbalAdminSolicitudsApi {
 
                 Marshaller marshaller = contexto.createMarshaller();
 
-                marshaller.marshal(this.datosEspecificos, sw);
+                // DatosEspecificos doesn't have @XmlRootElement; marshal as JAXBElement
+                es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.ObjectFactory of =
+                    new es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.ObjectFactory();
+                javax.xml.bind.JAXBElement<es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.DatosEspecificos> jbe =
+                    of.createDatosEspecificos(this.datosEspecificos);
+
+                marshaller.marshal(jbe, sw);
 
                 return sw.toString();
 
@@ -385,7 +394,13 @@ public class PinbalAdminSolicitudsApi {
 
                 Marshaller marshaller = contexto.createMarshaller();
 
-                marshaller.marshal(this.datosEspecificos, sw);
+                // DatosEspecificos doesn't have @XmlRootElement; marshal as JAXBElement
+                es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.ObjectFactory ofc =
+                    new es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.ObjectFactory();
+                javax.xml.bind.JAXBElement<es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.DatosEspecificos> jbeC =
+                    ofc.createDatosEspecificos(this.datosEspecificos);
+
+                marshaller.marshal(jbeC, sw);
 
                 return sw.toString();
 
@@ -416,7 +431,13 @@ public class PinbalAdminSolicitudsApi {
 
                 Marshaller marshaller = contexto.createMarshaller();
 
-                marshaller.marshal(this.datosEspecificos, sw);
+                // DatosEspecificos doesn't have @XmlRootElement; marshal as JAXBElement
+                es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.ObjectFactory ofm =
+                    new es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.ObjectFactory();
+                javax.xml.bind.JAXBElement<es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.DatosEspecificos> jbeM =
+                    ofm.createDatosEspecificos(this.datosEspecificos);
+
+                marshaller.marshal(jbeM, sw);
 
                 return sw.toString();
 

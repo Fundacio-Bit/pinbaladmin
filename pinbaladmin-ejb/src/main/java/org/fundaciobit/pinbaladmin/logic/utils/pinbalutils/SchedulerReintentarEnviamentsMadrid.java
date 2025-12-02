@@ -44,6 +44,9 @@ public class SchedulerReintentarEnviamentsMadrid {
 
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
     protected InfoMadridLogicaService infoMadridLogicaEjb;
+    
+    @EJB(mappedName = PinbalUtilsModificacioLogicaService.JNDI_NAME)
+    protected PinbalUtilsModificacioLogicaService pinbalModificacioLogicaEjb;
 
 	@Resource
 	private TimerService timerService;
@@ -118,7 +121,6 @@ public class SchedulerReintentarEnviamentsMadrid {
 			List<String> codisConsultats = new ArrayList<>();
 
 			PinbalUtilsAltaLogicaEJB alta = new PinbalUtilsAltaLogicaEJB();
-			PinbalUtilsModificacio modificacio = new PinbalUtilsModificacio();
 
 			for (Solicitud solicitud : solicituds) {
 				String codi = solicitud.getProcedimentCodi();
@@ -136,16 +138,16 @@ public class SchedulerReintentarEnviamentsMadrid {
 					// enviamos una MODIFICACION.
 					if (infoMad.getDataAutoritzacio() == null) {
 						// Construir el texto consulta personalizado
-						String consultaTexto = "Buenos días,\n"
-								+ "Enviamos solicitud para dar servicios de alta en el procedimiento "
-								+ solicitud.getProcedimentCodi() + "\n\n" + "Quedamos a la espera de su respuesta.\n"
-								+ "Un saludo.";
+//						String consultaTexto = "Buenos días,\n"
+//								+ "Enviamos solicitud para dar servicios de alta en el procedimiento "
+//								+ solicitud.getProcedimentCodi() + "\n\n" + "Quedamos a la espera de su respuesta.\n"
+//								+ "Un saludo.";
 
 						// Obtener la solicitud para alta con la consulta configurada
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitudAlta = solicitudLogicaEjb
 								.getDadesSolicitudApiPinbalAlta((SolicitudJPA) solicitud);
 
-						solicitudAlta.setConsulta(consultaTexto);
+//						solicitudAlta.setConsulta(consultaTexto);
 
 						// Enviar solicitud
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = alta
@@ -159,7 +161,7 @@ public class SchedulerReintentarEnviamentsMadrid {
 						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitudMod = solicitudLogicaEjb
 								.getDadesModificarSolicitudApiPinbal(solicitud.getSolicitudID());
 
-						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta = modificacio
+						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta = pinbalModificacioLogicaEjb
 								.modificacioSolicitudApiPinbal(titular, funcionario, solicitudMod);
 
 						solicitudLogicaEjb.processarRespostaPinbalModificacio(solicitud, resposta, titular,
