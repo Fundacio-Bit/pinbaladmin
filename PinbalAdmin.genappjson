@@ -5688,7 +5688,7 @@
           "isAutoIncrement": false,
           "sqlName": "missatgepinbal",
           "sqlType": 12,
-          "size": 255,
+          "size": 2147483647,
           "digits": 0,
           "isNotNullable": false,
           "labels": {

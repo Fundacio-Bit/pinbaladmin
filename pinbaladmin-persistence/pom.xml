@@ -86,6 +86,36 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- API de plugins de información de usuario -->
+        <dependency>
+            <artifactId>pluginsib-userinformation-api</artifactId>
+            <groupId>org.fundaciobit.pluginsib.userinformation</groupId>
+            <version>${pluginsib.userinformation.api.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.fundaciobit.pluginsib.core</groupId>
+                    <artifactId>pluginsib-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- API de plugins de estructura organizativa -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.estructuraorganitzativa</groupId>
+            <artifactId>pluginsib-estructuraorganitzativa-api</artifactId>
+            <version>${pluginsib.estructuraorganitzativa.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencia para PluginsManager y configuración -->
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.utils</groupId>
+            <artifactId>pluginsib-utils-commons</artifactId>
+            <version>${pluginsib.utils.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
