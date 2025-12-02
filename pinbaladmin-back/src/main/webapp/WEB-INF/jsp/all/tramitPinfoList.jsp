@@ -107,6 +107,16 @@
 	margin-top: .5rem;
 }
 
+#nota {
+  font-style: italic;
+  border: 1px solid darkgray;
+  border-radius: 5px;
+  padding: 6px;
+  background-color: #d3d3d336;
+  width: fit-content;
+  margin: 1rem auto;
+}
+
 #msgAfegirPinfoData {
 	text-align: center;
 	margin: 2rem;
@@ -170,10 +180,15 @@
 						<%@include
 							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
 							
-							
+						<p id="nota">
+							<fmt:message key="tramit.pinfo.nota" />
+						</p>
+
 						<div id="msgAfegirPinfoData">
-							<p class="lead">Afegir dades al PINFO...</p>
+<!-- 							<p class="lead">Afegir dades al PINFO...</p> -->
+							
 						</div>
+						
 					</div>
 
 					<script type="text/javascript">
@@ -183,7 +198,8 @@
 						elements[0] = alta;
 						
 						elements.removeClass("float-right");
-						$("#msgAfegirPinfoData").html(elements);
+
+						$("#msgAfegirPinfoData").append(elements);
 					</script>
 				</c:if>
 

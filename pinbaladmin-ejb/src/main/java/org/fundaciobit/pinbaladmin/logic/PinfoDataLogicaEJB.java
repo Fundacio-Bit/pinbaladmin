@@ -21,6 +21,7 @@ import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.PinfoDataEJB;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
@@ -34,6 +35,8 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.core.v3.IPluginIB;
 import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
+import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.fundaciobit.pluginsib.utils.templateengine.TemplateEngine;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -112,11 +115,15 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 	@Override
 	public PinfoDataFull getEstructuraUsuarisProcedimentServeis(Long pinfoID) throws I18NException {
-		final String ENTITAT_CIF = pinfoLogicaEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
-		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
+//		final String ENTITAT_CIF = pinfoLogicaEjb.executeQueryOne(PinfoFields.ENTITAT, PinfoFields.PINFOID.equal(pinfoID));
+//		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
 		
 		 //= "GOVERN"; // "S0711001H";
 		// final String CODI_USUARI = "e45186147w"; //"S0711001H";
+
+		final boolean debug = false;
+    	boolean caib = true;
+		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
 
 		final String baseUrl = Configuracio.getApiPinbalClientUrl();
 		final String username = Configuracio.getApiPinbalClientUsername();
@@ -161,8 +168,9 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			if (nouUsuari) {
 //				log.info("Creant nou usuari amb nova llista de procediments");
 				try {
-					UsuariEntitat usuariEntitat = usuariClient.getUsuari(usuariID, ENTITAT_CIF);
-					UsuariData usuariData = new UsuariData(usuariEntitat.getCodi(), usuariEntitat.getNif(), usuariEntitat.getNom(), new ArrayList<ProcedimentData>());
+//					UsuariEntitat usuariEntitat = usuariClient.getUsuari(usuariID, ENTITAT_CIF);
+					UserInfo usuari = pluginUserInfo.getUserInfoByUserName(usuariID);
+					UsuariData usuariData = new UsuariData(usuari.getUsername(), usuari.getAdministrationID(), usuari.getFullName(), new ArrayList<ProcedimentData>());
 					procedimentsList = usuariData.getProcediments();
 					lastUsuariData = usuariData;
 					lastUsuariID = usuariID;
@@ -431,234 +439,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			this.usuaris = usuaris;
 		}
 	}
-
-	private IPluginIB pluginInstance = null;
-
-	@Override
-	public IEstructuraOrganitzativaPlugin getPluginEstructuraOrganitzativa() throws I18NException{
-
-		if (pluginInstance != null) {
-			log.info("Plugin d'estructura organitzativa ja creat.");
-			return (IEstructuraOrganitzativaPlugin) pluginInstance;
-		}
-
-		String clase = "org.fundaciobit.pluginsib.estructuraorganitzativa.ldapcaib.LdapCaibEstructuraOrganitzativaPlugin";
-		String propertyBase = Constants.PINBALADMIN_PROPERTY_BASE;
-		Properties prop = new Properties();
-		String propertiesStringOld = 
-				  "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.users_context_dn=dc\\=caib,dc\\=es\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.host_url=ldap\\://sdesauthlin1.caib.es\\:389\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_authentication=simple\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.search_scope=subtree\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_principal=cn=lectorenviafib,dc=caib,dc=es\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_credentials=fib$2803\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.username=cn\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.mail=mail\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.administration_id=nif\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.name=givenName\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname=sn\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname1=sn1\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname2=sn2\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.telephone=\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.department=departmentNumber\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.memberof=memberOf\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.prefix_role_match_memberof=cn=\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.suffix_role_match_memberof=,dc=caib,dc=es\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.dir3host=https://se.caib.es/dir3caib/rest\r\n"
-				+ "\r\n"
-				+ "# S'ha de definir una de les dues propietats: o mappingdir3consellerusername o rolcaparea\r\n"
-				+ "#org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.mappingdir3consellerusername=D:/dades/dades/CarpetesPersonals/ProjecteBase/jboss7/standalone/deploy_enviafib/mappingdir3consellerusername.properties\r\n"
-				+ "#org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolcaparea=IBK_CONSELLER\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolcapdepartament=EFI_DIRECTOR\r\n"
-				+ "#IBK_DIRECTOR\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolsecretari=EFI_SECRETARI\r\n"
-				+ "#DIS_IBSALUT_RRHH\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.gerentpresident.nom=Margalida Prohens Rigo\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.gerentpresident.username=e78213313l\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.nom=Govern de les Illes Balears\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.dir3=A04003003\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.nif=S0711001H\r\n"
-				+ "\r\n"
-				+ "# S'ha de definir una de les dues propietats: o conselleria.dir o rolcaparea\r\n"
-				+ "#org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolcaparea=IBK_CONSELLER\r\n"
-				+ "\r\n"
-				+ "#Mapeig de DIR3 de Conselleries i Consellers\r\n"
-				+ "\r\n"
-				+ "# Conselleria de Turisme, Cultura i esports\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026906=e18219772t\r\n"
-				+ "\r\n"
-				+ "#Conselleria d'Economia, Hisenda i Innovació\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026911=u99853\r\n"
-				+ "\r\n"
-				+ "#Conselleria de Presidència i Administracions Públiques\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04027007=u03439\r\n"
-				+ "\r\n"
-				+ "#Conselleria d'Empresa, Ocupació i Energia\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A040043816=e25386104s\r\n"
-				+ "\r\n"
-				+ "#Conselleria de Salut\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026919=u100793\r\n"
-				+ "\r\n"
-				+ "#Conselleria d'Educació i Universitats\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026923=u05679\r\n"
-				+ "\r\n"
-				+ "#Conselleria d'Habitatge, Territori i Mobilitat\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026937=u105606\r\n"
-				+ "\r\n"
-				+ "#Conselleria de Famílies i Afers Socials\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026929=u151993\r\n"
-				+ "\r\n"
-				+ "#Conselleria de la Mar i del Cicle de l'Aigua\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026953=u06160\r\n"
-				+ "\r\n"
-				+ "#Conselleria d'Agricultura, Pesca i Medi Natural\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026949=u100030\r\n"
-				+ "\r\n"
-				+ "#Mapeig dels grups que no tenen DIR3 associat a grups que si el tenen\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.group.externs=dgtic";
-		
-		String propertiesString = "# PLUGIN ESTRUCTURA ORGANITZATIVA - LDAP CAIB\r\n"
-				+ "\r\n"
-				+ "# Classe org.fundaciobit.pluginsib.estructuraorganitzativa.ldapcaib.LdapCaibEstructuraOrganitzativaPlugin\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.users_context_dn=dc\\=caib,dc\\=es\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.host_url=ldap\\://sdesauthlin1.caib.es\\:389\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_authentication=simple\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.search_scope=subtree\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_principal=cn=lectorenviafib,dc=caib,dc=es\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.security_credentials=fib$2803\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.username=cn\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.mail=mail\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.administration_id=nif\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.name=givenName\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname=sn\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname1=sn1\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.surname2=sn2\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.telephone=\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.department=departmentNumber\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.attribute.memberof=memberOf\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.prefix_role_match_memberof=cn=\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.ldap.suffix_role_match_memberof=,dc=caib,dc=es\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.dir3host=https://se.caib.es/dir3caib/rest\r\n"
-				+ "\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolcapdepartament=DIS_IBSALUT_RRHH\r\n"
-				+ "#IBK_DIRECTOR\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolsecretari=PFI_USER\r\n"
-				+ "#IBK_SECRETARI\r\n"
-				+ "\r\n"
-				+ "# S´ha de definir una de les dues propietats: o conselleria.dir o rolcaparea\r\n"
-				+ "#org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.rolcaparea=IBK_CONSELLER\r\n"
-				+ "\r\n"
-				+ "#Mapeig de DIR3 de Conselleries i Consellers\r\n"
-				+ "# Juan Pedro Yllanes Suarez Yllanes Suarez\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026972=u143134\r\n"
-				+ "# Mercedes Garrido Rodriguez\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04027007=e18227253y\r\n"
-				+ "# Rosario Sanchez Grau\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026911=u135358\r\n"
-				+ "# Iago Negueruela Vázquez\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026960=u93566\r\n"
-				+ "# Fina De Santiago Rodríguez\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026929=u06246\r\n"
-				+ "# Marti Xavier March Cerda\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026923=u06196\r\n"
-				+ "# Patricia Juana Gomez Picard\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026919=u89586\r\n"
-				+ "# Miquel Company Pons\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026906=e41507318t\r\n"
-				+ "# Miquel Mir Gual\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026953=u97173\r\n"
-				+ "# María Asunción Jacoba Pía de la Concha García-Mauriño\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026949=u143142\r\n"
-				+ "# Josep Mari Ribas\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.conselleria.A04026937=e41439526n\r\n"
-				+ "\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.gerentpresident.nom=Francina Armengol i Socias\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.gerentpresident.username=u135371\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.nom=Govern de les Illes Balears\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.dir3=A04003003\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.organitzacio.nif=S0711001H\r\n"
-				+ "\r\n"
-				+ "\r\n"
-				+ "#Mapeig dels grups que no tenen DIR3 associat a grups que si el tenen\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.group.externs=dgtic\r\n"
-				+ "\r\n"
-				+ "#Mapeig d´usuaris usuaris de grups que no tenen DIR3 associats a un grup que si en te\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.user.u80067=dgtic\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.user.e45186147w=dgtic\r\n"
-				+ "org.fundaciobit.pinbaladmin.pluginsib.estructuraorganitzativa.ldapcaib.user.ptrias=dgtic\r\n"
-				+ "";
-		
-		
-        try {
-
-            // Exemple:
-            // [=SP["es.caib.digitalib.plugins.signatureserver.afirmaserver.authorization.password"]]
-
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("SP", Configuracio.getSystemAndFileProperties());
-
-            String plantilla = propertiesString;
-            String generat = TemplateEngine.processExpressionLanguageSquareBrackets(plantilla, map,
-                    new Locale("ca"));
-
-            // final String generat = plantilla;
-            // log.error("PROPIETATS DESPRES DE generat:\n" + generat + "\n");
-
-            prop.load(new StringReader(generat));
-
-        } catch (Exception e) {
-            throw new I18NException(e, "genapp.comodi", new I18NArgumentString(
-                    "Error desconegut processant propietats del plugin d'estructura organitzativa: " + e.getMessage()));
-        }
-		
-		
-		pluginInstance = (IPluginIB) PluginsManager.instancePluginByClassName(clase, propertyBase, prop);
-
-		return (IEstructuraOrganitzativaPlugin) pluginInstance;
-	}
-	
-	
-//	private LDAPUserManager ldapUserManager = null;
-//	String LDAPCAIB_ESTRUCTURAORGANITZATIVA_PROPERTY_BASE = ESTRUCTURAORGANITZATIVA_PROPERTY_BASE
-//            + "ldapcaib.";
-//	String LDAP_BASE_PROPERTIES = LDAPCAIB_ESTRUCTURAORGANITZATIVA_PROPERTY_BASE;
-//	
-//	public LDAPUserManager getLDAPUserManager() {
-//
-//		if (ldapUserManager == null) {
-//
-//			Properties ldapProperties = new Properties();
-//			for (String attrib : LDAPConstants.LDAP_PROPERTIES) {
-//				String value = getProperty(LDAP_BASE_PROPERTIES + attrib);
-//				if (value == null) {
-//					if (!attrib.equals(LDAPConstants.LDAP_SEARCHFILTER)
-//							&& !attrib.equals(LDAPConstants.LDAP_ADDITIONAL_ATTRIBUTES)) {
-//						System.err.println("Property[" + LDAP_BASE_PROPERTIES + attrib + "] is NULL");
-//					}
-//				} else {
-//					ldapProperties.setProperty(attrib, value);
-//				}
-//			}
-//
-//			ldapUserManager = new LDAPUserManager(ldapProperties);
-//		}
-//		return ldapUserManager;
-//	}		
 	
 	public void test() throws Exception {
+		boolean debug = true;
+		boolean caib = true;
 		
-		IEstructuraOrganitzativaPlugin plugin =  getPluginEstructuraOrganitzativa();
+		IEstructuraOrganitzativaPlugin plugin = PinbalAdminPluginsManager.getEstructuraOrganitzativaPlugin(debug, caib);
 
 		String username = "e45186147w";
 		String cap = plugin.getCapAreaConsellerName(username);
@@ -837,13 +623,21 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			}
 		}
 		
+		log.info("Actualitzant estat Pinfo i IncidenciaTecnica");
+		
 		pinfo.setMissatgePinbal(String.join("\n", missatges));
 		pinfo.setEstat(Constants.ESTAT_PINFO_TRAMITAT);
+		log.info("Missatge Pinbal: " + pinfo.getMissatgePinbal());
 		pinfoLogicaEjb.update(pinfo);
+		log.info("Pinfo actualitzat correctament.");
 		
+		log.info("Actualitzant estat IncidenciaTecnica associada.");
 		IncidenciaTecnica in = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
 		in.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_TRAMITAT.intValue());
+		
+		log.info("IncidenciaTecnica Missatge Pinbal: " + pinfo.getMissatgePinbal());
 		incidenciaLogicaEjb.update(in);
+		log.info("IncidenciaTecnica actualitzada correctament.");
 
 		log.info("Permisos solicitats afegits correctament.");
 	}

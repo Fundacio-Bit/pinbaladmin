@@ -75,9 +75,9 @@ public class PinfoValidator<I extends Pinfo>
 
     if (__vr.getFieldErrorCount(MISSATGEPINBAL) == 0) {
       java.lang.String __missatgepinbal = __target__.getMissatgePinbal();
-      if (__missatgepinbal!= null && __missatgepinbal.length() > 255) {
+      if (__missatgepinbal!= null && __missatgepinbal.length() > 2147483647) {
         __vr.rejectValue(MISSATGEPINBAL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGEPINBAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGEPINBAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
       }
     }
 

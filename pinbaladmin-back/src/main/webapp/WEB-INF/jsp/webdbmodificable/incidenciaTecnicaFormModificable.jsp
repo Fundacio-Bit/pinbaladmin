@@ -72,7 +72,7 @@ label {
 								input.autocomplete = "off";
 								input.name = "incidenciaTecnica.organid";
 
-								//Asigna valor actual (per si es edició i no creació)
+								//Asigna valor actual (per si es ediciï¿½ i no creaciï¿½)
 								const selected = select.selectedOptions[0];
 								if (selected.value.length > 0) {
 									input.value = selected.innerHTML;
@@ -86,7 +86,7 @@ label {
 								dropdown.className = "autocomplete-dropdown";
 								dropdown.style.zIndex = 5;
 
-								// Agregar el campo de entrada de texto y el desplegable después del select
+								// Agregar el campo de entrada de texto y el desplegable despuï¿½s del select
 								select.parentNode.insertBefore(dropdown,
 										select.nextSibling);
 								select.parentNode.insertBefore(input,
@@ -108,7 +108,7 @@ label {
 													// Limpiar el desplegable
 													dropdown.innerHTML = "";
 
-													// Mostrar todas las opciones si el campo de entrada está vacío
+													// Mostrar todas las opciones si el campo de entrada estï¿½ vacï¿½o
 													if (value === "") {
 														for (let i = 0; i < options.length; i++) {
 															dropdown
@@ -127,7 +127,7 @@ label {
 														}
 													}
 
-													// Mostrar u ocultar el desplegable según las opciones disponibles
+													// Mostrar u ocultar el desplegable segï¿½n las opciones disponibles
 													if (dropdown.children.length > 0) {
 														dropdown.style.display = "block";
 													} else {
@@ -135,7 +135,7 @@ label {
 													}
 												});
 
-								// Controlador de clic en el desplegable para seleccionar la opción
+								// Controlador de clic en el desplegable para seleccionar la opciï¿½n
 								dropdown
 										.addEventListener(
 												"click",
@@ -152,7 +152,7 @@ label {
 													}
 												});
 
-								// Función para crear una opción en el desplegable
+								// Funciï¿½n para crear una opciï¿½n en el desplegable
 								function createDropdownOption(option) {
 									const div = document.createElement("div");
 									div.textContent = option.textContent;
@@ -240,12 +240,12 @@ label {
 	<!-- AFEGIR DESPLEGABLE ENTITAT DE L'USUARI  -->
 	
 <!-- Select generado con JSTL y oculto inicialmente -->
-<select id="incidenciaTecnica_entitatid" name="incidenciaTecnica.entitatid" class="w-100 form-control" style="display: none;">
-    <option value="">Selecciona una opció</option>
+<!-- <select id="incidenciaTecnica_entitatid" name="incidenciaTecnica.entitatid" class="w-100 form-control" style="display: none;">
+    <option value="">Selecciona una opciï¿½</option>
     <c:forEach var="entitat" items="${entitats}">
         <option value="${entitat.key}">${entitat.value}</option>
     </c:forEach>
-</select>
+</select> -->
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -269,7 +269,7 @@ label {
         var selectClone = selectTemplate.cloneNode(true);
         selectClone.style.display = "block";
 
-        // Insertar el select en la celda y añadir la fila a la tabla
+        // Insertar el select en la celda y aï¿½adir la fila a la tabla
         tdSelect.appendChild(selectClone);
         tr.appendChild(tdLabel);
         tr.appendChild(tdSelect);

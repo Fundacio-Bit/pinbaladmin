@@ -146,10 +146,10 @@ public class PinfoOperadorController extends PinfoController {
 		
 		try {
 			pinfoDataLogicaEjb.procesarPermisosPinfo(pinfoID);
-			
 			//String operador = LoginInfo.getInstance().getUsername();
 			
 			String msg = "PINFO " + pinfoID + " processat correctament";
+			log.info(msg);
 			HtmlUtils.saveMessageSuccess(request, msg);
 			
 		} catch (I18NException e) {
@@ -247,10 +247,11 @@ public class PinfoOperadorController extends PinfoController {
 		return Where.AND(super.getAdditionalCondition(request), wEstats);
 	}
 	
-	@Override
-	public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request, ModelAndView mav, Where where)
-			throws I18NException {
-		return pinfoLogicEjb.getEntitats();
-	}
+//	DELETE
+//	@Override
+//	public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request, ModelAndView mav, Where where)
+//			throws I18NException {
+//		return pinfoLogicEjb.getEntitats();
+//	}
 
 }

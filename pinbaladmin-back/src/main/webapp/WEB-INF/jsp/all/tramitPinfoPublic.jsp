@@ -2,7 +2,7 @@
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController"%>
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.IncidenciaPinfoPublicController"%>
 
-<!--  Capçalera i peu -->
+<!--  Capï¿½alera i peu -->
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
@@ -25,7 +25,7 @@
 </div>
 
 <div id="footer">
-	<p>© 2024 - Fundació BIT</p>
+	<p>2024 - FundaciÃ³ BIT</p>
 </div>
 
 <script>
@@ -42,6 +42,14 @@
 </script>
 
 <style>
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
 #header {
 	padding: 1rem 4rem;
 	text-align: center;
@@ -93,9 +101,20 @@
 }
 
 #footer {
-	padding: 1rem;
+	padding: 2rem 1rem;
 	text-align: center;
-	background-color: #white;
-	color: black;
+	background-color: #f8f9fa;
+	color: #333;
+	margin-top: auto;
+	/* border-top: 3px solid #4DBA79; */
+	box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#footer p {
+	margin: 0;
+	font-size: 0.95rem;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	color: #555;
 }
 </style>

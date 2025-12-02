@@ -111,20 +111,21 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		return super.update(instance);
 	}
 
-	@Override
-	public List<StringKeyValue> getEntitats() throws I18NException {
-		String[][] entitats = { 
-				{ "GOVERN", "Govern de les Illes Balears" }, 
-				{ "FOGAIBA", "FOGAIBA text" },
-				{ "IBSALUT", "Illes Balears SALUT" } 
-			};
-		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+	// DELTE METHOD
+	// @Override
+	// public List<StringKeyValue> getEntitats() throws I18NException {
+	// 	String[][] entitats = { 
+	// 			{ "GOVERN", "Govern de les Illes Balears" }, 
+	// 			{ "FOGAIBA", "FOGAIBA text" },
+	// 			{ "IBSALUT", "Illes Balears SALUT" } 
+	// 		};
+	// 	List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 		
-		for (String[] entitat : entitats) {
-			__tmp.add(new StringKeyValue(entitat[0], entitat[1]));
-		}
-		return __tmp;
-	}	
+	// 	for (String[] entitat : entitats) {
+	// 		__tmp.add(new StringKeyValue(entitat[0], entitat[1]));
+	// 	}
+	// 	return __tmp;
+	// }	
 	
 	@Override
 	public Long generarPinfoPDF(Long pinfoID) throws Exception, I18NException {

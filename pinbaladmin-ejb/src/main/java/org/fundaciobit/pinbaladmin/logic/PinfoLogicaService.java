@@ -32,7 +32,7 @@ public interface PinfoLogicaService extends PinfoService {
 
 	public void enviarPinfoPortaFIB(Long pinfoID) throws I18NException ;
 
-	public List<StringKeyValue> getEntitats() throws I18NException;
+//	public List<StringKeyValue> getEntitats() throws I18NException;
 
 	public void enviarMissatgeSolicitant(UserInfo operador, Long pinfoID)  throws I18NException;
 	

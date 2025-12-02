@@ -4,11 +4,13 @@ import org.fundaciobit.pinbaladmin.model.entity.*;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.Set;
+import org.hibernate.annotations.Type;
 import java.util.HashSet;
 import javax.persistence.GenerationType;
 import javax.persistence.Index;
@@ -60,7 +62,9 @@ public class PinfoJPA implements Pinfo {
     @Column(name="destinatarinom",length = 255)
     java.lang.String destinatariNom;
 
-    @Column(name="missatgepinbal",length = 255)
+    @Column(name="missatgepinbal",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     java.lang.String missatgePinbal;
 
 

@@ -51,6 +51,31 @@ section .title {
 	margin: 0 0 .5rem 0;
 }
 
+.usuaris-titulo {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+.usuaris-lista {
+	font-size: 14px;
+}
+
+.spinner {
+	border: 4px solid #f3f3f3;
+	border-top: 4px solid #3498db;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
 .botones {
 	text-align: right;
 	margin-top: 1rem;
@@ -74,6 +99,11 @@ section .title {
 	border: 1px solid #e9e9e9;
 	max-height: 170px;
 	overflow-y: auto;
+  	width: 50%;
+  }
+
+#autocomplete-procediments.hidden, #autocomplete-usuaris.hidden {
+	display: none;
 }
 
 #autocomplete-procediments div {
@@ -234,17 +264,12 @@ section .title {
 							<button type="button" class="btn" onclick="afegirUsuari();">Add</button> -->
 	
 							<div id="input-usuari-container">
-							
-
- 							<input id="usuariNom" name="userID" type="text"
-								autocomplete="off" class="campsUsuari w-25 form-control"
-								placeholder="Nom">
- 							<input id="usuariNif" name="userID" type="text"
-								autocomplete="off" class="campsUsuari w-25 form-control"
-								placeholder="NIF">
+	 							<input id="usuariNom" name="userID" type="text"
+									autocomplete="off" class="campsUsuari w-25 form-control"
+									placeholder="Nom">
 							</div>
  
-							<div id="autocomplete-usuaris"></div>
+							<div id="autocomplete-usuaris" class="hidden"></div>
 						</div>
 						<div id="llistat-usuaris">
 							<ul></ul>
@@ -272,7 +297,7 @@ section .title {
 								autocomplete="off" class="w-100 form-control"
 								placeholder="Procediment. Minim 2 caracters...">
 
-							<div id="autocomplete-procediments"></div>
+							<div id="autocomplete-procediments" class="hidden"></div>
 						</div>
 						<div id="llistat-procediments">
 							<ul ></ul>
@@ -316,10 +341,10 @@ section .title {
 		$(document).ready(function() {
 
 			$("#procedimentID").on("input", function() {
-				var	procediment = $(this).val();
+				var procediment = $(this).val();
 				console.log(procediment);
 				if (procediment.length < 2) { 
-					$("#autocomplete-procediments").empty(); 
+					$("#autocomplete-procediments").empty().addClass("hidden");
 					return; 
 				}
 				
@@ -329,46 +354,63 @@ section .title {
                     data : { query : procediment },
                     success : function(data) {
                         $("#autocomplete-procediments").empty();
-                        data.forEach(function(proc) {
-                            //Si el procediment ja esta a la llista, no el mostri
-                            afegirProcediment(proc);
-                        });
+                        
+                        if (data.length === 0) {
+                            $("#autocomplete-procediments").html("<div style='padding: 10px; color: #666;'>No se encontraron procedimientos</div>").removeClass("hidden");
+                        } else {
+                            data.forEach(function(proc) {
+                                afegirProcediment(proc);
+                            });
+                            $("#autocomplete-procediments").removeClass("hidden");
+                        }
+                    },
+                    error : function() {
+                        $("#autocomplete-procediments").empty().addClass("hidden");
                     }
                 });
-								
 			});
 			
-			let debounceTimer;
+		let debounceTimer;
 
-			$(".campsUsuari").on("input", function() {
-			    clearTimeout(debounceTimer); // Limpiar el anterior
+		$(".campsUsuari").on("input", function() {
+		    clearTimeout(debounceTimer); // Limpiar el anterior
 
-			    debounceTimer = setTimeout(function() {
-			        var nom = $("#usuariNom").val();
-			        var nif = $("#usuariNif").val();
+		    debounceTimer = setTimeout(function() {
+		        var nom = $("#usuariNom").val();
 
-			        console.log("nom: " + nom + ", nif: " + nif );
-			        if ((nom.length < 3) && (nif.length < 3)) {
-			            $("#autocomplete-usuaris").empty();
-			            return;
-			        }
+		        console.log("nom: " + nom);
+		        if (nom.length < 3) {
+		            $("#autocomplete-usuaris").empty().addClass("hidden");
+		            return;
+		        }
 
-			        $.ajax({
-			            url : "jsonUsuaris",
-			            type : "GET",
-			            data : { nom : nom, nif : nif },
-			            success : function(data) {
-			                $("#autocomplete-usuaris").empty();
-			                data.forEach(function(usuari) {
-			                    // Si el usuari ja està a la llista, no el mostri
-			                    afegirUsuari(usuari);
-			                });
-			            }
-			        });
-			    }, 500); // Espera 1 segon abans de fer la petició
-			});
+		        // Mostrar spinner y eliminar clase hidden
+		        $("#autocomplete-usuaris").html("<div class='spinner'></div>").removeClass("hidden");
 
-			
+		        $.ajax({
+		            url : "jsonUsuaris",
+		            type : "GET",
+		            data : { nom : nom },
+		            success : function(data) {
+		                $("#autocomplete-usuaris").empty().removeClass("hidden");
+		                
+		                if (data == null) {
+			                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'>Hay más de 500 usuarios. Por favor, refina la búsqueda.</div>");
+                        } else if (data.length === 0) {
+		                    $("#autocomplete-usuaris").html("<div style='padding: 10px; color: #666;'>No se encontraron usuarios</div>");
+		                } else {
+		                    data.forEach(function(usuari) {
+		                        // Si el usuari ja està a la llista, no el mostri
+		                        afegirUsuari(usuari);
+		                    });
+		                }
+		            },
+		            error : function() {
+		                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'>Hay más de 500 usuarios. Por favor, refina la búsqueda.</div>");
+		            }
+		        });
+		    }, 500); // Espera 1 segon abans de fer la petició
+		});			
 		});
 		
 		function afegirProcediment(proc) {
@@ -381,15 +423,15 @@ section .title {
             $("#autocomplete-procediments").append(procedimentDiv);
         }
 		
-		function convertirUsuariEnUser(usuari) {
+/* 		function convertirUsuariEnUser(usuari) {
 			            console.log(usuari);
             return { key : usuari.nif, value : usuari.nom, nom : usuari.nom, codi : usuari.codi };
-		}
+		} */
 		
 		function afegirUsuari(usuari) {
             var usuariDiv = document.createElement("div");
             usuariDiv.classList.add("usuari-item");
-            usuariDiv.innerHTML = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1 + " " + usuari.surname2;
+            usuariDiv.innerHTML = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1;
             usuariDiv.onclick = function() {
                 elegirUsuari(usuari);
             };
@@ -424,10 +466,11 @@ section .title {
             
             $("#llistat-procediments ul").append(li);
             $("input[name='procedimentID']").val("");
-            $("#autocomplete-procediments").empty();
+            $("#autocomplete-procediments").empty().addClass("hidden");
 		}
 		
 		function elegirUsuari(usuari) {
+			console.log(usuari);
             for (let i = 0; i < usuaris.length; i++) {
                 if (usuaris[i].username == usuari.username) {
                     alert("Ja el tenim a la llista");
@@ -440,12 +483,12 @@ section .title {
             let li = $("<li></li>").addClass("usuari-li");
             let container = $("<div></div>").addClass("usuari-data-container");
             
-            let text = usuari.administrationID + " - " + usuari.name + " " +  usuari.surname1 + " " + usuari.surname2 + " - " + usuari.username;
+            let text = usuari.administrationID + " - " + usuari.name + " " +  usuari.surname1 + " - " + usuari.username;
             let spanText = $("<span></span>").addClass("usuari-data-text").text(text);
             
             let spanDelete = $("<span></span>").addClass("usuari-data-delete").html('<i class="fas fa-times"></i>').click(function() {
                 usuaris = usuaris.filter(function(u) {
-                    return u.codi != usuari.codi;
+                    return u.username != usuari.username;
                 });
                 li.remove();
             });
@@ -456,7 +499,7 @@ section .title {
             
             $("#llistat-usuaris ul").append(li);
             $(".campsUsuari").val("");
-            $("#autocomplete-usuaris").empty();
+            $("#autocomplete-usuaris").empty().addClass("hidden");
         }
 		
 		function next() {
@@ -526,7 +569,7 @@ section .title {
 
 		function construyeTablaServicios(serveisTrobats, allSoliServ) {
 
-			document.getElementById("subtitle-usuaris").innerHTML = "Usuaris: " + usuaris.map(u => u.nom + " (" + u.nif + " - " + u.codi + ")").join(", ")
+			generarSubtitolUsuaris();
 			
 			//Cream una primera fila amb els procediments, i despres de cada un, es mostren els serveis d'aquest
 			var trTitol = $("<tr></tr>");	
@@ -556,11 +599,21 @@ section .title {
                         	var tdSolSer = $("<td></td>").attr("value", serveiSoli.id).addClass("solSer"); // noSelected")//.attr("onclick", "seleccionaServei(this)");//.text("check");
                         	//Afegir input check per seleccionar procediment-servei
                         	
-                        	tdSolSer.append("<input class='solSerInput' id='" + serveiSoli.id + "'  type='checkbox' onchange='marcarSolSer(this)'>")
-                        	
+                        	var checkbox = $("<input class='solSerInput' id='" + serveiSoli.id + "'  type='checkbox' onchange='marcarSolSer(this)'>");
+                        	checkbox.on("click", function(e) {
+                        		e.stopPropagation();
+                        	});
+                        	tdSolSer.append(checkbox);
                         	
                         	tdSolSer.attr("proc", procediment.key);
                         	tdSolSer.attr("serv", servei.key);
+                        	
+                        	// Añadir evento click en la celda para marcar/desmarcar el checkbox
+                        	tdSolSer.on("click", function(e) {
+                        		var input = $(this).find("input[type='checkbox']");
+                        		input.prop("checked", !input.prop("checked"));
+                        		input.trigger("change");
+                        	});
                         	
 //                            tr.append("<td id='solser" + serveiSoli.id + "' value='" + serveiSoli.id + "' class='solSer noSelected' onclick='seleccionaServei(this)'>"+ "check" + "</td>");
                             tr.append(tdSolSer);
@@ -609,7 +662,20 @@ section .title {
 		    });
 		}
 
-		function prev() {
+	function generarSubtitolUsuaris(){
+		var usuarisHTML = "<div class='usuaris-titulo'>Usuaris:</div>";
+		usuarisHTML += "<div class='usuaris-lista'>";
+		usuaris.forEach(function(u, index) {
+			usuarisHTML += u.name + " " + u.surname1 + " (" + u.administrationID + " - " + u.username + ")";
+			if (index < usuaris.length - 1) {
+				usuarisHTML += "<br>";
+			}
+		});
+		usuarisHTML += "</div>";
+		document.getElementById("subtitle-usuaris").innerHTML = usuarisHTML;
+	}		
+	
+	function prev() {
 			showSection(--actualSection);
 		}
 
@@ -617,18 +683,6 @@ section .title {
 			$("section").hide();
 			$("#section" + section).show();
 		}
-
-		function afegirUsuariOld() {
-			var user = $(".campsUsuari").val();
-
-			if (user == "")
-				return;
-			if (usuaris.includes(user))
-				return;
-			
-			validarUsuariPluginUserInformation(user);
-		}
-
 
 		function marcarSolSer(input) {
 			var td = input.parentElement;
@@ -735,78 +789,30 @@ section .title {
 		}
 
 		$("#pinfoDataForm").submit(
-				function(event) {
-					event.preventDefault();
-
-					let usuarisAuxx = [];
-					$("input[name='usuaris']").val(
-							usuaris.map(u => u.codi).join(","));
-
-					var selecteds = $("#taula-serveis .selected");
-					if (selecteds.length == 0) {
-						alert("Selecciona al menos un servicio");
-						return;
-					}
-
-					for (var i = 0; i < selecteds.length; i++) {
-						let idNum = $(selecteds[i]).attr("value");
-						solicitudServeis.push(idNum);
-					}
-
-					$("input[name='solicitudServeis']").val(
-							solicitudServeis.join(","));
-
-					this.submit();
-				});
-		
-		
-		
-		function validarUsuariPluginUserInformation(user) {
-			//Aqui ens arriba un string amb el nom de l'usuari. No es buit, i no está repetit.
-			console.log("Validant usuari " + user + " a LDAP");
-			
-			//Aqui es on es faria la crida al plugin de validació d'usuaris.
-			
-			$.ajax({
-				url : "validarUsuariPluginUserInformation",
-				type : "GET",
-				data : {
-					user : user
-				},
-				success : function(usuari) {
-                    console.log("Usuari validat");
-        			console.log(usuari);
-        			
-        			if (usuari == null) {
-        				alert("Usuari no trobat");
-        				return;
-        			}
-
-        			
-        			
-        			let li = $("<li></li>").addClass("usuari-li");
-        			let container = $("<div></div>").addClass("usuari-data-container");
-        			
-        			let spanText = $("<span></span>").addClass("usuari-data-text").text(usuari.nom + " - " + usuari.nif);
-        			
-        			let spanDelete = $("<span></span>").addClass("usuari-data-delete").html('<i class="fas fa-times"></i>').click(function() {
-                        procediments = procediments.filter(function(p) {
-                            return p.id != proc.id;
-                        });
-                        li.remove();
-                    });
-        			
-        			container.append(spanText);
-        			container.append(spanDelete);
-        			li.append(container);
-        			
-        			$("#llistat-usuaris ul").append(li);
-        			usuaris.push(usuari);
-        			$(".campsUsuari").val("");
+			function(event) {
+				event.preventDefault();
+	
+				let usuarisAuxx = [];
+				$("input[name='usuaris']").val(
+						usuaris.map(u => u.username).join(","));
+	
+				var selecteds = $("#taula-serveis .selected");
+				if (selecteds.length == 0) {
+					alert("Selecciona al menos un servicio");
+					return;
 				}
-			});
-		}
-		
+	
+				for (var i = 0; i < selecteds.length; i++) {
+					let idNum = $(selecteds[i]).attr("value");
+					solicitudServeis.push(idNum);
+				}
+	
+				$("input[name='solicitudServeis']").val(
+						solicitudServeis.join(","));
+	
+				this.submit();
+			}
+		);
 	</script>
 </body>
 </html>

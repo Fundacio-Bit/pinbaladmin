@@ -20,15 +20,19 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
+import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
@@ -40,6 +44,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.informe.ClientInforme;
+import es.caib.pinbal.client.procediments.ProcedimentClient;
+import es.caib.pinbal.client.serveis.ServeiClient;
+import es.caib.pinbal.client.usuaris.UsuariClient;
+import es.caib.pinbal.client.usuaris.UsuariEntitat;
+import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
+import es.caib.pinbal.client.recobriment.v2.Entitat;
+import es.caib.pinbal.client.comu.ClientBase;
+import es.caib.pinbal.client.comu.EntitatEstadistiques;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import es.caib.pinbal.client.comu.EntitatEstadistiques;
+import es.caib.pinbal.client.comu.ServeiEstadistiques;
+import es.caib.pinbal.client.informe.ClientInforme;
 
 /**
  * 
@@ -64,6 +90,9 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicEjb;
+	
+	@EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+	protected EntitatLogicaService entitatLogicEjb;
 	
 	@Override
 	public String getTileForm() {
@@ -139,7 +168,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			}
 			
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
-			request.getSession().setAttribute("entitats", pinfoLogicEjb.getEntitats());
+//DEL			request.getSession().setAttribute("entitats", pinfoLogicEjb.getEntitats());
 
 			form.setAttachedAdditionalJspCode(true);
 			mav.addObject("isPinfo", true);
@@ -158,8 +187,14 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	}
     public String getCodiDIR3(String username) throws I18NException {
 
-        IEstructuraOrganitzativaPlugin instance = pinfoDataLogicEjb.getPluginEstructuraOrganitzativa();
+    	boolean debug = false;
+    	boolean caib = true;
+    	
+    	
+        IEstructuraOrganitzativaPlugin instance = PinbalAdminPluginsManager.getEstructuraOrganitzativaPlugin(debug, caib);
 
+        
+        
         String codiDIR3;
         try {
             codiDIR3 = instance.getDir3DepartamentDireccioGeneral(username);
@@ -198,8 +233,15 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		Long estat = Constants.ESTAT_PINFO_CREANT;
 		String solicitantNIF = (String) request.getSession().getAttribute("usuariNIF");
 		
-		String entitat = request.getParameter("incidenciaTecnica.entitatid");
-		log.info("Entitat: " + entitat);
+		// String entitat = request.getParameter("incidenciaTecnica.entitatid");
+		// log.info("Entitat: " + entitat);
+		
+		Long organID = it.getOrganid();
+		Organ organ = organLogicEjb.findByPrimaryKey(organID);
+		
+		String entitat = getEntiatPinfoFromOrgan(organ);
+		
+		log.info("Entitat per Pinfo: " + entitat);
 		
 		Long fitxerID = null;
 		Long fitxerFirmatID = null;
@@ -216,6 +258,91 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		return it;
 	}
 	
+	private String objectToJsonString(Object obj) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+		mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		return mapper.writeValueAsString(obj);
+	}
+	
+	private String getEntiatPinfoFromOrgan(Organ organ) {
+		
+    	final String baseUrl = Configuracio.getApiPinbalClientUrl();
+    	final String username = Configuracio.getApiPinbalClientUsername();
+    	final String password = Configuracio.getApiPinbalClientPassword();
+    	final LogLevel logLevel = LogLevel.INFO;
+
+        log.info("Creant Clients");
+
+		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+		
+		ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+		
+		try {
+			serveiClient.enableLogginFilter();
+			
+			usuariClient.enableLogginFilter();
+			UsuariEntitat usuari = usuariClient.getUsuari("e45186147w", "GOVERN");
+			log.info("-> Usuari Pinbal: " + objectToJsonString(usuari));
+			
+			
+			procedimentClient.enableLogginFilter();
+			
+			clientRecobriment.enableLogginFilter();
+			List<Entitat> entitats = clientRecobriment.getEntitats();
+			
+			for (Entitat entitat : entitats) {
+				log.info("-> Entitat Pinbal: " + objectToJsonString(entitat));
+			}
+
+		} catch (IOException e) {
+			
+			log.error("Error obteniendo estadistiques d'usuaris: " + e.getMessage(), e);
+			
+		}
+
+		
+		
+		
+		log.info("Clients creats");
+		
+		
+		
+		if (organ == null || organ.getEntitatid() == null) {
+			return null;
+		}
+		
+		try {
+			Long entitatID = organ.getEntitatid();
+			EntitatJPA entitat = entitatLogicEjb.findByPrimaryKey(entitatID);
+			
+			if (entitat == null || entitat.getCIF() == null) {
+				return null;
+			}
+			
+			String cif = entitat.getCIF().trim().toUpperCase();
+			
+			switch (cif) {
+				case "S0711001H":
+					return "GOVERN";
+					
+				case "Q0700494H":
+					return "FOGAIBA";
+					
+					
+				default:
+					return null;
+			}
+		} catch (Exception e) {
+			log.error("Error obteniendo entitat de organ: " + organ.getOrganid(), e);
+			return null;
+		}
+	}
+
 	@RequestMapping(value = "/new/{token}", method = RequestMethod.GET)
 	public String obtenirDadesFitxerToken(HttpServletRequest request, HttpServletRequest response, @PathVariable("token") java.lang.String token) {
 		
