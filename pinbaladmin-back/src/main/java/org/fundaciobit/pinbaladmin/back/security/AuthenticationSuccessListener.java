@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 //import org.fundaciobit.genapp.common.i18n.I18NArgumentCode;
 //import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.genapp.common.i18n.I18NException;
@@ -83,7 +84,7 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         	boolean caib = false;
         	log.info("Instanciarem plugin");
 //        	username = "e45186147w";
-        	IUserInformationPlugin plugin =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+        	IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.OTAE);
         	log.info("Plugin instanciat, provam getUserInfoByUserName: " + username);
             info = plugin.getUserInfoByUserName(username);
             log.info(info);

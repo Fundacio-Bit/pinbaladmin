@@ -381,6 +381,14 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/fusionarProcediments.jsp"/>
     </definition>
 
+    <definition name="usuarispinbal" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/usuarisPinbal.jsp"/>
+    </definition>
+
+    <definition name="procedimentspinbal" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/procedimentsPinbal.jsp"/>
+    </definition>
+
 
 
 
@@ -1031,7 +1039,3 @@
 <!-- ==== GENAPP MARK END -->
 
 </tiles-definitions>
-
-
-
-

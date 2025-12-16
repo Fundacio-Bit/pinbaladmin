@@ -13,6 +13,7 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.TramitGDadesTitForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Entitat;
 import org.fundaciobit.pinbaladmin.model.entity.TramitCDadesCesi;
 import org.fundaciobit.pinbaladmin.model.fields.TramitCDadesCesiFields;
@@ -104,7 +105,7 @@ public class TramitGPublicController extends TramitGOperadorController {
 			UserInfo infoDG  = null;
 			
 			try {
-				IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+				IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 				infoDG = pluginUserInfo.getUserInfoByAdministrationID(nifDG);
 			} catch (Exception e) {
 				log.error("Error obtenint dades DG Innovació i Transformació Digital amb NIF " + nifDG, e);
@@ -113,7 +114,7 @@ public class TramitGPublicController extends TramitGOperadorController {
 			if (infoDG == null) {
 				try {
 					caib = false;
-					IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+					IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.OTAE);
 					infoDG = pluginUserInfo.getUserInfoByAdministrationID(nifDG);
 				} catch (Exception e) {
 					log.error("Error obtenint dades del DG  NIF " + nifDG, e);

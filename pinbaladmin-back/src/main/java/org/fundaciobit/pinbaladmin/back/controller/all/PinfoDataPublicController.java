@@ -35,6 +35,7 @@ import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
@@ -546,7 +547,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		final boolean debug = true;
 		boolean caib = true;
 		log.info("Obtenint pluginUserInfo...");
-		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		log.info("PluginUserInfo: " + plugin.getClass().getName());
 		return plugin;
 	}
@@ -582,9 +583,31 @@ public class PinfoDataPublicController extends PinfoDataController {
 						String apellidos = String.join(" ", java.util.Arrays.copyOfRange(palabras, i, palabras.length));
 
 						List<UserInfo> resultadoAnd = testNombreApellido(plugin, nombre, apellidos);
+
 						if (resultadoAnd != null) {
 							usuarisList.addAll(resultadoAnd);
 						}
+//						// Construir nombre: desde la primera palabra hasta la posición i
+//						StringBuilder nombre = new StringBuilder(palabras[0]);
+//						for (int j = 1; j <= i; j++) {
+//							nombre.append(" ").append(palabras[j]);
+//						}
+//
+//						// Construir apellido: desde la posición i+1 hasta el final
+//						if (i + 1 < palabras.length) {
+//							StringBuilder apellido = new StringBuilder(palabras[i + 1]);
+//							for (int j = i + 2; j < palabras.length; j++) {
+//								apellido.append(" ").append(palabras[j]);
+//							}
+//
+//							// Realizar búsqueda con esta combinación
+//							List<UserInfo> resultadoAnd = testNombreApellido(plugin, nombre.toString(),
+//									apellido.toString());
+//							if (resultadoAnd != null) {
+//								usuarisList.addAll(resultadoAnd);
+//							}
+//						}
+
 					}
 				}
 
@@ -673,7 +696,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		List<Item> items = new java.util.ArrayList<Item>();
 
 		// log.info("solicituds: " + solicituds.size());
-
+		
 		for (Solicitud soli : solicituds) {
 			String id = String.valueOf(soli.getSolicitudID());
 			String key = soli.getProcedimentCodi();
@@ -797,7 +820,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		final boolean debug = false;
     	boolean caib = true;
-		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+		IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		
 		String rol = "PFI_USER";
 //        String rol = "usuari-tipus-I";
@@ -937,7 +960,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 		final boolean debug = false;
     	boolean caib = true;
-		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+		IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		UserInfo userInfoResponsable;
 		try {
 			userInfoResponsable = pluginUserInfo.getUserInfoByAdministrationID(selecionat);

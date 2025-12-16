@@ -104,7 +104,7 @@
 		</li>
 
  
-<%-- 		<li style="list-style-type: disc; list-style-position: inside;"><a
+ 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/pinfo/list"/>"> <span
 				style="${(fn:contains(url, '/operador/pinfo'))? "font-weight:bold;" : ""}">
 					<fmt:message key="pinfo.pinfo.plural" />
@@ -119,12 +119,22 @@
 		
 		</li> 
 		
-		<li style="list-style-type: disc; list-style-position: inside;"><a
+		<%-- <li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/pinfoData/new"/>"> <span
 				style="${(fn:contains(url, '/operador/pinfoData/permisosusuari'))? "font-weight:bold;" : ""}">
 					<fmt:message key="pinfoData.permisosusuari" />
 			</span>
-		</a></li>  --%>
+		</a></li> --%>
+		
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/dadespinbal/usuaris"/>"> <span
+				style="${(fn:contains(url, '/operador/dadespinbal/usuaris'))? "font-weight:bold;" : ""}">Usuaris PINBAL</span>
+		</a></li>
+		
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/dadespinbal/procediments"/>"> <span
+				style="${(fn:contains(url, '/operador/dadespinbal/procediments'))? "font-weight:bold;" : ""}">Procediments PINBAL</span>
+		</a></li>
 		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 

@@ -28,6 +28,7 @@ import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
@@ -36,6 +37,8 @@ import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.estructuraorganitzativa.api.IEstructuraOrganitzativaPlugin;
+import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -160,7 +163,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			request.getSession().setAttribute("usuariNom", nomComplet);
 			request.getSession().setAttribute("usuariUsername", username);
 
-			String dir3Solicitant = getCodiDIR3(username);
+			String dir3Solicitant = getCodiDIR3FromNif(usuariNIF);
 			Long organID = organLogicEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3Solicitant));
 			if (organID != null) {
 				incidencia.setOrganid(organID);
@@ -185,6 +188,37 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		incidencia.setNomEntitat("Govern Digital");
 		incidencia.setTitol("Titol de test");
 	}
+	
+	public String getCodiDIR3FromNif(String nif) throws I18NException {
+    	boolean debug = false;
+
+    	IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+
+		UserInfo userInfo = null;
+		try {
+			userInfo = plugin.getUserInfoByAdministrationID(nif);
+			log.info("UserInfo obtingut de NIF " + nif + ": " + userInfo);
+		} catch (Exception e) {
+			throw new I18NException("error.plugin.userinformation.userinfonotfound", e.getMessage());
+		}
+
+		log.info("UserInfo de NIF " + nif + ": " + userInfo);
+		if (userInfo == null) {
+			throw new I18NException("error.plugin.userinformation.userinfonotfound", "NIF: " + nif);
+		}
+		
+		String dir3 = userInfo.getDir3();
+		log.info("DIR3 de NIF " + nif + " es: " + dir3);
+		
+		if (dir3 != null && dir3.trim().length() > 0) {
+			log.info("Codi DIR3 de NIF " + nif + " es: " + dir3);
+			return dir3;
+		}else {
+			String username = userInfo.getUsername();
+			return getCodiDIR3(username);
+		}
+	}
+	
     public String getCodiDIR3(String username) throws I18NException {
 
     	boolean debug = false;
@@ -276,8 +310,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
         log.info("Creant Clients");
 
+        UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
-		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
 		
 		ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);

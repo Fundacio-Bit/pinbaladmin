@@ -13,11 +13,16 @@ import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 
 public class PinbalAdminPluginsManager {
 
+	public static enum TipusPluginUserInfo {
+		OTAE, LDAP, SOFFID
+	}
+	
     public static final String USERINFO_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "userinformationplugin";
     public static final String ESTRUCTURAORG_PLUGIN_KEY = Constants.PINBALADMIN_PROPERTY_BASE + "estructuraorganitzativa";
 
     public static IUserInformationPlugin userInfoPluginOtae = null;
-    public static IUserInformationPlugin userInfoPluginCaib = null;
+    public static IUserInformationPlugin userInfoPluginCaibLdap = null;
+    public static IUserInformationPlugin userInfoPluginCaibSoffid = null;
 
     public static IEstructuraOrganitzativaPlugin estructuraOrgPluginOtae = null;
     public static IEstructuraOrganitzativaPlugin estructuraOrgPluginCaib = null;
@@ -25,10 +30,24 @@ public class PinbalAdminPluginsManager {
     protected final static Logger log = Logger.getLogger(PinbalAdminPluginsManager.class);
 
 
-	public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug, boolean caib) throws I18NException {
+	public static IUserInformationPlugin getUserInformationPluginInstance(boolean debug, TipusPluginUserInfo tipusPlugin) throws I18NException {
 
-		log.info("Plugin UserInformation: caib=" + caib);
-		IUserInformationPlugin userInfoPlugin = caib ? userInfoPluginCaib : userInfoPluginOtae;
+		log.info("Plugin UserInformation: tipusPlugin=" + tipusPlugin);
+		
+		IUserInformationPlugin userInfoPlugin;
+		switch (tipusPlugin) {
+			case OTAE:
+				userInfoPlugin = userInfoPluginOtae;
+				break;
+			case LDAP:
+				userInfoPlugin = userInfoPluginCaibLdap;
+				break;
+			case SOFFID:
+				userInfoPlugin = userInfoPluginCaibSoffid;
+				break;
+			default:
+				throw new I18NException("plugin.tipus.desconegut");
+		}
 		
 		log.info("userInfoPlugin inicial: " + userInfoPlugin);
 		
@@ -47,7 +66,25 @@ public class PinbalAdminPluginsManager {
 				}
 			}
             
-			String className = propTmp.getProperty(USERINFO_PLUGIN_KEY + (caib ? ".caib" : ".otae"));
+			String propertySuffix;
+			switch (tipusPlugin) {
+				case OTAE:
+					propertySuffix = ".otae";
+					break;
+				case LDAP:
+					propertySuffix = ".ldap";
+					break;
+				case SOFFID:
+					propertySuffix = ".soffid";
+					break;
+				default:
+					throw new I18NException("plugin.tipus.desconegut");
+			}
+			
+			String clName = USERINFO_PLUGIN_KEY + propertySuffix;
+			log.info("Property plugin class name: " + clName);
+			
+			String className = propTmp.getProperty(clName);
             
             log.info("className: " + className);
             Object pluginInstance = PluginsManager.instancePluginByClassName(className,
@@ -59,12 +96,22 @@ public class PinbalAdminPluginsManager {
             if (pluginInstance == null) {
                 throw new I18NException("plugin.donotinstantiateplugin.userinfo");
             }
-            if (caib) {
-            	userInfoPluginCaib = (IUserInformationPlugin) pluginInstance;
-            	userInfoPlugin = userInfoPluginCaib;
-			} else {
-				userInfoPluginOtae = (IUserInformationPlugin) pluginInstance;
-				userInfoPlugin = userInfoPluginOtae;
+            
+            switch (tipusPlugin) {
+				case OTAE:
+					userInfoPluginOtae = (IUserInformationPlugin) pluginInstance;
+					userInfoPlugin = userInfoPluginOtae;
+					break;
+				case LDAP:
+					userInfoPluginCaibLdap = (IUserInformationPlugin) pluginInstance;
+					userInfoPlugin = userInfoPluginCaibLdap;
+					break;
+				case SOFFID:
+					userInfoPluginCaibSoffid = (IUserInformationPlugin) pluginInstance;
+					userInfoPlugin = userInfoPluginCaibSoffid;
+					break;
+				default:
+					throw new I18NException("plugin.tipus.desconegut");
 			}
         }else {
 			log.info("userInfoPlugin ja existeix. " + userInfoPlugin.getClass().getName());

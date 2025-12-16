@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 
 /**
@@ -50,7 +51,7 @@ public class PinfoDataPublicControllerTest {
 		final boolean debug = true;
     	boolean caib = true;
     	log.info("Obtenint pluginUserInfo...");
-		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, caib);
+		IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		
 
 	}
