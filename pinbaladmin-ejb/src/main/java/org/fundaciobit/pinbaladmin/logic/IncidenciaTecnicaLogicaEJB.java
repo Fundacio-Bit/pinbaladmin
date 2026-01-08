@@ -62,8 +62,13 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
 
         java.lang.String subject = emi.getSubject();
         java.lang.String missatge = emi.getBody(); // TODO limit tamany
+//        emi.getSentDate();
+//        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
+
+        //Si el email no te data d'enviament, posar la data actual
+		java.sql.Timestamp data = emi.getSentDate() != null ? new java.sql.Timestamp(emi.getSentDate().getTime())
+				: new Timestamp(System.currentTimeMillis());
         
-        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
         java.sql.Timestamp dataFi = null;
         int estat = Constants.ESTAT_INCIDENCIA_OBERTA;
         java.lang.String nomEntitat = "";
