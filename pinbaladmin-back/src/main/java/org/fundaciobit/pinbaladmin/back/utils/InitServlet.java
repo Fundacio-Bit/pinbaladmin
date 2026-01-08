@@ -47,6 +47,7 @@ public class InitServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
 
+        log.info("Iniciant InitServlet - PinbalAdmin Back");
         super.init(config);
 
         new Thread(new Runnable() {
