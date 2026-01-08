@@ -79,8 +79,10 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		Consulta consulta = new Consulta();
 		consulta.setCodigoProcedimiento(codiProcediment);
 
+		String CIF = solicitud.getNif();
+		
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
-				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA));
+				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA, CIF));
 
 		retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
 		

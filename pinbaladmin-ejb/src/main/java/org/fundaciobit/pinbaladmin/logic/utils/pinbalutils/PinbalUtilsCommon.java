@@ -25,6 +25,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
@@ -35,8 +36,10 @@ import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsCommon.Doc
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
+import org.fundaciobit.pinbaladmin.model.entity.Entitat;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
@@ -79,6 +82,9 @@ public abstract class PinbalUtilsCommon {
 
 	@EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
 	protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
+	
+	@EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+	protected EntitatLogicaService entitatLogicaEjb;
 
 	final String PINBAL_CONSENTIMENT_LLEI = "Ley";
 	final String PINBAL_CONSENTIMENT_SI = "Si";
@@ -152,7 +158,7 @@ public abstract class PinbalUtilsCommon {
 
 	}
 
-	public PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus)
+	public PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus, String cif)
 			throws Exception {
 
 		PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
@@ -162,8 +168,12 @@ public abstract class PinbalUtilsCommon {
 		config.setPassword(Configuracio.getApiPinbalPassword());
 
 		config.setFinalidad("Solicitar autorización procedimiento");
-		config.setIdentificadorSolicitante("S0711001H");
-		config.setUnidadTramitadora("Fundacio BIT");
+		
+		Entitat entitat = entitatLogicaEjb.findByCif(cif);
+		
+		log.info("Configurant cridada Pinbal per a l'entitat: " + entitat.getNom() + " - CIF: " + entitat.getCIF());
+		config.setIdentificadorSolicitante(entitat.getCIF());
+		config.setUnidadTramitadora(entitat.getNom());
 
 		config.setCodProcedimiento(Configuracio.getApiPinbalCodiProcediment());
 

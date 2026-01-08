@@ -47,10 +47,10 @@ public class PinbalUtilsModificacioLogicaEJB extends PinbalUtilsCommon implement
 
 	@Override
 	public Respuesta modificacioSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario,
-			Solicitud solicitud) throws Exception {
+			Solicitud solicitud, String CIF) throws Exception {
 
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
-				getPinbalAdminSolicitudsConfiguration(TipusCridada.MODIFICACIO));
+				getPinbalAdminSolicitudsConfiguration(TipusCridada.MODIFICACIO, CIF));
 		Respuesta respuesta = api.modificacioSolicitudPinbalApi(solicitud, titular, funcionario);
 
 		return respuesta;
