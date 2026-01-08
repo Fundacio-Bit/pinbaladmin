@@ -132,66 +132,66 @@ th {
 	</tbody>
 </table>
 </c:if>
+
 <script type="text/javascript">
-  	var user = '<%=request.getRemoteUser()%>';
+  	var user = '${usuariQEF}';
   	var data = $("#inputDate").val();
 
-      var ENTRADES_PER_AFEGIR;
+    var ENTRADES_PER_AFEGIR;
   	var ENTRADES_AFEGIDES;
   	
   	function afegirEntradaXhttp(user, date, msg){
-          
-          var xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-              if (this.readyState == 4 && this.status == 200) {
-              	testFinal();
-              }
-          };
-
-          var url =  '<%=request.getContextPath()%> ${contexte}/afegirEntrada/' + user + "/" + date + "/" + msg;
-          xhttp.open("GET", url, true);
-          xhttp.setRequestHeader("Content-type", "application/json");
-          xhttp.send('');
-      }
+		var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        	if (this.readyState == 4 && this.status == 200) {
+            	testFinal();
+			}
+        };
+        
+        var url =  '<%=request.getContextPath()%> ${contexte}/afegirEntrada/' + user + "/" + date + "/" + msg;
+        xhttp.open("GET", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send('');
+  	}
       
-  	
-function afegirUnaEntrada(missatge) {
-	ENTRADES_AFEGIDES= 0;
-	ENTRADES_PER_AFEGIR = 1;
-	afegirEntradaXhttp(user, data, missatge);
-}
-
-function afegirTotesLesEntrades() {
-	var items = document.getElementsByClassName("itemInfo itemHash");
-	ENTRADES_AFEGIDES= 0;
-          ENTRADES_PER_AFEGIR = items.length;
-
-	for (var i = 0; i < items.length; i++) {
-		var missatge = items[i].innerText;
+	function afegirUnaEntrada(missatge) {
+		ENTRADES_AFEGIDES= 0;
+		ENTRADES_PER_AFEGIR = 1;
 		afegirEntradaXhttp(user, data, missatge);
 	}
-}
 
-function afegirSeleccionats(){
-       var items = $('input[type=checkbox]:checked');
-       ENTRADES_AFEGIDES= 0;
-          ENTRADES_PER_AFEGIR = items.length;
-
-	for (var i = 0; i < items.length; i++) {
-		var missatge = items[i].value;
-		afegirEntradaXhttp(user, data, missatge);
-	}
-}
-
-function testFinal(){
-	ENTRADES_AFEGIDES++;
-
-	if (ENTRADES_AFEGIDES == ENTRADES_PER_AFEGIR) {
-		if (ENTRADES_AFEGIDES == 1) {
-               alert("S'ha afegit l'entrada");
-		}else{
-               alert("S'han afegit " + ENTRADES_AFEGIDES + " entrades");
+	function afegirTotesLesEntrades() {
+		var items = document.getElementsByClassName("itemInfo itemHash");
+		
+		ENTRADES_AFEGIDES= 0;
+	    ENTRADES_PER_AFEGIR = items.length;
+	
+		for (var i = 0; i < items.length; i++) {
+			var missatge = items[i].innerText;
+			afegirEntradaXhttp(user, data, missatge);
 		}
 	}
-}
+	
+	function afegirSeleccionats(){
+	       var items = $('input[type=checkbox]:checked');
+	       ENTRADES_AFEGIDES= 0;
+	          ENTRADES_PER_AFEGIR = items.length;
+	
+		for (var i = 0; i < items.length; i++) {
+			var missatge = items[i].value;
+			afegirEntradaXhttp(user, data, missatge);
+		}
+	}
+	
+	function testFinal(){
+		ENTRADES_AFEGIDES++;
+	
+		if (ENTRADES_AFEGIDES == ENTRADES_PER_AFEGIR) {
+			if (ENTRADES_AFEGIDES == 1) {
+	               alert("S'ha afegit l'entrada");
+			}else{
+	               alert("S'han afegit " + ENTRADES_AFEGIDES + " entrades");
+			}
+		}
+	}
 </script>

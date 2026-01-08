@@ -27,6 +27,7 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.QueEsticFentUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
@@ -69,9 +70,25 @@ public class QueEsticFentOperadorController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView listGet(HttpServletRequest request, HttpServletResponse response) {
-
         return listPost(request, response);
     }
+    
+    
+	public String getUsername(HttpServletRequest request) {
+
+//		final String USERNAME_DEFAULT = "pvico";
+		final String USERNAME_DEFAULT = Configuracio.getUsuariQueEsticFentDefault();
+		
+		String username = request.getRemoteUser();
+		
+		if (USERNAME_DEFAULT != null) {
+			log.info("Username es " + username + ", pero utilitzam per defecte: " + USERNAME_DEFAULT);
+
+			username = USERNAME_DEFAULT;
+		}
+		
+		return username;
+	}
 
     public String getContextWeb() {
         RequestMapping rm = AnnotationUtils.findAnnotation(this.getClass(), RequestMapping.class);
@@ -109,7 +126,7 @@ public class QueEsticFentOperadorController {
         Timestamp to = new Timestamp(atEndOfDay(date).getTime());
         log.info("to: " + to);
 
-        final String username = request.getRemoteUser();
+        final String username = getUsername(request);
         log.info("remote user: " + username);
 
         mav.addObject("data", dateStr);
@@ -173,6 +190,7 @@ public class QueEsticFentOperadorController {
             }
 
             log.info("Queesticfent: #events=" + fullevents.size());
+            mav.addObject("usuariQEF", username);
             mav.addObject("items", fullevents.values());
             mav.addObject("contexte", getContextWeb());
 
