@@ -166,8 +166,9 @@ public class AltaSolicitudPinbalOperadorController {
         SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
         try {
             // 1. Enviar a PINBAL
+        	String CIF = soli.getNif();
             es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta =
-                solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud);
+                solicitudLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud, CIF);
 
             // 2. CREAR INFO MADRID BASIC
             InfoMadridJPA infoMad = crearInfoMadrid(soli.getProcedimentCodi(), consulta, titular);
@@ -204,12 +205,13 @@ public class AltaSolicitudPinbalOperadorController {
             request.getSession().getAttribute("solicitud");
 
         try {
-            // 1. Enviar a PINBAL
-            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta =
-                solicitudLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud);
+        	// 1. Obtener JPA
+        	SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
-            // 2. Obtener JPA
-            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+        	// 2. Enviar a PINBAL
+        	String CIF = soli.getNif();
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta =
+                solicitudLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud, CIF);
 
             // 3. Procesar respuesta + mensajes usuario
             solicitudLogicaEjb.processarRespostaPinbalModificacio(soli, resposta, titular, funcionario);
