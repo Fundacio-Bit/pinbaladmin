@@ -2,6 +2,7 @@ package org.fundaciobit.pinbaladmin.logic;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,10 @@ import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
@@ -35,7 +39,9 @@ import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificaci
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitJConsent;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -47,12 +53,21 @@ import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
+import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.hibernate.Hibernate;
 
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
+
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.procediments.ClaseTramite;
+import es.caib.pinbal.client.procediments.Procediment;
+import es.caib.pinbal.client.procediments.ProcedimentClient;
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
+import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;
 
 /**
@@ -90,7 +105,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
     protected TramitJConsentLogicaService tramitJEjb;
 
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
-    protected InfoMadridLogicaService infoMadridLogicaJEjb;
+    protected InfoMadridLogicaService infoMadridLogicaEjb;
 
 	@EJB(mappedName = PinbalUtilsConsultaLogicaService.JNDI_NAME)
 	protected PinbalUtilsConsultaLogicaService pinbalConsultaLogicaEjb;
@@ -100,6 +115,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	
 	@EJB(mappedName = PinbalUtilsAltaLogicaService.JNDI_NAME)
     protected PinbalUtilsAltaLogicaService pinbalAltaLogicaEjb;
+	
+	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
+	protected OrganLogicaService organLogicaEjb;
     
 
 //    PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
@@ -866,6 +884,411 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
 	
 	}
+	
+//	@Override
+//	public void crearOActualitzarSolicitudPinbal(Long soliID) {
+//
+//		// =========================
+//		// 1. Cargar y validar solicitud
+//		// =========================
+//		SolicitudJPA solicitud = findByPrimaryKey(soliID);
+//		if (solicitud == null) {
+//			throw new IllegalStateException("No existe la solicitud con id " + soliID);
+//		}
+//
+//		if (solicitud.getInfomadridid() == null) {
+//			throw new IllegalStateException("La solicitud no tiene InfoMadrid asociada");
+//		}
+//
+//		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+//
+//		if (infoMad == null) {
+//			throw new IllegalStateException("No existe InfoMadrid para la solicitud " + soliID);
+//		}
+//
+//		// =========================
+//		// 2. Comprobar autorización
+//		// =========================
+//		if (infoMad.getDataAutoritzacio() == null) {
+//			log.info("La solicitud " + soliID + " no está autorizada. No se creará/actualizará en PINBAL.");
+//			return;
+//		}
+//
+//		// =========================
+//		// 3. Datos necesarios
+//		// =========================
+//		if (solicitud.getNif() == null || solicitud.getNif().isBlank()) {
+//			throw new IllegalStateException("La solicitud no tiene NIF informado");
+//		}
+//
+//		String entitatCodi;
+//		try {
+//			entitatCodi = getEntitatCodiFromCIF(solicitud.getNif());
+//		} catch (Exception e) {
+//			String msg = "Error obteniendo el código de entidad a partir del CIF " + solicitud.getNif()
+//					+ " para la solicitud " + soliID;
+//			log.error(msg, e);
+//			throw new IllegalStateException(msg, e);
+//		}
+//
+//		String procedimentCodi = solicitud.getProcedimentCodi();
+//
+//		OrganJPA organ = organLogicaEjb.findByPrimaryKey(solicitud.getOrganid());
+//		if (organ == null) {
+//			throw new IllegalStateException("No existe el órgano gestor de la solicitud " + soliID);
+//		}
+//
+//		// =========================
+//		// 4. Cliente PINBAL
+//		// =========================
+//		ProcedimentClient procedimentClient = createProcedimentClient();
+//
+//		// =========================
+//		// 5. Obtener procediment (si existe)
+//		// =========================
+//		es.caib.pinbal.client.procediments.Procediment procedimentPinbal = null;
+//		boolean existeixProcediment = true;
+//
+//		try {
+//
+//			procedimentPinbal = procedimentClient.getProcediment(procedimentCodi, entitatCodi);
+//
+//			log.info("Procediment " + procedimentCodi + " encontrado en PINBAL para la entidad " + entitatCodi);
+//
+//		} catch (RuntimeException e) {
+//
+//			// PINBAL lanza RuntimeException cuando el recurso no existe (404)
+//			if (e.getMessage() != null && e.getMessage().contains("Recurs no trobat")) {
+//
+//				existeixProcediment = false;
+//
+//				log.info("Procediment " + procedimentCodi + " no existe en PINBAL para la entidad " + entitatCodi
+//						+ ". Se procederá a su creación.");
+//
+//			} else {
+//
+//				String msg = "Error inesperado consultando el procediment " + procedimentCodi
+//						+ " en PINBAL para la entidad " + entitatCodi;
+//
+//				log.error(msg, e);
+//				throw new IllegalStateException(msg, e);
+//			}
+//
+//		} catch (IOException e) {
+//
+//			String msg = "Error de comunicación con PINBAL consultando el procediment " + procedimentCodi
+//					+ " para la entidad " + entitatCodi;
+//
+//			log.error(msg, e);
+//			throw new IllegalStateException(msg, e);
+//		}
+//
+//		// =========================
+//		// 6. Crear o actualizar
+//		// =========================
+//
+//		try {
+//
+//			if (!existeixProcediment) {
+//
+//				// ---- Crear ----
+//				es.caib.pinbal.client.procediments.Procediment nou = buildProcedimentPinbal(solicitud, entitatCodi,
+//						organ);
+//
+//				nou.setId(null); // obligatorio para creación
+//				nou.setDepartament(null);
+//				nou.setActiu(true);
+//				nou.setCodiSia(null);
+//				nou.setValorCampAutomatizado(false);
+//
+//				procedimentClient.createProcediment(nou);
+//
+//				log.info("Procediment " + procedimentCodi + " creado correctamente en PINBAL para la entidad "
+//						+ entitatCodi);
+//
+//			} else {
+//
+//				log.info("Procediment " + procedimentCodi + " existeix a PINBAL per a l'entitat " + entitatCodi
+//						+ ". Es procedirà a la seva actualització.");
+//				
+//				log.info("ID Procediment PINBAL: " + procedimentPinbal.getId());
+//				
+//				// ---- Actualizar ----
+//				es.caib.pinbal.client.procediments.Procediment actualitzat = buildProcedimentPinbal(solicitud,
+//						entitatCodi, organ);
+//				
+//			    actualitzat.setId(procedimentPinbal.getId());
+//
+//				actualitzat.setDepartament(procedimentPinbal.getDepartament());
+//				actualitzat.setActiu(procedimentPinbal.isActiu());
+//				actualitzat.setCodiSia(procedimentPinbal.getCodiSia());
+//				actualitzat.setValorCampAutomatizado(procedimentPinbal.getValorCampAutomatizado());
+//
+//				procedimentClient.updateProcediment(procedimentPinbal.getId(), actualitzat);
+//
+//				log.info("Procediment " + procedimentCodi + " actualizado correctamente en PINBAL para la entidad "
+//						+ entitatCodi);
+//			}
+//
+//		} catch (IOException e) {
+//
+//			String msg = "Error de comunicación con PINBAL creando/actualizando el procediment " + procedimentCodi
+//					+ " para la entidad " + entitatCodi;
+//
+//			log.error(msg, e);
+//			throw new IllegalStateException(msg, e);
+//		}
+//	}
+
+	@Override
+	public void crearOActualitzarSolicitudPinbal(Long soliID) {
+		
+		// 1. Obtener la solicitud
+		SolicitudJPA solicitud = findByPrimaryKey(soliID);
+		
+	    // 2️. Comprobar si la solicitud está autorizada
+	    if (!estaAutorizada(solicitud)) {
+	        log.info("Solicitud "+soliID+" no autorizada. No se creará/actualizará en PINBAL.");
+	        return;
+	    }
+	    
+		ProcedimentClient procedimentClient = createProcedimentClient();
+		
+		
+		String entitatCodi = getEntitatCodiFromCIF(solicitud.getNif());
+		String procedimentCodi = solicitud.getProcedimentCodi();
+
+	    // 3. Si está autorizada, buscarla en Pinbal.
+	    es.caib.pinbal.client.procediments.Procediment procedimentAPinbal = buscarProcedimentPinbal(procedimentClient, procedimentCodi, entitatCodi);
+
+	    // 4. Si no existe, crearla.
+	    OrganJPA organ = organLogicaEjb.findByPrimaryKey(solicitud.getOrganid());
+	    es.caib.pinbal.client.procediments.Procediment p = buildProcedimentPinbal(solicitud, entitatCodi, organ);
+
+	    
+		try {
+			Long idSolicitudPinbal;
+			
+			if (procedimentAPinbal == null) {
+				// Crear
+				p.setId(null);
+				p.setDepartament(null);
+				p.setActiu(true);
+				p.setCodiSia(null);
+				p.setValorCampAutomatizado(false);
+
+				procedimentClient.createProcediment(p);
+				log.info("Procediment " + solicitud.getProcedimentCodi() + " creado en PINBAL.");
+				
+				//Obtenim nou ID:
+				
+				es.caib.pinbal.client.procediments.Procediment procedimentCreat = buscarProcedimentPinbal(procedimentClient, procedimentCodi, entitatCodi);
+				idSolicitudPinbal = procedimentCreat.getId();
+				log.info("ID del nou procediment a PINBAL: " + idSolicitudPinbal);
+				
+			} else {
+				// Actualizar
+				idSolicitudPinbal = procedimentAPinbal.getId();
+
+				p.setId(idSolicitudPinbal);
+				p.setDepartament(procedimentAPinbal.getDepartament());
+				p.setActiu(procedimentAPinbal.isActiu());
+				p.setCodiSia(procedimentAPinbal.getCodiSia());
+				p.setValorCampAutomatizado(procedimentAPinbal.getValorCampAutomatizado());
+
+				procedimentClient.updateProcediment(idSolicitudPinbal, p);
+				log.info("Procediment " + solicitud.getProcedimentCodi() + " actualizado en PINBAL.");
+			}
+			
+			// Ahora damos de alta los servicios autorizados de la solicitud en Pinbaladmin a Pinbal.
+			
+			List<SolicitudServei> serveisAutoritzats = solicitudServeiLogicaEjb.select(Where.AND(
+					SolicitudServeiFields.SOLICITUDID.equal(soliID),
+					SolicitudServeiFields.ESTATSOLICITUDSERVEIID.equal(Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT)));
+			
+			List<String> serveisAfegits = new ArrayList<>();
+			List<String> serveisNoAfegits = new ArrayList<>();
+			
+			for (SolicitudServei ss : serveisAutoritzats) {
+				Servei servei = serveiLogicaEjb.findByPrimaryKey(ss.getServeiID());
+				String codiServei = reduceString255(servei.getCodi());
+
+				try {
+
+					procedimentClient.enableServeiToProcediment(idSolicitudPinbal, codiServei);
+					log.info("Servei " + codiServei + " autoritzat per al procediment " + solicitud.getProcedimentCodi()
+							+ " a PINBAL.");
+					serveisAfegits.add(codiServei);
+				} catch (RuntimeException e) {
+					if (e.getMessage() != null && e.getMessage().contains("Recurs no trobat")) {
+						log.warn("Servei " + codiServei
+								+ " no trobat a PINBAL. No s'ha pogut autoritzar per al procediment "
+								+ solicitud.getProcedimentCodi() + ".");
+						serveisNoAfegits.add(codiServei);
+					} else {
+						throw new IllegalStateException("Error autoritzant el servei " + codiServei
+								+ " per al procediment " + solicitud.getProcedimentCodi() + " a PINBAL.", e);
+					}
+				}
+
+			}
+			
+			String msgFinal = "\nProcediment " + solicitud.getProcedimentCodi() + " creat/actualitzat correctament a PINBAL amb els serveis autoritzats (" + serveisAfegits.size() + ").";
+
+			for (String s : serveisAfegits) {
+				msgFinal += "\n - Servei autoritzat: " + s;
+			}
+			for (String s : serveisNoAfegits) {	
+				msgFinal += "\n - Servei NO autoritzat (no trobat a PINBAL): " + s;
+			}
+			
+			log.info(msgFinal);
+			
+		} catch (IOException e) {
+			log.error("Error creando/actualizando el procediment en PINBAL", e);
+	        throw new IllegalStateException("Error creando/actualizando el procediment en PINBAL", e);
+		} catch (I18NException e) {
+			log.error("Error obteniendo los servicios autorizados de la solicitud " + soliID, e);
+			throw new IllegalStateException("Error obteniendo los servicios autorizados de la solicitud " + soliID, e);
+
+		}
+	}
+	
+	private boolean estaAutorizada(SolicitudJPA solicitud) {
+		if (solicitud == null) {
+			return false;
+		}
+
+		if (solicitud.getInfomadridid() == null) {
+			return false;
+		}
+
+		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
+
+		if (infoMad == null) {
+			return false;
+		}
+
+		if (infoMad.getDataAutoritzacio() == null) {
+			log.info("La solicitud " + solicitud.getProcedimentCodi() + " no está autorizada. No se creará/actualizará en PINBAL.");
+			return false;
+		}
+		
+		return true;
+	}
+
+	private es.caib.pinbal.client.procediments.Procediment buscarProcedimentPinbal(ProcedimentClient client,
+			String procedimentCodi, String entitatCodi) {
+
+		try {
+			es.caib.pinbal.client.procediments.Procediment p = client.getProcediment(procedimentCodi, entitatCodi);
+			log.info("Procediment " + procedimentCodi + " encontrado en PINBAL para la entidad " + entitatCodi);
+			return p;
+		} catch (RuntimeException e) {
+			if (e.getMessage() != null && e.getMessage().contains("Recurs no trobat")) {
+				log.info("Procediment " + procedimentCodi + " no existe en PINBAL para la entidad " + entitatCodi
+						+ ". Se procederá a su creación.");
+				return null;
+			} else {
+				throw new IllegalStateException("Error consultando PINBAL", e);
+			}
+		} catch (IOException e) {
+			throw new IllegalStateException("Error de comunicación con PINBAL", e);
+		}
+	}
+
+	private ProcedimentClient createProcedimentClient() {
+		return new ProcedimentClient(Configuracio.getApiPinbalClientUrl(), Configuracio.getApiPinbalClientUsername(),
+				Configuracio.getApiPinbalClientPassword(), LogLevel.INFO);
+	}
+
+	private es.caib.pinbal.client.procediments.Procediment buildProcedimentPinbal(SolicitudJPA solicitud,
+			String entitatCodi, OrganJPA organ) {
+
+		es.caib.pinbal.client.procediments.Procediment p = new es.caib.pinbal.client.procediments.Procediment();
+
+		p.setCodi(solicitud.getProcedimentCodi());
+		p.setNom(solicitud.getProcedimentNom());
+		p.setEntitatCodi(entitatCodi);
+
+		p.setValorCampClaseTramite(mapearTipusProcedimentAPinbal(solicitud.getProcedimentTipus()));
+
+		p.setOrganGestorDir3(organ.getDir3());
+
+		return p;
+	}
+
+
+	private boolean procedimentNoTrobat(Procediment procedimentPinbal) {
+		log.info("Comprovant si el procediment existeix a PINBAL...");
+		log.info("Procediment PINBAL: \n");
+		log.info(procedimentPinbal == null ? "null" : procedimentPinbal.toString());
+		return procedimentPinbal == null || procedimentPinbal.getCodi() == null;
+	}
+
+	private String getEntitatCodiFromCIF(String entitatCif) {
+		
+		final String baseUrl = Configuracio.getApiPinbalClientUrl();
+		final String username = Configuracio.getApiPinbalClientUsername();
+		final String password = Configuracio.getApiPinbalClientPassword();
+
+		LogLevel logLevel = LogLevel.INFO;
+		
+        ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+
+        
+        List<es.caib.pinbal.client.recobriment.v2.Entitat> entitats;
+		try {
+			entitats = clientRecobriment.getEntitats();
+		} catch (IOException e) {
+			throw new IllegalStateException("Error obteniendo el listado de entidades de PINBAL", e);
+			
+		}
+        
+		for (es.caib.pinbal.client.recobriment.v2.Entitat entitat : entitats) {
+			if (entitat.getCif().equals(entitatCif)) {
+				return entitat.getCodi();
+			}
+		}
+		
+		
+		throw new IllegalStateException("No s'ha trobat el codi d'entitat a PINBAL per al CIF: " + entitatCif);
+	}
+	
+    private static final Map<Integer, ClaseTramite> idToClaseMap = new HashMap<>();
+
+    static {
+        idToClaseMap.put(1, ClaseTramite.ADUANERO);
+        idToClaseMap.put(2, ClaseTramite.AFILIACION_COTIZACION_SS);
+        idToClaseMap.put(3, ClaseTramite.AUTORIZ_LICEN_CONCES_HOMOLOG);
+        idToClaseMap.put(4, ClaseTramite.AYUDAS_BECAS_SUBVEN);
+        idToClaseMap.put(5, ClaseTramite.CERTIFICADOS);
+        idToClaseMap.put(6, ClaseTramite.CONTRATACION_PUB);
+        idToClaseMap.put(7, ClaseTramite.CONVENIOS_COMUNIC);
+        idToClaseMap.put(8, ClaseTramite.GESTION_ECON_PATRIM);
+        idToClaseMap.put(9, ClaseTramite.DECLARAC_COMUNIC_INTERESADOS);
+        idToClaseMap.put(10, ClaseTramite.INSPECTORA);
+        idToClaseMap.put(11, ClaseTramite.PREMIOS);
+        idToClaseMap.put(12, ClaseTramite.PRESTACIONES);
+        idToClaseMap.put(13, ClaseTramite.RECURSOS_HUMANOS);
+        idToClaseMap.put(14, ClaseTramite.REGISTROS_CENSOS);
+        idToClaseMap.put(15, ClaseTramite.RESP_PATRIM_INDEM);
+        idToClaseMap.put(16, ClaseTramite.REVISION_ACTOS_ADM_RECURSOS);
+        idToClaseMap.put(17, ClaseTramite.SANCIONADOR);
+        idToClaseMap.put(18, ClaseTramite.SUGEREN_QUEJAS_CIUDADANOS);
+        idToClaseMap.put(19, ClaseTramite.TRIBUTARIO);
+    }
     
-    
+	public static ClaseTramite mapearTipusProcedimentAPinbal(String tipusProcediment) {
+        if (tipusProcediment == null || tipusProcediment.isEmpty()) {
+            return null;
+        }
+
+        try {
+            int id = Integer.parseInt(tipusProcediment.trim());
+            return idToClaseMap.get(id); // devuelve null si no existe
+        } catch (NumberFormatException e) {
+            return null; // o lanzar excepción si prefieres
+        }
+    }
 }

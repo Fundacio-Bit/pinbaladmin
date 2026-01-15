@@ -126,182 +126,222 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
     }
   }
 
-  @Override
-  public SolicitudForm getSolicitudForm(SolicitudJPA _jpa, boolean __isView,
-      HttpServletRequest request, ModelAndView mav) throws I18NException {
-    SolicitudForm solicitudForm = super.getSolicitudForm(_jpa, __isView, request, mav);
+	@Override
+	public SolicitudForm getSolicitudForm(SolicitudJPA _jpa, boolean __isView, HttpServletRequest request,
+			ModelAndView mav) throws I18NException {
+		SolicitudForm solicitudForm = super.getSolicitudForm(_jpa, __isView, request, mav);
 
-    
-    SolicitudJPA solicitud = solicitudForm.getSolicitud();
-    
-    mav.addObject("isView", __isView);
-    
-    if (__isView) {
-    	final boolean isEstatal = solicitud.getEntitatEstatal() != null && solicitud.getEntitatEstatal().trim().length() > 0;
+		SolicitudJPA solicitud = solicitudForm.getSolicitud();
 
-    	
-      // Canviam el cancel·lar per un tornar.....
-      solicitudForm.setCancelButtonVisible(false);
-      Long soliID = solicitud.getSolicitudID();
-      String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
-      
-      solicitudForm.addAdditionalButton(
-          new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, AdditionalButtonStyle.INFO));
+		mav.addObject("isView", __isView);
+
+		if (__isView) {
+			final boolean isEstatal = solicitud.getEntitatEstatal() != null
+					&& solicitud.getEntitatEstatal().trim().length() > 0;
+
+			Long soliID = solicitud.getSolicitudID();
+
+			afegirBotonsBackEditEvents(solicitudForm, solicitud, isEstatal);
+
+			if (isEstatal) {
+				addEstatalButtons(solicitudForm, soliID);
+			} else {
+				addLocalButtons(solicitudForm, solicitud, soliID);
+			}
+
+//			getSeccionsFullView(solicitudForm, isEstatal, request, mav);
+			solicitudForm.setAttachedAdditionalJspCode(true);
+		}
+
+		HttpSession sessio = request.getSession();
+		Long id = solicitud.getSolicitudID();
+		sessio.setAttribute(SolicitudDocumentOperadorController.SESSIO_SOLIID_MANAGE_DOCUMENTS, id);
+		sessio.setAttribute(SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS, id);
+
+		log.info("Set attibute [" + SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS + "] = "
+				+ solicitud.getSolicitudID());
+
+		return solicitudForm;
+	}
+  
+	private void afegirBotonsBackEditEvents(SolicitudForm solicitudForm, SolicitudJPA solicitud, boolean isEstatal) {
+		// Canviam el cancel·lar per un tornar.....
+		solicitudForm.setCancelButtonVisible(false);
+		Long soliID = solicitud.getSolicitudID();
+		String urlTornar = "/operador/solicitudfullview/" + soliID + " /cancel";
+
+		solicitudForm.addAdditionalButton(
+				new AdditionalButton("fas fa-arrow-left", "tornar", urlTornar, AdditionalButtonStyle.INFO));
 
 		solicitudForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_EDIT, "solicitud.edit",
 				"/operador/solicitud" + (isEstatal ? "estatal" : "local") + "/" + soliID + "/edit",
 				AdditionalButtonStyle.WARNING));
-		
-      String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/"
-              + soliID + (isEstatal() == null ? "" : ("/" + isEstatal));
 
-      solicitudForm.addAdditionalButton(
-              new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents, AdditionalButtonStyle.SUCCESS));
-      
-		if (!isEstatal) {
-			// Si és local
-			solicitudForm.addAdditionalButton(
-					new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
-							getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
-			
-			if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Enviar_Director) {
-				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
-						getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
-			}
-			//Si no te el document firmat pel DG, i está pendent d'enviar o de rebre firma, mostrar el botó. (Pot ser que s'envii manual)
-			if (!isFirmatPelDirector(solicitud)
-					&& (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
-							|| solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_Firma_Director)) {
-				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
-						getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
-			}
-			
-			
-			
-			Long estatID = solicitud.getEstatSolicitud();
-			
-			// Botones según el estatID
-			if (estatID != null) {
-				
-				Long infoMadID = solicitud.getInfomadridid();
-				
-				//S'ha de poder enviar a Madrid quan està pendent, i quan s'està en ESMENES, perque s'ha de poder canviar facil i enviar una altra vegada.
-				if (estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
-						|| estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
-						|| estatID == Constants.SOLI_ESTAT_ESMENES) {
+		String urlBackToEvents = EventSolicitudOperadorController.CONTEXTWEB + "/veureevents/" + soliID
+				+ (isEstatal() == null ? "" : ("/" + isEstatal));
 
-//					AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-//							"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-//					solicitudForm.addAdditionalButton(alta);
-					
-					//Peticio no enviada a madrid. Enviar ALTA.
-					if (infoMadID == null) {
-						AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-								"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-						solicitudForm.addAdditionalButton(alta);
-					}else {
-						InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
-						
-						//Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
-						if (infoMad.getDataAutoritzacio() == null) {
-							AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
-									"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
-							solicitudForm.addAdditionalButton(alta);
-						}else {
-							AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
-									"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
-							solicitudForm.addAdditionalButton(modificacio);
-						}
-					}
-				}
+		solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-bullhorn", "events.titol", urlBackToEvents,
+				AdditionalButtonStyle.SUCCESS));
 
-				// Si està pendent d'autoritzar, s'ha enviat a Madrid i volem resposta. Utilitzam CONSULTA. Si no, tenim resposta, la
-				// cercam de InfoMad, si es != null, vol dir que en algun moment hem tengut una interacció amb madrid. Estats anteriors tenen infoMadrid == null
-				if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) {
-					// CONSULTA permitida
-					AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-							"/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
-					solicitudForm.addAdditionalButton(consulta);
-				} else {
+	}
+	
+	private void addLocalButtons(SolicitudForm solicitudForm, SolicitudJPA solicitud, Long soliID)
+			throws I18NException {
 
-					if (infoMadID != null) {
-						AdditionalButton infoMadBtn = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
-								"/operador/infoMadrid/view/" + infoMadID, AdditionalButtonStyle.SECONDARY);
-						solicitudForm.addAdditionalButton(infoMadBtn);
-					}
-				}
-				
-				
-				if (estatID == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
+		// Botó per generar el formulari del Director General
+		solicitudForm.addAdditionalButton(
+				new AdditionalButton(IconUtils.ICON_RELOAD, "solicitud.generarformularidirectorgeneral",
+						getContextWeb() + "/generarformularidirectorgeneral/" + soliID, AdditionalButtonStyle.WARNING));
 
-					Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
+		Long estatID = solicitud.getEstatSolicitud();
 
-					Where wEstatMod = ModificacioSolicitudFields.ESTATMODIFICACIO
-							.equal(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
-
-					Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
-							Where.AND(wSoli, wEstatMod));
-
-					log.info("ModSoli: " + modSoliID);
-					if (modSoliID != null) {
-						solicitudForm.addAdditionalButton(
-								new AdditionalButton("fas fa-jedi", "solicitud.modificacio.aceptar",
-										"/operador/solicitudfullview/acceptarModificacio/" + modSoliID,
-										AdditionalButtonStyle.PRIMARY));
-					}
-				}
-			}
-
-		} else {
-			// Si és estatal
-			
-//			if (solicitud.getEstatSolicitud() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
-//				// Boto per enviar correus als cedents
-//				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
-//						"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
-//			}
-//			
-			//Boto per enviar correus als cedents
-			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
-					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
+		if (estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director) {
+			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
+					getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
 		}
-      
-//		getSeccionsFullView(solicitudForm, isEstatal, request, mav);
+
+		// Si no te el document firmat pel DG, i está pendent d'enviar o de rebre firma,
+		// mostrar el botó. (Pot ser que s'envii manual)
+		boolean pendentFirmaDirector = estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
+				|| estatID == Constants.SOLI_ESTAT_PENDENT_Firma_Director;
+
+		if (!isFirmatPelDirector(solicitud) && pendentFirmaDirector) {
+			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-upload", "afegir.formulari.firmat",
+					getContextWeb() + "/afegirFormulariFirmat/" + soliID, AdditionalButtonStyle.WARNING));
+		}
+
+		// ======================
+		// BOTONES DE PRE-ALTAS A MADRID
+		// ======================
+		Long infoMadID = solicitud.getInfomadridid();
+
+		// S'ha de poder enviar a Madrid quan està pendent, i quan s'està en ESMENES,
+		// perque s'ha de poder canviar facil i enviar una altra vegada.
+		boolean potEnviarMadrid = estatID == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID
+				|| estatID == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID || estatID == Constants.SOLI_ESTAT_ESMENES;
+
+		if (potEnviarMadrid) {
+			addMadridAltaOrModificacion(solicitudForm, soliID, infoMadID);
+		}
+
+		// Si està pendent d'autoritzar, s'ha enviat a Madrid i volem resposta.
+		// Utilitzam CONSULTA. Si no, tenim resposta, la
+		// cercam de InfoMad, si es != null, vol dir que en algun moment hem tengut una
+		// interacció amb madrid. Estats anteriors tenen infoMadrid == null
+
+		if (estatID == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR) {
+			// CONSULTA permitida
+			AdditionalButton consulta = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+					"/operador/altapinbal/consultaestado/" + soliID, AdditionalButtonStyle.SECONDARY);
+			solicitudForm.addAdditionalButton(consulta);
+		} else if (infoMadID != null) {
+			AdditionalButton infoMadBtn = new AdditionalButton("fas fa-eye", "consulta.pinbal.madrid",
+					"/operador/infoMadrid/view/" + infoMadID, AdditionalButtonStyle.SECONDARY);
+			solicitudForm.addAdditionalButton(infoMadBtn);
+
+		}
+
+		// ======================
+		// MODIFICACIONS PENDENTS
+		// ======================
+		if (estatID == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
+
+			Where wSoli = ModificacioSolicitudFields.SOLICITUDID.equal(soliID);
+
+			Where wEstatMod = ModificacioSolicitudFields.ESTATMODIFICACIO
+					.equal(Constants.ESTAT_MODIFICACIO_SOLICITUD_ENVIADA);
+
+			Long modSoliID = modificacioSolicitudLogicaEjb.executeQueryOne(ModificacioSolicitudFields.MODSOLIID,
+					Where.AND(wSoli, wEstatMod));
+
+			log.info("ModSoli: " + modSoliID);
+			if (modSoliID != null) {
+				solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-jedi", "solicitud.modificacio.aceptar",
+						"/operador/solicitudfullview/acceptarModificacio/" + modSoliID, AdditionalButtonStyle.PRIMARY));
+			}
+		}
 		
+		// ======================
+		// CREAR SOLICITUD A PINBAL
+		// ======================
+
+		// Si existe informació de Madrid, es pot crear o actualitzar la sol·licitud a PINBAL.
+		// El controlador ja decidirà si és ALTA o MODIFICACIÓ.
 		
-      solicitudForm.setAttachedAdditionalJspCode(true);
-    }
+		if (infoMadID != null) {
+		    solicitudForm.addAdditionalButton(
+		            new AdditionalButton(
+		                    "fas fa-share-square",
+		                    "pinbal.exportarsolicitud",
+		                    "/operador/solicitudfullview/crearOActualitzarSolicitud/" + soliID,
+		                    AdditionalButtonStyle.PRIMARY
+		            )
+		    );
+		}
+		
+	}
 
-    HttpSession sessio = request.getSession();
-    Long id = solicitud.getSolicitudID();
-    sessio.setAttribute(SolicitudDocumentOperadorController.SESSIO_SOLIID_MANAGE_DOCUMENTS,
-        id);
-    sessio.setAttribute(SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS, id);
+	private void addMadridAltaOrModificacion(SolicitudForm solicitudForm, Long soliID, Long infoMadID) {
 
-    log.info("Set attibute [" + SolicitudServeiOperadorController.SESSIO_SOLIID_MANAGE_SERVEIS
-        + "] = " + solicitud.getSolicitudID());
+		// AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+		// "/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+		// solicitudForm.addAdditionalButton(alta);
+		
+		// Peticio no enviada a madrid. Enviar ALTA.
+		if (infoMadID == null) {
+			addAltaMadrid(solicitudForm, soliID);
+			return;
+		}
 
-    return solicitudForm;
-  }
+		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadID);
+
+		// Si no s'ha autoritzat. Enviar ALTA. Si s'ha autoritzat, enviar MODIFICACIO
+		if (infoMad.getDataAutoritzacio() == null) {
+			addAltaMadrid(solicitudForm, soliID);
+			return;
+		}
+
+		AdditionalButton modificacio = new AdditionalButton("fas fa-tools", "modificacio.pinbal.madrid",
+				"/operador/altapinbal/vistaprevia/modificacio/" + soliID, AdditionalButtonStyle.SUCCESS);
+		solicitudForm.addAdditionalButton(modificacio);
+	}
+
+	private void addAltaMadrid(SolicitudForm solicitudForm, Long soliID) {
+		AdditionalButton alta = new AdditionalButton("fas fa-cloud-upload-alt", "alta.pinbal.madrid",
+				"/operador/altapinbal/vistaprevia/alta/" + soliID, AdditionalButtonStyle.PRIMARY);
+		solicitudForm.addAdditionalButton(alta);
+	}
+
+	private void addEstatalButtons(SolicitudForm solicitudForm, Long soliID) {
+//		if (solicitud.getEstatSolicitud() == Constants.SOLICITUD_ESTAT_PENDENT_Enviar_Cedents) {
+//			// Boto per enviar correus als cedents
+//			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
+//					"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
+//		}
+
+//		 Boto per enviar correus als cedents
+		solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-envelope", "estatal.enviarcorreucedents",
+				"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
+	}
   
-  @RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
-  public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request,
-      HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
+	@RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
+	public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable Long soliID) throws I18NException {
 
-    ModelAndView mav = new ModelAndView("formularicaidfitxersOperador");
+		ModelAndView mav = new ModelAndView("formularicaidfitxersOperador");
 
-    mav.addObject("action", request.getContextPath() + getContextWeb() + "/formularicaid/" + soliID);
+		mav.addObject("action", request.getContextPath() + getContextWeb() + "/formularicaid/" + soliID);
 
-    SubQuery<DocumentSolicitud, Long> subQueryDocSoli = documentSolicitudEjb.getSubQuery(
-        DocumentSolicitudFields.DOCUMENTID, DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+		SubQuery<DocumentSolicitud, Long> subQueryDocSoli = documentSolicitudEjb
+				.getSubQuery(DocumentSolicitudFields.DOCUMENTID, DocumentSolicitudFields.SOLICITUDID.equal(soliID));
 
-    List<Document> docs = documentEjb.select(DocumentFields.DOCUMENTID.in(subQueryDocSoli));
+		List<Document> docs = documentEjb.select(DocumentFields.DOCUMENTID.in(subQueryDocSoli));
 
-    mav.addObject("documents", docs);
+		mav.addObject("documents", docs);
 
-    return mav;
+		return mav;
 
-  }
+	}
 
   @RequestMapping(value = "/formularicaid/{soliID}", method = RequestMethod.POST)
   public ModelAndView generarFormulariCaid(HttpServletRequest request,
@@ -900,5 +940,26 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		}
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
-  
+	
+	@RequestMapping(value = "/crearOActualitzarSolicitud/{soliID}", method = RequestMethod.GET)
+	public String crearOActualitzarSolicitudPinbal(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable Long soliID) throws I18NException {
+
+		try {
+			log.info("Crearem o actualitzarem la sol·licitud a PINBAL per la solicitud [" + soliID + "]");
+
+			solicitudLogicaEjb.crearOActualitzarSolicitudPinbal(soliID);
+
+			log.info("S'ha creat o actualitzat la sol·licitud a PINBAL per la solicitud [" + soliID + "]");
+			HtmlUtils.saveMessageInfo(request,
+					"S'ha creat o actualitzat la sol·licitud a PINBAL per la solicitud [" + soliID + "]");
+		} catch (Exception e) {
+			String msg = "Error creant o actualitzant la solicitud a PINBAL: " + e.getMessage();
+			log.error(msg, e);
+			HtmlUtils.saveMessageError(request, msg);
+		}
+		return "redirect:" + getContextWeb() + "/view/" + soliID;
+
+	}
+	
 }

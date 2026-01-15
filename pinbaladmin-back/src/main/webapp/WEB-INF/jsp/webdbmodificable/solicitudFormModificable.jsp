@@ -12,7 +12,8 @@
 		"/afegirFormulariFirmat/", 
 		"/solicitudestatal/enviarcorreucedents/",
 		"/acceptarModificacio",
-		"/infoMadrid/view"
+		"/infoMadrid/view",
+		"/crearOActualitzarSolicitud"
 		
 		]
 

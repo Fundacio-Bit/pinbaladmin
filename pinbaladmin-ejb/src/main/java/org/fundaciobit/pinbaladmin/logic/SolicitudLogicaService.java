@@ -83,6 +83,8 @@ public interface SolicitudLogicaService extends SolicitudService {
 			ScspTitular titular, ScspFuncionario funcionario) throws Exception;
 
 	void crearInfoMadridFromSolicitud(Solicitud solicitud);
+
+	void crearOActualitzarSolicitudPinbal(Long soliID);
 	
 
 //	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
