@@ -129,8 +129,23 @@ public class TramitGPublicController extends TramitGOperadorController {
 			
 			tramitG.setNif(infoDG.getAdministrationID());
 			tramitG.setNom(infoDG.getName());
-			tramitG.setLlinatge1(infoDG.getSurname1());
-			tramitG.setLlinatge2(infoDG.getSurname2());
+
+			String ape1 = infoDG.getSurname1();
+			String ape2 = infoDG.getSurname2();
+			
+			//Si ape1 te els dos llinatges i ape2 es buit, repartir-los
+			if (ape1.indexOf(" ") > 0 && (ape2 == null  || ape2.trim().length() == 0)) {
+				ape1 = ape1.substring(0, ape1.indexOf(" "));
+				ape2 = infoDG.getSurname1().substring(infoDG.getSurname1().indexOf(" ") + 1);
+			}
+			
+			if (ape2 == null || ape2.trim().length() == 0) {
+				ape2 = "---";
+			}
+			
+			tramitG.setLlinatge1(ape1);
+			tramitG.setLlinatge2(ape2);
+			
 			tramitG.setCarrec("Director General d'Estrategia Digital i Desenvolupament Tecnològic");
 			tramitG.setMail(infoDG.getEmail());
 			tramitG.setTelefon(infoDG.getPhoneNumber());
