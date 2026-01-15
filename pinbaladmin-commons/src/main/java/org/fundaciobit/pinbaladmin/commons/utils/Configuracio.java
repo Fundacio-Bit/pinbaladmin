@@ -321,9 +321,8 @@ public class Configuracio implements Constants {
 	}
 
 	public static String getUsuariQueEsticFentDefault() {
-//        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.password");
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "queesticfent.usuari.default");
 		//return pvico
-		return null;
 	}
 
 }
