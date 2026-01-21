@@ -12,8 +12,10 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ejb.EJB;
@@ -42,6 +44,8 @@ import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
+import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
@@ -61,6 +65,8 @@ import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
+import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -1346,7 +1352,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	@RequestMapping(value = "/actualizarTitulares", method = RequestMethod.GET)
 	public String actualizarTitulares(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		actualizarTitulares();
+		buscarNIFsPluginUserInfo() ;
+//		actualizarNifFirmaTitulares();
+//		actualizarTitulares();
 		
 		HtmlUtils.saveMessageSuccess(request, "Titulars actualitzats correctament.");
 		return "redirect:" + getContextWeb() + "/list";
@@ -1362,6 +1370,144 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		return "redirect:" + getContextWeb() + "/list";
 	}
 
+	int nifsTrobatsOrganGestor = 0;
+	
+	private void buscarNIFsPluginUserInfo() throws Exception{
+		
+		boolean debug = false;
+		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+
+		Map<String, String> cacheNifNoms= new HashMap();
+		
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+		
+		for (Solicitud soli : solicituds) {
+			String nifTitular = soli.getTitularFirmaNif();
+			
+			if (nifTitular == null || nifTitular.isEmpty()) {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - sense NIF titular. Cercam el nif del organ gestor.");
+				nifTitular = buscarNifDelOrganGestor(soli);
+				
+				if (nifTitular == null || nifTitular.isEmpty()) {
+					log.info("Solicitud: " + soli.getSolicitudID() + " - No s'ha pogut trobar NIF del organ gestor.");
+					continue;
+				}
+				soli.setTitularFirmaNif(nifTitular);
+                solicitudLogicaEjb.update(soli);
+			}
+			
+			if (cacheNifNoms.containsKey(nifTitular)) {
+				String nomComplet = cacheNifNoms.get(nifTitular);
+				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom (cache): "
+						+ nomComplet);
+
+				soli.setTitularFirmaNom(nomComplet);
+				solicitudLogicaEjb.update(soli);
+				continue;
+			}
+			
+			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
+			
+			if (userInfo == null) {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
+				continue;
+			}
+			
+			String nomComplet = userInfo.getFullName();
+			cacheNifNoms.put(nifTitular, nomComplet);
+			log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom: " + nomComplet);
+			
+			soli.setTitularFirmaNom(nomComplet);
+			solicitudLogicaEjb.update(soli);
+		}		
+		
+		log.info("NIFs trobats per organ gestor: " + nifsTrobatsOrganGestor);
+	}
+	
+	private String buscarNifDelOrganGestor(Solicitud soli) {
+		//Buscamos otras solicitudes con ese organ gestor, y vemos si todas tienen el mismo NIF.
+		
+		Where wOrgan = SolicitudFields.ORGANID.equal(soli.getOrganid());
+		Where wNifNotNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
+		
+		List<String> nifsDistints = new java.util.ArrayList<>();
+		
+		try {
+			List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wOrgan, wNifNotNull));
+			
+			for (Solicitud s : solicituds) {
+				String nif = s.getTitularFirmaNif();
+				if (!nifsDistints.contains(nif)) {
+					nifsDistints.add(nif);
+				}
+			}
+			
+			if (nifsDistints.size() == 1) {
+				String nifTrobat = nifsDistints.get(0);
+				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF trobat per organ gestor " + soli.getOrganid()
+						+ ": " + nifTrobat);
+				nifsTrobatsOrganGestor++;
+				return nifTrobat;
+			} else if (nifsDistints.size() > 1) {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - NIFs diferents trobats per organ gestor "
+						+ soli.getOrganid() + ": " + nifsDistints.toString());
+				return null;
+			} else {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - No hi ha NIFs trobats per organ gestor "
+						+ soli.getOrganid());
+				return null;
+			}
+			
+		} catch (Exception e) {
+			log.error("Error cercant NIFs del organ gestor " + soli.getOrganid(), e);
+			return null;
+		}
+	}
+	
+	
+	
+	private void actualizarNifFirmaTitulares() throws Exception{
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+		
+		for (Solicitud soli : solicituds) {
+			log.info("Solicitud: " + soli.getSolicitudID());
+			
+			Long fitxerID = soli.getSolicitudXmlID();
+
+    		if (fitxerID == null) {
+    			log.info("fitxerID: " + fitxerID);
+    			continue;
+    		}
+
+    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+    		if (prop == null) {
+    			log.info("prop: " + prop);
+    			continue;
+    		}
+    		
+    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
+    		
+			if (nifTitular == null || nifTitular.isEmpty()) {
+				log.info("nifTitular: " + nifTitular);
+				continue;
+			}
+    		
+			String nomTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG") + " "
+					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG") + " "
+					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
+    		
+    		log.info("Solicitud " + soli.getProcedimentCodi() + ": Titular " + nifTitular + " - nom: " + nomTitular);
+
+    		soli.setTitularFirmaNif(nifTitular);
+    		soli.setTitularFirmaNom(nomTitular);
+    		
+			solicitudLogicaEjb.update(soli);    		
+		}
+	}
 	
 	private void actualizarTitulares() throws Exception{
 		

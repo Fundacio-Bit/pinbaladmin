@@ -330,10 +330,24 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 		try {
 			log.info("Enviem a firmar el document[" + documentID + "]");
 
-			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+//			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+			
+			//Obtenir solicitud del document, i obtenir el NIF del titular de la solicitud
+			List<Long> solicitudIDs = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.SOLICITUDID,
+					DocumentSolicitudFields.DOCUMENTID.equal(documentID));
+			
+			if (solicitudIDs.isEmpty()) {
+				throw new I18NException("error", "El document [" + documentID + "] no està associat a cap solicitud");
+			}
+			
+			Long solicitudID = solicitudIDs.get(0);
+			SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+			String nifDestinatari = solicitud.getTitularFirmaNif();
+			String nomDestinatari = solicitud.getTitularFirmaNom();
+			
 			String remitent = request.getRemoteUser();
 
-			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, nifDestinatari, remitent);
+			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, nifDestinatari, nomDestinatari, remitent);
 
 			log.info("S'ha enviat a firmar el document [" + documentID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");

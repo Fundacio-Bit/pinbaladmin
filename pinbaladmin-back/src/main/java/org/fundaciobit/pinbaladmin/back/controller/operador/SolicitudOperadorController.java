@@ -341,6 +341,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 		
 		Section dadesGestio = new Section("info_gestio", "section.dadesgestio", 
 				SolicitudFields.ESTATSOLICITUD, 
+				SolicitudFields.TITULARFIRMANIF,
+				SolicitudFields.TITULARFIRMANOM,
 				SolicitudFields.CREADOR, 
 				SolicitudFields.OPERADOR,
 				SolicitudFields.DATAINICI, 

@@ -151,6 +151,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.FITXERCONSENTIMENTID);
   }
 
+  public StringField TITULARFIRMANIF() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANIF);
+  }
+
+  public StringField TITULARFIRMANOM() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANOM);
+  }
+
 
 
   @Override

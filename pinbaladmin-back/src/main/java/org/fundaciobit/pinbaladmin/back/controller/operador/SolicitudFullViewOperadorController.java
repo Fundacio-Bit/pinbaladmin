@@ -44,6 +44,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
@@ -870,11 +871,17 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		try {
 			log.info("Enviem a firmar la sol·licitud [" + soliID + "]");
 			
+			Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+
 //	        String nifDestinatari = "45186147W";
-	        String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+//	        String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+			
+			String nifDestinatari = soli.getTitularFirmaNif();
+			String nomDestinatari = soli.getTitularFirmaNom();
 	        String remitent = request.getRemoteUser();
 	        
-			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soliID, nifDestinatari, remitent);
+	        
+			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, nifDestinatari, nomDestinatari, remitent);
 			
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");

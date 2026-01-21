@@ -74,7 +74,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	}
 
 	@Override
-	public void enviarDocumentDGPortaFIB(Long docID, String destinatariNif, String remitent) throws I18NException {
+	public void enviarDocumentDGPortaFIB(Long docID, String destinatariNif, String nomDestinatari, String remitent) throws I18NException {
 
 		Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
 				DocumentSolicitudFields.DOCUMENTID.equal(docID));
@@ -109,7 +109,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		}
 
 		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinatari: "
-				+ destinatariNif + "\n" + "Fitxer: " + doc.getNom();
+				+ destinatariNif + " - " + nomDestinatari + "\n" + "Fitxer: " + doc.getNom();
 
 		afegirEventSolicitudEnviada(soliID, remitent, msg);
 	}

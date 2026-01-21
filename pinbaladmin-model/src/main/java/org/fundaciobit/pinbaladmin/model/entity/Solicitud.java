@@ -107,6 +107,12 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getFitxerConsentimentID();
 	public void setFitxerConsentimentID(java.lang.Long _fitxerConsentimentID_);
 
+	public java.lang.String getTitularFirmaNif();
+	public void setTitularFirmaNif(java.lang.String _titularFirmaNif_);
+
+	public java.lang.String getTitularFirmaNom();
+	public void setTitularFirmaNom(java.lang.String _titularFirmaNom_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

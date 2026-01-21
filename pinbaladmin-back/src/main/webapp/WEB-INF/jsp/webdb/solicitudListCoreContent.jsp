@@ -227,6 +227,16 @@
             </c:if>
            </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
+          <td>
+          ${solicitud.titularFirmaNif}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
+          <td>
+          ${solicitud.titularFirmaNom}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

@@ -117,6 +117,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.FITXERCONSENTIMENTID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.FITXERCONSENTIMENTID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMANIF)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMANOM)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

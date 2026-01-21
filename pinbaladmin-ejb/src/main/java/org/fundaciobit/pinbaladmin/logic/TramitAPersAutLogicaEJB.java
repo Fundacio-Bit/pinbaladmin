@@ -223,6 +223,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String consentimentadjunt = null;
         Long fitxerConsentimentID = null;
         String nomFitxerAdjunt = null;
+        
+        String nifTitularFirma = null;
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -311,6 +313,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         TramitGDadesTit G = (TramitGDadesTit) obj;
                         String fullNameG = toFullName(G.getNom(), G.getLlinatge1(), G.getLlinatge2());
                         map.put("fullNameG", fullNameG);
+                        nifTitularFirma = G.getNif();
                     break;
                     case "H":
                         TramitHProc H = (TramitHProc) obj;
@@ -441,6 +444,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         soli.setConsentiment(consentiment);
         soli.setUrlconsentiment(urlconsentiment);
         soli.setConsentimentadjunt(consentimentadjunt);
+        soli.setTitularFirmaNif(nifTitularFirma);
 
         
 

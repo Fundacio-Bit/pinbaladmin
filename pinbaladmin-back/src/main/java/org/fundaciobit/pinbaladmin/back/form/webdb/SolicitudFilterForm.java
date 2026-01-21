@@ -428,6 +428,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String titularFirmaNif;
+
+  public java.lang.String getTitularFirmaNif() {
+    return this.titularFirmaNif;
+  }
+
+  public void setTitularFirmaNif(java.lang.String titularFirmaNif) {
+    this.titularFirmaNif = titularFirmaNif;
+  }
+
+
+  private java.lang.String titularFirmaNom;
+
+  public java.lang.String getTitularFirmaNom() {
+    return this.titularFirmaNom;
+  }
+
+  public void setTitularFirmaNom(java.lang.String titularFirmaNom) {
+    this.titularFirmaNom = titularFirmaNom;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -470,6 +492,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.infomadrididFins = __toClone.infomadrididFins;
     this.dataCaducitatDesde = __toClone.dataCaducitatDesde;
     this.dataCaducitatFins = __toClone.dataCaducitatFins;
+    this.titularFirmaNif = __toClone.titularFirmaNif;
+    this.titularFirmaNom = __toClone.titularFirmaNom;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;

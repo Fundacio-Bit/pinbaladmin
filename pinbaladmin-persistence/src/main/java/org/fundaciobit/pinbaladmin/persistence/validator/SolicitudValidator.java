@@ -235,6 +235,22 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(TITULARFIRMANIF) == 0) {
+      java.lang.String __titularfirmanif = __target__.getTitularFirmaNif();
+      if (__titularfirmanif!= null && __titularfirmanif.length() > 255) {
+        __vr.rejectValue(TITULARFIRMANIF, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(TITULARFIRMANOM) == 0) {
+      java.lang.String __titularfirmanom = __target__.getTitularFirmaNom();
+      if (__titularfirmanom!= null && __titularfirmanom.length() > 255) {
+        __vr.rejectValue(TITULARFIRMANOM, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

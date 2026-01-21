@@ -15,7 +15,7 @@ public interface DocumentLogicaService extends DocumentService {
 
     public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/DocumentLogicaEJB!org.fundaciobit.pinbaladmin.logic.DocumentLogicaService";
     
-	public void enviarDocumentDGPortaFIB(Long docID, String destinatariNif, String remitent) throws I18NException;
+	public void enviarDocumentDGPortaFIB(Long docID, String destinatariNif, String nomDestinatari, String remitent) throws I18NException;
 	
 //	public Long crearIEnviarPeticioDeFirma(Long documentID, String destinatariNif, String titolPeticio, String description, String reason, String remitent) throws Exception;
 

@@ -539,18 +539,21 @@ public class EntitatOperadorController extends EntitatController {
 		ProcedimentClient procedimentClient = getProcedimentClient();
 
 		try {
+			String consulta = "SVDPIDESTADOAUTWS01";
+			String alta = "SVDPIDSOLAUTWS01";
+			String modificacio = "SVDPIDACTPROCWS01";
 
 			// CONSULTA
-			log.info("      Autoritzant SVDPIDESTADOAUTWS01...");
-			procedimentClient.enableServeiToProcediment(procedimentID, "SVDPIDESTADOAUTWS01");
+			log.info("      Autoritzant " + consulta + "...");
+			procedimentClient.enableServeiToProcediment(procedimentID, consulta);
 
 			// ALTA
-			log.info("      Autoritzant SVDPIDSOLAUTWS01...");
-			procedimentClient.enableServeiToProcediment(procedimentID, "SVDPIDSOLAUTWS01");
+			log.info("      Autoritzant " + alta + "...");
+			procedimentClient.enableServeiToProcediment(procedimentID, alta);
 
 			// MODIFICACIÓ
-			log.info("      Autoritzant SVDPIDACTPROCWS01...");
-			procedimentClient.enableServeiToProcediment(procedimentID, "SVDPIDACTPROCWS01");
+			log.info("      Autoritzant " + modificacio + "...");
+			procedimentClient.enableServeiToProcediment(procedimentID, modificacio);
 
 			log.info("   Serveis autoritzats correctament.");
 

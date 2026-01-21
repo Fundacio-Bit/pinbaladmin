@@ -1019,3 +1019,39 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
+        <tr id="solicitud_titularFirmaNif_rowid">
+          <td id="solicitud_titularFirmaNif_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANIF])?'solicitud.titularFirmaNif':__theForm.labels[SolicitudFields.TITULARFIRMANIF]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANIF]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANIF]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularFirmaNif_columnvalueid">
+            <form:errors path="solicitud.titularFirmaNif" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIF)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIF)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNif"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
+        <tr id="solicitud_titularFirmaNom_rowid">
+          <td id="solicitud_titularFirmaNom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANOM])?'solicitud.titularFirmaNom':__theForm.labels[SolicitudFields.TITULARFIRMANOM]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularFirmaNom_columnvalueid">
+            <form:errors path="solicitud.titularFirmaNom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
