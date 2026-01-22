@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
@@ -27,6 +30,7 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
@@ -39,9 +43,13 @@ import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -50,6 +58,7 @@ import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
+import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.EntitatServeiJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
@@ -107,6 +116,8 @@ public class FusionarProcedimentsOperadorController {
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
     
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+
 	@RequestMapping(value = "/elegirProcediments", method = RequestMethod.GET)
 	public ModelAndView elegirProcediments(HttpServletRequest request, HttpServletResponse response) {
 		log.info("Entra a elegirProcediments");
@@ -265,10 +276,18 @@ public class FusionarProcedimentsOperadorController {
 		private String procedimentTipus;
 		private Timestamp dataInici;
 		private Timestamp dataCaducitat;
+		private String creador;
 		private String personaContacte;
 		private String personaContacteEmail;
 		private String responsableProcNom;
 		private String responsableProcEmail;
+		private String titularFirmaNIF;
+		private String titularFirmaNom;
+		
+		private String entitatNom;
+		private String entitatCif;
+		private String entitatDir3;
+		
 //		private String notes;
 //		private String consentiment;
 //		private String urlconsentiment;
@@ -293,10 +312,19 @@ public class FusionarProcedimentsOperadorController {
 			this.procedimentNom = soli.getProcedimentNom();
 			this.dataInici = soli.getDataInici();
 			this.dataCaducitat = soli.getDataCaducitat();
+			this.creador = soli.getCreador();
 			this.personaContacte = soli.getPersonaContacte();
 			this.personaContacteEmail = soli.getPersonaContacteEmail();
 			this.responsableProcNom = soli.getResponsableProcNom();
 			this.responsableProcEmail = soli.getResponsableProcEmail();
+			this.titularFirmaNIF = soli.getTitularFirmaNif();
+			this.titularFirmaNom = soli.getTitularFirmaNom();
+			
+			this.entitatNom = soli.getDenominacio();
+			this.entitatCif = soli.getNif();
+			this.entitatDir3 = soli.getDir3();
+			
+			
 //			this.notes = soli.getNotes();
 //			this.consentiment = soli.getConsentiment();
 //			this.urlconsentiment = soli.getUrlconsentiment();
@@ -411,6 +439,7 @@ public class FusionarProcedimentsOperadorController {
 		// Campos simples
 		// ================================
 		SolicitudJPA solicitudNueva = crearSolicicitudCampos(request);
+		solicitudNueva.setOperador(request.getRemoteUser());
 		
 		afegirConsentimentInfo(solicitudNueva, consentimientoParam);
 		
@@ -420,9 +449,10 @@ public class FusionarProcedimentsOperadorController {
 		
 		List<SolicitudServeiJPA> serviciosNuevos = getServiciosSolicitud(fusionados, servicios);
 		
-//		fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos, infoMadrid);
+		fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos, infoMadrid);
 
-		return "redirect:/operador/fusionarprocediments/elegirProcediments";
+//		return "redirect:/operador/fusionarprocediments/elegirProcediments";
+		return "redirect:/operador/solicitudfullview/view/" + solicitudNueva.getSolicitudID();
 	}
 	
 	private void afegirConsentimentInfo(SolicitudJPA solicitudNueva, String consentimientoParam) {
@@ -467,7 +497,9 @@ public class FusionarProcedimentsOperadorController {
 
 		List<String> codis = new ArrayList<>();
 		List<String> notas = new ArrayList<>();
-
+		Timestamp dataFi = null;
+		
+		
 		for (Long soliID : fusionados) {
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 			if (soli != null) {
@@ -486,7 +518,12 @@ public class FusionarProcedimentsOperadorController {
 				if (soli.getNotes() != null && !soli.getNotes().isEmpty()) {
 					notas.add(soli.getNotes().trim());
 				}
-
+				
+				if (soli.getDataFi() != null) {
+					if (dataFi == null || soli.getDataFi().after(dataFi)) {
+						dataFi = soli.getDataFi();
+					}
+				}
 			}
 		}
 
@@ -505,6 +542,7 @@ public class FusionarProcedimentsOperadorController {
 		
 		solicitudNueva.setCodiSiaConv(codiSiaConv);
 		solicitudNueva.setNotes(notasFinal);
+		solicitudNueva.setDataFi(dataFi);
 		
 		return fusionadas;
 	}
@@ -649,20 +687,33 @@ public class FusionarProcedimentsOperadorController {
 			eventLogicaEjb.update(ev);
 		}
 
+//		Set<SolicitudServeiJPA> set = new HashSet<>();
 		for (SolicitudServeiJPA ss : serviciosNuevos) {
 			ss.setSolicitudID(nuevaSolicitudID);
 			solicitudServeiLogicaEjb.create(ss);
+//			SolicitudServei solSer = solicitudServeiLogicaEjb.create(ss);
+//			set.add((SolicitudServeiJPA) solSer);
 		}
-
-		List<DocumentSolicitud> docs = documentSolicitudLogicaEjb.select(Where.AND(
-				DocumentSolicitudFields.SOLICITUDID.in(fusionados), DocumentSolicitudFields.DOCUMENTID.in(documentos)));
+//		solicitudNueva.setSolicitudServeis(set);
 		
-		for (DocumentSolicitud ds : docs) {
-			ds.setSolicitudID(nuevaSolicitudID);
-			documentSolicitudLogicaEjb.update(ds);
+//		List<DocumentSolicitud> docs = documentSolicitudLogicaEjb.select(Where.AND(
+//				DocumentSolicitudFields.SOLICITUDID.in(fusionados), DocumentSolicitudFields.DOCUMENTID.in(documentos)));
+//		
+//		for (DocumentSolicitud ds : docs) {
+//			ds.setSolicitudID(nuevaSolicitudID);
+//			documentSolicitudLogicaEjb.update(ds);
+//		}
+		
+		try {
+			// Gestión de documentos. 
+			generarNousDocumentsSolicitud(solicitudNueva, fusionados, documentos);
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		generarNousDocumentsSolicitud();
 		
 		//Falta borrar todas las solicitudes originales.
 		log.info("Fusión completada: nueva solicitud ID " + solicitudNueva.getSolicitudID());
@@ -670,25 +721,234 @@ public class FusionarProcedimentsOperadorController {
 
 	}
 
-	private void generarNousDocumentsSolicitud() {
+	private void generarNousDocumentsSolicitud(SolicitudJPA solicitudNueva, List<Long> fusionados,
+			List<Long> documentos) throws I18NException, Exception {
+
+		Long nuevaSolicitudID = solicitudNueva.getSolicitudID();
+		solicitudNueva = solicitudLogicaEjb.findByPrimaryKeyFull(nuevaSolicitudID);
+		
+		// Todo lo que tenga un documento firmado, o se quiera guardar manualmente, se
+		// mantiene.
+		// Excels y plantillas fuera y se generan nuevas.
+
+		List<DocumentSolicitud> docs = documentSolicitudLogicaEjb
+				.select(DocumentSolicitudFields.SOLICITUDID.in(fusionados));
+		for (DocumentSolicitud ds : docs) {
+			Document doc = documentLogicaEjb.findByPrimaryKey(ds.getDocumentID());
+			// Si está firmado, se mantiene
+			if (doc.getFitxerFirmatID() != null || documentos.contains(doc.getDocumentID())) {
+				ds.setSolicitudID(nuevaSolicitudID);
+				documentSolicitudLogicaEjb.update(ds);
+			} else {
+				// Borrar documento y su asociación
+				documentSolicitudLogicaEjb.delete(ds);
+				documentLogicaEjb.delete(doc);
+			}
+		}
+		
+		//Ahora guardamos los ficherosXML y documentos de Solicitud de las solicitudes.
+		List<Solicitud> solicitudesOriginals = solicitudLogicaEjb.select(SolicitudFields.SOLICITUDID.in(fusionados));
+		for (Solicitud soli : solicitudesOriginals) {
+			Long fitxerXMLID = soli.getSolicitudXmlID();
+			FitxerJPA fitxerJpa = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerXMLID);
+			// Crear Document i DocumentSolicitud.
+			if (fitxerJpa == null) {
+				log.warn("La solicitud ID " + soli.getSolicitudID() + " no tiene fichero XML asociado (ID "
+						+ fitxerXMLID + "). No se podrá copiar el formulario.");
+			} else {
+
+				afegirDocumentSolicitudAmbFitxer(fitxerJpa,
+						"formulari_" + soli.getSolicitudID() + "_" + soli.getDataInici() + ".xml",
+						Constants.DOCUMENT_SOLICITUD_ALTRES, nuevaSolicitudID);
+			}
+
+			Long docSoliID = soli.getDocumentSolicitudID();
+			if (docSoliID == null) {
+				log.warn("La solicitud ID " + soli.getSolicitudID() + " no tiene documento de solicitud asociado (ID "
+						+ docSoliID + "). No se podrá copiar el documento de solicitud.");
+
+			} else {
+
+				FitxerJPA fitxerDocSoli = fitxerPublicLogicaEjb.findByPrimaryKey(docSoliID);
+				afegirDocumentSolicitudAmbFitxer(fitxerDocSoli,
+						"document_solicitud_" + soli.getSolicitudID() + "_" + soli.getDataInici() + ".pdf",
+						Constants.DOCUMENT_SOLICITUD_ALTRES, nuevaSolicitudID);
+			}
+		}
+		
+
+		// Ahora añadimos los nuevos documentos que se tienen que generar: 
+		// Excel de locales y estatales, plantilla ODT y PDF.
+
+		Long organid = solicitudNueva.getOrganid();
+
+		Properties prop;
+		Fitxer docConsentiment = fitxerPublicLogicaEjb.findByPrimaryKey(solicitudNueva.getFitxerConsentimentID());
+
+//		generarDocumentsSolicitud(nuevaSolicitudID, organid, prop);
+		generarExcelDeServeis(solicitudNueva, docConsentiment);
+
 		/*
 		 * Lista de documentos que hay que regenerar:
 		 * 
-		 * Documento de la solicitud PDF
-		 * XML de la solicitud
+		 * Documento de la solicitud PDF XML de la solicitud
 		 * 
-		 * Formulario para el DG (PDF)
-		 * Formulario para el DG (ODT)
+		 * Formulario para el DG (PDF) Formulario para el DG (ODT)
 		 * 
-		 * Excel de procedimientos Locales
-		 * Excel de procedimientos Estatales
-		 * 
+		 * Excel de procedimientos Locales Excel de procedimientos Estatales
 		 * 
 		 */
-
-		
-		
 	}
+	
+	
+	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
+		
+		setOrganGestorProperties(organID, prop);		
+		
+		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
+		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
+
+		File plantilla = new File(Configuracio.getTemplateFormulari());
+
+		ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
+
+		{
+			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(), "application/pdf",
+					"");
+
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
+			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (PDF)", tipus, solicitudID);
+
+			FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
+		}
+
+		{
+			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
+					"application/vnd.oasis.opendocument.text", "");
+
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+			FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
+			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (ODT)", tipus, solicitudID);
+		}
+	}
+
+	public void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
+		String denomincaion;
+		String cif;
+		String UR;
+		String dir3UR;
+		String dir3Raiz;
+
+		/*
+		 * Denominació: Organ Gestor CIF: Primer CIF que trobi cercant als pares. Unitat
+		 * Responsable: Si el CIF es el de Govern, posar DGTIC, sino, la del CIF trobat.
+		 * DIR3 RESPONSABLE: DIR3 UR DIR3 RAIZ: Dir3 pare mes alt.
+		 */
+
+		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
+		Organ unitatResponsable = null;
+		Organ arrel = null;
+
+		Organ organTest = organGestor;
+		boolean end = false;
+		while (!end) {
+			if (unitatResponsable == null && organTest.getCif() != null) {
+				unitatResponsable = organTest;
+			}
+			if (arrel == null && organTest.getDir3pare() == null) {
+				arrel = organTest;
+			}
+
+			if (organTest.getDir3pare() != null) {
+				List<Organ> pares = organLogicaEjb.select(OrganFields.DIR3.equal(organTest.getDir3pare()));
+				organTest = pares.get(0);
+			} else {
+				end = true;
+			}
+		}
+
+		denomincaion = organGestor.getNom();
+		cif = unitatResponsable.getCif();
+
+		if (arrel.getCif().equals("S0711001H")) {
+			String dir3Dgtic = "A04027005";
+			List<Organ> organs = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
+			if (organs.size() == 1) {
+				Organ dgtic = organs.get(0);
+				unitatResponsable = dgtic;
+			}
+		}
+
+		UR = unitatResponsable.getNom();
+		dir3UR = unitatResponsable.getDir3();
+
+		dir3Raiz = arrel.getDir3();
+
+		log.info("denomincaion: " + denomincaion);
+		log.info("cif: " + cif);
+		log.info("UR: " + UR);
+		log.info("dir3UR: " + dir3UR);
+		log.info("dir3Raiz: " + dir3Raiz);
+
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION", denomincaion);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CIF", cif);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dir3UR);
+		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
+	}
+
+    public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
+
+        Long solicitudID = soli.getSolicitudID();
+        log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
+
+        
+        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+        
+        String[] excels = { "locals", "estatals" };
+
+		for (String excel : excels) {
+			log.info("Generant Excel de Serveis: " + excel);
+			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel, docConsentiment);
+
+			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx
+			String nom = excel + "_" + SDF.format(new Date()) + "_" + plantillaXLSX.getName();
+
+			FitxerJPA fitxer = new FitxerJPA(nom, data.length,
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", null);
+			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
+
+			FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxer.getFitxerID());
+
+			Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
+			afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
+		}
+    }
+
+    private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
+        
+        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+
+        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+
+        documentSolicitudLogicaEjb.create(ds);
+        log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
+
+    }
+
+
+	
+	
+	
+	
+	
+	
+	
 
 	private SolicitudJPA crearSolicicitudCampos(HttpServletRequest request) throws I18NException {
 
@@ -698,14 +958,21 @@ public class FusionarProcedimentsOperadorController {
 		String procedimentNom = request.getParameter("procedimentNom");
 		Timestamp dataInici = parseTimestamp(request.getParameter("dataInici"));
 		Timestamp dataCaducitat = parseTimestamp(request.getParameter("dataCaducitat"));
+		
+		String creador = request.getParameter("creador");
+		
 		String personaContacte = request.getParameter("personaContacte");
 		String personaContacteEmail = request.getParameter("personaContacteEmail");
 		String responsableProcNom = request.getParameter("responsableProcNom");
 		String responsableProcEmail = request.getParameter("responsableProcEmail");
-//		String notes = request.getParameter("notes");
-//		String consentiment = request.getParameter("consentiment");
-//		String urlconsentiment = request.getParameter("urlconsentiment");
-//		String consentimentadjunt = request.getParameter("consentimentadjunt");
+
+		String firmaTitularNif = request.getParameter("titularFirmaNIF");
+		String titularFirmaNom = request.getParameter("titularFirmaNom");
+		String entitatNom = request.getParameter("entitatNom");
+		String entitatCif = request.getParameter("entitatCif");
+		String entitatDir3 = request.getParameter("entitatDir3");
+		
+		
 
 		String organParam = request.getParameter("organid");
 		log.info("Organ recibido: " + organParam);
@@ -734,14 +1001,19 @@ public class FusionarProcedimentsOperadorController {
 		log.info("procedimentNom: " + procedimentNom);
 		log.info("dataInici: " + dataInici);
 		log.info("dataCaducitat: " + dataCaducitat);
+		
+		log.info("creador: " + creador);
+		
 		log.info("personaContacte: " + personaContacte);
 		log.info("personaContacteEmail: " + personaContacteEmail);
 		log.info("responsableProcNom: " + responsableProcNom);
 		log.info("responsableProcEmail: " + responsableProcEmail);
-//		log.info("notes: " + notes);
-//		log.info("consentiment: " + consentiment);
-//		log.info("urlconsentiment: " + urlconsentiment);
-//		log.info("consentimentadjunt: " + consentimentadjunt);
+
+		log.info("firmaTitularNif: " + firmaTitularNif);
+		log.info("titularFirmaNom: " + titularFirmaNom);
+		log.info("entitatNom: " + entitatNom);
+		log.info("entitatCif: " + entitatCif);
+		log.info("entitatDir3: " + entitatDir3);
 
 		log.info("organId: " + organId);
 		log.info("estatSolicitud: " + estatSolicitudId);
@@ -759,14 +1031,19 @@ public class FusionarProcedimentsOperadorController {
 		solicitudNueva.setDataCaducitat(dataCaducitat);
 		solicitudNueva.setDataFi(null);
 		
+		solicitudNueva.setCreador(creador);
 		solicitudNueva.setPersonaContacte(personaContacte);
 		solicitudNueva.setPersonaContacteEmail(personaContacteEmail);
 		solicitudNueva.setResponsableProcNom(responsableProcNom);
 		solicitudNueva.setResponsableProcEmail(responsableProcEmail);
-//		solicitudNueva.setNotes(notes);
-//		solicitudNueva.setConsentiment(consentiment);
-//		solicitudNueva.setUrlconsentiment(urlconsentiment);
-//		solicitudNueva.setConsentimentadjunt(consentimentadjunt);
+		
+		solicitudNueva.setTitularFirmaNif(firmaTitularNif);
+		solicitudNueva.setTitularFirmaNom(titularFirmaNom);
+		solicitudNueva.setDenominacio(entitatNom);
+		solicitudNueva.setNif(entitatCif);
+		solicitudNueva.setDir3(entitatDir3);
+		
+		
 		solicitudNueva.setOrganid(organId);
 		solicitudNueva.setEstatSolicitud(estatSolicitudId);
 //		solicitudNueva.setEstatpinbal(estatpinbalId);
@@ -801,31 +1078,50 @@ public class FusionarProcedimentsOperadorController {
 		}
 
 		for (Long serveiID : servicios) {
+			
+			String notes = "";
+			
+			String caduca = null;
+			String dataCad = null;
+			
 			List<SolicitudServei> soliServsBySoli = solicitudServeiLogicaEjb.select(Where.AND(
 					SolicitudServeiFields.SOLICITUDID.in(fusionados), SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
 			List<NormaInfo> normas = new ArrayList<>();
-
+			List<Long> estatsSoliSer = new ArrayList<>();
 			for (SolicitudServei ss : soliServsBySoli) {
-				log.info("Procesando SoliServ: solicitudId=" + ss.getSolicitudID() + ", serveiId=" + ss.getServeiID());
+				Long serveiId = ss.getServeiID();
+				Long solicitudId = ss.getSolicitudID();
+				
+				log.info("Procesando SoliServ: solicitudId=" + solicitudId + ", serveiId=" + serveiId);
 
 				if (ss.getNormaLegal() != null && !ss.getNormaLegal().isEmpty()) {
-					log.info("  Añadiendo norma1='" + ss.getNormaLegal() + "' (solicitud=" + ss.getSolicitudID()
-							+ ", servei=" + ss.getServeiID() + ")");
-					normas.add(new NormaInfo(ss.getNormaLegal(), ss.getFitxernormaID(), ss.getArticles(),
-							ss.getSolicitudID(), ss.getServeiID()));
+					log.info("  Añadiendo norma1='" + ss.getNormaLegal() + "' (solicitud=" + solicitudId + ", servei="
+							+ serveiId + ")");
+					normas.add(new NormaInfo(ss.getNormaLegal(), ss.getFitxernormaID(), ss.getArticles(), solicitudId,
+							serveiId));
 				}
 				if (ss.getNorma2() != null && !ss.getNorma2().isEmpty()) {
-					log.info("  Añadiendo norma2='" + ss.getNorma2() + "' (solicitud=" + ss.getSolicitudID()
-							+ ", servei=" + ss.getServeiID() + ")");
-					normas.add(new NormaInfo(ss.getNorma2(), ss.getFitxernorma2ID(), ss.getArticles2(),
-							ss.getSolicitudID(), ss.getServeiID()));
+					log.info("  Añadiendo norma2='" + ss.getNorma2() + "' (solicitud=" + solicitudId + ", servei="
+							+ serveiId + ")");
+					normas.add(new NormaInfo(ss.getNorma2(), ss.getFitxernorma2ID(), ss.getArticles2(), solicitudId,
+							serveiId));
 				}
 				if (ss.getNorma3() != null && !ss.getNorma3().isEmpty()) {
-					log.info("  Añadiendo norma3='" + ss.getNorma3() + "' (solicitud=" + ss.getSolicitudID()
-							+ ", servei=" + ss.getServeiID() + ")");
-					normas.add(new NormaInfo(ss.getNorma3(), ss.getFitxernorma3ID(), ss.getArticles3(),
-							ss.getSolicitudID(), ss.getServeiID()));
+					log.info("  Añadiendo norma3='" + ss.getNorma3() + "' (solicitud=" + solicitudId + ", servei="
+							+ serveiId + ")");
+					normas.add(new NormaInfo(ss.getNorma3(), ss.getFitxernorma3ID(), ss.getArticles3(), solicitudId,
+							serveiId));
+				}
+
+				notes += ss.getNotes() != null ? ss.getNotes() + "\n" : "";
+
+				if (!estatsSoliSer.contains(ss.getEstatSolicitudServeiID())) {
+					estatsSoliSer.add(ss.getEstatSolicitudServeiID());
+				}
+				
+				if (ss.getFechaCaduca() != null) {
+					dataCad = ss.getFechaCaduca();
 				}
 			}
 
@@ -844,6 +1140,27 @@ public class FusionarProcedimentsOperadorController {
 			SolicitudServeiJPA nuevoSoliServ = new SolicitudServeiJPA();
 			nuevoSoliServ.setServeiID(serveiID);
 
+			nuevoSoliServ.setEstatSolicitudServeiID(estatsSoliSer.get(0)); 
+			
+			nuevoSoliServ.setConsentiment(null);
+			nuevoSoliServ.setTipusConsentiment(null);
+			nuevoSoliServ.setEnllazConsentiment(null);
+
+			if (dataCad == null || dataCad.isEmpty()) {
+				caduca = "No Caduca";
+			} else {
+				caduca = "Caduca";
+			}
+			
+			nuevoSoliServ.setCaduca(caduca);
+			nuevoSoliServ.setFechaCaduca(dataCad);
+			
+			nuevoSoliServ.setNotes(notes);
+			
+			
+			
+			
+			
 			// Asignar hasta 3 normas
 			if (normasUnicas.size() > 0) {
 				nuevoSoliServ.setNormaLegal(normasUnicas.get(0).norma);

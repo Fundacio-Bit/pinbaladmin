@@ -360,6 +360,26 @@ $("#btnFusionar").click(function() {
 	mapLabels.set("personaContacteEmail", "<fmt:message key='solicitud.personaContacteEmail'/>");
 	mapLabels.set("responsableProcNom", "<fmt:message key='solicitud.responsableProcNom'/>");
 	mapLabels.set("responsableProcEmail", "<fmt:message key='solicitud.responsableProcEmail'/>");
+	
+	/*
+	
+			private String titularFirmaNIF;
+		private String titularFirmaNom;
+		
+		private String entitatNom;
+		private String entitatCif;
+		private String entitatDir3;
+		*/
+		
+	mapLabels.set("titularFirmaNIF", "<fmt:message key='solicitud.titularFirmaNif'/>");
+	mapLabels.set("titularFirmaNom", "<fmt:message key='solicitud.titularFirmaNom'/>");
+	mapLabels.set("entitatNom", "<fmt:message key='solicitud.denominacio'/>");
+	mapLabels.set("entitatCif", "<fmt:message key='solicitud.cif'/>");
+	mapLabels.set("entitatDir3", "<fmt:message key='solicitud.dir3'/>");
+		
+	
+	
+	
 	mapLabels.set("consentiment", "<fmt:message key='solicitud.consentiment'/>");
 	mapLabels.set("urlconsentiment", "<fmt:message key='solicitud.urlconsentiment'/>");
 	mapLabels.set("consentimentadjunt", "<fmt:message key='solicitud.consentimentadjunt'/>");
