@@ -87,5 +87,8 @@ public class TramitFPublicController extends TramitFOperadorController {
 					"El número de teléfono debe tener 9 o 10 dígitos.");
 		}
 
+		if (telefon == null) {
+			tramitForm.getTramitFCteTec().setTelefon("---");
+		}
     }
 }
