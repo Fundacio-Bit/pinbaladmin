@@ -1,15 +1,11 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 
-import java.util.List;
-
 import javax.ejb.Local;
 
 import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleFlowTemplate;
-import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.PinfoService;
-import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 

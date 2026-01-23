@@ -4,8 +4,6 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.InfoMadridEJB;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;

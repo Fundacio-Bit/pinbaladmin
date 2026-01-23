@@ -2,11 +2,6 @@ package org.fundaciobit.pinbaladmin.logic.utils.pinbalutils;
 
 import javax.ejb.Local;
 
-import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
-import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
-import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
-
 import es.caib.pinbal.client.recobriment.model.ScspFuncionario;
 import es.caib.pinbal.client.recobriment.model.ScspTitular;
 import es.caib.scsp.esquemas.SVDPIDESTADOAUTWS01.consulta.datosespecificos.Retorno;

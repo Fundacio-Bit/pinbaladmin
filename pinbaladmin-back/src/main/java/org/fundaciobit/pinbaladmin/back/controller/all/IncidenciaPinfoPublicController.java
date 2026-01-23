@@ -48,27 +48,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.caib.pinbal.client.comu.LogLevel;
-import es.caib.pinbal.client.informe.ClientInforme;
-import es.caib.pinbal.client.procediments.ProcedimentClient;
-import es.caib.pinbal.client.serveis.ServeiClient;
-import es.caib.pinbal.client.usuaris.UsuariClient;
-import es.caib.pinbal.client.usuaris.UsuariEntitat;
-import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
-import es.caib.pinbal.client.recobriment.v2.Entitat;
-import es.caib.pinbal.client.comu.ClientBase;
-import es.caib.pinbal.client.comu.EntitatEstadistiques;
-
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import es.caib.pinbal.client.comu.EntitatEstadistiques;
-import es.caib.pinbal.client.comu.ServeiEstadistiques;
-import es.caib.pinbal.client.informe.ClientInforme;
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.procediments.ProcedimentClient;
+import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
+import es.caib.pinbal.client.recobriment.v2.Entitat;
+import es.caib.pinbal.client.serveis.ServeiClient;
+import es.caib.pinbal.client.usuaris.UsuariClient;
+import es.caib.pinbal.client.usuaris.UsuariEntitat;
 
 /**
  * 

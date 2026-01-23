@@ -3,11 +3,7 @@ package org.fundaciobit.pinbaladmin.back.security;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
@@ -16,7 +12,6 @@ import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPl
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 //import org.fundaciobit.pinbaladmin.back.security.LoginInfo;

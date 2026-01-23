@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,29 +13,22 @@ import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPl
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
-import es.caib.pinbal.client.comu.LogLevel;
-import es.caib.pinbal.client.comu.Page;
-import es.caib.pinbal.client.usuaris.FiltreUsuaris;
-import es.caib.pinbal.client.usuaris.UsuariClient;
-import es.caib.pinbal.client.usuaris.UsuariEntitat;
-import es.caib.pinbal.client.procediments.Procediment;
-import es.caib.pinbal.client.procediments.ProcedimentClient;
-import es.caib.pinbal.client.usuaris.PermisosServei;
-import es.caib.pinbal.client.usuaris.ProcedimentServei;
-import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
-import es.caib.pinbal.client.recobriment.v2.Entitat;
-
-import org.fundaciobit.pinbaladmin.back.form.webdb.EventFilterForm;
-import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import es.caib.pinbal.client.comu.LogLevel;
+import es.caib.pinbal.client.comu.Page;
+import es.caib.pinbal.client.procediments.Procediment;
+import es.caib.pinbal.client.procediments.ProcedimentClient;
+import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
+import es.caib.pinbal.client.recobriment.v2.Entitat;
+import es.caib.pinbal.client.usuaris.FiltreUsuaris;
+import es.caib.pinbal.client.usuaris.PermisosServei;
+import es.caib.pinbal.client.usuaris.UsuariClient;
+import es.caib.pinbal.client.usuaris.UsuariEntitat;
 
 /**
  * 

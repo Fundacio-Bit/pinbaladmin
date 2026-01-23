@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.operador.TramitGOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitGDadesTitFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.TramitGDadesTitForm;

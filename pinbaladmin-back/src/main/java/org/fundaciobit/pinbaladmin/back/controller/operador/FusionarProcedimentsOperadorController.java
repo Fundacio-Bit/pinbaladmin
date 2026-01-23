@@ -74,9 +74,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
-import es.caib.pinbal.client.recobriment.model.ScspTitular;
-import es.caib.pinbal.client.recobriment.model.ScspTitular.ScspTipoDocumentacion;
-
 @Controller
 @RequestMapping(value = FusionarProcedimentsOperadorController.CONTEXTWEB)
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })

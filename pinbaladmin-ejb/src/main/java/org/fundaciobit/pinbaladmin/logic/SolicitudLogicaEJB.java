@@ -24,15 +24,12 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
-import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
-import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsAltaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsConsultaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.pinbalutils.PinbalUtilsModificacioLogicaService;
@@ -57,9 +54,6 @@ import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
 import org.hibernate.Hibernate;
-
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.procediments.ClaseTramite;
