@@ -125,19 +125,6 @@
 
 
         </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitHProcFields.URLSEU)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="tramitHProc.urlseu" var="urlseu" />
-              <fmt:message key="genapp.form.searchby" var="cercaperurlseu" >                
-                 <fmt:param value="${urlseu}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${urlseu}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercaperurlseu}" path="urlseu" />
-            </div>
-
-
-        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,TramitHProcFields.CADUCITAT)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>

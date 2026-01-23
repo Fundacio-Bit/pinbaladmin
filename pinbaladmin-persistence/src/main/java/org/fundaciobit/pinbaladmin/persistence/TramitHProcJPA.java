@@ -40,9 +40,6 @@ public class TramitHProcJPA implements TramitHProc {
     @Column(name="tipus",nullable = false,length = 240)
     java.lang.String tipus;
 
-    @Column(name="urlseu",length = 240)
-    java.lang.String urlseu;
-
     @Column(name="caducitat",nullable = false,length = 1)
     boolean caducitat;
 
@@ -71,13 +68,12 @@ public class TramitHProcJPA implements TramitHProc {
   }
 
   /** Constructor amb tots els camps  */
-  public TramitHProcJPA(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcJPA(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.procid=procid;
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.tipus=tipus;
-    this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
     this.descripcio=descripcio;
@@ -87,28 +83,13 @@ public class TramitHProcJPA implements TramitHProc {
     this.automatizado=automatizado;
 }
   /** Constructor sense valors autoincrementals */
-  public TramitHProcJPA(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , java.lang.String urlseu , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
+  public TramitHProcJPA(long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , boolean caducitat , java.sql.Timestamp caducitatdata , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
     this.tramitid=tramitid;
     this.nom=nom;
     this.codi=codi;
     this.tipus=tipus;
-    this.urlseu=urlseu;
     this.caducitat=caducitat;
     this.caducitatdata=caducitatdata;
-    this.descripcio=descripcio;
-    this.peticionsaldia=peticionsaldia;
-    this.peticionsalmes=peticionsalmes;
-    this.periodico=periodico;
-    this.automatizado=automatizado;
-}
-  /** Constructor dels valors Not Null */
-  public TramitHProcJPA(long procid , long tramitid , java.lang.String nom , java.lang.String codi , java.lang.String tipus , boolean caducitat , java.lang.String descripcio , long peticionsaldia , long peticionsalmes , boolean periodico , boolean automatizado) {
-    this.procid=procid;
-    this.tramitid=tramitid;
-    this.nom=nom;
-    this.codi=codi;
-    this.tipus=tipus;
-    this.caducitat=caducitat;
     this.descripcio=descripcio;
     this.peticionsaldia=peticionsaldia;
     this.peticionsalmes=peticionsalmes;
@@ -121,7 +102,6 @@ public class TramitHProcJPA implements TramitHProc {
     this.setNom(__bean.getNom());
     this.setCodi(__bean.getCodi());
     this.setTipus(__bean.getTipus());
-    this.setUrlseu(__bean.getUrlseu());
     this.setCaducitat(__bean.isCaducitat());
     this.setCaducitatdata(__bean.getCaducitatdata());
     this.setDescripcio(__bean.getDescripcio());
@@ -164,13 +144,6 @@ public class TramitHProcJPA implements TramitHProc {
 	};
 	public void setTipus(java.lang.String _tipus_) {
 		this.tipus = _tipus_;
-	};
-
-	public java.lang.String getUrlseu() {
-		return(urlseu);
-	};
-	public void setUrlseu(java.lang.String _urlseu_) {
-		this.urlseu = _urlseu_;
 	};
 
 	public boolean isCaducitat() {
@@ -261,7 +234,6 @@ public class TramitHProcJPA implements TramitHProc {
     __tmp.setNom(__bean.getNom());
     __tmp.setCodi(__bean.getCodi());
     __tmp.setTipus(__bean.getTipus());
-    __tmp.setUrlseu(__bean.getUrlseu());
     __tmp.setCaducitat(__bean.isCaducitat());
     __tmp.setCaducitatdata(__bean.getCaducitatdata());
     __tmp.setDescripcio(__bean.getDescripcio());

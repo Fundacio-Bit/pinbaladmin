@@ -98,17 +98,6 @@ public class TramitHProcFilterForm extends PinbalAdminBaseFilterForm implements 
   }
 
 
-  private java.lang.String urlseu;
-
-  public java.lang.String getUrlseu() {
-    return this.urlseu;
-  }
-
-  public void setUrlseu(java.lang.String urlseu) {
-    this.urlseu = urlseu;
-  }
-
-
   private java.sql.Timestamp caducitatdataDesde;
 
   public java.sql.Timestamp getCaducitatdataDesde() {
@@ -198,7 +187,6 @@ public class TramitHProcFilterForm extends PinbalAdminBaseFilterForm implements 
     this.nom = __toClone.nom;
     this.codi = __toClone.codi;
     this.tipus = __toClone.tipus;
-    this.urlseu = __toClone.urlseu;
     this.caducitatdataDesde = __toClone.caducitatdataDesde;
     this.caducitatdataFins = __toClone.caducitatdataFins;
     this.descripcio = __toClone.descripcio;

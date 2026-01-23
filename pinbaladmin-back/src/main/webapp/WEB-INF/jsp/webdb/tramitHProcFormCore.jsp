@@ -100,36 +100,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.URLSEU)}">
-        <tr id="tramitHProc_urlseu_rowid">
-          <td id="tramitHProc_urlseu_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[TramitHProcFields.URLSEU])?'tramitHProc.urlseu':__theForm.labels[TramitHProcFields.URLSEU]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[TramitHProcFields.URLSEU]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[TramitHProcFields.URLSEU]}" ></i>
-              </c:if>
-            </td>
-          <td id="tramitHProc_urlseu_columnvalueid">
-           <c:if test="${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)}">
-
-             <c:if test="${ not empty __theForm.tramitHProc.urlseu}">
-               <a href="${__theForm.tramitHProc.urlseu}" target="_blank">${__theForm.tramitHProc.urlseu}</a>
-
-             </c:if>
-           </c:if>
-
-           <c:if test="${not (gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU))}">
-
-            <form:errors path="tramitHProc.urlseu" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,TramitHProcFields.URLSEU)? ' uneditable-input' : ''}"  style="" maxlength="240" path="tramitHProc.urlseu"   />
-
-           </c:if>
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,TramitHProcFields.CADUCITAT)}">
         <tr id="tramitHProc_caducitat_rowid">
           <td id="tramitHProc_caducitat_columnlabelid">

@@ -55,14 +55,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.URLSEU)}">
-          <td>
-                       <c:if test="${ not empty tramitHProc.urlseu}">
-               <a href="${tramitHProc.urlseu}" target="_blank">${tramitHProc.urlseu}</a>
-             </c:if>
-
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.CADUCITAT)}">
           <td>
             <img height="18" width="18" src="<c:url value="/img/icn_alert_${tramitHProc.caducitat?'success':'error'}.png"/>">

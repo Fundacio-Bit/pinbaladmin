@@ -97,14 +97,6 @@ public class TramitHProcValidator<I extends TramitHProc>
       }
     }
 
-    if (__vr.getFieldErrorCount(URLSEU) == 0) {
-      java.lang.String __urlseu = __target__.getUrlseu();
-      if (__urlseu!= null && __urlseu.length() > 240) {
-        __vr.rejectValue(URLSEU, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(URLSEU)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(240)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(DESCRIPCIO) == 0) {
       java.lang.String __descripcio = __target__.getDescripcio();
       if (__descripcio!= null && __descripcio.length() > 240) {

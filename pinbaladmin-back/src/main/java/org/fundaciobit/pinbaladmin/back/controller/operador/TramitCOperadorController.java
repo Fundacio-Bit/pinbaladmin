@@ -396,7 +396,7 @@ public class TramitCOperadorController extends TramitCDadesCesiController {
 		Gson g = new Gson();
 		String json = g.toJson(OrganItems);
 
-		log.info(json);
+//		log.info(json);
 
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");

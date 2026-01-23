@@ -31,10 +31,6 @@ public class TramitHProcQueryPath extends org.fundaciobit.genapp.common.query.Qu
     return new StringField(getQueryPath(), TramitHProcFields.TIPUS);
   }
 
-  public StringField URLSEU() {
-    return new StringField(getQueryPath(), TramitHProcFields.URLSEU);
-  }
-
   public BooleanField CADUCITAT() {
     return new BooleanField(getQueryPath(), TramitHProcFields.CADUCITAT);
   }

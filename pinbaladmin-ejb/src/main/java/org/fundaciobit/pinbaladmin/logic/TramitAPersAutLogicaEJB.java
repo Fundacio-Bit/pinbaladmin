@@ -325,10 +325,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         String tipusProcedimentNom = getTipusProcediment(Long.valueOf(procedimentTipus));
                         map.put("tipusProcedimentNom", tipusProcedimentNom );
                         
-                        if(H.getUrlseu() == null || H.getUrlseu().trim().length() == 0) {
-                        	H.setUrlseu("---");
-                        }
-
                         String dataFiStr;
                         if (H.isCaducitat()) {
                         	dataCaducitat = H.getCaducitatdata();

@@ -10744,31 +10744,6 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "urlseu",
-          "sqlType": 12,
-          "size": 240,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "URL Seu Electrònica",
-            "es": "URL Sede Electrónica"
-          },
-          "javaName": "urlseu",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 13
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "caducitat",
           "sqlType": -7,
           "size": 1,

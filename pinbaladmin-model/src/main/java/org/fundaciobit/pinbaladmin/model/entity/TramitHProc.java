@@ -17,9 +17,6 @@ public interface TramitHProc extends org.fundaciobit.genapp.common.IGenAppEntity
 	public java.lang.String getTipus();
 	public void setTipus(java.lang.String _tipus_);
 
-	public java.lang.String getUrlseu();
-	public void setUrlseu(java.lang.String _urlseu_);
-
 	public boolean isCaducitat();
 	public void setCaducitat(boolean _caducitat_);
 

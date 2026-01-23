@@ -27,9 +27,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.TIPUS)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.TIPUS)}</th>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.URLSEU)}">
-        <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.URLSEU)}</th>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,TramitHProcFields.CADUCITAT)}">
         <th>${pad:getSortIcons(__theFilterForm,TramitHProcFields.CADUCITAT)}</th>
         </c:if>
