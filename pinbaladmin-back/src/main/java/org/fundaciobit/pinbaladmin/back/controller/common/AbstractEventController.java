@@ -415,6 +415,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
     public abstract String getUrlToCloseItem(T item);
 
     public abstract String getUrlToChangeOperadorItem(T item);
+    
+    public abstract String getUrlToChangeContacteItem(T item);
 
     public abstract String getTitol(T item);
 
@@ -695,7 +697,8 @@ public abstract class AbstractEventController<T> extends EventController impleme
         
         
         mav.addObject("urlToChangeOperator", getUrlToChangeOperadorItem(item));
-
+        mav.addObject("urlToChangeContacte", getUrlToChangeContacteItem(item));
+        
 
         mav.addObject("ID", itemID);
         mav.addObject("tipus", isSolicitud() ? "Sol·licitud" : "Incidència");

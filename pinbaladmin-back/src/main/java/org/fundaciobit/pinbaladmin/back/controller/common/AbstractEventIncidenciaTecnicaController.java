@@ -76,6 +76,11 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
     public String getUrlToChangeOperadorItem(IncidenciaTecnica item) {
         return IncidenciaTecnicaOperadorController.WEBCONTEXT + "/changeOperador/" + item.getIncidenciaTecnicaID();
     }
+    
+    @Override
+	public String getUrlToChangeContacteItem(IncidenciaTecnica item) {
+		return IncidenciaTecnicaOperadorController.WEBCONTEXT + "/changeContacte/" + item.getIncidenciaTecnicaID();
+	}
 
     @Override
     public boolean isClosed(IncidenciaTecnica item) {

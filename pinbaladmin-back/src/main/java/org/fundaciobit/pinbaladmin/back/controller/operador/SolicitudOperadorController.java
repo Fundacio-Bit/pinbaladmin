@@ -62,6 +62,7 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudQueryPath;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -1374,6 +1375,31 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return "redirect:/operador/solicitudfullview/view/" + solicitudID;
     }
 
+    @RequestMapping(value = "/changeContacte/{solicitudID}/{nom}/{email}", method = RequestMethod.GET)
+   	public String changeContacteIncidenciaTecnicaGet(
+   			@PathVariable("solicitudID") java.lang.Long solicitudID,
+   			@PathVariable("nom") java.lang.String nom, @PathVariable("email") java.lang.String email,
+   			HttpServletRequest request, HttpServletResponse response) throws I18NException {
+
+   		SolicitudJPA s = this.findByPrimaryKey(request, solicitudID);
+
+   		s.setPersonaContacte(nom);
+   		s.setPersonaContacteEmail(email);
+
+   		try {
+   			this.update(request, s);
+
+   			HtmlUtils.saveMessageSuccess(request, "Contacte canviat correctament. (" + nom + " - " + email + ")");
+
+   		} catch (Throwable e) {
+   			String msg = "Error canviant contacte: " + e.getMessage();
+   			log.error(msg, e);
+   			HtmlUtils.saveMessageError(request, msg);
+   		}
+
+        return "redirect:/operador/solicitudfullview/view/" + solicitudID;
+   	}
+    
     @Override
     public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {

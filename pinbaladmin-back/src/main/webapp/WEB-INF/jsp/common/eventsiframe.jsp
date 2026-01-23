@@ -1219,6 +1219,12 @@ textarea.event {
 							</c:if>
 							
 							<c:if test="${!isSolicitud}">
+							
+								<a class="btn btn-sm btn-warning" role="button"
+									href="<c:url value="javascript:modificarContacte()"/>"> <i
+									class="<%=IconUtils.ICON_USER%>"></i> Modificar Contacte
+								</a>
+							
 								<a class="btn btn-info btn-sm" role="button"
 									href="<c:url value="${urlToEditItem}"/>"> <i
 									class="<%=IconUtils.ICON_EYE%>"></i> Editar ${tipus}
@@ -1538,7 +1544,53 @@ function myFunction() {
 function changeOperador() {
     $("#modelSeleccioTramitador").modal();
 }
+</script>
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="modalModificarContacte" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Modificar Contacte</h4>
+				<button type="button" class="close"
+					style="margin: 0px; padding: 0px" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+
+				<label id="label_contacteNom" for="contacteNom"> Contacte: </label> 
+				<input type="text" id="contacteNom" value="${personaContacte}" />
+	
+				<br>
+
+				<label id="label_contacteEmail" for="contacteEmail">Correu</label> 
+				<input type="text" id="contacteEmail" value="${personaContacteEmail}" />
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" onClick="myFunctionChangeContacte()"
+					data-dismiss="modal">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function myFunctionChangeContacte() {
+	
+    var contacteNom = document.getElementById("contacteNom").value;
+    var contacteEmail = document.getElementById("contacteEmail").value;
+        
+    var root = "<%=request.getContextPath()%>${urlToChangeContacte}";
+    
+    window.location.href = root + "/" + contacteNom
+            + "/" + contacteEmail;
+}
+
+function modificarContacte(){
+    $("#modalModificarContacte").modal();
+}
 </script>

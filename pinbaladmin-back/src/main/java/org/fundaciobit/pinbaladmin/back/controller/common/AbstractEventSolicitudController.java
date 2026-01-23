@@ -86,6 +86,12 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
     public String getUrlToChangeOperadorItem(Solicitud item) {
         return SolicitudLocalOperadorController.CONTEXTWEB + "/changeOperador/" + item.getSolicitudID();
     }
+    
+    @Override
+	public String getUrlToChangeContacteItem(Solicitud item) {
+		return SolicitudLocalOperadorController.CONTEXTWEB + "/changeContacte/" + item.getSolicitudID();
+	}
+    
     @Override
     public boolean isClosed(Solicitud item) {
         return item.getEstatSolicitud() == Constants.SOLI_ESTAT_TANCAT;
