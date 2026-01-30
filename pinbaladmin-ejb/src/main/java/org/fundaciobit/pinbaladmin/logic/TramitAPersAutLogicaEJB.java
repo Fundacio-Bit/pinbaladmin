@@ -185,7 +185,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
          * 4. Crear els Documents de la Solicitud (Exmple a generarFormulari de SolicitudFullViewOperadorController)
          */
 
-        SolicitudJPA soli = new SolicitudJPA();
+//        SolicitudJPA soli = new SolicitudJPA();
 
         //Constants
         Long estatID = Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO;
@@ -199,6 +199,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         //nulls
         String entitatEstatal = null;
         String pinfo = null;
+        String expedientPid = null;
+        Long contacteTitularID = null;
+		Long portafibID = null;
+		Long infoMadridID = null;
 
         //Camps a obtenir
         String procedimentCodi = null;
@@ -224,8 +228,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long fitxerConsentimentID = null;
         String nomFitxerAdjunt = null;
         
-        String nifTitularFirma = null;
-
+        String titularFirmaNIF = null;
+        String titularFirmaNom = null;
+        String titularFirmaEmail = null;
+        String titularFirmaLlinatges = null;
+        
         Map<String, Object> map = new HashMap<String, Object>();
 
         List<List<?>> listas = Arrays.asList(this.select(TRAMITID.equal(tramitID)),
@@ -313,7 +320,10 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         TramitGDadesTit G = (TramitGDadesTit) obj;
                         String fullNameG = toFullName(G.getNom(), G.getLlinatge1(), G.getLlinatge2());
                         map.put("fullNameG", fullNameG);
-                        nifTitularFirma = G.getNif();
+                        titularFirmaNIF = G.getNif();
+                        titularFirmaNom = G.getNom();
+                        titularFirmaEmail = G.getMail();
+                        titularFirmaLlinatges = G.getLlinatge1() + " " + G.getLlinatge2();
                     break;
                     case "H":
                         TramitHProc H = (TramitHProc) obj;
@@ -400,52 +410,62 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         
         //Documents
         Properties prop = null;
+        Long solicitudXmlID = null;
+        Long docSoliID = null;
 		try {
-			Long solicitudXmlID = generarXMLFromMap(map);
+			solicitudXmlID = generarXMLFromMap(map);
 			prop = ParserFormulariXML.getPropertiesFromFormulario(solicitudXmlID);
-			Long docSoliID = generarDocumentSolicitudAmbXML(procedimentCodi, prop, listaTramitsI);
+			docSoliID = generarDocumentSolicitudAmbXML(procedimentCodi, prop, listaTramitsI);
 			
-			soli.setSolicitudXmlID(solicitudXmlID);
-	        soli.setDocumentSolicitudID(docSoliID);
+//			soli.setSolicitudXmlID(solicitudXmlID);
+//	        soli.setDocumentSolicitudID(docSoliID);
 		} catch (Exception e) {
 			String msg = "Error generant XML de la sol·licitud: " + e.getMessage();
 			log.error(msg, e);
 			throw new I18NException(msg);
 		}
-        soli.setProcedimentCodi(procedimentCodi); 
-        soli.setCodiSiaConv(procedimentCodi);
-        soli.setCodiDescriptiu(codiDescriptiu);
-        soli.setProcedimentNom(procedimentNom);
-        soli.setProcedimentTipus(procedimentTipus);
-        soli.setEstatSolicitud(estatID);
-        soli.setOrganid(organid);
-        soli.setEntitatEstatal(entitatEstatal);
-        soli.setPinfo(pinfo);
-        soli.setDataInici(dataInici);
-        soli.setDataFi(null);
-        soli.setDataCaducitat(dataCaducitat);
-        soli.setPersonaContacte(personaContacte);
-        soli.setPersonaContacteEmail(personaContacteEmail);
-        soli.setResponsableProcNom(responsableProcNom);
-        soli.setResponsableProcEmail(responsableProcEmail);
-        soli.setNotes(notesSoli);
-        soli.setFirmatDocSolicitud(firmatDocSolicitud);
-        soli.setProduccio(produccio);
-        soli.setDenominacio(denominacio);
-        soli.setDir3(dir3arrel);
-        soli.setNif(nifArrel);
-        soli.setCreador(creador);
-        soli.setOperador(operador);
-        soli.setEstatpinbal(estatpinbal);
-        soli.setConsentiment(consentiment);
-        soli.setUrlconsentiment(urlconsentiment);
-        soli.setConsentimentadjunt(consentimentadjunt);
-        soli.setTitularFirmaNif(nifTitularFirma);
+//        soli.setProcedimentCodi(procedimentCodi); 
+//        soli.setCodiSiaConv(procedimentCodi);
+//        soli.setCodiDescriptiu(codiDescriptiu);
+//        soli.setProcedimentNom(procedimentNom);
+//        soli.setProcedimentTipus(procedimentTipus);
+//        soli.setEstatSolicitud(estatID);
+//        soli.setOrganid(organid);
+//        soli.setEntitatEstatal(entitatEstatal);
+//        soli.setPinfo(pinfo);
+//        soli.setDataInici(dataInici);
+//        soli.setDataFi(null);
+//        soli.setDataCaducitat(dataCaducitat);
+//        soli.setPersonaContacte(personaContacte);
+//        soli.setPersonaContacteEmail(personaContacteEmail);
+//        soli.setResponsableProcNom(responsableProcNom);
+//        soli.setResponsableProcEmail(responsableProcEmail);
+//        soli.setNotes(notesSoli);
+//        soli.setFirmatDocSolicitud(firmatDocSolicitud);
+//        soli.setProduccio(produccio);
+//        soli.setDenominacio(denominacio);
+//        soli.setDir3(dir3arrel);
+//        soli.setNif(nifArrel);
+//        soli.setCreador(creador);
+//        soli.setOperador(operador);
+//        soli.setEstatpinbal(estatpinbal);
+//        soli.setConsentiment(consentiment);
+//        soli.setUrlconsentiment(urlconsentiment);
+//        soli.setConsentimentadjunt(consentimentadjunt);
+//        soli.setTitularFirmaNif(nifTitularFirma);
 
-        
+        String codiSiaConv = procedimentCodi;
 
-        try {
-	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soli);
+
+		SolicitudJPA soliJpa = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
+				procedimentTipus, organid, estatID, expedientPid, entitatEstatal, pinfo, dataInici, dataInici,
+				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
+				solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel, creador, operador,
+				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
+				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail);
+
+		try {
+	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soliJpa);
 	
 	        Long soliID = solicitud.getSolicitudID();
 	        log.info("SolicitudID de la solicitud creada: " + soliID);
@@ -463,7 +483,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 			log.info("Afegim serveis a la sol·licitud");
 			Set<SolicitudServeiJPA> solicitudServeis = afegirServeisSolicitud(listaTramitsI, dataCaducitat, soliID);
-			soli.setSolicitudServeis(solicitudServeis);
+			solicitud.setSolicitudServeis(solicitudServeis);
+			
 			log.info("Generem Excel de Serveis");
 			generarExcelDeServeis(solicitud, docConsentiment);
 			
