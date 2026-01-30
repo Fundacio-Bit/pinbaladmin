@@ -178,9 +178,23 @@
             <version>${pluginsib.estructuraorganitzativa.version}</version>
         </dependency>
 
+        <!-- ============================================ -->
+        <!-- ====          PLUGINS DE LOGIN           === -->
+        <!-- ============================================ -->
+        
+<!--
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.login</groupId>
+            <artifactId>pluginsib-login-loginib</artifactId>
+            <version>${pluginsib.login.version}</version>
+        </dependency>
 
-
-
+        <dependency>
+            <groupId>org.fundaciobit.pluginsib.login</groupId>
+            <artifactId>pluginsib-login-mock</artifactId>
+            <version>${pluginsib.login.version}</version>
+        </dependency>
+-->
 
         <!-- ============================================ -->
         <!-- ========== PLUGINS DE DATAEXPORT =========== -->
