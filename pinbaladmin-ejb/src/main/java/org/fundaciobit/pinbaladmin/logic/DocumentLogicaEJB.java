@@ -24,6 +24,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEJB;
 import org.fundaciobit.pinbaladmin.ejb.OperadorService;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -66,7 +67,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	}
 
 	@Override
-	public void enviarDocumentDGPortaFIB(Long docID, String destinatariNif, String nomDestinatari, String remitent) throws I18NException {
+	public void enviarDocumentDGPortaFIB(Long docID, Contacte destinatari, String remitent) throws I18NException {
 
 		Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
 				DocumentSolicitudFields.DOCUMENTID.equal(docID));
@@ -85,7 +86,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
 		String reason = tipusPeticio + " d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
 
-		Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinatariNif, titolPeticio, description, reason,
+		Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinatari, titolPeticio, description, reason,
 				remitent);
 
 		log.info("Peticio de firma creada: " + idPortafib);
@@ -101,12 +102,12 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		}
 
 		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinatari: "
-				+ destinatariNif + " - " + nomDestinatari + "\n" + "Fitxer: " + doc.getNom();
+				+ destinatari.getNif() + " - " + destinatari.getNom() + "\n" + "Fitxer: " + doc.getNom();
 
 		afegirEventSolicitudEnviada(soliID, remitent, msg);
 	}
 
-	public Long crearIEnviarPeticioDeFirma(Document doc, String destinatariNif, String titolPeticio,
+	public Long crearIEnviarPeticioDeFirma(Document doc, Contacte destinatari, String titolPeticio,
 			String description, String reason, String remitent) throws I18NException {
 
 		String languageUI = "ca";
@@ -124,7 +125,8 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		String senderFullName = operadorEjb.executeQueryOne(OperadorFields.NOM,
 				OperadorFields.USERNAME.equal(remitent));
 
-		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
+		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertContacteToSignatureBlock(destinatari);
+//		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
 
 		String profileCode = Configuracio.getPortafibProfile();
 		int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
@@ -167,6 +169,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 			return peticioDeFirmaID;
 		} catch (AbstractApisIBException e) {
 //			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
+			log.error("Error creant peticio de firma a Portafib: " + e.getMessage(), e);
 			throw new I18NException("error.portafib.generic", new I18NArgumentString(e.getMessage()));
 		}
 	}

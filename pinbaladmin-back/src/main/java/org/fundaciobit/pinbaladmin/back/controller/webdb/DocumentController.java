@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="document.document.plural", order=40, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="document.document.plural", order=50, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/document")
 @SessionAttributes(types = { DocumentForm.class, DocumentFilterForm.class })

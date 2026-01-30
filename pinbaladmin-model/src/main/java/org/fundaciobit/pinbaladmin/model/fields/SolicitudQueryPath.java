@@ -151,12 +151,24 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.FITXERCONSENTIMENTID);
   }
 
+  public LongField CONTACTETITULARID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTETITULARID);
+  }
+
   public StringField TITULARFIRMANIF() {
     return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANIF);
   }
 
   public StringField TITULARFIRMANOM() {
     return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANOM);
+  }
+
+  public StringField TITULARFIRMALLINATGES() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMALLINATGES);
+  }
+
+  public StringField TITULARFIRMAEMAIL() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMAEMAIL);
   }
 
 
@@ -274,6 +286,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new FitxerQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "fitxerConsentiment" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTE() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacte" + ".";
       }
     });
   }

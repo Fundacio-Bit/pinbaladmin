@@ -17,6 +17,8 @@ public class SolicitudBeanValidator
 
 
   // EJB's
+  protected final org.fundaciobit.pinbaladmin.model.dao.IContacteManager __contacteManager;
+
   protected final org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager;
 
   protected final org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager;
@@ -27,9 +29,11 @@ public class SolicitudBeanValidator
   public final SolicitudValidator<SolicitudJPA> _validator;
 
 
-  public SolicitudBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager,
+  public SolicitudBeanValidator(org.fundaciobit.pinbaladmin.model.dao.IContacteManager __contacteManager,
+     org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager,
      org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) { 
+    this.__contacteManager = __contacteManager;
     this.__infoMadridManager = __infoMadridManager;
     this.__organManager = __organManager;
     this.__solicitudManager = __solicitudManager;
@@ -37,9 +41,11 @@ public class SolicitudBeanValidator
   }
 
   public SolicitudBeanValidator(SolicitudValidator<SolicitudJPA> _validator,
+     org.fundaciobit.pinbaladmin.model.dao.IContacteManager __contacteManager,
      org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager,
      org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager,
      org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
+    this.__contacteManager = __contacteManager;
     this.__infoMadridManager = __infoMadridManager;
     this.__organManager = __organManager;
     this.__solicitudManager = __solicitudManager;
@@ -49,7 +55,7 @@ public class SolicitudBeanValidator
   @Override
   public List<I18NFieldError> validate(SolicitudJPA target, boolean isNou) throws I18NException {
     BeanValidatorResult<SolicitudJPA> _bvr_ = new BeanValidatorResult<SolicitudJPA>();
-    _validator.validate(_bvr_, target, isNou, __infoMadridManager, __organManager, __solicitudManager);
+    _validator.validate(_bvr_, target, isNou, __contacteManager, __infoMadridManager, __organManager, __solicitudManager);
     return _bvr_.getErrors();
   }
 }

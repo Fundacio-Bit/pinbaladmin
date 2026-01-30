@@ -227,6 +227,14 @@
             </c:if>
            </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTETITULARID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteTitularID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteTitularID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
           <td>
           ${solicitud.titularFirmaNif}
@@ -235,6 +243,16 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
           <td>
           ${solicitud.titularFirmaNom}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMALLINATGES)}">
+          <td>
+          ${solicitud.titularFirmaLlinatges}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
+          <td>
+          ${solicitud.titularFirmaEmail}
           </td>
         </c:if>
 

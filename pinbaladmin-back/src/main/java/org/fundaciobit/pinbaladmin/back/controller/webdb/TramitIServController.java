@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitIServ.tramitIServ.plural", order=410, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tramitIServ.tramitIServ.plural", order=420, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitIServ")
 @SessionAttributes(types = { TramitIServForm.class, TramitIServFilterForm.class })

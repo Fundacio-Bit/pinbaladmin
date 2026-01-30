@@ -49,7 +49,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="idioma.idioma.plural", order=170, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="idioma.idioma.plural", order=180, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/idioma")
 @SessionAttributes(types = { IdiomaForm.class, IdiomaFilterForm.class })

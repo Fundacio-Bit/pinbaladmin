@@ -179,8 +179,13 @@ public class PinfoPublicController extends PinfoController {
 			pinfoFilterForm.addHiddenField(FITXERID);
 			pinfoFilterForm.addHiddenField(FITXERFIRMATID);
 			pinfoFilterForm.addHiddenField(PORTAFIBID);
-			pinfoFilterForm.addHiddenField(PINFOID);
+//			pinfoFilterForm.addHiddenField(PINFOID);
+		
+			pinfoFilterForm.addHiddenField(ENTITAT);
+			pinfoFilterForm.addHiddenField(DESTINATARINIF);
+			pinfoFilterForm.addHiddenField(MISSATGEPINBAL);
 			
+			pinfoFilterForm.setItemsPerPage(-1);
 			
 			pinfoFilterForm.setFooterListVisible(false);
 			

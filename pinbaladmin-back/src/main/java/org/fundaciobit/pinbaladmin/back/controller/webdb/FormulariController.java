@@ -52,7 +52,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="formulari.formulari.plural", order=140, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="formulari.formulari.plural", order=150, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/formulari")
 @SessionAttributes(types = { FormulariForm.class, FormulariFilterForm.class })

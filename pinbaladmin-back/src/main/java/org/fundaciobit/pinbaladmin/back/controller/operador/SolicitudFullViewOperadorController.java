@@ -33,12 +33,14 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -48,6 +50,7 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
+import org.fundaciobit.pinbaladmin.persistence.ContacteJPA;
 import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
@@ -92,6 +95,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
   @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
   protected InfoMadridLogicaService infoMadridLogicaEjb;
+  
+  @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+  protected ContacteLogicaService contacteLogicaEjb;
   
   
   @Override
@@ -195,7 +201,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 		if (estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director) {
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
-					getContextWeb() + "/enviarAFirmar/" + soliID, AdditionalButtonStyle.PRIMARY));
+					getContextWeb() + "/enviarAFirmarTitular/" + soliID, AdditionalButtonStyle.PRIMARY));
 		}
 
 		// Si no te el document firmat pel DG, i está pendent d'enviar o de rebre firma,
@@ -861,7 +867,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
       return null;
   }
   
-	@RequestMapping(value = "/enviarAFirmar/{soliID}", method = RequestMethod.GET)
+	@RequestMapping(value = "/enviarAFirmarTitular/{soliID}", method = RequestMethod.GET)
 	public String enviarDocumentAFirmar(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable Long soliID) throws I18NException {
 		
@@ -873,12 +879,13 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 //	        String nifDestinatari = "45186147W";
 //	        String nifDestinatari = Configuracio.getNIFDirectorGeneral();
 			
-			String nifDestinatari = soli.getTitularFirmaNif();
-			String nomDestinatari = soli.getTitularFirmaNom();
+//			String nifDestinatari = soli.getTitularFirmaNif();
+//			String nomDestinatari = soli.getTitularFirmaNom();
+			
 	        String remitent = request.getRemoteUser();
+	        Contacte titular = contacteLogicaEjb.crearContacteTitular(soli);
 	        
-	        
-			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, nifDestinatari, nomDestinatari, remitent);
+			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, titular, remitent);
 			
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");
@@ -889,7 +896,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		}
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
-  
+	
 	public Long crearFitxerNormaFromURL(String url) {
 		try {
 			final boolean debug = false;

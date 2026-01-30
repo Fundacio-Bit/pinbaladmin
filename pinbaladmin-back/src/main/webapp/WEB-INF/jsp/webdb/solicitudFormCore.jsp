@@ -1019,6 +1019,46 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONTACTETITULARID)}">
+        <tr id="solicitud_contacteTitularID_rowid">
+          <td id="solicitud_contacteTitularID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONTACTETITULARID])?'solicitud.contacteTitularID':__theForm.labels[SolicitudFields.CONTACTETITULARID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONTACTETITULARID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONTACTETITULARID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_contacteTitularID_columnvalueid">
+          <form:errors path="solicitud.contacteTitularID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTETITULARID)}" >
+          <form:hidden path="solicitud.contacteTitularID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.contacteTitularID,__theForm.listOfContacteForContacteTitularID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTETITULARID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_contacteTitularID"  onchange="if(typeof onChangeContacteTitularID == 'function') {  onChangeContacteTitularID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.contacteTitularID">
+            <c:forEach items="${__theForm.listOfContacteForContacteTitularID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.contacteTitularID }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.contacteTitularID }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
         <tr id="solicitud_titularFirmaNif_rowid">
           <td id="solicitud_titularFirmaNif_columnlabelid">
@@ -1050,6 +1090,42 @@
           <td id="solicitud_titularFirmaNom_columnvalueid">
             <form:errors path="solicitud.titularFirmaNom" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMALLINATGES)}">
+        <tr id="solicitud_titularFirmaLlinatges_rowid">
+          <td id="solicitud_titularFirmaLlinatges_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMALLINATGES])?'solicitud.titularFirmaLlinatges':__theForm.labels[SolicitudFields.TITULARFIRMALLINATGES]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMALLINATGES]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMALLINATGES]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularFirmaLlinatges_columnvalueid">
+            <form:errors path="solicitud.titularFirmaLlinatges" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMALLINATGES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMALLINATGES)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaLlinatges"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
+        <tr id="solicitud_titularFirmaEmail_rowid">
+          <td id="solicitud_titularFirmaEmail_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMAEMAIL])?'solicitud.titularFirmaEmail':__theForm.labels[SolicitudFields.TITULARFIRMAEMAIL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMAEMAIL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMAEMAIL]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularFirmaEmail_columnvalueid">
+            <form:errors path="solicitud.titularFirmaEmail" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAIL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaEmail"   />
 
            </td>
         </tr>

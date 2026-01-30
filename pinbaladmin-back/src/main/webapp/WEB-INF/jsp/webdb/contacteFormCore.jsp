@@ -1,0 +1,130 @@
+<%-- ========= FITXER AUTOGENERAT - NO MODIFICAR !!!!! --%>
+<%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
+<un:useConstants var="ContacteFields" className="org.fundaciobit.pinbaladmin.model.fields.ContacteFields"/>
+  
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.NIF)}">
+        <tr id="contacte_nif_rowid">
+          <td id="contacte_nif_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.NIF])?'contacte.nif':__theForm.labels[ContacteFields.NIF]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.NIF]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.NIF]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_nif_columnvalueid">
+            <form:errors path="contacte.nif" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.NIF)? 'true' : 'false'}" cssClass="w-50 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.NIF)? ' uneditable-input' : ''}"  style="" maxlength="30" path="contacte.nif"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.NOM)}">
+        <tr id="contacte_nom_rowid">
+          <td id="contacte_nom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.NOM])?'contacte.nom':__theForm.labels[ContacteFields.NOM]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.NOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.NOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_nom_columnvalueid">
+            <form:errors path="contacte.nom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.NOM)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.NOM)? ' uneditable-input' : ''}"  style="" maxlength="60" path="contacte.nom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.LLINATGE1)}">
+        <tr id="contacte_llinatge1_rowid">
+          <td id="contacte_llinatge1_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.LLINATGE1])?'contacte.llinatge1':__theForm.labels[ContacteFields.LLINATGE1]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.LLINATGE1]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.LLINATGE1]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_llinatge1_columnvalueid">
+            <form:errors path="contacte.llinatge1" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.LLINATGE1)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.LLINATGE1)? ' uneditable-input' : ''}"  style="" maxlength="60" path="contacte.llinatge1"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.LLINATGE2)}">
+        <tr id="contacte_llinatge2_rowid">
+          <td id="contacte_llinatge2_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.LLINATGE2])?'contacte.llinatge2':__theForm.labels[ContacteFields.LLINATGE2]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.LLINATGE2]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.LLINATGE2]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_llinatge2_columnvalueid">
+            <form:errors path="contacte.llinatge2" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.LLINATGE2)? 'true' : 'false'}" cssClass="w-75 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.LLINATGE2)? ' uneditable-input' : ''}"  style="" maxlength="60" path="contacte.llinatge2"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.CARREC)}">
+        <tr id="contacte_carrec_rowid">
+          <td id="contacte_carrec_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.CARREC])?'contacte.carrec':__theForm.labels[ContacteFields.CARREC]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.CARREC]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.CARREC]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_carrec_columnvalueid">
+            <form:errors path="contacte.carrec" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.CARREC)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.CARREC)? ' uneditable-input' : ''}"  style="" maxlength="120" path="contacte.carrec"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.TELEFON)}">
+        <tr id="contacte_telefon_rowid">
+          <td id="contacte_telefon_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.TELEFON])?'contacte.telefon':__theForm.labels[ContacteFields.TELEFON]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.TELEFON]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.TELEFON]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_telefon_columnvalueid">
+            <form:errors path="contacte.telefon" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.TELEFON)? 'true' : 'false'}" cssClass="w-50 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.TELEFON)? ' uneditable-input' : ''}"  style="" maxlength="12" path="contacte.telefon"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.MAIL)}">
+        <tr id="contacte_mail_rowid">
+          <td id="contacte_mail_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.MAIL])?'contacte.mail':__theForm.labels[ContacteFields.MAIL]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.MAIL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.MAIL]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_mail_columnvalueid">
+            <form:errors path="contacte.mail" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.MAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.MAIL)? ' uneditable-input' : ''}"  style="" maxlength="120" path="contacte.mail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        

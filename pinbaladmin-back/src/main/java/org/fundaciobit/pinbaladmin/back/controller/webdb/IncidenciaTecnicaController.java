@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="incidenciaTecnica.incidenciaTecnica.plural", order=180, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="incidenciaTecnica.incidenciaTecnica.plural", order=190, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/incidenciaTecnica")
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })

@@ -433,6 +433,239 @@
       ]
     },
     {
+      "name": "pad_contacte",
+      "nameJava": "Contacte",
+      "shortName": "cte",
+      "labels": {
+        "ca": "Contacte",
+        "es": "Contacto"
+      },
+      "labelsPlural": {
+        "ca": "Contactes",
+        "es": "Contactos"
+      },
+      "generate": true,
+      "fileMappingEntity": false,
+      "languageMappingEntity": false,
+      "translationEntity": false,
+      "translationMapEntity": false,
+      "fields": [
+        {
+          "PK": "pad_contacte_pk",
+          "index": "pad_contacte_pk_i",
+          "isAutoIncrement": true,
+          "sqlName": "contacteid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "ContacteID",
+            "es": "ContactoID"
+          },
+          "javaName": "ContacteID",
+          "javaType": "long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": true,
+          "transientField": false,
+          "defaultValue": "nextval(\u0027pad_contacte_seq\u0027::regclass)",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 0,
+            "label": [
+              "nom"
+            ]
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_tit_fk",
+              "table": "pad_solicitud",
+              "field": "contactetitularid",
+              "type": 0
+            }
+          ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nif",
+          "sqlType": 12,
+          "size": 30,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "NIF",
+            "es": "NIF"
+          },
+          "javaName": "nif",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nom",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Nom",
+            "es": "Nombre"
+          },
+          "javaName": "nom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge1",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Llinatge1",
+            "es": "Apellido1"
+          },
+          "javaName": "llinatge1",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "llinatge2",
+          "sqlType": 12,
+          "size": 60,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Llinatge2",
+            "es": "Apellido2"
+          },
+          "javaName": "llinatge2",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "carrec",
+          "sqlType": 12,
+          "size": 120,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Càrrec",
+            "es": "Cargo"
+          },
+          "javaName": "carrec",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "telefon",
+          "sqlType": 12,
+          "size": 12,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Telefon",
+            "es": "Teléfono"
+          },
+          "javaName": "telefon",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "mail",
+          "sqlType": 12,
+          "size": 120,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "email",
+            "es": "email"
+          },
+          "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        }
+      ]
+    },
+    {
       "name": "pad_departament",
       "nameJava": "Departament",
       "shortName": "depart",
@@ -7262,6 +7495,46 @@
           ]
         },
         {
+          "index": "pad_solicitud_titularid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contactetitularid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Titular",
+            "es": "Titular"
+          },
+          "javaName": "contacteTitularID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "minAllowedValue": "0, 1",
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_soli_cte_tit_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_tit_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
           "isAutoIncrement": false,
           "sqlName": "titularfirmanif",
           "sqlType": 12,
@@ -7298,6 +7571,56 @@
             "es": "Titular Firma Nombre"
           },
           "javaName": "titularFirmaNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularfirmallinatges",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Titular FIrma Llinatges",
+            "es": "Titular FIrma Apellidos"
+          },
+          "javaName": "titularFirmaLlinatges",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularfirmaemail",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Titular Firma email",
+            "es": "Titular Firma email"
+          },
+          "javaName": "titularFirmaEmail",
           "javaType": "java.lang.String",
           "traduible": false,
           "showInWebList": true,

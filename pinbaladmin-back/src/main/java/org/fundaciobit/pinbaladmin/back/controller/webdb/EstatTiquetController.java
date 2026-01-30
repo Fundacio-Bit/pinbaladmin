@@ -49,7 +49,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="estatTiquet.estatTiquet.plural", order=110, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="estatTiquet.estatTiquet.plural", order=120, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/estatTiquet")
 @SessionAttributes(types = { EstatTiquetForm.class, EstatTiquetFilterForm.class })

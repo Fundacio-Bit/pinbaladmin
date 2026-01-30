@@ -13,6 +13,7 @@
 		<class>org.fundaciobit.pinbaladmin.persistence.AreaJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.CampFormulariJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.CampSolicitudJPA</class>
+		<class>org.fundaciobit.pinbaladmin.persistence.ContacteJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.DepartamentJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.DocumentJPA</class>
 		<class>org.fundaciobit.pinbaladmin.persistence.DocumentCedentJPA</class>

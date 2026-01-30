@@ -635,6 +635,24 @@
 
     
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.CONTACTETITULARID)}">
+            <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
+            <%-- FILTRE NUMERO DESDE-FINS --%>
+              <span class="add-on"><fmt:message key="solicitud.contacteTitularID" />:</span>
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.from" /></span>
+              
+              <form:input cssClass="input-append input-small" path="contacteTitularIDDesde" />
+
+
+              <span class="add-on">&nbsp;<fmt:message key="genapp.to" />&nbsp;</span>
+
+              <form:input cssClass="input-append input-small search-query" path="contacteTitularIDFins" />
+
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.TITULARFIRMANIF)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -657,6 +675,32 @@
               </fmt:message>
               <span class="add-on"><c:out value="${titularFirmaNom}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercapertitularFirmaNom}" path="titularFirmaNom" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.TITULARFIRMALLINATGES)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.titularFirmaLlinatges" var="titularFirmaLlinatges" />
+              <fmt:message key="genapp.form.searchby" var="cercapertitularFirmaLlinatges" >                
+                 <fmt:param value="${titularFirmaLlinatges}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${titularFirmaLlinatges}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapertitularFirmaLlinatges}" path="titularFirmaLlinatges" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.TITULARFIRMAEMAIL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.titularFirmaEmail" var="titularFirmaEmail" />
+              <fmt:message key="genapp.form.searchby" var="cercapertitularFirmaEmail" >                
+                 <fmt:param value="${titularFirmaEmail}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${titularFirmaEmail}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapertitularFirmaEmail}" path="titularFirmaEmail" />
             </div>
 
 

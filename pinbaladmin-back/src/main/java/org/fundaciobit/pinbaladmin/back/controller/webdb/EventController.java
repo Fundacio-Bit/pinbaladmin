@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="event.event.plural", order=120, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="event.event.plural", order=130, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/event")
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })

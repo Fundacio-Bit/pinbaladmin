@@ -218,7 +218,8 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
     	
     	
         IEstructuraOrganitzativaPlugin instance = PinbalAdminPluginsManager.getEstructuraOrganitzativaPlugin(debug, caib);
-
+        
+        log.info("Obtenint codi DIR3 de l'usuari: " + username + " amb plugin Estr. Org.: " + instance);
         
         
         String codiDIR3;
@@ -233,7 +234,9 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
             }
 
         } catch (Exception e) {
-            throw new I18NException("error.plugin.estructuraorganitzativa.dir3notfount", e.getMessage());
+            log.error("Error obtenint codi DIR3 de l'usuari " + username + ": " + e.getMessage(), e);
+//            throw new I18NException("error.plugin.estructuraorganitzativa.dir3notfound", username);
+            throw new I18NException("genapp.comodi", e.getMessage());
         }
     }
 

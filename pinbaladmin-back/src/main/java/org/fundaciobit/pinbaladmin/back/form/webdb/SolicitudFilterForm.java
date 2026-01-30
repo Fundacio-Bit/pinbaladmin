@@ -428,6 +428,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long contacteTitularIDDesde;
+
+  public java.lang.Long getContacteTitularIDDesde() {
+    return this.contacteTitularIDDesde;
+  }
+
+  public void setContacteTitularIDDesde(java.lang.Long contacteTitularIDDesde) {
+    this.contacteTitularIDDesde = contacteTitularIDDesde;
+  }
+
+
+  private java.lang.Long contacteTitularIDFins;
+
+  public java.lang.Long getContacteTitularIDFins() {
+    return this.contacteTitularIDFins;
+  }
+
+  public void setContacteTitularIDFins(java.lang.Long contacteTitularIDFins) {
+    this.contacteTitularIDFins = contacteTitularIDFins;
+  }
+
+
   private java.lang.String titularFirmaNif;
 
   public java.lang.String getTitularFirmaNif() {
@@ -447,6 +469,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setTitularFirmaNom(java.lang.String titularFirmaNom) {
     this.titularFirmaNom = titularFirmaNom;
+  }
+
+
+  private java.lang.String titularFirmaLlinatges;
+
+  public java.lang.String getTitularFirmaLlinatges() {
+    return this.titularFirmaLlinatges;
+  }
+
+  public void setTitularFirmaLlinatges(java.lang.String titularFirmaLlinatges) {
+    this.titularFirmaLlinatges = titularFirmaLlinatges;
+  }
+
+
+  private java.lang.String titularFirmaEmail;
+
+  public java.lang.String getTitularFirmaEmail() {
+    return this.titularFirmaEmail;
+  }
+
+  public void setTitularFirmaEmail(java.lang.String titularFirmaEmail) {
+    this.titularFirmaEmail = titularFirmaEmail;
   }
 
 
@@ -492,8 +536,12 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.infomadrididFins = __toClone.infomadrididFins;
     this.dataCaducitatDesde = __toClone.dataCaducitatDesde;
     this.dataCaducitatFins = __toClone.dataCaducitatFins;
+    this.contacteTitularIDDesde = __toClone.contacteTitularIDDesde;
+    this.contacteTitularIDFins = __toClone.contacteTitularIDFins;
     this.titularFirmaNif = __toClone.titularFirmaNif;
     this.titularFirmaNom = __toClone.titularFirmaNom;
+    this.titularFirmaLlinatges = __toClone.titularFirmaLlinatges;
+    this.titularFirmaEmail = __toClone.titularFirmaEmail;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;
@@ -503,6 +551,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfValuesForConsentiment = __toClone.mapOfValuesForConsentiment;
     this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;
     this.mapOfInfoMadridForInfomadridid = __toClone.mapOfInfoMadridForInfomadridid;
+    this.mapOfContacteForContacteTitularID = __toClone.mapOfContacteForContacteTitularID;
   }
   
   /* ========= UTILS ========== */
@@ -641,6 +690,18 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfInfoMadridForInfomadridid(Map<String, String> mapOfInfoMadridForInfomadridid) {
     this.mapOfInfoMadridForInfomadridid = mapOfInfoMadridForInfomadridid;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteTitularID;
+
+  public Map<String, String> getMapOfContacteForContacteTitularID() {
+    return this.mapOfContacteForContacteTitularID;
+  }
+
+  public void setMapOfContacteForContacteTitularID(Map<String, String> mapOfContacteForContacteTitularID) {
+    this.mapOfContacteForContacteTitularID = mapOfContacteForContacteTitularID;
   }
 
 

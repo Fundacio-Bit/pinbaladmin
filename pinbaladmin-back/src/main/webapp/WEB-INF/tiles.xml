@@ -647,6 +647,16 @@
     </definition>
 
 
+    <definition name="contacteFormWebDB" extends="webdb">
+        <put-attribute name="titol" value="contacte.contacte" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/contacteForm.jsp" />
+    </definition>
+    
+    <definition name="contacteListWebDB" extends="webdb">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/contacteList.jsp" />
+    </definition>
+
+
     <definition name="departamentFormWebDB" extends="webdb">
         <put-attribute name="titol" value="departament.departament" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/departamentForm.jsp" />

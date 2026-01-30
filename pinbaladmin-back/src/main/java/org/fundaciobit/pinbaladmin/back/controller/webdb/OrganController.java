@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="organ.organ.plural", order=230, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="organ.organ.plural", order=240, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/organ")
 @SessionAttributes(types = { OrganForm.class, OrganFilterForm.class })

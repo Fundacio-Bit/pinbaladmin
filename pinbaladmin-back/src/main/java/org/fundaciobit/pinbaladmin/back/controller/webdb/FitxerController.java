@@ -49,7 +49,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="fitxer.fitxer.plural", order=130, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="fitxer.fitxer.plural", order=140, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/fitxer")
 @SessionAttributes(types = { FitxerForm.class, FitxerFilterForm.class })

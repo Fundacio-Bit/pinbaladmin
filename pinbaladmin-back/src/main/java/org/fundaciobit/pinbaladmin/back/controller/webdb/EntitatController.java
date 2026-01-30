@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="entitat.entitat.plural", order=90, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="entitat.entitat.plural", order=100, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/entitat")
 @SessionAttributes(types = { EntitatForm.class, EntitatFilterForm.class })

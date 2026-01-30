@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="modificacioSolicitud.modificacioSolicitud.plural", order=200, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="modificacioSolicitud.modificacioSolicitud.plural", order=210, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/modificacioSolicitud")
 @SessionAttributes(types = { ModificacioSolicitudForm.class, ModificacioSolicitudFilterForm.class })

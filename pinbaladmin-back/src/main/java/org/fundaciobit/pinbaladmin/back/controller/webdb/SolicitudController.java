@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="solicitud.solicitud.plural", order=270, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="solicitud.solicitud.plural", order=280, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/solicitud")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
@@ -81,6 +81,10 @@ public class SolicitudController
   // References 
   @Autowired
   protected InfoMadridRefList infoMadridRefList;
+
+  // References 
+  @Autowired
+  protected ContacteRefList contacteRefList;
 
   /**
    * Llistat de totes Solicitud
@@ -298,6 +302,16 @@ public class SolicitudController
       };
     }
 
+    // Field contacteTitularID
+    {
+      _listSKV = getReferenceListForContacteTitularID(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfContacteForContacteTitularID(_tmp);
+      if (filterForm.getGroupByFields().contains(CONTACTETITULARID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONTACTETITULARID, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -322,6 +336,7 @@ public class SolicitudController
     __mapping.put(CONSENTIMENT, filterForm.getMapOfValuesForConsentiment());
     __mapping.put(CONSENTIMENTADJUNT, filterForm.getMapOfValuesForConsentimentadjunt());
     __mapping.put(INFOMADRIDID, filterForm.getMapOfInfoMadridForInfomadridid());
+    __mapping.put(CONTACTETITULARID, filterForm.getMapOfContacteForContacteTitularID());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -449,6 +464,15 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfInfoMadridForInfomadridid(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfContacteForContacteTitularID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForContacteTitularID(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfContacteForContacteTitularID(_listSKV);
     }
     
   }
@@ -1141,6 +1165,46 @@ public java.lang.Long stringToPK(String value) {
   public List<StringKeyValue> getReferenceListForInfomadridid(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return infoMadridRefList.getReferenceList(InfoMadridFields.INFOMADRIDID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CONTACTETITULARID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (solicitudForm.isReadOnlyField(CONTACTETITULARID)) {
+      _where = ContacteFields.CONTACTEID.equal(solicitudForm.getSolicitud().getContacteTitularID());
+    }
+    return getReferenceListForContacteTitularID(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CONTACTETITULARID)
+       && !solicitudFilterForm.isGroupByField(CONTACTETITULARID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(CONTACTETITULARID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Solicitud _item : list) {
+        if(_item.getContacteTitularID() == null) { continue; };
+        _pkList.add(_item.getContacteTitularID());
+        }
+        _w = ContacteFields.CONTACTEID.in(_pkList);
+      }
+    return getReferenceListForContacteTitularID(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return contacteRefList.getReferenceList(ContacteFields.CONTACTEID, where );
   }
 
 

@@ -49,7 +49,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="email.email.plural", order=80, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="email.email.plural", order=90, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/email")
 @SessionAttributes(types = { EmailForm.class, EmailFilterForm.class })

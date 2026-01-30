@@ -8,7 +8,7 @@
 		"/altapinbal/vistaprevia/alta/",
 		"/altapinbal/consultaestado/",
 		"/altapinbal/vistaprevia/modificacio/",
-		"/enviarAFirmar/",
+		"/enviarAFirmarTitular/",
 		"/afegirFormulariFirmat/", 
 		"/solicitudestatal/enviarcorreucedents/",
 		"/acceptarModificacio",

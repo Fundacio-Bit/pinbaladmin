@@ -54,7 +54,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="documentCedent.documentCedent.plural", order=50, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="documentCedent.documentCedent.plural", order=60, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/documentCedent")
 @SessionAttributes(types = { DocumentCedentForm.class, DocumentCedentFilterForm.class })

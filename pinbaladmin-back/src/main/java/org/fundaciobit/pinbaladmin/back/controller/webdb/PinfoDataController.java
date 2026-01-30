@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="pinfoData.pinfoData.plural", order=250, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="pinfoData.pinfoData.plural", order=260, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/pinfoData")
 @SessionAttributes(types = { PinfoDataForm.class, PinfoDataFilterForm.class })

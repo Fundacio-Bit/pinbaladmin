@@ -6,6 +6,7 @@ public interface IPinbalAdminDaoManagers {
 	public IAreaManager getAreaManager();
 	public ICampFormulariManager getCampFormulariManager();
 	public ICampSolicitudManager getCampSolicitudManager();
+	public IContacteManager getContacteManager();
 	public IDepartamentManager getDepartamentManager();
 	public IDocumentManager getDocumentManager();
 	public IDocumentCedentManager getDocumentCedentManager();

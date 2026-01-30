@@ -117,11 +117,20 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.FITXERCONSENTIMENTID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.FITXERCONSENTIMENTID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTETITULARID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONTACTETITULARID)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMANIF)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMANOM)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMALLINATGES)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMALLINATGES)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMAEMAIL)}</th>
         </c:if>
 
 

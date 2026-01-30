@@ -9,6 +9,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
    private final AreaJPAManager pad_area;
    private final CampFormulariJPAManager pad_campformulari;
    private final CampSolicitudJPAManager pad_campsolicitud;
+   private final ContacteJPAManager pad_contacte;
    private final DepartamentJPAManager pad_departament;
    private final DocumentJPAManager pad_document;
    private final DocumentCedentJPAManager pad_documentcedent;
@@ -53,6 +54,7 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
     this.pad_area = new AreaJPAManager(__em);
     this.pad_campformulari = new CampFormulariJPAManager(__em);
     this.pad_campsolicitud = new CampSolicitudJPAManager(__em);
+    this.pad_contacte = new ContacteJPAManager(__em);
     this.pad_departament = new DepartamentJPAManager(__em);
     this.pad_document = new DocumentJPAManager(__em);
     this.pad_documentcedent = new DocumentCedentJPAManager(__em);
@@ -104,6 +106,10 @@ public final class PinbalAdminJPADaoManagers implements IPinbalAdminDaoManagers{
 
     public ICampSolicitudManager getCampSolicitudManager() {
         return this.pad_campsolicitud;
+    };
+
+    public IContacteManager getContacteManager() {
+        return this.pad_contacte;
     };
 
     public IDepartamentManager getDepartamentManager() {

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.InfoMadridFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 
@@ -29,6 +30,7 @@ public class SolicitudValidator<I extends Solicitud>
 
   /** Constructor */
   public void validate(IValidatorResult<I> __vr,I __target__, boolean __isNou__
+    ,org.fundaciobit.pinbaladmin.model.dao.IContacteManager __contacteManager
     ,org.fundaciobit.pinbaladmin.model.dao.IInfoMadridManager __infoMadridManager
     ,org.fundaciobit.pinbaladmin.model.dao.IOrganManager __organManager
     ,org.fundaciobit.pinbaladmin.model.dao.ISolicitudManager __solicitudManager) {
@@ -251,6 +253,22 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(TITULARFIRMALLINATGES) == 0) {
+      java.lang.String __titularfirmallinatges = __target__.getTitularFirmaLlinatges();
+      if (__titularfirmallinatges!= null && __titularfirmallinatges.length() > 255) {
+        __vr.rejectValue(TITULARFIRMALLINATGES, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMALLINATGES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(TITULARFIRMAEMAIL) == 0) {
+      java.lang.String __titularfirmaemail = __target__.getTitularFirmaEmail();
+      if (__titularfirmaemail!= null && __titularfirmaemail.length() > 255) {
+        __vr.rejectValue(TITULARFIRMAEMAIL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMAEMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 
@@ -291,6 +309,20 @@ public class SolicitudValidator<I extends Solicitud>
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("infoMadrid.infoMadrid"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("infoMadrid.infoMadridID"),
          new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__infomadridid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTETITULARID) == 0) {
+      java.lang.Long __contactetitularid = __target__.getContacteTitularID();
+      if (__contactetitularid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contactetitularid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTETITULARID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contactetitularid)));
         }
       }
     }

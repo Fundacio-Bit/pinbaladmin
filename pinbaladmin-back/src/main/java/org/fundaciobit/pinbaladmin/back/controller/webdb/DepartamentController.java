@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="departament.departament.plural", order=30, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="departament.departament.plural", order=40, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/departament")
 @SessionAttributes(types = { DepartamentForm.class, DepartamentFilterForm.class })

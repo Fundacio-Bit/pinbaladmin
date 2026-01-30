@@ -33,11 +33,15 @@ import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.FitxerPublicLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
+import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitHProcLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitJConsentLogicaService;
@@ -45,9 +49,12 @@ import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
+import org.fundaciobit.pinbaladmin.model.entity.Entitat;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
+import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
 import org.fundaciobit.pinbaladmin.model.entity.TramitHProc;
@@ -59,6 +66,7 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitHProcFields;
 import org.fundaciobit.pinbaladmin.model.fields.TramitJConsentFields;
+import org.fundaciobit.pinbaladmin.persistence.ContacteJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
@@ -99,9 +107,17 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
     @EJB(mappedName = TramitJConsentLogicaService.JNDI_NAME)
     protected TramitJConsentLogicaService tramitJLogicaEjb;
     
-	
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
+
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerLogicEjb;
+
+    @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+    protected OrganLogicaService organLogicaEjb;
+
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicaEjb;
     
 	@Override
 	public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
@@ -1347,7 +1363,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	@RequestMapping(value = "/actualizarTitulares", method = RequestMethod.GET)
 	public String actualizarTitulares(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		buscarNIFsPluginUserInfo() ;
+		guardarDatosTitularEnContacte();
+//		buscarNIFsPluginUserInfo() ;
 //		actualizarNifFirmaTitulares();
 //		actualizarTitulares();
 		
@@ -1366,6 +1383,179 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	}
 
 	int nifsTrobatsOrganGestor = 0;
+	
+	String FALTA_CORREU = "ZZZ";
+	
+	private void guardarDatosTitularEnContacte() throws Exception{
+		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+		
+		
+		int titularsPerXML = 0;
+		int titularsPerPlugin = 0;
+		int titularsDirector = 0;
+		
+		for (Solicitud soli : solicituds) {
+			log.info("Solicitud: " + soli.getSolicitudID());
+			
+			Long fitxerID = soli.getSolicitudXmlID();
+
+    		if (fitxerID == null) {
+    			log.info("fitxerID: " + fitxerID);
+    			continue;
+    		}
+
+    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+    		if (prop == null) {
+    			log.info("prop: " + prop);
+    			continue;
+    		}
+    		
+    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
+    		
+			if (nifTitular == null || nifTitular.isEmpty()) {
+				log.info("nifTitular: " + nifTitular);
+				continue;
+			}
+    		
+			//Si arriba aquí, crear el contacte.
+			
+			ContacteJPA titularJpa = new ContacteJPA();
+			
+			titularJpa.setNif(nifTitular);
+			String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
+			String llinatge1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
+			String llinatge2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
+			String fullName = nom + " " + llinatge1 + " " + (llinatge2 == null ? "" : llinatge2);
+			String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
+
+			
+			String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECG");
+			if (mail == null || mail.trim().length() == 0) {
+				mail = FALTA_CORREU;
+			}
+
+			setDadesTitular(nifTitular, nom, llinatges, mail, soli, "Fitxer XML");
+			
+//			Contacte titular = contacteLogicaEjb.create(titularJpa);
+//			Long contacteID = titular.getContacteID();
+//			soli.setContacteTitularID(contacteID);
+			solicitudLogicaEjb.update(soli);    	
+			titularsPerXML++;
+		}
+		
+		//Quan acaba el bucle de crear contactes amb dades de xml, agafar les que tenen nif i cercat la informació del mail i el nom amb el plugin userinfo.
+		
+		Where titularNoNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
+		Where faltaEmail = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
+		Where wTitularsPerPlugin = Where.AND(titularNoNull, faltaEmail);
+		List<Solicitud> solicitudsRestants = solicitudLogicaEjb.select(Where.AND(wLocals, wTitularsPerPlugin));
+
+		//Solicituds sense contacte pero amb NIF del titular. Cercam info a plugin.
+		boolean debug = false;
+		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+		
+		Map<String, UserInfo> cacheUserInfo = new HashMap<>();
+		
+		for(Solicitud soli : solicitudsRestants) {
+			
+			log.info("Solicitud (plugin): " + soli.getSolicitudID());
+			
+			String nifTitular = soli.getTitularFirmaNif();
+			
+			if (cacheUserInfo.containsKey(nifTitular)) {
+				UserInfo userInfo = cacheUserInfo.get(nifTitular);
+				
+				setDadesTitular(userInfo, soli, "PluginUserInfo-Cache");
+				continue;
+			}
+			
+			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
+			if (userInfo == null) {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
+				continue;
+			}
+			
+			cacheUserInfo.put(nifTitular, userInfo);
+			
+			setDadesTitular(userInfo, soli, "PluginUserInfo");			
+			titularsPerPlugin++;
+		}
+		
+		
+		//Ara agafam totes les solicituds que no tenen info del titular, i a les que siguin de GOVERN, posam les dades del DG.
+		
+		Where stillWithoutTitularEmail = SolicitudFields.TITULARFIRMAEMAIL.isNull();
+		List<Solicitud> solicitudsStillWithout = solicitudLogicaEjb.select(Where.AND(wLocals, stillWithoutTitularEmail));
+		
+		String CIF_GOVERN = "S0711001H";
+		Entitat govern = entitatLogicaEjb.findByCif(CIF_GOVERN);
+		log.info("Entitat GOVERN - ID: " + govern.getEntitatID() + ", Nom: " + govern.getNom());
+		
+		String nifDG = Configuracio.getNIFDirectorGeneral();
+		UserInfo userInfoDG = plugin.getUserInfoByAdministrationID(nifDG);
+		
+		for (Solicitud soli : solicitudsStillWithout) {
+			
+			Organ organ = organLogicaEjb.findByPrimaryKey(soli.getOrganid());
+
+			log.info("Entitat del organ: " + organ.getEntitatid());
+			
+			if (organ.getEntitatid() != govern.getEntitatID()) {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - Organ no és de GOVERN: " + soli.getOrganid());
+				continue;
+			}
+			
+			setDadesTitular(userInfoDG, soli, "DirectorGeneral");
+			titularsDirector++;
+		}
+		
+		
+		
+		
+		log.info("Contactes titulars creats a partir de XML: " + titularsPerXML);
+		log.info("Contactes titulars creats a partir de Plugin UserInfo: " + titularsPerPlugin);
+		log.info("Contactes titulars creats a partir de Director General de GOVERN: " + titularsDirector);
+	}
+
+	private void setDadesTitular(UserInfo userInfoDG, Solicitud soli, String origen) {
+		String nifDG = userInfoDG.getAdministrationID();
+		String nom = userInfoDG.getName();
+		String llinatge1 = userInfoDG.getSurname1();
+		String llinatge2 = userInfoDG.getSurname2();
+		String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
+		String mail = userInfoDG.getEmail();
+		
+		if (mail == null || mail.trim().length() == 0) {
+			mail = FALTA_CORREU;
+		}
+		
+		setDadesTitular(nifDG, nom, llinatges, mail, soli, origen);
+	}
+	
+	private void setDadesTitular(String nifDG, String nom, String llinatges, String mail, Solicitud soli, String origen) {
+		
+		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifDG + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
+		
+		soli.setTitularFirmaNif(nifDG);
+		soli.setTitularFirmaNom(nom);
+		soli.setTitularFirmaLlinatges(llinatges);
+		soli.setTitularFirmaEmail(mail);
+		
+		try {
+			solicitudLogicaEjb.update(soli);
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	
+	
 	
 	private void buscarNIFsPluginUserInfo() throws Exception{
 		

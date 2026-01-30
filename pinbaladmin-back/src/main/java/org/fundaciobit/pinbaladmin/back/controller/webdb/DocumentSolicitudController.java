@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="documentSolicitud.documentSolicitud.plural", order=70, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="documentSolicitud.documentSolicitud.plural", order=80, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/documentSolicitud")
 @SessionAttributes(types = { DocumentSolicitudForm.class, DocumentSolicitudFilterForm.class })

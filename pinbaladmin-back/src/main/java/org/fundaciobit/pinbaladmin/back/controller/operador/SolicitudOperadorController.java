@@ -43,9 +43,11 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalAdminUtils;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
@@ -123,6 +125,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
+    
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
+    
 
     @Autowired
     protected AreaRefList areaNovaRefList;
@@ -1583,6 +1589,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         return __tmp;
         //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
     }    
+    
+    
+    @Override
+    public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        
+        if (where != null) {
+        }
+        
+        List<Contacte> contactes = contacteLogicaEjb.select(where);
+
+        for (Contacte cte : contactes) {
+
+			String str = cte.getNif() + " | " + cte.getNom() + cte.getLlinatge1()
+					+ (cte.getLlinatge2() == null ? "" : cte.getLlinatge2()) + " | " + cte.getMail();
+            __tmp.add(new StringKeyValue(String.valueOf(cte.getContacteID()), str));
+        }
+
+        return __tmp;
+        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
+    }    
+
 
     /*
      * 

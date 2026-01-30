@@ -21,7 +21,9 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -56,6 +58,11 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService solicitudLogicaEjb;
+    
+
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
+    
 
     public static final String SESSIO_SOLIID_MANAGE_DOCUMENTS = "SESSIO_SOLIID_MANAGE_DOCUMENTS";
 
@@ -340,13 +347,15 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			}
 			
 			Long solicitudID = solicitudIDs.get(0);
-			SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-			String nifDestinatari = solicitud.getTitularFirmaNif();
-			String nomDestinatari = solicitud.getTitularFirmaNom();
+			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+//			String nifDestinatari = solicitud.getTitularFirmaNif();
+//			String nomDestinatari = solicitud.getTitularFirmaNom();
 			
 			String remitent = request.getRemoteUser();
 
-			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, nifDestinatari, nomDestinatari, remitent);
+	        Contacte titular = contacteLogicaEjb.crearContacteTitular(soli);
+	        
+			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, titular, remitent);
 
 			log.info("S'ha enviat a firmar el document [" + documentID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");

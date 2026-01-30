@@ -51,7 +51,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="tramitCDadesCesi.tramitCDadesCesi.plural", order=350, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="tramitCDadesCesi.tramitCDadesCesi.plural", order=360, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/tramitCDadesCesi")
 @SessionAttributes(types = { TramitCDadesCesiForm.class, TramitCDadesCesiFilterForm.class })

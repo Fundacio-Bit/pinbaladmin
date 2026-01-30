@@ -49,7 +49,7 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
  * 
  * @author GenApp
  */
-@MenuOption(labelCode="entitatServei.entitatServei.plural", order=100, group=Tab.MENU_WEBDB)
+@MenuOption(labelCode="entitatServei.entitatServei.plural", order=110, group=Tab.MENU_WEBDB)
 @Controller
 @RequestMapping(value = "/webdb/entitatServei")
 @SessionAttributes(types = { EntitatServeiForm.class, EntitatServeiFilterForm.class })
