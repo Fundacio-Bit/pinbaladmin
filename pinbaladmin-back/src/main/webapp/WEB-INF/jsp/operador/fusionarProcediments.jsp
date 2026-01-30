@@ -112,6 +112,12 @@
 	flex-direction: column;
 	margin-left: 0.5rem;
 }
+
+.results {
+	display: flex;
+	flex-direction: column;
+}
+
 </style>
 
 <h3>Fusionar Procediments</h3>
@@ -373,8 +379,12 @@ $("#btnFusionar").click(function() {
 		
 	mapLabels.set("titularFirmaNIF", "<fmt:message key='solicitud.titularFirmaNif'/>");
 	mapLabels.set("titularFirmaNom", "<fmt:message key='solicitud.titularFirmaNom'/>");
+	mapLabels.set("titularFirmaEmail", "<fmt:message key='solicitud.titularFirmaEmail'/>");
+	mapLabels.set("titularFirmaLlinatges", "<fmt:message key='solicitud.titularFirmaLlinatges'/>");
+	
+	
 	mapLabels.set("entitatNom", "<fmt:message key='solicitud.denominacio'/>");
-	mapLabels.set("entitatCif", "<fmt:message key='solicitud.cif'/>");
+	mapLabels.set("entitatCif", "<fmt:message key='solicitud.nif'/>");
 	mapLabels.set("entitatDir3", "<fmt:message key='solicitud.dir3'/>");
 		
 	
@@ -392,6 +402,8 @@ $("#btnFusionar").click(function() {
 	mapLabelsConsentiment.set("tipus", "<fmt:message key='consentiment.tipus'/>");
 	mapLabelsConsentiment.set("url", "<fmt:message key='consentiment.url'/>");
 	mapLabelsConsentiment.set("nomFitxer", "<fmt:message key='consentiment.nomFitxer'/>");
+	
+	const ESTAT_PENDENT_REVISAR = "<fmt:message key='solicitud.estat.100'/>";
 	
     function construirModalFusion(procs){
         const tbody = $("#fusionCamposTable tbody").empty();
@@ -438,7 +450,7 @@ $("#btnFusionar").click(function() {
 		            .map(p => p[campo])
 		    )];
 		
-		    const tdResult = $("<td>");
+		    const tdResult = $("<td class='results'>");
 		
 	        valoresUnicos.forEach((valor, idx) => {
 	            const radio = $("<input type='radio'>")
@@ -450,7 +462,29 @@ $("#btnFusionar").click(function() {
 	                .append(" " + valor);
 	            tdResult.append(label);
 	        });
-		        
+
+	        //Si estamos en el campo estado y hay mas de una opcione, y no es "PENDIENTE REVISAR", añadir la opción de "PENDIENTE REVISAR".
+	        
+	        if(campo == "estatSolicitud"){
+            	if(valoresUnicos.length > 1 && !valoresUnicos.includes(ESTAT_PENDENT_REVISAR)){
+            		const radio = $("<input type='radio'>")
+                    .attr("name", campo)
+                    .val(ESTAT_PENDENT_REVISAR);
+                
+                    const label = $("<label class='me-2'>")
+                        .append(radio)
+                        .append(ESTAT_PENDENT_REVISAR);
+                    tdResult.append(label);
+            	}
+            }
+	        
+	        
+/* 	        if(campo  = estado){
+				if(valoresUnicos > 1 && !valoresUnicos.include("PENDIENTE REVISAR")){
+		
+				}
+			}
+ */		        
 		    tr.append(tdResult);
 		    tbody.append(tr);
 		});
@@ -558,7 +592,7 @@ $("#btnFusionar").click(function() {
             // Añadimos cada documento con su checkbox
             docs.forEach(d => {
                 const label = $("<label class='me-3 document-item d-block'>");
-                const chk = $("<input type='checkbox' checked>").attr("data-id", d.id);
+                const chk = $("<input type='checkbox'>").attr("data-id", d.id);
                 label.append(chk).append(" [" + d.id + "] " + d.nom);
                 groupDiv.append(label);
             });

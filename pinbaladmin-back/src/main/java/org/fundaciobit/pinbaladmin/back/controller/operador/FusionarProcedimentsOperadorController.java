@@ -280,6 +280,8 @@ public class FusionarProcedimentsOperadorController {
 		private String responsableProcEmail;
 		private String titularFirmaNIF;
 		private String titularFirmaNom;
+		private String titularFirmaLlinatges;
+		private String titularFirmaEmail;
 		
 		private String entitatNom;
 		private String entitatCif;
@@ -314,8 +316,11 @@ public class FusionarProcedimentsOperadorController {
 			this.personaContacteEmail = soli.getPersonaContacteEmail();
 			this.responsableProcNom = soli.getResponsableProcNom();
 			this.responsableProcEmail = soli.getResponsableProcEmail();
+			
 			this.titularFirmaNIF = soli.getTitularFirmaNif();
 			this.titularFirmaNom = soli.getTitularFirmaNom();
+			this.titularFirmaEmail = soli.getTitularFirmaEmail();
+			this.titularFirmaLlinatges = soli.getTitularFirmaLlinatges();
 			
 			this.entitatNom = soli.getDenominacio();
 			this.entitatCif = soli.getNif();
@@ -489,6 +494,8 @@ public class FusionarProcedimentsOperadorController {
 	}
 
 	private List<SolicitudJPA> procesarMultiples(List<Long> fusionados, SolicitudJPA solicitudNueva) {
+		boolean firmatDocSolicitud = true;
+		boolean produccio = true;
 
 		List<SolicitudJPA> fusionadas = new ArrayList<>();
 
@@ -521,6 +528,12 @@ public class FusionarProcedimentsOperadorController {
 						dataFi = soli.getDataFi();
 					}
 				}
+				
+				//Si tots estan firmats, el nou també ho està
+				firmatDocSolicitud &= soli.isFirmatDocSolicitud();
+				
+				//Si tots estan en producció, el nou també ho està
+				produccio &= soli.isProduccio();
 			}
 		}
 
@@ -535,11 +548,12 @@ public class FusionarProcedimentsOperadorController {
 		log.info("Notas concatenadas: ");
 		log.info(notasFinal);
 		
-		
-		
 		solicitudNueva.setCodiSiaConv(codiSiaConv);
 		solicitudNueva.setNotes(notasFinal);
 		solicitudNueva.setDataFi(dataFi);
+		
+		solicitudNueva.setFirmatDocSolicitud(firmatDocSolicitud);
+		solicitudNueva.setProduccio(produccio);
 		
 		return fusionadas;
 	}
@@ -963,8 +977,12 @@ public class FusionarProcedimentsOperadorController {
 		String responsableProcNom = request.getParameter("responsableProcNom");
 		String responsableProcEmail = request.getParameter("responsableProcEmail");
 
-		String firmaTitularNif = request.getParameter("titularFirmaNIF");
+		String titularFirmaNIF = request.getParameter("titularFirmaNIF");
 		String titularFirmaNom = request.getParameter("titularFirmaNom");
+		String titularFirmaEmail = request.getParameter("titularFirmaEmail");
+		String titularFirmaLlinatges = request.getParameter("titularFirmaLlinatges");
+		
+		
 		String entitatNom = request.getParameter("entitatNom");
 		String entitatCif = request.getParameter("entitatCif");
 		String entitatDir3 = request.getParameter("entitatDir3");
@@ -1006,8 +1024,11 @@ public class FusionarProcedimentsOperadorController {
 		log.info("responsableProcNom: " + responsableProcNom);
 		log.info("responsableProcEmail: " + responsableProcEmail);
 
-		log.info("firmaTitularNif: " + firmaTitularNif);
+		log.info("titularFirmaNif: " + titularFirmaNIF);
 		log.info("titularFirmaNom: " + titularFirmaNom);
+		log.info("titularFirmaEmail: " + titularFirmaEmail);
+		log.info("titularFirmaLlinatges: " + titularFirmaLlinatges);
+		
 		log.info("entitatNom: " + entitatNom);
 		log.info("entitatCif: " + entitatCif);
 		log.info("entitatDir3: " + entitatDir3);
@@ -1017,34 +1038,70 @@ public class FusionarProcedimentsOperadorController {
 //		log.info("estatpinbal: " + estatpinbalId);
 		log.info("procedimentTipus: " + procedimentTipus);
 
-		SolicitudJPA solicitudNueva = new SolicitudJPA();
-
-		solicitudNueva.setProcedimentCodi(procedimentCodi);
-		solicitudNueva.setCodiDescriptiu(codiDescriptiu);
-//		solicitudNueva.setCodiSiaConv(codiSiaConv);
-		solicitudNueva.setProcedimentNom(procedimentNom);
-		solicitudNueva.setProcedimentTipus(procedimentTipus);
-		solicitudNueva.setDataInici(dataInici);
-		solicitudNueva.setDataCaducitat(dataCaducitat);
-		solicitudNueva.setDataFi(null);
-		
-		solicitudNueva.setCreador(creador);
-		solicitudNueva.setPersonaContacte(personaContacte);
-		solicitudNueva.setPersonaContacteEmail(personaContacteEmail);
-		solicitudNueva.setResponsableProcNom(responsableProcNom);
-		solicitudNueva.setResponsableProcEmail(responsableProcEmail);
-		
-		solicitudNueva.setTitularFirmaNif(firmaTitularNif);
-		solicitudNueva.setTitularFirmaNom(titularFirmaNom);
-		solicitudNueva.setDenominacio(entitatNom);
-		solicitudNueva.setNif(entitatCif);
-		solicitudNueva.setDir3(entitatDir3);
-		
-		
-		solicitudNueva.setOrganid(organId);
-		solicitudNueva.setEstatSolicitud(estatSolicitudId);
+//		SolicitudJPA solicitudNueva = new SolicitudJPA();
+//
+//		solicitudNueva.setProcedimentCodi(procedimentCodi);
+//		solicitudNueva.setCodiDescriptiu(codiDescriptiu);
+////		solicitudNueva.setCodiSiaConv(codiSiaConv);
+//		solicitudNueva.setProcedimentNom(procedimentNom);
+//		solicitudNueva.setProcedimentTipus(procedimentTipus);
+//		solicitudNueva.setDataInici(dataInici);
+//		solicitudNueva.setDataCaducitat(dataCaducitat);
+//		solicitudNueva.setDataFi(null);
+//		
+//		solicitudNueva.setCreador(creador);
+//		solicitudNueva.setPersonaContacte(personaContacte);
+//		solicitudNueva.setPersonaContacteEmail(personaContacteEmail);
+//		solicitudNueva.setResponsableProcNom(responsableProcNom);
+//		solicitudNueva.setResponsableProcEmail(responsableProcEmail);
+//		
+//		solicitudNueva.setTitularFirmaNif(firmaTitularNif);
+//		solicitudNueva.setTitularFirmaNom(titularFirmaNom);
+//		solicitudNueva.setDenominacio(entitatNom);
+//		solicitudNueva.setNif(entitatCif);
+//		solicitudNueva.setDir3(entitatDir3);
+//		
+//		
+//		solicitudNueva.setOrganid(organId);
+//		solicitudNueva.setEstatSolicitud(estatSolicitudId);
 //		solicitudNueva.setEstatpinbal(estatpinbalId);
+		
+		
+		//Se rellenan estos campos despues en la fusión
+		String operador = null;
 
+		String codiSiaConv = null;
+		String notesSoli = null;
+		Timestamp dataFi = null;
+		boolean firmatDocSolicitud = false;
+		boolean produccio = false;
+		
+		String consentiment = null;
+		String urlconsentiment = null;
+		String consentimentadjunt = null;
+		Long fitxerConsentimentID = null;
+
+		Long infoMadridID = null;
+		Long estatpinbal = null;
+		
+		//Estos campos son nulos por ser locales, o porque siempre lo son:
+		String expedientPid = null;
+		String entitatEstatal = null;
+		String pinfo = null;
+		Long contacteTitularID = null;
+		
+		//Y estos son nulos por ser una fusión nueva:
+		Long docSoliID = null;
+		Long solicitudXmlID = null;
+		Long portafibID = null;
+
+		SolicitudJPA solicitudNueva = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
+				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
+				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
+				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
+				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
+				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail);
+		
 		return solicitudNueva;
 	}
 
