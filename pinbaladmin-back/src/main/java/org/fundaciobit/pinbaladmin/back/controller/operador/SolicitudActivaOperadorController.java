@@ -1789,7 +1789,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 			int estatID = Long.valueOf(soli.getEstatSolicitud()).intValue();
 
-			if (estatID == Constants.SOLI_ESTAT_SENSE_ESTAT || estatID == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO
+			if (estatID == Constants.SOLI_ESTAT_FUSIONADA || estatID == Constants.SOLI_ESTAT_SENSE_ESTAT || estatID == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO
 					|| estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director
 					|| estatID == Constants.SOLI_ESTAT_PENDENT_Firma_Director) {
 				crear = false;

@@ -102,7 +102,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		}
 
 		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinatari: "
-				+ destinatari.getNif() + " - " + destinatari.getNom() + "\n" + "Fitxer: " + doc.getNom();
+				+ destinatari.getNif() + " - " + destinatari.getNom() + " " + destinatari.getLlinatge1() + "\n" + "Fitxer: " + doc.getNom();
 
 		afegirEventSolicitudEnviada(soliID, remitent, msg);
 	}
