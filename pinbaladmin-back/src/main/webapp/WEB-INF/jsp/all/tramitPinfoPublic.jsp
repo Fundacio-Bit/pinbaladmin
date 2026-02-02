@@ -18,7 +18,7 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Tramit PINFO</div>
+	<div id="titol-tramit" class="third">Solicitud permisos de PINBAL</div>
 	<div id="button-menu" class="third">
 		<a href="<%=request.getContextPath() + PinfoPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="tramitpinfo.exit"/></a>
 	</div>
