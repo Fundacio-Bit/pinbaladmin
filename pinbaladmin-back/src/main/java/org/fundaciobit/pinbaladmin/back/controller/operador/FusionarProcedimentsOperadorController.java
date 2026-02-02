@@ -106,14 +106,14 @@ public class FusionarProcedimentsOperadorController {
 
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
-	
+
 	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
 	protected InfoMadridLogicaService infoMadridLogicaEjb;
-	
-    @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
-    protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
-    
-    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+
+	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
+	protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+
+	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
 	@RequestMapping(value = "/elegirProcediments", method = RequestMethod.GET)
 	public ModelAndView elegirProcediments(HttpServletRequest request, HttpServletResponse response) {
@@ -136,11 +136,12 @@ public class FusionarProcedimentsOperadorController {
 			List<Solicitud> results = new ArrayList<>();
 
 			Where wLocals = SolicitudFields.ORGANID.isNotNull();
-			
+			Where wNoFusionadas = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
+
 			Where wID = null;
 			Where wCodi = SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%");
 			Where wNom = SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%");
-			
+
 			// 1. Buscar por ID si es número
 			try {
 				Long id = Long.parseLong(param);
@@ -149,8 +150,8 @@ public class FusionarProcedimentsOperadorController {
 			} catch (NumberFormatException ignored) {
 			}
 
-			results.addAll(solicitudLogicaEjb.select(Where.AND(wLocals, Where.OR(wID, wCodi, wNom))));
-			
+			results.addAll(solicitudLogicaEjb.select(Where.AND(wLocals, wNoFusionadas, Where.OR(wID, wCodi, wNom))));
+
 			// Quitar duplicados
 			List<Solicitud> distinctResults = results.stream().distinct().collect(Collectors.toList());
 
@@ -249,21 +250,21 @@ public class FusionarProcedimentsOperadorController {
 
 		public ConsentimentDTO(SolicitudJPA soli) {
 			this.fitxerID = soli.getFitxerConsentimentID();
-			
+
 			if (this.fitxerID != null) {
 				FitxerJPA fitxer = fitxerPublicLogicaEjb.findByPrimaryKey(this.fitxerID);
 				if (fitxer != null) {
 					this.nomFitxer = fitxer.getNom();
 				}
 			}
-			
+
 			this.tipus = I18NUtils.tradueix("consentiment.tipus." + soli.getConsentiment());
 
 			this.solicitudID = soli.getSolicitudID();
 			this.url = soli.getUrlconsentiment();
 		}
 	}
-	
+
 	public class SolicitudFullDTO {
 		private Long solicitudID;
 		private String procedimentCodi;
@@ -282,11 +283,11 @@ public class FusionarProcedimentsOperadorController {
 		private String titularFirmaNom;
 		private String titularFirmaLlinatges;
 		private String titularFirmaEmail;
-		
+
 		private String entitatNom;
 		private String entitatCif;
 		private String entitatDir3;
-		
+
 //		private String notes;
 //		private String consentiment;
 //		private String urlconsentiment;
@@ -294,13 +295,13 @@ public class FusionarProcedimentsOperadorController {
 
 		private String organid;
 		private String estatSolicitud;
-//		private String estatpinbal;
+		private String estatpinbal;
 
 		private List<ServeiDTO> servicios;
 		private List<DocumentDTO> documentos;
 
 		private ConsentimentDTO consentiment;
-		
+
 		public SolicitudFullDTO(Long solicitudID) throws I18NException {
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 
@@ -316,17 +317,16 @@ public class FusionarProcedimentsOperadorController {
 			this.personaContacteEmail = soli.getPersonaContacteEmail();
 			this.responsableProcNom = soli.getResponsableProcNom();
 			this.responsableProcEmail = soli.getResponsableProcEmail();
-			
+
 			this.titularFirmaNIF = soli.getTitularFirmaNif();
 			this.titularFirmaNom = soli.getTitularFirmaNom();
 			this.titularFirmaEmail = soli.getTitularFirmaEmail();
 			this.titularFirmaLlinatges = soli.getTitularFirmaLlinatges();
-			
+
 			this.entitatNom = soli.getDenominacio();
 			this.entitatCif = soli.getNif();
 			this.entitatDir3 = soli.getDir3();
-			
-			
+
 //			this.notes = soli.getNotes();
 //			this.consentiment = soli.getConsentiment();
 //			this.urlconsentiment = soli.getUrlconsentiment();
@@ -336,14 +336,14 @@ public class FusionarProcedimentsOperadorController {
 
 			this.organid = organ != null ? "(" + organ.getDir3() + ") " + organ.getNom() : "";
 			this.estatSolicitud = I18NUtils.tradueix("solicitud.estat." + soli.getEstatSolicitud());
-//			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
+			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
 //			this.procedimentTipus = soli.getProcedimentTipus();
 
 			log.info("ProcedimentTipus ID: " + soli.getProcedimentTipus());
 			String tipusText = getTipusDocFromID(soli.getProcedimentTipus());
 			log.info("ProcedimentTipus Text: " + tipusText);
 			this.procedimentTipus = tipusText;
-			
+
 			List<ServeiDTO> serveisList = solicitudServeiLogicaEjb
 					.select(SolicitudServeiFields.SOLICITUDID.equal(solicitudID)).stream()
 					.map(ss -> new ServeiDTO(ss.getServeiID())).collect(Collectors.toList());
@@ -351,11 +351,12 @@ public class FusionarProcedimentsOperadorController {
 			this.servicios = serveisList;
 
 			List<DocumentDTO> docsList = documentSolicitudLogicaEjb
-					.select(DocumentSolicitudFields.SOLICITUDID.equal(solicitudID), new OrderBy(DocumentSolicitudFields.DOCUMENTID)).stream()
-					.map(ds -> new DocumentDTO(ds.getDocumentID(), solicitudID)).collect(Collectors.toList());
+					.select(DocumentSolicitudFields.SOLICITUDID.equal(solicitudID),
+							new OrderBy(DocumentSolicitudFields.DOCUMENTID))
+					.stream().map(ds -> new DocumentDTO(ds.getDocumentID(), solicitudID)).collect(Collectors.toList());
 
 			this.documentos = docsList;
-			
+
 			this.consentiment = new ConsentimentDTO(soli);
 
 		}
@@ -410,7 +411,8 @@ public class FusionarProcedimentsOperadorController {
 	}
 
 	@RequestMapping(value = "/fusionar", method = RequestMethod.POST)
-	public String procesarFusion(HttpServletRequest request, HttpServletResponse response) throws IOException, I18NException {
+	public String procesarFusion(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, I18NException {
 
 		log.info("Entra a fusionar");
 
@@ -435,43 +437,45 @@ public class FusionarProcedimentsOperadorController {
 				: Collections.emptyList();
 		log.info("Documentos seleccionados: " + documentos);
 
-		String consentimientoParam = request.getParameter("consentiment"); // El ID del procedimiento que aporta el consentimiento
-		
+		String consentimientoParam = request.getParameter("consentiment"); // El ID del procedimiento que aporta el
+																			// consentimiento
+
 		// ================================
 		// Campos simples
 		// ================================
 		SolicitudJPA solicitudNueva = crearSolicicitudCampos(request);
 		solicitudNueva.setOperador(request.getRemoteUser());
-		
+
 		afegirConsentimentInfo(solicitudNueva, consentimientoParam);
-		
+
 		List<SolicitudJPA> solicitudes = procesarMultiples(fusionados, solicitudNueva);
-		
+
 		InfoMadridJPA infoMadrid = crearNouInfoMadrid(solicitudes, solicitudNueva);
-		
+
 		List<SolicitudServeiJPA> serviciosNuevos = getServiciosSolicitud(fusionados, servicios);
-		
+
 		fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos, infoMadrid);
+
+		marcarFusionadas(solicitudes);
 
 //		return "redirect:/operador/fusionarprocediments/elegirProcediments";
 		return "redirect:/operador/solicitudfullview/view/" + solicitudNueva.getSolicitudID();
 	}
-	
+
 	private void afegirConsentimentInfo(SolicitudJPA solicitudNueva, String consentimientoParam) {
-		
-		
+
 		log.info("Procesando consentimiento de la solicitud ID: " + consentimientoParam);
-		
+
 		if (consentimientoParam != null && !consentimientoParam.isEmpty()) {
 			try {
 				Long soliID = Long.parseLong(consentimientoParam);
 				SolicitudJPA soliConsentiment = solicitudLogicaEjb.findByPrimaryKey(soliID);
 				if (soliConsentiment != null) {
 					solicitudNueva.setConsentiment(soliConsentiment.getConsentiment());
-					
+
 					solicitudNueva.setFitxerConsentimentID(soliConsentiment.getFitxerConsentimentID());
 					solicitudNueva.setUrlconsentiment(soliConsentiment.getUrlconsentiment());
-					
+
 					if (soliConsentiment.getFitxerConsentimentID() != null) {
 						log.info("Consentimiento añadido de la solicitud ID " + soliID + ": fitxerID="
 								+ soliConsentiment.getFitxerConsentimentID());
@@ -479,16 +483,16 @@ public class FusionarProcedimentsOperadorController {
 					} else {
 						log.info("Consentimiento añadido de la solicitud ID " + soliID + ": URL="
 								+ soliConsentiment.getUrlconsentiment());
-						
+
 						solicitudNueva.setConsentimentadjunt(Constants.CONSENTIMENT_PUBLICAT);
 					}
-					
+
 				}
 			} catch (NumberFormatException e) {
 				log.warn("ID de consentimiento no válido: " + consentimientoParam);
 			}
 		}
-		
+
 		log.info("Consentimiento procesado: " + solicitudNueva.getConsentiment() + ", fitxerID="
 				+ solicitudNueva.getFitxerConsentimentID() + ", url=" + solicitudNueva.getUrlconsentiment());
 	}
@@ -499,15 +503,16 @@ public class FusionarProcedimentsOperadorController {
 
 		List<SolicitudJPA> fusionadas = new ArrayList<>();
 
+		List<String> IDs = new ArrayList<>();
 		List<String> codis = new ArrayList<>();
 		List<String> notas = new ArrayList<>();
 		Timestamp dataFi = null;
-		
-		
+
 		for (Long soliID : fusionados) {
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 			if (soli != null) {
 				fusionadas.add(soli);
+				IDs.add(soliID.toString());
 
 				if (soli.getCodiSiaConv() != null && !soli.getCodiSiaConv().isEmpty()) {
 					String[] parts = soli.getCodiSiaConv().split(",");
@@ -518,21 +523,21 @@ public class FusionarProcedimentsOperadorController {
 						}
 					}
 				}
-				
+
 				if (soli.getNotes() != null && !soli.getNotes().isEmpty()) {
 					notas.add(soli.getNotes().trim());
 				}
-				
+
 				if (soli.getDataFi() != null) {
 					if (dataFi == null || soli.getDataFi().after(dataFi)) {
 						dataFi = soli.getDataFi();
 					}
 				}
-				
-				//Si tots estan firmats, el nou també ho està
+
+				// Si tots estan firmats, el nou també ho està
 				firmatDocSolicitud &= soli.isFirmatDocSolicitud();
-				
-				//Si tots estan en producció, el nou també ho està
+
+				// Si tots estan en producció, el nou també ho està
 				produccio &= soli.isProduccio();
 			}
 		}
@@ -543,21 +548,25 @@ public class FusionarProcedimentsOperadorController {
 		codiSiaConv = codiSiaConv.length() > maxLength ? codiSiaConv.substring(0, maxLength) : codiSiaConv;
 		log.info("Codigos SIA concatenados: " + codiSiaConv);
 
-		String notasFinal = String.join("\n----------------------\n", notas);
-		
-		log.info("Notas concatenadas: ");
+		String notasFinal = "Procediment fusionat de : " + String.join(", ", IDs) + "\n----------------------\n"
+				+ String.join("\n----------------------\n", notas);
+
+		log.info("Notas concatenadas: " + notas.size() + " notas. Tamaño total: " + notasFinal.length());
 		log.info(notasFinal);
 		
+		if (notasFinal.length() > 4000) {
+			notasFinal = notasFinal.substring(0, 4000);
+		}
+
 		solicitudNueva.setCodiSiaConv(codiSiaConv);
 		solicitudNueva.setNotes(notasFinal);
 		solicitudNueva.setDataFi(dataFi);
-		
+
 		solicitudNueva.setFirmatDocSolicitud(firmatDocSolicitud);
 		solicitudNueva.setProduccio(produccio);
-		
+
 		return fusionadas;
 	}
-	
 
 	private InfoMadridJPA crearNouInfoMadrid(List<SolicitudJPA> solicitudes, SolicitudJPA solicitudNueva) {
 
@@ -579,12 +588,12 @@ public class FusionarProcedimentsOperadorController {
 
 		// Llistat d'intents per agafar el maxim
 
-		List<Long> intentsList = new ArrayList<>();
 //		List<String[]> titularsList = new ArrayList<>();
+		Long maxIntents = 0L;
 
-		Timestamp dataAutoritzacio = null;
-		Timestamp dataEnviament = null;
-		Timestamp dataConsulta = null;
+		Timestamp dataAutFinal = null;
+		Timestamp dataEnviFinal = null;
+		Timestamp dataConsFinal = null;
 
 		String titularNom = null;
 		String titularNif = null;
@@ -592,34 +601,61 @@ public class FusionarProcedimentsOperadorController {
 		List<String> mensajes = new ArrayList<>();
 		String mensajeFinal = "";
 
+		List<Long> estadosPinbal = new ArrayList<>();
+
+		boolean todasEnviadas = true;
+		boolean todasAutorizadas = true;
+
 		for (SolicitudJPA soli : solicitudes) {
 			if (soli != null && soli.getInfomadridid() != null) {
 				InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(soli.getInfomadridid());
 
-				if (infoMad.getDataAutoritzacio() != null) {
+				if (infoMad == null) {
+					log.warn("La solicitud ID " + soli.getSolicitudID() + " no tiene InfoMadrid asociado (ID "
+							+ soli.getInfomadridid() + ").");
+					continue;
+				}
+
+				Long estatPinbal = soli.getEstatpinbal();
+				if (estatPinbal != null && !estadosPinbal.contains(estatPinbal)) {
+					estadosPinbal.add(estatPinbal);
+				}
+
+				Timestamp dataAut = infoMad.getDataAutoritzacio();
+
+				if (dataAut != null) {
+					// Se queda la fecha más reciente
 //					autorizados++;
 
-					if (dataAutoritzacio == null || infoMad.getDataAutoritzacio().before(dataAutoritzacio)) {
-						dataAutoritzacio = infoMad.getDataAutoritzacio();
+					if (dataAutFinal == null || dataAut.after(dataAutFinal)) {
+						dataAutFinal = dataAut;
 					}
-
+				} else {
+					todasAutorizadas = false;
 				}
 
-				if (infoMad.getDataEnviament() != null) {
-					if (dataEnviament == null || infoMad.getDataEnviament().before(dataEnviament)) {
-						dataEnviament = infoMad.getDataEnviament();
+				Timestamp dataEnvi = infoMad.getDataEnviament();
+				if (dataEnvi != null) {
+					// Se queda la fecha más reciente
+					if (dataEnviFinal == null || dataEnvi.after(dataEnviFinal)) {
+						dataEnviFinal = dataEnvi;
 					}
-//					enviadosPreAltas++;
+				} else {
+					todasEnviadas = false;
 				}
 
-				if (infoMad.getDataConsulta() != null) {
-					if (dataConsulta == null || infoMad.getDataConsulta().before(dataConsulta)) {
-						dataConsulta = infoMad.getDataConsulta();
+				Timestamp dataCons = infoMad.getDataConsulta();
+				if (dataCons != null) {
+					// Se queda la fecha más reciente
+					if (dataConsFinal == null || dataCons.after(dataConsFinal)) {
+						dataConsFinal = dataCons;
 					}
-//					consultados++;
 				}
 
-				intentsList.add(infoMad.getIntents());
+				Long intents = infoMad.getIntents();
+				if (intents != null && intents > maxIntents) {
+					maxIntents = intents;
+				}
 
 				if (soli.getResponsableProcNom() != null
 						&& soli.getResponsableProcNom().equals(solicitudNueva.getResponsableProcNom())) {
@@ -636,19 +672,56 @@ public class FusionarProcedimentsOperadorController {
 
 			}
 		}
+		
+		log.info("Mensajes concatenados: " + mensajes.size() + " mensajes. Tamaño total: " + mensajeFinal.length());
+		log.info(mensajeFinal);
+		
+		if (mensajeFinal.length() > 1024) {
+			mensajeFinal = mensajeFinal.substring(0, 1024);
+		}
 
-		infoMadNou.setDataAutoritzacio(dataAutoritzacio);
-		infoMadNou.setDataEnviament(dataEnviament);
-		infoMadNou.setDataConsulta(dataConsulta);
+		infoMadNou.setDataAutoritzacio(dataAutFinal);
+		infoMadNou.setDataEnviament(dataEnviFinal);
+		infoMadNou.setDataConsulta(dataConsFinal);
 
-		Long maxIntents = intentsList.stream().max(Long::compare).orElse(0L);
 		infoMadNou.setIntents(maxIntents);
 
 		infoMadNou.setTitularNom(titularNom);
 		infoMadNou.setTitularNif(titularNif);
 
 		infoMadNou.setEstatProcediment(solicitudNueva.getEstatSolicitud());
-		infoMadNou.setEstatAutoritzacio(solicitudNueva.getEstatpinbal());
+		infoMadNou.setEstatProcediment(solicitudNueva.getEstatpinbal());
+
+//		Long estatPinbal = null;
+//
+//		if (estadosPinbal.size() == 1) {
+//			estatPinbal = estadosPinbal.get(0);
+//		} else if (estadosPinbal.size() == 0) {
+//			estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+//		} else {
+//			// Solicitudes con estados Madrid diferentes.
+//
+//			// Si hay alguna no enviada, el estado puede ser o NO_SOLICITAT (si no habia
+//			// ninguna autorizada) o AUTORITZA
+//			if (!todasEnviadas) {
+//				estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+//			} else {
+//				// Si todas están enviadas
+//			}
+//
+//			// Si la fecha de autorización es nula, y la de envio no, está pendiente de
+//			// tramitar.
+//			if (dataAutFinal == null && dataEnviFinal != null) {
+//				estatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+//			} else if (dataAutFinal != null) {
+//				estatPinbal = Constants.ESTAT_PINBAL_AUTORITZAT;
+//			} else {
+//				estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
+//			}
+//
+//		}
+//
+//		infoMadNou.setEstatAutoritzacio(estatPinbal);
 
 		infoMadNou.setMissatge(mensajeFinal);
 
@@ -656,41 +729,19 @@ public class FusionarProcedimentsOperadorController {
 
 	}
 
-	private String procesarCodisProcediment(List<SolicitudJPA> solicitudes) {
-		// Coger todos los codigos SIA de los procedimientos y concater los distintos
-		
-		List<String> codis = new ArrayList<>();
-		
-		for (SolicitudJPA soli : solicitudes) {
-			if (soli != null && soli.getCodiSiaConv() != null && !soli.getCodiSiaConv().isEmpty()) {
-				String[] parts = soli.getCodiSiaConv().split(",");
-				for (String part : parts) {
-					String trimmed = part.trim();
-					if (!trimmed.isEmpty() && !codis.contains(trimmed) && trimmed.length() <= 20) {
-						codis.add(trimmed);
-					}
-				}
-			}
-		}
-		
-		int maxLength = 255;
-		String result = String.join(", ", codis);
-		String maxLengthStr = result.length() > maxLength ? result.substring(0, maxLength) : result; 
-		
-		log.info("Códigos SIA concatenados: " + maxLengthStr);
-		
-		return maxLengthStr;
-	}
 
-	private void fusionar(SolicitudJPA solicitudNueva, List<Long> fusionados,
-			List<SolicitudServeiJPA> serviciosNuevos, List<Long> documentos, InfoMadridJPA infoMad) throws I18NException {
-		
+	private void fusionar(SolicitudJPA solicitudNueva, List<Long> fusionados, List<SolicitudServeiJPA> serviciosNuevos,
+			List<Long> documentos, InfoMadridJPA infoMad) throws I18NException {
+
 		InfoMadrid im = infoMadridLogicaEjb.create(infoMad);
-		solicitudNueva.setInfomadridid(im.getInfoMadridID());
+		Long infoMadridID = im.getInfoMadridID();
+		log.info("InfoMadrid creado ID: " + infoMadridID);
+		solicitudNueva.setInfomadridid(infoMadridID);
+//		solicitudNueva.setEstatpinbal(im.getEstatAutoritzacio());
 
 		Solicitud soli = solicitudLogicaEjb.create(solicitudNueva);
 		Long nuevaSolicitudID = soli.getSolicitudID();
-		
+
 		List<Event> eventos = eventLogicaEjb.select(EventFields.SOLICITUDID.in(fusionados));
 
 		for (Event ev : eventos) {
@@ -706,7 +757,7 @@ public class FusionarProcedimentsOperadorController {
 //			set.add((SolicitudServeiJPA) solSer);
 		}
 //		solicitudNueva.setSolicitudServeis(set);
-		
+
 //		List<DocumentSolicitud> docs = documentSolicitudLogicaEjb.select(Where.AND(
 //				DocumentSolicitudFields.SOLICITUDID.in(fusionados), DocumentSolicitudFields.DOCUMENTID.in(documentos)));
 //		
@@ -714,9 +765,9 @@ public class FusionarProcedimentsOperadorController {
 //			ds.setSolicitudID(nuevaSolicitudID);
 //			documentSolicitudLogicaEjb.update(ds);
 //		}
-		
+
 		try {
-			// Gestión de documentos. 
+			// Gestión de documentos.
 			generarNousDocumentsSolicitud(solicitudNueva, fusionados, documentos);
 		} catch (I18NException e) {
 			// TODO Auto-generated catch block
@@ -725,10 +776,9 @@ public class FusionarProcedimentsOperadorController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//Falta borrar todas las solicitudes originales.
+
+		// Falta borrar todas las solicitudes originales.
 		log.info("Fusión completada: nueva solicitud ID " + solicitudNueva.getSolicitudID());
-		
 
 	}
 
@@ -737,17 +787,19 @@ public class FusionarProcedimentsOperadorController {
 
 		Long nuevaSolicitudID = solicitudNueva.getSolicitudID();
 		solicitudNueva = solicitudLogicaEjb.findByPrimaryKeyFull(nuevaSolicitudID);
-		
+
 		// Todo lo que tenga un documento firmado, o se quiera guardar manualmente, se
 		// mantiene.
 		// Excels y plantillas fuera y se generan nuevas.
 
 		List<DocumentSolicitud> docs = documentSolicitudLogicaEjb
 				.select(DocumentSolicitudFields.SOLICITUDID.in(fusionados));
+
 		for (DocumentSolicitud ds : docs) {
 			Document doc = documentLogicaEjb.findByPrimaryKey(ds.getDocumentID());
-			// Si está firmado, se mantiene
-			if (doc.getFitxerFirmatID() != null || documentos.contains(doc.getDocumentID())) {
+			// Si está firmado, esta marcado para guardar, o es de tipo ALTRTES, se mantiene
+			if (doc.getFitxerFirmatID() != null || documentos.contains(doc.getDocumentID())
+					|| doc.getTipus() == Constants.DOCUMENT_SOLICITUD_ALTRES) {
 				ds.setSolicitudID(nuevaSolicitudID);
 				documentSolicitudLogicaEjb.update(ds);
 			} else {
@@ -756,8 +808,8 @@ public class FusionarProcedimentsOperadorController {
 				documentLogicaEjb.delete(doc);
 			}
 		}
-		
-		//Ahora guardamos los ficherosXML y documentos de Solicitud de las solicitudes.
+
+		// Ahora guardamos los ficherosXML y documentos de Solicitud de las solicitudes.
 		List<Solicitud> solicitudesOriginals = solicitudLogicaEjb.select(SolicitudFields.SOLICITUDID.in(fusionados));
 		for (Solicitud soli : solicitudesOriginals) {
 			Long fitxerXMLID = soli.getSolicitudXmlID();
@@ -786,9 +838,8 @@ public class FusionarProcedimentsOperadorController {
 						Constants.DOCUMENT_SOLICITUD_ALTRES, nuevaSolicitudID);
 			}
 		}
-		
 
-		// Ahora añadimos los nuevos documentos que se tienen que generar: 
+		// Ahora añadimos los nuevos documentos que se tienen que generar:
 		// Excel de locales y estatales, plantilla ODT y PDF.
 
 		Long organid = solicitudNueva.getOrganid();
@@ -810,12 +861,12 @@ public class FusionarProcedimentsOperadorController {
 		 * 
 		 */
 	}
-	
-	
-	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
-		
-		setOrganGestorProperties(organID, prop);		
-		
+
+	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop)
+			throws Exception, I18NException {
+
+		setOrganGestorProperties(organID, prop);
+
 		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
 		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
@@ -913,15 +964,14 @@ public class FusionarProcedimentsOperadorController {
 		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
 	}
 
-    public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
+	public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
 
-        Long solicitudID = soli.getSolicitudID();
-        log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
+		Long solicitudID = soli.getSolicitudID();
+		log.info("generaPlantillaExcelDeServeis(); => SOLI = " + solicitudID);
 
-        
-        File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
-        
-        String[] excels = { "locals", "estatals" };
+		File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel());
+
+		String[] excels = { "locals", "estatals" };
 
 		for (String excel : excels) {
 			log.info("Generant Excel de Serveis: " + excel);
@@ -939,27 +989,19 @@ public class FusionarProcedimentsOperadorController {
 			Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
 			afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
 		}
-    }
+	}
 
-    private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
-        
-        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+	private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID)
+			throws I18NException {
 
-        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+		Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
 
-        documentSolicitudLogicaEjb.create(ds);
-        log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
+		DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
 
-    }
+		documentSolicitudLogicaEjb.create(ds);
+		log.info("Afegit document: " + nom + " a la solicitud: " + soliID);
 
-
-	
-	
-	
-	
-	
-	
-	
+	}
 
 	private SolicitudJPA crearSolicicitudCampos(HttpServletRequest request) throws I18NException {
 
@@ -969,9 +1011,9 @@ public class FusionarProcedimentsOperadorController {
 		String procedimentNom = request.getParameter("procedimentNom");
 		Timestamp dataInici = parseTimestamp(request.getParameter("dataInici"));
 		Timestamp dataCaducitat = parseTimestamp(request.getParameter("dataCaducitat"));
-		
+
 		String creador = request.getParameter("creador");
-		
+
 		String personaContacte = request.getParameter("personaContacte");
 		String personaContacteEmail = request.getParameter("personaContacteEmail");
 		String responsableProcNom = request.getParameter("responsableProcNom");
@@ -981,13 +1023,10 @@ public class FusionarProcedimentsOperadorController {
 		String titularFirmaNom = request.getParameter("titularFirmaNom");
 		String titularFirmaEmail = request.getParameter("titularFirmaEmail");
 		String titularFirmaLlinatges = request.getParameter("titularFirmaLlinatges");
-		
-		
+
 		String entitatNom = request.getParameter("entitatNom");
 		String entitatCif = request.getParameter("entitatCif");
 		String entitatDir3 = request.getParameter("entitatDir3");
-		
-		
 
 		String organParam = request.getParameter("organid");
 		log.info("Organ recibido: " + organParam);
@@ -999,14 +1038,16 @@ public class FusionarProcedimentsOperadorController {
 		String estatSolicitud = request.getParameter("estatSolicitud");
 		Long estatSolicitudId = extratEstat("solicitud.estat.", Constants.ESTATS_SOLI, estatSolicitud);
 
-//		String estatpinbal = request.getParameter("estatpinbal");
-//		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
+		String estatpinbal = request.getParameter("estatpinbal");
+		log.info("estatpinbal recibido: " + estatpinbal);
+		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
+		log.info("estatpinbalId extraído: " + estatpinbalId);
 
 //		String procedimentTipus = request.getParameter("procedimentTipus");
-		
-        String procedimentTipusText = request.getParameter("procedimentTipus");
-        String procedimentTipus = String.valueOf(getTipusDocIDFromText(procedimentTipusText));
-        
+
+		String procedimentTipusText = request.getParameter("procedimentTipus");
+		String procedimentTipus = String.valueOf(getTipusDocIDFromText(procedimentTipusText));
+
 		// ================================
 		// Log para depuración
 		// ================================
@@ -1016,9 +1057,9 @@ public class FusionarProcedimentsOperadorController {
 		log.info("procedimentNom: " + procedimentNom);
 		log.info("dataInici: " + dataInici);
 		log.info("dataCaducitat: " + dataCaducitat);
-		
+
 		log.info("creador: " + creador);
-		
+
 		log.info("personaContacte: " + personaContacte);
 		log.info("personaContacteEmail: " + personaContacteEmail);
 		log.info("responsableProcNom: " + responsableProcNom);
@@ -1028,14 +1069,14 @@ public class FusionarProcedimentsOperadorController {
 		log.info("titularFirmaNom: " + titularFirmaNom);
 		log.info("titularFirmaEmail: " + titularFirmaEmail);
 		log.info("titularFirmaLlinatges: " + titularFirmaLlinatges);
-		
+
 		log.info("entitatNom: " + entitatNom);
 		log.info("entitatCif: " + entitatCif);
 		log.info("entitatDir3: " + entitatDir3);
 
 		log.info("organId: " + organId);
 		log.info("estatSolicitud: " + estatSolicitudId);
-//		log.info("estatpinbal: " + estatpinbalId);
+		log.info("estatpinbal: " + estatpinbalId);
 		log.info("procedimentTipus: " + procedimentTipus);
 
 //		SolicitudJPA solicitudNueva = new SolicitudJPA();
@@ -1065,9 +1106,8 @@ public class FusionarProcedimentsOperadorController {
 //		solicitudNueva.setOrganid(organId);
 //		solicitudNueva.setEstatSolicitud(estatSolicitudId);
 //		solicitudNueva.setEstatpinbal(estatpinbalId);
-		
-		
-		//Se rellenan estos campos despues en la fusión
+
+		// Se rellenan estos campos despues en la fusión
 		String operador = null;
 
 		String codiSiaConv = null;
@@ -1075,22 +1115,22 @@ public class FusionarProcedimentsOperadorController {
 		Timestamp dataFi = null;
 		boolean firmatDocSolicitud = false;
 		boolean produccio = false;
-		
+
 		String consentiment = null;
 		String urlconsentiment = null;
 		String consentimentadjunt = null;
 		Long fitxerConsentimentID = null;
 
 		Long infoMadridID = null;
-		Long estatpinbal = null;
-		
-		//Estos campos son nulos por ser locales, o porque siempre lo son:
+//		Long estatpinbal = null;
+
+		// Estos campos son nulos por ser locales, o porque siempre lo son:
 		String expedientPid = null;
 		String entitatEstatal = null;
 		String pinfo = null;
 		Long contacteTitularID = null;
-		
-		//Y estos son nulos por ser una fusión nueva:
+
+		// Y estos son nulos por ser una fusión nueva:
 		Long docSoliID = null;
 		Long solicitudXmlID = null;
 		Long portafibID = null;
@@ -1099,9 +1139,10 @@ public class FusionarProcedimentsOperadorController {
 				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
 				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
-				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
-				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail);
-		
+				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
+				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges,
+				titularFirmaEmail);
+
 		return solicitudNueva;
 	}
 
@@ -1132,12 +1173,12 @@ public class FusionarProcedimentsOperadorController {
 		}
 
 		for (Long serveiID : servicios) {
-			
+
 			String notes = "";
-			
+
 			String caduca = null;
 			String dataCad = null;
-			
+
 			List<SolicitudServei> soliServsBySoli = solicitudServeiLogicaEjb.select(Where.AND(
 					SolicitudServeiFields.SOLICITUDID.in(fusionados), SolicitudServeiFields.SERVEIID.equal(serveiID)));
 
@@ -1146,7 +1187,7 @@ public class FusionarProcedimentsOperadorController {
 			for (SolicitudServei ss : soliServsBySoli) {
 				Long serveiId = ss.getServeiID();
 				Long solicitudId = ss.getSolicitudID();
-				
+
 				log.info("Procesando SoliServ: solicitudId=" + solicitudId + ", serveiId=" + serveiId);
 
 				if (ss.getNormaLegal() != null && !ss.getNormaLegal().isEmpty()) {
@@ -1169,22 +1210,31 @@ public class FusionarProcedimentsOperadorController {
 				}
 
 				notes += ss.getNotes() != null ? ss.getNotes() + "\n" : "";
+				Long estatSoliSerID = ss.getEstatSolicitudServeiID();
 
-				if (!estatsSoliSer.contains(ss.getEstatSolicitudServeiID())) {
-					estatsSoliSer.add(ss.getEstatSolicitudServeiID());
+				if (estatSoliSerID == null) {
+					estatSoliSerID = Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
 				}
-				
+
+				if (!estatsSoliSer.contains(estatSoliSerID)) {
+					log.info("  Añadiendo estatSolicitudServeiID=" + estatSoliSerID + " (solicitud=" + solicitudId
+							+ ", servei=" + serveiId + ")");
+					estatsSoliSer.add(estatSoliSerID);
+				} else {
+					log.info("  EstatSolicitudServeiID=" + estatSoliSerID + " ya añadido anteriormente.");
+				}
+
 				if (ss.getFechaCaduca() != null) {
 					dataCad = ss.getFechaCaduca();
 				}
 			}
 
 			// 🔑 Eliminar duplicados por el nombre de la norma
-			
+
 			log.info("Total normas encontradas para serveiId=" + serveiID + ": " + normas.size());
-			
+
 			Set<String> seenNormas = new HashSet<>();
-			List<NormaInfo> normasUnicas = normas.stream().filter(n -> seenNormas.add(n.norma)) 
+			List<NormaInfo> normasUnicas = normas.stream().filter(n -> seenNormas.add(n.norma))
 					.collect(Collectors.toList());
 			// solo deja pasar la primera vez que aparece la norma
 
@@ -1194,8 +1244,11 @@ public class FusionarProcedimentsOperadorController {
 			SolicitudServeiJPA nuevoSoliServ = new SolicitudServeiJPA();
 			nuevoSoliServ.setServeiID(serveiID);
 
-			nuevoSoliServ.setEstatSolicitudServeiID(estatsSoliSer.get(0)); 
-			
+			Long estatSoliSerID = estatsSoliSer.size() > 0 ? estatsSoliSer.get(0)
+					: Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR;
+			log.info("Asignando estatSolicitudServeiID=" + estatSoliSerID + " al nuevo SoliServ");
+			nuevoSoliServ.setEstatSolicitudServeiID(estatsSoliSer.get(0));
+
 			nuevoSoliServ.setConsentiment(null);
 			nuevoSoliServ.setTipusConsentiment(null);
 			nuevoSoliServ.setEnllazConsentiment(null);
@@ -1205,22 +1258,18 @@ public class FusionarProcedimentsOperadorController {
 			} else {
 				caduca = "Caduca";
 			}
-			
+
 			nuevoSoliServ.setCaduca(caduca);
 			nuevoSoliServ.setFechaCaduca(dataCad);
-			
+
 			nuevoSoliServ.setNotes(notes);
-			
-			
-			
-			
-			
+
 			// Asignar hasta 3 normas
 			if (normasUnicas.size() > 0) {
 				nuevoSoliServ.setNormaLegal(normasUnicas.get(0).norma);
 				nuevoSoliServ.setFitxernormaID(normasUnicas.get(0).fitxerId);
 				nuevoSoliServ.setArticles(normasUnicas.get(0).articles);
-				
+
 				log.info("  Norma asignada: '" + normasUnicas.get(0).norma + "' (solicitud="
 						+ normasUnicas.get(0).solicitudId + ", servei=" + normasUnicas.get(0).serveiId + ")");
 			}
@@ -1228,7 +1277,7 @@ public class FusionarProcedimentsOperadorController {
 				nuevoSoliServ.setNorma2(normasUnicas.get(1).norma);
 				nuevoSoliServ.setFitxernorma2ID(normasUnicas.get(1).fitxerId);
 				nuevoSoliServ.setArticles2(normasUnicas.get(1).articles);
-				
+
 				log.info("  Norma asignada: '" + normasUnicas.get(1).norma + "' (solicitud="
 						+ normasUnicas.get(1).solicitudId + ", servei=" + normasUnicas.get(1).serveiId + ")");
 			}
@@ -1236,31 +1285,31 @@ public class FusionarProcedimentsOperadorController {
 				nuevoSoliServ.setNorma3(normasUnicas.get(2).norma);
 				nuevoSoliServ.setFitxernorma3ID(normasUnicas.get(2).fitxerId);
 				nuevoSoliServ.setArticles3(normasUnicas.get(2).articles);
-				
+
 				log.info("  Norma asignada: '" + normasUnicas.get(2).norma + "' (solicitud="
 						+ normasUnicas.get(2).solicitudId + ", servei=" + normasUnicas.get(2).serveiId + ")");
 			}
 
 			definitius.add(nuevoSoliServ);
 		}
-		
+
 		return definitius;
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//===========================================================
-	//===================    Auxiliares     =====================
-	//===========================================================
-		
+
+	private void marcarFusionadas(List<SolicitudJPA> fusionados) throws I18NException {
+		// Marcar las solicitudes fusionadas como "fusionadas" en su estado
+		for (SolicitudJPA soli : fusionados) {
+			soli.setEstatSolicitud(Constants.SOLI_ESTAT_FUSIONADA);
+			solicitudLogicaEjb.update(soli);
+			log.info("Solicitud ID " + soli.getSolicitudID() + " marcada como fusionada.");
+		}
+	}
+
+	// ===========================================================
+	// =================== Auxiliares =====================
+	// ===========================================================
+
 	public static Timestamp parseTimestamp(String dateStr) {
 		if (dateStr == null || dateStr.isEmpty())
 			return null;
@@ -1305,13 +1354,13 @@ public class FusionarProcedimentsOperadorController {
 
 	private String getTipusDocFromID(String id) {
 		log.info("getTipusDocFromID: " + id);
-		
+
 		if (id == null) {
 			return null;
 		}
-		
-		String lang = "ca";        
-        List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
+
+		String lang = "ca";
+		List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
 		for (TipusProcediment tp : tipus) {
 			if (tp.id == Long.valueOf(id)) {
 				String text;
@@ -1323,10 +1372,10 @@ public class FusionarProcedimentsOperadorController {
 				return text;
 			}
 		}
-        return null;
-        
+		return null;
+
 	}
-	
+
 	private Long getTipusDocIDFromText(String text) {
 		log.info("getTipusDocIDFromText: " + text);
 
@@ -1350,5 +1399,5 @@ public class FusionarProcedimentsOperadorController {
 		return null;
 
 	}
-	
+
 }

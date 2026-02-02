@@ -114,9 +114,9 @@
 }
 
 .results {
-	display: flex;
+/* 	display: flex;
 	flex-direction: column;
-}
+ */}
 
 </style>
 
@@ -388,6 +388,8 @@ $("#btnFusionar").click(function() {
 	mapLabels.set("entitatDir3", "<fmt:message key='solicitud.dir3'/>");
 		
 	
+	mapLabels.set("creador", "<fmt:message key='solicitud.creador'/>");
+	mapLabels.set("operador", "<fmt:message key='solicitud.operador'/>");
 	
 	
 	mapLabels.set("consentiment", "<fmt:message key='solicitud.consentiment'/>");
@@ -395,6 +397,7 @@ $("#btnFusionar").click(function() {
 	mapLabels.set("consentimentadjunt", "<fmt:message key='solicitud.consentimentadjunt'/>");
 	mapLabels.set("organid", "<fmt:message key='solicitud.organid'/>");
 	mapLabels.set("estatSolicitud", "<fmt:message key='solicitud.estatSolicitud'/>");
+	mapLabels.set("estatpinbal", "<fmt:message key='solicitud.estatpinbal'/>");
 	mapLabels.set("servicios", "<fmt:message key='solicitud.servicios'/>");
 	mapLabels.set("documentos", "<fmt:message key='solicitud.documentos'/>");
 	
@@ -460,7 +463,8 @@ $("#btnFusionar").click(function() {
 	            const label = $("<label class='me-2'>")
 	                .append(radio)
 	                .append(" " + valor);
-	            tdResult.append(label);
+	            const div = $("<div class='option'>").append(label);
+	            tdResult.append(div);
 	        });
 
 	        //Si estamos en el campo estado y hay mas de una opcione, y no es "PENDIENTE REVISAR", añadir la opción de "PENDIENTE REVISAR".
@@ -474,7 +478,8 @@ $("#btnFusionar").click(function() {
                     const label = $("<label class='me-2'>")
                         .append(radio)
                         .append(ESTAT_PENDENT_REVISAR);
-                    tdResult.append(label);
+    	            const div = $("<div class='option'>").append(label);
+    	            tdResult.append(div);
             	}
             }
 	        
@@ -529,7 +534,10 @@ $("#btnFusionar").click(function() {
                     .append(radio)
                     .append("Solicitud " + valor);
                 tdResult.append(label);
-                tdResult.append($("<br>"));
+//                tdResult.append($("<br>"));
+	            const div = $("<div class='option'>").append(label);
+	            tdResult.append(div);
+
             });
 			tr.append(tdResult);
 			tbody.append(tr);

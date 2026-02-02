@@ -506,6 +506,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         
         Long soliID = getSolicitudID(request);
 
+        log.info("postList(); => SOLI = " + soliID + " amb " + list.size() + " serveis");
+        
 		String entitatEstatal = solicitudLogicaEjb.executeQueryOne(SolicitudFields.ENTITATESTATAL,
 				SolicitudFields.SOLICITUDID.equal(soliID));
 		boolean estatal = entitatEstatal != null && entitatEstatal.trim().length() > 0;
@@ -513,7 +515,8 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         filterForm.getAdditionalButtonsByPK().clear();
 
         for (SolicitudServei solicitudServei : list) {
-        	
+        	log.info("solicitudServei: " + solicitudServei);
+        	log.info("  - serveiID: " + solicitudServei.getServeiID() + " estatActual: " + solicitudServei.getEstatSolicitudServeiID());
             if (solicitudServei.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT) {
                 error = true;
                 filterForm.addAdditionalButtonByPK(solicitudServei.getId(),
