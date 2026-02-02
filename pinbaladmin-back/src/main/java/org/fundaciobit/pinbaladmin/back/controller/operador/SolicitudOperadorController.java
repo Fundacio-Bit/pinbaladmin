@@ -312,6 +312,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 		solicitudForm.addHiddenField(SolicitudFields.FIRMATDOCSOLICITUD);
 		solicitudForm.addHiddenField(SolicitudFields.PRODUCCIO);
 		solicitudForm.addHiddenField(SolicitudFields.PINFO);
+		solicitudForm.addHiddenField(SolicitudFields.CONTACTETITULARID);
+		
 
 		Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
 				SolicitudFields.PROCEDIMENTCODI, 
@@ -347,8 +349,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 		
 		Section dadesGestio = new Section("info_gestio", "section.dadesgestio", 
 				SolicitudFields.ESTATSOLICITUD, 
-				SolicitudFields.TITULARFIRMANIF,
-				SolicitudFields.TITULARFIRMANOM,
 				SolicitudFields.CREADOR, 
 				SolicitudFields.OPERADOR,
 				SolicitudFields.DATAINICI, 
@@ -362,9 +362,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 				SolicitudFields.INFOMADRIDID
 				);
 		
+		Section dadesTitular = new Section("info_titular", "section.dadestitular",
+				SolicitudFields.TITULARFIRMANIF,
+				SolicitudFields.TITULARFIRMANOM,
+				SolicitudFields.TITULARFIRMALLINATGES,
+				SolicitudFields.TITULARFIRMAEMAIL
+				);
+		
 		solicitudForm.addSection(dadesSoli);
 		solicitudForm.addSection(dadesConsentiment);
 		solicitudForm.addSection(dadesGestio);
+		solicitudForm.addSection(dadesTitular);
 		solicitudForm.addSection(dadesAutoritzacio);
 		solicitudForm.addSection(contactes);
 		solicitudForm.addSection(dadesEntitat);
@@ -1153,9 +1161,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             }
         }
 
+        //Ocultar solicituds fusionades.
+		Where wNoFusionades = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
+		
+		
         // FILTRE AVANÇAT PER CERCA
-
-        return Where.AND(getAdditionalConditionFine(request), wBalears, super.getAdditionalCondition(request),
+        return Where.AND(getAdditionalConditionFine(request), wBalears, wNoFusionades, super.getAdditionalCondition(request),
                 tipusEstatalService, getAdditionaConditionAdvancedFilter(request));
 
     }
@@ -1474,7 +1485,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     @Override
     public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav,
             SolicitudForm solicitudForm, Where where) throws I18NException {
-
+    	log.info("getReferenceListForEstatSolicitud 1488 called");
         Boolean estatal = isEstatal();
 
         if (estatal == null) {
@@ -1505,6 +1516,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             	}
             }
         } else {
+        	//Sol·licituds locals
 //            __tmp = getReferenceListForEstatSolicitud(request, mav, where);
             __tmp = new java.util.ArrayList<StringKeyValue>();
 			for (long estat : Constants.ESTATS_SOLI) {
@@ -1516,11 +1528,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 	
 					|| estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
 					|| estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
-					|| estat == Constants.SOLI_ESTAT_REVISIO
+//					|| estat == Constants.SOLI_ESTAT_REVISIO
 					
-					|| estat == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR
+//					|| estat == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR
 					|| estat == Constants.SOLI_ESTAT_AUTORITZAT_Manual
-					|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
+//					|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
 //					|| estat == Constants.SOLI_ESTAT_REVISIO
 						
 						) {
@@ -1531,11 +1543,6 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 				String key = String.valueOf(estat);
 				__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
 			}
-            
-            
-            
-            
-            
         }
 
         return __tmp;
@@ -1544,6 +1551,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     @Override
     public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
+    	log.info("getReferenceListForEstatSolicitud 1558 called");
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
         
