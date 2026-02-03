@@ -15,6 +15,7 @@ public class EntitatBean implements Entitat {
 	long grupEntitatID;
 	boolean convenipmsbae;
 	java.lang.String dir3;
+	java.lang.String codiPinbal;
 
 
   /** Constructor Buit */
@@ -22,7 +23,7 @@ public class EntitatBean implements Entitat {
   }
 
   /** Constructor amb tots els camps  */
-  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3) {
+  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal) {
     this.entitatID=entitatID;
     this.nom=nom;
     this.personaContacte=personaContacte;
@@ -30,15 +31,17 @@ public class EntitatBean implements Entitat {
     this.grupEntitatID=grupEntitatID;
     this.convenipmsbae=convenipmsbae;
     this.dir3=dir3;
+    this.codiPinbal=codiPinbal;
 }
   /** Constructor sense valors autoincrementals */
-  public EntitatBean(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3) {
+  public EntitatBean(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal) {
     this.nom=nom;
     this.personaContacte=personaContacte;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
     this.convenipmsbae=convenipmsbae;
     this.dir3=dir3;
+    this.codiPinbal=codiPinbal;
 }
   /** Constructor dels valors Not Null */
   public EntitatBean(long entitatID , java.lang.String nom , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
@@ -56,6 +59,7 @@ public class EntitatBean implements Entitat {
     this.setGrupEntitatID(__bean.getGrupEntitatID());
     this.setConvenipmsbae(__bean.isConvenipmsbae());
     this.setDir3(__bean.getDir3());
+    this.setCodiPinbal(__bean.getCodiPinbal());
 	}
 
 	public long getEntitatID() {
@@ -107,6 +111,13 @@ public class EntitatBean implements Entitat {
 		this.dir3 = _dir3_;
 	};
 
+	public java.lang.String getCodiPinbal() {
+		return(codiPinbal);
+	};
+	public void setCodiPinbal(java.lang.String _codiPinbal_) {
+		this.codiPinbal = _codiPinbal_;
+	};
+
 
 
   // ======================================
@@ -121,6 +132,7 @@ public class EntitatBean implements Entitat {
     __tmp.setGrupEntitatID(__bean.getGrupEntitatID());
     __tmp.setConvenipmsbae(__bean.isConvenipmsbae());
     __tmp.setDir3(__bean.getDir3());
+    __tmp.setCodiPinbal(__bean.getCodiPinbal());
 		return __tmp;
 	}
 

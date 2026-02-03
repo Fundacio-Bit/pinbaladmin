@@ -39,6 +39,10 @@ public class EntitatQueryPath extends org.fundaciobit.genapp.common.query.QueryP
     return new StringField(getQueryPath(), EntitatFields.DIR3);
   }
 
+  public StringField CODIPINBAL() {
+    return new StringField(getQueryPath(), EntitatFields.CODIPINBAL);
+  }
+
 
 
   @Override

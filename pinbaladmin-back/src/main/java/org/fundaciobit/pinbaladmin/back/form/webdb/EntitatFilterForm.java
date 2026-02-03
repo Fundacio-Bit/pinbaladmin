@@ -109,6 +109,17 @@ public class EntitatFilterForm extends PinbalAdminBaseFilterForm implements Enti
   }
 
 
+  private java.lang.String codiPinbal;
+
+  public java.lang.String getCodiPinbal() {
+    return this.codiPinbal;
+  }
+
+  public void setCodiPinbal(java.lang.String codiPinbal) {
+    this.codiPinbal = codiPinbal;
+  }
+
+
   public EntitatFilterForm() {
   }
   
@@ -122,6 +133,7 @@ public class EntitatFilterForm extends PinbalAdminBaseFilterForm implements Enti
     this.grupEntitatIDDesde = __toClone.grupEntitatIDDesde;
     this.grupEntitatIDFins = __toClone.grupEntitatIDFins;
     this.dir3 = __toClone.dir3;
+    this.codiPinbal = __toClone.codiPinbal;
     this.mapOfGrupEntitatForGrupEntitatID = __toClone.mapOfGrupEntitatForGrupEntitatID;
   }
   

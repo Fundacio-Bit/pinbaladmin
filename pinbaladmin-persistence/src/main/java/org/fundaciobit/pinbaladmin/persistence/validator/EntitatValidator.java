@@ -81,6 +81,14 @@ public class EntitatValidator<I extends Entitat>
       }
     }
 
+    if (__vr.getFieldErrorCount(CODIPINBAL) == 0) {
+      java.lang.String __codipinbal = __target__.getCodiPinbal();
+      if (__codipinbal!= null && __codipinbal.length() > 50) {
+        __vr.rejectValue(CODIPINBAL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CODIPINBAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(50)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

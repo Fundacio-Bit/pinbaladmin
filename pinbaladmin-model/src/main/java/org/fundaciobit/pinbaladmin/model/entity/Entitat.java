@@ -23,6 +23,9 @@ public interface Entitat extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getDir3();
 	public void setDir3(java.lang.String _dir3_);
 
+	public java.lang.String getCodiPinbal();
+	public void setCodiPinbal(java.lang.String _codiPinbal_);
+
 
 
   // ======================================

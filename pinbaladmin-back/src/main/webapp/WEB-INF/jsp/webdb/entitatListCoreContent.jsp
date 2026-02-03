@@ -62,6 +62,11 @@
           ${entitat.dir3}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.CODIPINBAL)}">
+          <td>
+          ${entitat.codiPinbal}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->
