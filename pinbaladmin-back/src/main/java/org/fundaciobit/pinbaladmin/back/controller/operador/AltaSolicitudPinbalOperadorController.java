@@ -349,6 +349,31 @@ public class AltaSolicitudPinbalOperadorController {
     	Long infoMadridID = soli.getInfomadridid();
     	
     	if (infoMadridID == null) {
+    		
+			if (soli.getTitularFirmaNif() != null) {
+				ScspTitular titular = new ScspTitular();
+				ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+				titular.setTipoDocumentacion(tipoDocumentacion);
+				titular.setDocumentacion(soli.getTitularFirmaNif());
+
+				titular.setNombre(soli.getTitularFirmaNom());
+
+				String apellidos = soli.getTitularFirmaLlinatges();
+				String ape1 = "";
+				String ape2 = "";
+				if (apellidos.contains(" ")) {
+					ape1 = apellidos.substring(0, apellidos.indexOf(" "));
+					ape2 = apellidos.substring(apellidos.indexOf(" ") + 1);
+				} else {
+					ape1 = apellidos;
+				}
+				String nombreCompleto = soli.getTitularFirmaNom() + " " + soli.getTitularFirmaLlinatges();
+
+				titular.setApellido1(ape1);
+				titular.setApellido2(ape2);
+				titular.setNombreCompleto(nombreCompleto);
+			}
+    		
             Long fitxerID = soli.getSolicitudXmlID();
             Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
             

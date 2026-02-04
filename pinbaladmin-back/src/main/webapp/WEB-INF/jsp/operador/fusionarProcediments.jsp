@@ -151,7 +151,9 @@
 				<h5 class="modal-title" id="fusionModalLabel">Revisar fusión de
 					procedimientos</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Cerrar"></button>
+					aria-label="Cerrar">
+					<i class="fas fa-times"></i>
+					</button>
 			</div>
 			<div class="modal-body">
 
@@ -184,7 +186,7 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary"
+				<button type="button" class="btn btn-secondary btn-close"
 					data-bs-dismiss="modal">Cancelar</button>
 				<button type="button" class="btn btn-primary" id="btnConfirmFusion">Confirmar
 					fusión</button>
@@ -387,6 +389,7 @@ $("#btnFusionar").click(function() {
 	mapLabels.set("entitatCif", "<fmt:message key='solicitud.nif'/>");
 	mapLabels.set("entitatDir3", "<fmt:message key='solicitud.dir3'/>");
 		
+	mapLabels.set("dataCaducitat", "<fmt:message key='solicitud.dataCaducitat'/>");
 	
 	mapLabels.set("creador", "<fmt:message key='solicitud.creador'/>");
 	mapLabels.set("operador", "<fmt:message key='solicitud.operador'/>");
@@ -601,7 +604,7 @@ $("#btnFusionar").click(function() {
             docs.forEach(d => {
                 const label = $("<label class='me-3 document-item d-block'>");
                 const chk = $("<input type='checkbox'>").attr("data-id", d.id);
-                label.append(chk).append(" [" + d.id + "] " + d.nom);
+                label.append(chk).append(" [" + d.solicitudID + "] " + d.nom);
                 groupDiv.append(label);
             });
 
@@ -649,6 +652,14 @@ $("#btnFusionar").click(function() {
 
         $("#fusionModal").modal("hide");
     });
+    
+    
+    //Añadir evento para cerrar el formulario pulsando en close.
+    
+    $("#fusionModal .btn-close").click(function(){
+    	$("#fusionModal").modal("hide");
+    });
+    
 
 /*     $("#fusionForm").on("submit", function(e) {
         // Guardar arrays en los hidden inputs como strings separados por coma
