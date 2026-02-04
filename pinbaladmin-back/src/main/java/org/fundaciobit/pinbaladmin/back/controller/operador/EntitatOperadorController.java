@@ -113,6 +113,8 @@ public class EntitatOperadorController extends EntitatController {
 
 	// public static final int SOLICITUDS = 1;
 	public static final int DOCS = 1;
+//	public static final int PREALTAS_OK = 2;
+	
 	public static final String PREALTAS = "PREALTAS";
 
 	@Override
@@ -162,6 +164,14 @@ public class EntitatOperadorController extends EntitatController {
 			adfield4.setEscapeXml(false);
 			entitatFilterForm.addAdditionalField(adfield4);
 
+//			AdditionalField<Long, String> adfieldPreAltasOk = new AdditionalField<Long, String>();
+//			adfieldPreAltasOk.setCodeName("=PREALTAS OK.");
+//			adfieldPreAltasOk.setPosition(PREALTAS_OK);
+//			// Els valors s'ompliran al mètode postList()
+//			adfieldPreAltasOk.setValueMap(new HashMap<Long, String>());
+//			adfieldPreAltasOk.setEscapeXml(false);
+//			entitatFilterForm.addAdditionalField(adfieldPreAltasOk);
+			
 			// Boto per afegir, editar o modificar documents de l'entitat
 			entitatFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_FILE,
 					"documentsentitatlocal", "/operador/entitat/documents/{0}", AdditionalButtonStyle.SUCCESS));
@@ -185,6 +195,9 @@ public class EntitatOperadorController extends EntitatController {
 		return entitatFilterForm;
 	}
 
+	HashMap<Long, List<ServeiBasic>> mapEntitatsPinbal = new HashMap<Long, List<ServeiBasic>>();
+	
+
 	@Override
 	public void postList(HttpServletRequest request, ModelAndView mav, EntitatFilterForm filterForm, List<Entitat> list)
 			throws I18NException {
@@ -203,6 +216,186 @@ public class EntitatOperadorController extends EntitatController {
 		map = (Map<Long, String>) filterForm.getAdditionalField(DOCS).getValueMap();
 		map.clear();
 
+//		Map<Long, String> mapPreAltas;
+//		mapPreAltas = (Map<Long, String>) filterForm.getAdditionalField(PREALTAS_OK).getValueMap();
+//		mapPreAltas.clear();
+//		
+//		clientRecobriment = getClientRecobriment();
+//		List<es.caib.pinbal.client.recobriment.v2.Entitat> entitatsPinbal = null;
+//		
+//		try {
+//			log.info("Recuperant entitats de Pinbal per comprovar PREALTAS...");
+//			entitatsPinbal = clientRecobriment.getEntitats();
+//			log.info("Entitats de Pinbal recuperades: " + (entitatsPinbal != null ? entitatsPinbal.size() : "null"));
+//		} catch (Exception e) {
+//			log.error("Error recuperant entitats de Pinbal per comprovar PREALTAS: " + e.getMessage());
+//		}
+//
+//		if (entitatsPinbal != null) {
+//			if (entitatsPinbal.size() == mapEntitatsPinbal.size()) {
+//				log.info("Les entitats de Pinbal ja estaven carregades prèviament. No es tornen a carregar.");
+//			} else {
+//				for (Entitat entitat : list) {
+//					String codiPinbal = entitat.getCodiPinbal();
+//					for (es.caib.pinbal.client.recobriment.v2.Entitat entitatPinbal : entitatsPinbal) {
+//						if (entitatPinbal.getCodi().equals(codiPinbal)) {
+//							//Entitat trobada a Pinbal. Recuperam els serveis.
+//							try {
+//								List<ServeiBasic> serveisEntitat = clientRecobriment.getServeisPerEntitat(codiPinbal);
+//								mapEntitatsPinbal.put(entitat.getEntitatID(), serveisEntitat);
+//
+//								log.info("Serveis de l'entitat  " + codiPinbal + ": "
+//										+ (serveisEntitat != null ? serveisEntitat.size() : "null"));
+//							} catch (Exception e) {
+//								log.error("Error recuperant serveis de l'entitat Pinbal " + codiPinbal + ": "
+//										+ e.getMessage());
+//							}
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		for (Entitat entitat : list) {
+//			
+//			boolean usuariCreat = false; //Si está a la llista d'entitats de pinbal, l'usuari està creat.
+//			boolean serveisActius = false; //Si tots els serveis estan actius. Es podrá crear PRE-ALTAS.
+//			boolean procCreat = false; // Si el procediment PREALTAS ja està creat a l'entitat
+//			
+//			List<ServeiBasic> serveisEntitat = mapEntitatsPinbal.get(entitat.getEntitatID());
+//			if (serveisEntitat != null) {
+//				usuariCreat = true;
+//				int actius = 0;
+//				for (ServeiBasic servei : serveisEntitat) {
+//					String codi = servei.getCodi();
+//					if (codi.equals(CODI_CONSULTA) || codi.equals(CODI_ALTA) || codi.equals(CODI_MODIFICACIO)) {
+//						if (servei.getActiu()) {
+//							actius++;
+//						} else {
+//							log.warn("Servei NO actiu a l'entitat Pinbal: " + codi);
+//						}
+//					}
+//				}
+//
+//				if (actius == 3) {
+//					serveisActius = true;
+//					
+//					//Comprovam si el procediment PREALTAS ja està creat.
+//					ProcedimentClient procedimentClient = getProcedimentClient();
+//					try {
+//						log.info("Comprovant si el procediment " + PREALTAS + " ja està creat a l'entitat: "
+//								+ entitat.getNom());
+//						Procediment existing = procedimentClient.getProcediment(PREALTAS, entitat.getCodiPinbal());
+//						if (existing != null) {
+//							procCreat = true;
+//							log.info("El procediment " + PREALTAS + " ja existia per a l'entitat: " + entitat.getNom()
+//									+ ". ID: " + existing.getId());
+//						}
+//					} catch (Exception e) {
+//						log.info("No s'ha trobat procediment " + PREALTAS + " existent (o error al comprovar): ");
+//					}
+//				}
+//				
+//			}
+//			
+//			
+//			String strPreAltas = "";
+//			
+//			if (usuariCreat) {
+//				strPreAltas = "Usuari Creat";
+//
+//				if (serveisActius) {
+//					strPreAltas += "<br> (Ok Serveis)";
+//					
+//					if (procCreat) {
+//						strPreAltas += "<br> (Proc. Creat)";
+//					} else {
+////						strPreAltas += "<br> (Ok Serveis)";
+//					}
+//				} else {
+//					strPreAltas += "<br> (Serveis NO Actius)";
+//				}
+//			} else {
+//				strPreAltas = "No";
+//			}
+//			
+//			mapPreAltas.put(entitat.getEntitatID(), strPreAltas);
+//		}
+//		
+		
+//		for (Entitat entitat : list) {
+//
+//			// PREALTAS
+//
+//			String codiPinbal = null;
+//			if (entitat instanceof EntitatJPA) {
+//				codiPinbal = ((EntitatJPA) entitat).getCodiPinbal();
+//			}
+//			boolean preAltasOk = false;
+//			boolean serveisActius = false;
+//			if (entitatsPinbal != null && codiPinbal != null) {
+//				for (es.caib.pinbal.client.recobriment.v2.Entitat entitatPinbal : entitatsPinbal) {
+//					if (codiPinbal.equals(entitatPinbal.getCodi())) {
+//						preAltasOk = true;
+//						
+//						// Comprovam que els serveis estiguin actius
+//						List<ServeiBasic> serveisEntitat = null;
+//						try {
+//							serveisEntitat = clientRecobriment.getServeisPerEntitat(codiPinbal);
+//							mapEntitatsPinbal.put(entitat.getEntitatID(), serveisEntitat);
+//							
+//							log.info("Serveis de l'entitat  " + codiPinbal + ": "
+//									+ (serveisEntitat != null ? serveisEntitat.size() : "null"));
+//						} catch (Exception e) {
+//							log.error("Error recuperant serveis de l'entitat Pinbal " + codiPinbal + ": "
+//									+ e.getMessage());
+//						}
+//						
+//						int actius = 0;
+//						if (serveisEntitat != null) {
+//							for (ServeiBasic servei : serveisEntitat) {
+//								String codi = servei.getCodi();
+//								if (codi.equals(CODI_CONSULTA) || codi.equals(CODI_ALTA)
+//										|| codi.equals(CODI_MODIFICACIO)) {
+//									if (servei.getActiu()) {
+//										actius++;
+//									} else {
+//										log.warn("Servei NO actiu a l'entitat Pinbal: " + codi);
+//									}
+//								}
+//							}
+//						}
+//						
+//						if (actius == 3) {
+//							serveisActius = true;
+//						}
+//						
+//						break;
+//					}
+//				}
+//			}
+//			
+//			String strPreAltas = "";
+//			
+//			if (preAltasOk) {
+//				strPreAltas = "Si";
+//				
+//				if (serveisActius) {
+//					strPreAltas += " (Ok Serveis)";
+//				} else {
+//					strPreAltas += " (Serveis NO Actius)";
+//				}
+//			} else {
+//				strPreAltas = "No";
+//			}
+//			
+//			mapPreAltas.put(entitat.getEntitatID(), strPreAltas);
+//		}
+//		
+		
+
+		
 		for (Entitat entitat : list) {
 
 			// DOCUMENTS
