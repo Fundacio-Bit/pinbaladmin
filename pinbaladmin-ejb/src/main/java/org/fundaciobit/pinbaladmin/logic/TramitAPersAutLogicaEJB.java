@@ -835,6 +835,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		for (String excel : excels) {
 			log.info("Generant Excel de Serveis: " + excel);
 			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel, docConsentiment);
+			if (data == null) {
+				String msg = "No hi ha serveis " + excel + " per a la sol·licitud";
+				log.warn(msg);
+				continue;
+			}
 
 			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx
 			String nom = excel + "_" + SDF.format(new Date()) + "_" + plantillaXLSX.getName();

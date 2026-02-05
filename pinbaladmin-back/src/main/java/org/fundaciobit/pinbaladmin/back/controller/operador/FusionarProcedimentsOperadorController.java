@@ -26,6 +26,7 @@ import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
@@ -845,7 +846,12 @@ public class FusionarProcedimentsOperadorController {
 		Long organid = solicitudNueva.getOrganid();
 
 		Properties prop;
-		Fitxer docConsentiment = fitxerPublicLogicaEjb.findByPrimaryKey(solicitudNueva.getFitxerConsentimentID());
+		
+        Fitxer docConsentiment = null;
+        Long docConsentID = solicitudNueva.getFitxerConsentimentID();
+        if (docConsentID != null) {
+			docConsentiment = fitxerPublicLogicaEjb.findByPrimaryKey(docConsentID);
+        }
 
 //		generarDocumentsSolicitud(nuevaSolicitudID, organid, prop);
 		generarExcelDeServeis(solicitudNueva, docConsentiment);
@@ -977,6 +983,12 @@ public class FusionarProcedimentsOperadorController {
 			log.info("Generant Excel de Serveis: " + excel);
 			byte[] data = CrearExcelDeServeis.crearExcelDeServeis(plantillaXLSX, soli, excel, docConsentiment);
 
+			if (data == null) {
+				String msg = "No hi ha serveis " + excel + " per a la sol·licitud";
+				log.warn(msg);
+				continue;
+			}
+			
 			// locals_2019-12-31_12:26_Plantilla-Procedimientos.xlsx
 			String nom = excel + "_" + SDF.format(new Date()) + "_" + plantillaXLSX.getName();
 

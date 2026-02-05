@@ -301,19 +301,12 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             File plantillaXLSX = new File(Configuracio.getTemplateServeisExcel()); // baseFile, "Plantilla-Procedimientos.xlsx");
 
             //File dest = new File(baseFile, "generat.xlsx");
-
-            Fitxer docConsentiment = null;
-			List<Long> documentsSolicitud = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
-					DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
-			
-			for (Long docSoli : documentsSolicitud) {
-				Document doc = documentEjb.findByPrimaryKey(docSoli);
-				if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP || doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) {
-					docConsentiment = fitxerEjb.findByPrimaryKey(doc.getFitxerOriginalID());
-					break;
-				}
-			}
             
+            Fitxer docConsentiment = null;
+            Long docConsentID = soli.getFitxerConsentimentID();
+            if (docConsentID != null) {
+            	docConsentiment = fitxerEjb.findByPrimaryKey(docConsentID );
+            }
             
 			String[] excels = { "locals", "estatals" };
 

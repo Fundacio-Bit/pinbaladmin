@@ -7,15 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.xml.parsers.ParserConfigurationException;
 
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
@@ -23,16 +24,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
-import org.fundaciobit.pinbaladmin.model.entity.Document;
-import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
-import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
-import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudServeiJPA;
@@ -53,6 +48,7 @@ public class CrearExcelDeServeis {
   @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentLogicaService.JNDI_NAME)
   protected static org.fundaciobit.pinbaladmin.logic.DocumentLogicaService documentLogicEjb;
 
+  public static final SimpleDateFormat SDF = new SimpleDateFormat("YYYY/MM/dd");
   
   public static final String[] CAMPS_EXCEL = {
           "Código del Procedimiento", //0
@@ -62,14 +58,14 @@ public class CrearExcelDeServeis {
           "Periodo", //4
           "Descripción (Codi. Desc. de Sol·licitud o DESCRIPCION de formulari.xml))", //5
           "Tipo de Procedimiento", //6
-          "Consentimiento (Possibles valors: Si, Sí, Llei, Ley, No oposició, No oposición) ", //7
+          "Consentimiento (Possibles valors: NO_OPOSICION/Si/Ley) ", //7
           "Norma Legal", //8
           "Artículos", //9
           "Enlace http Norma Legal", //10
           "Enlace http Consentimiento ", //11
-          "Caducidad", //12
-          "Periódico", //13
-          "Automatizado", //14
+          "Fecha de Caducidad (AAAA/MM/DD (o 'No caduca')", //12
+          "Periódico (SI/NO)", //13
+          "Automatizado (SI/NO)", //14
           "Peticiones al dia" // 15 
   };
 
@@ -90,18 +86,22 @@ public class CrearExcelDeServeis {
 
     String codiProc = soli.getProcedimentCodi(); // values.get("FORMULARIO.DATOS_SOLICITUD.CODIPROC");
     String nomProc = soli.getProcedimentNom(); // values.get("FORMULARIO.DATOS_SOLICITUD.NOMBREPROC");
-    String tipusProcediment = soli.getProcedimentTipus();
+    String tipusProcedimentId = soli.getProcedimentTipus();
+    String tipusProc = TipusProcediments.getTipusProceimentById(tipusProcedimentId, "es");
+    
     String descripcio = soli.getCodiDescriptiu(); // values.get("FORMULARIO.DATOS_SOLICITUD.DESCRIPCION");
 
+    String fechaCad = soli.getDataCaducitat() != null ? SDF.format(soli.getDataCaducitat()) : "No caduca"; // values.get("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
+    
 	String origen = soli.getConsentiment();
 	String consentiment = "";
 	if (origen.equals("noop")) consentiment = "NO_OPOSICION";
 	if (origen.equals("si")) consentiment = "Si";
 	if (origen.equals("llei")) consentiment = "Ley";
-	
+
 	log.info("Consentiment. Abans: " + origen + " Despres: " + consentiment);
 	
-    String periodo = "10 años";
+//    String periodo = "10 años";
     String automatizado = "NO"; //soli.getAutomatizado(); // values.get("FORMULARIO.DATOS_SOLICITUD.AUTOMATIZADO");
     String periodico = "NO"; //soli.getPeriodico(); // values.get("FORMULARIO.DATOS_SOLICITUD.PERIODICO");
     String peticionsDia = "30"; //soli.getPetsDia(); // values.get("FORMULARIO.DATOS_SOLICITUD.PETICIONESDIA");
@@ -133,7 +133,8 @@ public class CrearExcelDeServeis {
       dades[1] = nomProc;
 
       // C 2 Cercar el cedent de (SVDDGPCIWS02 => DGP)
-      dades[2] = ss.getServei().getEntitatServei().getNom(); // values.get(base
+      String cedent = ss.getServei().getEntitatServei().getNom();
+      dades[2] = cedent; // values.get(base
                                                              // + "CODISERV");
                                                              // // TODO XYZ ZZZ
 
@@ -141,8 +142,8 @@ public class CrearExcelDeServeis {
       dades[3] = ss.getServei().getNom(); // values.get(base + "NOMSERVEI");
 
       //E 4 PERIODO 
-      if (ss.getServei().getCodi().equals("SVDINESECOPAHISTORICOMUNICIPIOSWS01")) {
-          dades[4] = periodo;        
+      if (cedent.equals("INE")) {
+          dades[4] = "SI";        
       }else {
           dades[4] = "";        
       }
@@ -150,7 +151,7 @@ public class CrearExcelDeServeis {
       dades[5] = descripcio;
 
       //  G 6 (Ayudas, Becas y Subvenciones) TIPUS PROCEDIMENT
-      dades[6] = tipusProcediment;
+      dades[6] = tipusProc;
 
       // H 7 FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.CONSENTIMIENTO No
       dades[7] = consentiment;
@@ -207,17 +208,11 @@ public class CrearExcelDeServeis {
       }
 
       // M 12 FORMULARIO.DATOS_SOLICITUD.CADUCA o
-      // FORMULARIO.DATOS_SOLICITUD.FECHACAD
-      {
-        String caduca = ss.getFechaCaduca(); // values.get("FORMULARIO.DATOS_SOLICITUD.FECHACAD");
-        if (caduca == null || caduca.trim().length() == 0) {
-          caduca = ss.getCaduca(); // values.get("FORMULARIO.DATOS_SOLICITUD.CADUCA");
-        }
-        dades[12] = caduca;
-      }
+      dades[12] = fechaCad; // Puede ser "NO CADUCA" o una fecha formateada como "AAAA/MM/DD"
 
       // N 13 Periodico (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
       dades[13] = periodico;
+
       // O 14 Automatizado (FORMULARIO.DATOS_SOLICITUD.LELSERVICIOS.ID2.ENLACENOR)
       dades[14] = automatizado;
       
@@ -238,6 +233,10 @@ public class CrearExcelDeServeis {
     try {
       Long soliID = soli.getSolicitudID();
       Map<Long, String[]> dadesByServeiSolicitudID = getDadesExcelBySoliServeiID(soli, tipusExcel, docConsentiment);
+      
+		if (dadesByServeiSolicitudID.isEmpty()) {
+			return null;
+		}
 
       // Read Excel document first
       input_document = new FileInputStream(plantillaXLSX);

@@ -517,6 +517,106 @@ public class EntitatOperadorController extends EntitatController {
 	}
 	
 	public void crearPreAltaPerEntitatJPA(EntitatJPA entitat, ClientRecobriment clientRecobriment,
+			ProcedimentClient procedimentClient) throws Exception {
+
+		String dir3Local = entitat.getDir3();
+		String codiPinbal = entitat.getCodiPinbal();
+		String nomEntitat = entitat.getNom();
+
+		log.info("[PREALTAS] Inici procés per a l'entitat: " + nomEntitat + " (" + codiPinbal + ")");
+
+		// 1. Recuperar serveis de l'entitat
+		log.info("[PREALTAS] Recuperant serveis de l'entitat a Pinbal: " + codiPinbal);
+		List<ServeiBasic> serveisEntitat = clientRecobriment.getServeisPerEntitat(codiPinbal);
+
+		if (serveisEntitat == null) {
+			log.error("[PREALTAS] L'entitat no te serveis, o no s'han pogut recuperar. Entitat=" + codiPinbal);
+			throw new Exception("L'entitat no te serveis, o no s'han pogut recuperar.");
+		}
+
+		log.info("[PREALTAS] Serveis recuperats: " + serveisEntitat.size());
+
+		// 2. Comprovar serveis actius necessaris
+		int serveisActius = 0;
+
+		for (ServeiBasic servei : serveisEntitat) {
+			String codiServei = servei.getCodi();
+
+			if (CODI_CONSULTA.equals(codiServei) || CODI_ALTA.equals(codiServei)
+					|| CODI_MODIFICACIO.equals(codiServei)) {
+
+				if (servei.getActiu()) {
+					serveisActius++;
+					log.info("[PREALTAS] Servei actiu: " + codiServei);
+				} else {
+					log.warn("[PREALTAS] Servei NO actiu: " + codiServei);
+				}
+			}
+		}
+
+		if (serveisActius < 3) {
+			log.warn("[PREALTAS] Serveis actius insuficients (" + serveisActius + "/3). Entitat=" + codiPinbal);
+			throw new Exception("L'entitat no té actius tots els serveis necessaris.");
+		}
+
+		// 3. Comprovar si el procediment ja existeix
+		Long procedimentID = null;
+
+		try {
+			Procediment existing = procedimentClient.getProcediment(PREALTAS, codiPinbal);
+			if (existing != null) {
+				procedimentID = existing.getId();
+				log.info("[PREALTAS] Procediment ja existent. ID=" + procedimentID);
+			}
+		} catch (Exception e) {
+			log.info("[PREALTAS] No s'ha trobat procediment existent. Es crearà un de nou.");
+		}
+
+		// 4. Crear procediment si no existeix
+		if (procedimentID == null) {
+			log.info("[PREALTAS] Creant nou procediment PREALTAS");
+
+			Procediment procediment = crearProcPreAlta(codiPinbal, dir3Local);
+
+			log.info("[PREALTAS] Dades del procediment:");
+			log.info("   - ID: " + procediment.getId());
+			log.info("   - Codi: " + procediment.getCodi());
+			log.info("   - Nom: " + procediment.getNom());
+			log.info("   - Departament: " + procediment.getDepartament());
+			log.info("   - EntitatCodi: " + procediment.getEntitatCodi());
+			log.info("   - OrganGestorDir3: " + procediment.getOrganGestorDir3());
+			log.info("   - Actiu: " + procediment.isActiu());
+			log.info("   - CodiSia: " + procediment.getCodiSia());
+			log.info("   - ClaseTramite: " + procediment.getValorCampClaseTramite());
+			log.info("   - Automatizado: " + procediment.getValorCampAutomatizado());
+
+			procedimentClient.createProcediment(procediment);
+			log.info("[PREALTAS] Procediment creat correctament");
+
+			// Recuperar ID del procediment creat
+			Procediment created = procedimentClient.getProcediment(PREALTAS, codiPinbal);
+			if (created == null) {
+				log.error("[PREALTAS] Procediment creat però no recuperable");
+				throw new Exception("Error recuperant el procediment creat.");
+			}
+
+			procedimentID = created.getId();
+			log.info("[PREALTAS] ID del procediment creat: " + procedimentID);
+		}
+
+		// 5. Autoritzar serveis
+		if (procedimentID != null) {
+			log.info("[PREALTAS] Autoritzant serveis al procediment ID=" + procedimentID);
+			autoritzarServeisPreAltaProcediment(procedimentID, procedimentClient);
+			log.info("[PREALTAS] Procés finalitzat correctament");
+		} else {
+			log.error("[PREALTAS] No s'ha pogut obtenir l'ID del procediment");
+			throw new Exception("No s'ha pogut crear ni recuperar el procediment PREALTAS.");
+		}
+
+	}
+
+	public void crearPreAltaPerEntitatJPAOld(EntitatJPA entitat, ClientRecobriment clientRecobriment,
 			ProcedimentClient procedimentClient) throws I18NException {
 
 		// 1. Obtenim el cif i el dir3 de l'entitat.
@@ -558,7 +658,10 @@ public class EntitatOperadorController extends EntitatController {
 				}
 			}
 
-			if (actius < 3) {
+			if (actius == 0) {
+				log.error("No s'han pogut recuperar els serveis de l'entitat Pinbal: " + codiPinbal
+						+ ". No es pot crear el procediment PREALTAS.");
+			}else if (actius < 3) {
 				log.error("No tots els serveis necessaris estan actius a l'entitat Pinbal. "
 						+ "No es pot crear el procediment PREALTAS.");
 //				HtmlUtils.saveMessageError(request, "No tots els serveis necessaris estan actius a l'entitat Pinbal. "
@@ -633,6 +736,8 @@ public class EntitatOperadorController extends EntitatController {
 				autoritzarServeisPreAltaProcediment(procedimentID, procedimentClient);
 			} else {
 				log.error("No s'ha pogut crear ni recuperar el procediment PREALTAS per a l'entitat: " + nomEntitat);
+				throw new Exception(
+						"No s'ha pogut crear ni recuperar el procediment PREALTAS per a l'entitat: " + nomEntitat);
 			}
 
 		} catch (Exception e) {
@@ -646,64 +751,49 @@ public class EntitatOperadorController extends EntitatController {
 	@RequestMapping(value = "/crearPreAltasEntitat/{id}", method = RequestMethod.GET)
 	public ModelAndView crearPreAltasEntitat(@PathVariable("id") Long id, HttpServletRequest request,
 			HttpServletResponse response) {
-		log.info("Iniciant crearPreAltasEntitat per id: " + id);
-		
+
+		log.info("[PREALTAS] Iniciant creació per a l'entitat amb id: " + id);
+
 		try {
 			ClientRecobriment clientRecobriment = getClientRecobriment();
 			ProcedimentClient procedimentClient = getProcedimentClient();
 			UsuariClient usuariClient = getUsuariClient();
 
-			
 			EntitatJPA entitatLocal = entitatLogicaEjb.findByPrimaryKey(id);
-			
-			//quan tenim l'entitat localitzada, obtenim l'usuari per crear el procediment.
-			UsuariEntitat usuari = crearUsuariPinbalAdminEntitat(entitatLocal, usuariClient);
-			
-			if (usuari != null) {
-				crearPreAltaPerEntitatJPA(entitatLocal, clientRecobriment,  procedimentClient);
 
-			}else {
-				log.error("No s'ha pogut crear l'usuari Pinbal per l'entitat: " + entitatLocal.getNom()
-						+ ". No es pot crear el procediment PREALTAS.");
+			if (entitatLocal == null) {
+				log.error("[PREALTAS] No s'ha trobat l'entitat amb id: " + id);
+				HtmlUtils.saveMessageError(request, "No s'ha trobat l'entitat indicada.");
+				return new ModelAndView("redirect:" + getContextWeb() + "/list");
 			}
 
-//			log.info("Entitat local recuperada: " + entitatLocal.getNom() + ", CIF: " + CIF + ", Dir3: " + dir3Local);
-//
-//			// Obtener las entidades de Pinbal, y recuperar la de CIF.
-//			log.info("Recuperant entitats de Pinbal...");
-//			List<es.caib.pinbal.client.recobriment.v2.Entitat> entitatsPinbal = clientRecobriment.getEntitats();
-//			log.info("Entitats de Pinbal recuperades: " + (entitatsPinbal != null ? entitatsPinbal.size() : "null"));
-//
-//			es.caib.pinbal.client.recobriment.v2.Entitat entitatPinbalFound = null;
-//			if (entitatsPinbal != null) {
-//				for (es.caib.pinbal.client.recobriment.v2.Entitat entitatPinbal : entitatsPinbal) {
-//					if (CIF != null && CIF.equalsIgnoreCase(entitatPinbal.getCif())) {
-//						entitatPinbalFound = entitatPinbal;
-//						log.info("Entitat Pinbal trobada per CIF " + CIF + ": Codi=" + entitatPinbal.getCodi());
-//						break;
-//					}
-//				}
-//			}
-//
-//			if (entitatPinbalFound == null) {
-//				log.warn("No s'ha trobat cap entitat a Pinbal amb CIF: " + CIF
-//						+ ". No es pot crear el procediment PREALTAS.");
-//				throw new I18NException("No s'ha trobat cap entitat a Pinbal amb CIF: " + CIF
-//						+ ". No es pot crear el procediment PREALTAS.");
-////				HtmlUtils.saveMessageError(request, "No s'ha trobat cap entitat a Pinbal amb CIF: " + CIF
-////						+ ". No es pot crear el procediment PREALTAS.");
-////				return new ModelAndView("redirect:" + getContextWeb() + "/list");
-//			}
-//			
-//			//Si hem arribat aquí, tenim l'entitat a Pinbal. Obtenim el codi.
-//			String CODI_ENTITAT = entitatPinbalFound.getCodi();
-			
-		} catch (I18NException e) {
-			log.error("Error a crearPreAltasEntitat", e);
-			HtmlUtils.saveMessageError(request, I18NUtils.getMessage(e));
-//			HtmlUtils.saveMessageError(request, "Error: " + I18NException.getMessage(e));
+			log.info("[PREALTAS] Entitat trobada: " + entitatLocal.getNom());
+
+			// Crear o recuperar usuari Pinbal
+			UsuariEntitat usuari = crearUsuariPinbalAdminEntitat(entitatLocal, usuariClient);
+
+			if (usuari == null) {
+				log.error("[PREALTAS] No s'ha pogut crear l'usuari Pinbal per a l'entitat: " + entitatLocal.getNom());
+				HtmlUtils.saveMessageError(request, "No s'ha pogut crear l'usuari necessari per a l'entitat.");
+				return new ModelAndView("redirect:" + getContextWeb() + "/list");
+			}
+
+			log.info("[PREALTAS] Usuari Pinbal creat o existent per a l'entitat");
+
+			// Crear procediment PREALTAS
+			crearPreAltaPerEntitatJPA(entitatLocal, clientRecobriment, procedimentClient);
+
+			HtmlUtils.saveMessageInfo(request,
+					"El procediment PREALTAS s'ha creat correctament per a l'entitat " + entitatLocal.getNom());
+
+			log.info("[PREALTAS] Procés finalitzat correctament per a l'entitat: " + entitatLocal.getNom());
+
+		} catch (Exception e) {
+			log.error("[PREALTAS] Error durant la creació del procediment: " + e.getMessage(), e);
+
+			HtmlUtils.saveMessageError(request, "Error:" + e.getMessage());
 		}
-		
+
 		return new ModelAndView("redirect:" + getContextWeb() + "/list");
 	}
 

@@ -85,6 +85,26 @@ public class TipusProcediments {
     public static List<TipusProcediment> getAllTipusProcediments() {
         return tipusProcediments;
     }
+    
+    public static String getTipusProceimentById(String id, String lang) {
+		if (id == null || lang == null) {
+			return null;
+		}
+
+		for (TipusProcediment tipusProcediment : tipusProcediments) {
+			
+			if (String.valueOf(tipusProcediment.id).equals(id)) {
+				
+				if (lang.equalsIgnoreCase("es")) {
+					return tipusProcediment.castella;
+				} else if (lang.equalsIgnoreCase("ca")) {
+					return tipusProcediment.catala;
+				}
+			}
+		}
+
+		return null;
+    }
 
     /**
      * 

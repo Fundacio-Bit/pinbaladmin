@@ -1384,8 +1384,10 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 	int nifsTrobatsOrganGestor = 0;
 	
-	String FALTA_CORREU = "ZZZ";
+	String FALTA_CORREU = "---";
 	
+	HashMap<String, List<ContacteJPA>> cacheContactes = new HashMap<>();		
+
 	private void guardarDatosTitularEnContacte() throws Exception{
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
 
@@ -1395,6 +1397,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		int titularsPerXML = 0;
 		int titularsPerPlugin = 0;
 		int titularsDirector = 0;
+		int titularsCacheContactes = 0;
+		int titularsCacheContactesMultiple = 0;
+		int titularesCacheMultiplesPosibles = 0;
 		
 		for (Solicitud soli : solicituds) {
 			log.info("Solicitud: " + soli.getSolicitudID());
@@ -1421,9 +1426,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
     		
 			//Si arriba aquí, crear el contacte.
 			
-			ContacteJPA titularJpa = new ContacteJPA();
 			
-			titularJpa.setNif(nifTitular);
+//			titularJpa.setNif(nifTitular);
 			String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
 			String llinatge1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
 			String llinatge2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
@@ -1513,10 +1517,79 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		
 		
 		
+		// En aquest punt, hi ha solicituds amb NIF del titular, pero sense la resta de dades, i no son organs de govern. 
+		// S'hauria de fer una pasada i veure si tenim dades dels nifs a cacheContactes.
+		Where correuKo = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
+		Where correuNull = SolicitudFields.TITULARFIRMAEMAIL.isNull();
+		Where nomNull = SolicitudFields.TITULARFIRMANOM.isNull();
+		Where llinatgesNull = SolicitudFields.TITULARFIRMALLINATGES.isNull();
+		
+		Where NIFOK = SolicitudFields.TITULARFIRMANIF.isNotNull();
+		
+		Where wFaltaDades = Where.OR(correuKo, correuNull, nomNull, llinatgesNull);
+		List<Solicitud> solicitudsFaltaDades = solicitudLogicaEjb.select(Where.AND(wLocals, NIFOK, wFaltaDades));
+		
+		for (Solicitud soli : solicitudsFaltaDades) {
+			String nifTitular = soli.getTitularFirmaNif();
+			List<ContacteJPA> contactes = cacheContactes.get(nifTitular);
+			
+			if (contactes != null && contactes.size() > 0) {
+				
+				if (contactes.size() == 1) {
+
+					ContacteJPA contacte = contactes.get(0);
+
+					setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
+							"CacheContactes");
+					titularsCacheContactes++;
+					log.info("Solicitud: " + soli.getSolicitudID()
+							+ " - Dades del titular actualitzades a partir de cacheContactes. NIF: " + nifTitular);
+				} else {
+					// Casos raros de varios contactos en mismo NIF.
+					// Tenemos que ver cuantos tienen la información completa. Si solo hay uno, assignar ese. Si hay varios, no assignar ninguno porque no sabemos cual es el correcto.
+					
+					int completos = 0;
+					int idxCompleto = -1;
+					for (int i = 0; i < contactes.size(); i++) {
+						ContacteJPA c = contactes.get(i);
+						if (c.getNom() != null && !c.getNom().isEmpty() && c.getLlinatge1() != null
+								&& !c.getLlinatge1().isEmpty() && c.getMail() != null && !c.getMail().isEmpty()
+								&& !c.getMail().equals(FALTA_CORREU)) {
+							completos++;
+							idxCompleto = i;
+						}
+					}
+					
+					if (completos == 1) {
+                        ContacteJPA contacte = contactes.get(idxCompleto);
+
+                        setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
+                                "CacheContactes-Multiple");
+                        titularsCacheContactesMultiple++;
+                        log.info("Solicitud: " + soli.getSolicitudID()
+                                + " - Dades del titular actualitzades a partir de cacheContactes (caso múltiple, pero solo un contacto con info completa). NIF: " + nifTitular);
+					} else if (completos > 1) {
+						//Varios casos posibles para este titular.
+						titularesCacheMultiplesPosibles++;
+					}
+				}
+			} else {
+				log.info("Solicitud: " + soli.getSolicitudID() + " - No tenim dades del titular a cacheContactes. NIF: "
+						+ nifTitular);
+			}
+		}
+				
+		
+		
+		
+		
 		
 		log.info("Contactes titulars creats a partir de XML: " + titularsPerXML);
 		log.info("Contactes titulars creats a partir de Plugin UserInfo: " + titularsPerPlugin);
 		log.info("Contactes titulars creats a partir de Director General de GOVERN: " + titularsDirector);
+		log.info("Contactes titulars creats a partir de cacheContactes: " + titularsCacheContactes);
+		log.info("Contactes titulars creats a partir de cacheContactes en casos múltiples pero con un solo contacto con info completa: " + titularsCacheContactesMultiple);
+		log.info("Solicituds con múltiples posibles titulares en cacheContactes: " + titularesCacheMultiplesPosibles);
 	}
 
 	private void setDadesTitular(UserInfo userInfoDG, Solicitud soli, String origen) {
@@ -1534,11 +1607,18 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		setDadesTitular(nifDG, nom, llinatges, mail, soli, origen);
 	}
 	
-	private void setDadesTitular(String nifDG, String nom, String llinatges, String mail, Solicitud soli, String origen) {
+	private void setDadesTitular(String nifTitular, String nom, String llinatges, String mail, Solicitud soli, String origen) {
 		
-		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifDG + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
+		nifTitular = nifTitular.toUpperCase();
 		
-		soli.setTitularFirmaNif(nifDG);
+		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifTitular + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
+		
+		
+		ContacteJPA titularJpa = new ContacteJPA(nifTitular, nom, llinatges, null, null, null, mail);
+
+		afegirContacteCache(nifTitular, titularJpa);	
+		
+		soli.setTitularFirmaNif(nifTitular);
 		soli.setTitularFirmaNom(nom);
 		soli.setTitularFirmaLlinatges(llinatges);
 		soli.setTitularFirmaEmail(mail);
@@ -1552,7 +1632,39 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 	}
 	
-	
+	private void afegirContacteCache(String nif, ContacteJPA contacte) {
+		List<ContacteJPA> contactesDelNIF = cacheContactes.get(nif);
+		if (contactesDelNIF == null) {
+			contactesDelNIF = new java.util.ArrayList<>();
+			contactesDelNIF.add(contacte);
+			cacheContactes.put(nif, contactesDelNIF);
+		} else {
+			// Si ya tenemos contactos con ese NIF, asegurar que lo añadimos solo si tiene
+			// algun campo diferente (nombre, apellidos o mail) para no crear contactos
+			// repetidos sin información adicional.
+
+			boolean afegit = false;
+
+			for (ContacteJPA c : contactesDelNIF) {
+				if (c.getNom().equals(contacte.getNom()) && c.getLlinatge1().equals(contacte.getLlinatge1())
+						&& c.getMail().equals(contacte.getMail())) {
+					log.info(
+							"Ya tenemos un contacto con el mismo NIF y misma información. No añadimos nuevo contacto. NIF: "
+									+ nif);
+					afegit = true;
+					break;
+				}
+			}
+
+			if (!afegit) {
+				log.info(
+						"Tenemos un contacto con el mismo NIF pero diferente información. Añadimos nuevo contacto. NIF: "
+								+ nif);
+
+				contactesDelNIF.add(contacte);
+			}
+		}
+	}
 	
 	
 	
