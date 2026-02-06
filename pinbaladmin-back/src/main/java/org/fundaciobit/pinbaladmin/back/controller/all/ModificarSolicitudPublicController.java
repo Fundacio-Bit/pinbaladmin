@@ -360,23 +360,23 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
 		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
 		mod.setConsentiment(solicitud.getConsentiment());
+		mod.setDoCconsentimentID(solicitud.getFitxerConsentimentID());
 		
-		
-		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
-				DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
-
-		List<Long> tipusDocuments = new ArrayList<Long>();
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
-
-		List<Document> documents = documentLogicaEjb.select(Where
-				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
-
-		log.info("Tenim " + documents + " posibles documents de consentiment.");
-		for (Document document : documents) {
-			mod.setDoCconsentimentID(document.getFitxerOriginalID());
-			break;
-		}
+//		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+//				DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
+//
+//		List<Long> tipusDocuments = new ArrayList<Long>();
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
+//
+//		List<Document> documents = documentLogicaEjb.select(Where
+//				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
+//
+//		log.info("Tenim " + documents + " posibles documents de consentiment.");
+//		for (Document document : documents) {
+//			mod.setDoCconsentimentID(document.getFitxerOriginalID());
+//			break;
+//		}
 
 	}
 	
@@ -782,28 +782,31 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 				modificacio.getResponsableProceMail());
 		appendSiModificat(msg, "Consentiment", original.getConsentiment(), modificacio.getConsentiment());
 
-		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
-				DocumentSolicitudFields.SOLICITUDID.equal(soliID));
-
-		List<Long> tipusDocuments = new ArrayList<Long>();
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
-
-		List<Document> documents = documentLogicaEjb.select(Where
-				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
-
-		Long docConsentimentOriginalID = null;
-		Document consentimentOriginal = null;
-
-		log.info("Tenim " + documents.size() + " possibles documents de consentiment.");
-
-		// Obtenim el primer document de consentiment original
-		for (Document document : documents) {
-			docConsentimentOriginalID = document.getFitxerOriginalID();
-			consentimentOriginal = document;
-			break;
-		}
-
+//		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+//				DocumentSolicitudFields.SOLICITUDID.equal(soliID));
+//
+//		List<Long> tipusDocuments = new ArrayList<Long>();
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
+//
+//		List<Document> documents = documentLogicaEjb.select(Where
+//				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
+//
+//		Long docConsentimentOriginalID = null;
+//		Document consentimentOriginal = null;
+//
+//		log.info("Tenim " + documents.size() + " possibles documents de consentiment.");
+//
+//		// Obtenim el primer document de consentiment original
+//		for (Document document : documents) {
+//			docConsentimentOriginalID = document.getFitxerOriginalID();
+//			consentimentOriginal = document;
+//			break;
+//		}
+		
+		Long docConsentimentOriginalID = original.getFitxerConsentimentID();
+		FitxerJPA consentimentOriginal = original.getFitxerConsentiment();
+		
 		// Document nou de la modificació
 		Long docConsentimentNouID = modificacio.getDoCconsentimentID();
 		FitxerJPA docConsentimentNou = modificacio.getDoCconsentiment();

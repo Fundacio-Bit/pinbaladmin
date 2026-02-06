@@ -540,32 +540,32 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
     }
 
-    private Fitxer afegirDocumentConsentimentOld(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
-
-        if (fitxerConsentimentID != null) {
-
-        	log.info("Tenim document de consentiment: " + fitxerConsentimentID + " - " + consentiment );
-        	
-        	FitxerJPA cons = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerConsentimentID);
-        	File consFile = FileSystemManager.getFile(cons.getFitxerID());
-        	
-        	// Copiar fitxer de consentiment
-        	FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(), cons.getDescripcio());
-        	fitxerCopia = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxerCopia);
-        	
-        	File consFilePdf = FileSystemManager.getFile(fitxerCopia.getFitxerID());
-        	FileSystemManager.copy(consFile, consFilePdf);
-        	
-        	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
-        	String nom = "Document Consentiment";
-        	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
-        	return fitxerCopia;
-        }else {
-        	log.info("No tenim document de consentiment");
-        	return null;
-        }
-
-    }
+//    private Fitxer afegirDocumentConsentimentOld(Long fitxerConsentimentID, String consentiment,  Long soliID) throws I18NException {
+//
+//        if (fitxerConsentimentID != null) {
+//
+//        	log.info("Tenim document de consentiment: " + fitxerConsentimentID + " - " + consentiment );
+//        	
+//        	FitxerJPA cons = fitxerPublicLogicaEjb.findByPrimaryKey(fitxerConsentimentID);
+//        	File consFile = FileSystemManager.getFile(cons.getFitxerID());
+//        	
+//        	// Copiar fitxer de consentiment
+//        	FitxerJPA fitxerCopia = new FitxerJPA(cons.getNom(), cons.getTamany(), cons.getMime(), cons.getDescripcio());
+//        	fitxerCopia = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxerCopia);
+//        	
+//        	File consFilePdf = FileSystemManager.getFile(fitxerCopia.getFitxerID());
+//        	FileSystemManager.copy(consFile, consFilePdf);
+//        	
+//        	Long tipus =  consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI) ? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI : Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
+//        	String nom = "Document Consentiment";
+//        	afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
+//        	return fitxerCopia;
+//        }else {
+//        	log.info("No tenim document de consentiment");
+//        	return null;
+//        }
+//
+//    }
 
     private Long ferCopiaFitxer(Long fileOriginalID) throws I18NException {
     	

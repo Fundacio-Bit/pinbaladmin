@@ -93,9 +93,7 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 
 		if (modSoli.getDoCconsentimentID() != null) {
 			FitxerJPA docConsentiment = fitxerPublicLogicaEjb.findByPrimaryKey(modSoli.getDoCconsentimentID());
-			Long tipus = modSoli.getConsentiment().equals(Constants.CONSENTIMENT_TIPUS_SI)
-					? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-					: Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
+			Long tipus = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 			String nom = "Document Consentiment " + LocalDateTime.now().format(formatter);

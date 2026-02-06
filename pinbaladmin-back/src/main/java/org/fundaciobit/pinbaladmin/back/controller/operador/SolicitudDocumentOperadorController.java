@@ -219,38 +219,40 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     }
 
-    // Si cream un document de consentiment, hem d'actualizar els camps de consentiment de la solicitud
 	@Override
 	public void postValidate(HttpServletRequest request, DocumentForm documentForm, BindingResult result)
 			throws I18NException {
 
 		super.postValidate(request, documentForm, result);
 
-		Long tipusDoc = documentForm.getDocument().getTipus();
-		updateConsentiment(request, tipusDoc);
+		// Si cream un document de consentiment, hem d'actualizar els camps de consentiment de la solicitud.
+		// UPDATE. Ara el consentiment s'ha de tenir tot a la taula solicitud. No als documents. Es manté el tipus de document per solicituds antigues.
+		
+//		Long tipusDoc = documentForm.getDocument().getTipus();
+//		updateConsentiment(request, tipusDoc);
 	}
    
-	public void updateConsentiment(HttpServletRequest request, Long tipusDoc) {
-		log.info("Provant si s'executa el metode");
-		if (tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-				|| tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP) {
-			try {
-				Long solicitudID = getSolicitudID(request);
-				if (solicitudID != null) {
-					SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-							? Constants.CONSENTIMENT_TIPUS_SI
-							: Constants.CONSENTIMENT_TIPUS_NOOP);
-
-					soli.setUrlconsentiment(null);
-					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
-					solicitudLogicaEjb.update(soli);
-				}
-			} catch (Throwable th) {
-				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
-			}
-		}
-	}
+//	public void updateConsentiment(HttpServletRequest request, Long tipusDoc) {
+//		log.info("Provant si s'executa el metode");
+//		if (tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
+//			try {
+//				Long solicitudID = getSolicitudID(request);
+//				if (solicitudID != null) {
+//					SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+//					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+//							? Constants.CONSENTIMENT_TIPUS_SI
+//							: Constants.CONSENTIMENT_TIPUS_NOOP);
+//
+//					soli.setUrlconsentiment(null);
+//					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
+//					solicitudLogicaEjb.update(soli);
+//				}
+//			} catch (Throwable th) {
+//				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
+//			}
+//		}
+//	}
+	
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
 

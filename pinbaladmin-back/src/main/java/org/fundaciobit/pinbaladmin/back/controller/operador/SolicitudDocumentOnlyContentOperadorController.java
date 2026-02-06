@@ -99,7 +99,7 @@ public class SolicitudDocumentOnlyContentOperadorController extends SolicitudDoc
 	public String getRedirectWhenModified(HttpServletRequest request, DocumentForm docForm, Throwable __e) {
 
 		Long tipusDoc = docForm.getDocument().getTipus();
-		updateConsentiment(request, tipusDoc);
+//		updateConsentiment(request, tipusDoc);
 
 		Long fitxerFirmat = docForm.getDocument().getFitxerFirmatID();
 

@@ -198,7 +198,7 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 		
 		log.info("Assignant la solicitudID " + solicitudID + " a la modificacio.");
 		
-		log.info("solicitudLogicaEjb = " + solicitudLogicaEjb);
+//		log.info("solicitudLogicaEjb = " + solicitudLogicaEjb);
 		
 		SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 		
@@ -217,22 +217,23 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
 		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
 		mod.setConsentiment(solicitud.getConsentiment());
-
-		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
-				DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
-
-		List<Long> tipusDocuments = new ArrayList<Long>();
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
-		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
-
-		List<Document> documents = documentLogicaEjb.select(Where
-				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
-
-		log.info("Tenim " + documents + " posibles documents de consentiment.");
-		for (Document document : documents) {
-			mod.setDoCconsentimentID(document.getFitxerOriginalID());
-			break;
-		}
+		mod.setDoCconsentimentID(solicitud.getFitxerConsentimentID());
+		
+//		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
+//				DocumentSolicitudFields.SOLICITUDID.equal(solicitudID));
+//
+//		List<Long> tipusDocuments = new ArrayList<Long>();
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP);
+//		tipusDocuments.add(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI);
+//
+//		List<Document> documents = documentLogicaEjb.select(Where
+//				.AND(DocumentFields.DOCUMENTID.in(listDocumentsSolicitud), DocumentFields.TIPUS.in(tipusDocuments)));
+//
+//		log.info("Tenim " + documents + " posibles documents de consentiment.");
+//		for (Document document : documents) {
+//			mod.setDoCconsentimentID(document.getFitxerOriginalID());
+//			break;
+//		}
 
 	}
 

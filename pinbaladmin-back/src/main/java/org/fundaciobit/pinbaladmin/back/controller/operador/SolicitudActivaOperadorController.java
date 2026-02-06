@@ -426,14 +426,13 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	public InfoConsentiment buscarConsentimientoDocuments(Long soliID) throws I18NException {
 		// Obtener documentos de la solicitud de tipo Consentiment.
 
-		Long[] tipusConsentimentArray = new Long[] { Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP,
-				Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI };
+		Long tipusConsentiment = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
 
 		List<Long> documentsSoli = documentSolicitudEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,
 				DocumentSolicitudFields.SOLICITUDID.equal(soliID));
 
 		List<Document> documents = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(documentsSoli),
-				DocumentFields.TIPUS.in(tipusConsentimentArray)));
+				DocumentFields.TIPUS.equal(tipusConsentiment)));
 
 		if (documents.size() == 0) {
 			return null;
@@ -441,7 +440,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		Document consentiment = documents.get(documents.size() - 1); // Agafam l'ultim com a vàlid.)
 
-		String tipus = consentiment.getTipus().equals(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI) ? "si" : "noop";
+		String tipus = consentiment.getTipus().equals(Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) ? "si" : "noop";
 		String url = null;
 		
 		Long fitxerID = consentiment.getFitxerOriginalID();
@@ -895,9 +894,6 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		int ambUrl = 0;
 		int senseConsentiment = 0;
 
-		Long[] tipusConsentimentArray = new Long[] { Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP,
-				Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI };
-		
 		for (Solicitud solicitud : solicituds) {
 			idx++;
 			// Obtener documentos de la solicitud de tipo Consentiment.
@@ -910,7 +906,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 					DocumentSolicitudFields.SOLICITUDID.equal(soliID));
 
 			List<Document> documents = documentEjb.select(Where.AND(DocumentFields.DOCUMENTID.in(documentsSoli),
-					DocumentFields.TIPUS.in(tipusConsentimentArray)));
+					DocumentFields.TIPUS.equal( Constants.DOCUMENT_SOLICITUD_CONSENTIMENT)));
 
 			log.info(idx + "/" + total + " - SolicitudID: " + soliID + ". Consentiments: " + documents.size());
 			if (documents.size() != 0) {

@@ -646,7 +646,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 				for (DocumentSolicitud docSol :documentsSoli ) {
 					Document doc = documentLogicaEjb.findByPrimaryKey(docSol.getDocumentID());
 					
-					if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI || doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP ) {
+					if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
 						teDocument = true;
 						break;
 					}
@@ -706,9 +706,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 			File consFilePdf = FileSystemManager.getFile(fitxerCopia.getFitxerID());
 			FileSystemManager.copy(consFile, consFilePdf);
 
-			Long tipus = consentiment.equals(Constants.CONSENTIMENT_TIPUS_SI)
-					? Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-					: Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP;
+			Long tipus = Constants.DOCUMENT_SOLICITUD_CONSENTIMENT;
+			
 			String nom = "Document Consentiment";
 			afegirDocumentSolicitudAmbFitxer(fitxerCopia, nom, tipus, soliID);
 			return fitxerCopia;
