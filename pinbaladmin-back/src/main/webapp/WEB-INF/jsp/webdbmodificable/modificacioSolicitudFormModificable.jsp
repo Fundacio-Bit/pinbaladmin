@@ -8,11 +8,15 @@
 	padding-top: 2rem;
 	border-radius: 12px;
 	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-	position: absolute;
+	/* position: absolute;
 	left: 20rem;
 	right: 20rem;
-	padding-top: 0;
+	padding-top: 0; */
 	margin-top: 2rem;
+  margin-right: 20rem;
+  margin-left: 20rem;
+  margin-bottom: 2rem;
+
 }
 
 #modificacioSolicitud_tableid {
@@ -59,7 +63,7 @@
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	/* Fondo oscuro semitransparente */
-	z-index: 999; /* Asegura que esté encima */
+	z-index: 999; /* Asegura que estï¿½ encima */
 }
 
 .modal-content {
@@ -224,13 +228,33 @@
   
 	function submitForm() {
 		console.log('submitForm');
+		
+		var errors = [];
+		
+		function checkField(id, label) {
+			var el = document.getElementById(id);
+			// Intentar con guion bajo si falla con punto
+			if (!el) el = document.getElementById(id.replace('.', '_'));
+			
+			if (!el || !el.value || el.value.trim() === "") {
+				errors.push(label);
+			}
+		}
 
-	    const consentiment = document.getElementById('modificacioSolicitud_consentiment').value;
-
-	    if (!consentiment) {
-	      alert("S'ha de selecionar un tipus de consentiment.");
-	      return false; // evita el submit
-	    }else{
+		// Validar campos obligatorios
+		checkField("modificacioSolicitud.responsableProcNom", "Datos de responsables");
+		checkField("modificacioSolicitud.procedimentTipus", "Tipo de procedimiento");
+		checkField("modificacioSolicitud.codiSiaNou", "Codigo SIA nuevo");
+		
+		// Datos de consentimiento (usando el ID conocido con guion bajo)
+		var consentimentEl = document.getElementById('modificacioSolicitud_consentiment');
+		if (!consentimentEl || !consentimentEl.value || consentimentEl.value.trim() === "") {
+			errors.push("Datos de consentimiento");
+		}
+		
+		if (errors.length > 0) {
+			alert("Los siguientes campos son obligatorios:\n\n- " + errors.join("\n- "));
+			return false;
 		}
 
 	    document.getElementById('modificacioSolicitudForm').submit();
@@ -266,7 +290,7 @@
 	    }
 	  }
 
-	  // Asignar función al cambio del select SIN borrar otros handlers
+	  // Asignar funciï¿½n al cambio del select SIN borrar otros handlers
 	  $selectCaduca.on("change", actualizarCampoFecha);
 
 	  // Ejecutar al cargar para establecer el estado inicial
@@ -290,7 +314,7 @@
 			<div class="modal-content"
 				style="padding: 20px; border: 1px solid #ccc; background: white; width: 400px; margin: 100px auto; position: relative;">
 				<span id="closeModal"
-					style="position: absolute; top: 10px; right: 10px; cursor: pointer;">×</span>
+					style="position: absolute; top: 10px; right: 10px; cursor: pointer;">ï¿½</span>
 
 
 				<input type="hidden" name="serveiId" id="serveiId" value="">

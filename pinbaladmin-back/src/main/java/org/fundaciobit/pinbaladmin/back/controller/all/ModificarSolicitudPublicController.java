@@ -600,13 +600,15 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 
 		Where wProcediment = Where.OR(SolicitudFields.PROCEDIMENTCODI.like("%" + param + "%"),
 				SolicitudFields.PROCEDIMENTNOM.like("%" + param + "%"));
+		
+		Where wNoFusionat= SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
 
 		Where wLocal = SolicitudFields.ORGANID.isNotNull();
 		
 //		Long[] estats = {Constants.SOLI_ESTAT_AUTORITZAT, Constants.SOLI_ESTAT_TANCAT};
 //		Where wEstats = SolicitudFields.ESTATSOLICITUD.in(estats);
 		
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wLocal));//, wEstats));
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wNoFusionat, wLocal));//, wEstats));
 
 		List<Item> items = new java.util.ArrayList<Item>();
 

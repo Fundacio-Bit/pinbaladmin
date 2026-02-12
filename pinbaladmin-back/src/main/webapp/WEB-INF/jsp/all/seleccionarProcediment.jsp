@@ -11,7 +11,21 @@
 
 
 <style>
+/* Estilos específicos para esta página para forzar el footer abajo */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
 
+.container {
+    flex: 1 0 auto; /* Crece para ocupar el espacio */
+}
+
+#footer {
+    flex-shrink: 0;
+}
 
 
 .procediment-item{
@@ -77,7 +91,7 @@
 	margin: 1rem 5rem;
 }
 
-#btn-container {
+#btn-container-continuar, #btn-container-siguiente {
   text-align: right;
 }
 
@@ -116,7 +130,7 @@
 						type="email" autocomplete="email" />
 				</div>
 
-				<div>
+				<div id="btn-container-siguiente">
 					<button type="button" id="btnSiguiente" class="btn btn-primary">Siguiente
 						<i class="fas fa-arrow-right"></i></button>
 				</div>
@@ -146,50 +160,16 @@
 						<ul></ul>
 					</div>
 				</div>
+                
+                <div id="errorMsgProcediment" class="error" role="alert" aria-live="polite"></div>
 
-				<div id="btn-container" style="margin-top: 12px;">
+				<div id="btn-container-continuar" style="margin-top: 12px;">
 					<button type="button" id="btnAnterior" class="btn btn-secondary">
 					<i class="fas fa-arrow-left"></i> Anterior</button>
 					<button type="submit" class="btn btn-primary">Continuar</button>
 				</div>
 			</div>
 		</form>
-  
-  
-  
-	<%-- 	<form id="seleccionarProcediment" action="seleccionarProcediment"
-			method="POST">
-
-			<div id="dadesContacte>
-				
-				<input id="nomContacte" name="nomContacte"/>				
-				
-			</div>
-			
-			<div id="dadesProcediment">
-				<div class="input-container procediment">
-					<div id="cercador-procediments">
-	
-						<input id="cercadorProcediment" name="cercadorProcediment" type="text"
-							autocomplete="off" class="w-100 form-control"
-							placeholder="Procediment. Minim 2 caracters...">
-	
-						<div id="autocomplete-procediments"></div>
-					</div>
-					<div id="llistat-procediments">
-						<ul></ul>
-					</div>
-				</div>
-	
-				<div id="btn-container">
-					<div class="btn btn-sm btn-primary" onclick="submitForm();"
-						title="<fmt:message key="genapp.continue"/>"> <i
-						class="fas fa-arrow-right"></i> 
-					</div>
-				</div>
-			</div>
-		</form>
- --%>
 
 		<script type="text/javascript">
 			$("#cercadorProcediment").on("input", function() {
@@ -361,6 +341,10 @@
     // Por si alguien intenta enviar el formulario directamente (enter/submit),
     // comprobamos de nuevo los datos de contacto y forzamos volver si es necesario.
     form.addEventListener('submit', (e) => {
+      // Limpiar mensaje de error de procedimiento
+      const errorMsgProcediment = document.getElementById('errorMsgProcediment');
+      if (errorMsgProcediment) errorMsgProcediment.textContent = '';
+
       if (!validateContact()) {
         e.preventDefault();
         // mostramos la parte de contacto para que corrija
@@ -368,6 +352,21 @@
         dadesProcediment.setAttribute('aria-hidden', 'true');
         dadesContacte.style.display = 'block';
         dadesContacte.setAttribute('aria-hidden', 'false');
+        return;
+      }
+
+      // Validacion codigo procedimiento
+      const solicitudID = document.querySelector('input[name="solicitudID"]');
+      if (!solicitudID || !solicitudID.value) {
+          e.preventDefault();
+          if (errorMsgProcediment) {
+              errorMsgProcediment.textContent = 'Debe seleccionar un procedimiento.';
+          } else {
+              alert('Debe seleccionar un procedimiento.');
+          }
+          // focus en campo del procedimiento
+          const busc = document.getElementById('cercadorProcediment');
+          if (busc) busc.focus(); 
       }
       // si todo OK, se envía normalmente
     });

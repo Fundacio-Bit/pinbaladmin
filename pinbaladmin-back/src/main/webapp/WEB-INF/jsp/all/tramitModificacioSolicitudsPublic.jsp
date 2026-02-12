@@ -2,7 +2,7 @@
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController"%>
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.IncidenciaPinfoPublicController"%>
 
-<!--  Capçalera i peu -->
+<!--  Capï¿½alera i peu -->
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
@@ -41,23 +41,44 @@
 </div>
 
 <div id="footer">
-	<p>© 2025 - Fundació BIT</p>
+	<p>2026 - FundaciÃ³ BIT</p>
 </div>
 
 <script>
-	$(document).ready(function() {
+	document.addEventListener("DOMContentLoaded", function() {
 		var body = document.body;
 		var header = document.getElementById("header");
 	    var footer = document.getElementById("footer");
 	    
-		body.insertBefore(header, body.firstElementChild);
-		body.appendChild(footer);
+	    if (header) {
+			body.insertBefore(header, body.firstElementChild);
+	    }
+	    if (footer) {
+			body.appendChild(footer); // Mueve el footer al final del body
+	    }
 		
-		$(".alert.alert-success").hide();
+	    // Ocultar alertas (compatible con/sin jQuery)
+	    var alerts = document.querySelectorAll(".alert.alert-success");
+	    for (var i = 0; i < alerts.length; i++) {
+	        alerts[i].style.display = 'none';
+	    }
 	});
 </script>
 
 <style>
+
+body {
+	margin: 0;
+	padding: 0;
+	/* min-height: 100vh; */
+}
+
+#footer {
+	margin-top: auto !important; /* Fuerza al footer hacia abajo */
+	flex-shrink: 0; /* Evita que el footer se encoja */
+}
+
+
 #header {
 	padding: 1rem 4rem;
 	text-align: center;
@@ -109,9 +130,21 @@
 }
 
 #footer {
-	padding: 1rem;
+	padding: 2rem 1rem;
 	text-align: center;
-	background-color: #white;
-	color: black;
+	background-color: #f8f9fa;
+	color: #333;
+	margin-top: 2rem;
+	/* border-top: 3px solid #4DBA79; */
+	box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+#footer p {
+	margin: 0;
+	font-size: 0.95rem;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	color: #555;
 }
 </style>
