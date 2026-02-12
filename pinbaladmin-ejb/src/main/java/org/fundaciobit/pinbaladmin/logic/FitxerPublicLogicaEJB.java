@@ -1,11 +1,17 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 
+import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.FitxerEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.fields.FitxerFields;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 
 /**
@@ -38,4 +44,32 @@ public class FitxerPublicLogicaEJB extends FitxerEJB implements FitxerPublicLogi
     public void delete(Fitxer instance) {
         super.delete(instance);
     }
+    
+    @Override
+    @PermitAll
+    public void deleteFull(Fitxer instance) {
+
+        // Crear el Set con el ID del fitxer
+        Set<Long> files = new HashSet();
+        files.add(instance.getFitxerID());
+
+        // Borrar en BBDD
+        super.delete(instance);
+
+        // Borrar ficheros del sistema
+        FileSystemManager.eliminarArxius(files);
+    }
+
+    @Override
+    @PermitAll
+    public void deleteFullMultiple(Set<Long> files) throws I18NException {
+
+        // Borrar en BBDD
+        super.delete(FitxerFields.FITXERID.in(files));
+
+        // Borrar ficheros del sistema
+        FileSystemManager.eliminarArxius(files);
+    }
+    
+    
 }

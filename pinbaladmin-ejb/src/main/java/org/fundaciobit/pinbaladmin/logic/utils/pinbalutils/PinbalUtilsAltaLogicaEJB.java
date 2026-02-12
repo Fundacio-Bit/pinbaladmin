@@ -543,6 +543,12 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 					log.info("POST-NORMA " + i + " - " + normaLegal + ": " + nom + " (" + contingut.length + " bytes)");
 					descripcio = "Norma Legal " + i + " - Servei: " + servei.getNom();
 
+					if (nom== null || !nom.toLowerCase().contains(".pdf")) {
+						// Si no tenemos nombre, o no es un pdf. No lo enviamos.
+						log.info("El fitxer de la norma no té nom o no és un PDF. No s'afegirà la norma.");
+						continue;
+					}
+					
 					docNorma.setNombre(servei.getCodi() + "_" + nom);
 					docNorma.setDescripcion(descripcio);
 

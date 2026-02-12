@@ -1,6 +1,7 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,8 @@ import es.caib.pinbal.client.procediments.Procediment;
 import es.caib.pinbal.client.procediments.ProcedimentClient;
 import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
 import es.caib.pinbal.client.serveis.ServeiBasic;
+import es.caib.pinbal.client.usuaris.PermisosServei;
+import es.caib.pinbal.client.usuaris.ProcedimentServei;
 import es.caib.pinbal.client.usuaris.UsuariClient;
 import es.caib.pinbal.client.usuaris.UsuariEntitat;
 
@@ -474,6 +477,8 @@ public class EntitatOperadorController extends EntitatController {
 			
 			
 			UsuariEntitat usuari = usuariClient.getUsuari(codi, entitatCodi);
+
+			log.info("Usuari Trobat: " + usuari.getCodi() + " - " + usuari.getEntitatCodi());
 			if (usuari != null) {
 				log.info(
 						"L'usuari " + codi + " ja existeix a l'entitat Pinbal " + entitatCodi + ". No es crea de nou.");
@@ -517,7 +522,7 @@ public class EntitatOperadorController extends EntitatController {
 	}
 	
 	public void crearPreAltaPerEntitatJPA(EntitatJPA entitat, ClientRecobriment clientRecobriment,
-			ProcedimentClient procedimentClient) throws Exception {
+			ProcedimentClient procedimentClient, UsuariClient usuariClient) throws Exception {
 
 		String dir3Local = entitat.getDir3();
 		String codiPinbal = entitat.getCodiPinbal();
@@ -608,6 +613,9 @@ public class EntitatOperadorController extends EntitatController {
 		if (procedimentID != null) {
 			log.info("[PREALTAS] Autoritzant serveis al procediment ID=" + procedimentID);
 			autoritzarServeisPreAltaProcediment(procedimentID, procedimentClient);
+			
+			autoritzarUsuariPreAltasEntitat(procedimentID, entitat, usuariClient);
+			
 			log.info("[PREALTAS] Procés finalitzat correctament");
 		} else {
 			log.error("[PREALTAS] No s'ha pogut obtenir l'ID del procediment");
@@ -781,7 +789,7 @@ public class EntitatOperadorController extends EntitatController {
 			log.info("[PREALTAS] Usuari Pinbal creat o existent per a l'entitat");
 
 			// Crear procediment PREALTAS
-			crearPreAltaPerEntitatJPA(entitatLocal, clientRecobriment, procedimentClient);
+			crearPreAltaPerEntitatJPA(entitatLocal, clientRecobriment, procedimentClient, usuariClient);
 
 			HtmlUtils.saveMessageInfo(request,
 					"El procediment PREALTAS s'ha creat correctament per a l'entitat " + entitatLocal.getNom());
@@ -807,6 +815,7 @@ public class EntitatOperadorController extends EntitatController {
 		try {
 			ClientRecobriment clientRecobriment = getClientRecobriment();
 			ProcedimentClient procedimentClient = getProcedimentClient();
+			UsuariClient usuariClient = getUsuariClient();
 
 			List<Entitat> entitatsLocals = entitatLogicaEjb.select();
 			total = entitatsLocals.size();
@@ -815,7 +824,7 @@ public class EntitatOperadorController extends EntitatController {
 			for (Entitat entitatLocal : entitatsLocals) {
 				EntitatJPA entitatLocalJPA = (EntitatJPA) entitatLocal;
 				try {
-					crearPreAltaPerEntitatJPA(entitatLocalJPA, clientRecobriment, procedimentClient);
+					crearPreAltaPerEntitatJPA(entitatLocalJPA, clientRecobriment, procedimentClient, usuariClient);
 					creats++;
 				} catch (I18NException e) {
 					errors++;
@@ -885,5 +894,32 @@ public class EntitatOperadorController extends EntitatController {
 		}
 
 	}
+	
+	public void autoritzarUsuariPreAltasEntitat(Long procedimentID, EntitatJPA entitat, UsuariClient usuariClient)
+			throws Exception {
+		
+		log.info("   Autoritzant usuari per al procediment PREALTAS i l'entitat: " + entitat.getNom());
 
+		try {
+			String codiUsuari = Configuracio.getApiPinbalUsername();
+			String codiEntitat = entitat.getCodiPinbal();
+
+			log.info("      Autoritzant usuari al procediment...");
+
+			List<ProcedimentServei> procedimentServei = new ArrayList<ProcedimentServei>();
+
+			procedimentServei.add(new ProcedimentServei(PREALTAS, CODI_ALTA));
+			procedimentServei.add(new ProcedimentServei(PREALTAS, CODI_CONSULTA));
+			procedimentServei.add(new ProcedimentServei(PREALTAS, CODI_MODIFICACIO));
+
+			PermisosServei permisosServei = new PermisosServei(codiUsuari, codiEntitat, procedimentServei);
+			usuariClient.grantPermissions(codiUsuari, permisosServei);
+
+			log.info("   Usuari autoritzat correctament.");
+
+		} catch (Exception e) {
+			log.error("   Error autoritzant usuari per al procediment PREALTAS i l'entitat: " + entitat.getNom(), e);
+			throw e;
+		}
+	}
 }

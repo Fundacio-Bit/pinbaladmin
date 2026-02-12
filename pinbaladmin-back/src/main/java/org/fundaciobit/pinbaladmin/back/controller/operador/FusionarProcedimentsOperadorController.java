@@ -823,7 +823,7 @@ public class FusionarProcedimentsOperadorController {
 
 				afegirDocumentSolicitudAmbFitxer(fitxerJpa,
 						"formulari_" + soli.getSolicitudID() + "_" + soli.getDataInici() + ".xml",
-						Constants.DOCUMENT_SOLICITUD_ALTRES, nuevaSolicitudID);
+						Constants.DOCUMENT_SOLICITUD_XML_SOLI, nuevaSolicitudID);
 			}
 
 			Long docSoliID = soli.getDocumentSolicitudID();

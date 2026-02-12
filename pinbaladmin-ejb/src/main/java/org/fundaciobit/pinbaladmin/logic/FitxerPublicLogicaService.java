@@ -1,5 +1,7 @@
 package org.fundaciobit.pinbaladmin.logic;
 
+import java.util.Set;
+
 import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 
@@ -25,5 +27,9 @@ public interface FitxerPublicLogicaService extends FitxerService {
     @Override
     @PermitAll
     public FitxerJPA findByPrimaryKey(Long _ID_);
+
+	void deleteFull(Fitxer instance);
+
+	void deleteFullMultiple(Set<Long> files) throws I18NException;
     
 }

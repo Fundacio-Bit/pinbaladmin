@@ -546,12 +546,14 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         return "redirect:" + WEBCONTEXT + "/list";
     }
 
-    @RequestMapping(value = "/changeContacte/{incidenciaTecnicaID}/{nom}/{email}", method = RequestMethod.GET)
+    @RequestMapping(value = "/changeContacte/{incidenciaTecnicaID}/{email}/{nom}", method = RequestMethod.GET)
 	public String changeContacteIncidenciaTecnicaGet(
 			@PathVariable("incidenciaTecnicaID") java.lang.Long incidenciaTecnicaID,
-			@PathVariable("nom") java.lang.String nom, @PathVariable("email") java.lang.String email,
+			@PathVariable("email") java.lang.String email, @PathVariable("nom") java.lang.String nom, 
 			HttpServletRequest request, HttpServletResponse response) throws I18NException {
 
+    	log.info("mail: " + email);
+    	
 		IncidenciaTecnicaJPA i = this.findByPrimaryKey(request, incidenciaTecnicaID);
 
 		i.setContacteNom(nom);

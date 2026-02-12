@@ -1586,8 +1586,11 @@ function myFunctionChangeContacte() {
         
     var root = "<%=request.getContextPath()%>${urlToChangeContacte}";
     
-    window.location.href = root + "/" + contacteNom
-            + "/" + contacteEmail;
+    var url =root + "/" + contacteEmail + "/" + contacteNom;
+    console.log(url);
+    
+    window.location.href = url;
+    
 }
 
 function modificarContacte(){

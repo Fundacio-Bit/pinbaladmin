@@ -421,6 +421,7 @@ public abstract class PinbalUtilsCommon {
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
 				// No se envía
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_PDF) {
+				//Si hem d'enviar algun document PDF adicional, ha de ser d'aquest tipus.
 				Long documentID = document.getFitxerFirmatID() == null ? document.getFitxerOriginalID()
 						: document.getFitxerFirmatID();
 				
@@ -432,17 +433,22 @@ public abstract class PinbalUtilsCommon {
 					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
 				}
 			} else {
-				//Afegim qualsevol PDF per si de cas.
-				Long documentID = document.getFitxerFirmatID() == null ? document.getFitxerOriginalID()
-						: document.getFitxerFirmatID();
+				// No afegim cap altre document. Ho indicam.
+
+				//No enviam el document NOM per ser de tipus TIPUS.
+				log.info("El document " + document.getDocumentID() + " no s'enviarà a Madrid perquè és de tipus " + tipus);
 				
-				FitxerJPA fitxer = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(documentID);
-				
-				if (fitxer.getMime().equals("application/pdf")) {
-					String desc = "Fitxer PDF associat al procediment";
-					String tipo = "FORMULARIO DE AUTORIZACION";
-					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
-				}
+//				//Afegim qualsevol PDF per si de cas.
+//				Long documentID = document.getFitxerFirmatID() == null ? document.getFitxerOriginalID()
+//						: document.getFitxerFirmatID();
+//				
+//				FitxerJPA fitxer = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(documentID);
+//				
+//				if (fitxer.getMime().equals("application/pdf")) {
+//					String desc = "Fitxer PDF associat al procediment";
+//					String tipo = "FORMULARIO DE AUTORIZACION";
+//					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
+//				}
 			}
 		}
 		return docsAuth;

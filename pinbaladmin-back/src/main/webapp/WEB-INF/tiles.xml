@@ -132,6 +132,11 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatList.jsp" />
     </definition>
     
+    <definition name="fitxerList_operador" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/fitxerList.jsp" />
+    </definition>
+    
+    
     <definition name="solicitudServeiFormWebDB_operador" extends="operador_base">
         <put-attribute name="titol" value="solicitudServei.solicitudServei" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudServeiForm.jsp" />

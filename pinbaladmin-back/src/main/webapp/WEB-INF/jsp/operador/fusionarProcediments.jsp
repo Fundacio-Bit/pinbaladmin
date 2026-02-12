@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
-
+<!-- Fusionar Procediments fusionarProcediment.jsp -->
 <style>
 .procediment-li {
 	padding: 5px 1rem 5px 0;
@@ -114,10 +114,17 @@
 }
 
 .results {
-/* 	display: flex;
+	/* 	display: flex;
 	flex-direction: column;
- */}
+ */
+	
+}
 
+.tdConsentiment {
+	max-width: 300px;
+	white-space: normal;
+	word-wrap: break-word;
+}
 </style>
 
 <h3>Fusionar Procediments</h3>
@@ -515,7 +522,7 @@ $("#btnFusionar").click(function() {
                 	html +=  "<br>" + "Fitxer: " + (consentiment.nomFitxer || "");
                 }
                 
-                tr.append($("<td>").html(html));
+                tr.append($("<td class='tdConsentiment'>").html(html));
             });
 			
 			// --- consentimientosUnicos será una lista de solicitudID de todos los que tienen procedimento no nulo.

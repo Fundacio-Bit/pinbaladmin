@@ -303,6 +303,7 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 		__tmp.add(new StringKeyValue("4", "Consentiment noop"));
 		__tmp.add(new StringKeyValue("5", "Consentiment si"));
 		__tmp.add(new StringKeyValue("6", "Formulari PDF"));
+		__tmp.add(new StringKeyValue("7", "XML Solicitud"));
 		
 //		Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF
 		return __tmp;

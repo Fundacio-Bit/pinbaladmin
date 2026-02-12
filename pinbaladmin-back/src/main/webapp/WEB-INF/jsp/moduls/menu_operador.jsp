@@ -211,6 +211,16 @@
 				style="${(fn:contains(url, '/cedent/'))? "font-weight:bold;" : ""}"><fmt:message
 						key="entitatServei.entitatServei.plural" /></span>
 		</a></li>
+		
+		
+		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/fitxer/list"/>"> <span
+				style="${(fn:contains(url, '/fitxer/'))? "font-weight:bold;" : ""}"><fmt:message
+						key="gestio.fitxers" /></span>
+		</a></li>
 
 
 <%-- 		<li style="list-style-type: disc; list-style-position: inside;"><a

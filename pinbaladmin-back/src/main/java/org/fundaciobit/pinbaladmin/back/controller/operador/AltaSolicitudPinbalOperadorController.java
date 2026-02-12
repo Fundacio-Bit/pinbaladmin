@@ -347,8 +347,17 @@ public class AltaSolicitudPinbalOperadorController {
     private ScspTitular getTitular(Solicitud soli) throws Exception {
 
     	Long infoMadridID = soli.getInfomadridid();
+    	InfoMadridJPA infoMad = null;
+    	boolean infoMadridInvalido = false;
     	
-    	if (infoMadridID == null) {
+		if (infoMadridID != null) {
+			infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+			if (infoMad == null || infoMad.getTitularNif() == null || infoMad.getTitularNom() == null) {
+				infoMadridInvalido = true;
+			}
+		}
+    	
+    	if (infoMadridInvalido) {
     		
 			if (soli.getTitularFirmaNif() != null) {
 				ScspTitular titular = new ScspTitular();
@@ -380,10 +389,11 @@ public class AltaSolicitudPinbalOperadorController {
             return getTitularFromProperties(prop);
 		}
     	
-    	InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+    	infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+    	
+    	String documentacion = infoMad.getTitularNif();
     	
     	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-    	String documentacion = infoMad.getTitularNif();
 
 		log.info("Titular Nom: " + infoMad.getTitularNom());
     	

@@ -169,6 +169,8 @@ public interface Constants {
 //    public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT_NOOP = 4L;
 //    public static final Long DOCUMENT_SOLICITUD_CONSENTIMENT_SI = 5L;
     public static final Long DOCUMENT_SOLICITUD_PDF = 6L;
+    public static final Long DOCUMENT_SOLICITUD_XML_SOLI = 7L;
+    
 
     /**
      * Estat de Solicituds a PINBAL
