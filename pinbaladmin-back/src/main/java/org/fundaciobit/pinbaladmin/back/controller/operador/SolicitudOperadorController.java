@@ -814,10 +814,15 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     while (aux.getCif() == null && aux.getDir3pare() != null) {
                         i++;
                         List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                        aux = listAux.get(0);
-                        String linea = "<br>" + "&nbsp;".repeat(3 * i) + '└' + " (" + aux.getDir3() + ") "
-                                + aux.getNom();
-                        html += linea;
+                        if (listAux==null || listAux.size() == 0) {
+                            html += "<br>" + "&nbsp;".repeat(3 * i) + " NO s'HA TROBAT ORGAN AMB DIR3 = " + aux.getDir3pare() + "!!!!!!!!";
+                            break;
+                        } else {
+                            aux = listAux.get(0);
+                            String linea = "<br>" + "&nbsp;".repeat(3 * i) + '└' + " (" + aux.getDir3() + ") "
+                                    + aux.getNom();
+                            html += linea;
+                        }
                     }
                     html += "</span>";
                     html += "</p>";
