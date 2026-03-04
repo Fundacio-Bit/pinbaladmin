@@ -601,8 +601,8 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
         Where w = SolicitudFields.NOTES.like(likeStr);
 
-        Long[] estats = {Constants.SOLI_ESTAT_TANCAT};
-        Where wEstat = SolicitudFields.ESTATSOLICITUD.notIn(estats);
+        //Long[] estats = {Constants.SOLI_ESTAT_TANCAT};
+        //Where wEstat = SolicitudFields.ESTATSOLICITUD.notIn(estats);
         log.info("Where: "  + w.toSQL() + " - " + likeStr);
         
         OrderBy order = new OrderBy(SolicitudFields.DATAINICI);
@@ -824,6 +824,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		case ESTAT_SUBSANAR:
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 			
+			// TODO Podem comentar-ho ????
 			Retorno retorno = this.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
 //			EstadoProcedimiento estat = retorno.getProcedimiento().getEstadoProcedimiento();
 //			solicitud.setEstatpinbal(estat.getEstado());

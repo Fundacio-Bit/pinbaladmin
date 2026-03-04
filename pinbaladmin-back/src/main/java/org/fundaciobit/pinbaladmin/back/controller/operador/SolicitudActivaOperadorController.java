@@ -49,7 +49,6 @@ import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
-import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Entitat;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
@@ -1158,7 +1157,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals)); // , wEstatPinbal , wEstatSoli));
-		int idx = 0;
+		//int idx = 0;
 		int tipusActualitzats = 0;
 		int caducitatsActualitzades = 0;
 		
@@ -1247,7 +1246,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 //				break;
 //			}
 
-			idx++;
+			//idx++;
 		}
 		
 		log.info("Tipus actualitzats detalls: ");
@@ -1276,7 +1275,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
 		Where wNoCaducitat = SolicitudFields.DATACADUCITAT.isNull();
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wLocals, wNoCaducitat)); // , wEstatPinbal , wEstatSoli));
-		int actualitzades = 0;
+		//int actualitzades = 0;
 		for (Solicitud soli : solicituds) {
 			
 			//Buscar la caducidad con tramitH.
@@ -1294,7 +1293,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 					soli.setDataCaducitat(proc.getCaducitatdata());
 					log.info("[TRAMIT] Actualitzada caducitat " + soli.getSolicitudID() + " a " + proc.getCaducitatdata());
 					solicitudLogicaEjb.update(soli);
-					actualitzades++;
+					//actualitzades++;
 					continue;
 				}
 			}
@@ -1334,7 +1333,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 					soli.setDataCaducitat(caducitat);
 					log.info("[SERVEI] Actualitzada caducitat " + soli.getSolicitudID() + " a " + caducitat);
 					solicitudLogicaEjb.update(soli);
-					actualitzades++;
+					//actualitzades++;
 					continue;
 				}
 			}
@@ -1427,7 +1426,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 			String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
 			String llinatge1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
 			String llinatge2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
-			String fullName = nom + " " + llinatge1 + " " + (llinatge2 == null ? "" : llinatge2);
+			//String fullName = nom + " " + llinatge1 + " " + (llinatge2 == null ? "" : llinatge2);
 			String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
 
 			
@@ -1670,7 +1669,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		boolean debug = false;
 		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 
-		Map<String, String> cacheNifNoms= new HashMap();
+		Map<String, String> cacheNifNoms= new HashMap<>();
 		
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
 
@@ -2167,8 +2166,8 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		final String SOLICITUD_ENVIADA_MANUALMENTE = "2";
 
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-		Where wEstatPinbal = Where.AND(SolicitudFields.ESTATPINBAL.isNotNull(),
-				SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT));
+		//Where wEstatPinbal = Where.AND(SolicitudFields.ESTATPINBAL.isNotNull(),
+	//			SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT));
 
 //			Long[] estatsSoliOk =  {Constants.soli_estat_};
 //			Where wEstatSoli = SolicitudFields.ESTATSOLICITUD.in(estatsSoliOk );
@@ -2178,7 +2177,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 
 		log.info(solicituds.size() + " solicituds");
 
-		int solis = 0;
+		//int solis = 0;
 		for (Solicitud soli : solicituds) {
 
 			log.info("Volem procesar la solicitud " + soli.getProcedimentCodi() + " [" + soli.getSolicitudID() + "]");
@@ -2287,7 +2286,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 //				soli.setInfomadridid(infoMad.getInfoMadridID());
 //				solicitudLogicaEjb.update(soli);
 //				
-			solis++;
+//			solis++;
 
 			log.info("Final");
 //				if (solis == 5) {

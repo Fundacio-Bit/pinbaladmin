@@ -26,7 +26,6 @@ import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
@@ -203,6 +202,31 @@ public class FusionarProcedimentsOperadorController {
 			this.codi = s.getProcedimentCodi();
 			this.nom = s.getProcedimentNom();
 		}
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getCodi() {
+            return codi;
+        }
+
+        public void setCodi(String codi) {
+            this.codi = codi;
+        }
+
+        public String getNom() {
+            return nom;
+        }
+
+        public void setNom(String nom) {
+            this.nom = nom;
+        }
+		
 	}
 
 	public class ServeiDTO {
@@ -223,6 +247,41 @@ public class FusionarProcedimentsOperadorController {
 			this.cedent = entitat.getNom();
 
 		}
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getCodi() {
+            return codi;
+        }
+
+        public void setCodi(String codi) {
+            this.codi = codi;
+        }
+
+        public String getNom() {
+            return nom;
+        }
+
+        public void setNom(String nom) {
+            this.nom = nom;
+        }
+
+        public String getCedent() {
+            return cedent;
+        }
+
+        public void setCedent(String cedent) {
+            this.cedent = cedent;
+        }
+		
+		
+		
 	}
 
 	public class DocumentDTO {
@@ -240,6 +299,41 @@ public class FusionarProcedimentsOperadorController {
 			this.tipus = doc.getTipus();
 			this.solicitudID = solicitudID;
 		}
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getNom() {
+            return nom;
+        }
+
+        public void setNom(String nom) {
+            this.nom = nom;
+        }
+
+        public Long getTipus() {
+            return tipus;
+        }
+
+        public void setTipus(Long tipus) {
+            this.tipus = tipus;
+        }
+
+        public Long getSolicitudID() {
+            return solicitudID;
+        }
+
+        public void setSolicitudID(Long solicitudID) {
+            this.solicitudID = solicitudID;
+        }
+		
+		
+		
 	}
 
 	public class ConsentimentDTO {
@@ -264,6 +358,50 @@ public class FusionarProcedimentsOperadorController {
 			this.solicitudID = soli.getSolicitudID();
 			this.url = soli.getUrlconsentiment();
 		}
+
+        public Long getFitxerID() {
+            return fitxerID;
+        }
+
+        public void setFitxerID(Long fitxerID) {
+            this.fitxerID = fitxerID;
+        }
+
+        public String getNomFitxer() {
+            return nomFitxer;
+        }
+
+        public void setNomFitxer(String nomFitxer) {
+            this.nomFitxer = nomFitxer;
+        }
+
+        public String getTipus() {
+            return tipus;
+        }
+
+        public void setTipus(String tipus) {
+            this.tipus = tipus;
+        }
+
+        public Long getSolicitudID() {
+            return solicitudID;
+        }
+
+        public void setSolicitudID(Long solicitudID) {
+            this.solicitudID = solicitudID;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+		
+		
+		
+		
 	}
 
 	public class SolicitudFullDTO {
@@ -361,6 +499,209 @@ public class FusionarProcedimentsOperadorController {
 			this.consentiment = new ConsentimentDTO(soli);
 
 		}
+
+        public Long getSolicitudID() {
+            return solicitudID;
+        }
+
+        public void setSolicitudID(Long solicitudID) {
+            this.solicitudID = solicitudID;
+        }
+
+        public String getProcedimentCodi() {
+            return procedimentCodi;
+        }
+
+        public void setProcedimentCodi(String procedimentCodi) {
+            this.procedimentCodi = procedimentCodi;
+        }
+
+        public String getCodiDescriptiu() {
+            return codiDescriptiu;
+        }
+
+        public void setCodiDescriptiu(String codiDescriptiu) {
+            this.codiDescriptiu = codiDescriptiu;
+        }
+
+        public String getProcedimentNom() {
+            return procedimentNom;
+        }
+
+        public void setProcedimentNom(String procedimentNom) {
+            this.procedimentNom = procedimentNom;
+        }
+
+        public String getProcedimentTipus() {
+            return procedimentTipus;
+        }
+
+        public void setProcedimentTipus(String procedimentTipus) {
+            this.procedimentTipus = procedimentTipus;
+        }
+
+        public Timestamp getDataInici() {
+            return dataInici;
+        }
+
+        public void setDataInici(Timestamp dataInici) {
+            this.dataInici = dataInici;
+        }
+
+        public Timestamp getDataCaducitat() {
+            return dataCaducitat;
+        }
+
+        public void setDataCaducitat(Timestamp dataCaducitat) {
+            this.dataCaducitat = dataCaducitat;
+        }
+
+        public String getCreador() {
+            return creador;
+        }
+
+        public void setCreador(String creador) {
+            this.creador = creador;
+        }
+
+        public String getPersonaContacte() {
+            return personaContacte;
+        }
+
+        public void setPersonaContacte(String personaContacte) {
+            this.personaContacte = personaContacte;
+        }
+
+        public String getPersonaContacteEmail() {
+            return personaContacteEmail;
+        }
+
+        public void setPersonaContacteEmail(String personaContacteEmail) {
+            this.personaContacteEmail = personaContacteEmail;
+        }
+
+        public String getResponsableProcNom() {
+            return responsableProcNom;
+        }
+
+        public void setResponsableProcNom(String responsableProcNom) {
+            this.responsableProcNom = responsableProcNom;
+        }
+
+        public String getResponsableProcEmail() {
+            return responsableProcEmail;
+        }
+
+        public void setResponsableProcEmail(String responsableProcEmail) {
+            this.responsableProcEmail = responsableProcEmail;
+        }
+
+        public String getTitularFirmaNIF() {
+            return titularFirmaNIF;
+        }
+
+        public void setTitularFirmaNIF(String titularFirmaNIF) {
+            this.titularFirmaNIF = titularFirmaNIF;
+        }
+
+        public String getTitularFirmaNom() {
+            return titularFirmaNom;
+        }
+
+        public void setTitularFirmaNom(String titularFirmaNom) {
+            this.titularFirmaNom = titularFirmaNom;
+        }
+
+        public String getTitularFirmaLlinatges() {
+            return titularFirmaLlinatges;
+        }
+
+        public void setTitularFirmaLlinatges(String titularFirmaLlinatges) {
+            this.titularFirmaLlinatges = titularFirmaLlinatges;
+        }
+
+        public String getTitularFirmaEmail() {
+            return titularFirmaEmail;
+        }
+
+        public void setTitularFirmaEmail(String titularFirmaEmail) {
+            this.titularFirmaEmail = titularFirmaEmail;
+        }
+
+        public String getEntitatNom() {
+            return entitatNom;
+        }
+
+        public void setEntitatNom(String entitatNom) {
+            this.entitatNom = entitatNom;
+        }
+
+        public String getEntitatCif() {
+            return entitatCif;
+        }
+
+        public void setEntitatCif(String entitatCif) {
+            this.entitatCif = entitatCif;
+        }
+
+        public String getEntitatDir3() {
+            return entitatDir3;
+        }
+
+        public void setEntitatDir3(String entitatDir3) {
+            this.entitatDir3 = entitatDir3;
+        }
+
+        public String getOrganid() {
+            return organid;
+        }
+
+        public void setOrganid(String organid) {
+            this.organid = organid;
+        }
+
+        public String getEstatSolicitud() {
+            return estatSolicitud;
+        }
+
+        public void setEstatSolicitud(String estatSolicitud) {
+            this.estatSolicitud = estatSolicitud;
+        }
+
+        public String getEstatpinbal() {
+            return estatpinbal;
+        }
+
+        public void setEstatpinbal(String estatpinbal) {
+            this.estatpinbal = estatpinbal;
+        }
+
+        public List<ServeiDTO> getServicios() {
+            return servicios;
+        }
+
+        public void setServicios(List<ServeiDTO> servicios) {
+            this.servicios = servicios;
+        }
+
+        public List<DocumentDTO> getDocumentos() {
+            return documentos;
+        }
+
+        public void setDocumentos(List<DocumentDTO> documentos) {
+            this.documentos = documentos;
+        }
+
+        public ConsentimentDTO getConsentiment() {
+            return consentiment;
+        }
+
+        public void setConsentiment(ConsentimentDTO consentiment) {
+            this.consentiment = consentiment;
+        }
+		
+		
+		
 	}
 
 	@RequestMapping(value = "/detallesFusion", method = RequestMethod.POST)
@@ -604,8 +945,8 @@ public class FusionarProcedimentsOperadorController {
 
 		List<Long> estadosPinbal = new ArrayList<>();
 
-		boolean todasEnviadas = true;
-		boolean todasAutorizadas = true;
+		//boolean todasEnviadas = true;
+		//boolean todasAutorizadas = true;
 
 		for (SolicitudJPA soli : solicitudes) {
 			if (soli != null && soli.getInfomadridid() != null) {
@@ -632,7 +973,7 @@ public class FusionarProcedimentsOperadorController {
 						dataAutFinal = dataAut;
 					}
 				} else {
-					todasAutorizadas = false;
+					//todasAutorizadas = false;
 				}
 
 				Timestamp dataEnvi = infoMad.getDataEnviament();
@@ -642,7 +983,7 @@ public class FusionarProcedimentsOperadorController {
 						dataEnviFinal = dataEnvi;
 					}
 				} else {
-					todasEnviadas = false;
+					//todasEnviadas = false;
 				}
 
 				Timestamp dataCons = infoMad.getDataConsulta();
@@ -843,9 +1184,9 @@ public class FusionarProcedimentsOperadorController {
 		// Ahora añadimos los nuevos documentos que se tienen que generar:
 		// Excel de locales y estatales, plantilla ODT y PDF.
 
-		Long organid = solicitudNueva.getOrganid();
+		//Long organid = solicitudNueva.getOrganid();
 
-		Properties prop;
+		//Properties prop;
 		
         Fitxer docConsentiment = null;
         Long docConsentID = solicitudNueva.getFitxerConsentimentID();

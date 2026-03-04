@@ -100,7 +100,7 @@ public class TramitGPublicController extends TramitGOperadorController {
 		if (entitat != null && entitat.getCIF().equals(CIF_GOVERN)) {
 			String nifDG = Configuracio.getNIFDirectorGeneral();
 			final boolean debug = true;
-	    	boolean caib = true;
+	    	//boolean caib = true;
 			UserInfo infoDG  = null;
 			
 			try {
@@ -112,7 +112,7 @@ public class TramitGPublicController extends TramitGOperadorController {
 			
 			if (infoDG == null) {
 				try {
-					caib = false;
+					//caib = false;
 					IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.OTAE);
 					infoDG = pluginUserInfo.getUserInfoByAdministrationID(nifDG);
 				} catch (Exception e) {

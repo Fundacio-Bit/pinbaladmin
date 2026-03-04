@@ -14,11 +14,11 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NArgumentString;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.SelectMultipleStringKeyValue;
+import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
-import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatForm;
@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
@@ -52,8 +51,6 @@ import es.caib.pinbal.client.usuaris.PermisosServei;
 import es.caib.pinbal.client.usuaris.ProcedimentServei;
 import es.caib.pinbal.client.usuaris.UsuariClient;
 import es.caib.pinbal.client.usuaris.UsuariEntitat;
-
-import org.fundaciobit.genapp.common.web.HtmlUtils;
 
 @Controller
 @RequestMapping(value = "/operador/entitat")
@@ -488,8 +485,7 @@ public class EntitatOperadorController extends EntitatController {
 			
 			
 			//Camps per crear l'usuari a Pinbal
-
-			String nif = null;
+			final String nif = null;
 			String nom = null;
 			String departament = "PinbalAdmin";
 

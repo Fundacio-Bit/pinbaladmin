@@ -76,7 +76,7 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         // Si no interessa gestionar informació personal d'usuari, comentar aquest bloc.
         try {
         	boolean debug = true;
-        	boolean caib = false;
+        	//boolean caib = false;
         	log.info("Instanciarem plugin");
 //        	username = "e45186147w";
         	IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.OTAE);

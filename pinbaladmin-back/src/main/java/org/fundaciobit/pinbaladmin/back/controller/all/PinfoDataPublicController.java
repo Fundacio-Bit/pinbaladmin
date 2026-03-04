@@ -531,7 +531,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 	private IUserInformationPlugin getPluginUserInfo() throws Exception {
 		final boolean debug = true;
-		boolean caib = true;
+		//oolean caib = true;
 		log.info("Obtenint pluginUserInfo...");
 		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		log.info("PluginUserInfo: " + plugin.getClass().getName());
@@ -805,7 +805,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
 
 		final boolean debug = false;
-    	boolean caib = true;
+    	//boolean caib = true;
 		IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		
 		String rol = "PFI_USER";
@@ -945,7 +945,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("selecionat: " + selecionat);
 		
 		final boolean debug = false;
-    	boolean caib = true;
+    	//boolean caib = true;
 		IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 		UserInfo userInfoResponsable;
 		try {

@@ -252,7 +252,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	
 	public void actualizarEstatSolicitud(InfoMadrid infoMadrid, Solicitud solicitud) {
 		Long estadoMadridNuevo = Long.valueOf(infoMadrid.getEstatAutoritzacio());// 👈 directo de Madrid
-		boolean yaAutorizada = infoMadrid.getDataAutoritzacio() != null; 
+		
+		//boolean yaAutorizada = infoMadrid.getDataAutoritzacio() != null; 
 		
 		//Ahora, en funcion de cada estado, se asocian los otros.
 		

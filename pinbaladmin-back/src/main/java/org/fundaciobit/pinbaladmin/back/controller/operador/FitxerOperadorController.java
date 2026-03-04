@@ -1,7 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.File;
-import java.nio.file.FileSystem;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.FitxerController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.FitxerFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.FitxerForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.DocumentCedentService;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEntitatService;
 import org.fundaciobit.pinbaladmin.ejb.DocumentService;
@@ -270,7 +268,7 @@ public class FitxerOperadorController extends FitxerController {
 		}
 
 		String[] seleccionats = filterForm.getSelectedItems();
-		Set<Long> files = new HashSet();
+		Set<Long> files = new HashSet<>();
 		
 		if (seleccionats != null && seleccionats.length != 0) {
 			for (int i = 0; i < seleccionats.length; i++) {
@@ -330,7 +328,7 @@ public class FitxerOperadorController extends FitxerController {
 
 		Map<Long, File> allFiles = FileSystemManager.getAllFiles();
 
-		Set<Long> fisicsPerEsborrar = new HashSet();
+		Set<Long> fisicsPerEsborrar = new HashSet<>();
 
 		// Afegirem fisics que no tenen referencia en BD
 		for (Map.Entry<Long, File> entry : allFiles.entrySet()) {
@@ -363,7 +361,7 @@ public class FitxerOperadorController extends FitxerController {
 		Map<Long, File> allFiles = FileSystemManager.getAllFiles();
 		List<Long> fitxersBBDD = fitxerLogicaEjb.executeQuery(FITXERID, new OrderBy(FITXERID));
 
-		Set<Long> fitxersEsborrarBBDD = new HashSet();
+		Set<Long> fitxersEsborrarBBDD = new HashSet<>();
 		
 		for (Long fID : fitxersBBDD) {
 			if (!allFiles.containsKey(fID)) {

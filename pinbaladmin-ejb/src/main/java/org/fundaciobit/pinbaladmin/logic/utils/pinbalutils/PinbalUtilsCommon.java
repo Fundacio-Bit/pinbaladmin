@@ -361,8 +361,9 @@ public abstract class PinbalUtilsCommon {
 
 	public byte[] getCertificadoX509() {
 
+	    
 		String certificado = "MIIB8TCCAZegAwIBAgIUJ7s5b0e4a5EKeosFVYpY8R4jtv8wCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIVGVzdENlcnQwHhcNMjUxMjAxMTAwMDAwWhcNMjYxMjAxMTAwMDAwWjATMREwDwYDVQQDDAhUZXN0Q2VydDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMX0cS5Fmw7fq0g3MzZ0MsnMd+2C7IeEhuIAH4JlTT1kkp97JQnWWhY1uCEkDp3NzVP8Lzz0JcTsPv4f9NqqWFSjUzBRMB0GA1UdDgQWBBTFo9GhlZJAew34r5TjAmdxhqS93TAfBgNVHSMEGDAWgBTFo9GhlZJAew34r5TjAmdxhqS93TAPBgNVHRMBAf8EBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQCjQGcr/5Znd7XK9LdJxgC5rmUtBk8oun3nH0D7mYYTIwIhAIpw1o6v9EYawcy+HUildGL9TEZ17KJTudYbuvVKCBKt";
-
+// TODO Això és correcte ?????
 		byte[] consentimentBytes = certificado.getBytes();
 //		return consentimentBytes;
 		return null;

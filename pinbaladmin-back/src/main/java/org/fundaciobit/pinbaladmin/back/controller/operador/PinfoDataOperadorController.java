@@ -81,7 +81,7 @@ public class PinfoDataOperadorController extends PinfoDataController {
 	    log.info("username: ]" + username + "[");
 
 	    boolean debug = false;
-    	boolean caib = true;
+    	//boolean caib = true;
 
 		IUserInformationPlugin plugin =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
 	    UserInfo info = plugin.getUserInfoByUserName(username);

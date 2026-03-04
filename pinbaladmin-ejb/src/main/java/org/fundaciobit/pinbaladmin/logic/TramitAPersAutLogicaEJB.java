@@ -221,7 +221,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         boolean produccio = true;
         List<TramitIServ> listaTramitsI = null;
         
-        TramitJConsent tramitJ = null;
+        //TramitJConsent tramitJ = null;
         String consentiment = null;
         String urlconsentiment = null;
         String consentimentadjunt = null;
@@ -369,7 +369,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     break;
                     case "J":
                         TramitJConsent J = (TramitJConsent) obj;
-                        tramitJ = J;
+                        //tramitJ = J;
                         
                         consentiment = J.getConsentiment();
 

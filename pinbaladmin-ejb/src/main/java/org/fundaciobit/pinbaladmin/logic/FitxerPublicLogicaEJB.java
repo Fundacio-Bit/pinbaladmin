@@ -1,7 +1,6 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.security.PermitAll;
@@ -50,7 +49,7 @@ public class FitxerPublicLogicaEJB extends FitxerEJB implements FitxerPublicLogi
     public void deleteFull(Fitxer instance) {
 
         // Crear el Set con el ID del fitxer
-        Set<Long> files = new HashSet();
+        Set<Long> files = new HashSet<>();
         files.add(instance.getFitxerID());
 
         // Borrar en BBDD

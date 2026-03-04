@@ -42,7 +42,6 @@ import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.comu.Page;
 import es.caib.pinbal.client.procediments.Procediment;
 import es.caib.pinbal.client.procediments.ProcedimentClient;
-import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
 import es.caib.pinbal.client.serveis.Servei;
 import es.caib.pinbal.client.serveis.ServeiClient;
 import es.caib.pinbal.client.usuaris.FiltreUsuaris;
@@ -112,17 +111,17 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		// final String CODI_USUARI = "e45186147w"; //"S0711001H";
 
 		final boolean debug = false;
-    	boolean caib = true;
+    	// boolean caib = true;
 		IUserInformationPlugin pluginUserInfo =  PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
-
+/*
 		final String baseUrl = Configuracio.getApiPinbalClientUrl();
 		final String username = Configuracio.getApiPinbalClientUsername();
 		final String password = Configuracio.getApiPinbalClientPassword();
 		final LogLevel logLevel = LogLevel.INFO;
+*/
+		//UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 
-		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
-
-		ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+		//ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
 //		clientRecobriment.getEntitats().get(0).get
 		
 		log.info("getEstructuraUsuarisProcedimentServeis per PINFO" + pinfoID);
@@ -692,10 +691,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		final String password = Configuracio.getApiPinbalClientPassword();
 
 		final String ENTITAT_CIF = "GOVERN"; // "S0711001H";
+		/*
 		final String CODIGO_PROCEDIMIENTO = "CODSVDR_GBA_20121107";
 		final String PETICION_SCSP_ID = "PINBAL00000000000000265474";
 		final boolean ENABLE_LOGGING = true;
 		final boolean BASIC_AUTH = true;
+		*/
 
 		LogLevel logLevel = LogLevel.INFO;
 		log.info("Creant Clients");

@@ -64,7 +64,8 @@ public class PinbalUtilsModificacioLogicaEJB extends PinbalUtilsCommon implement
 		Contactos contactos = getContactos();
 		solicitud.setContactos(contactos);
 
-		AutorizacionDelegada autDelegada = getAutorizacionDelegada(soli);
+		
+		//AutorizacionDelegada autDelegada = getAutorizacionDelegada(soli);
 	//	solicitud.setAutorizacionDelegada(autDelegada);
 
 		Procedimiento proc = getProcedimiento(soli);

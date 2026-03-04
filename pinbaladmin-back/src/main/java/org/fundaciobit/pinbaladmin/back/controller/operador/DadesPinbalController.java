@@ -138,7 +138,7 @@ public class DadesPinbalController {
         // Valores de paginación
         int page = (pageNum != null && pageNum >= 0) ? pageNum : 0;
         int size = (pageSize != null && pageSize > 0) ? pageSize : 20;
-        String sort = null;
+        //String sort = null;
         
         mav.addObject("currentPage", page);
         mav.addObject("pageSize", size);

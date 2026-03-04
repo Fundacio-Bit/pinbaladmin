@@ -49,7 +49,6 @@ import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
-import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.ModificacioSolicitud;
@@ -57,8 +56,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.entity.SolicitudServei;
-import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
-import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
@@ -313,7 +310,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 	public String seleccionarProcedimentPost(HttpServletRequest request, HttpServletResponse response)
 			throws I18NException {
 		log.info("Entra a seleccionarProcediment POST");
-		ModelAndView mav = new ModelAndView("editarProcedimentAll");
+		//ModelAndView mav = new ModelAndView("editarProcedimentAll");
 
 		Long solicitudID = Long.valueOf(request.getParameter("solicitudID"));
 		
