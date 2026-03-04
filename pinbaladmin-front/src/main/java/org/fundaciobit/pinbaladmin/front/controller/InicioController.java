@@ -43,13 +43,15 @@ public class InicioController {
 
 	public final static String CONTEXT_ARRAMCAR_AUTH = "/arrancarpinfoauth";
 	public final static String CONTEXT_MODIFICAR_AUTH = "/modificarsolicitudauth";
+	
+	public final static String MAPPING_OK_LOGIN = "/okLogin";
 
 	
 	@RequestMapping(value = { "/"}, method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView root(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		log.info("Entra a ROOT");
 		
-		return new ModelAndView(new RedirectView("/arrancarpinfo", true));
+		return new ModelAndView(new RedirectView("/modificarsolicitud", true));
 		
 	}
 	
@@ -73,7 +75,10 @@ public class InicioController {
 			log.info("urlbase: " + urlbase);
 			String urlRedirect = urlbase + request.getContextPath() + CONTEXT_ARRAMCAR_AUTH;
 
+			log.info("urlRedirect: " + urlRedirect);
 			request.getSession().setAttribute(PluginLoginController.SESSION_RETURN_URL_POST_LOGIN, urlRedirect);
+			request.getSession().setAttribute(MAPPING_OK_LOGIN, urlRedirect);
+
 			mav = new ModelAndView(
 					new RedirectView(PluginLoginController.MAPPING_PRELOGIN + "?urlbase=" + urlbase, true));
 //			mav = new ModelAndView("inici");
@@ -82,7 +87,6 @@ public class InicioController {
 			mav = new ModelAndView(new RedirectView(CONTEXT_ARRAMCAR_AUTH, true));
 
 		}
-
 		return mav;
 	}
 
@@ -107,7 +111,10 @@ public class InicioController {
 				log.info("urlbase: " + urlbase);
 				String urlRedirect = urlbase + request.getContextPath() + CONTEXT_MODIFICAR_AUTH;
 
+				log.info("urlRedirect: " + urlRedirect);
 				request.getSession().setAttribute(PluginLoginController.SESSION_RETURN_URL_POST_LOGIN, urlRedirect);
+				request.getSession().setAttribute(MAPPING_OK_LOGIN, urlRedirect);
+
 				mav = new ModelAndView(
 						new RedirectView(PluginLoginController.MAPPING_PRELOGIN + "?urlbase=" + urlbase, true));
 //			mav = new ModelAndView("inici");

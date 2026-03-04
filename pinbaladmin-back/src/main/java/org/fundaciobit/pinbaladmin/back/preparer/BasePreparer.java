@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.LongField;
 import org.fundaciobit.genapp.common.query.SelectCount;
 import org.fundaciobit.genapp.common.query.SelectDistinct;
 import org.fundaciobit.genapp.common.query.StringField;
@@ -314,8 +315,9 @@ public class BasePreparer implements ViewPreparer, Constants {
                 {
                     StringField operador = new EventQueryPath().SOLICITUD().OPERADOR();
                     StringField estatal = new EventQueryPath().SOLICITUD().ENTITATESTATAL();
+                    LongField estat = new EventQueryPath().SOLICITUD().ESTATSOLICITUD();
                     
-                    Where wComu = Where.AND(wNoLlegit, EventFields.SOLICITUDID.isNotNull());
+                    Where wComu = Where.AND(wNoLlegit, EventFields.SOLICITUDID.isNotNull() ); //, estat.notEqual(SOLI_ESTAT_FUSIONADA));
                     SelectDistinct<Long> sd = new SelectDistinct<Long>(EventFields.SOLICITUDID);
                     
                     SelectCount sc = new SelectCount(sd);
