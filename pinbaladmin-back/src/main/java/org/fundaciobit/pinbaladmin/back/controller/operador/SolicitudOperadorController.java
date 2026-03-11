@@ -1589,9 +1589,17 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             if (where != null) {
                 while (aux.getCif() == null && aux.getDir3pare() != null) {
                     List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                    aux = listAux.get(0);
-//                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
-                    jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+                    
+                    if (listAux == null || listAux.size() == 0) {
+                        jerarquia.add("( NO TE ORGANS NI DIR3 !!!! ) ");
+                        break;
+                    } else {
+                    
+                    
+                        aux = listAux.get(0);
+    //                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
+                        jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+                    }
                 }
             }
             String str = String.join("|", jerarquia);

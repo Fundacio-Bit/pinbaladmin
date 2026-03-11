@@ -348,17 +348,22 @@ public class AltaSolicitudPinbalOperadorController {
 
     	Long infoMadridID = soli.getInfomadridid();
     	InfoMadridJPA infoMad = null;
-    	boolean infoMadridInvalido = false;
+    	boolean infoMadridInvalido;
     	
-		if (infoMadridID != null) {
+		if (infoMadridID == null) {
+		    infoMadridInvalido = true;
+		} else {
 			infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
 			if (infoMad == null || infoMad.getTitularNif() == null || infoMad.getTitularNom() == null) {
 				infoMadridInvalido = true;
+			} else {
+			    infoMadridInvalido = false;
+                
 			}
 		}
     	
     	if (infoMadridInvalido) {
-    		
+    		/* TODO ERROR: Aquest CODI NO FA RES REVISAR-HO !!!!! */
 			if (soli.getTitularFirmaNif() != null) {
 				ScspTitular titular = new ScspTitular();
 				ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
@@ -382,43 +387,45 @@ public class AltaSolicitudPinbalOperadorController {
 				titular.setApellido2(ape2);
 				titular.setNombreCompleto(nombreCompleto);
 			}
+			
     		
             Long fitxerID = soli.getSolicitudXmlID();
             Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
             
             return getTitularFromProperties(prop);
+		} else {
+    	
+        	//infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+        	
+        	String documentacion = infoMad.getTitularNif();
+        	
+        	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+    
+    		log.info("Titular Nom: " + infoMad.getTitularNom());
+        	
+    		String[] fullName = infoMad.getTitularNom().split("\\|");
+        	log.info("FullName: " + fullName);
+        	
+            ScspTitular titular = new ScspTitular();
+    
+            String nombre = fullName[0];
+            log.info("nombre: " + nombre);
+            String ape1 = fullName[1];
+            log.info("ape1: " + ape1);
+            String ape2 = fullName[2];
+            log.info("ape2: " + ape2);
+            String nombreCompleto = toFullName(nombre, ape1, ape2);
+            log.info("nombreCompleto: " + nombreCompleto);
+    
+            titular.setTipoDocumentacion(tipoDocumentacion);
+            titular.setDocumentacion(documentacion);
+            titular.setNombre(nombre);
+            titular.setApellido1(ape1);
+            titular.setApellido2(ape2);
+            titular.setNombreCompleto(nombreCompleto);
+    
+            return titular;
 		}
-    	
-    	infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
-    	
-    	String documentacion = infoMad.getTitularNif();
-    	
-    	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-
-		log.info("Titular Nom: " + infoMad.getTitularNom());
-    	
-		String[] fullName = infoMad.getTitularNom().split("\\|");
-    	log.info("FullName: " + fullName);
-    	
-        ScspTitular titular = new ScspTitular();
-
-        String nombre = fullName[0];
-        log.info("nombre: " + nombre);
-        String ape1 = fullName[1];
-        log.info("ape1: " + ape1);
-        String ape2 = fullName[2];
-        log.info("ape2: " + ape2);
-        String nombreCompleto = toFullName(nombre, ape1, ape2);
-        log.info("nombreCompleto: " + nombreCompleto);
-
-        titular.setTipoDocumentacion(tipoDocumentacion);
-        titular.setDocumentacion(documentacion);
-        titular.setNombre(nombre);
-        titular.setApellido1(ape1);
-        titular.setApellido2(ape2);
-        titular.setNombreCompleto(nombreCompleto);
-
-        return titular;
     }
     
 
