@@ -421,7 +421,7 @@ public abstract class PinbalUtilsCommon {
 
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
 				// No se envía
-			} else if (tipus == Constants.DOCUMENT_SOLICITUD_PDF) {
+			} else if (tipus == Constants.DOCUMENT_SOLICITUD_ADUNJT) {
 				//Si hem d'enviar algun document PDF adicional, ha de ser d'aquest tipus.
 				Long documentID = document.getFitxerFirmatID() == null ? document.getFitxerOriginalID()
 						: document.getFitxerFirmatID();
@@ -429,7 +429,7 @@ public abstract class PinbalUtilsCommon {
 				FitxerJPA fitxer = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(documentID);
 				
 				if (fitxer.getMime().equals("application/pdf")) {
-					String desc = "Document PDF de la solicitud";
+					String desc = "Document adjunt a la solicitud";
 					String tipo = "FORMULARIO DE AUTORIZACION";
 					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
 				}
