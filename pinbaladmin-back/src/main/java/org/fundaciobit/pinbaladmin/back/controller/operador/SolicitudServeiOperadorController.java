@@ -89,6 +89,9 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
+
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb;
     
 
     public boolean isPublic() {
@@ -461,7 +464,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
 						adjunt = fitxerEjb.findByPrimaryKey(soli.getSolicitudXmlID());
 					}
 					
-					mail.crearEvent(soli, adjunt, eventLogicaEjb);
+					mail.crearEvent(soli, adjunt, eventLogicaEjb, notificacionLogicaEjb);
 					mail.actualitzarEstatServei(soliID, solicitudServeiLogicaEjb);
 					String missatge = "Correu enviat a " + mail.getId();
 					log.info(missatge);

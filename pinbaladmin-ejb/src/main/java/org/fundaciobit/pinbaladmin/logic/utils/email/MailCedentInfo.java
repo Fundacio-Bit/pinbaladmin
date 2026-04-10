@@ -190,27 +190,13 @@ public class MailCedentInfo {
 //		}
 //	}
 	
-	public void crearEvent(SolicitudJPA soli, FitxerJPA adjunt, EventLogicaService eventLogicaEjb) throws Exception {
+	public void crearEvent(SolicitudJPA soli, FitxerJPA adjunt, EventLogicaService eventLogicaEjb,
+			org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb) throws Exception {
 		try {
-			Timestamp data = new Timestamp(System.currentTimeMillis());
-			int tipus = Constants.EVENT_TIPUS_CONSULTA_A_CEDENT;
-			String cedent = this.subject;
+			// Construir el mensaje
+			String subject = this.subject + " - Cedent PID [" + soli.getExpedientPid() + "]";
 
-			EventJPA evt = new EventJPA();
-			evt.setSolicitudID(soli.getSolicitudID());
-			evt.setDataEvent(data);
-			evt.setTipus(tipus);
-			evt.setPersona(soli.getOperador());
-			evt.setDestinatari(cedent);
-			evt.setNoLlegit(false);
-
-			// Camps per enviar el correu
-			String subject = this.subject + " - Cedent "+ "PID [" + soli.getExpedientPid() + "]";
-
-			String destinataris = ""; // = String.join(";", dests);
-			for (String dest : this.dests) {
-				destinataris += dest + ";";
-			}
+			String destinataris = String.join(";", this.dests);
 
 			String msg = this.message;
 
@@ -230,17 +216,19 @@ public class MailCedentInfo {
 			String entitat = soli.getEntitatEstatal();
 			msg = msg.replaceAll("#ENTITAT#", entitat);
 
-			evt.setComentari(msg);
-			evt.setFitxerID(adjunt.getFitxerID());
-			evt.setFitxer(adjunt);
-			evt.setDestinatarimail(destinataris);
-			evt.setAsumpte(subject);
-
-			eventLogicaEjb.create(evt);
+			// Usar el nuevo servicio de notificaciones
+			notificacionLogicaEjb.crearConsultaACedente(
+				soli,
+				soli.getOperador(),
+				this.subject,
+				destinataris,
+				subject,
+				msg,
+				adjunt.getFitxerID()
+			);
 		} catch (Exception e) {
-			throw new Exception("Error al crear event", e);
+			throw new Exception("Error al crear event de consulta a cedent", e);
 		}
-
 	}
 
 	public static FitxerJPA convertirAdjuntsZip(List<FitxerJPA> adjunts, FitxerService fitxerEjb) {

@@ -17,6 +17,10 @@ public interface Constants {
 
     public static final String MAIL_QUEUE = "jms/PinbalAdminMailsQueue";
 
+    // NOMBRES DE SISTEMAS
+    public static final String SISTEMA_PINBALADMIN = "PinbalAdmin";
+    public static final String SISTEMA_PORTAFIB = "PortaFIB";
+
     public static final String PAD_ADMIN = "PAD_ADMIN";
     public static final String PAD_USER = "PAD_USER";
     public static final String PAD_WS = "PAD_WS";

@@ -54,6 +54,9 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	@EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)
 	protected org.fundaciobit.pinbaladmin.ejb.FitxerService fitxerEjb;
 
+	@EJB(mappedName = NotificacionLogicaService.JNDI_NAME)
+	protected NotificacionLogicaService notificacionLogicaEjb;
+
 	@Override
 	@PermitAll
 	public Document create(Document instance) throws I18NException {
@@ -256,27 +259,13 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	protected void crearEventSolcitudFirmada(Long soliID, Long fitxerFirmatID) throws I18NException {
 
 		log.info("Afegir event de peticio rebuda de portafib");
-		{
-			Long _solicitudID_ = soliID;
-			Long _incidenciaTecnicaID_ = null;
-
-			Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-
-			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-			boolean _noLlegit_ = true;
-			Long _fitxerID_ = fitxerFirmatID;
-			String _missatge_ = "Solicitud Firmada rebuda de Portafib";
-			String _asumpte_ = "Guardat Fitxer Firmat";
-			String _persona_ = "PortaFIB - PinbalAdmin";
-
-			String _destinatari_ = null;
-			String _destinatariEmail_ = null;
-			String _caidIdentificadorConsulta_ = null;
-			String _caidNumeroSeguiment_ = null;
-
-			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-					_destinatariEmail_, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
-					_caidNumeroSeguiment_);
+		SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(soliID);
+		
+		try {
+			notificacionLogicaEjb.registrarRecepcionFirma(solicitud, fitxerFirmatID);
+		} catch (I18NException e) {
+			log.error("Error registrant recepció de firma: " + e.getMessage(), e);
+			throw e;
 		}
 	}
 }

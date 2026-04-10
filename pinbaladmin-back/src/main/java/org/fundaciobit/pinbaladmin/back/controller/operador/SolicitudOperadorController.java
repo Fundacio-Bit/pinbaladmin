@@ -123,6 +123,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     @EJB(mappedName = EventLogicaService.JNDI_NAME)
     protected EventLogicaService eventLogicaEjb;
 
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb;
+
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
     

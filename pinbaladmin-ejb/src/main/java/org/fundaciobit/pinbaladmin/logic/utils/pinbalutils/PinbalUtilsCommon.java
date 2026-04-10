@@ -84,6 +84,9 @@ public abstract class PinbalUtilsCommon {
 	@EJB(mappedName = EntitatLogicaService.JNDI_NAME)
 	protected EntitatLogicaService entitatLogicaEjb;
 
+	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService.JNDI_NAME)
+	protected org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb;
+
 	final String PINBAL_CONSENTIMENT_LLEI = "Ley";
 	final String PINBAL_CONSENTIMENT_SI = "Si";
 	final String PINBAL_CONSENTIMENT_NOOP = "NoOpo";
@@ -295,32 +298,47 @@ public abstract class PinbalUtilsCommon {
 		return url;
 	}
 
-	public void enviarMissatgeAlSolicitant(SolicitudJPA solicitud, String asumpte, String missatge)
-			throws I18NException {
+	/**
+	 * Envía un mensaje relacionado con una solicitud.
+	 * @param solicitud La solicitud
+	 * @param asumpte Asunto del mensaje
+	 * @param missatge Contenido del mensaje
+	 * @param enviarEmailAlContacte true para enviar email al contacto (comportamiento anterior),
+	 *                              false para notificar a tramitadores sin enviar email (comportamiento nuevo)
+	 */
+	public void enviarMissatgeAlSolicitant(SolicitudJPA solicitud, String asumpte, String missatge, 
+			boolean enviarEmailAlContacte) throws I18NException {
 		final Timestamp data = new Timestamp(System.currentTimeMillis());
 		final String caidIdentificadorConsulta = null;
 		final String caidNumeroSeguiment = null;
 
 		Long _fitxerID_ = null;
-		boolean _noLlegit_ = false;
 
 		EventJPA event = new EventJPA();
 		event.setSolicitudID(solicitud.getSolicitudID());
 		event.setIncidenciaTecnicaID(null);
 		event.setDataEvent(data);
-		event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 		event.setFitxerID(_fitxerID_);
-		event.setNoLlegit(_noLlegit_);
 		event.setCaidIdentificadorConsulta(caidIdentificadorConsulta);
 		event.setCaidNumeroSeguiment(caidNumeroSeguiment);
-
-		event.setPersona("PinbalAdmin");
 		event.setAsumpte(asumpte);
 		event.setComentari(missatge);
 
-		// Es un comentari de contacte, no te destinatari.
-		event.setDestinatari(solicitud.getPersonaContacte());
-		event.setDestinatarimail(solicitud.getPersonaContacteEmail());
+		if (enviarEmailAlContacte) {
+			// COMPORTAMIENTO ANTERIOR: Enviar email al contacto
+			event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC); // De tramitador a contacto (envía email)
+			event.setNoLlegit(false);
+			event.setPersona("PinbalAdmin");
+			event.setDestinatari(solicitud.getPersonaContacte());
+			event.setDestinatarimail(solicitud.getPersonaContacteEmail());
+		} else {
+			// COMPORTAMIENTO NUEVO: Notificar a tramitadores sin enviar email
+			event.setTipus(Constants.EVENT_TIPUS_COMENTARI_CONTACTE); // De contacto a tramitador (NO envía email)
+			event.setNoLlegit(true); // Marcar como no leído para que los tramitadores lo vean
+			event.setPersona(solicitud.getPersonaContacte()); // Aparece como enviado por el contacto
+			event.setDestinatari(null);
+			event.setDestinatarimail(null);
+		}
 
 		eventLogicaEjb.create(event);
 	}
@@ -495,52 +513,41 @@ public abstract class PinbalUtilsCommon {
 
 	/**
 	 * Añade un evento de solicitud enviada a Madrid
+	 * 
+	 * @deprecated Usar {@link NotificacionLogicaService#registrarEnvioAMadrid(SolicitudJPA, String, String, String)} en su lugar
 	 */
+	@Deprecated
 	protected void afegirEventSolicitudEnviada(org.fundaciobit.pinbaladmin.model.entity.Solicitud soli, String mensaje,
 			String tipusOperacio) {
 
-		final Timestamp data = new Timestamp(System.currentTimeMillis());
-		int tipus = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-		String persona = "pinbaladmin - " + soli.getOperador();
-		String subject = tipusOperacio + " enviada a MADRID. " + soli.getProcedimentCodi();
-		String msg = "S'ha enviat la " + tipusOperacio.toLowerCase() + " a MADRID. " + mensaje;
-
-		EventJPA event = new EventJPA();
-		event.setSolicitudID(soli.getSolicitudID());
-		event.setIncidenciaTecnicaID(null);
-		event.setDataEvent(data);
-		event.setTipus(tipus);
-		event.setPersona(persona);
-		event.setDestinatari(null);
-		event.setDestinatarimail(null);
-		event.setAsumpte(subject);
-		event.setComentari(msg);
-		event.setFitxerID(null);
-		event.setNoLlegit(true);
-		event.setCaidIdentificadorConsulta(null);
-		event.setCaidNumeroSeguiment(null);
-
 		try {
-			eventLogicaEjb.create(event);
+			notificacionLogicaEjb.registrarEnvioAMadrid(
+				(SolicitudJPA) soli, 
+				soli.getOperador(), 
+				tipusOperacio, 
+				mensaje
+			);
 		} catch (I18NException e) {
-			log.error("No s'ha pogut crear l'event de " + tipusOperacio.toLowerCase() + " enviada: " + e.getMessage(),
-					e);
+			log.error("Error registrant envio a Madrid: " + e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * Avisa al contacto de una solicitud desestimada que requiere esmenas
+	 * 
+	 * @deprecated Usar {@link NotificacionLogicaService#notificarDesestimacionATramitadores(SolicitudJPA, String, String)} en su lugar
 	 */
+	@Deprecated
 	protected void avisarContacteSolicitudDesestimada(SolicitudJPA solicitud, String respostaMadrid,
 			String tipusProces) {
-		String asumpte = "PROCÉS " + tipusProces + " PROCEDIMENT " + solicitud.getProcedimentCodi()
-				+ ". Requereix esmenes.";
-		String missatge = generarMissatgeEsmena(solicitud, respostaMadrid);
-
 		try {
-			enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+			notificacionLogicaEjb.notificarDesestimacionATramitadores(
+				solicitud, 
+				respostaMadrid, 
+				tipusProces
+			);
 		} catch (I18NException e) {
-			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
+			log.error("Error notificant desestimació: " + e.getMessage(), e);
 		}
 	}
 

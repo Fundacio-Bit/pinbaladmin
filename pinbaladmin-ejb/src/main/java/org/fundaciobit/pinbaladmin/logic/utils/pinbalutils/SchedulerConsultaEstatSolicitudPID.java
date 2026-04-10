@@ -41,9 +41,11 @@ public class SchedulerConsultaEstatSolicitudPID {
 	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
 	protected SolicitudLogicaService solicitudLogicaEjb;
 
+	@EJB(mappedName = EventLogicaService.JNDI_NAME)
+	protected EventLogicaService eventLogicaEjb;
 
-    @EJB(mappedName = EventLogicaService.JNDI_NAME)
-    protected EventLogicaService eventLogicaEjb;
+	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService.JNDI_NAME)
+	protected org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb;
 
 	@Resource
 	private TimerService timerService;
@@ -52,16 +54,16 @@ public class SchedulerConsultaEstatSolicitudPID {
 	public void init() {
 		// Configurar la tarea con valores dinámicos
 
-//		String horaStr = Configuracio.getHoraTancamentExpedientsScheduler(); // 14
-//		String nHoresStr = Configuracio.getNhoresTancamentExpedientsScheduler(); // 2
-//
-//		int nHores = Integer.parseInt(nHoresStr);
-//		if (nHores > 1) {
-//			int hores = Integer.parseInt(horaStr);
-//			horaStr += "-" + (hores + nHores - 1);
-//		}
-//
-//		log.info("initScheduler:: Tancar expedients a les " + horaStr + " hores");
+		// String horaStr = Configuracio.getHoraTancamentExpedientsScheduler(); // 14
+		// String nHoresStr = Configuracio.getNhoresTancamentExpedientsScheduler(); // 2
+		//
+		// int nHores = Integer.parseInt(nHoresStr);
+		// if (nHores > 1) {
+		// int hores = Integer.parseInt(horaStr);
+		// horaStr += "-" + (hores + nHores - 1);
+		// }
+		//
+		// log.info("initScheduler:: Tancar expedients a les " + horaStr + " hores");
 		String horaStr = "14";
 		String minuteStr = "00";
 
@@ -85,7 +87,7 @@ public class SchedulerConsultaEstatSolicitudPID {
 	@Timeout
 	public void onTimeout(Timer timer) {
 		log.info("No executam el cron per canviar estats encara.");
-//		obtenirEstatsSolicitudsPinbal();
+		// obtenirEstatsSolicitudsPinbal();
 	}
 
 	protected void obtenirEstatsSolicitudsPinbal() {
@@ -111,26 +113,37 @@ public class SchedulerConsultaEstatSolicitudPID {
 			/*
 			 * Les solicituds que s'han de consultar:
 			 * 
-			 * Son les que s'han enviat a Madrid i espren resposta. Si ja tenim la resposta no s'han de consultar.
+			 * Son les que s'han enviat a Madrid i espren resposta. Si ja tenim la resposta
+			 * no s'han de consultar.
 			 * 
-			 * Esperam resposta de les solicitud amb estat SOLI_ESTAT_PENDENT_AUTORITZAR (alta) i SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO (modificacio).
-			 * Si está autoritzat i no es fa cap modificació, no s'ha de tornar a consultar, ja tenim la resposta.
-			 * Si donen resposta de Madrid, la solicitud pot pasar a diversos estats, pero no torna a pendent autoritzar, perque ja tenim resposta, ok o ko.
+			 * Esperam resposta de les solicitud amb estat SOLI_ESTAT_PENDENT_AUTORITZAR
+			 * (alta) i SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO (modificacio).
+			 * Si está autoritzat i no es fa cap modificació, no s'ha de tornar a consultar,
+			 * ja tenim la resposta.
+			 * Si donen resposta de Madrid, la solicitud pot pasar a diversos estats, pero
+			 * no torna a pendent autoritzar, perque ja tenim resposta, ok o ko.
 			 * 
 			 * 
 			 * Error Pinbal fent la consulta:
 			 * 
-			 * Si dona error fent PRE-ALTAS, l'estat de la solicitud es SOLI_ESTAT_ERROR_ENVIANT_MADRID (_MODIFICACIO). Aquestes s'enviaran una altra vegada amb cron nocturn.
-			 * També tenim ESTAT_PINBAL_ERROR. Aquests son solicituds que han donat error fent la consulta. Aquestes s'han de tornar a consultar, s'havien de consultar, han donat error, pero no sabem el nou estat.
+			 * Si dona error fent PRE-ALTAS, l'estat de la solicitud es
+			 * SOLI_ESTAT_ERROR_ENVIANT_MADRID (_MODIFICACIO). Aquestes s'enviaran una altra
+			 * vegada amb cron nocturn.
+			 * També tenim ESTAT_PINBAL_ERROR. Aquests son solicituds que han donat error
+			 * fent la consulta. Aquestes s'han de tornar a consultar, s'havien de
+			 * consultar, han donat error, pero no sabem el nou estat.
 			 * 
 			 * 
-			 * Solicituds pendents d'autoritzar manualment. Hi ha solicituds que s'han enviat manualent, aquestes tenen ESTAT_PINBAL_NO_SOLICITAT, que es el que totes tenen per defecte i que es canvia quan es fa l'alta.
+			 * Solicituds pendents d'autoritzar manualment. Hi ha solicituds que s'han
+			 * enviat manualent, aquestes tenen ESTAT_PINBAL_NO_SOLICITAT, que es el que
+			 * totes tenen per defecte i que es canvia quan es fa l'alta.
 			 * Aquestes no les hem de processar.
 			 * 
 			 */
-			
+
 			// Excloure les que no s'han sol·licitat (estat per defecte)
-//			Where wEstatPinbalValid = SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT);
+			// Where wEstatPinbalValid =
+			// SolicitudFields.ESTATPINBAL.notEqual(Constants.ESTAT_PINBAL_NO_SOLICITAT);
 
 			Where wEstatSolicitudValid = SolicitudFields.ESTATSOLICITUD.equal(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 
@@ -145,52 +158,57 @@ public class SchedulerConsultaEstatSolicitudPID {
 			log.info("Solicituds a processar: " + solicituds.size());
 
 			List<String> solicitudConsultades = new ArrayList<String>();
-			
+
 			for (Solicitud solicitud : solicituds) {
-				
+
 				String codi = solicitud.getProcedimentCodi();
-				
-				if (codi.length() > 20 ) {
+
+				if (codi.length() > 20) {
 					log.error("Solicitud amb codi llarg: " + codi);
 					continue;
 				}
-				
+
 				if (solicitudConsultades.contains(codi)) {
 					log.info("Solicitud " + codi + " ja consultada.");
 					continue;
 				} else {
 					solicitudConsultades.add(codi);
 				}
-				
+
 				try {
 					Long estatPinbalOld = solicitud.getEstatpinbal();
-					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario, solicitud.getSolicitudID());
+					Retorno retorno = solicitudLogicaEjb.consultaEstatApiPinbal(titular, funcionario,
+							solicitud.getSolicitudID());
 
 					final String SOLICITUD_TROBADA = "0";
 					if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 
 						EstadoProcedimiento estadoActual = retorno.getProcedimiento().getEstadoProcedimiento();
 						Long estatPinbalNou = Long.valueOf(estadoActual.getEstado());
-						
+
 						if (estatPinbalOld != estatPinbalNou) {
-							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR && estatPinbalNou != Constants.ESTAT_PINBAL_ERROR) {
+							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR
+									&& estatPinbalNou != Constants.ESTAT_PINBAL_ERROR) {
 								crearMissatgeCanviEstat(solicitud.getSolicitudID(), estatPinbalOld, estadoActual);
 							}
 						}
 						solicitud.setEstatpinbal(estatPinbalNou);
 					} else {
-						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: " + retorno.getEstado().getCodigoEstado() + " - " + retorno.getEstado().getLiteralError() );
+						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: "
+								+ retorno.getEstado().getCodigoEstado() + " - "
+								+ retorno.getEstado().getLiteralError());
 					}
-					
+
 				} catch (I18NException e) {
-					log.error("Error creant event de canvi de solicitud " + solicitud.getProcedimentCodi() + ": " + e.getMessage());
+					log.error("Error creant event de canvi de solicitud " + solicitud.getProcedimentCodi() + ": "
+							+ e.getMessage());
 				} catch (Exception e) {
 					log.error("Error al consultar l'estat de la solicitud " + codi + ": " + e.getMessage(), e);
 					solicitud.setEstatpinbal(Constants.ESTAT_PINBAL_ERROR);
 				}
-				
+
 				solicitudLogicaEjb.update(solicitud);
-				
+
 				// Si el CRON s'executa durant 2 min, surt del for i acaba la funció.
 				if ((System.currentTimeMillis() - startTime) > TRANSACTION_EXIT_IN_MILI) {
 					log.warn("Timeout.");
@@ -207,48 +225,33 @@ public class SchedulerConsultaEstatSolicitudPID {
 		log.info("Total time: " + (endTime - startTime));
 		log.info("Acaba obtenirEstatsSolicitudsPinbal()");
 	}
-	
-	private void crearMissatgeCanviEstat(Long solicitudID, Long estadoAnterior, EstadoProcedimiento estadoActual) throws I18NException {
-		String estadoAnteriorStr = getEstatString(estadoAnterior);
+
+	private void crearMissatgeCanviEstat(Long solicitudID, Long estadoAnterior, EstadoProcedimiento estadoActual)
+			throws I18NException {
 		Long estatActual = Long.valueOf(estadoActual.getEstado());
-		String estadoActualStr = getEstatString(estatActual);
+		String descripcio = estadoActual.getDescripcion();
+		String observaciones = estadoActual.getObservaciones();
 
-    	String msgPinbal = estadoActual.getDescripcion();
-    	if (estadoActual.getObservaciones() != null && !estadoActual.getObservaciones().isEmpty()) {
-    	    msgPinbal += "<br><br><b>Observacions:</b> " + estadoActual.getObservaciones();
-    	}
+		org.fundaciobit.pinbaladmin.persistence.SolicitudJPA solicitud = solicitudLogicaEjb
+				.findByPrimaryKey(solicitudID);
 
-    	String descripcio = "<div style=\"margin: 0.5rem; font-size: 15px;\">"
-    	        + "<b>Actualització de l'estat de la sol·licitud a Pinbal</b><br>"
-    	        + "<br>"
-    	        + "<b>Estat anterior:</b> " + estadoAnteriorStr + "<br>"
-    	        + "<b>Estat actual:</b> " + estadoActualStr + "<br>"
-    	        		+ "<br>"
-    	        + msgPinbal
-    	        + "</div>";
+		// log.info("Registrant canvi d'estat per scheduler: solicitud={}, {} → {}",
+		// 		solicitudID, estadoAnterior, estatActual);
+		log.info("Registrant canvi d'estat per scheduler: solicitud=" + solicitudID + ", "
+				+ getEstatString(estadoAnterior) + " → " + getEstatString(estatActual));
 
-    	String asumpte = "Actualització de l'estat de la solicitud a Pinbal";
-
-		
-		// afegir event a la solicitud indicant el canvi d'estat
-		Long _incidenciaTecnicaID_ = null;
-		
-		Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
-		int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-		String _persona_ = "PinbalAdmin";
-		boolean _noLlegit_ = true;
-
-		String _caidIdentificadorConsulta_ = null;
-		String _caidNumeroSeguiment_ = null;
-		String _destinatari_ = null;
-		String _destinatariEmail_ = null;
-
-		log.info("Afegint event a la solicitud. Descripció: " + descripcio);
-		eventLogicaEjb.create(solicitudID, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_,
-				_destinatari_, _destinatariEmail_, asumpte, descripcio, null, _noLlegit_,
-				_caidIdentificadorConsulta_, _caidNumeroSeguiment_);
+		try {
+			notificacionLogicaEjb.registrarCambioEstadoScheduler(
+					solicitud,
+					estadoAnterior,
+					estatActual,
+					descripcio,
+					observaciones);
+		} catch (I18NException e) {
+			log.error("Error registrant canvi d'estat: " + e.getMessage(), e);
+			throw e;
+		}
 	}
-    
 
 	private String getEstatString(Long estado) {
 		String estadoActualStr;

@@ -341,33 +341,25 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 		Long estatSoli = solicitud.getEstatSolicitud();
 
-		String asumpte = null;
-		String missatge = null;
-
-		if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
-			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Procediment Autoritzat.";
-
-			missatge = "La seva sol·licitud amb codi " + solicitud.getProcedimentCodi()
-					+ " ha estat autoritzada. Ja pot procedir a realitzar els tràmits que desitgi.";
-
-		} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
-			asumpte = "PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
-			missatge = generarMissatgeEsmena(solicitud, infoMad.getMissatge());
-
-		} else {
-			// No ha cambiado de estado. No informamos. PENDENT AUTORITZAR.
-//			asumpte = "TEST PROCÉS AUTORITZACIÓ PROCEDIMENT " + solicitud.getProcedimentCodi() + ". Requereix esmenes.";
-//			missatge = "TEST " + generarMissatgeEsmena(solicitud);
-
-		}
 		try {
-			// Enviar email si hay cambio de estado.
-			if (asumpte != null && missatge != null) {
-				enviarMissatgeAlSolicitant(solicitud, asumpte, missatge);
+			if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
+				// Solicitud autorizada - ENVIAR EMAIL al contacto
+				log.info("Notificando autorización a contacto: solicitud=" + solicitud.getSolicitudID());
+				notificacionLogicaEjb.notificarAutorizacionAContacto(solicitud);
+				
+			} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
+				// Solicitud desestimada - NOTIFICAR a tramitadores (NO email)
+				log.info("Notificando desestimación a tramitadores: solicitud=" + solicitud.getSolicitudID());
+				notificacionLogicaEjb.notificarDesestimacionATramitadores(
+					solicitud, 
+					infoMad.getMissatge(), 
+					"AUTORITZACIÓ"
+				);
 			}
+			// Si no ha cambiado de estado, no informamos (PENDENT AUTORITZAR)
 
 		} catch (I18NException e) {
-			log.error("Error enviant missatge al sol·licitant: " + e.getMessage(), e);
+			log.error("Error notificant canvi d'estat: " + e.getMessage(), e);
 		}
 	}
 }

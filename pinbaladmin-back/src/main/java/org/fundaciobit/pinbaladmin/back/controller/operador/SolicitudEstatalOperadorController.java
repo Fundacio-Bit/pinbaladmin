@@ -158,7 +158,7 @@ public class SolicitudEstatalOperadorController extends SolicitudOperadorControl
 			if (mail.getServeis().size() > 0) {
 				try {
 //					mail.sendMail(soli, excel);
-					mail.crearEvent(soli, adjunt, eventLogicaEjb);
+					mail.crearEvent(soli, adjunt, eventLogicaEjb, notificacionLogicaEjb);
 					mail.actualitzarEstatServei(soliID, solicitudServeiEjb);
 					String missatge = "Correu enviat a " + mail.getId();
 					log.info(missatge);
