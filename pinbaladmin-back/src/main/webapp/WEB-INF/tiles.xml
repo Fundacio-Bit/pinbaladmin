@@ -114,6 +114,10 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudList.jsp" />
     </definition>
     
+    <definition name="solicitudLocalPendentKanban" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/solicitudLocalPendentKanban.jsp" />
+    </definition>
+    
     <definition name="serveiFormWebDB_operador" extends="operador_base">
         <put-attribute name="titol" value="servei.servei" />
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiForm.jsp" />

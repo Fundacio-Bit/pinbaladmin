@@ -53,6 +53,13 @@
 			</c:if></li>
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/solicitudlocalpendent/kanban"/>"> <span
+				style="${(fn:contains(url, '/solicitudlocalpendent'))? "font-weight:bold;" : ""}">
+					<fmt:message key="solicitud.local.pendents" />
+			</span>
+		</a></li>
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/infoMadrid/list/1"/>">
 				<span
 				style="${(fn:contains(url, '/infoMadrid'))? "font-weight:bold;" : ""}">Info Madrid</span>
