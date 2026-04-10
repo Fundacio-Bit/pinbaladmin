@@ -135,7 +135,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		SolicitudForm solicitudForm = super.getSolicitudForm(_jpa, __isView, request, mav);
 
 		SolicitudJPA solicitud = solicitudForm.getSolicitud();
-
+		
+		// Establim el títol amb l'estat de la sol·licitud
+		Long estatID = solicitud.getEstatSolicitud();
+		String titleCode = "solicitud.fullview.estat." + estatID;
+		solicitudForm.setTitleCode(titleCode);
+		
 		mav.addObject("isView", __isView);
 
 		if (__isView) {
