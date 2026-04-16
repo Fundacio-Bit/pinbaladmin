@@ -76,6 +76,32 @@ public class NotificacionLogicaEJB implements NotificacionLogicaService {
 	}
 
 	@Override
+	public void registrarAutorizacionDesdeMadrid(SolicitudJPA solicitud) throws I18NException {
+
+		String asunto = String.format("PROCÉS AUTORITZACIÓ PROCEDIMENT %s. Procediment Autoritzat.",
+				solicitud.getProcedimentCodi());
+
+		String mensaje = String.format(
+				"<div style=\"margin: .5rem;\">"
+				+ "La Plataforma Estatal d'Interoperabilitat (PID) ha AUTORITZAT la sol·licitud "
+				+ "del procediment amb codi <b>%s</b>.<br><br>"
+				+ "<i>Nota: El tramitador enviarà el correu de notificació al contacte quan correspongui.</i>"
+				+ "</div>",
+				solicitud.getProcedimentCodi());
+
+		log.info("Registrando autorización desde Madrid: solicitud={}", solicitud.getSolicitudID());
+
+		// Tipo CONTACTE = mensaje PÚBLICO (tramitadores y contacto lo ven) 
+		// pero NO envía email (representa información recibida de Madrid)
+		crearEventoPublicoSinEmail(solicitud, 
+				Constants.SISTEMA_PINBALADMIN + " - Madrid", 
+				asunto, 
+				mensaje, 
+				true // Marcar como NO LEÍDO para que tramitador lo vea
+		);
+	}
+
+	@Override
 	public void registrarEnvioAMadrid(SolicitudJPA solicitud, String operador, String tipoProceso, String mensaje)
 			throws I18NException {
 

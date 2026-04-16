@@ -35,6 +35,15 @@ public interface NotificacionLogicaService {
 	void notificarAutorizacionAContacto(SolicitudJPA solicitud) throws I18NException;
 
 	/**
+	 * Registra que Madrid ha autorizado la solicitud. Este evento es PÚBLICO 
+	 * (visible para tramitadores y contacto) pero NO envía email automáticamente.
+	 * El tramitador decidirá cuándo enviar el email de notificación.
+	 * 
+	 * @param solicitud La solicitud autorizada
+	 */
+	void registrarAutorizacionDesdeMadrid(SolicitudJPA solicitud) throws I18NException;
+
+	/**
 	 * Registra un evento interno de envío a Madrid. Solo visible para tramitadores,
 	 * NO envía email.
 	 * 

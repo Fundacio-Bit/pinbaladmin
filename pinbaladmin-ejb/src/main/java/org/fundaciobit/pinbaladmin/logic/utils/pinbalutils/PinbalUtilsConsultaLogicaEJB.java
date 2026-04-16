@@ -343,9 +343,10 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 
 		try {
 			if (estatSoli == Constants.SOLI_ESTAT_AUTORITZAT) {
-				// Solicitud autorizada - ENVIAR EMAIL al contacto
-				log.info("Notificando autorización a contacto: solicitud=" + solicitud.getSolicitudID());
-				notificacionLogicaEjb.notificarAutorizacionAContacto(solicitud);
+				// Madrid ha autorizado - Registrar evento PÚBLICO (visible para tramitador y contacto)
+				// pero NO envía email automáticamente. Pilar decidirá cuándo enviarlo.
+				log.info("Registrando autorización desde Madrid: solicitud=" + solicitud.getSolicitudID());
+				notificacionLogicaEjb.registrarAutorizacionDesdeMadrid(solicitud);
 				
 			} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
 				// Solicitud desestimada - NOTIFICAR a tramitadores (NO email)
