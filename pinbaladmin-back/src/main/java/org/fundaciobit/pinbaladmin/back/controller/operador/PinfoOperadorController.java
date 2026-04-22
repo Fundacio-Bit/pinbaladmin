@@ -20,6 +20,7 @@ import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
@@ -107,6 +108,15 @@ public class PinfoOperadorController extends PinfoController {
 		if (__isView) {
 			PinfoJPA pinfo = pinfoForm.getPinfo();
 			Long estat = pinfo.getEstat();
+			Long pinfoID = pinfo.getPinfoID();
+			
+			// Obtener los datos de usuarios y permisos para mostrar en la vista
+			try {
+				PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
+				mav.addObject("pinfoDataFull", pinfoDataFull);
+			} catch (Exception e) {
+				log.error("Error obtenint dades de permisos per PINFO " + pinfoID, e);
+			}
 			
 			if (estat == Constants.ESTAT_PINFO_CREANT) {
 				pinfoForm.addHiddenField(FITXERID);
@@ -136,6 +146,8 @@ public class PinfoOperadorController extends PinfoController {
 						new AdditionalButton("fas fa-paper-plane", "tramitpinfo.enviarmissatge.solicitant",
 								WEBCONTEXT + "/enviarMissatgeSolicitant/{0}", AdditionalButtonStyle.SUCCESS));
 			}
+
+			pinfoForm.setAttachedAdditionalJspCode(true);
 		}
 
 		return pinfoForm;
