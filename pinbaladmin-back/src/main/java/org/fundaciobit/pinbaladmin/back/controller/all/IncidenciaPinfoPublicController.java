@@ -146,7 +146,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addReadOnlyField(IncidenciaTecnicaFields.CONTACTENOM);
 
 			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
-			setDadesTest(incidencia);
+			// setDadesTest(incidencia);
 
 			String usuariNIF = properties.getProperty("NIF");
 			String username = properties.getProperty("Username");
@@ -283,6 +283,9 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
 		
 		log.info("Creant Pinfo " + Pinfo.getPinfoID());
+		
+		// Guardar el pinfoID en sesión para usarlo en procesarPermisos
+		request.getSession().setAttribute("pinfoID", Pinfo.getPinfoID());
 		
 		return it;
 	}
@@ -423,7 +426,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		//guardar inciencicaid a sessio
 		request.getSession().setAttribute("incidenciaId", incidenciaTecnicaForm.getIncidenciaTecnica().getIncidenciaTecnicaID());
 		
-		return "redirect:" + PinfoDataPublicController.CONTEXT_WEB + "/list";
+		return "redirect:" + PinfoDataPublicController.CONTEXT_WEB + "/elegirTipo";
 	}
 	
     @Override
@@ -440,19 +443,22 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
         for (Organ organ : organs) {
 
             Organ aux = organ;
-            List<String> jerarquia = new ArrayList<String>();
-//            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
-            jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
-
+            
+            // Buscar la entidad (órgano padre con CIF)
+            String entitatInfo = "";
             if (where != null) {
                 while (aux.getCif() == null && aux.getDir3pare() != null) {
                     List<Organ> listAux = organLogicEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
                     aux = listAux.get(0);
-//                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
-                    jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
+                }
+                // aux ahora es el órgano padre con CIF (la entidad)
+                if (aux.getCif() != null) {
+                    entitatInfo = " - [" + aux.getCif() + " - " + aux.getNom() + "]";
                 }
             }
-            String str = String.join("|", jerarquia);
+            
+            // Mostrar solo el órgano gestor + info de la entidad
+            String str = "(" + organ.getDir3() + ") " + organ.getNom() + entitatInfo;
 
             __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), str));
         }

@@ -520,43 +520,55 @@
     
     
     <!-- TRAMIT PINFO -->
-    <definition name="incidenciaTecnicaPinfoFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <!-- Definición base para todas las vistas del tramit PINFO -->
+    <definition name="tramitpinfo_base" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    </definition>
+
+    <definition name="incidenciaTecnicaPinfoFormOperador" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp" />
     </definition>
     
-    <definition name="incidenciaTecnicaPinfoListOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="incidenciaTecnicaPinfoListOperador" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp" />
     </definition>
 
-    <definition name="pinfoDataFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="pinfoElegirTipo" extends="tramitpinfo_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/pinfoElegirTipo.jsp" />
+    </definition>
+
+    <definition name="pinfoDataFormPublic" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoForm.jsp" />
     </definition>
     
-    <definition name="pinfoDataListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="pinfoDataListPublic" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/tramitPinfoList.jsp" />
     </definition>
     
-    <definition name="llistaResponsables" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="llistaResponsables" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/seleccionarResponsable.jsp" />
     </definition>
 
-    <definition name="showPinfoPdf" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="showPinfoPdf" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/showPinfoPdf.jsp" />
     </definition>
 
-    <definition name="pinfoFormPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="pinfoFormPublic" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoForm.jsp" />
     </definition>
-    
-    <definition name="pinfoListPublic" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+
+    <definition name="pinfoEnviadoConfirmacion" extends="tramitpinfo_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/all/pinfoEnviadoConfirmacion.jsp" />
+    </definition>
+
+    <definition name="pinfoListPublic" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/pinfoList.jsp" />
     </definition>
 
-   <definition name="flowview" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+   <definition name="flowview" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/urlflow_iframe.jsp" />
     </definition>
  
-    <definition name="finaliframe" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
+    <definition name="finaliframe" extends="tramitpinfo_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/all/final_iframe.jsp" />
     </definition>
     

@@ -39,10 +39,12 @@ import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
+import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -155,11 +157,106 @@ public class PinfoPublicController extends PinfoController {
 		//EJB Per enviar peticio a firmar
 		pinfoLogicaEjb.enviarPinfoPortaFIB(pinfoID); //, responsable);
 		
-		//Redirect to llistat events.
-		Long incidenciaID = pinfoLogicaEjb.executeQueryOne(PinfoFields.INCIDENCIAID, PinfoFields.PINFOID.equal(pinfoID));
-		IncidenciaTecnicaJPA it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(incidenciaID);
-		String destinatari = "CONTACTE|" + it.getContacteNom();
-		return redirectToEventsPinfo(incidenciaID, destinatari);
+		// Enviar email informativo al solicitante
+		try {
+			enviarEmailConfirmacion(pinfoID);
+		} catch (Exception e) {
+			log.error("Error enviant email de confirmació al solicitant: " + e.getMessage(), e);
+			// No bloqueamos el flujo si falla el email
+		}
+		
+		//Redirect to página de confirmación
+		return "redirect:" + CONTEXT_WEB + "/confirmacionEnviado/" + pinfoID;
+	}
+	
+	@RequestMapping(value = "/confirmacionEnviado/{pinfoID}")
+	public ModelAndView confirmacionEnviado(HttpServletRequest request, @PathVariable("pinfoID") java.lang.Long pinfoID)
+			throws I18NException {
+
+		log.info("confirmacionEnviado: pinfoID=" + pinfoID);
+
+		ModelAndView mav = new ModelAndView("pinfoEnviadoConfirmacion");
+
+		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
+		Long incidenciaID = pinfo.getIncidenciaID();
+		IncidenciaTecnicaJPA incidencia = incidenciaTecnicaLogicaEjb.findByPrimaryKey(incidenciaID);
+
+		// Información para mostrar en la página
+		mav.addObject("incidenciaID", incidenciaID);
+		mav.addObject("pinfoID", pinfoID);
+		mav.addObject("titolIncidencia", incidencia.getTitol());
+		mav.addObject("destinatariNom", pinfo.getDestinatariNom());
+		mav.addObject("destinatariNIF", pinfo.getDestinatariNIF());
+		mav.addObject("emailSolicitant", incidencia.getContacteEmail());
+
+		// URLs para los botones
+		String destinatari = "CONTACTE|" + incidencia.getContacteNom();
+		String urlEvents = "/pinbaladmin" + redirectToEventsPinfo(incidenciaID, destinatari).replace("redirect:", "");
+		String urlMisPinfos = "/pinbaladmin" + CONTEXT_WEB + "/list/1";
+
+		mav.addObject("urlEvents", urlEvents);
+		mav.addObject("urlMisPinfos", urlMisPinfos);
+
+		return mav;
+	}
+	
+	private void enviarEmailConfirmacion(Long pinfoID) throws Exception {
+		log.info("Enviando email de confirmación para PINFO: " + pinfoID);
+
+		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
+		Long incidenciaID = pinfo.getIncidenciaID();
+		IncidenciaTecnicaJPA incidencia = incidenciaTecnicaLogicaEjb.findByPrimaryKey(incidenciaID);
+
+		String destinatariEmail = incidencia.getContacteEmail();
+		String solicitantNom = incidencia.getContacteNom();
+		String responsableNom = pinfo.getDestinatariNom();
+		String responsableNIF = pinfo.getDestinatariNIF();
+
+		String subject = "PINFO [" + incidenciaID + "] - Sol·licitud enviada a firmar";
+		String from = Configuracio.getAppEmail();
+
+		// Generar URL para seguimiento
+		String destinatari = "CONTACTE|" + incidencia.getContacteNom();
+		String encryptedIncidenciaID = HibernateFileUtil.encryptFileID(incidenciaID);
+		String encryptedDestinatari = HibernateFileUtil.encryptString(destinatari);
+		String urlSeguiment = Configuracio.getAppBackUrl() + "/public/eventincidenciatecnica/veureevents/" 
+				+ encryptedIncidenciaID + "/" + encryptedDestinatari;
+
+		String message = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>"
+				+ "<div style='background-color: #4DBA79; color: white; padding: 20px; text-align: center;'>"
+				+ "<h2 style='margin: 0;'>Sol·licitud de Permisos PINBAL</h2>"
+				+ "</div>"
+				+ "<div style='padding: 20px; background-color: #f8f9fa;'>"
+				+ "<p>Bon dia <strong>" + solicitantNom + "</strong>,</p>"
+				+ "<p>La seva sol·licitud de permisos <strong>PINFO " + incidenciaID + "</strong> s'ha enviat correctament a firmar.</p>"
+				+ "<div style='background-color: white; padding: 15px; border-left: 4px solid #4DBA79; margin: 20px 0;'>"
+				+ "<p style='margin: 5px 0;'><strong>Títol:</strong> " + incidencia.getTitol() + "</p>"
+				+ "<p style='margin: 5px 0;'><strong>Número de sol·licitud:</strong> " + incidenciaID + "</p>"
+				+ "<p style='margin: 5px 0;'><strong>Responsable que firmarà:</strong> " + responsableNom + " (" + responsableNIF + ")</p>"
+				+ "</div>"
+				+ "<p>El responsable seleccionat rebrà una notificació per procedir amb la signatura electrònica del document.</p>"
+				+ "<p><strong>Pot seguir l'estat de la seva sol·licitud accedint al següent enllaç:</strong></p>"
+				+ "<div style='text-align: center; margin: 30px 0;'>"
+				+ "<a href='" + urlSeguiment + "' style='background-color: #4DBA79; color: white; padding: 12px 30px; "
+				+ "text-decoration: none; border-radius: 5px; display: inline-block;'>Veure estat de la sol·licitud</a>"
+				+ "</div>"
+				+ "<p style='color: #666; font-size: 14px; margin-top: 20px;'>També rebrà notificacions per correu electrònic quan hi hagi actualitzacions en la seva sol·licitud.</p>"
+				+ "</div>"
+				+ "<div style='background-color: #e9ecef; padding: 15px; text-align: center; font-size: 12px; color: #666;'>"
+				+ "<p style='margin: 5px 0;'>Salutacions,</p>"
+				+ "<p style='margin: 5px 0;'><em>Àrea de Govern Digital - Fundació BIT</em></p>"
+				+ "<p style='margin: 10px 0; padding-top: 10px; border-top: 1px solid #ccc;'>"
+				+ "Si us plau, NO CONTESTEU directament a aquest correu. Per a qualsevol consulta, accediu a l'enllaç proporcionat."
+				+ "</p>"
+				+ "</div>"
+				+ "</div>";
+
+		boolean isHtml = true;
+		FitxerJPA adjunt = null;
+
+		EmailUtil.postMail(subject, message, isHtml, from, adjunt, destinatariEmail);
+
+		log.info("Email de confirmació enviat a: " + destinatariEmail);
 	}
 	
 

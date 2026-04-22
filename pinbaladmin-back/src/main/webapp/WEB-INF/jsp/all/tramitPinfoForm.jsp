@@ -8,27 +8,91 @@
 <title>Afegir permisos a la solicitud</title>
 
 <style>
-/* body {
+/* ========================================
+   WIZARD - INDICADOR DE PASOS
+   ======================================== */
+.step-indicator {
 	display: flex;
 	justify-content: center;
-	min-height: 100vh;
-	background: #e9faff;
-} */
+	align-items: center;
+	margin: 1rem auto 1.5rem auto;
+	gap: 24px;
+}
+
+.step {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.step-circle {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background-color: #e9ecef;
+	color: #6c757d;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+	font-size: 18px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.step-circle.active {
+	background-color: #4DBA79;
+	color: white;
+	box-shadow: 0 4px 12px rgba(77, 186, 121, 0.3);
+	transform: scale(1.1);
+}
+
+.step-circle.completed {
+	background-color: #265d3c;
+	color: white;
+}
+
+.step-label {
+	font-size: 15px;
+	color: #6c757d;
+	font-weight: 500;
+}
+
+.step-label.active {
+	color: #4DBA79;
+	font-weight: 600;
+}
+
+.step-separator {
+	width: 80px;
+	height: 3px;
+	background-color: #e9ecef;
+	border-radius: 2px;
+}
+
+.step-separator.completed {
+	background-color: #4DBA79;
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+   ======================================== */
 #form-container {
 	background: white;
-	padding: 1rem;
-	border-radius: 6px;
-	border: 2px solid black;
+	padding: 2rem 3rem;
+	border-radius: 16px;
 	margin: 0 3rem;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	border: none;
 }
 
 #form-content {
 	display: flex;
-	margin: 0 2rem;
+	margin: 0 1rem;
 }
 
 section {
-	padding: 1rem;
+	padding: 0 1rem;
 	min-width: 50rem;
 	width: 100%;
 	max-width: 100%;
@@ -36,34 +100,42 @@ section {
 	flex-flow: column;
 }
 
-.header {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: .5rem;
-}
-
-section .title {
-	font-size: 25px;
-}
+/* ========================================
+   HEADERS DE SECCIÓN - Usando clases estándar de tramitPinfoPublic.jsp
+   ======================================== */
 
 .sub-title {
-	font-size: 20px;
-	margin: 0 0 .5rem 0;
+	font-size: 18px;
+	margin: 0.5rem 0 1rem 0;
+	color: #265d3c;
+	font-weight: 600;
 }
 
+/* ========================================
+   SUBTÍTULO Y LISTA DE USUARIOS
+   ======================================== */
 .usuaris-titulo {
-	font-size: 24px;
-	font-weight: bold;
-	margin-bottom: 0.5rem;
+	font-size: 16px;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+	color: #265d3c;
 }
 
 .usuaris-lista {
 	font-size: 14px;
+	background: linear-gradient(135deg, #f0f9f4 0%, #f8f9fa 100%);
+	padding: 14px 16px;
+	border-radius: 8px;
+	border-left: 4px solid #4DBA79;
+	line-height: 1.6;
 }
 
+/* ========================================
+   SPINNER
+   ======================================== */
 .spinner {
 	border: 4px solid #f3f3f3;
-	border-top: 4px solid #3498db;
+	border-top: 4px solid #4DBA79;
 	border-radius: 50%;
 	width: 40px;
 	height: 40px;
@@ -76,119 +148,165 @@ section .title {
 	100% { transform: rotate(360deg); }
 }
 
-.botones {
-	text-align: right;
-	margin-top: 1rem;
-}
+/* ========================================
+   BOTONES (específicos de este formulario)
+   ======================================== */
 
-.procediment-item, .usuari-item {
+.btn-primary-custom {
+	background: linear-gradient(135deg, #4DBA79 0%, #3a9e65 100%);
+	color: white;
+	padding: 10px 28px;
+	border: none;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 600;
 	cursor: pointer;
-	padding: 6px;
-	background-color: #fff;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(77, 186, 121, 0.2);
 }
 
-.procediment-item:hover, , .usuari-item:hover {
-	background-color: #f1f1f1;
+.btn-primary-custom:hover {
+	background: linear-gradient(135deg, #3a9e65 0%, #265d3c 100%);
+	box-shadow: 0 4px 12px rgba(77, 186, 121, 0.3);
+	transform: translateY(-2px);
 }
 
+.btn-secondary-custom {
+	background-color: white;
+	color: #6c757d;
+	padding: 10px 28px;
+	border: 2px solid #e9ecef;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: none;
+}
+
+.btn-secondary-custom:hover {
+	background-color: #f8f9fa;
+	border-color: #ced4da;
+	color: #495057;
+	transform: translateY(-1px);
+}
+
+/* ========================================
+   INPUTS
+   ======================================== */
+.input-container.user, .input-container.procediment {
+	width: 100%;
+	margin-top: 0;
+}
+
+#cercador-usuaris, #cercador-procediments {
+	position: relative;
+	margin-bottom: 0.75rem;
+}
+
+#input-usuari-container {
+	display: flex;
+	width: 100%;
+	margin-bottom: 0.5rem;
+}
+
+.campsUsuari {
+	width: 100% !important;
+}
+
+#input-usuari-container input, #procedimentID {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid #e9ecef;
+	border-radius: 10px;
+	font-size: 15px;
+	transition: all 0.3s ease;
+	background: white;
+	color: #333;
+}
+
+#input-usuari-container input:focus, #procedimentID:focus {
+	border-color: #4DBA79;
+	outline: none;
+	box-shadow: 0 0 0 4px rgba(77, 186, 121, 0.1);
+	background: #fafafa;
+}
+
+#input-usuari-container input::placeholder, #procedimentID::placeholder {
+	color: #adb5bd;
+	font-style: normal;
+}
+
+/* ========================================
+   AUTOCOMPLETE
+   ======================================== */
 #autocomplete-procediments, #autocomplete-usuaris {
 	display: block;
 	position: absolute;
-	z-index: 1;
-	background-color: #f9f9f9;
-	border: 1px solid #e9e9e9;
-	max-height: 170px;
+	z-index: 1000;
+	background-color: white;
+	border: none;
+	border-radius: 12px;
+	max-height: 280px;
 	overflow-y: auto;
-  	width: 50%;
-  }
+	width: 100%;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	margin-top: 8px;
+}
 
 #autocomplete-procediments.hidden, #autocomplete-usuaris.hidden {
 	display: none;
 }
 
-#autocomplete-procediments div {
-	padding: 6px;
-}
-
-#autocomplete-usuaris div {
-	padding: 6px;
-}
-
-/* #taula-serveis td:nth-child(1), #taula-serveis tr:nth-child(1) {
-	background-color: #f1f1f1;
-	font-weight: bold;
-}
-*/
-#titol-procediments, #titol-serveis {
-	background-color: #f1f1f1;
-	font-weight: bold;
-}
-
-.marcarAll {
-	background-color: #f1f1f1;
-	font-weight: bold;
-}
-
-.keyProc, .keyServ {
-	background-color: #f1f1f1;
-	font-weight: bold;
-	padding: 3px 6px;
-}
-
-.keyServ, .keyProc {
-	position: relative;
-	cursor: help;
-}
-
-.keyProc {
-	text-align: center;
-	word-break: break-word;
-}
-
-.tooltip {
-	position: absolute;
-	background-color: black;
-	color: white;
-	padding: 5px;
-	border-radius: 5px;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.2s;
-	z-index: 1000;
-}
-
-#titol-serveis {
-	padding-top: 2rem;
-	text-align: center;
-}
-
-#titol-procediments {
-	padding: 0.3rem;
-}
-
-.solSer {
-	text-align: center;
-	background-color: #FFF;
-}
-
-.solSer.selected {
-	background-color: #d6eecd;
-	font-weight: bold;
+.procediment-item, .usuari-item {
 	cursor: pointer;
+	padding: 14px 18px;
+	background-color: white;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid #f8f9fa;
+	transition: all 0.2s;
+	font-size: 14px;
 }
 
-.noSelected {
-	background-color: #ffd0d0;
-	cursor: pointer;
+.procediment-item:first-child {
+	border-radius: 12px 12px 0 0;
 }
 
-.marcarAll {
-	padding: 6px 1rem;
-	text-align: center;
+.procediment-item:last-child, .usuari-item:last-child {
+	border-radius: 0 0 12px 12px;
+	border-bottom: none;
 }
 
-#llistat-procediments ul {
-	margin-top: 1rem;
+.procediment-item:hover, .usuari-item:hover {
+	background: linear-gradient(90deg, #f0f9f4 0%, #f8f9fa 100%);
+	border-left: 3px solid #4DBA79;
+	padding-left: 15px;
+}
+
+/* ========================================
+   LISTAS DE ITEMS SELECCIONADOS
+   ======================================== */
+#llistat-procediments ul, #llistat-usuaris ul {
+	margin-top: 0.5rem;
+	list-style: none;
+	padding-left: 0;
+}
+
+.usuari-li, .procediment-li {
+	padding: 12px 16px;
+	margin: 6px 0;
+	border: none;
+	border-radius: 10px;
+	background: linear-gradient(135deg, #f0f9f4 0%, #f8f9fa 100%);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+	transition: all 0.3s;
+}
+
+.usuari-li:hover, .procediment-li:hover {
+	background: linear-gradient(135deg, #e8f5e9 0%, #f0f9f4 100%);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	transform: translateX(4px);
 }
 
 .usuari-data-container, .procediment-data-container {
@@ -197,43 +315,249 @@ section .title {
 	align-items: center;
 }
 
-.usuari-li, .procediment-li {
-	padding-top: 5px;
-	padding-right: 1rem;
-	padding-bottom: 5px;
-	margin: 2px 0px;
-	border: 1px solid white;
-}
-
-.usuari-li:hover, .procediment-li:hover {
-	background-color: #f1f1f1;
-	border-bottom-color: black;
-	border-top-color: black;
-}
-
 .usuari-data-text, .procediment-data-text {
 	margin-right: 1rem;
+	font-size: 14px;
+	color: #333;
+	font-weight: 500;
 }
 
 .usuari-data-delete, .procediment-data-delete {
 	cursor: pointer;
-	color: #ae0808;
+	color: #dc3545;
+	font-size: 18px;
+	transition: all 0.2s;
+	padding: 4px;
+	border-radius: 4px;
 }
 
-#backToList-button-container {
-	text-align: right;
-	margin: 1rem 5rem;
+.usuari-data-delete:hover, .procediment-data-delete:hover {
+	color: white;
+	background-color: #dc3545;
+	transform: scale(1.1);
 }
 
-#input-usuari-container {
-	display: flex;
+/* ========================================
+   TABLA DE SERVICIOS
+   ======================================== */
+#taula-serveis {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 0.75rem;
+	border: 1px solid #ddd;
+}
+
+#taula-serveis td {
+	border: 1px solid #ddd;
+}
+
+#titol-procediments, #titol-serveis {
+	background-color: #f5f5f5;
+	color: #333;
+	font-weight: 600;
+	padding: 10px;
+	text-align: center;
+	font-size: 13px;
+}
+
+#titol-serveis {
+	width: 160px;
+}
+
+.marcarAll {
+	background-color: #fafafa;
+	font-weight: 600;
+	padding: 8px;
+	text-align: center;
+	color: #555;
+	font-size: 12px;
+}
+
+.keyProc, .keyServ {
+	background-color: #fafafa;
+	font-weight: 500;
+	padding: 8px;
+	font-size: 13px;
+	position: relative;
+	cursor: help;
+	color: #333;
+}
+
+.keyProc:hover, .keyServ:hover {
+	background-color: #f0f0f0;
+}
+
+.keyProc {
+	text-align: center;
+	word-break: break-word;
+}
+
+.keyServ {
+	width: 160px;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.tooltip {
+	position: absolute;
+	background-color: #333;
+	color: white;
+	padding: 6px 10px;
+	border-radius: 4px;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.2s;
+	z-index: 1000;
+	font-size: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	max-width: 250px;
+	word-wrap: break-word;
+}
+
+.solSer {
+	text-align: center;
+	background-color: white;
+	cursor: pointer;
+	transition: background-color 0.15s;
+	padding: 12px;
+}
+
+.solSer.selected {
+	background-color: #e8f5e9;
+}
+
+.solSer:hover {
+	background-color: #f9f9f9;
+}
+
+.solSer.selected:hover {
+	background-color: #d4ecd6;
+}
+
+/* ========================================
+   CHECKBOXES PERSONALIZADOS
+   ======================================== */
+.solSer input[type="checkbox"],
+.marcarAll input[type="checkbox"] {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 18px;
+	height: 18px;
+	border: 2px solid #bbb;
+	border-radius: 3px;
+	background-color: white;
+	cursor: pointer;
+	position: relative;
+	transition: all 0.15s;
+	outline: none;
+}
+
+.solSer input[type="checkbox"]:hover {
+	border-color: #4DBA79;
+}
+
+.solSer input[type="checkbox"]:checked {
+	background-color: #4DBA79;
+	border-color: #4DBA79;
+}
+
+.solSer input[type="checkbox"]:checked::after {
+	content: '✓';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.marcarAll input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+}
+
+.marcarAll input[type="checkbox"]:checked {
+	background-color: #555;
+	border-color: #555;
+}
+
+.marcarAll input[type="checkbox"]:checked::after {
+	content: '✓';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+#llistat-procediments ul, #llistat-usuaris ul {
+	max-height: 300px;
+	overflow-y: auto;
+	padding-right: 8px;
+}
+
+/* Scrollbar personalizado */
+#llistat-procediments ul::-webkit-scrollbar,
+#llistat-usuaris ul::-webkit-scrollbar,
+#autocomplete-procediments::-webkit-scrollbar,
+#autocomplete-usuaris::-webkit-scrollbar {
+	width: 8px;
+}
+
+#llistat-procediments ul::-webkit-scrollbar-track,
+#llistat-usuaris ul::-webkit-scrollbar-track,
+#autocomplete-procediments::-webkit-scrollbar-track,
+#autocomplete-usuaris::-webkit-scrollbar-track {
+	background: #f8f9fa;
+	border-radius: 4px;
+}
+
+#llistat-procediments ul::-webkit-scrollbar-thumb,
+#llistat-usuaris ul::-webkit-scrollbar-thumb,
+#autocomplete-procediments::-webkit-scrollbar-thumb,
+#autocomplete-usuaris::-webkit-scrollbar-thumb {
+	background: #ced4da;
+	border-radius: 4px;
+}
+
+#llistat-procediments ul::-webkit-scrollbar-thumb:hover,
+#llistat-usuaris ul::-webkit-scrollbar-thumb:hover,
+#autocomplete-procediments::-webkit-scrollbar-thumb:hover,
+#autocomplete-usuaris::-webkit-scrollbar-thumb:hover {
+	background: #4DBA79;
 }
 </style>
 
+<script>
+	// Variables de traducción para JavaScript
+	var MSG_USUARIS_ALMENYSUN = '<fmt:message key="tramit.pinfo.usuaris.almenysun"/>';
+	var MSG_PROCEDIMENTS_ALMENYSUN = '<fmt:message key="tramit.pinfo.procediments.almenysun"/>';
+	var MSG_USUARIS_DUPLICAT = '<fmt:message key="tramit.pinfo.usuaris.duplicat"/>';
+	var MSG_PROCEDIMENTS_DUPLICAT = '<fmt:message key="tramit.pinfo.procediments.duplicat"/>';
+	var MSG_SERVEIS_ALMENYSUN = '<fmt:message key="tramit.pinfo.serveis.almenysun"/>';
+</script>
+
 </head>
 <body>
-	<div id="backToList-button-container">
-		<a id="backToList-button" href="list/1" class="btn btn-secondary">Tornar al llistat</a>
+	<!-- Indicador de pasos -->
+	<div class="step-indicator">
+		<div class="step">
+			<div class="step-circle" id="step-circle-1">1</div>
+			<span class="step-label" id="step-label-1"><fmt:message key="tramit.pinfo.step.usuaris"/></span>
+		</div>
+		<div class="step-separator" id="separator-1"></div>
+		<div class="step">
+			<div class="step-circle" id="step-circle-2">2</div>
+			<span class="step-label" id="step-label-2"><fmt:message key="tramit.pinfo.step.procediments"/></span>
+		</div>
+		<div class="step-separator" id="separator-2"></div>
+		<div class="step">
+			<div class="step-circle" id="step-circle-3">3</div>
+			<span class="step-label" id="step-label-3"><fmt:message key="tramit.pinfo.step.permisos"/></span>
+		</div>
 	</div>
 
 	<div id="form-container">
@@ -248,27 +572,24 @@ section .title {
 			<div id="form-content">
 
 				<section id="section1">
-					<div class="header">
-						<div class="title">Introduce los usuarios:</div>
-					
-						<div class="botones">
-							<button type="button" class="pagination-button btn"
-								onclick="next();"><fmt:message key="tramitpinfodata.sec1.seguent"/></button>
+				<div class="titol-tramit-pinfo-header">
+					<div class="titol-tramit-pinfo-container">
+						<h3 class="titol-tramit-pinfo"><i class="fas fa-users"></i> <fmt:message key="tramit.pinfo.usuaris.introduir"/></h3>
+					</div>
+					<div class="titol-tramit-pinfo-botonera">
+							<button type="button" class="btn-primary-custom" onclick="next();">
+								<fmt:message key="tramitpinfodata.sec1.seguent"/> <i class="fas fa-arrow-right"></i>
+							</button>
 						</div>
 					</div>
 					
 					<div class="input-container user">
 						<div id="cercador-usuaris">
-<!-- 							<input type="text" name="userID" placeholder="Usuari"
-								value="ptrias">
-							<button type="button" class="btn" onclick="afegirUsuari();">Add</button> -->
-	
 							<div id="input-usuari-container">
-	 							<input id="usuariNom" name="userID" type="text"
-									autocomplete="off" class="campsUsuari w-25 form-control"
-									placeholder="Nom">
+								<input id="usuariNom" name="userID" type="text"
+									autocomplete="off" class="campsUsuari"
+									placeholder="<fmt:message key="tramit.pinfo.usuaris.placeholder"/>">
 							</div>
- 
 							<div id="autocomplete-usuaris" class="hidden"></div>
 						</div>
 						<div id="llistat-usuaris">
@@ -278,55 +599,54 @@ section .title {
 				</section>
 
 				<section id="section2">
-
-					<div class="header">
-						<div class="title">Introduce los procedimientos:</div>
-
-						<div class="botones">
-							<button type="button" class="pagination-button btn"
-								onclick="prev();"><fmt:message key="tramitpinfodata.sec2.anterior"/></button>
-							<button type="button" class="pagination-button btn"
-								onclick="next();"><fmt:message key="tramitpinfodata.sec2.seguent"/></button>
+				<div class="titol-tramit-pinfo-header">
+					<div class="titol-tramit-pinfo-container">
+						<h3 class="titol-tramit-pinfo"><i class="fas fa-list-alt"></i> <fmt:message key="tramit.pinfo.procediments.introduir"/></h3>
+					</div>
+					<div class="titol-tramit-pinfo-botonera">
+							<button type="button" class="btn-primary-custom" onclick="prev();">
+								<i class="fas fa-arrow-left"></i> <fmt:message key="tramitpinfodata.sec2.anterior"/>
+							</button>
+							<button type="button" class="btn-primary-custom" onclick="next();">
+								<fmt:message key="tramitpinfodata.sec2.seguent"/> <i class="fas fa-arrow-right"></i>
+							</button>
 						</div>
 					</div>
-
+					
 					<div class="input-container procediment">
 						<div id="cercador-procediments">
-
 							<input id="procedimentID" name="procedimentID" type="text"
-								autocomplete="off" class="w-100 form-control"
-								placeholder="Procediment. Minim 2 caracters...">
-
+								autocomplete="off"
+								placeholder="<fmt:message key="tramit.pinfo.procediments.placeholder"/>">
 							<div id="autocomplete-procediments" class="hidden"></div>
 						</div>
 						<div id="llistat-procediments">
-							<ul ></ul>
+							<ul></ul>
 						</div>
 					</div>
 				</section>
 
 				<section id="section3">
-					<div class="header">
-						<div class="title">Assignar permisos:</div>
-	
-						<div class="botones">
-							<button type="button" class="pagination-button btn"
-								onclick="prev()"><fmt:message key="tramitpinfodata.sec3.anterior"/></button>
-								
-							<input type="submit" class="btn" value="<fmt:message key="tramitpinfodata.sec3.seguent"/>">
+				<div class="titol-tramit-pinfo-header">
+					<div class="titol-tramit-pinfo-container">
+						<h3 class="titol-tramit-pinfo"><i class="fas fa-check-square"></i> <fmt:message key="tramit.pinfo.permisos.assignar"/></h3>
+					</div>
+					<div class="titol-tramit-pinfo-botonera">
+							<button type="button" class="btn-primary-custom" onclick="prev();">
+								<i class="fas fa-arrow-left"></i> <fmt:message key="tramitpinfodata.sec3.anterior"/>
+							</button>
+							<input type="submit" class="btn-primary-custom" value="<fmt:message key="tramitpinfodata.sec3.seguent"/>">
 						</div>
 					</div>
+					
 					<div id="subtitle-usuaris" class="sub-title"></div>
 					
-
 					<div class="input-container servei">
 						<div id="taula-serveis-cont">
-							<table id="taula-serveis" border="1"></table>
-						</div>
-					</div>
+						<table id="taula-serveis"></table>
 				</section>
 
-			</div>
+		</div>
 		</form>
 	</div>
 
@@ -340,41 +660,50 @@ section .title {
 
 		$(document).ready(function() {
 
-			$("#procedimentID").on("input", function() {
-				var procediment = $(this).val();
+		let debounceTimerProc;
+
+		$("#procedimentID").on("input", function() {
+			clearTimeout(debounceTimerProc); // Limpiar el timer anterior
+
+			debounceTimerProc = setTimeout(function() {
+				var procediment = $("#procedimentID").val();
 				console.log(procediment);
 				if (procediment.length < 2) { 
 					$("#autocomplete-procediments").empty().addClass("hidden");
 					return; 
 				}
 				
+				// Mostrar spinner mientras se carga
+				$("#autocomplete-procediments").html("<div class='spinner'></div>").removeClass("hidden");
+				
 				$.ajax({
-                    url : "jsonProcediments",
-                    type : "GET",
-                    data : { query : procediment },
-                    success : function(data) {
-                        $("#autocomplete-procediments").empty();
-                        
-                        if (data.length === 0) {
-                            $("#autocomplete-procediments").html("<div style='padding: 10px; color: #666;'>No se encontraron procedimientos</div>").removeClass("hidden");
-                        } else {
-                            data.forEach(function(proc) {
-                                afegirProcediment(proc);
-                            });
-                            $("#autocomplete-procediments").removeClass("hidden");
-                        }
-                    },
-                    error : function() {
-                        $("#autocomplete-procediments").empty().addClass("hidden");
-                    }
-                });
-			});
-			
+	                url : "jsonProcediments",
+	                type : "GET",
+	                data : { query : procediment },
+	                success : function(data) {
+	                    $("#autocomplete-procediments").empty();
+	                    
+	                    if (data.length === 0) {
+	                        $("#autocomplete-procediments").html("<div style='padding: 10px; color: #666;'><fmt:message key='tramit.pinfo.procediments.notrobats'/></div>").removeClass("hidden");
+	                    } else {
+	                        data.forEach(function(proc) {
+	                            afegirProcediment(proc);
+	                        });
+	                        $("#autocomplete-procediments").removeClass("hidden");
+	                    }
+	                },
+	                error : function() {
+	                    $("#autocomplete-procediments").empty().addClass("hidden");
+	                }
+	            });
+			}, 500); // Esperar 500ms después de que el usuario deje de escribir
+		});
+		
 		let debounceTimer;
-
+		
 		$(".campsUsuari").on("input", function() {
-		    clearTimeout(debounceTimer); // Limpiar el anterior
-
+		    clearTimeout(debounceTimer); // Limpiar el timer anterior
+		    
 		    debounceTimer = setTimeout(function() {
 		        var nom = $("#usuariNom").val();
 
@@ -395,9 +724,9 @@ section .title {
 		                $("#autocomplete-usuaris").empty().removeClass("hidden");
 		                
 		                if (data == null) {
-			                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'>Hay más de 500 usuarios. Por favor, refina la búsqueda.</div>");
+			                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'><fmt:message key='tramit.pinfo.usuaris.mescinccents'/></div>");
                         } else if (data.length === 0) {
-		                    $("#autocomplete-usuaris").html("<div style='padding: 10px; color: #666;'>No se encontraron usuarios</div>");
+		                    $("#autocomplete-usuaris").html("<div style='padding: 10px; color: #666;'><fmt:message key='tramit.pinfo.usuaris.notrobats'/></div>");
 		                } else {
 		                    data.forEach(function(usuari) {
 		                        // Si el usuari ja està a la llista, no el mostri
@@ -406,11 +735,11 @@ section .title {
 		                }
 		            },
 		            error : function() {
-		                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'>Hay más de 500 usuarios. Por favor, refina la búsqueda.</div>");
+		                $("#autocomplete-usuaris").html("<div style='padding: 10px; color: red;'><fmt:message key='tramit.pinfo.usuaris.mescinccents'/></div>");
 		            }
 		        });
-		    }, 500); // Espera 1 segon abans de fer la petició
-		});			
+		    }, 500); // Espera 500ms antes de hacer la petición
+		});
 		});
 		
 		function afegirProcediment(proc) {
@@ -442,7 +771,7 @@ section .title {
 		function elegirProcediment(proc) {
 			            for (let i = 0; i < procediments.length; i++) {
                 if (procediments[i].key == proc.key) {
-                    alert("Ja el tenim a la llista");
+                    alert(MSG_PROCEDIMENTS_DUPLICAT);
                     return;
                 }
             }
@@ -473,7 +802,7 @@ section .title {
 			console.log(usuari);
             for (let i = 0; i < usuaris.length; i++) {
                 if (usuaris[i].username == usuari.username) {
-                    alert("Ja el tenim a la llista");
+                    alert(MSG_USUARIS_DUPLICAT);
                     return;
                 }
             }
@@ -507,16 +836,16 @@ section .title {
 
 			if (actualSection == 1) {
 				if ($("#llistat-usuaris ul li").length == 0) {
-					alert("Introduce al menos un usuario");
-					return;
-				}
+				alert(MSG_USUARIS_ALMENYSUN);
+				return;
 			}
+		}
 
-			if (actualSection == 2) {
-				if ($("#llistat-procediments ul li").length == 0) {
-					alert("Introduce al menos un procedimiento");
-					return;
-				}
+		if (actualSection == 2) {
+			if ($("#llistat-procediments ul li").length == 0) {
+				alert(MSG_PROCEDIMENTS_ALMENYSUN);
+				return;
+			}
 
 				//Actualitzar taula de serveis:
 				$("#taula-serveis").empty();
@@ -644,6 +973,12 @@ section .title {
 				
 		        trFinal.append(td);
 			});
+			
+			// Añadir checkbox para marcar/desmarcar todos
+			var tdTots = $("<td></td>").addClass("marcarAll tots");
+			tdTots.append("<input type='checkbox' onchange='marcarTots(this)'>");
+			trFinal.append(tdTots);
+			
 			$("#taula-serveis").append(trFinal);
 			
 			// Crear el tooltip
@@ -682,6 +1017,30 @@ section .title {
 		function showSection(section) {
 			$("section").hide();
 			$("#section" + section).show();
+			
+			// Actualizar indicador de pasos
+			for (let i = 1; i <= 3; i++) {
+				const circle = $("#step-circle-" + i);
+				const label = $("#step-label-" + i);
+				const separator = $("#separator-" + i);
+				
+				if (i < section) {
+					// Paso completado
+					circle.removeClass("active").addClass("completed");
+					label.removeClass("active");
+					if (separator.length) separator.addClass("completed");
+				} else if (i === section) {
+					// Paso actual
+					circle.removeClass("completed").addClass("active");
+					label.addClass("active");
+					if (separator.length) separator.removeClass("completed");
+				} else {
+					// Paso pendiente
+					circle.removeClass("active completed");
+					label.removeClass("active");
+					if (separator.length) separator.removeClass("completed");
+				}
+			}
 		}
 
 		function marcarSolSer(input) {
@@ -788,6 +1147,16 @@ section .title {
 			 }
 		}
 
+		function marcarTots(checkbox) {
+			var marcar = checkbox.checked;
+			var tds = $("td.solSer:not(.empty)");
+			
+			for (let i = 0; i < tds.length; i++) {
+				var td = tds[i];
+				marcarSolSerVal(td, marcar);
+			}
+		}
+
 		$("#pinfoDataForm").submit(
 			function(event) {
 				event.preventDefault();
@@ -798,9 +1167,9 @@ section .title {
 	
 				var selecteds = $("#taula-serveis .selected");
 				if (selecteds.length == 0) {
-					alert("Selecciona al menos un servicio");
-					return;
-				}
+				alert(MSG_SERVEIS_ALMENYSUN);
+				return;
+			}
 	
 				for (var i = 0; i < selecteds.length; i++) {
 					let idNum = $(selecteds[i]).attr("value");

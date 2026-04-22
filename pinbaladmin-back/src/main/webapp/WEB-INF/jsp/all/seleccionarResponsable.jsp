@@ -10,92 +10,182 @@
 <title>Seleccionar responsable</title>
 
 <style>
-.container {
-	padding: 1rem;
-	border-radius: 6px;
-	border: 2px solid black;
+/* Contenedor principal */
+.container-responsable {
+	max-width: 900px;
+	margin: 2rem auto;
+	padding: 2rem;
+	border-radius: 12px;
+	background: white;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	border: none;
 }
 
-label {
-	font-size: 1rem;
-	margin: 0.25rem;
-}
+/* Headers usan clases estándar de tramitPinfoPublic.jsp */
 
-#backToList-button-container {
-	text-align: right;
-	margin: 1rem 5rem;
-}
-
-#responsables-list {
-  height: 15rem;
-}
-
-.header-section {
-	display: flex;
-	justify-content: space-between;
+/* Botón principal - Generar PDF */
+.btn-primary-custom {
+	background: linear-gradient(135deg, #4DBA79 0%, #3a9e65 100%) !important;
+	color: white !important;
+	padding: 10px 24px;
+	border: none !important;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+	text-decoration: none !important;
+	display: inline-flex;
 	align-items: center;
+	gap: 8px;
+	box-shadow: 0 2px 8px rgba(77, 186, 121, 0.2) !important;
+}
+
+.btn-primary-custom:hover {
+	background: linear-gradient(135deg, #3a9e65 0%, #2d7a4e 100%) !important;
+	color: white !important;
+	text-decoration: none !important;
+	box-shadow: 0 4px 12px rgba(77, 186, 121, 0.3) !important;
+	transform: translateY(-1px);
+}
+
+/* Campo de búsqueda */
+.filter-container {
 	margin-bottom: 1.5rem;
 }
 
-.header-section h3 {
-	margin: 0;
-	flex: 1;
-}
-
-#btn-container {
-	text-align: right;
-	color: white;
-	white-space: nowrap;
-	margin-left: 1rem;
-}
-
-#btn-container .btn {
-	margin: 0;
-}
-
-#seleccionarResponsable {
-  margin: 1rem;
-}
-
-.filter-container {
-	padding-top: 0;
-  	padding-left: 1rem;
-	margin-bottom: 1rem;
-}
-
-.responsable-item {
-	transition: opacity 0.2s ease;
+.filter-container label {
+	font-size: 14px;
+	font-weight: 600;
+	color: #2d3748;
 	margin-bottom: 0.5rem;
+	display: block;
+}
+
+.filter-container label i {
+	color: #4DBA79;
+	margin-right: 6px;
+}
+
+.filter-container input {
+	width: 100%;
+	padding: 12px 16px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	font-size: 14px;
+	transition: all 0.2s;
+	box-sizing: border-box;
+}
+
+.filter-container input:focus {
+	border-color: #4DBA79;
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(77, 186, 121, 0.1);
+}
+
+/* Lista de responsables - altura fija */
+#responsables-list {
+	height: 400px;
+	min-height: 400px;
+	max-height: 400px;
+	overflow-y: auto;
+	padding-right: 8px;
+}
+
+/* Scrollbar personalizado */
+#responsables-list::-webkit-scrollbar {
+	width: 8px;
+}
+
+#responsables-list::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 4px;
+}
+
+#responsables-list::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: 4px;
+}
+
+#responsables-list::-webkit-scrollbar-thumb:hover {
+	background: #a8a8a8;
+}
+
+/* Items de responsable */
+.responsable-item {
+	transition: all 0.2s ease;
+	margin-bottom: 8px;
+	padding: 12px 16px;
+	border-radius: 8px;
+	border: 1px solid #e8e8e8;
+	background: white;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.responsable-item:hover {
+	background-color: #f8f9fa;
+	border-color: #4DBA79;
+	box-shadow: 0 2px 8px rgba(77, 186, 121, 0.1);
+}
+
+/* Radio button - estilo nativo con acento verde */
+.responsable-item input[type="radio"] {
+	cursor: pointer;
+	margin: 0;
+	accent-color: #4DBA79;
+	width: 16px;
+	height: 16px;
+	min-width: 16px;
+}
+
+/* Label del responsable */
+.responsable-item label {
+	cursor: pointer;
+	margin: 0;
+	font-size: 14px;
+	color: #4a5568;
+	flex: 1;
+	line-height: 1.5;
+}
+
+.responsable-item input[type="radio"]:checked + label {
+	font-weight: 600;
+	color: #2d3748;
 }
 
 .responsable-item:hidden {
 	display: none;
 }
 
+#seleccionarResponsable {
+	margin: 0;
+}
 </style>
 
 </head>
 <body>
-	<div id="backToList-button-container">
-		<a id="backToList-button" href="list/1" class="btn btn-secondary">Tornar
-			al llistat</a>
-	</div>
-
-	<div class="container">
-		<div class="header-section">
-			<h3>Seleccionar Responsable</h3>
-			<div id="btn-container">
-				<a class="btn btn-sm btn-primary"
+	<div class="container-responsable">
+		<div class="titol-tramit-pinfo-header">
+			<div class="titol-tramit-pinfo-container">
+				<h3 class="titol-tramit-pinfo"><i class="fas fa-user-check"></i> <fmt:message key="tramit.pinfo.responsable.seleccionar"/></h3>
+			</div>
+			<div class="titol-tramit-pinfo-botonera">
+				<a class="btn-primary-custom"
 					onclick="submitForm();"
-					title="<fmt:message key="generar.pdf"/>"> <i
-					class="fas fa-file-pdf"></i> <fmt:message key="generar.pdf" />
+					title="<fmt:message key="generar.pdf"/>">
+					<i class="fas fa-file-pdf"></i> <fmt:message key="generar.pdf" />
 				</a>
 			</div>
 		</div>
 
-		<div class="filter-container" style="margin-bottom: 1rem;">
-			<input type="text" id="filtro-responsables" placeholder="Escriba al menos 2 caracteres para filtrar por NIF, nombre, cargo, teléfono o email..." 
-				   style="width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ccc; border-radius: 4px;" />
+		<div class="filter-container">
+			<label for="filtro-responsables">
+				<i class="fas fa-search"></i> <fmt:message key="tramit.pinfo.responsable.buscar"/>
+			</label>
+			<input type="text" id="filtro-responsables" placeholder="<fmt:message key="tramit.pinfo.responsable.placeholder"/>" />
 		</div>
 
 		<form id="seleccionarResponsable" action="seleccionarResponsable"
@@ -117,6 +207,15 @@ label {
 	<script>
 	
 	$(document).ready(function(){
+		// Hacer todo el div clickeable para seleccionar el radio
+		$('.responsable-item').on('click', function(e){
+			// Solo si no se ha clickeado directamente en el radio o label
+			if (!$(e.target).is('input[type="radio"]') && !$(e.target).is('label')) {
+				var radio = $(this).find('input[type="radio"]');
+				radio.prop('checked', true);
+			}
+		});
+		
 		// Mover el responsable seleccionado al principio
 		var selectedItem = null;
 		$('.responsable-item').each(function(){

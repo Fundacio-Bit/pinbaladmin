@@ -10,163 +10,158 @@
 
 
 <style>
-#dades-incidencia-container {
-	margin: auto;
-	width: fit-content;
-	background: lightgray;
-	border-radius: 6px;
-	padding: 5px 1rem;
-}
-
-#dades-solicitant {
-	
-}
-
-#dades-solicitant td {
-	padding: 5px;
-}
-
-#dades-solicitant .label {
-	font-weight: bold;
-	padding-right: 1rem;
-}
-
-#dades-solicitant .value {
-	
-}
-
-#includedContentLlistatPinfoData {
-	margin: 1rem;
-}
-
+/* Contenedor principal */
 .myContainer {
 	background: white;
-	padding: 1rem;
-	border-radius: 6px;
-	border: 2px solid black;
+	padding: 3rem 4rem;
+	border-radius: 12px;
 	margin: 2rem 7rem;
 	min-width: 75rem;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	min-height: 500px;
+	display: flex;
+	flex-direction: column;
 }
 
-#title {
-	text-align: center;
-	margin: 1rem;
+/* Ocultar elementos autogenerados */
+#pinfoData_listheader {
+	display: none !important;
 }
 
-.info-usuari-full {
-	/* 	width: fit-content; */
-	max-width: 45rem;
-	margin: 2rem auto;
-	border: 1px black solid;
-	padding: 15px;
-	border-radius: 3px;
-	box-shadow: 1px 2px 3px 1px #888;
-}
-
-.btn.btn-danger {
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-}
-
-.pinfodata-user {
-	font-style: italic;
-	font-size: 18px;
-	font-weight: bold;
-	margin: 6px;
-}
-
-.taula-procediment {
-	margin-bottom: 1rem;
-	width: 100%;
-	/* 	display: flex;
-	  flex-direction: column;
- */
-}
-
-.pinfodata-procediment {
-	background: #e6e6e6;
-	font-weight: bold;
-	padding: 5px 10px;
+/* Botón Següent */
+.btn-seguent {
+	background: linear-gradient(135deg, #4DBA79 0%, #3a9e65 100%);
+	color: white;
+	padding: 10px 28px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 14px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s;
+	text-decoration: none;
+	display: inline-flex;
 	align-items: center;
-	display: flex;
-	border-radius: 5px 00px 00px 5px;
+	gap: 8px;
+	box-shadow: 0 2px 8px rgba(77, 186, 121, 0.2);
 }
 
-.llista-serveis {
-	padding: 6px;
-	display: flex;
-	justify-content: space-between;
-	min-width: 20rem;
+.btn-seguent:hover {
+	background: linear-gradient(135deg, #3a9e65 0%, #2d7a4e 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(77, 186, 121, 0.3);
+	color: white;
+	text-decoration: none;
 }
 
+/* Cards de usuario - diseño moderno sin bordes duros */
+.info-usuari-full {
+	max-width: 65rem;
+	margin: 1.5rem auto;
+	padding: 0;
+	border-radius: 12px;
+	background: white;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+	overflow: hidden;
+	transition: all 0.3s;
+}
+
+.info-usuari-full:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+/* Header de usuario - con acento verde sutil */
+.pinfodata-user {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
+	padding: 16px 20px;
+	color: white;
+	background: linear-gradient(135deg, #4DBA79 0%, #3a9e65 100%);
+	border-bottom: none;
+}
+
+/* Tabla de procedimientos - diseño limpio */
+.taula-procediment {
+	margin-bottom: 0;
+	width: 100%;
+}
+
+/* Headers de procedimiento - más sutiles */
+.pinfodata-procediment {
+	background: #f8f9fa;
+	color: #265d3c;
+	font-weight: 600;
+	font-size: 14px;
+	padding: 12px 20px;
+	display: flex;
+	align-items: center;
+	border-left: 4px solid #4DBA79;
+	margin: 0;
+}
+
+/* Contenedor de servicios */
 .pinfodata-serveis {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	margin-left: .5rem;
-	margin-top: .5rem;
+	padding: 8px 20px 16px 20px;
+	background: white;
 }
 
-#nota {
-  font-style: italic;
-  border: 1px solid darkgray;
-  border-radius: 5px;
-  padding: 6px;
-  background-color: #d3d3d336;
-  width: fit-content;
-  margin: 1rem auto;
-}
-
-#msgAfegirPinfoData {
-	text-align: center;
-	margin: 2rem;
+/* Items de servicio - sin bordes, solo hover */
+.llista-serveis {
+	padding: 12px 16px;
 	display: flex;
-	justify-content: center;
-	gap: 16px;
+	justify-content: space-between;
+	align-items: center;
+	margin: 4px 0;
+	border-radius: 6px;
+	background: white;
+	transition: all 0.2s;
 }
 
+.llista-serveis:hover {
+	background: #f8f9fa;
+}
+
+.servei-item {
+	flex: 1;
+}
+
+
+
+/* Botón de eliminar - más discreto */
 .btn-delete-container {
-	
+	margin-left: 12px;
 }
 
-.tipus1 {
-	color: black;
+.btn.btn-danger {
+	padding: 6px 10px;
+	transition: all 0.3s;
+	border-radius: 6px;
+	font-size: 14px;
 }
 
-.tipus0 {
-	color: red;
+.btn.btn-danger:hover {
+	background-color: #c82333;
+	transform: scale(1.05);
+}
+
+/* Contenedor de permisos */
+#pinfo-data-content {
+	margin-top: 1rem;
+}
+
+/* Sistema de headers limpios */
+#includedContentLlistatPinfoData {
+	margin: 1rem 0;
 }
 </style>
 
 </head>
 <body>
 	<div class="myContainer">
-<%-- 		<h4 id="title" style="margin: 1rem auto;">Dades solicitant</h4>
-
-		<div id="dades-incidencia-container">
-			<!--
-	|Usuari	 | Usuari					|
-	|Nom 	 | Nom						|
-	|Telefon | Telefon | Correu | Correu|	
- -->
-			<table id="dades-solicitant">
-				<tr>
-					<!-- 					<td class="label" rowspan="3" style="text-align: center;">DADES<br>SOLICITANT</td> -->
-					<td class="label">Usuari</td>
-					<td class="value" colspan="3">${usuariNIF}&nbsp;${usuariNom}</td>
-				</tr>
-				<tr>
-					<td class="label">Nom</td>
-					<td class="value" colspan="3">${incidencia.contacteNom}</td>
-				</tr>
-				<tr>
-					<td class="label">Telefon</td>
-					<td class="value">${incidencia.contacteTelefon}</td>
-					<td class="label">Correu</td>
-					<td class="value">${incidencia.contacteEmail}</td>
-			</table>
-		</div> --%>
-
 		<div id="includedContentLlistatPinfoData">
 			<form:form name="pinfoData" cssClass="form-search"
 				modelAttribute="pinfoDataFilterForm"
@@ -175,43 +170,24 @@
 
 				<%@include file="/WEB-INF/jsp/webdb/pinfoDataListCommon.jsp"%>
 
-				<c:if test="${empty pinfoDataFull.usuaris}">
-					<div>
-						<%@include
-							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
-							
-						<p id="nota">
-							<fmt:message key="tramit.pinfo.nota" />
-						</p>
-
-						<div id="msgAfegirPinfoData">
-<!-- 							<p class="lead">Afegir dades al PINFO...</p> -->
-							
-						</div>
-						
+				<!-- Título y botón Següent -->
+				<div class="titol-tramit-pinfo-header">
+					<div class="titol-tramit-pinfo-container">
+						<h3 class="titol-tramit-pinfo">
+							<fmt:message key="tramit.pinfo.permisos.solicitats"/>
+							<c:if test="${altaBaixa == 1}"> - <span style="color: #4DBA79; font-weight: 600;">ALTA PERMISOS</span></c:if>
+							<c:if test="${altaBaixa == 0}"> - <span style="color: #dc3545; font-weight: 600;">BAIXA PERMISOS</span></c:if>
+						</h3>
 					</div>
-
-					<script type="text/javascript">
-						var elements = $('a[href*="/pinfodata/crear"]');
-						let alta = elements[1];
-						elements[1] = elements[0];
-						elements[0] = alta;
-						
-						elements.removeClass("float-right");
-
-						$("#msgAfegirPinfoData").append(elements);
-					</script>
-				</c:if>
-
-				<c:if test="${not empty pinfoDataFull.usuaris}">
-					<div id="${formName}_listheader" class="filterLine lead"
-						style="margin-bottom: 10px">
-						<%@include
-							file="/WEB-INF/jsp/webdb/pinfoDataListHeaderButtons.jsp"%>
+					<div class="titol-tramit-pinfo-botonera">
+						<a href="<c:url value="/public/pinfodata/seleccionarResponsable"/>" class="btn-seguent">
+							<span>Següent</span>
+							<i class="fas fa-arrow-right"></i>
+						</a>
 					</div>
+				</div>
 
-
-					<div id="pinfo-data-content">
+				<div id="pinfo-data-content">
 <%-- 						<p>PinfoID : ${pinfoDataFull.pinfoID}</p> --%>
 						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
 							<div class="info-usuari-full">
@@ -227,90 +203,42 @@
 											<br> ${procediment.procediment}
 										</div>
 										<div class="pinfodata-serveis">
-											<c:if test="${altes.size() > 0}">
-												<c:forEach var="servei" items="${altes}" varStatus="status">
-													<div class="llista-serveis">
-														<div class="servei-item tipus${servei.alta}">
-															${servei.nom} 
-														</div>
-														<div class="btn-delete-container">
-															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
-																class="btn btn-danger"><i class="fas fa-times"></i>
-															</a>
-														</div>
+											<c:forEach var="servei" items="${altes}" varStatus="status">
+												<div class="llista-serveis">
+													<div class="servei-item">
+														${servei.nom} 
 													</div>
-												</c:forEach>
-											</c:if>
+													<div class="btn-delete-container">
+														<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
+															class="btn btn-danger"><i class="fas fa-times"></i>
+														</a>
+													</div>
+												</div>
+											</c:forEach>
 
-											<c:if test="${baixes.size() > 0}">
-												<c:forEach var="servei" items="${baixes}" varStatus="status">
-													<div class="llista-serveis">
-														<div class="servei-item tipus${servei.alta}">
-															${servei.nom} 
-														</div>
-														<div class="btn-delete-container">
+											<c:forEach var="servei" items="${baixes}" varStatus="status">
+												<div class="llista-serveis">
+													<div class="servei-item">
+														${servei.nom} 
+													</div>
+													<div class="btn-delete-container">
 															<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
 																class="btn btn-danger"><i class="fas fa-times"></i>
 															</a>
 														</div>
 													</div>
 												</c:forEach>
-											</c:if>
 										</div>
 									</div>
-									
-									
-									<%-- <table class="taula-procediment">
-										<tr>
-											<td class="pinfodata-procediment" rowspan="${altes.size() + baixes.size()}">
-												${procediment.codi} <br> ${procediment.procediment}
-											</td>
-
-											<c:if test="${altes.size() > 0">
-												<td class="llista-serveis tipus1">Altes</td>
-											</c:if>
-										</tr>
-										
-										<c:forEach var="servei" items="${altes}" varStatus="status">
-											<tr>
-												<td class="llista-serveis tipus${servei.alta}">${servei.servei}</td>
-												<td class="btn-delete-container">
-													<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
-														<i class="fas fa-times"></i>
-													</a>
-												</td>
-											</tr>
-										</c:forEach>
-										
-										<c:if test="${baixes.size() > 0">
-											<td class="llista-serveis tipus0">Baixes</td>
-										</c:if>
-											
-										<c:forEach var="servei" items="${baixes}" varStatus="status">
-											<tr>
-												<td class="llista-serveis tipus${servei.alta}">${servei.servei}</td>
-												<td class="btn-delete-container">
-													<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />" class="btn btn-danger">
-														<i class="fas fa-times"></i>
-													</a>
-												</td>
-											</tr>
-										</c:forEach>
-									</table> --%>
-									
-									
-									
 								</c:forEach>
 							</div>
 						</c:forEach>
 					</div>
 
-
 					<c:if test="${__theFilterForm.attachedAdditionalJspCode}">
 						<%@include
 							file="/WEB-INF/jsp/webdbmodificable/pinfoDataListModificable.jsp"%>
 					</c:if>
-				</c:if>
 			</form:form>
 		</div>
 	</div>

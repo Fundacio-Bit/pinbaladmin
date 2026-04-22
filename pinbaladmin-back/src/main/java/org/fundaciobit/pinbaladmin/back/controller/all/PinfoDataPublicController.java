@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
+import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
@@ -133,7 +135,6 @@ public class PinfoDataPublicController extends PinfoDataController {
 		
 		if (pinfoID == null) {
 			pinfoID = pinfoLogicEjb.executeQueryOne(PinfoFields.PINFOID, PinfoFields.INCIDENCIAID.equal(id));
-//			pinfoID = 1005L;
 		}
 		
 		IncidenciaTecnica inc = incidenciaTecnicaLogicaEjb.findByPrimaryKey(id);
@@ -158,6 +159,10 @@ public class PinfoDataPublicController extends PinfoDataController {
 			PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
 			mav.addObject("pinfoDataFull", pinfoDataFull);
 		}
+		
+		// Passar el tipus de tramit (alta o baixa) al JSP
+		Long altaBaixa = (Long) request.getSession().getAttribute(ALTA_BAIXA);
+		mav.addObject("altaBaixa", altaBaixa);
 
 		return filterForm;
 	}
@@ -257,11 +262,13 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		if (incidenciaID != null) {
 
-			List<Pinfo> pinfos = pinfoLogicEjb.select(PinfoFields.INCIDENCIAID.equal(incidenciaID));
+			List<Pinfo> pinfos = pinfoLogicEjb.select(PinfoFields.INCIDENCIAID.equal(incidenciaID), 
+					new OrderBy[] {new OrderBy(PinfoFields.PINFOID, OrderType.DESC)});
 			log.info("getAdditionalCondition():: pinfos: " + pinfos.size());
-			if (pinfos.size() == 1) {
+			if (pinfos.size() >= 1) {
+				// Agafar el darrer PINFO creat (el més recent)
 				Long pinfoID = pinfos.get(0).getPinfoID();
-				log.info("pinfoID: " + pinfoID);
+				log.info("pinfoID (darrer): " + pinfoID);
 				request.getSession().setAttribute("pinfoID", pinfoID);
 				request.getSession().setAttribute("incidenciaId", incidenciaID);
 
@@ -324,42 +331,18 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("procesarPermisos");
 
 		String user = request.getParameter("usuaris");
-//		String procedimentIDStr = request.getParameter("procediments");
 		String solicitudServeisStr = request.getParameter("solicitudServeis");
 
 		String[] usuaris = user.split(",");
-//		String[] procediments = procedimentIDStr.split(",");
 		String[] solicitudServeis = solicitudServeisStr.split(",");
 
 		Long pinfoID = (Long) request.getSession().getAttribute("pinfoID");
 		Long estat = 0L; // Creant
 		Long alta_baixa = (Long) request.getSession().getAttribute(ALTA_BAIXA);
 		
+		log.info(">>>>> CREANT PinfoDatas amb pinfoID: " + pinfoID + " (alta_baixa: " + alta_baixa + ")");
+		
 		for (String u : usuaris) {
-			
-//	        try {
-//	        	log.info("Intentarem obtenir dades d'estructura organitzativa de l'usuari: " + u);
-//	        	boolean debug = true;
-//	        	IEstructuraOrganitzativaPlugin plugin = pinfoDataLogicaEjb.getPluginEstructuraOrganitzativa();
-//
-////	        	String president = plugin.getGerentPresidentName();
-////	        	log.info("Nom del presidente: " + president);
-//	        	String codiDG = plugin.getCodeDepartamentDireccioGeneral(u);
-//				String usernameDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
-//				String nomDG = plugin.getCapDepartamentDirectorGeneralUsername(u);
-//
-//				log.info("Director general de " + u + ": " + codiDG + " - "+ nomDG + " (" + usernameDG + ")");
-//				
-//				
-////				String capDepartamentDG = plugin.getCapDepartamentDirectorGeneralName(u);
-////				log.info("El capDepartamentDG  es: " + capDepartamentDG  );
-//
-//	        } catch (Exception e) {
-//				log.error("NO HA ANAT BE: " + e.getMessage(), e);
-//				HtmlUtils.saveMessageError(request, "NO HA ANAT BE: " + e.getMessage());
-//			}
-			
-			
 			for (String solSer : solicitudServeis) {
 				SolicitudServei ss = solicitudServeiLogicaEjb.findByPrimaryKey(Long.parseLong(solSer));
 				Long procedimentID = ss.getSolicitudID();
@@ -369,7 +352,7 @@ public class PinfoDataPublicController extends PinfoDataController {
 				PinfoDataJPA pinfoDataJPA = new PinfoDataJPA(pinfoID, estat, u, procedimentID, serveiID, alta_baixa);
 
 				PinfoData pinfoData = pinfoDataLogicaEjb.create(pinfoDataJPA);
-				log.info("pinfoData: " + pinfoData.getPinfodataID());
+				log.info("pinfoData: " + pinfoData.getPinfodataID() + " -> amb pinfoID: " + pinfoData.getPinfoID());
 			}
 		}
 		return "redirect:" + CONTEXT_WEB + "/list";
@@ -677,7 +660,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		Where wOrganDelSolicitant = SolicitudFields.ORGANID.equal(organID);
 
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wOrganDelSolicitant));
+//		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wOrganDelSolicitant));
+		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment));
 
 		List<Item> items = new java.util.ArrayList<Item>();
 
@@ -1002,6 +986,14 @@ public class PinfoDataPublicController extends PinfoDataController {
 	}
 	
 	
+	
+	@RequestMapping(value = "/elegirTipo", method = RequestMethod.GET)
+	public ModelAndView elegirTipo(HttpServletRequest request) throws I18NException {
+		log.info("elegirTipo GET");
+		
+		ModelAndView mav = new ModelAndView("pinfoElegirTipo");
+		return mav;
+	}
 	
 	@RequestMapping(value = "/crearalta")
 	public String crearAlta(HttpServletRequest request, ModelAndView mav) throws I18NException {

@@ -2,7 +2,7 @@
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController"%>
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.IncidenciaPinfoPublicController"%>
 
-<!--  Cap�alera i peu -->
+<!-- Capçalera i peu -->
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
@@ -18,14 +18,14 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Solicitud permisos de PINBAL</div>
+	<div id="titol-tramit" class="third"><fmt:message key="tramit.pinfo.titol"/></div>
 	<div id="button-menu" class="third">
 		<a href="<%=request.getContextPath() + PinfoPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="tramitpinfo.exit"/></a>
 	</div>
 </div>
 
 <div id="footer">
-	<p>2024 - Fundació BIT</p>
+	<p>2026 - IBDigital</p>
 </div>
 
 <script>
@@ -117,4 +117,35 @@ body {
 	letter-spacing: 0.5px;
 	color: #555;
 }
+
+/* ========================================
+   CLASE COM�N T͍TULOS DEL TR��MITE
+   ======================================== */
+
+.titol-tramit-pinfo-header{
+	display: flex;
+  	justify-content: space-between;
+  	align-items: center;
+  	border-bottom: 1px solid #e9ecef;
+  	padding: 0 3rem 1rem 3rem;
+  	margin-bottom: 1rem;
+}
+
+.titol-tramit-pinfo-container{
+
+}
+
+.titol-tramit-pinfo {
+	color: #265d3c !important;
+	font-size: 26px !important;
+	font-weight: 600 !important;
+	margin: 0 !important;
+	line-height: 1.2 !important;
+}
+
+
+.titol-tramit-pinfo-botonera{
+
+}
+
 </style>
