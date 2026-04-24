@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/modificacioSoliServ")
 @SessionAttributes(types = { ModificacioSoliServForm.class, ModificacioSoliServFilterForm.class })
-@Tile(name="modificacioSoliServFormWebDB", contentJsp="/WEB-INF/jsp/webdb/modificacioSoliServForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="modificacioSoliServ.modificacioSoliServ")})
-@Tile(name="modificacioSoliServListWebDB", contentJsp="/WEB-INF/jsp/webdb/modificacioSoliServList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="modificacioSoliServ.modificacioSoliServ") })
+@Tile(name="modificacioSoliServFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/modificacioSoliServForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="modificacioSoliServ.modificacioSoliServ")})
+@Tile(name="modificacioSoliServListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/modificacioSoliServList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="modificacioSoliServ.modificacioSoliServ")})
 public class ModificacioSoliServController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<ModificacioSoliServ, java.lang.Long, ModificacioSoliServForm> implements ModificacioSoliServFields {
 

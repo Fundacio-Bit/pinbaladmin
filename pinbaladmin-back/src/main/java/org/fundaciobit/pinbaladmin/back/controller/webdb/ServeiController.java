@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/servei")
 @SessionAttributes(types = { ServeiForm.class, ServeiFilterForm.class })
-@Tile(name="serveiFormWebDB", contentJsp="/WEB-INF/jsp/webdb/serveiForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="servei.servei")})
-@Tile(name="serveiListWebDB", contentJsp="/WEB-INF/jsp/webdb/serveiList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="servei.servei") })
+@Tile(name="serveiFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/serveiForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="servei.servei")})
+@Tile(name="serveiListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/serveiList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="servei.servei")})
 public class ServeiController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Servei, java.lang.Long> implements ServeiFields {
 

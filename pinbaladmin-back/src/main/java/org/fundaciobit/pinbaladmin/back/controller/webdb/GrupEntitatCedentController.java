@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/grupEntitatCedent")
 @SessionAttributes(types = { GrupEntitatCedentForm.class, GrupEntitatCedentFilterForm.class })
-@Tile(name="grupEntitatCedentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/grupEntitatCedentForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="grupEntitatCedent.grupEntitatCedent")})
-@Tile(name="grupEntitatCedentListWebDB", contentJsp="/WEB-INF/jsp/webdb/grupEntitatCedentList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="grupEntitatCedent.grupEntitatCedent") })
+@Tile(name="grupEntitatCedentFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/grupEntitatCedentForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="grupEntitatCedent.grupEntitatCedent")})
+@Tile(name="grupEntitatCedentListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/grupEntitatCedentList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="grupEntitatCedent.grupEntitatCedent")})
 public class GrupEntitatCedentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<GrupEntitatCedent, java.lang.Long> implements GrupEntitatCedentFields {
 

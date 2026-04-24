@@ -83,6 +83,8 @@ public class PinfoOperadorController extends PinfoController {
 			pinfoFilterForm.addHiddenField(DESTINATARINIF);
 			pinfoFilterForm.addHiddenField(DESTINATARINOM);
 			pinfoFilterForm.addHiddenField(MISSATGEPINBAL);
+			pinfoFilterForm.addHiddenField(LOGPPNBAL);
+			pinfoFilterForm.addHiddenField(MISSATGESOLICITANT);
 			
 			//Afegir filtre per NifSolicitant, NifDestinatari, idpinfo,
 			List<Field<?>> filterBy = pinfoFilterForm.getDefaultFilterByFields();
@@ -133,10 +135,20 @@ public class PinfoOperadorController extends PinfoController {
 			} else if (estat == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
 				pinfoForm.addHiddenField(FITXERID);
 				pinfoForm.addHiddenField(PORTAFIBID);
-				pinfoForm.addHiddenField(MISSATGEPINBAL);
+				// pinfoForm.addHiddenField(MISSATGEPINBAL);
 
-				pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-cogs", "procesar.pinfo",
-						WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+				// Si encara no s'ha processat, mostrar botó per processar
+				if (pinfo.getMissatgePinbal() == null || pinfo.getMissatgePinbal().trim().isEmpty()) {
+					pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-cogs", "procesar.pinfo",
+							WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+				} else {
+					// Si ja s'ha processat, mostrar botó per marcar com tramitat
+					pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-check-circle", "marcar.com.tramitat",
+							WEBCONTEXT + "/marcarComTramitat/{0}", AdditionalButtonStyle.SUCCESS));
+					// També permetre reprocessar per si cal
+					pinfoForm.addAdditionalButton(new AdditionalButton("fas fa-redo", "reprocessar.pinfo",
+							WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.WARNING));
+				}
 
 			} else if (estat == Constants.ESTAT_PINFO_TRAMITAT) {
 				pinfoForm.addHiddenField(FITXERID);
@@ -158,14 +170,32 @@ public class PinfoOperadorController extends PinfoController {
 		
 		try {
 			pinfoDataLogicaEjb.procesarPermisosPinfo(pinfoID);
-			//String operador = LoginInfo.getInstance().getUsername();
 			
-			String msg = "PINFO " + pinfoID + " processat correctament";
+			String msg = "PINFO " + pinfoID + " processat correctament. Reviseu el resultat i marqueu com tramitat si tot és correcte.";
 			log.info(msg);
 			HtmlUtils.saveMessageSuccess(request, msg);
 			
 		} catch (I18NException e) {
 			String msg = "Error Procesant PINFO " + pinfoID + ": " + I18NUtils.getMessage(e);
+			log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+		}
+		
+		return "redirect:" + WEBCONTEXT + "/view/" + pinfoID;
+	}
+	
+	@RequestMapping(value = "/marcarComTramitat/{pinfoID}")
+	public String marcarComTramitat(HttpServletRequest request, ModelAndView mav, @PathVariable("pinfoID") java.lang.Long pinfoID) {
+		
+		try {
+			pinfoDataLogicaEjb.marcarPinfoComTramitat(pinfoID);
+			
+			String msg = "PINFO " + pinfoID + " marcat com a TRAMITAT correctament";
+			log.info(msg);
+			HtmlUtils.saveMessageSuccess(request, msg);
+			
+		} catch (I18NException e) {
+			String msg = "Error marcant PINFO " + pinfoID + " com tramitat: " + I18NUtils.getMessage(e);
 			log.error(msg, e);
             HtmlUtils.saveMessageError(request, msg);
 		}
@@ -237,8 +267,15 @@ public class PinfoOperadorController extends PinfoController {
 							AdditionalButtonStyle.SUCCESS));
 
 			if (pinfo.getEstat() == Constants.ESTAT_PINFO_PENDENT_TRAMITAR) {
-				filterForm.addAdditionalButtonByPK(pinfoID, new AdditionalButton("fas fa-cogs", "procesar.pinfo",
-						WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+				// Si encara no s'ha processat, mostrar botó per processar
+				if (pinfo.getMissatgePinbal() == null || pinfo.getMissatgePinbal().trim().isEmpty()) {
+					filterForm.addAdditionalButtonByPK(pinfoID, new AdditionalButton("fas fa-cogs", "procesar.pinfo",
+							WEBCONTEXT + "/procesarPinfo/{0}", AdditionalButtonStyle.PRIMARY));
+				} else {
+					// Si ja s'ha processat, mostrar botó per marcar com tramitat
+					filterForm.addAdditionalButtonByPK(pinfoID, new AdditionalButton("fas fa-check-circle", "marcar.com.tramitat",
+							WEBCONTEXT + "/marcarComTramitat/{0}", AdditionalButtonStyle.SUCCESS));
+				}
 
 			} else if (pinfo.getEstat() == Constants.ESTAT_PINFO_TRAMITAT) {
 				filterForm.addAdditionalButtonByPK(pinfoID,

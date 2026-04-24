@@ -92,6 +92,16 @@
           ${pinfo.missatgePinbal}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.LOGPPNBAL)}">
+          <td>
+          ${pinfo.logpPnbal}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.MISSATGESOLICITANT)}">
+          <td>
+          ${pinfo.missatgeSolicitant}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

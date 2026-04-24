@@ -23,6 +23,8 @@ public interface PinfoFields extends java.io.Serializable {
 	 public static final StringField DESTINATARINIF = new StringField(_TABLE_MODEL, "destinatariNIF", "destinatarinif");
 	 public static final StringField DESTINATARINOM = new StringField(_TABLE_MODEL, "destinatariNom", "destinatarinom");
 	 public static final StringField MISSATGEPINBAL = new StringField(_TABLE_MODEL, "missatgePinbal", "missatgepinbal");
+	 public static final StringField LOGPPNBAL = new StringField(_TABLE_MODEL, "logpPnbal", "logpinbal");
+	 public static final StringField MISSATGESOLICITANT = new StringField(_TABLE_MODEL, "missatgeSolicitant", "missatgesolicitant");
 
 
   public static final Field<?>[] ALL_PINFO_FIELDS = {
@@ -36,7 +38,9 @@ public interface PinfoFields extends java.io.Serializable {
     PORTAFIBID,
     DESTINATARINIF,
     DESTINATARINOM,
-    MISSATGEPINBAL
+    MISSATGEPINBAL,
+    LOGPPNBAL,
+    MISSATGESOLICITANT
   };
 
 

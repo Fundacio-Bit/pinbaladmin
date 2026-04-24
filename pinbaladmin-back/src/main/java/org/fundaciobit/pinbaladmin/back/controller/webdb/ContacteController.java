@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/contacte")
 @SessionAttributes(types = { ContacteForm.class, ContacteFilterForm.class })
-@Tile(name="contacteFormWebDB", contentJsp="/WEB-INF/jsp/webdb/contacteForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="contacte.contacte")})
-@Tile(name="contacteListWebDB", contentJsp="/WEB-INF/jsp/webdb/contacteList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="contacte.contacte") })
+@Tile(name="contacteFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/contacteForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="contacte.contacte")})
+@Tile(name="contacteListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/contacteList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="contacte.contacte")})
 public class ContacteController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Contacte, java.lang.Long> implements ContacteFields {
 

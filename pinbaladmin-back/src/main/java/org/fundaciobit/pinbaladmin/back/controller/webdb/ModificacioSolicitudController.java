@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/modificacioSolicitud")
 @SessionAttributes(types = { ModificacioSolicitudForm.class, ModificacioSolicitudFilterForm.class })
-@Tile(name="modificacioSolicitudFormWebDB", contentJsp="/WEB-INF/jsp/webdb/modificacioSolicitudForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="modificacioSolicitud.modificacioSolicitud")})
-@Tile(name="modificacioSolicitudListWebDB", contentJsp="/WEB-INF/jsp/webdb/modificacioSolicitudList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="modificacioSolicitud.modificacioSolicitud") })
+@Tile(name="modificacioSolicitudFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/modificacioSolicitudForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="modificacioSolicitud.modificacioSolicitud")})
+@Tile(name="modificacioSolicitudListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/modificacioSolicitudList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="modificacioSolicitud.modificacioSolicitud")})
 public class ModificacioSolicitudController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<ModificacioSolicitud, java.lang.Long, ModificacioSolicitudForm> implements ModificacioSolicitudFields {
 

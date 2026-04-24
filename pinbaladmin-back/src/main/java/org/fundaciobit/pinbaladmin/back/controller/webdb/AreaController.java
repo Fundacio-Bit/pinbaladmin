@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/area")
 @SessionAttributes(types = { AreaForm.class, AreaFilterForm.class })
-@Tile(name="areaFormWebDB", contentJsp="/WEB-INF/jsp/webdb/areaForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="area.area")})
-@Tile(name="areaListWebDB", contentJsp="/WEB-INF/jsp/webdb/areaList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="area.area") })
+@Tile(name="areaFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/areaForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="area.area")})
+@Tile(name="areaListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/areaList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="area.area")})
 public class AreaController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Area, java.lang.Long> implements AreaFields {
 

@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tipusTiquet")
 @SessionAttributes(types = { TipusTiquetForm.class, TipusTiquetFilterForm.class })
-@Tile(name="tipusTiquetFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tipusTiquetForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tipusTiquet.tipusTiquet")})
-@Tile(name="tipusTiquetListWebDB", contentJsp="/WEB-INF/jsp/webdb/tipusTiquetList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tipusTiquet.tipusTiquet") })
+@Tile(name="tipusTiquetFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tipusTiquetForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tipusTiquet.tipusTiquet")})
+@Tile(name="tipusTiquetListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tipusTiquetList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tipusTiquet.tipusTiquet")})
 public class TipusTiquetController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TipusTiquet, java.lang.Long> implements TipusTiquetFields {
 

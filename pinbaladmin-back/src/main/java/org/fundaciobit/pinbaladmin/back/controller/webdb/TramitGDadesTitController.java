@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitGDadesTit")
 @SessionAttributes(types = { TramitGDadesTitForm.class, TramitGDadesTitFilterForm.class })
-@Tile(name="tramitGDadesTitFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitGDadesTitForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitGDadesTit.tramitGDadesTit")})
-@Tile(name="tramitGDadesTitListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitGDadesTitList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitGDadesTit.tramitGDadesTit") })
+@Tile(name="tramitGDadesTitFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitGDadesTitForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitGDadesTit.tramitGDadesTit")})
+@Tile(name="tramitGDadesTitListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitGDadesTitList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitGDadesTit.tramitGDadesTit")})
 public class TramitGDadesTitController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitGDadesTit, java.lang.Long> implements TramitGDadesTitFields {
 

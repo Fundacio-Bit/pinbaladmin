@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitIServ")
 @SessionAttributes(types = { TramitIServForm.class, TramitIServFilterForm.class })
-@Tile(name="tramitIServFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitIServForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitIServ.tramitIServ")})
-@Tile(name="tramitIServListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitIServList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitIServ.tramitIServ") })
+@Tile(name="tramitIServFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitIServForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitIServ.tramitIServ")})
+@Tile(name="tramitIServListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitIServList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitIServ.tramitIServ")})
 public class TramitIServController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<TramitIServ, java.lang.Long, TramitIServForm> implements TramitIServFields {
 

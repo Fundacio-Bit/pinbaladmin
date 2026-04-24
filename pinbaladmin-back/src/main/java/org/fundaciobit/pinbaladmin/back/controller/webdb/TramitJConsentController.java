@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitJConsent")
 @SessionAttributes(types = { TramitJConsentForm.class, TramitJConsentFilterForm.class })
-@Tile(name="tramitJConsentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent")})
-@Tile(name="tramitJConsentListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitJConsentList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent") })
+@Tile(name="tramitJConsentFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitJConsentForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent")})
+@Tile(name="tramitJConsentListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitJConsentList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitJConsent.tramitJConsent")})
 public class TramitJConsentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<TramitJConsent, java.lang.Long, TramitJConsentForm> implements TramitJConsentFields {
 

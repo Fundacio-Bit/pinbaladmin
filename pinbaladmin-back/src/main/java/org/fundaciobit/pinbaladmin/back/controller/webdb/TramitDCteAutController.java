@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitDCteAut")
 @SessionAttributes(types = { TramitDCteAutForm.class, TramitDCteAutFilterForm.class })
-@Tile(name="tramitDCteAutFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitDCteAutForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitDCteAut.tramitDCteAut")})
-@Tile(name="tramitDCteAutListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitDCteAutList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitDCteAut.tramitDCteAut") })
+@Tile(name="tramitDCteAutFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitDCteAutForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitDCteAut.tramitDCteAut")})
+@Tile(name="tramitDCteAutListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitDCteAutList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitDCteAut.tramitDCteAut")})
 public class TramitDCteAutController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitDCteAut, java.lang.Long> implements TramitDCteAutFields {
 

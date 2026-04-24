@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/solicitud")
 @SessionAttributes(types = { SolicitudForm.class, SolicitudFilterForm.class })
-@Tile(name="solicitudFormWebDB", contentJsp="/WEB-INF/jsp/webdb/solicitudForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="solicitud.solicitud")})
-@Tile(name="solicitudListWebDB", contentJsp="/WEB-INF/jsp/webdb/solicitudList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="solicitud.solicitud") })
+@Tile(name="solicitudFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/solicitudForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="solicitud.solicitud")})
+@Tile(name="solicitudListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/solicitudList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="solicitud.solicitud")})
 public class SolicitudController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Solicitud, java.lang.Long, SolicitudForm> implements SolicitudFields {
 

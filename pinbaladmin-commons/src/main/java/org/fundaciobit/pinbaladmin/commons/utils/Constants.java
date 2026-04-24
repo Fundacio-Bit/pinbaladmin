@@ -227,6 +227,11 @@ public interface Constants {
     
     public static final Long[] ESTATS_PINFO = { ESTAT_PINFO_ERROR, ESTAT_PINFO_CREANT, ESTAT_PINFO_PENDENT_FIRMA, ESTAT_PINFO_PENDENT_TRAMITAR, ESTAT_PINFO_TRAMITAT, ESTAT_PINFO_NOTIFICAT };
 
+	// Estats de PinfoData (línies individuals de tramitació)
+	public static final Long ESTAT_PINFODATA_PENDENT = 0L;
+	public static final Long ESTAT_PINFODATA_OK = 1L;
+	public static final Long ESTAT_PINFODATA_ERROR = -1L;
+
 	public static final Long ESTAT_MODIFICACIO_SOLICITUD_CREACIO = 0L;
 	public static final Long ESTAT_MODIFICACIO_SOLICITUD_ENVIADA = 1L;
 	public static final Long ESTAT_MODIFICACIO_SOLICITUD_ACEPTADA = 2L;

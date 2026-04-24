@@ -508,131 +508,595 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 	@Override
 	public void procesarPermisosPinfo(Long pinfoID) throws I18NException {
+		// ========== 1. INICIALITZACIÓ ==========
 		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
-
 		final String ENTITAT_CIF = pinfo.getEntitat();
-		;
+		
+		StringBuilder logDetallat = new StringBuilder();
+		StringBuilder missatgeTramitador = new StringBuilder();
+		
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String dataHoraInici = sdf.format(new java.util.Date());
+		
+		logDetallat.append("=== INICI PROCESSAMENT PINFO #").append(pinfoID).append(" ===\n");
+		logDetallat.append("Data/Hora: ").append(dataHoraInici).append("\n");
+		logDetallat.append("Entitat CIF: ").append(ENTITAT_CIF).append("\n");
+		
+		log.info("INICI processament PINFO #" + pinfoID + " per entitat: " + ENTITAT_CIF);
 
-		log.info("ENTITAT_CIF: " + ENTITAT_CIF);
-
-		List<String> missatges = new ArrayList<String>();
-
+		// ========== 2. CREAR CLIENTS API PINBAL I CACHÉS D'OPTIMITZACIÓ ==========
 		final String baseUrl = Configuracio.getApiPinbalClientUrl();
 		final String username = Configuracio.getApiPinbalClientUsername();
 		final String password = Configuracio.getApiPinbalClientPassword();
 		final LogLevel logLevel = LogLevel.INFO;
 
-		log.info("Creant Clients");
+		logDetallat.append("API Pinbal URL: ").append(baseUrl).append("\n\n");
+		log.info("Creant clients API Pinbal");
 
 		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
 		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
 
-		log.info("Clients creats");
+		logDetallat.append("✓ Clients API Pinbal creats\n\n");
+
+		// Cachés per optimitzar validacions repetides
+		java.util.Map<String, Procediment> cacheProcediments = new java.util.HashMap<>();
+		java.util.Map<String, Servei> cacheServeis = new java.util.HashMap<>();
+		java.util.Map<String, Boolean> cacheHabilitacions = new java.util.HashMap<>();
+
+		// Estructures per categoritzar errors únics
+		java.util.Set<String> procedimentsNoExisteixen = new java.util.LinkedHashSet<>();
+		java.util.Set<String> serveisNoExisteixen = new java.util.LinkedHashSet<>();
+		java.util.Map<String, java.util.Set<String>> serveisNoAutoritzats = new java.util.LinkedHashMap<>(); // procediment -> serveis
+		java.util.Map<Long, String> pinfodataErrors = new java.util.HashMap<>(); // pinfoDataID -> missatge error
+
+		// ========== 3. CARREGAR DADES A PROCESSAR ==========
+		int totalUsuaris = 0, usuarisProcessatsOK = 0, totalPermisosConcedits = 0;
+		int totalPinfodatasProcessats = 0, pinfodatasOK = 0, pinfodatasError = 0;
 
 		PinfoDataFull pinfoDataFull = getEstructuraUsuarisProcedimentServeis(pinfoID);
+		totalUsuaris = pinfoDataFull.getUsuaris().size();
+		
+		logDetallat.append("--- USUARIS A PROCESSAR: ").append(totalUsuaris).append(" ---\n\n");
+		log.info("Total usuaris a processar: " + totalUsuaris);
+		
+		// ========== 4. PROCESSAR CADA USUARI ==========
 		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
-
 			try {
 				String codiUsuari = usuariData.getUsuariCodi();
-				log.info("Usuari: " + usuariData.getUserInfo());
-//				UsuariEntitat usuariEntitat = usuariClient.getUsuari(codiUsuari, ENTITAT_CIF);
-//				log.info(objectToJsonString(usuariEntitat));
+				String nomUsuari = usuariData.getUsuariNom() != null ? usuariData.getUsuariNom() : codiUsuari;
+				
+				logDetallat.append("┌─ USUARI: ").append(nomUsuari).append(" (").append(codiUsuari).append(")\n");
+				logDetallat.append("│  Procediments: ").append(usuariData.getProcediments().size()).append("\n");
+				log.info("→ Processant usuari: " + codiUsuari);
 
 				List<ProcedimentServei> procedimentServeiList = new ArrayList<ProcedimentServei>();
+				int serveisUsuari = 0;
 
+				// --- Processar procediments de l'usuari ---
 				for (ProcedimentData procedimentData : usuariData.getProcediments()) {
 					String procedimentCodi = procedimentData.getCodi();
-					log.info("procedimentCodi: " + procedimentCodi);
-					Long procedimentId = null;
-					try {
-						Procediment procediment = procedimentClient.getProcediment(procedimentCodi, ENTITAT_CIF);
-//						log.info(objectToJsonString(procediment));
-						procedimentId = procediment.getId();
-
-					} catch (Throwable t) {
-						// El procediment no existeix a Pinbal. No fem res.
-						String msg = "El procediment " + procedimentCodi + " no existeix a Pinbal.";
-						missatges.add(msg);
-						continue;
-					}
-
-					for (ServeiData serveiData : procedimentData.getAltes()) {
-						String serveiCodi = null;
-
-						try {
-							log.info("serveiCodi: " + serveiData.getServei());
-							Servei servei = serveiClient.getServei(serveiData.getServei());
-							log.info(objectToJsonString(servei));
-							serveiCodi = servei.getCodi();
-
-						} catch (Throwable t) {
-							// El procediment no existeix a Pinbal. No fem res.
-							String msg = "El servei " + serveiData.getServei() + " no existeix a Pinbal.";
-							missatges.add(msg);
-							log.error(msg);
-							continue;
+					String procedimentNom = procedimentData.getProcediment() != null ? procedimentData.getProcediment() : procedimentCodi;
+					
+					logDetallat.append("│\n│  ├─ PROCEDIMENT: ").append(procedimentNom).append(" (").append(procedimentCodi).append(")\n");
+					
+					// Validar procediment a Pinbal (amb caché)
+					Procediment procediment = validarProcedimentPinbal(procedimentCodi, ENTITAT_CIF, procedimentClient, 
+							logDetallat, procedimentsNoExisteixen, cacheProcediments);
+					if (procediment == null) {
+						// Marcar tots els serveis d'aquest procediment com a error
+						for (ServeiData sd : procedimentData.getAltes()) {
+							totalPinfodatasProcessats++;
+							pinfodatasError++;
+							pinfodataErrors.put(sd.getPinfoDataID(), "Procediment " + procedimentCodi + " no existeix a Pinbal");
+							actualitzarEstatPinfoData(sd.getPinfoDataID(), Constants.ESTAT_PINFODATA_ERROR);
 						}
-						// Afegim el servei al procediment perque nomes demanaran permisos que a
-						// PinbalAdmin estan autoritzats.
-						if (procedimentId != null && serveiCodi != null) {
-							log.info("ProcemintId: " + procedimentId + " - ServeiCodi: " + serveiCodi);
-							try {
-								procedimentClient.enableServeiToProcediment(procedimentId, serveiCodi);
-								log.info("Servei afegit al procediment.");
-								procedimentServeiList.add(new ProcedimentServei(procedimentCodi, serveiCodi));
+						continue; // Procediment no trobat, passar al següent
+					}
+					
+					logDetallat.append("│  │  Serveis a processar: ").append(procedimentData.getAltes().size()).append("\n");
 
-							} catch (Throwable t) {
-								// El procediment no existeix a Pinbal. No fem res.
-								String msg = "El servei " + serveiData.getServei()
-										+ " no es pot autoritzar per el procediment " + procedimentCodi + ".";
-								missatges.add(msg);
-								log.error(msg);
-							}
+					// --- Processar serveis d'alta ---
+					for (ServeiData serveiData : procedimentData.getAltes()) {
+						totalPinfodatasProcessats++;
+						String serveiNom = serveiData.getNom() != null ? serveiData.getNom() : serveiData.getServei();
+						logDetallat.append("│  │\n│  │  ├─ SERVEI: ").append(serveiNom).append(" # ").append(serveiData.getServei()).append(" (").append(serveiData.getServei()).append(")\n");
+						
+						// Validar servei a Pinbal (amb caché)
+						Servei servei = validarServeiPinbal(serveiData.getServei(), serveiClient, logDetallat, serveisNoExisteixen, cacheServeis);
+						if (servei == null) {
+							pinfodatasError++;
+							pinfodataErrors.put(serveiData.getPinfoDataID(), "Servei " + serveiData.getServei() + " no existeix a Pinbal");
+							actualitzarEstatPinfoData(serveiData.getPinfoDataID(), Constants.ESTAT_PINFODATA_ERROR);
+							continue; // Servei no trobat, passar al següent
+						}
+						
+						// Habilitar servei al procediment (amb caché)
+						boolean habilitat = habilitarServeiProcediment(procediment.getId(), servei.getCodi(), procedimentCodi, 
+								serveiData.getServei(), procedimentClient, logDetallat, serveisNoAutoritzats, cacheHabilitacions);
+						
+						if (habilitat) {
+							procedimentServeiList.add(new ProcedimentServei(procedimentCodi, servei.getCodi()));
+							serveisUsuari++;
+							pinfodatasOK++;
+							actualitzarEstatPinfoData(serveiData.getPinfoDataID(), Constants.ESTAT_PINFODATA_OK);
+						} else {
+							pinfodatasError++;
+							pinfodataErrors.put(serveiData.getPinfoDataID(), "Servei " + serveiData.getServei() + " no es pot autoritzar per al procediment " + procedimentCodi);
+							actualitzarEstatPinfoData(serveiData.getPinfoDataID(), Constants.ESTAT_PINFODATA_ERROR);
 						}
 					}
 				}
 
+				// --- Concedir permisos a l'usuari ---
 				if (procedimentServeiList.isEmpty()) {
-					String msg = "No hi ha serveis a afegir. Usuari: " + codiUsuari;
-					missatges.add(msg);
+					logDetallat.append("│\n│  ⚠ Cap servei a concedir per aquest usuari\n");
+					logDetallat.append("└─ Fi usuari (sense permisos)\n\n");
+					log.warn("Cap servei per usuari " + codiUsuari);
 					continue;
 				}
 
+				logDetallat.append("│\n│  → Concedint ").append(serveisUsuari).append(" permisos a Pinbal...\n");
 				PermisosServei permisosServei = new PermisosServei(codiUsuari, ENTITAT_CIF, procedimentServeiList);
-				log.info(objectToJsonString(permisosServei));
 
-				usuariClient.grantPermissions(codiUsuari, permisosServei);
-				String msg = "Permisos afegits correctament per usuari " + codiUsuari;
-				missatges.add(msg);
-				log.info(msg);
-				log.info(objectToJsonString(permisosServei));
+				try {
+					usuariClient.grantPermissions(codiUsuari, permisosServei);
+					logDetallat.append("│  ✓ PERMISOS CONCEDITS\n");
+					logDetallat.append("└─ Fi usuari [OK]\n\n");
+					
+					usuarisProcessatsOK++;
+					totalPermisosConcedits += serveisUsuari;
+					log.info("✓ Permisos concedits a " + codiUsuari + ": " + serveisUsuari + " serveis");
+					
+				} catch (Throwable t) {
+					String msg = "Error concedint permisos a usuari " + codiUsuari + ": " + t.getMessage();
+					logDetallat.append("│  ✗ ERROR CRÍTIC: ").append(msg).append("\n");
+					logDetallat.append("│    ").append(t.getMessage()).append("\n");
+					logDetallat.append("└─ Fi usuari [ERROR]\n\n");
+					log.error(msg, t);
+					throw new I18NException("genapp.comodi", msg);
+				}
 
+			} catch (I18NException e) {
+				throw e; // Propagar error crític
 			} catch (Throwable t) {
-				String msg = "Error processant permisos per usuari " + usuariData.getUserInfo() + " - "
-						+ t.getMessage();
+				String msg = "Error inesperat processant usuari";
+				logDetallat.append("└─ ERROR FATAL: ").append(msg).append("\n\n");
 				log.error(msg, t);
-				throw new I18NException("genapp.comodi", msg);
+				throw new I18NException("genapp.comodi", msg + " - " + t.getMessage());
 			}
 		}
 
-		log.info("Actualitzant estat Pinfo i IncidenciaTecnica");
+		// ========== 5. GENERAR RESUM AMB ERRORS ÚNICS I INSTRUCCIONS ==========
+		String dataHoraFi = sdf.format(new java.util.Date());
+		
+		// Calcular estadístiques
+		int totalProcedimentsDistints = cacheProcediments.size();
+		int totalServeisDistints = cacheServeis.size();
+		int totalHabilitacionsDistintes = cacheHabilitacions.size();
+		int totalErrorsUnics = procedimentsNoExisteixen.size() + serveisNoExisteixen.size() + serveisNoAutoritzats.size();
+		
+		// === LOG DETALLAT ===
+		logDetallat.append("=== RESUM PROCESSAMENT ===\n");
+		logDetallat.append("Data/Hora Fi: ").append(dataHoraFi).append("\n");
+		logDetallat.append("Usuaris processats: ").append(usuarisProcessatsOK).append("/").append(totalUsuaris).append("\n");
+		logDetallat.append("Línies processades: ").append(pinfodatasOK).append("/").append(totalPinfodatasProcessats).append(" (").append(pinfodatasError).append(" errors)\n");
+		logDetallat.append("Permisos concedits: ").append(totalPermisosConcedits).append("\n");
+		logDetallat.append("Errors únics: ").append(totalErrorsUnics).append("\n");
+		logDetallat.append("\nOptimització (validacions úniques):\n");
+		logDetallat.append("  • Procediments diferents: ").append(totalProcedimentsDistints).append("\n");
+		logDetallat.append("  • Serveis diferents: ").append(totalServeisDistints).append("\n");
+		logDetallat.append("  • Habilitacions diferents: ").append(totalHabilitacionsDistintes).append("\n");
+		
+		if (totalErrorsUnics > 0) {
+			logDetallat.append("\n=== ERRORS ÚNICS DETECTATS ===\n");
+			if (!procedimentsNoExisteixen.isEmpty()) {
+				logDetallat.append("\nProcediments que no existeixen a Pinbal (").append(procedimentsNoExisteixen.size()).append("):\n");
+				for (String proc : procedimentsNoExisteixen) {
+					logDetallat.append("  • ").append(proc).append("\n");
+				}
+			}
+			if (!serveisNoExisteixen.isEmpty()) {
+				logDetallat.append("\nServeis que no existeixen a Pinbal (").append(serveisNoExisteixen.size()).append("):\n");
+				for (String servei : serveisNoExisteixen) {
+					logDetallat.append("  • ").append(servei).append("\n");
+				}
+			}
+			if (!serveisNoAutoritzats.isEmpty()) {
+				logDetallat.append("\nServeis que no es poden autoritzar (").append(serveisNoAutoritzats.size()).append(" procediments afectats):\n");
+				for (java.util.Map.Entry<String, java.util.Set<String>> entry : serveisNoAutoritzats.entrySet()) {
+					logDetallat.append("  • Procediment: ").append(entry.getKey()).append("\n");
+					for (String servei : entry.getValue()) {
+						logDetallat.append("    - ").append(servei).append("\n");
+					}
+				}
+			}
+		}
+		logDetallat.append("\n=== FI PROCESSAMENT ===\n");
 
-		pinfo.setMissatgePinbal(String.join("\n", missatges));
-		pinfo.setEstat(Constants.ESTAT_PINFO_TRAMITAT);
-		log.info("Missatge Pinbal: " + pinfo.getMissatgePinbal());
+		// === MISSATGE PINBAL (per al tramitador - info tècnica) ===
+		missatgeTramitador.append("RESULTAT DEL PROCESSAMENT\n");
+		missatgeTramitador.append("=========================\n\n");
+		missatgeTramitador.append("Data: ").append(dataHoraFi).append("\n\n");
+		
+		missatgeTramitador.append("RESUM GENERAL:\n");
+		missatgeTramitador.append("• Usuaris processats: ").append(usuarisProcessatsOK).append("/").append(totalUsuaris).append("\n");
+		missatgeTramitador.append("• Autoritzacions tramitades: ").append(pinfodatasOK).append("/").append(totalPinfodatasProcessats).append("\n");
+		missatgeTramitador.append("• Permisos concedits: ").append(totalPermisosConcedits).append("\n");
+		missatgeTramitador.append("• Autoritzacions amb error: ").append(pinfodatasError).append("\n");
+		missatgeTramitador.append("• Errors únics detectats: ").append(totalErrorsUnics).append("\n\n");
+		
+		if (totalErrorsUnics > 0) {
+			missatgeTramitador.append("ERRORS DETECTATS I COM CORREGIR-LOS:\n");
+			missatgeTramitador.append("=====================================\n\n");
+			
+			if (!procedimentsNoExisteixen.isEmpty()) {
+				missatgeTramitador.append("❌ PROCEDIMENTS QUE NO EXISTEIXEN A PINBAL (").append(procedimentsNoExisteixen.size()).append("):\n");
+				for (String proc : procedimentsNoExisteixen) {
+					missatgeTramitador.append("  • ").append(proc).append("\n");
+				}
+				missatgeTramitador.append("\n  ⚠️ ACCIÓ REQUERIDA:\n");
+				missatgeTramitador.append("     - Verificar que el codi del procediment sigui correcte\n");
+				missatgeTramitador.append("     - Crear el procediment a Pinbal si no existeix\n");
+				missatgeTramitador.append("     - Revisar que l'entitat CIF sigui correcta\n\n");
+			}
+			
+			if (!serveisNoExisteixen.isEmpty()) {
+				missatgeTramitador.append("❌ SERVEIS QUE NO EXISTEIXEN A PINBAL (").append(serveisNoExisteixen.size()).append("):\n");
+				for (String servei : serveisNoExisteixen) {
+					missatgeTramitador.append("  • ").append(servei).append("\n");
+				}
+				missatgeTramitador.append("\n  ⚠️ ACCIÓ REQUERIDA:\n");
+				missatgeTramitador.append("     - Verificar que el codi del servei sigui correcte\n");
+				missatgeTramitador.append("     - Contactar amb l'administrador de Pinbal per donar d'alta el servei\n");
+				missatgeTramitador.append("     - Revisar el catàleg de serveis disponibles\n\n");
+			}
+			
+			if (!serveisNoAutoritzats.isEmpty()) {
+				missatgeTramitador.append("❌ SERVEIS NO AUTORITZABLES (").append(serveisNoAutoritzats.size()).append(" procediments afectats):\n");
+				for (java.util.Map.Entry<String, java.util.Set<String>> entry : serveisNoAutoritzats.entrySet()) {
+					missatgeTramitador.append("  Procediment: ").append(entry.getKey()).append("\n");
+					for (String servei : entry.getValue()) {
+						missatgeTramitador.append("    • ").append(servei).append("\n");
+					}
+				}
+				missatgeTramitador.append("\n  ⚠️ ACCIÓ REQUERIDA:\n");
+				missatgeTramitador.append("     - Verificar que el servei estigui donat d'alta a Pinbal\n");
+				missatgeTramitador.append("     - Comprovar que el servei estigui habilitat per aquesta entitat\n");
+				missatgeTramitador.append("     - Contactar amb l'administrador de Pinbal per autoritzar el servei\n\n");
+			}
+			
+			missatgeTramitador.append("\n⚠️ IMPORTANT:\n");
+			missatgeTramitador.append("Després de corregir els errors, utilitzeu l'opció 'REPROCESSAR PINFO'\n");
+			missatgeTramitador.append("per tornar a tramitar només les autoritzacions amb error.\n\n");
+		} else {
+			missatgeTramitador.append("\n✓ Processament completat sense errors\n");
+		}
+		missatgeTramitador.append("\n\nATENCIÓ TRAMITADOR: Revisar el resultat i marcar com tramitat si tot és correcte.");
+
+		// ========== 6. GUARDAR RESULTAT (sense canviar estat a TRAMITAT) ==========
+		log.info("Guardant resultat del processament");
+		pinfo.setMissatgePinbal(missatgeTramitador.toString());
+		pinfo.setLogpPnbal(logDetallat.toString());
+		pinfo.setMissatgeSolicitant(null); // Es generarà al tramitar
+		// NO canviem l'estat aquí - l'operador ho farà manualment després de revisar
 		pinfoLogicaEjb.update(pinfo);
-		log.info("Pinfo actualitzat correctament.");
 
-		log.info("Actualitzant estat IncidenciaTecnica associada.");
-		IncidenciaTecnica in = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
-		in.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_TRAMITAT.intValue());
-
-		log.info("IncidenciaTecnica Missatge Pinbal: " + pinfo.getMissatgePinbal());
-		incidenciaLogicaEjb.update(in);
-		log.info("IncidenciaTecnica actualitzada correctament.");
-
-		log.info("Permisos solicitats afegits correctament.");
+		log.info("FI processament PINFO #" + pinfoID + " - Usuaris: " + usuarisProcessatsOK + "/" + totalUsuaris 
+				+ ", Permisos: " + totalPermisosConcedits + ", PinfoDatas OK: " + pinfodatasOK + ", Errors: " + pinfodatasError 
+				+ ", Errors únics: " + totalErrorsUnics);
+		log.info("IMPORTANT: L'operador ha de revisar els resultats i tramitar manualment.");
+	}
+	
+	/**
+	 * Actualitza l'estat d'un PinfoData individual després de processar-lo
+	 */
+	private void actualitzarEstatPinfoData(Long pinfodataID, Long nouEstat) {
+		try {
+			PinfoData pinfoData = this.findByPrimaryKey(pinfodataID);
+			if (pinfoData != null) {
+				pinfoData.setEstat(nouEstat);
+				this.update(pinfoData);
+			}
+		} catch (Throwable t) {
+			log.warn("No s'ha pogut actualitzar estat de PinfoData #" + pinfodataID + ": " + t.getMessage());
+		}
+	}
+	
+	/**
+	 * Marca un Pinfo com a TRAMITAT després de revisar els resultats del processament.
+	 * Aquest mètode s'invoca manualment per l'operador i genera el missatge per al solicitant.
+	 */
+	@Override
+	public void marcarPinfoComTramitat(Long pinfoID) throws I18NException {
+		log.info("Marcant PINFO #" + pinfoID + " com a TRAMITAT manualment");
+		
+		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
+		if (pinfo == null) {
+			throw new I18NException("genapp.comodi", "Pinfo no trobat: " + pinfoID);
+		}
+		
+		// Carregar totes les línies de PinfoData per generar el missatge
+		List<PinfoData> pinfodatas = this.select(PinfoDataFields.PINFOID.equal(pinfoID), null);
+		
+		// Estructura jeràrquica: Usuari -> Procediment -> Servei -> Estat
+		// Map<usuariID, Map<procedimentNom, Map<serveiNom, estat>>>
+		java.util.Map<String, java.util.Map<String, java.util.Map<String, String>>> estructuraJerarquica = new java.util.LinkedHashMap<>();
+		
+		// Conjunts per errors únics (per al resum final)
+		java.util.Set<String> serveisNoExisteixen = new java.util.LinkedHashSet<>();
+		java.util.Set<String> procedimentsNoExisteixen = new java.util.LinkedHashSet<>();
+		java.util.Map<String, java.util.Set<String>> serveisNoAutoritzats = new java.util.LinkedHashMap<>(); // procediment -> serveis
+		
+		int totalLinies = pinfodatas.size();
+		int liniesOK = 0;
+		int liniesError = 0;
+		
+		// Processar cada PinfoData i construir l'estructura jeràrquica
+		for (PinfoData pd : pinfodatas) {
+			String usuariID = pd.getUsuariid();
+			Long estat = pd.getEstat();
+			
+			String estatText;
+			String errorDetall = null;
+			
+			if (estat != null && estat.equals(Constants.ESTAT_PINFODATA_OK)) {
+				estatText = "✓ AUTORIZADO";
+				liniesOK++;
+			} else if (estat != null && estat.equals(Constants.ESTAT_PINFODATA_ERROR)) {
+				estatText = "✗ ERROR";
+				liniesError++;
+			} else {
+				estatText = "⚠ PENDIENTE";
+			}
+			
+			// Obtenir noms de procediment i servei
+			String procedimentNom = "Procediment desconegut";
+			String procedimentCodi = "";
+			String serveiNom = "Servei desconegut";
+			String serveiCodi = "";
+			
+			try {
+				SolicitudJPA procediment = solicitudLogicaEjb.findByPrimaryKey(pd.getProcedimentID());
+				if (procediment != null) {
+					procedimentNom = procediment.getProcedimentNom();
+					procedimentCodi = procediment.getProcedimentCodi();
+				}
+				
+				ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(pd.getServeiID());
+				if (servei != null) {
+					serveiNom = servei.getNom();
+					serveiCodi = servei.getCodi();
+				}
+				
+				// Si hi ha error, intentar determinar el tipus d'error del log de Pinbal
+				if (estat != null && estat.equals(Constants.ESTAT_PINFODATA_ERROR)) {
+					// Analitzar el missatge de Pinbal per determinar el tipus d'error
+					String logPinbal = pinfo.getLogpPnbal();
+					if (logPinbal != null) {
+						if (logPinbal.contains("Servei " + serveiCodi + " no existeix") || 
+							logPinbal.contains("VALIDACIÓ [✗]: Servei " + serveiCodi)) {
+							serveisNoExisteixen.add(serveiCodi + " (" + serveiNom + ")");
+							errorDetall = "El servei no existeix a Pinbal";
+						} else if (logPinbal.contains("Procediment " + procedimentCodi + " no existeix") ||
+								   logPinbal.contains("VALIDACIÓ [✗]: Procediment " + procedimentCodi)) {
+							procedimentsNoExisteixen.add(procedimentCodi + " (" + procedimentNom + ")");
+							errorDetall = "El procediment no existeix a Pinbal";
+						} else if (logPinbal.contains("Servei " + serveiCodi + " no autoritzable") ||
+								   logPinbal.contains("HABILITACIÓ [✗]:")) {
+							if (!serveisNoAutoritzats.containsKey(procedimentCodi + " (" + procedimentNom + ")")) {
+								serveisNoAutoritzats.put(procedimentCodi + " (" + procedimentNom + ")", new java.util.LinkedHashSet<>());
+							}
+							serveisNoAutoritzats.get(procedimentCodi + " (" + procedimentNom + ")").add(serveiCodi + " (" + serveiNom + ")");
+							errorDetall = "El servei no es pot autoritzar per aquest procediment";
+						}
+					}
+				}
+				
+			} catch (Exception e) {
+				log.warn("Error obtenint detalls per PinfoData #" + pd.getPinfodataID() + ": " + e.getMessage());
+			}
+			
+			// Afegir a l'estructura jeràrquica
+			if (!estructuraJerarquica.containsKey(usuariID)) {
+				estructuraJerarquica.put(usuariID, new java.util.LinkedHashMap<>());
+			}
+			
+			java.util.Map<String, java.util.Map<String, String>> procedimentsUsuari = estructuraJerarquica.get(usuariID);
+			if (!procedimentsUsuari.containsKey(procedimentNom)) {
+				procedimentsUsuari.put(procedimentNom, new java.util.LinkedHashMap<>());
+			}
+			
+			java.util.Map<String, String> serveisProcediment = procedimentsUsuari.get(procedimentNom);
+			String estatComplet = errorDetall != null ? estatText + " (" + errorDetall + ")" : estatText;
+			serveisProcediment.put(serveiNom, estatComplet);
+		}
+		
+		// ========== GENERAR MISSATGE PER AL SOLICITANT ==========
+		StringBuilder missatge = new StringBuilder();
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+		
+		missatge.append("Estimat/da sol·licitant,<br><br>");
+		missatge.append("S'ha tramitat la seva sol·licitud d'autorització amb la següent informació:<br><br>");
+		
+		missatge.append("<strong>RESUM:</strong><br>");
+		missatge.append("• Total d'autoritzacions: ").append(totalLinies).append("<br>");
+		missatge.append("• Tramitades correctament: ").append(liniesOK).append("<br>");
+		missatge.append("• Amb incidències: ").append(liniesError).append("<br>");
+		missatge.append("• Data de tramitació: ").append(sdf.format(new java.util.Date())).append("<br><br>");
+		
+		missatge.append("<strong>DETALL PER USUARI:</strong><br><br>");
+		
+		// Recórrer l'estructura jeràrquica i generar el llistat
+		for (java.util.Map.Entry<String, java.util.Map<String, java.util.Map<String, String>>> entryUsuari : estructuraJerarquica.entrySet()) {
+			String usuariID = entryUsuari.getKey();
+			java.util.Map<String, java.util.Map<String, String>> procediments = entryUsuari.getValue();
+			
+			missatge.append("<strong>• Usuari: ").append(usuariID).append("</strong><br>");
+			
+			for (java.util.Map.Entry<String, java.util.Map<String, String>> entryProcediment : procediments.entrySet()) {
+				String procedimentNom = entryProcediment.getKey();
+				java.util.Map<String, String> serveis = entryProcediment.getValue();
+				
+				missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;→ Procediment: ").append(procedimentNom).append("<br>");
+				
+				for (java.util.Map.Entry<String, String> entryServei : serveis.entrySet()) {
+					String serveiNom = entryServei.getKey();
+					String estat = entryServei.getValue();
+					
+					missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ").append(serveiNom).append(": <strong>").append(estat).append("</strong><br>");
+				}
+			}
+			missatge.append("<br>");
+		}
+		
+		// Si hi ha errors, afegir resum d'errors al final
+		if (liniesError > 0) {
+			missatge.append("<br><strong>ERRORS DETECTATS:</strong><br>");
+			
+			if (!serveisNoExisteixen.isEmpty()) {
+				missatge.append("<br>• Serveis que no existeixen a la Plataforma d'Intermediació:<br>");
+				for (String servei : serveisNoExisteixen) {
+					missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;- ").append(servei).append("<br>");
+				}
+			}
+			
+			if (!procedimentsNoExisteixen.isEmpty()) {
+				missatge.append("<br>• Procediments que no existeixen a la Plataforma d'Intermediació:<br>");
+				for (String procediment : procedimentsNoExisteixen) {
+					missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;- ").append(procediment).append("<br>");
+				}
+			}
+			
+			if (!serveisNoAutoritzats.isEmpty()) {
+				missatge.append("<br>• Serveis no autoritzables:<br>");
+				for (java.util.Map.Entry<String, java.util.Set<String>> entry : serveisNoAutoritzats.entrySet()) {
+					String procediment = entry.getKey();
+					java.util.Set<String> serveis = entry.getValue();
+					missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;Per al procediment <strong>").append(procediment).append("</strong>:<br>");
+					for (String servei : serveis) {
+						missatge.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ").append(servei).append("<br>");
+					}
+				}
+			}
+			
+			missatge.append("<br><em>Si necessita més informació sobre les incidències detectades, ");
+			missatge.append("si us plau, posis en contacte amb el servei de suport tècnic.</em><br>");
+		} else {
+			missatge.append("<br><strong>✓ Tots els permisos s'han tramitat correctament.</strong><br>");
+			missatge.append("Els usuaris ja poden accedir als serveis sol·licitats.<br>");
+		}
+		
+		// Actualitzar Pinfo amb el missatge i l'estat
+		pinfo.setEstat(Constants.ESTAT_PINFO_TRAMITAT);
+		pinfo.setMissatgeSolicitant(missatge.toString());
+		pinfoLogicaEjb.update(pinfo);
+		log.info("Estat Pinfo actualitzat a TRAMITAT i missatge al solicitant generat");
+		
+		// Actualitzar estat de la incidència tècnica associada
+		if (pinfo.getIncidenciaID() != null) {
+			IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
+			incidencia.setEstat(Constants.ESTAT_INCIDENCIA_PINFO_TRAMITAT.intValue());
+			incidenciaLogicaEjb.update(incidencia);
+			log.info("Estat IncidenciaTecnica actualitzat a PINFO_TRAMITAT");
+		}
+		
+		log.info("PINFO #" + pinfoID + " marcat com a TRAMITAT correctament. Linies OK: " + liniesOK + ", Errors: " + liniesError);
+	}
+	
+	// Mètodes auxiliars per validació i operacions Pinbal
+	
+	private Procediment validarProcedimentPinbal(String codi, String entitat, ProcedimentClient client,
+			StringBuilder log, java.util.Set<String> procedimentsNoExisteixen, java.util.Map<String, Procediment> cache) {
+		String clauCache = codi + "|" + entitat;
+		
+		// Comprovar si ja està al caché
+		if (cache.containsKey(clauCache)) {
+			Procediment cached = cache.get(clauCache);
+			if (cached != null) {
+				log.append("│  │  ✓ Procediment trobat (ID: ").append(cached.getId()).append(") [CACHE]\n");
+			} else {
+				log.append("│  │  ✗ ERROR: Procediment ").append(codi).append(" no existeix a Pinbal [CACHE]\n");
+			}
+			return cached;
+		}
+		
+		// No està al caché, validar i afegir
+		try {
+			Procediment proc = client.getProcediment(codi, entitat);
+			cache.put(clauCache, proc);
+			log.append("│  │  ✓ Procediment trobat (ID: ").append(proc.getId()).append(")\n");
+			return proc;
+		} catch (Throwable t) {
+			cache.put(clauCache, null); // Cachear el resultat negatiu
+			procedimentsNoExisteixen.add(codi);
+			log.append("│  │  ✗ ERROR: Procediment ").append(codi).append(" no existeix a Pinbal\n");
+			return null;
+		}
+	}
+	
+	private Servei validarServeiPinbal(String codi, ServeiClient client, StringBuilder log, 
+			java.util.Set<String> serveisNoExisteixen, java.util.Map<String, Servei> cache) {
+		// Comprovar si ja està al caché
+		if (cache.containsKey(codi)) {
+			Servei cached = cache.get(codi);
+			if (cached != null) {
+				log.append("│  │  │  ✓ Servei trobat [CACHE]\n");
+			} else {
+				log.append("│  │  │  ✗ ERROR: Servei ").append(codi).append(" no existeix a Pinbal [CACHE]\n");
+			}
+			return cached;
+		}
+		
+		// No està al caché, validar i afegir
+		try {
+			Servei servei = client.getServei(codi);
+			cache.put(codi, servei);
+			log.append("│  │  │  ✓ Servei trobat\n");
+			return servei;
+		} catch (Throwable t) {
+			cache.put(codi, null); // Cachear el resultat negatiu
+			serveisNoExisteixen.add(codi);
+			log.append("│  │  │  ✗ ERROR: Servei ").append(codi).append(" no existeix a Pinbal\n");
+			return null;
+		}
+	}
+	
+	private boolean habilitarServeiProcediment(Long procId, String serveiCodi, String procCodi, 
+			String serveiOriginal, ProcedimentClient client, StringBuilder log, 
+			java.util.Map<String, java.util.Set<String>> serveisNoAutoritzats,
+			java.util.Map<String, Boolean> cache) {
+		String clauCache = procId + "|" + serveiCodi;
+		
+		// Comprovar si ja està al caché
+		if (cache.containsKey(clauCache)) {
+			Boolean cached = cache.get(clauCache);
+			if (cached) {
+				log.append("│  │  │  ✓ Servei habilitat [CACHE]\n");
+			} else {
+				log.append("│  │  │  ✗ ERROR: No es pot autoritzar servei ").append(serveiOriginal)
+					.append(" per procediment ").append(procCodi).append(" [CACHE]\n");
+			}
+			return cached;
+		}
+		
+		// No està al caché, habilitar i afegir
+		try {
+			client.enableServeiToProcediment(procId, serveiCodi);
+			cache.put(clauCache, true);
+			log.append("│  │  │  ✓ Servei habilitat\n");
+			return true;
+		} catch (Throwable t) {
+			cache.put(clauCache, false); // Cachear el resultat negatiu
+			// Afegir a la llista de serveis no autoritzats
+			if (!serveisNoAutoritzats.containsKey(procCodi)) {
+				serveisNoAutoritzats.put(procCodi, new java.util.LinkedHashSet<>());
+			}
+			serveisNoAutoritzats.get(procCodi).add(serveiOriginal);
+			log.append("│  │  │  ✗ ERROR: No es pot autoritzar servei ").append(serveiOriginal)
+				.append(" per procediment ").append(procCodi).append("\n");
+			return false;
+		}
 	}
 
 	@Override

@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/documentEntitat")
 @SessionAttributes(types = { DocumentEntitatForm.class, DocumentEntitatFilterForm.class })
-@Tile(name="documentEntitatFormWebDB", contentJsp="/WEB-INF/jsp/webdb/documentEntitatForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="documentEntitat.documentEntitat")})
-@Tile(name="documentEntitatListWebDB", contentJsp="/WEB-INF/jsp/webdb/documentEntitatList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="documentEntitat.documentEntitat") })
+@Tile(name="documentEntitatFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/documentEntitatForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="documentEntitat.documentEntitat")})
+@Tile(name="documentEntitatListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/documentEntitatList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="documentEntitat.documentEntitat")})
 public class DocumentEntitatController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<DocumentEntitat, java.lang.Long, DocumentEntitatForm> implements DocumentEntitatFields {
 

@@ -56,10 +56,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/formulari")
 @SessionAttributes(types = { FormulariForm.class, FormulariFilterForm.class })
-@Tile(name="formulariFormWebDB", contentJsp="/WEB-INF/jsp/webdb/formulariForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="formulari.formulari")})
-@Tile(name="formulariListWebDB", contentJsp="/WEB-INF/jsp/webdb/formulariList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="formulari.formulari") })
+@Tile(name="formulariFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/formulariForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="formulari.formulari")})
+@Tile(name="formulariListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/formulariList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="formulari.formulari")})
 public class FormulariController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Formulari, java.lang.Long, FormulariForm> implements FormulariFields {
 

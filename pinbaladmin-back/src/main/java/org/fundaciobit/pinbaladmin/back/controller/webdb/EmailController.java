@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/email")
 @SessionAttributes(types = { EmailForm.class, EmailFilterForm.class })
-@Tile(name="emailFormWebDB", contentJsp="/WEB-INF/jsp/webdb/emailForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="email.email")})
-@Tile(name="emailListWebDB", contentJsp="/WEB-INF/jsp/webdb/emailList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="email.email") })
+@Tile(name="emailFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/emailForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="email.email")})
+@Tile(name="emailListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/emailList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="email.email")})
 public class EmailController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Email, java.lang.Long> implements EmailFields {
 

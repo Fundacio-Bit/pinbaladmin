@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitAPersAut")
 @SessionAttributes(types = { TramitAPersAutForm.class, TramitAPersAutFilterForm.class })
-@Tile(name="tramitAPersAutFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitAPersAutForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitAPersAut.tramitAPersAut")})
-@Tile(name="tramitAPersAutListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitAPersAutList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitAPersAut.tramitAPersAut") })
+@Tile(name="tramitAPersAutFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitAPersAutForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitAPersAut.tramitAPersAut")})
+@Tile(name="tramitAPersAutListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitAPersAutList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitAPersAut.tramitAPersAut")})
 public class TramitAPersAutController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitAPersAut, java.lang.Long> implements TramitAPersAutFields {
 

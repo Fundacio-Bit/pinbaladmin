@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitFCteTec")
 @SessionAttributes(types = { TramitFCteTecForm.class, TramitFCteTecFilterForm.class })
-@Tile(name="tramitFCteTecFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitFCteTecForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitFCteTec.tramitFCteTec")})
-@Tile(name="tramitFCteTecListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitFCteTecList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitFCteTec.tramitFCteTec") })
+@Tile(name="tramitFCteTecFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitFCteTecForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitFCteTec.tramitFCteTec")})
+@Tile(name="tramitFCteTecListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitFCteTecList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitFCteTec.tramitFCteTec")})
 public class TramitFCteTecController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitFCteTec, java.lang.Long> implements TramitFCteTecFields {
 

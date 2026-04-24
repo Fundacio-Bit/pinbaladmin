@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/estatTiquet")
 @SessionAttributes(types = { EstatTiquetForm.class, EstatTiquetFilterForm.class })
-@Tile(name="estatTiquetFormWebDB", contentJsp="/WEB-INF/jsp/webdb/estatTiquetForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="estatTiquet.estatTiquet")})
-@Tile(name="estatTiquetListWebDB", contentJsp="/WEB-INF/jsp/webdb/estatTiquetList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="estatTiquet.estatTiquet") })
+@Tile(name="estatTiquetFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/estatTiquetForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="estatTiquet.estatTiquet")})
+@Tile(name="estatTiquetListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/estatTiquetList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="estatTiquet.estatTiquet")})
 public class EstatTiquetController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<EstatTiquet, java.lang.Long> implements EstatTiquetFields {
 

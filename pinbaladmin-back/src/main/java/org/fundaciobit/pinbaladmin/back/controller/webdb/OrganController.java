@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/organ")
 @SessionAttributes(types = { OrganForm.class, OrganFilterForm.class })
-@Tile(name="organFormWebDB", contentJsp="/WEB-INF/jsp/webdb/organForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="organ.organ")})
-@Tile(name="organListWebDB", contentJsp="/WEB-INF/jsp/webdb/organList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="organ.organ") })
+@Tile(name="organFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/organForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="organ.organ")})
+@Tile(name="organListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/organList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="organ.organ")})
 public class OrganController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Organ, java.lang.Long> implements OrganFields {
 

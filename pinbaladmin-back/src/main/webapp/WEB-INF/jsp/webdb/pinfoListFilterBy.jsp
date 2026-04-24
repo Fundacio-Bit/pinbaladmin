@@ -191,6 +191,32 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.LOGPPNBAL)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.logpPnbal" var="logpPnbal" />
+              <fmt:message key="genapp.form.searchby" var="cercaperlogpPnbal" >                
+                 <fmt:param value="${logpPnbal}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${logpPnbal}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperlogpPnbal}" path="logpPnbal" />
+            </div>
+
+
+        </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.MISSATGESOLICITANT)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.missatgeSolicitant" var="missatgeSolicitant" />
+              <fmt:message key="genapp.form.searchby" var="cercapermissatgeSolicitant" >                
+                 <fmt:param value="${missatgeSolicitant}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${missatgeSolicitant}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapermissatgeSolicitant}" path="missatgeSolicitant" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

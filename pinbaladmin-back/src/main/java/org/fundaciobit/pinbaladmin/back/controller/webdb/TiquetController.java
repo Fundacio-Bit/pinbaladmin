@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tiquet")
 @SessionAttributes(types = { TiquetForm.class, TiquetFilterForm.class })
-@Tile(name="tiquetFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tiquetForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tiquet.tiquet")})
-@Tile(name="tiquetListWebDB", contentJsp="/WEB-INF/jsp/webdb/tiquetList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tiquet.tiquet") })
+@Tile(name="tiquetFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tiquetForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tiquet.tiquet")})
+@Tile(name="tiquetListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tiquetList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tiquet.tiquet")})
 public class TiquetController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Tiquet, java.lang.Long, TiquetForm> implements TiquetFields {
 

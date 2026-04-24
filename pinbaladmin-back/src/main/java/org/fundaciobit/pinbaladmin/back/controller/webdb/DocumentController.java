@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/document")
 @SessionAttributes(types = { DocumentForm.class, DocumentFilterForm.class })
-@Tile(name="documentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/documentForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="document.document")})
-@Tile(name="documentListWebDB", contentJsp="/WEB-INF/jsp/webdb/documentList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="document.document") })
+@Tile(name="documentFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/documentForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="document.document")})
+@Tile(name="documentListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/documentList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="document.document")})
 public class DocumentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Document, java.lang.Long, DocumentForm> implements DocumentFields {
 

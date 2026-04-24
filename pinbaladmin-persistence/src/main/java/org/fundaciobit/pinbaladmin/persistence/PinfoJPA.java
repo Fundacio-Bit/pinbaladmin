@@ -67,6 +67,16 @@ public class PinfoJPA implements Pinfo {
     @Type(type = "org.hibernate.type.TextType")
     java.lang.String missatgePinbal;
 
+    @Column(name="logpinbal",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    java.lang.String logpPnbal;
+
+    @Column(name="missatgesolicitant",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    java.lang.String missatgeSolicitant;
+
 
 
   /** Constructor Buit */
@@ -74,7 +84,7 @@ public class PinfoJPA implements Pinfo {
   }
 
   /** Constructor amb tots els camps  */
-  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
+  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.pinfoID=pinfoID;
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
@@ -86,9 +96,11 @@ public class PinfoJPA implements Pinfo {
     this.destinatariNIF=destinatariNIF;
     this.destinatariNom=destinatariNom;
     this.missatgePinbal=missatgePinbal;
+    this.logpPnbal=logpPnbal;
+    this.missatgeSolicitant=missatgeSolicitant;
 }
   /** Constructor sense valors autoincrementals */
-  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
+  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
@@ -99,6 +111,8 @@ public class PinfoJPA implements Pinfo {
     this.destinatariNIF=destinatariNIF;
     this.destinatariNom=destinatariNom;
     this.missatgePinbal=missatgePinbal;
+    this.logpPnbal=logpPnbal;
+    this.missatgeSolicitant=missatgeSolicitant;
 }
   /** Constructor dels valors Not Null */
   public PinfoJPA(long pinfoID) {
@@ -116,6 +130,8 @@ public class PinfoJPA implements Pinfo {
     this.setDestinatariNIF(__bean.getDestinatariNIF());
     this.setDestinatariNom(__bean.getDestinatariNom());
     this.setMissatgePinbal(__bean.getMissatgePinbal());
+    this.setLogpPnbal(__bean.getLogpPnbal());
+    this.setMissatgeSolicitant(__bean.getMissatgeSolicitant());
     // Fitxer
     this.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer
@@ -197,6 +213,20 @@ public class PinfoJPA implements Pinfo {
 	};
 	public void setMissatgePinbal(java.lang.String _missatgePinbal_) {
 		this.missatgePinbal = _missatgePinbal_;
+	};
+
+	public java.lang.String getLogpPnbal() {
+		return(logpPnbal);
+	};
+	public void setLogpPnbal(java.lang.String _logpPnbal_) {
+		this.logpPnbal = _logpPnbal_;
+	};
+
+	public java.lang.String getMissatgeSolicitant() {
+		return(missatgeSolicitant);
+	};
+	public void setMissatgeSolicitant(java.lang.String _missatgeSolicitant_) {
+		this.missatgeSolicitant = _missatgeSolicitant_;
 	};
 
 
@@ -285,6 +315,8 @@ public class PinfoJPA implements Pinfo {
     __tmp.setDestinatariNIF(__bean.getDestinatariNIF());
     __tmp.setDestinatariNom(__bean.getDestinatariNom());
     __tmp.setMissatgePinbal(__bean.getMissatgePinbal());
+    __tmp.setLogpPnbal(__bean.getLogpPnbal());
+    __tmp.setMissatgeSolicitant(__bean.getMissatgeSolicitant());
     // Fitxer
     __tmp.setFitxer(FitxerJPA.toJPA(__bean.getFitxer()));
     // Fitxer

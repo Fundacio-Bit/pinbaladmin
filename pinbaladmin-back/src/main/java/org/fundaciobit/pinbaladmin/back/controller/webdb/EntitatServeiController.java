@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/entitatServei")
 @SessionAttributes(types = { EntitatServeiForm.class, EntitatServeiFilterForm.class })
-@Tile(name="entitatServeiFormWebDB", contentJsp="/WEB-INF/jsp/webdb/entitatServeiForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="entitatServei.entitatServei")})
-@Tile(name="entitatServeiListWebDB", contentJsp="/WEB-INF/jsp/webdb/entitatServeiList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="entitatServei.entitatServei") })
+@Tile(name="entitatServeiFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/entitatServeiForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="entitatServei.entitatServei")})
+@Tile(name="entitatServeiListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/entitatServeiList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="entitatServei.entitatServei")})
 public class EntitatServeiController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<EntitatServei, java.lang.Long> implements EntitatServeiFields {
 

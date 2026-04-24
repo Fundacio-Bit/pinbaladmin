@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitCDadesCesi")
 @SessionAttributes(types = { TramitCDadesCesiForm.class, TramitCDadesCesiFilterForm.class })
-@Tile(name="tramitCDadesCesiFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitCDadesCesiForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitCDadesCesi.tramitCDadesCesi")})
-@Tile(name="tramitCDadesCesiListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitCDadesCesiList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitCDadesCesi.tramitCDadesCesi") })
+@Tile(name="tramitCDadesCesiFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitCDadesCesiForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitCDadesCesi.tramitCDadesCesi")})
+@Tile(name="tramitCDadesCesiListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitCDadesCesiList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitCDadesCesi.tramitCDadesCesi")})
 public class TramitCDadesCesiController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitCDadesCesi, java.lang.Long> implements TramitCDadesCesiFields {
 

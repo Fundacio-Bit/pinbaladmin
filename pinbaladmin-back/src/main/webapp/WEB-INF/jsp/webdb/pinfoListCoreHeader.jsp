@@ -45,6 +45,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.MISSATGEPINBAL)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.MISSATGEPINBAL)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.LOGPPNBAL)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.LOGPPNBAL)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.MISSATGESOLICITANT)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.MISSATGESOLICITANT)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

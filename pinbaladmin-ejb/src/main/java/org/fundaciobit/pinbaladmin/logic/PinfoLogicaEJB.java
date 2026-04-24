@@ -633,12 +633,19 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		Pinfo pinfo = this.findByPrimaryKey(pinfoID);
 		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
 
-		String missatgePinbal = pinfo.getMissatgePinbal().replace("\n", "<br>");
+		// Utilitzar el missatge del solicitant (no el missatge tècnic del tramitador)
+		String missatgeSolicitant = pinfo.getMissatgeSolicitant();
+		
+		// Si no hi ha missatge del solicitant generat, avisar
+		if (missatgeSolicitant == null || missatgeSolicitant.trim().isEmpty()) {
+			throw new I18NException("genapp.comodi", 
+				"No s'ha generat el missatge per al solicitant. Cal marcar el PINFO com a tramitat abans d'enviar-lo.");
+		}
 
-		String msg = "Bon dia, " + incidencia.getContacteNom() + " <br><br>" + "Hem tramitat la seva solicitud (PINFO "
+		String msg = "Bon dia, " + incidencia.getContacteNom() + " <br><br>" + "Hem tramitat la seva sol·licitud (PINFO "
 				+ pinfoID + "): <br><br>"
 				+ "<div style=\"border: 1px solid #00000040;padding: .5rem;background-color: #f7f7f7;border-radius: 3px;\">"
-				+ missatgePinbal + "</div><br>" + "Salutacions cordials, <br><br>" + operador.getFullName() + ", Fundació BIT";
+				+ missatgeSolicitant + "</div><br>" + "Salutacions cordials, <br><br>" + operador.getFullName() + ", Fundació BIT";
 
 		log.info("Afegir event de PINFO rebut de portafib");
 

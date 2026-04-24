@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/pinfoData")
 @SessionAttributes(types = { PinfoDataForm.class, PinfoDataFilterForm.class })
-@Tile(name="pinfoDataFormWebDB", contentJsp="/WEB-INF/jsp/webdb/pinfoDataForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="pinfoData.pinfoData")})
-@Tile(name="pinfoDataListWebDB", contentJsp="/WEB-INF/jsp/webdb/pinfoDataList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="pinfoData.pinfoData") })
+@Tile(name="pinfoDataFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/pinfoDataForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="pinfoData.pinfoData")})
+@Tile(name="pinfoDataListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/pinfoDataList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="pinfoData.pinfoData")})
 public class PinfoDataController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<PinfoData, java.lang.Long> implements PinfoDataFields {
 

@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitHProc")
 @SessionAttributes(types = { TramitHProcForm.class, TramitHProcFilterForm.class })
-@Tile(name="tramitHProcFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitHProcForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitHProc.tramitHProc")})
-@Tile(name="tramitHProcListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitHProcList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitHProc.tramitHProc") })
+@Tile(name="tramitHProcFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitHProcForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitHProc.tramitHProc")})
+@Tile(name="tramitHProcListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitHProcList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitHProc.tramitHProc")})
 public class TramitHProcController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitHProc, java.lang.Long> implements TramitHProcFields {
 

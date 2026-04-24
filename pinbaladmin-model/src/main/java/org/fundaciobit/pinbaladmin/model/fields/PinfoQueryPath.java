@@ -55,6 +55,14 @@ public class PinfoQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new StringField(getQueryPath(), PinfoFields.MISSATGEPINBAL);
   }
 
+  public StringField LOGPPNBAL() {
+    return new StringField(getQueryPath(), PinfoFields.LOGPPNBAL);
+  }
+
+  public StringField MISSATGESOLICITANT() {
+    return new StringField(getQueryPath(), PinfoFields.MISSATGESOLICITANT);
+  }
+
 
 
   @Override

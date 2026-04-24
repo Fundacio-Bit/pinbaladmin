@@ -35,6 +35,12 @@ public interface Pinfo extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getMissatgePinbal();
 	public void setMissatgePinbal(java.lang.String _missatgePinbal_);
 
+	public java.lang.String getLogpPnbal();
+	public void setLogpPnbal(java.lang.String _logpPnbal_);
+
+	public java.lang.String getMissatgeSolicitant();
+	public void setMissatgeSolicitant(java.lang.String _missatgeSolicitant_);
+
   // Fitxer
   public <F extends Fitxer> F getFitxer();
   // Fitxer

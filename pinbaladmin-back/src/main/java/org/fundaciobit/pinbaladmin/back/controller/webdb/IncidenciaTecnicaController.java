@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/incidenciaTecnica")
 @SessionAttributes(types = { IncidenciaTecnicaForm.class, IncidenciaTecnicaFilterForm.class })
-@Tile(name="incidenciaTecnicaFormWebDB", contentJsp="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="incidenciaTecnica.incidenciaTecnica")})
-@Tile(name="incidenciaTecnicaListWebDB", contentJsp="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="incidenciaTecnica.incidenciaTecnica") })
+@Tile(name="incidenciaTecnicaFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/incidenciaTecnicaForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="incidenciaTecnica.incidenciaTecnica")})
+@Tile(name="incidenciaTecnicaListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/incidenciaTecnicaList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="incidenciaTecnica.incidenciaTecnica")})
 public class IncidenciaTecnicaController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<IncidenciaTecnica, java.lang.Long> implements IncidenciaTecnicaFields {
 

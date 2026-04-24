@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/campFormulari")
 @SessionAttributes(types = { CampFormulariForm.class, CampFormulariFilterForm.class })
-@Tile(name="campFormulariFormWebDB", contentJsp="/WEB-INF/jsp/webdb/campFormulariForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="campFormulari.campFormulari")})
-@Tile(name="campFormulariListWebDB", contentJsp="/WEB-INF/jsp/webdb/campFormulariList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="campFormulari.campFormulari") })
+@Tile(name="campFormulariFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/campFormulariForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="campFormulari.campFormulari")})
+@Tile(name="campFormulariListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/campFormulariList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="campFormulari.campFormulari")})
 public class CampFormulariController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<CampFormulari, java.lang.Long> implements CampFormulariFields {
 

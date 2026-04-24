@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/documentCedent")
 @SessionAttributes(types = { DocumentCedentForm.class, DocumentCedentFilterForm.class })
-@Tile(name="documentCedentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/documentCedentForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="documentCedent.documentCedent")})
-@Tile(name="documentCedentListWebDB", contentJsp="/WEB-INF/jsp/webdb/documentCedentList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="documentCedent.documentCedent") })
+@Tile(name="documentCedentFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/documentCedentForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="documentCedent.documentCedent")})
+@Tile(name="documentCedentListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/documentCedentList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="documentCedent.documentCedent")})
 public class DocumentCedentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<DocumentCedent, java.lang.Long, DocumentCedentForm> implements DocumentCedentFields {
 

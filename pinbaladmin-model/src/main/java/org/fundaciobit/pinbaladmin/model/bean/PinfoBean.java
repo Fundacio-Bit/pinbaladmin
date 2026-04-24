@@ -19,6 +19,8 @@ public class PinfoBean implements Pinfo {
 	java.lang.String destinatariNIF;
 	java.lang.String destinatariNom;
 	java.lang.String missatgePinbal;
+	java.lang.String logpPnbal;
+	java.lang.String missatgeSolicitant;
 
 
   /** Constructor Buit */
@@ -26,7 +28,7 @@ public class PinfoBean implements Pinfo {
   }
 
   /** Constructor amb tots els camps  */
-  public PinfoBean(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
+  public PinfoBean(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.pinfoID=pinfoID;
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
@@ -38,9 +40,11 @@ public class PinfoBean implements Pinfo {
     this.destinatariNIF=destinatariNIF;
     this.destinatariNom=destinatariNom;
     this.missatgePinbal=missatgePinbal;
+    this.logpPnbal=logpPnbal;
+    this.missatgeSolicitant=missatgeSolicitant;
 }
   /** Constructor sense valors autoincrementals */
-  public PinfoBean(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal) {
+  public PinfoBean(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
@@ -51,6 +55,8 @@ public class PinfoBean implements Pinfo {
     this.destinatariNIF=destinatariNIF;
     this.destinatariNom=destinatariNom;
     this.missatgePinbal=missatgePinbal;
+    this.logpPnbal=logpPnbal;
+    this.missatgeSolicitant=missatgeSolicitant;
 }
   /** Constructor dels valors Not Null */
   public PinfoBean(long pinfoID) {
@@ -68,6 +74,8 @@ public class PinfoBean implements Pinfo {
     this.setDestinatariNIF(__bean.getDestinatariNIF());
     this.setDestinatariNom(__bean.getDestinatariNom());
     this.setMissatgePinbal(__bean.getMissatgePinbal());
+    this.setLogpPnbal(__bean.getLogpPnbal());
+    this.setMissatgeSolicitant(__bean.getMissatgeSolicitant());
     // Fitxer
     this.setFitxer(FitxerBean.toBean(__bean.getFitxer()));
     // Fitxer
@@ -151,6 +159,20 @@ public class PinfoBean implements Pinfo {
 		this.missatgePinbal = _missatgePinbal_;
 	};
 
+	public java.lang.String getLogpPnbal() {
+		return(logpPnbal);
+	};
+	public void setLogpPnbal(java.lang.String _logpPnbal_) {
+		this.logpPnbal = _logpPnbal_;
+	};
+
+	public java.lang.String getMissatgeSolicitant() {
+		return(missatgeSolicitant);
+	};
+	public void setMissatgeSolicitant(java.lang.String _missatgeSolicitant_) {
+		this.missatgeSolicitant = _missatgeSolicitant_;
+	};
+
 
 
   // ======================================
@@ -169,6 +191,8 @@ public class PinfoBean implements Pinfo {
     __tmp.setDestinatariNIF(__bean.getDestinatariNIF());
     __tmp.setDestinatariNom(__bean.getDestinatariNom());
     __tmp.setMissatgePinbal(__bean.getMissatgePinbal());
+    __tmp.setLogpPnbal(__bean.getLogpPnbal());
+    __tmp.setMissatgeSolicitant(__bean.getMissatgeSolicitant());
     // Fitxer
     __tmp.setFitxer(FitxerBean.toBean(__bean.getFitxer()));
     // Fitxer

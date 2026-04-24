@@ -53,10 +53,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/grupEntitat")
 @SessionAttributes(types = { GrupEntitatForm.class, GrupEntitatFilterForm.class })
-@Tile(name="grupEntitatFormWebDB", contentJsp="/WEB-INF/jsp/webdb/grupEntitatForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="grupEntitat.grupEntitat")})
-@Tile(name="grupEntitatListWebDB", contentJsp="/WEB-INF/jsp/webdb/grupEntitatList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="grupEntitat.grupEntitat") })
+@Tile(name="grupEntitatFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/grupEntitatForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="grupEntitat.grupEntitat")})
+@Tile(name="grupEntitatListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/grupEntitatList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="grupEntitat.grupEntitat")})
 public class GrupEntitatController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<GrupEntitat, java.lang.Long> implements GrupEntitatFields {
 

@@ -58,10 +58,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/event")
 @SessionAttributes(types = { EventForm.class, EventFilterForm.class })
-@Tile(name="eventFormWebDB", contentJsp="/WEB-INF/jsp/webdb/eventForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="event.event")})
-@Tile(name="eventListWebDB", contentJsp="/WEB-INF/jsp/webdb/eventList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="event.event") })
+@Tile(name="eventFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/eventForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="event.event")})
+@Tile(name="eventListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/eventList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="event.event")})
 public class EventController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesBaseController<Event, java.lang.Long, EventForm> implements EventFields {
 

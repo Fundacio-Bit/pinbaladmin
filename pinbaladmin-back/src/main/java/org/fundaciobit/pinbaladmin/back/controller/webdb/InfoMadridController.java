@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/infoMadrid")
 @SessionAttributes(types = { InfoMadridForm.class, InfoMadridFilterForm.class })
-@Tile(name="infoMadridFormWebDB", contentJsp="/WEB-INF/jsp/webdb/infoMadridForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="infoMadrid.infoMadrid")})
-@Tile(name="infoMadridListWebDB", contentJsp="/WEB-INF/jsp/webdb/infoMadridList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="infoMadrid.infoMadrid") })
+@Tile(name="infoMadridFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/infoMadridForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="infoMadrid.infoMadrid")})
+@Tile(name="infoMadridListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/infoMadridList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="infoMadrid.infoMadrid")})
 public class InfoMadridController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<InfoMadrid, java.lang.Long> implements InfoMadridFields {
 

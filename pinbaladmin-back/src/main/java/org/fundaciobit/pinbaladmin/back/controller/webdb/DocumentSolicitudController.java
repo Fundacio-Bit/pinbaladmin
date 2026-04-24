@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/documentSolicitud")
 @SessionAttributes(types = { DocumentSolicitudForm.class, DocumentSolicitudFilterForm.class })
-@Tile(name="documentSolicitudFormWebDB", contentJsp="/WEB-INF/jsp/webdb/documentSolicitudForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="documentSolicitud.documentSolicitud")})
-@Tile(name="documentSolicitudListWebDB", contentJsp="/WEB-INF/jsp/webdb/documentSolicitudList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="documentSolicitud.documentSolicitud") })
+@Tile(name="documentSolicitudFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/documentSolicitudForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="documentSolicitud.documentSolicitud")})
+@Tile(name="documentSolicitudListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/documentSolicitudList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="documentSolicitud.documentSolicitud")})
 public class DocumentSolicitudController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<DocumentSolicitud, java.lang.Long> implements DocumentSolicitudFields {
 

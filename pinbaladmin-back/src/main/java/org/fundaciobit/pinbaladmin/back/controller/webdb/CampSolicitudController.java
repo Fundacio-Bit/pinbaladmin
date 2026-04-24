@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/campSolicitud")
 @SessionAttributes(types = { CampSolicitudForm.class, CampSolicitudFilterForm.class })
-@Tile(name="campSolicitudFormWebDB", contentJsp="/WEB-INF/jsp/webdb/campSolicitudForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="campSolicitud.campSolicitud")})
-@Tile(name="campSolicitudListWebDB", contentJsp="/WEB-INF/jsp/webdb/campSolicitudList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="campSolicitud.campSolicitud") })
+@Tile(name="campSolicitudFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/campSolicitudForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="campSolicitud.campSolicitud")})
+@Tile(name="campSolicitudListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/campSolicitudList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="campSolicitud.campSolicitud")})
 public class CampSolicitudController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<CampSolicitud, java.lang.Long> implements CampSolicitudFields {
 

@@ -345,3 +345,81 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.LOGPPNBAL)}">
+        <tr id="pinfo_logpPnbal_rowid">
+          <td id="pinfo_logpPnbal_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.LOGPPNBAL])?'pinfo.logpPnbal':__theForm.labels[PinfoFields.LOGPPNBAL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.LOGPPNBAL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.LOGPPNBAL]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_logpPnbal_columnvalueid">
+              <form:errors path="pinfo.logpPnbal" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.LOGPPNBAL)? 'true' : 'false'}" path="pinfo.logpPnbal"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_logpPnbal" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_logpPnbal" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.logpPnbal'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('pinfo.logpPnbal'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.logpPnbal'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_logpPnbal').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_logpPnbal').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_logpPnbal').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.MISSATGESOLICITANT)}">
+        <tr id="pinfo_missatgeSolicitant_rowid">
+          <td id="pinfo_missatgeSolicitant_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.MISSATGESOLICITANT])?'pinfo.missatgeSolicitant':__theForm.labels[PinfoFields.MISSATGESOLICITANT]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.MISSATGESOLICITANT]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.MISSATGESOLICITANT]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_missatgeSolicitant_columnvalueid">
+              <form:errors path="pinfo.missatgeSolicitant" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.MISSATGESOLICITANT)? 'true' : 'false'}" path="pinfo.missatgeSolicitant"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_missatgeSolicitant" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_missatgeSolicitant" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgeSolicitant'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgeSolicitant'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('pinfo.missatgeSolicitant'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_missatgeSolicitant').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_missatgeSolicitant').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_missatgeSolicitant').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        

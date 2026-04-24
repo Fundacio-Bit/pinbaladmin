@@ -142,6 +142,28 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
   }
 
 
+  private java.lang.String logpPnbal;
+
+  public java.lang.String getLogpPnbal() {
+    return this.logpPnbal;
+  }
+
+  public void setLogpPnbal(java.lang.String logpPnbal) {
+    this.logpPnbal = logpPnbal;
+  }
+
+
+  private java.lang.String missatgeSolicitant;
+
+  public java.lang.String getMissatgeSolicitant() {
+    return this.missatgeSolicitant;
+  }
+
+  public void setMissatgeSolicitant(java.lang.String missatgeSolicitant) {
+    this.missatgeSolicitant = missatgeSolicitant;
+  }
+
+
   public PinfoFilterForm() {
   }
   
@@ -158,6 +180,8 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
     this.destinatariNIF = __toClone.destinatariNIF;
     this.destinatariNom = __toClone.destinatariNom;
     this.missatgePinbal = __toClone.missatgePinbal;
+    this.logpPnbal = __toClone.logpPnbal;
+    this.missatgeSolicitant = __toClone.missatgeSolicitant;
     this.mapOfIncidenciaTecnicaForIncidenciaID = __toClone.mapOfIncidenciaTecnicaForIncidenciaID;
     this.mapOfValuesForEntitat = __toClone.mapOfValuesForEntitat;
     this.mapOfValuesForEstat = __toClone.mapOfValuesForEstat;

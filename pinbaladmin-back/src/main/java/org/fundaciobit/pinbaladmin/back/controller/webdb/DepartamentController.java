@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/departament")
 @SessionAttributes(types = { DepartamentForm.class, DepartamentFilterForm.class })
-@Tile(name="departamentFormWebDB", contentJsp="/WEB-INF/jsp/webdb/departamentForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="departament.departament")})
-@Tile(name="departamentListWebDB", contentJsp="/WEB-INF/jsp/webdb/departamentList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="departament.departament") })
+@Tile(name="departamentFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/departamentForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="departament.departament")})
+@Tile(name="departamentListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/departamentList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="departament.departament")})
 public class DepartamentController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<Departament, java.lang.Long> implements DepartamentFields {
 

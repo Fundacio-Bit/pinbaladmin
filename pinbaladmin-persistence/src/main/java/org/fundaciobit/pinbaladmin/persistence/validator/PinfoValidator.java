@@ -81,6 +81,22 @@ public class PinfoValidator<I extends Pinfo>
       }
     }
 
+    if (__vr.getFieldErrorCount(LOGPPNBAL) == 0) {
+      java.lang.String __logppnbal = __target__.getLogpPnbal();
+      if (__logppnbal!= null && __logppnbal.length() > 2147483647) {
+        __vr.rejectValue(LOGPPNBAL, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(LOGPPNBAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(MISSATGESOLICITANT) == 0) {
+      java.lang.String __missatgesolicitant = __target__.getMissatgeSolicitant();
+      if (__missatgesolicitant!= null && __missatgesolicitant.length() > 2147483647) {
+        __vr.rejectValue(MISSATGESOLICITANT, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGESOLICITANT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

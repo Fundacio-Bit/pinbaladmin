@@ -55,10 +55,14 @@ import org.fundaciobit.pinbaladmin.back.utils.Tab;
 @Controller
 @RequestMapping(value = "/webdb/tramitBDadesSoli")
 @SessionAttributes(types = { TramitBDadesSoliForm.class, TramitBDadesSoliFilterForm.class })
-@Tile(name="tramitBDadesSoliFormWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitBDadesSoliForm.jsp", extendsTile=Tab.MENU_WEBDB,
-      type=TileType.WEBDB_FORM , attributes={ @TileAttribute(name="titol", value="tramitBDadesSoli.tramitBDadesSoli")})
-@Tile(name="tramitBDadesSoliListWebDB", contentJsp="/WEB-INF/jsp/webdb/tramitBDadesSoliList.jsp", extendsTile=Tab.MENU_WEBDB,
-       type=TileType.WEBDB_LIST, attributes={ @TileAttribute(name="titol", value="tramitBDadesSoli.tramitBDadesSoli") })
+@Tile(name="tramitBDadesSoliFormWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe
+    contentJsp="/WEB-INF/jsp/webdb/tramitBDadesSoliForm.jsp", type=TileType.WEBDB_FORM,
+    attributes={ @TileAttribute(name="titol", value="tramitBDadesSoli.tramitBDadesSoli")})
+@Tile(name="tramitBDadesSoliListWebDB", extendsTile=Tab.MENU_WEBDB,
+    // Els següents atributs no són necessaris si heredes aquesta classe 
+    contentJsp="/WEB-INF/jsp/webdb/tramitBDadesSoliList.jsp", type=TileType.WEBDB_LIST,
+    attributes={ @TileAttribute(name="titol", value="tramitBDadesSoli.tramitBDadesSoli")})
 public class TramitBDadesSoliController
     extends org.fundaciobit.pinbaladmin.back.controller.PinbalAdminBaseController<TramitBDadesSoli, java.lang.Long> implements TramitBDadesSoliFields {
 
