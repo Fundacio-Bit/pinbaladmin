@@ -19,8 +19,8 @@
 	</div>
 
 	<div id="titol-tramit" class="third"><fmt:message key="tramit.pinfo.titol"/></div>
-	<div id="button-menu" class="third">
-		<a href="<%=request.getContextPath() + PinfoPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="tramitpinfo.exit"/></a>
+	<div id="button-menu" class="third" >
+		<a style="display: none;" href="<%=request.getContextPath() + PinfoPublicController.CONTEXT_WEB %>/list/1"><fmt:message key="tramitpinfo.exit"/></a>
 	</div>
 </div>
 
