@@ -146,8 +146,8 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	    log.info("PINBAL → Estado procedimiento: " + estadoMadrid.getEstado()
 	            + " - " + estadoMadrid.getDescripcion());
 	    
-	    // 1. Crear/actualizar InfoMadrid
-	    InfoMadridJPA infoMadrid = actualizarInfoMadrid(estadoMadrid, solicitud, titular);
+	    // 1. Crear/actualizar InfoMadrid (pasamos el retorno completo para incluir info de servicios)
+	    InfoMadridJPA infoMadrid = actualizarInfoMadrid(retorno, solicitud, titular);
 	    
 	    // 2. Actualizar la solicitud con los datos de Madrid, teniendo en cuenta el estado anterior de la solicitud.
 	    actualizarEstatSolicitud(infoMadrid, solicitud);
@@ -160,9 +160,10 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	}
 
 	
-	public InfoMadridJPA actualizarInfoMadrid(EstadoProcedimiento estadoMadrid, SolicitudJPA soli, ScspTitular titular)
+	public InfoMadridJPA actualizarInfoMadrid(Retorno retorno, SolicitudJPA soli, ScspTitular titular)
 	        throws I18NException {
 
+	    EstadoProcedimiento estadoMadrid = retorno.getProcedimiento().getEstadoProcedimiento();
 	    Long infoMadID = soli.getInfomadridid();
 	    
 	    log.info("InfoMadrid: " + infoMadID);
@@ -181,7 +182,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	    	String procedimentCodi = soli.getProcedimentCodi();
 	    	Long estatProcediment = soli.getEstatSolicitud();
 	    	Long estatAutoritzacio = Long.valueOf(estadoMadrid.getEstado());
-	    	String missatge = estadoMadrid.getObservaciones();
+	    	String missatge = construirMissatgeComplet(retorno);
 	    	String consulta = generarTextoConsulta(procedimentCodi);
 	    	String titularNom = titular.getNombreCompleto();
 	    	String titularDoc = titular.getDocumentacion();
@@ -233,13 +234,71 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 	                infoMad.setDataAutoritzacio(ahora);
 	            }
 	            
-//	            infoMad.setEstatProcediment(soli.getEstatSolicitud());
+	            // Actualizar estado y mensaje con toda la información de la consulta
 	            infoMad.setEstatAutoritzacio(Long.valueOf(estadoMadrid.getEstado()));
-	            infoMad.setMissatge(estadoMadrid.getObservaciones());
+	            infoMad.setMissatge(construirMissatgeComplet(retorno));
 	            infoMad.setDataConsulta(ahora);
+	            
+	            // Actualizar información del titular (por si ha cambiado)
+	            if (titular != null) {
+	                infoMad.setTitularNom(titular.getNombreCompleto());
+	                infoMad.setTitularNif(titular.getDocumentacion());
+	            }
 			}
 	        return infoMad;
 	    }
+	}
+	
+	/**
+	 * Construye un mensaje completo con toda la información relevante de la respuesta de Madrid
+	 * Incluye: estado del procedimiento, observaciones y detalles de servicios (especialmente desestimados)
+	 */
+	private String construirMissatgeComplet(Retorno retorno) {
+	    StringBuilder missatge = new StringBuilder();
+	    
+	    EstadoProcedimiento estadoProc = retorno.getProcedimiento().getEstadoProcedimiento();
+	    
+	    // 1. Estado y descripción del procedimiento
+	    missatge.append("Estado: ").append(estadoProc.getEstado())
+	            .append(" - ").append(estadoProc.getDescripcion());
+	    
+	    // 2. Observaciones del procedimiento (si existen)
+	    if (estadoProc.getObservaciones() != null && !estadoProc.getObservaciones().trim().isEmpty()) {
+	        missatge.append("\n\nObservaciones: ").append(estadoProc.getObservaciones());
+	    }
+	    
+	    // 3. Información detallada de servicios (especialmente si hay problemas)
+	    List<Servicio> servicios = retorno.getProcedimiento().getServicios().getServicio();
+	    boolean hayServiciosConProblemas = false;
+	    StringBuilder serviciosInfo = new StringBuilder();
+	    
+	    for (Servicio servicio : servicios) {
+	        int estadoServicio = servicio.getEstadoAutorizacion().getEstado();
+	        String observacionesServicio = servicio.getEstadoAutorizacion().getObservaciones();
+	        
+	        // Incluir información si el servicio NO está autorizado (estado != 7) o tiene observaciones
+	        if (estadoServicio != 7 || (observacionesServicio != null && !observacionesServicio.trim().isEmpty())) {
+	            if (!hayServiciosConProblemas) {
+	                serviciosInfo.append("\n\nServicios:");
+	                hayServiciosConProblemas = true;
+	            }
+	            
+	            serviciosInfo.append("\n  • ").append(servicio.getCodigoCertificado())
+	                        .append(" (").append(servicio.getNombre()).append(")")
+	                        .append(" - Estado: ").append(servicio.getEstadoAutorizacion().getDescripcion());
+	            
+	            if (observacionesServicio != null && !observacionesServicio.trim().isEmpty()) {
+	                serviciosInfo.append("\n    Observaciones: ").append(observacionesServicio);
+	            }
+	        }
+	    }
+	    
+	    // Solo añadir información de servicios si hay alguno con problemas u observaciones
+	    if (hayServiciosConProblemas) {
+	        missatge.append(serviciosInfo);
+	    }
+	    
+	    return missatge.toString();
 	}
 
 	public String generarTextoConsulta(String codi) {

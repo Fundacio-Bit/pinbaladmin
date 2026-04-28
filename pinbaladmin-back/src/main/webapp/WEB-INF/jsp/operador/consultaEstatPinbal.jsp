@@ -143,6 +143,12 @@ table.solicitud.servicio.item {
 							<th>Estado Autorización</th>
 							<td class="item">${servicio.estadoAutorizacion.descripcion}</td>
 						</tr>
+						<c:if test="${not empty servicio.estadoAutorizacion.observaciones}">
+							<tr>
+								<th>Observaciones</th>
+								<td class="item">${servicio.estadoAutorizacion.observaciones}</td>
+							</tr>
+						</c:if>
 					</table>
 				</td>
 			</tr>
