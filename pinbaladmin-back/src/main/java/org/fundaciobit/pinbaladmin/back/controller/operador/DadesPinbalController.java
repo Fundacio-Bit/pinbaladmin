@@ -1,15 +1,32 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.OrderType;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
+import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
+import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
+import org.fundaciobit.pinbaladmin.model.entity.Servei;
+import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
+import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
+import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -44,6 +61,18 @@ public class DadesPinbalController {
     private static final String DEFAULT_ENTITAT_CODI = "GOVERN";
     
     private static List<Entitat> cachedEntitats = null;
+    
+    @EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
+    private PinfoDataLogicaService pinfoDataLogicaEjb;
+    
+    @EJB(mappedName = PinfoLogicaService.JNDI_NAME)
+    private PinfoLogicaService pinfoLogicaEjb;
+    
+    @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+    private SolicitudLogicaService solicitudLogicaEjb;
+    
+    @EJB(mappedName = ServeiLogicaService.JNDI_NAME)
+    private ServeiLogicaService serveiLogicaEjb;
 
     @RequestMapping(value = "/permisos", method = RequestMethod.GET)
     public ModelAndView getPermisos(
@@ -377,6 +406,161 @@ public class DadesPinbalController {
 		page.setTotalElements(usuaris.size());
 		page.setTotalPages(1);
 		return page;
+	}
+	
+	/**
+	 * Buscador de PINFOs por usuario, procedimiento y/o servicio
+	 */
+	@RequestMapping(value = "/buscadorpinfos", method = RequestMethod.GET)
+    public ModelAndView buscadorPinfos(
+            String searchUsuari,
+            String searchProcediment,
+            String searchServei) {
+
+        ModelAndView mav = new ModelAndView("operador/buscadorPinfos");
+
+		mav.addObject("searchUsuari", searchUsuari);
+		mav.addObject("searchProcediment", searchProcediment);
+		mav.addObject("searchServei", searchServei);
+		
+		// Solo buscar si hay algún criterio
+		boolean hasSearch = (searchUsuari != null && !searchUsuari.trim().isEmpty()) ||
+		                     (searchProcediment != null && !searchProcediment.trim().isEmpty()) ||
+		                     (searchServei != null && !searchServei.trim().isEmpty());
+		
+		if (hasSearch) {
+			try {
+				Where whereProcediment = null;
+				Where whereServei = null;
+				Where whereUsuari = null;
+				
+				// 1. Buscar procedimientos (Solicitudes) si se especifica
+				if (searchProcediment != null && !searchProcediment.trim().isEmpty()) {
+					String searchText = searchProcediment.trim();
+					List<Long> procedimentIDs = new ArrayList<>();
+					
+					// Intentar buscar por ID numérico
+					try {
+						Long id = Long.parseLong(searchText);
+						Solicitud sol = solicitudLogicaEjb.findByPrimaryKey(id);
+						if (sol != null) {
+							procedimentIDs.add(id);
+						}
+					} catch (NumberFormatException e) {
+						// No es un ID, buscar por código o nombre
+					}
+					
+					// Buscar por código o nombre
+					Where whereSearchSol = Where.OR(
+							SolicitudFields.PROCEDIMENTCODI.like("%" + searchText + "%"),
+							SolicitudFields.PROCEDIMENTNOM.like("%" + searchText + "%")
+					);
+					List<Solicitud> solicituds = solicitudLogicaEjb.select(whereSearchSol);
+					for (Solicitud sol : solicituds) {
+						if (!procedimentIDs.contains(sol.getSolicitudID())) {
+							procedimentIDs.add(sol.getSolicitudID());
+						}
+					}
+					
+					// Construir Where con los IDs encontrados
+					if (!procedimentIDs.isEmpty()) {
+						if (procedimentIDs.size() == 1) {
+							whereProcediment = PinfoDataFields.PROCEDIMENTID.equal(procedimentIDs.get(0));
+						} else {
+							whereProcediment = PinfoDataFields.PROCEDIMENTID.in(procedimentIDs.toArray(new Long[0]));
+						}
+					}
+				}
+				
+				// 2. Buscar servicios si se especifica
+				if (searchServei != null && !searchServei.trim().isEmpty()) {
+					String searchText = searchServei.trim();
+					List<Long> serveiIDs = new ArrayList<>();
+					
+					// Intentar buscar por ID numérico
+					try {
+						Long id = Long.parseLong(searchText);
+						Servei serv = serveiLogicaEjb.findByPrimaryKey(id);
+						if (serv != null) {
+							serveiIDs.add(id);
+						}
+					} catch (NumberFormatException e) {
+						// No es un ID, buscar por código o nombre
+					}
+					
+					// Buscar por código o nombre
+					Where whereSearchServ = Where.OR(
+							ServeiFields.CODI.like("%" + searchText + "%"),
+							ServeiFields.NOM.like("%" + searchText + "%")
+					);
+					List<Servei> serveis = serveiLogicaEjb.select(whereSearchServ);
+					for (Servei serv : serveis) {
+						if (!serveiIDs.contains(serv.getServeiID())) {
+							serveiIDs.add(serv.getServeiID());
+						}
+					}
+					
+					// Construir Where con los IDs encontrados
+					if (!serveiIDs.isEmpty()) {
+						if (serveiIDs.size() == 1) {
+							whereServei = PinfoDataFields.SERVEIID.equal(serveiIDs.get(0));
+						} else {
+							whereServei = PinfoDataFields.SERVEIID.in(serveiIDs.toArray(new Long[0]));
+						}
+					}
+				}
+				
+				// 3. Buscar por usuario si se especifica
+				if (searchUsuari != null && !searchUsuari.trim().isEmpty()) {
+					whereUsuari = PinfoDataFields.USUARIID.like("%" + searchUsuari.trim() + "%");
+				}
+				
+				// 4. Combinar todos los Where (aprovechando que null se ignora)
+				Where whereFinal = whereProcediment;
+				if (whereServei != null) {
+					whereFinal = (whereFinal == null) ? whereServei : Where.AND(whereFinal, whereServei);
+				}
+				if (whereUsuari != null) {
+					whereFinal = (whereFinal == null) ? whereUsuari : Where.AND(whereFinal, whereUsuari);
+				}
+				
+				// 5. Buscar PinfoData y obtener PINFOs únicos
+				if (whereFinal != null) {
+					OrderBy orderBy = new OrderBy(PinfoDataFields.PINFOID, OrderType.DESC);
+					List<PinfoData> pinfoDataList = pinfoDataLogicaEjb.select(whereFinal, orderBy);
+					
+					if (pinfoDataList != null && !pinfoDataList.isEmpty()) {
+						// Obtener IDs únicos de PINFOs
+						Set<Long> pinfoIDs = new LinkedHashSet<>();
+						for (PinfoData pd : pinfoDataList) {
+							if (pd.getPinfoID() != null) {
+								pinfoIDs.add(pd.getPinfoID());
+							}
+						}
+						
+						// Obtener los PINFOs completos
+						List<Pinfo> pinfos = new ArrayList<>();
+						for (Long pinfoID : pinfoIDs) {
+							Pinfo pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
+							if (pinfo != null) {
+								pinfos.add(pinfo);
+							}
+						}
+						
+						mav.addObject("pinfos", pinfos);
+					}
+				} else {
+					// No se encontraron procedimientos o servicios con ese criterio
+					mav.addObject("info", "No se encontraron resultados con los criterios especificados");
+				}
+				
+			} catch (Exception e) {
+				log.error("Error buscando PINFOs", e);
+				mav.addObject("error", "Error: " + e.getMessage());
+			}
+		}
+		
+		return mav;
 	}
 
 }

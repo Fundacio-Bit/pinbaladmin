@@ -143,6 +143,11 @@
 				style="${(fn:contains(url, '/operador/dadespinbal/procediments'))? "font-weight:bold;" : ""}">Procediments PINBAL</span>
 		</a></li>
 		
+		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/dadespinbal/buscadorpinfos"/>"> <span
+				style="${(fn:contains(url, '/operador/dadespinbal/buscadorpinfos'))? "font-weight:bold;" : ""}">Buscador de PINFOs</span>
+		</a></li>
+		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 

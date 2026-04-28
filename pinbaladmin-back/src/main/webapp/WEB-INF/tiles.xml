@@ -398,6 +398,10 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/procedimentsPinbal.jsp"/>
     </definition>
 
+    <definition name="operador/buscadorPinfos" extends="operador_base">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/buscadorPinfos.jsp"/>
+    </definition>
+
 
 
 
