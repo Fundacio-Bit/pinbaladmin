@@ -659,8 +659,12 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("organID: " + organID);
 
 		Where wOrganDelSolicitant = SolicitudFields.ORGANID.equal(organID);
+		
+		// Filtrar solo procedimientos del Govern de les Illes Balears
+//		Where wEntitat = SolicitudFields.NIF.equal("S0711001H");
 
 //		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wOrganDelSolicitant));
+		// List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment, wEntitat));
 		List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wProcediment));
 
 		List<Item> items = new java.util.ArrayList<Item>();

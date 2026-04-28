@@ -1,9 +1,9 @@
-<!--  Capçalera i peu -->
+<!--  Capï¿½alera i peu -->
 <%@page import="org.fundaciobit.pinbaladmin.back.controller.all.TramitAPublicController"%>
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
-			src="https://se.caib.es/sistramitfront/resources/1/O1S9IEZ4-ZJLRBRT8-T8SVCTKJ.png"
+			src="<c:url value="/img/logo-caib-sistra-blanc.png"/>"
 			width="50px">
 		<div id="user-info">
 			<div id="user-name">
@@ -15,14 +15,14 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Sol·litud d'autorització</div>
+	<div id="titol-tramit" class="third">Solï¿½litud d'autoritzaciï¿½</div>
 	<div id="button-menu" class="third">
 		<a href="<%=request.getContextPath() + TramitAPublicController.CONTEXT_WEB %>/cancelarTramit/${uuid}"><fmt:message key="tramit.sistra.cancelar.tramit"/></a>
 	</div>
 </div>
 
 <div id="footer">
-	<p>© 2024 - Fundació BIT</p>
+	<p>ï¿½ 2024 - Fundaciï¿½ BIT</p>
 </div>
 
 <script>

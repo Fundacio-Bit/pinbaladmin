@@ -6,7 +6,7 @@
 <div id="header">
 	<div id="logo-caib" class="third">
 		<img alt="logo-caib"
-			src="https://se.caib.es/sistramitfront/resources/1/O1S9IEZ4-ZJLRBRT8-T8SVCTKJ.png"
+			src="<c:url value="/img/logo-caib-sistra-blanc.png"/>"
 			width="50px">
 
 		<div id="user-info">
