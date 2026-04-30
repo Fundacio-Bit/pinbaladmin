@@ -144,8 +144,8 @@
 		</a></li>
 		
 		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/dadespinbal/buscadorpinfos"/>"> <span
-				style="${(fn:contains(url, '/operador/dadespinbal/buscadorpinfos'))? "font-weight:bold;" : ""}">Buscador de PINFOs</span>
+			href="<c:url value="/operador/dadespinbal/buscadorPinfo"/>"> <span
+				style="${(fn:contains(url, '/operador/dadespinbal/buscadorPinfo'))? "font-weight:bold;" : ""}">Consulta de Permisos</span>
 		</a></li>
 		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />

@@ -1,8 +1,12 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -13,7 +17,11 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.pluginsib.userinformation.UserInfo;
+
+import com.google.gson.Gson;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
@@ -61,6 +69,15 @@ public class DadesPinbalController {
     private static final String DEFAULT_ENTITAT_CODI = "GOVERN";
     
     private static List<Entitat> cachedEntitats = null;
+    
+    // Cachés para optimizar búsquedas de procedimientos y servicios
+    private static Map<Long, Solicitud> cachedProcedimentsAmbPinfos = null;
+    private static Map<Long, Servei> cachedServeisAmbPinfos = null;
+    private static long cacheTimestamp = 0;
+    private static final long CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
+    
+    // Plugin LDAP cacheado para evitar reinicializaciones
+    private static IUserInformationPlugin cachedPlugin = null;
     
     @EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
     private PinfoDataLogicaService pinfoDataLogicaEjb;
@@ -409,15 +426,372 @@ public class DadesPinbalController {
 	}
 	
 	/**
-	 * Buscador de PINFOs por usuario, procedimiento y/o servicio
+	 * Consulta de permisos en PINFOs: permite buscar qué usuarios, procedimientos y servicios
+	 * tienen permisos asignados en documentos PINFO. Solo muestra	 elementos con permisos activos.
 	 */
-	@RequestMapping(value = "/buscadorpinfos", method = RequestMethod.GET)
-    public ModelAndView buscadorPinfos(
+	// Clase interna para JSON
+	static class Item {
+		public String id;
+		public String key;
+		public String value;
+		
+		public Item(String id, String key, String value) {
+			this.id = id;
+			this.key = key;
+			this.value = value;
+		}
+	}
+	
+	@RequestMapping(value = "/jsonUsuaris", method = RequestMethod.GET)
+	public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String search = request.getParameter("nom");
+		log.info("Buscando usuarios: " + search);
+		
+		try {
+			List<Item> items = new ArrayList<>();
+			
+			// Si la búsqueda es muy corta, no devolver nada
+			if (search == null || search.trim().length() < 3) {
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().print("[]");
+				response.getWriter().flush();
+				return;
+			}
+			
+			// Buscar en LDAP con asteriscos
+			IUserInformationPlugin plugin = getPluginUserInfo();
+			String searchTerm = "*" + search.trim() + "*";
+			SearchUsersResult result = plugin.getUsersByPartialValuesOr(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+			
+			if (result != null && result.getUsers() != null) {
+				List<UserInfo> users = result.getUsers();
+				log.info("LDAP devuelve " + users.size() + " usuarios");
+				
+				// Limitar a 500 resultados
+				if (users.size() > 500) {
+					users = users.subList(0, 500);
+				}
+				
+				// Convertir a Items con formato: "Nombre Completo - NIF - ID"
+				for (UserInfo user : users) {
+					String adminId = user.getAdministrationID() != null ? user.getAdministrationID() : user.getId();
+					String nombre = user.getName() != null ? user.getName() : "";
+					String apellido1 = user.getSurname1() != null ? user.getSurname1() : "";
+					String apellido2 = user.getSurname2() != null ? user.getSurname2() : "";
+					
+					String nombreCompleto = (nombre + " " + apellido1 + " " + apellido2).trim();
+					String nif = user.getAdministrationID() != null ? user.getAdministrationID() : "";
+					String username = user.getUsername() != null ? user.getUsername() : "";
+					
+					// Formato: "Antonio Trobat Obrador - 43120476F - 43120476F"
+					String displayValue = username + " - " + nombreCompleto + " - " + nif ;
+					
+					// El ID que se usará para buscar en PinfoData es el administrationID
+					Item item = new Item(adminId, username, displayValue);
+					items.add(item);
+				}
+			}
+			
+			log.info("Devolviendo " + items.size() + " usuarios");
+			
+			// Devolver JSON
+			Gson g = new Gson();
+			String usuarisJson = g.toJson(items);
+			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(usuarisJson);
+			response.getWriter().flush();
+		} catch (Exception e) {
+			log.error("Error buscando usuarios: " + e.getMessage(), e);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print("[]");
+			response.getWriter().flush();
+		}
+	}
+	
+	@RequestMapping(value = "/jsonProcediments", method = RequestMethod.GET)
+	public void obtenirJsonProcediments(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String search = request.getParameter("query");
+		log.info("Buscando procedimientos con PINFOs: " + search);
+		
+		try {
+			// Obtener todos los procedimientos con PINFOs desde caché
+			List<Solicitud> todosProcediments = obtenirProcedimentsAmbPinfosDeCache();
+			
+			// Filtrar en memoria según el texto buscado
+			List<Solicitud> filtered = new ArrayList<>();
+			if (search != null && search.trim().length() >= 2) {
+				String searchLower = search.trim().toLowerCase();
+				for (Solicitud soli : todosProcediments) {
+					if (coincideixProcedimentAmbCerca(soli, searchLower)) {
+						filtered.add(soli);
+					}
+				}
+			} else if (search == null || search.trim().length() < 2) {
+				filtered = new ArrayList<>();
+			}
+			
+			// Limitar resultados
+			if (filtered.size() > 500) {
+				filtered = filtered.subList(0, 500);
+			}
+			
+			log.info("Procedimientos en caché: " + todosProcediments.size() + ", filtrados: " + filtered.size());
+			
+			// Convertir a Items
+			List<Item> items = new ArrayList<>();
+			for (Solicitud soli : filtered) {
+				String id = String.valueOf(soli.getSolicitudID());
+				String key = soli.getProcedimentCodi();
+				String value = soli.getProcedimentNom();
+				Item item = new Item(id, key, value);
+				items.add(item);
+			}
+			
+			// Devolver JSON
+			Gson g = new Gson();
+			String procedimentsJson = g.toJson(items);
+			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(procedimentsJson);
+			response.getWriter().flush();
+		} catch (Exception e) {
+			log.error("Error obteniendo procedimientos: " + e.getMessage(), e);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print("[]");
+			response.getWriter().flush();
+		}
+	}
+	
+	@RequestMapping(value = "/jsonServeis", method = RequestMethod.GET)
+	public void obtenirJsonServeis(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String search = request.getParameter("query");
+		log.info("Buscando servicios con PINFOs: " + search);
+		
+		try {
+			// Obtener todos los servicios con PINFOs desde caché
+			List<Servei> todosServeis = obtenirServeisAmbPinfosDeCache();
+			
+			// Filtrar en memoria según el texto buscado
+			List<Servei> filtered = new ArrayList<>();
+			if (search != null && search.trim().length() >= 2) {
+				String searchLower = search.trim().toLowerCase();
+				for (Servei serv : todosServeis) {
+					if (coincideixServeiAmbCerca(serv, searchLower)) {
+						filtered.add(serv);
+					}
+				}
+			} else if (search == null || search.trim().length() < 2) {
+				filtered = new ArrayList<>();
+			}
+			
+			// Limitar resultados
+			if (filtered.size() > 500) {
+				filtered = filtered.subList(0, 500);
+			}
+			
+			log.info("Servicios en caché: " + todosServeis.size() + ", filtrados: " + filtered.size());
+			
+			// Convertir a Items
+			List<Item> items = new ArrayList<>();
+			for (Servei serv : filtered) {
+				String id = String.valueOf(serv.getServeiID());
+				String key = serv.getCodi();
+				String value = serv.getNom();
+				Item item = new Item(id, key, value);
+				items.add(item);
+			}
+			
+			// Devolver JSON
+			Gson g = new Gson();
+			String serveisJson = g.toJson(items);
+			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(serveisJson);
+			response.getWriter().flush();
+		} catch (Exception e) {
+			log.error("Error obteniendo servicios: " + e.getMessage(), e);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print("[]");
+			response.getWriter().flush();
+		}
+	}
+	
+	private IUserInformationPlugin getPluginUserInfo() throws Exception {
+		if (cachedPlugin == null) {
+			synchronized (DadesPinbalController.class) {
+				if (cachedPlugin == null) {
+					final boolean debug = true;
+					log.info("Inicializando plugin LDAP (solo una vez)...");
+					cachedPlugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+				}
+			}
+		}
+		return cachedPlugin;
+	}
+	
+	/**
+	 * Regenera las cachés de procedimientos y servicios.
+	 */
+	private synchronized void regenerarTotesCaches() throws Exception {
+		long now = System.currentTimeMillis();
+		
+		// Solo regenerar si ha expirado
+		if (cachedProcedimentsAmbPinfos != null && cachedServeisAmbPinfos != null && 
+		    (now - cacheTimestamp) <= CACHE_TTL_MS) {
+			return; // Caché aún válida
+		}
+		
+		log.info("Regenerando cachés de procedimientos y servicios...");
+		
+		// 1. Obtener TODOS los PinfoData en una sola query
+		Where wPinfoDatasTramitats = null;
+		List<PinfoData> allPinfoDatas = pinfoDataLogicaEjb.select(wPinfoDatasTramitats);
+		
+		// 2. Extraer IDs únicos de procedimientos y servicios
+		Set<Long> procedimentIds = new HashSet<>();
+		Set<Long> serveiIds = new HashSet<>();
+		
+		for (PinfoData pd : allPinfoDatas) {
+			if (pd.getProcedimentID() != null) {
+				procedimentIds.add(pd.getProcedimentID());
+			}
+			if (pd.getServeiID() != null) {
+				serveiIds.add(pd.getServeiID());
+			}
+		}
+		
+		// 3. Regenerar caché de procedimientos desde BD en BATCH (1 query con IN)
+		Map<Long, Solicitud> newProcedimentsCache = new HashMap<>();
+		if (!procedimentIds.isEmpty()) {
+			Where whereProcediments = Where.AND(
+				SolicitudFields.SOLICITUDID.in(procedimentIds.toArray(new Long[0])),
+				SolicitudFields.NIF.equal("S0711001H")
+			);
+			List<Solicitud> solicituds = solicitudLogicaEjb.select(whereProcediments);
+			for (Solicitud s : solicituds) {
+				newProcedimentsCache.put(s.getSolicitudID(), s);
+			}
+		}
+		
+		// 4. Regenerar caché de servicios desde BD en BATCH (1 query con IN)
+		Map<Long, Servei> newServeisCache = new HashMap<>();
+		if (!serveiIds.isEmpty()) {
+			Where whereServeis = ServeiFields.SERVEIID.in(serveiIds.toArray(new Long[0]));
+			List<Servei> serveis = serveiLogicaEjb.select(whereServeis);
+			for (Servei s : serveis) {
+				newServeisCache.put(s.getServeiID(), s);
+			}
+		}
+		
+		// 5. Actualizar cachés y timestamp
+		cachedProcedimentsAmbPinfos = newProcedimentsCache;
+		cachedServeisAmbPinfos = newServeisCache;
+		cacheTimestamp = now;
+		
+		log.info("Cachés regeneradas - Procedimientos: " + cachedProcedimentsAmbPinfos.size() + 
+		         ", Servicios: " + cachedServeisAmbPinfos.size());
+	}
+	
+	/**
+	 * Obtiene la lista de procedimientos con PINFOs desde caché.
+	 * La caché se regenera automáticamente cada 5 minutos.
+	 */
+	private List<Solicitud> obtenirProcedimentsAmbPinfosDeCache() throws Exception {
+		regenerarTotesCaches();
+		return cachedProcedimentsAmbPinfos != null ? new ArrayList<>(cachedProcedimentsAmbPinfos.values()) : new ArrayList<>();
+	}
+	
+	/**
+	 * Verifica si un procedimiento coincide con el criterio de búsqueda.
+	 * Busca en: código y nombre de procedimiento.
+	 */
+	private boolean coincideixProcedimentAmbCerca(Solicitud soli, String searchLower) {
+		if (soli == null || searchLower == null) {
+			return false;
+		}
+		
+		// Buscar en código
+		if (soli.getProcedimentCodi() != null && soli.getProcedimentCodi().toLowerCase().contains(searchLower)) {
+			return true;
+		}
+		
+		// Buscar en nombre
+		if (soli.getProcedimentNom() != null && soli.getProcedimentNom().toLowerCase().contains(searchLower)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Obtiene la lista de servicios con PINFOs desde caché.
+	 * La caché se regenera automáticamente cada 5 minutos.
+	 */
+	private List<Servei> obtenirServeisAmbPinfosDeCache() throws Exception {
+		regenerarTotesCaches();
+		return cachedServeisAmbPinfos != null ? new ArrayList<>(cachedServeisAmbPinfos.values()) : new ArrayList<>();
+	}
+	
+	/**
+	 * Verifica si un servicio coincide con el criterio de búsqueda.
+	 * Busca en: código y nombre de servicio.
+	 */
+	private boolean coincideixServeiAmbCerca(Servei serv, String searchLower) {
+		if (serv == null || searchLower == null) {
+			return false;
+		}
+		
+		// Buscar en código
+		if (serv.getCodi() != null && serv.getCodi().toLowerCase().contains(searchLower)) {
+			return true;
+		}
+		
+		// Buscar en nombre
+		if (serv.getNom() != null && serv.getNom().toLowerCase().contains(searchLower)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	// private List<UserInfo> getUsuarisParam(String entrada) throws Exception {
+	// 	if (entrada == null || entrada.trim().length() < 3) {
+	// 		return new ArrayList<UserInfo>();
+	// 	}
+		
+	// 	try {
+	// 		IUserInformationPlugin plugin = getPluginUserInfo();
+	// 		SearchUsersResult result = plugin.searchUsersByPartialNifNomLlinatges(entrada.trim());
+			
+	// 		if (result != null && result.getUsers() != null) {
+	// 			List<UserInfo> users = result.getUsers();
+	// 			if (users.size() > 500) {
+	// 				return null; // Demasiados resultados
+	// 			}
+	// 			return users;
+	// 		}
+	// 		return new ArrayList<UserInfo>();
+	// 	} catch (Exception e) {
+	// 		log.error("Error buscando usuarios: " + e.getMessage(), e);
+	// 		return new ArrayList<UserInfo>();
+	// 	}
+	// }
+	
+	@RequestMapping(value = "/buscadorPinfo", method = RequestMethod.GET)
+    public ModelAndView buscadorPinfo(
             String searchUsuari,
             String searchProcediment,
             String searchServei) {
 
-        ModelAndView mav = new ModelAndView("operador/buscadorPinfos");
+        ModelAndView mav = new ModelAndView("buscadorPinfo");
 
 		mav.addObject("searchUsuari", searchUsuari);
 		mav.addObject("searchProcediment", searchProcediment);
@@ -538,15 +912,79 @@ public class DadesPinbalController {
 							}
 						}
 						
-						// Obtener los PINFOs completos
-						List<Pinfo> pinfos = new ArrayList<>();
+						// OPTIMIZACIÓN: Caché de usuarios LDAP para evitar consultas repetidas
+						Map<String, UserInfo> userCache = new HashMap<>();
+						IUserInformationPlugin plugin = getPluginUserInfo();
+						
+						// Obtener los PINFOs completos con información de usuarios
+						List<PinfoWithUserInfo> pinfos = new ArrayList<>();
 						for (Long pinfoID : pinfoIDs) {
 							Pinfo pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
 							if (pinfo != null) {
-								pinfos.add(pinfo);
+								PinfoWithUserInfo pwu = new PinfoWithUserInfo();
+								pwu.pinfo = pinfo;
+								
+								// Obtener nombre del solicitante (solo si no está en caché)
+								if (pinfo.getSolicitantNIF() != null && !pinfo.getSolicitantNIF().isEmpty()) {
+									String nifSolicitant = pinfo.getSolicitantNIF().trim();
+									UserInfo user = userCache.get(nifSolicitant);
+									
+									if (user == null) {
+										// No está en caché, consultar LDAP
+										try {
+											user = plugin.getUserInfoByAdministrationID(nifSolicitant);
+											if (user != null) {
+												userCache.put(nifSolicitant, user);
+											}
+										} catch (Exception e) {
+											log.warn("No se pudo obtener info del solicitante " + nifSolicitant + ": " + e.getMessage());
+										}
+									}
+									
+									if (user != null) {
+										pwu.solicitantNom = (user.getName() != null ? user.getName() : "") + " " + 
+											(user.getSurname1() != null ? user.getSurname1() : "") + " " + 
+											(user.getSurname2() != null ? user.getSurname2() : "");
+										pwu.solicitantNom = pwu.solicitantNom.trim();
+									}
+								}
+								
+								// Obtener nombre del destinatario (solo si no viene en el Pinfo)
+								if (pinfo.getDestinatariNIF() != null && !pinfo.getDestinatariNIF().isEmpty()) {
+									// Si ya tiene nombre en el Pinfo, usarlo
+									if (pinfo.getDestinatariNom() != null && !pinfo.getDestinatariNom().trim().isEmpty()) {
+										pwu.destinatariNom = pinfo.getDestinatariNom();
+									} else {
+										// No tiene nombre, buscar en LDAP (con caché)
+										String nifDestinatari = pinfo.getDestinatariNIF().trim();
+										UserInfo user = userCache.get(nifDestinatari);
+										
+										if (user == null) {
+											// No está en caché, consultar LDAP
+											try {
+												user = plugin.getUserInfoByAdministrationID(nifDestinatari);
+												if (user != null) {
+													userCache.put(nifDestinatari, user);
+												}
+											} catch (Exception e) {
+												log.warn("No se pudo obtener info del destinatario " + nifDestinatari + ": " + e.getMessage());
+											}
+										}
+										
+										if (user != null) {
+											pwu.destinatariNom = (user.getName() != null ? user.getName() : "") + " " + 
+												(user.getSurname1() != null ? user.getSurname1() : "") + " " + 
+												(user.getSurname2() != null ? user.getSurname2() : "");
+											pwu.destinatariNom = pwu.destinatariNom.trim();
+										}
+									}
+								}
+								
+								pinfos.add(pwu);
 							}
 						}
 						
+						log.info("PINFOs encontrados: " + pinfos.size() + ", consultas LDAP: " + userCache.size());
 						mav.addObject("pinfos", pinfos);
 					}
 				} else {
@@ -562,5 +1000,37 @@ public class DadesPinbalController {
 		
 		return mav;
 	}
+	
+	// Clase auxiliar para pasar información adicional a la vista
+    public static class PinfoWithUserInfo {
+    	public Pinfo pinfo;
+    	public String solicitantNom;
+    	public String destinatariNom;
+    	
+    	public Pinfo getPinfo() {
+    		return pinfo;
+    	}
+    	
+    	public String getSolicitantNom() {
+    		return solicitantNom != null ? solicitantNom : "";
+    	}
+    	
+    	public String getDestinatariNom() {
+    		// Si tenemos el nombre enriquecido, usarlo; si no, usar el del pinfo
+    		if (destinatariNom != null && !destinatariNom.isEmpty()) {
+    			return destinatariNom;
+    		}
+    		return pinfo.getDestinatariNom() != null ? pinfo.getDestinatariNom() : "";
+    	}
+    	
+    	// Métodos delegados para acceso directo desde JSP
+    	public Long getPinfoID() { return pinfo.getPinfoID(); }
+    	public String getEntitat() { return pinfo.getEntitat(); }
+    	public String getSolicitantNIF() { return pinfo.getSolicitantNIF(); }
+    	public String getDestinatariNIF() { return pinfo.getDestinatariNIF(); }
+    	public Long getEstat() { return pinfo.getEstat(); }
+    	public Long getFitxerfirmatID() { return pinfo.getFitxerfirmatID(); }
+    	public Long getFitxerID() { return pinfo.getFitxerID(); }
+    }
 
 }
