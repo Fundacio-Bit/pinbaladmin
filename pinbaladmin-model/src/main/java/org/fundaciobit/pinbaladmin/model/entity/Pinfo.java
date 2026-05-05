@@ -14,6 +14,9 @@ public interface Pinfo extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getSolicitantNIF();
 	public void setSolicitantNIF(java.lang.String _solicitantNIF_);
 
+	public java.lang.String getSolicitantNom();
+	public void setSolicitantNom(java.lang.String _solicitantNom_);
+
 	public java.lang.Long getEstat();
 	public void setEstat(java.lang.Long _estat_);
 

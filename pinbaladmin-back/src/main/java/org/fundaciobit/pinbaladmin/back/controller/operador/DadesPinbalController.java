@@ -28,6 +28,7 @@ import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
+import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.entity.Servei;
@@ -924,29 +925,9 @@ public class DadesPinbalController {
 								PinfoWithUserInfo pwu = new PinfoWithUserInfo();
 								pwu.pinfo = pinfo;
 								
-								// Obtener nombre del solicitante (solo si no está en caché)
-								if (pinfo.getSolicitantNIF() != null && !pinfo.getSolicitantNIF().isEmpty()) {
-									String nifSolicitant = pinfo.getSolicitantNIF().trim();
-									UserInfo user = userCache.get(nifSolicitant);
-									
-									if (user == null) {
-										// No está en caché, consultar LDAP
-										try {
-											user = plugin.getUserInfoByAdministrationID(nifSolicitant);
-											if (user != null) {
-												userCache.put(nifSolicitant, user);
-											}
-										} catch (Exception e) {
-											log.warn("No se pudo obtener info del solicitante " + nifSolicitant + ": " + e.getMessage());
-										}
-									}
-									
-									if (user != null) {
-										pwu.solicitantNom = (user.getName() != null ? user.getName() : "") + " " + 
-											(user.getSurname1() != null ? user.getSurname1() : "") + " " + 
-											(user.getSurname2() != null ? user.getSurname2() : "");
-										pwu.solicitantNom = pwu.solicitantNom.trim();
-									}
+								// Obtener nombre del solicitante directamente de la base de datos
+								if (pinfo.getSolicitantNom() != null && !pinfo.getSolicitantNom().trim().isEmpty()) {
+									pwu.solicitantNom = pinfo.getSolicitantNom();
 								}
 								
 								// Obtener nombre del destinatario (solo si no viene en el Pinfo)
@@ -1031,6 +1012,8 @@ public class DadesPinbalController {
     	public Long getEstat() { return pinfo.getEstat(); }
     	public Long getFitxerfirmatID() { return pinfo.getFitxerfirmatID(); }
     	public Long getFitxerID() { return pinfo.getFitxerID(); }
+    	public Fitxer getFitxerfirmat() { return pinfo.getFitxerfirmat(); }
+    	public Fitxer getFitxer() { return pinfo.getFitxer(); }
     }
 
 }

@@ -27,6 +27,10 @@ public class PinfoQueryPath extends org.fundaciobit.genapp.common.query.QueryPat
     return new StringField(getQueryPath(), PinfoFields.SOLICITANTNIF);
   }
 
+  public StringField SOLICITANTNOM() {
+    return new StringField(getQueryPath(), PinfoFields.SOLICITANTNOM);
+  }
+
   public LongField ESTAT() {
     return new LongField(getQueryPath(), PinfoFields.ESTAT);
   }

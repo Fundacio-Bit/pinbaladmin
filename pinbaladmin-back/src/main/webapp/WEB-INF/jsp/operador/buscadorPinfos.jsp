@@ -195,7 +195,6 @@
 		letter-spacing: 0.5px;
 		padding: 12px 10px;
 		vertical-align: middle;
-		color: white;
 		white-space: nowrap;
 	}
 	
@@ -267,18 +266,39 @@
 		display: inline-block;
 	}
 	
-	.badge-pendent {
+	.badge-iniciant {
+		background-color: #6c757d;
+		color: white;
+	}
+	
+	.badge-error {
+		background-color: #dc3545;
+		color: white;
+	}
+	
+	.badge-creant {
+		background-color: #e9ecef;
+		color: #495057;
+		border: 1px solid #ced4da;
+	}
+	
+	.badge-pendent-firma {
 		background-color: #ffc107;
 		color: #856404;
 	}
 	
-	.badge-enviat {
-		background-color: #17a2b8;
+	.badge-pendent-tramitar {
+		background-color: #fd7e14;
 		color: white;
 	}
 	
-	.badge-firmat {
+	.badge-tramitat {
 		background-color: #28a745;
+		color: white;
+	}
+	
+	.badge-notificat {
+		background-color: #20c997;
 		color: white;
 	}
 	
@@ -470,14 +490,26 @@
 									</td>
 									<td style="text-align: center;">
 										<c:choose>
+											<c:when test="${pinfoData.estat == -2}">
+												<span class="badge-estat badge-iniciant">Iniciant</span>
+											</c:when>
+											<c:when test="${pinfoData.estat == -1}">
+												<span class="badge-estat badge-error">Error</span>
+											</c:when>
 											<c:when test="${pinfoData.estat == 0}">
-												<span class="badge-estat badge-pendent">Pendent</span>
+												<span class="badge-estat badge-creant">Creant</span>
 											</c:when>
 											<c:when test="${pinfoData.estat == 1}">
-												<span class="badge-estat badge-enviat">Enviat</span>
+												<span class="badge-estat badge-pendent-firma">Pendent Firma</span>
 											</c:when>
 											<c:when test="${pinfoData.estat == 2}">
-												<span class="badge-estat badge-firmat">Firmat</span>
+												<span class="badge-estat badge-pendent-tramitar">Pendent Tramitar</span>
+											</c:when>
+											<c:when test="${pinfoData.estat == 3}">
+												<span class="badge-estat badge-tramitat">Tramitat</span>
+											</c:when>
+											<c:when test="${pinfoData.estat == 4}">
+												<span class="badge-estat badge-notificat">Notificat</span>
 											</c:when>
 											<c:otherwise>
 												<span class="badge-estat" style="background-color: #6c757d; color: white;">Estat ${pinfoData.estat}</span>
@@ -490,15 +522,15 @@
 										   title="Veure detalls del PINFO">
 											<i class="fas fa-eye"></i>
 										</a>
-										<c:if test="${not empty pinfoData.fitxerfirmatID}">
-											<a href="<c:url value='/common/download/fitxer/${pinfoData.fitxerfirmatID}'/>" 
+										<c:if test="${not empty pinfoData.fitxerfirmat}">
+											<a href="<c:url value='${pad:fileUrl(pinfoData.fitxerfirmat)}'/>" 
 											   class="btn btn-success btn-sm action-btn" 
 											   title="Descarregar PDF firmat">
 												<i class="fas fa-file-signature"></i>
 											</a>
 										</c:if>
-										<c:if test="${not empty pinfoData.fitxerID and empty pinfoData.fitxerfirmatID}">
-											<a href="<c:url value='/common/download/fitxer/${pinfoData.fitxerID}'/>" 
+										<c:if test="${not empty pinfoData.fitxer and empty pinfoData.fitxerfirmat}">
+											<a href="<c:url value='${pad:fileUrl(pinfoData.fitxer)}'/>" 
 											   class="btn btn-warning btn-sm action-btn" 
 											   title="Descarregar PDF (sense firmar)">
 												<i class="fas fa-file-pdf"></i>

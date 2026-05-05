@@ -100,6 +100,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.SOLICITANTNOM)}">
+        <tr id="pinfo_solicitantNom_rowid">
+          <td id="pinfo_solicitantNom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[PinfoFields.SOLICITANTNOM])?'pinfo.solicitantNom':__theForm.labels[PinfoFields.SOLICITANTNOM]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[PinfoFields.SOLICITANTNOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[PinfoFields.SOLICITANTNOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="pinfo_solicitantNom_columnvalueid">
+            <form:errors path="pinfo.solicitantNom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,PinfoFields.SOLICITANTNOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,PinfoFields.SOLICITANTNOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="pinfo.solicitantNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,PinfoFields.ESTAT)}">
         <tr id="pinfo_estat_rowid">
           <td id="pinfo_estat_columnlabelid">

@@ -87,6 +87,17 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
   }
 
 
+  private java.lang.String solicitantNom;
+
+  public java.lang.String getSolicitantNom() {
+    return this.solicitantNom;
+  }
+
+  public void setSolicitantNom(java.lang.String solicitantNom) {
+    this.solicitantNom = solicitantNom;
+  }
+
+
   private java.util.List<java.lang.Long> estatSelect;
 
   public java.util.List<java.lang.Long> getEstatSelect() {
@@ -175,6 +186,7 @@ public class PinfoFilterForm extends PinbalAdminBaseFilterForm implements PinfoF
     this.incidenciaIDFins = __toClone.incidenciaIDFins;
     this.entitat = __toClone.entitat;
     this.solicitantNIF = __toClone.solicitantNIF;
+    this.solicitantNom = __toClone.solicitantNom;
     this.estatSelect = __toClone.estatSelect;
     this.portafibid = __toClone.portafibid;
     this.destinatariNIF = __toClone.destinatariNIF;

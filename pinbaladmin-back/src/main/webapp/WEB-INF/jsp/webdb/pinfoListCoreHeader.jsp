@@ -24,6 +24,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNIF)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.SOLICITANTNIF)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNOM)}">
+        <th>${pad:getSortIcons(__theFilterForm,PinfoFields.SOLICITANTNOM)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.ESTAT)}">
         <th>${pad:getSortIcons(__theFilterForm,PinfoFields.ESTAT)}</th>
         </c:if>

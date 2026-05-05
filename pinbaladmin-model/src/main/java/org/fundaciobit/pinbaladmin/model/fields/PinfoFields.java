@@ -16,6 +16,7 @@ public interface PinfoFields extends java.io.Serializable {
 	 public static final LongField INCIDENCIAID = new LongField(_TABLE_MODEL, "incidenciaID", "incidenciaid");
 	 public static final StringField ENTITAT = new StringField(_TABLE_MODEL, "entitat", "entitat");
 	 public static final StringField SOLICITANTNIF = new StringField(_TABLE_MODEL, "solicitantNIF", "solicitantnif");
+	 public static final StringField SOLICITANTNOM = new StringField(_TABLE_MODEL, "solicitantNom", "solicitantnom");
 	 public static final LongField ESTAT = new LongField(_TABLE_MODEL, "estat", "estat");
 	 public static final LongField FITXERID = new LongField(_TABLE_MODEL, "fitxerID", "fitxerid");
 	 public static final LongField FITXERFIRMATID = new LongField(_TABLE_MODEL, "fitxerfirmatID", "fitxerfirmatid");
@@ -32,6 +33,7 @@ public interface PinfoFields extends java.io.Serializable {
     INCIDENCIAID,
     ENTITAT,
     SOLICITANTNIF,
+    SOLICITANTNOM,
     ESTAT,
     FITXERID,
     FITXERFIRMATID,

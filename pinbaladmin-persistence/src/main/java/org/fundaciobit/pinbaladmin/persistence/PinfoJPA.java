@@ -44,6 +44,9 @@ public class PinfoJPA implements Pinfo {
     @Column(name="solicitantnif",length = 100)
     java.lang.String solicitantNIF;
 
+    @Column(name="solicitantnom",length = 255)
+    java.lang.String solicitantNom;
+
     @Column(name="estat",length = 19)
     java.lang.Long estat;
 
@@ -84,11 +87,12 @@ public class PinfoJPA implements Pinfo {
   }
 
   /** Constructor amb tots els camps  */
-  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
+  public PinfoJPA(long pinfoID , java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.String solicitantNom , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.pinfoID=pinfoID;
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
+    this.solicitantNom=solicitantNom;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
@@ -100,10 +104,11 @@ public class PinfoJPA implements Pinfo {
     this.missatgeSolicitant=missatgeSolicitant;
 }
   /** Constructor sense valors autoincrementals */
-  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
+  public PinfoJPA(java.lang.Long incidenciaID , java.lang.String entitat , java.lang.String solicitantNIF , java.lang.String solicitantNom , java.lang.Long estat , java.lang.Long fitxerID , java.lang.Long fitxerfirmatID , java.lang.String portafibid , java.lang.String destinatariNIF , java.lang.String destinatariNom , java.lang.String missatgePinbal , java.lang.String logpPnbal , java.lang.String missatgeSolicitant) {
     this.incidenciaID=incidenciaID;
     this.entitat=entitat;
     this.solicitantNIF=solicitantNIF;
+    this.solicitantNom=solicitantNom;
     this.estat=estat;
     this.fitxerID=fitxerID;
     this.fitxerfirmatID=fitxerfirmatID;
@@ -123,6 +128,7 @@ public class PinfoJPA implements Pinfo {
     this.setIncidenciaID(__bean.getIncidenciaID());
     this.setEntitat(__bean.getEntitat());
     this.setSolicitantNIF(__bean.getSolicitantNIF());
+    this.setSolicitantNom(__bean.getSolicitantNom());
     this.setEstat(__bean.getEstat());
     this.setFitxerID(__bean.getFitxerID());
     this.setFitxerfirmatID(__bean.getFitxerfirmatID());
@@ -164,6 +170,13 @@ public class PinfoJPA implements Pinfo {
 	};
 	public void setSolicitantNIF(java.lang.String _solicitantNIF_) {
 		this.solicitantNIF = _solicitantNIF_;
+	};
+
+	public java.lang.String getSolicitantNom() {
+		return(solicitantNom);
+	};
+	public void setSolicitantNom(java.lang.String _solicitantNom_) {
+		this.solicitantNom = _solicitantNom_;
 	};
 
 	public java.lang.Long getEstat() {
@@ -308,6 +321,7 @@ public class PinfoJPA implements Pinfo {
     __tmp.setIncidenciaID(__bean.getIncidenciaID());
     __tmp.setEntitat(__bean.getEntitat());
     __tmp.setSolicitantNIF(__bean.getSolicitantNIF());
+    __tmp.setSolicitantNom(__bean.getSolicitantNom());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setFitxerID(__bean.getFitxerID());
     __tmp.setFitxerfirmatID(__bean.getFitxerfirmatID());

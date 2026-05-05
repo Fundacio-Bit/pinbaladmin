@@ -112,6 +112,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.SOLICITANTNOM)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="pinfo.solicitantNom" var="solicitantNom" />
+              <fmt:message key="genapp.form.searchby" var="cercapersolicitantNom" >                
+                 <fmt:param value="${solicitantNom}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${solicitantNom}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapersolicitantNom}" path="solicitantNom" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,PinfoFields.ESTAT)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
               <%-- FILTRE NUMERO SELECT MULTIPLE --%>

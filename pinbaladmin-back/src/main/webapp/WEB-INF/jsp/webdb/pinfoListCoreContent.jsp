@@ -50,6 +50,11 @@
           ${pinfo.solicitantNIF}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.SOLICITANTNOM)}">
+          <td>
+          ${pinfo.solicitantNom}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,PinfoFields.ESTAT)}">
           <td>
           <c:set var="tmp">${pinfo.estat}</c:set>

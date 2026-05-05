@@ -55,8 +55,8 @@ public class PinfoJPAManager
         return list.toArray(new Pinfo[list.size()]);
     };
 
-    public Pinfo create( java.lang.Long _incidenciaID_, java.lang.String _entitat_, java.lang.String _solicitantNIF_, java.lang.Long _estat_, java.lang.Long _fitxerID_, java.lang.Long _fitxerfirmatID_, java.lang.String _portafibid_, java.lang.String _destinatariNIF_, java.lang.String _destinatariNom_, java.lang.String _missatgePinbal_, java.lang.String _logpPnbal_, java.lang.String _missatgeSolicitant_) throws I18NException {
-        PinfoJPA __bean =  new PinfoJPA(_incidenciaID_,_entitat_,_solicitantNIF_,_estat_,_fitxerID_,_fitxerfirmatID_,_portafibid_,_destinatariNIF_,_destinatariNom_,_missatgePinbal_,_logpPnbal_,_missatgeSolicitant_);
+    public Pinfo create( java.lang.Long _incidenciaID_, java.lang.String _entitat_, java.lang.String _solicitantNIF_, java.lang.String _solicitantNom_, java.lang.Long _estat_, java.lang.Long _fitxerID_, java.lang.Long _fitxerfirmatID_, java.lang.String _portafibid_, java.lang.String _destinatariNIF_, java.lang.String _destinatariNom_, java.lang.String _missatgePinbal_, java.lang.String _logpPnbal_, java.lang.String _missatgeSolicitant_) throws I18NException {
+        PinfoJPA __bean =  new PinfoJPA(_incidenciaID_,_entitat_,_solicitantNIF_,_solicitantNom_,_estat_,_fitxerID_,_fitxerfirmatID_,_portafibid_,_destinatariNIF_,_destinatariNom_,_missatgePinbal_,_logpPnbal_,_missatgeSolicitant_);
         return create(__bean);
     }
 

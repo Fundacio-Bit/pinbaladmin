@@ -1,11 +1,16 @@
 package org.fundaciobit.pinbaladmin.logic;
 
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleFlowTemplate;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.PinfoService;
+import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 
@@ -31,5 +36,8 @@ public interface PinfoLogicaService extends PinfoService {
 //	public List<StringKeyValue> getEntitats() throws I18NException;
 
 	public void enviarMissatgeSolicitant(UserInfo operador, Long pinfoID)  throws I18NException;
+
+    List<Pinfo> selectFullWithIncidencia(Where where, OrderBy[] orderBy, Integer itemsPerPage, int inici)
+            throws I18NException;
 	
 }

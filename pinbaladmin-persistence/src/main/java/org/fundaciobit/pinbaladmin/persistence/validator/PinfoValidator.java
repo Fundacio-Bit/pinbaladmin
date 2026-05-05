@@ -49,6 +49,14 @@ public class PinfoValidator<I extends Pinfo>
       }
     }
 
+    if (__vr.getFieldErrorCount(SOLICITANTNOM) == 0) {
+      java.lang.String __solicitantnom = __target__.getSolicitantNom();
+      if (__solicitantnom!= null && __solicitantnom.length() > 255) {
+        __vr.rejectValue(SOLICITANTNOM, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(SOLICITANTNOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(PORTAFIBID) == 0) {
       java.lang.String __portafibid = __target__.getPortafibid();
       if (__portafibid!= null && __portafibid.length() > 50) {

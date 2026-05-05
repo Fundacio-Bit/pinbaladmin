@@ -261,6 +261,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		Long incidenciaID = it.getIncidenciaTecnicaID();
 		Long estat = Constants.ESTAT_PINFO_CREANT;
 		String solicitantNIF = (String) request.getSession().getAttribute("usuariNIF");
+		String solicitantNom = (String) request.getSession().getAttribute("usuariNom");
 		
 		// String entitat = request.getParameter("incidenciaTecnica.entitatid");
 		// log.info("Entitat: " + entitat);
@@ -281,7 +282,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		String logPinbal = null;
 		String missatgeSolicitant = null;
 		
-		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal, logPinbal, missatgeSolicitant);
+		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, solicitantNom, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal, logPinbal, missatgeSolicitant);
 		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
 		
 		log.info("Creant Pinfo " + Pinfo.getPinfoID());

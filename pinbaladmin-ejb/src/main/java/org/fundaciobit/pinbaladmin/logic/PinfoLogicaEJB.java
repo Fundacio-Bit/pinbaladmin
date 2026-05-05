@@ -36,6 +36,8 @@ import org.fundaciobit.apisib.apiflowtemplatesimple.v1.beans.FlowTemplateSimpleS
 import org.fundaciobit.apisib.core.exceptions.AbstractApisIBException;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
+import org.fundaciobit.genapp.common.query.OrderBy;
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.PinfoEJB;
@@ -53,6 +55,7 @@ import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
+import org.hibernate.Hibernate;
 
 /**
  * 
@@ -683,4 +686,26 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 
 	}
 	
+
+
+	@Override
+    public List<Pinfo> selectFullWithIncidencia(Where where, final OrderBy[] orderBy,
+            final Integer itemsPerPage, final int inici) throws I18NException {
+ 
+        List<Pinfo> list;
+        if (itemsPerPage == null) {
+            list = this.select(where, orderBy);
+        } else {
+            list = this.select(where, inici, itemsPerPage, orderBy);
+        }
+ 
+        for (Pinfo pinfo : list) {
+            PinfoJPA pinfoJPA = (PinfoJPA) pinfo;
+            Hibernate.initialize(pinfoJPA.getIncidenciaTecnica());
+        }
+ 
+        return list;
+    }
+
+
 }
