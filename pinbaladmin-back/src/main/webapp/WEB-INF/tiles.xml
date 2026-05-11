@@ -276,9 +276,9 @@
     </definition>
 
 
-    <definition name="actualitzarserveis" extends="operador_base">
+<!--     <definition name="actualitzarserveis" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/actualitzarserveis.jsp" />
-    </definition>
+    </definition> -->
 
 
     <definition name="eventFormOperador" template="/WEB-INF/jsp/layout/onlycontentlayout.jsp">
@@ -345,9 +345,9 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/queesticfent.jsp" />
     </definition>
     
-    <definition name="estadistiques" extends="operador_base">
+<!--     <definition name="estadistiques" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/estadistiques.jsp" />
-    </definition>
+    </definition> -->
 
     <definition name="tramitview" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/tramitView.jsp" />
@@ -605,6 +605,92 @@
      
     <definition name="option2Admin" extends="admin">
         <put-attribute name="contingut" value="/WEB-INF/jsp/admin/admin.jsp" />
+    </definition>
+    
+    <!-- Admin controllers -->
+    
+    <definition name="actualitzarserveis_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/admin/actualitzarserveis.jsp" />
+    </definition>
+    
+    <definition name="estadistiques_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/admin/estadistiques.jsp" />
+    </definition>
+    
+    <definition name="infocorreuscedents_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/admin/infoCorreusCedents.jsp" />
+    </definition>
+    
+    <definition name="solicitudFormWebDB_admin" extends="admin">
+        <put-attribute name="titol" value="solicitud.solicitud" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudForm.jsp" />
+    </definition>
+    
+    <definition name="solicitudListWebDB_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/solicitudList.jsp" />
+    </definition>
+    
+    <definition name="serveiFormWebDB_admin" extends="admin">
+        <put-attribute name="titol" value="servei.servei" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiForm.jsp" />
+    </definition>
+    
+    <definition name="serveiListWebDB_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/serveiList.jsp" />
+    </definition>
+    
+    <definition name="fitxerForm_admin" extends="admin">
+        <put-attribute name="titol" value="fitxer.fitxer" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/fitxerForm.jsp" />
+    </definition>
+    
+    <definition name="fitxerList_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/fitxerList.jsp" />
+    </definition>
+    
+    <definition name="entitatFormWebDB_admin" extends="admin">
+        <put-attribute name="titol" value="entitat.entitat" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatForm.jsp" />
+    </definition>
+    
+    <definition name="entitatListWebDB_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatList.jsp" />
+    </definition>
+    
+    <definition name="organFormAdmin" extends="admin">
+        <put-attribute name="titol" value="organ.organ" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organForm.jsp" />
+    </definition>
+    
+    <definition name="organListAdmin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/organList.jsp" />
+    </definition>
+    
+    <definition name="entitatServeiFormWebDB_admin" extends="admin">
+        <put-attribute name="titol" value="entitatServei.entitatServei" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatServeiForm.jsp" />
+    </definition>
+    
+    <definition name="entitatServeiListWebDB_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/entitatServeiList.jsp" />
+    </definition>
+    
+    <definition name="documentCedentForm_admin" extends="admin">
+        <put-attribute name="titol" value="documentCedent.documentCedent" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/documentCedentForm.jsp" />
+    </definition>
+    
+    <definition name="documentCedentList_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/documentCedentList.jsp" />
+    </definition>
+    
+    <definition name="documentEntitatForm_admin" extends="admin">
+        <put-attribute name="titol" value="documentEntitat.documentEntitat" />
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/documentEntitatForm.jsp" />
+    </definition>
+    
+    <definition name="documentEntitatList_admin" extends="admin">
+        <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/documentEntitatList.jsp" />
     </definition>
     
     <!--  ===========  DESENVOLUPAMENT ================== -->

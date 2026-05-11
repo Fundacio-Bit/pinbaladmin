@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                                    
+                                        
+    
     
     
     
@@ -8,7 +9,8 @@
     
     
     <wb-module deploy-name="pinbaladmin-front-2.0.0">
-                                                                        
+                                                                                
+        
         
         
         
@@ -17,7 +19,8 @@
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -26,7 +29,8 @@
         
         
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -35,7 +39,8 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -47,13 +52,8 @@
         <dependent-module archiveName="pinbaladmin-commons-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pinbaladmin-commons/pinbaladmin-commons">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="genapp-web-2.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/genapp-web/genapp-web">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="genapp-core-2.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/genapp-core/genapp-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-                                                                        
+                                                                                
+        
         
         
         
@@ -62,7 +62,8 @@
         
         
         <property name="context-root" value="pinbaladmin-front"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -71,7 +72,8 @@
         
         
         <property name="java-output-path" value="/pinbaladmin-front/target/classes"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -80,7 +82,8 @@
         
         
         <property name="component.exclusion.patterns" value="**/gson*redhat*.jar"/>
-                                                                    
+                                                                            
+    
     
     
     
@@ -89,7 +92,8 @@
     
     
     </wb-module>
-                                
+                                    
+
 
 
 

@@ -16,12 +16,6 @@
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/solicitudactiva/list"/>"> <span
-				style="${(fn:contains(url, '/solicitudactiva'))? "font-weight:bold;" : ""}"><fmt:message
-						key="solicitud.solicitudactiva.plural" /></span>
-		</a></li>
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/fusionarprocediments/elegirProcediments"/>"> <span
 				style="${(fn:contains(url, '/fusionarprocediments'))? "font-weight:bold;" : ""}"><fmt:message
 						key="fusionarprocediments" /></span>
@@ -29,12 +23,6 @@
 
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/solicituddesdefitxer/nou"/>"> <span
-				style="${(fn:contains(url, '/solicituddesdefitxer/'))? "font-weight:bold;" : ""}">Sol·licitud
-					Local des de Fitxer</span>
-		</a></li>
 
 		<li style="list-style-type: disc; list-style-position: inside;">
 		<a href="<c:url value="/operador/solicitudlocal/list"/>"> <span
@@ -68,13 +56,6 @@
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 		
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/solicitudestataldesdefitxers/nou"/>">
-				<span
-				style="${(fn:contains(url, '/solicitudestataldesdefitxers'))? "font-weight:bold;" : ""}">Sol·licitud
-					Estatal des de Fitxer</span>
-		</a></li>
-
 		<li style="list-style-type: disc; list-style-position: inside;">
 		<a href="<c:url value="/operador/solicitudestatal/list"/>"> <span
 				style="${(fn:contains(url, '/solicitudestatal/'))? "font-weight:bold;" : ""}"><fmt:message
@@ -150,7 +131,6 @@
 		
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
-
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/queesticfent/list"/>"> <span
 				style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
@@ -158,149 +138,11 @@
 
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/estadistiques/list"/>"> <span
-				style="${(fn:contains(url, '/operador/estadistiques'))? "font-weight:bold;" : ""}">Estadístiques</span>
-		</a></li>
-		
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-	
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/servei/list"/>"> <span
-				style="${(fn:contains(url, '/servei/'))? "font-weight:bold;" : ""}"><fmt:message
-						key="servei.servei.plural" /></span>
-		</a></li>
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/actualitzarserveis"/>"> <span
-				style="${(fn:contains(url, '/operador/actualitzarserveis'))? "font-weight:bold;" : ""}">Actualitzar
-					Serveis</span>
-		</a></li>
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/correucedents/list"/>"> <span
-				style="${(fn:contains(url, '/operador/correucedents'))? "font-weight:bold;" : ""}">Correus cedents</span>
-		</a></li>
-
 		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/eventsenviats/list"/>"> <span
 				style="${(fn:contains(url, '/operador/eventsenviats'))? "font-weight:bold;" : ""}">Correus enviats</span>
 		</a></li>
 
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/entitat/list"/>"> <span
-				style="${(fn:contains(url, 'entitat'))? "font-weight:bold;" : ""}"><fmt:message
-						key="entitat.entitat.plural" /></span>
-		</a></li>
-
-        <li style="list-style-type: disc; list-style-position: inside;"><a
-            href="<c:url value="/operador/organ/list"/>"> <span
-                style="${(fn:contains(url, 'organ'))? "font-weight:bold;" : ""}"><fmt:message
-                        key="organ.organ.plural" /></span>
-        </a></li>
-<%-- 
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/area/list"/>"> <span
-				style="text-decoration:line-through;${(fn:contains(url, 'area'))? "font-weight:bold;" : ""} "><fmt:message
-						key="area.area.plural" />(Deprecat)</span>
-		</a></li>
-		
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/departament/list"/>"> <span
-				style="text-decoration:line-through;${(fn:contains(url, 'departament'))? "font-weight:bold;" : ""}"><fmt:message
-						key="departament.departament.plural" />(Deprecat)</span>
-		</a></li>
- --%>
-
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/cedent/list"/>"> <span
-				style="${(fn:contains(url, '/cedent/'))? "font-weight:bold;" : ""}"><fmt:message
-						key="entitatServei.entitatServei.plural" /></span>
-		</a></li>
-		
-		
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/fitxer/list"/>"> <span
-				style="${(fn:contains(url, '/fitxer/'))? "font-weight:bold;" : ""}"><fmt:message
-						key="gestio.fitxers" /></span>
-		</a></li>
-
-
-<%-- 		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/tiquet/list"/>"> <span
-				style="text-decoration:line-through;${(fn:contains(url, '/tiquet/'))? "font-weight:bold;" : ""}"><fmt:message
-						key="tiquet.tiquet.plural" />(Deprecat)</span>
-		</a></li>
-
- --%>
-<%-- 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/email/list"/>"> <span
-				style="${(fn:contains(url, '/email/'))? "font-weight:bold;" : ""}">Gestió
-					de Correus</span>
-		</a></li>
-
- --%>
-<%-- 
-		<hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-		<li style="list-style-type: disc; list-style-position: inside;"><a
-			href="<c:url value="/operador/borrarcedentdegrup/list"/>"> <span
-				style="${(fn:contains(url, '/operador/borrarcedentdegrup'))? "font-weight:bold;" : ""}">Descartar
-					Cedent de Grup</span>
-		</a></li>
-
- --%>
-	
-
-<%--         <hr style="margin-top: 6px; margin-bottom: 6px;" />
-
-
-        <li style="list-style-type: disc; list-style-position: inside;"><a
-            href="<c:url value="/operador/tramita/list"/>"> <span
-                style="${(fn:contains(url, '/operador/tramit'))? "font-weight:bold;" : ""}">Tramit Sistra</span>
-        </a></li> --%>
-
-
-
-		<%--
-    <hr  style="margin-top: 6px;  margin-bottom: 6px;" />
-    <li style="list-style-type: disc; list-style-position: inside;">
-      <a href="<c:url value="/common/option1"/>">
-        <span style="${(fn:contains(url, 'option1'))? "font-weight: bold;" : ""}">Menú Option 1</span>
-      </a>
-    </li>
---%>
-		<%-- Example with security: virtual roles  --%>
-		<%--
-   <sec:authorize access="hasAnyRole('ROLE_SOLI', 'ROLE_DEST', 'ROLE_COLA', 'ROLE_DELE')">
-      <hr  style="margin-top: 6px;  margin-bottom: 6px;" />
-      <li style="list-style-type: disc; list-style-position: inside;">
-       <a href="<c:url value="/common/rebreAvis/list/1"/>" >
-       <span style="${(fn:contains(url, 'optionxxxxx/') && fn:contains(url, '/list'))? "font-weight: bold;" : ""}" >
-       Option XXXXX</span></a></li>
-   </sec:authorize>
-    --%>
-		<%--
-    <hr  style="margin-top: 6px;  margin-bottom: 6px;" />
-    <li style="list-style-type: disc; list-style-position: inside;">
-        <a target="_blank" href="/common/option2">
-        Last Menu Option (other page)
-        </a>
-    </li>
-   --%>
 	</ul>
 </div>
 

@@ -22,12 +22,13 @@ import org.fundaciobit.pluginsib.core.v3.utils.PluginsManager;
 import org.fundaciobit.pluginsib.exportdata.IExportDataPlugin;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
-import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+// import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 //import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.utils.I18NLogicUtils;
 import org.fundaciobit.pinbaladmin.logic.utils.LogicUtils;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
 
 //import org.fundaciobit.pluginsib.core.utils.PluginsManager;
 //import org.fundaciobit.pluginsib.exportdata.IExportDataPlugin;

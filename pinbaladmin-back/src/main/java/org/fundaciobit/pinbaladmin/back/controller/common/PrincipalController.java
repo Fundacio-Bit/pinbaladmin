@@ -66,8 +66,12 @@ public class PrincipalController {
             */
             if ("operador".equals(pipella)) {
                 //return new ModelAndView("solicitudListWebDB_operador");
-                return new ModelAndView(new RedirectView("/operador/solicitudactiva/list", true));
+                return new ModelAndView(new RedirectView("/operador/solicitudlocal/list", true));
                 //return new ModelAndView(new RedirectView("/operador/llistacorreus/list", true));
+            }
+
+            if ("admin".equals(pipella)) {
+                return new ModelAndView("admin");
             }
 
             if ("webdb".equals(pipella)) {

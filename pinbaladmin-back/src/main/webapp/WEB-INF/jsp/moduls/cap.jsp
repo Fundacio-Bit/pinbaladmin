@@ -122,25 +122,27 @@ header {
 						</sec:authorize>
 						
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<a class="rol-item ${(pipella eq 'webdb')?'active' : '' }" 
-							href="<c:url value="/canviarPipella/webdb" />">
-								<fmt:message key="webdb" />
-							</a>
-						</sec:authorize>
-						
-						<c:if test="${prefixLowercase}:isDesenvolupament()}">
-							<a class="rol-item ${(pipella eq 'desenvolupament')?'active' : '' }" href="<c:url value="/canviarPipella/desenvolupament" />">
-								<fmt:message key="desenvolupament" />
-							</a>
-						</c:if>
-						
-					</div>
-				</li>
-                             
-                             
-                             
-                             
-				
+						<a class="rol-item ${(pipella eq 'admin')?'active' : '' }" 
+						href="<c:url value="/canviarPipella/admin" />">
+							<fmt:message key="admin" />
+						</a>
+					</sec:authorize>
+					
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<a class="rol-item ${(pipella eq 'webdb')?'active' : '' }" 
+						href="<c:url value="/canviarPipella/webdb" />">
+							<fmt:message key="webdb" />
+						</a>
+					</sec:authorize>
+					
+					<c:if test="${prefixLowercase}:isDesenvolupament()}">
+						<a class="rol-item ${(pipella eq 'desenvolupament')?'active' : '' }" href="<c:url value="/canviarPipella/desenvolupament" />">
+							<fmt:message key="desenvolupament" />
+						</a>
+					</c:if>
+					
+				</div>
+			</li>
 
 
 				<%--  MENU D'IDIOMES, ELS AGAFA DE LA BASE DE DADES--%>
