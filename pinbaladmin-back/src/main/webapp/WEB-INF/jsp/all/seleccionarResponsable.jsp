@@ -181,6 +181,18 @@
 			</div>
 		</div>
 
+		<!-- Avís sobre el responsable -->
+		<div class="aviso-info">
+			<h5><i class="fas fa-question-circle"></i> Qui ha de firmar aquesta sol·licitud?</h5>
+			<p style="margin-bottom: 8px;">
+				Selecciona la persona <strong>responsable</strong> que revisarà i firmarà digitalment 
+				aquesta sol·licitud a PortaFIB. Ha de tenir permisos <code style="background: #e3f2fd; padding: 2px 6px; border-radius: 3px;">PFI_USER</code>.
+			</p>
+			<p style="margin-bottom: 0; font-size: 12px;">
+				<i class="fas fa-clock"></i> Aquesta persona rebrà un correu electrònic per firmar el document.
+			</p>
+		</div>
+
 		<div class="filter-container">
 			<label for="filtro-responsables">
 				<i class="fas fa-search"></i> <fmt:message key="tramit.pinfo.responsable.buscar"/>
@@ -195,9 +207,10 @@
 					<div class="element responsable-item">
 						<input type="radio" name="responsable"
 							id="responsable-${responsable.nif}" value="${responsable.nif}" />
-						<label for="responsable-${responsable.nif}">${responsable.nif}
-							- ${responsable.nomOcult} - ${responsable.cargo} -
-							${responsable.telefon} - ${responsable.mail} </label>
+						<label for="responsable-${responsable.nif}">
+							${responsable.nif} - ${responsable.nomOcult} - ${responsable.username} - ${responsable.mail}
+							
+						</label>
 					</div>
 				</c:forEach>
 			</div>

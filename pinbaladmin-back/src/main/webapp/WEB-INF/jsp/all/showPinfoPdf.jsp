@@ -119,6 +119,17 @@ canvas {
 				<h3 class="titol-tramit-pinfo"><fmt:message key="tramit.pinfo.pdf.vistaprevia"/> ${pinfo.incidenciaID}</h3>
 			</div>
 		</div>
+		
+		<!-- Avís abans d'enviar -->
+		<div class="aviso-warning" style="max-width: 700px; margin: 0 auto 1.5rem auto;">
+			<h5><i class="fas fa-check-circle"></i> Abans de continuar</h5>
+			<ul style="margin-bottom: 0;">
+				<li>Revisa que tots els permisos del document siguin correctes</li>
+				<li>Comprova que el responsable seleccionat és el correcte</li>
+				<li>Un cop enviat, el document anirà a <strong>PortaFIB</strong> per a la signatura digital</li>
+			</ul>
+		</div>
+		
 		<div class="titol-tramit-pinfo-botonera botonera-pdf">
 			<a href="${urlFirmarPinfo}" class="btn-primary-custom">
 				<i class="fas fa-paper-plane"></i> Enviar a firmar

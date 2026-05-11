@@ -583,6 +583,12 @@ section {
 						</div>
 					</div>
 					
+					<!-- Avís Paso 1: Usuarios -->
+					<div class="aviso-tip">
+						<i class="fas fa-lightbulb"></i>
+						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys 2 caràcters per iniciar la cerca.
+					</div>
+					
 					<div class="input-container user">
 						<div id="cercador-usuaris">
 							<div id="input-usuari-container">
@@ -613,6 +619,12 @@ section {
 						</div>
 					</div>
 					
+					<!-- Avís Paso 2: Procedimientos -->
+					<div class="aviso-tip">
+						<i class="fas fa-lightbulb"></i>
+						<strong>Consell:</strong> Escriu el nom o codi del procediment. Si no apareix el que busques, potser hauries de fer un tramit nou per donar d'alta el procediment.
+					</div>
+					
 					<div class="input-container procediment">
 						<div id="cercador-procediments">
 							<input id="procedimentID" name="procedimentID" type="text"
@@ -640,6 +652,13 @@ section {
 					</div>
 					
 					<div id="subtitle-usuaris" class="sub-title"></div>
+					
+					<!-- Avís Paso 3: Servicios -->
+					<div class="aviso-important">
+						<i class="fas fa-exclamation-circle"></i>
+						<strong>Important:</strong> Marca els serveis que vols sol·licitar a la taula inferior. Els permisos seleccionats s'aplicaran a <strong>tots els usuaris</strong> que has afegit al pas 1.
+						<br><small style="margin-top: 6px; display: block;">Després podràs revisar i eliminar permisos individuals si cal.</small>
+					</div>
 					
 					<div class="input-container servei">
 						<div id="taula-serveis-cont">

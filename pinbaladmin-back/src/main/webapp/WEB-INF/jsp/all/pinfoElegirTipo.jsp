@@ -127,6 +127,16 @@
 			</p>
 		</div>
 
+		<!-- Avís informatiu sobre Alta/Baja -->
+		<div class="aviso-info" style="max-width: 700px; margin: 0 auto 2rem auto;">
+			<i class="fas fa-question-circle"></i>
+			<strong>Què significa cada opció?</strong>
+			<ul style="margin-top: 8px;">
+				<li><strong>ALTA DE PERMISOS:</strong> Sol·licitar nous accessos per a usuaris que necessiten utilitzar serveis que no tenen actius.</li>
+				<li><strong>BAIXA DE PERMISOS:</strong> Retirar accessos que actualment tenen els usuaris.</li>
+			</ul>
+		</div>
+
 		<div id="msgAfegirPinfoData">
 			<a href="<c:url value="/public/pinfodata/crearalta"/>" class="btn-choice btn-alta">
 				<i class="fas fa-user-plus"></i>
