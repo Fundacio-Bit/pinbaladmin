@@ -782,13 +782,13 @@ public class PinfoDataPublicController extends PinfoDataController {
 		log.info("pinfoID: " + pinfoID);
 		
 		//Obtenir els procediments dels PinfoDatas:
-		List<Responsable> responsablesList = getLlistaResponsablesProcediments(pinfoID);
+		List<Responsable> responsablesList = getLlistaResponsables();
 		request.getSession().setAttribute(LLISTA_RESPONSABLES, responsablesList);
 		mav.addObject("responsables", responsablesList);
 		return mav;
 	}
 	
-	private List<Responsable> getLlistaResponsablesProcediments(Long pinfoID) throws I18NException {
+	private List<Responsable> getLlistaResponsables() throws I18NException {
 		
 		List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
 
@@ -825,29 +825,30 @@ public class PinfoDataPublicController extends PinfoDataController {
 				String telefon = u.getPhoneNumber();
 				String mail = u.getEmail();
 				String nomOcult = u.getFullName();
+				String username = u.getUsername();
 
 				
-				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + rol + " - " + telefon + " - " + mail + " - "
+				log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + username + " - " + mail + " - "
 						+ nomOcult);
 
-				Responsable responsable = new Responsable(nif, nom, ape1, ape2, rol, telefon, mail, nomOcult);
+			Responsable responsable = new Responsable(nif, nom, ape1, ape2, rol, telefon, mail, nomOcult, username);
 
-				responsablesList.add(responsable);
-			}
-		} catch (Exception e) {
-			log.error("No hem trobat usuaris amb rol " + rol + ": " + e.getMessage());
+			responsablesList.add(responsable);
 		}
+	} catch (Exception e) {
+		log.error("No hem trobat usuaris amb rol " + rol + ": " + e.getMessage());
+	}
 
-		log.info("Total responsables " + rol + ": " + responsablesList.size());
-		
-		return responsablesList;
-	}
+	log.info("Total responsables " + rol + ": " + responsablesList.size());
 	
-	private boolean isValidNIF(String nif) {
-		//RegEx para saber si el NIF es valido.
-		String nifRegex = "^[0-9]{8}[A-Za-z]$";
-		return nif.matches(nifRegex);
-	}
+	return responsablesList;
+}
+
+private boolean isValidNIF(String nif) {
+	//RegEx para saber si el NIF es valido.
+	String nifRegex = "^[0-9]{8}[A-Za-z]$";
+	return nif.matches(nifRegex);
+}
 
 //	private List<Responsable> getLlistaResponsablesProcedimentsOld(Long pinfoID) throws I18NException {
 //
@@ -915,9 +916,9 @@ public class PinfoDataPublicController extends PinfoDataController {
 			String nomOcult = info.getFullName();
 
 			log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + carrec + " - " + telefon + " - " + mail
-					+ " - " + nomOcult);
+					+ " - " + nomOcult + " - " + username);
 
-			Responsable responsable = new Responsable(nif, nom, ape1, ape2, carrec, telefon, mail, nomOcult);
+			Responsable responsable = new Responsable(nif, nom, ape1, ape2, carrec, telefon, mail, nomOcult, username);
 
 			responsablesList.add(responsable);
 		} else {

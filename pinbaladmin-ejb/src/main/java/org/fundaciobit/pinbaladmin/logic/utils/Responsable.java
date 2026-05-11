@@ -9,9 +9,10 @@ public class Responsable {
 	private String telefon;
 	private String mail;
 	private String nomOcult;
+	private String username;
 
 	public Responsable(String nif, String nom, String ape1, String ape2, String cargo, String telefon, String mail,
-			String nomOcult) {
+			String nomOcult, String username) {
 		this.nif = nif;
 		this.nom = nom;
 		this.ape1 = ape1;
@@ -20,6 +21,7 @@ public class Responsable {
 		this.telefon = telefon;
 		this.mail = mail;
 		this.nomOcult = nomOcult;
+		this.username = username;
 	}
 
 	//Constructor per defecte
@@ -32,6 +34,7 @@ public class Responsable {
 		this.telefon = null;
 		this.mail = null;
 		this.nomOcult = nomComplet;
+		this.username = null;
 	}
 	
 	public String getNif() {
@@ -96,5 +99,13 @@ public class Responsable {
 
 	public void setNomOcult(String nomOcult) {
 		this.nomOcult = nomOcult;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

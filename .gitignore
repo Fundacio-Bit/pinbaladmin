@@ -156,3 +156,5 @@ hs_err_pid*
 /scripts/.project
 /pinbaladmin-front/.settings/org.eclipse.jdt.apt.core.prefs
 /scripts/sqlgenerator/.settings/*.prefs
+/scripts/.settings/*.prefs
+*.prefs

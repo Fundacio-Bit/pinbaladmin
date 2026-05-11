@@ -476,8 +476,10 @@ public class PinfoPublicController extends PinfoController {
 	public String viewEventsPinfo(@PathVariable("pinfoID") Long pinfoID) {
 		PinfoJPA pinfo = pinfoLogicaEjb.findByPrimaryKey(pinfoID);
 		Long incidenciaID = pinfo.getIncidenciaID();
-		log.info("viewEventsPinfo: pinfoID=" + pinfoID + ", incidenciaID=" + incidenciaID);
-		return "redirect:/public/eventincidenciatecnica/veureevents/" + incidenciaID;
+		IncidenciaTecnicaJPA it = incidenciaTecnicaLogicaEjb.findByPrimaryKey(incidenciaID);
+		String destinatari = "CONTACTE|" + it.getContacteNom();
+		log.info("viewEventsPinfo: pinfoID=" + pinfoID + ", incidenciaID=" + incidenciaID + ", destinatari=" + destinatari);
+		return redirectToEventsPinfo(incidenciaID, destinatari);
 	}
 
 	@Override
