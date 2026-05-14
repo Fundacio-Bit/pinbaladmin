@@ -171,6 +171,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMAEMAIL);
   }
 
+  public LongField SOLICITUDFUSIONADAID() {
+    return new LongField(getQueryPath(), SolicitudFields.SOLICITUDFUSIONADAID);
+  }
+
 
 
   @Override

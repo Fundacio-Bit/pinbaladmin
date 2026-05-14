@@ -476,6 +476,15 @@ public abstract class AbstractEventController<T> extends EventController impleme
 				itemID = HibernateFileUtil.decryptFileID(itemStrID);
 				log.info("/veureevents public: itemID => " + itemID + " - destinatariEnc => " + destinataritEnc);
 				
+				// Si es una solicitud fusionada, redirigir a la solicitud final activa
+				if (isSolicitud() && itemID != null) {
+					Long itemIDFinal = solicitudLogicEjb.obtenerSolicitudFinalActiva(itemID);
+					if (itemIDFinal != null && !itemIDFinal.equals(itemID)) {
+						log.info("Solicitud fusionada detectada: " + itemID + " → redirigiendo a solicitud final: " + itemIDFinal);
+						itemID = itemIDFinal;
+					}
+				}
+				
 				if (destinataritEnc == null || destinataritEnc.trim().length() == 0) {
 					log.info("/veureevents public: DESTINATARI NULL");
 					destinatari = "";

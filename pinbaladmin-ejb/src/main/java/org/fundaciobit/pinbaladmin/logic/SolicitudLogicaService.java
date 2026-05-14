@@ -84,6 +84,16 @@ public interface SolicitudLogicaService extends SolicitudService {
 	void crearInfoMadridFromSolicitud(Solicitud solicitud);
 
 	void crearOActualitzarSolicitudPinbal(Long soliID);
+
+	/**
+	 * Obtiene el ID de la solicitud final activa siguiendo la cadena de fusiones.
+	 * Si la solicitud ha sido fusionada varias veces (1→3→5), devuelve el ID final (5).
+	 * Si la solicitud no ha sido fusionada, devuelve el mismo ID.
+	 * 
+	 * @param solicitudID ID de la solicitud original
+	 * @return ID de la solicitud final activa, o el mismo ID si no ha sido fusionada
+	 */
+	public Long obtenerSolicitudFinalActiva(Long solicitudID);
 	
 
 //	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;

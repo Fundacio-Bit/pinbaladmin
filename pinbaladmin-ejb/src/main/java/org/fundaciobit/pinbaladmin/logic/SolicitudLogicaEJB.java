@@ -1285,4 +1285,71 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             return null; // o lanzar excepción si prefieres
         }
     }
+
+	/**
+	 * Obtiene el ID de la solicitud final activa siguiendo la cadena de fusiones.
+	 * Si la solicitud ha sido fusionada varias veces (1→3→5), devuelve el ID final (5).
+	 * Si la solicitud no ha sido fusionada, devuelve el mismo ID.
+	 * 
+	 * @param solicitudID ID de la solicitud original
+	 * @return ID de la solicitud final activa, o el mismo ID si no ha sido fusionada
+	 */
+	@Override
+	public Long obtenerSolicitudFinalActiva(Long solicitudID) {
+		return obtenerSolicitudFinalActivaRecursivo(solicitudID, solicitudID, new HashSet<>());
+	}
+	
+	/**
+	 * Método recursivo auxiliar para seguir la cadena de fusiones.
+	 * 
+	 * @param solicitudID ID actual a procesar
+	 * @param solicitudOriginalID ID original (para logging)
+	 * @param visitados Set de IDs ya visitados para detectar ciclos
+	 * @return ID de la solicitud final activa
+	 */
+	private Long obtenerSolicitudFinalActivaRecursivo(Long solicitudID, Long solicitudOriginalID, Set<Long> visitados) {
+		if (solicitudID == null) {
+			return null;
+		}
+		
+		// Protección contra ciclos reales: si ya hemos visitado este ID, hay un ciclo
+		if (visitados.contains(solicitudID)) {
+			log.error("Ciclo detectado en cadena de fusiones para solicitud ID " + solicitudOriginalID 
+				+ ". ID repetido: " + solicitudID);
+			return solicitudID;
+		}
+		visitados.add(solicitudID);
+		
+		try {
+			SolicitudJPA solicitud = findByPrimaryKey(solicitudID);
+			
+			if (solicitud == null) {
+				log.warn("Solicitud no encontrada con ID: " + solicitudID);
+				return solicitudID;
+			}
+			
+			// Si no está fusionada, esta es la solicitud final activa
+			if (solicitud.getEstatSolicitud() != Constants.SOLI_ESTAT_FUSIONADA) {
+				if (!solicitudID.equals(solicitudOriginalID)) {
+					log.info("Solicitud ID " + solicitudOriginalID + " → Solicitud final activa ID " 
+						+ solicitudID + " (fusiones: " + (visitados.size() - 1) + ")");
+				}
+				return solicitudID;
+			}
+			
+			// Si está fusionada pero no tiene ID de destino
+			Long fusionadaEnID = solicitud.getSolicitudFusionadaID();
+			if (fusionadaEnID == null) {
+				log.warn("Solicitud ID " + solicitudID + " está marcada como fusionada pero no tiene solicitudFusionadaID");
+				return solicitudID;
+			}
+			
+			// Seguir la cadena recursivamente
+			return obtenerSolicitudFinalActivaRecursivo(fusionadaEnID, solicitudOriginalID, visitados);
+			
+		} catch (Exception e) {
+			log.error("Error obteniendo solicitud final activa para ID " + solicitudID + ": " + e.getMessage(), e);
+			return solicitudID;
+		}
+	}
 }

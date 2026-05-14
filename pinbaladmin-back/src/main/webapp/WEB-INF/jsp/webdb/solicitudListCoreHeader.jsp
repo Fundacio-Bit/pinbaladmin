@@ -132,6 +132,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.TITULARFIRMAEMAIL)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.SOLICITUDFUSIONADAID)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

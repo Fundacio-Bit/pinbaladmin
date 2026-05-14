@@ -494,6 +494,28 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long solicitudFusionadaIDDesde;
+
+  public java.lang.Long getSolicitudFusionadaIDDesde() {
+    return this.solicitudFusionadaIDDesde;
+  }
+
+  public void setSolicitudFusionadaIDDesde(java.lang.Long solicitudFusionadaIDDesde) {
+    this.solicitudFusionadaIDDesde = solicitudFusionadaIDDesde;
+  }
+
+
+  private java.lang.Long solicitudFusionadaIDFins;
+
+  public java.lang.Long getSolicitudFusionadaIDFins() {
+    return this.solicitudFusionadaIDFins;
+  }
+
+  public void setSolicitudFusionadaIDFins(java.lang.Long solicitudFusionadaIDFins) {
+    this.solicitudFusionadaIDFins = solicitudFusionadaIDFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -542,6 +564,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.titularFirmaNom = __toClone.titularFirmaNom;
     this.titularFirmaLlinatges = __toClone.titularFirmaLlinatges;
     this.titularFirmaEmail = __toClone.titularFirmaEmail;
+    this.solicitudFusionadaIDDesde = __toClone.solicitudFusionadaIDDesde;
+    this.solicitudFusionadaIDFins = __toClone.solicitudFusionadaIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;

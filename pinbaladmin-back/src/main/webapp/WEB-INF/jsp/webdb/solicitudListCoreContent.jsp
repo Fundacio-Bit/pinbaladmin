@@ -255,6 +255,11 @@
           ${solicitud.titularFirmaEmail}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
+          <td>
+          ${solicitud.solicitudFusionadaID}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

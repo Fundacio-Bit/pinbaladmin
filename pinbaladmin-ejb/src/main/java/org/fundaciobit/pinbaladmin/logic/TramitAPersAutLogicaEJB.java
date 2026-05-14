@@ -203,6 +203,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long contacteTitularID = null;
 		Long portafibID = null;
 		Long infoMadridID = null;
+		Long solicitudFusionadaID = null;
 
         //Camps a obtenir
         String procedimentCodi = null;
@@ -462,7 +463,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel, creador, operador,
 				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
-				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail);
+				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail, solicitudFusionadaID);
 
 		try {
 	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soliJpa);

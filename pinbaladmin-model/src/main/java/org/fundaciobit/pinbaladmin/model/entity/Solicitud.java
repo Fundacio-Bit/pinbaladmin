@@ -122,6 +122,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getTitularFirmaEmail();
 	public void setTitularFirmaEmail(java.lang.String _titularFirmaEmail_);
 
+	public java.lang.Long getSolicitudFusionadaID();
+	public void setSolicitudFusionadaID(java.lang.Long _solicitudFusionadaID_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

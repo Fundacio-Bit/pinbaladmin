@@ -798,7 +798,7 @@ public class FusionarProcedimentsOperadorController {
 
 		fusionar(solicitudNueva, fusionados, serviciosNuevos, documentos, infoMadrid);
 
-		marcarFusionadas(solicitudes);
+		marcarFusionadas(solicitudes, solicitudNueva.getSolicitudID());
 
 //		return "redirect:/operador/fusionarprocediments/elegirProcediments";
 		return "redirect:/operador/solicitudfullview/view/" + solicitudNueva.getSolicitudID();
@@ -1487,6 +1487,9 @@ public class FusionarProcedimentsOperadorController {
 		Long docSoliID = null;
 		Long solicitudXmlID = null;
 		Long portafibID = null;
+		
+		//Este campo es para saber que solicitud es la fusionada, es para las antiguas. Es null para las nuevas fusiones.
+		Long solicitudFusionadaID = null;
 
 		SolicitudJPA solicitudNueva = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
 				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
@@ -1494,7 +1497,7 @@ public class FusionarProcedimentsOperadorController {
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
 				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
 				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges,
-				titularFirmaEmail);
+				titularFirmaEmail, solicitudFusionadaID);
 
 		return solicitudNueva;
 	}
@@ -1650,12 +1653,14 @@ public class FusionarProcedimentsOperadorController {
 
 	}
 
-	private void marcarFusionadas(List<SolicitudJPA> fusionados) throws I18NException {
+	private void marcarFusionadas(List<SolicitudJPA> fusionados, Long solicitudNuevaID) throws I18NException {
 		// Marcar las solicitudes fusionadas como "fusionadas" en su estado
+		// y guardar el ID de la solicitud nueva en la que se han fusionado
 		for (SolicitudJPA soli : fusionados) {
 			soli.setEstatSolicitud(Constants.SOLI_ESTAT_FUSIONADA);
+			soli.setSolicitudFusionadaID(solicitudNuevaID);
 			solicitudLogicaEjb.update(soli);
-			log.info("Solicitud ID " + soli.getSolicitudID() + " marcada como fusionada.");
+			log.info("Solicitud ID " + soli.getSolicitudID() + " marcada como fusionada en solicitud " + solicitudNuevaID);
 		}
 	}
 

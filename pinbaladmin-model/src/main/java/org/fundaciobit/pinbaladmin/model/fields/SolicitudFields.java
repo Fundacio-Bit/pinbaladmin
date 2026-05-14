@@ -52,6 +52,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField TITULARFIRMANOM = new StringField(_TABLE_MODEL, "titularFirmaNom", "titularfirmanom");
 	 public static final StringField TITULARFIRMALLINATGES = new StringField(_TABLE_MODEL, "titularFirmaLlinatges", "titularfirmallinatges");
 	 public static final StringField TITULARFIRMAEMAIL = new StringField(_TABLE_MODEL, "titularFirmaEmail", "titularfirmaemail");
+	 public static final LongField SOLICITUDFUSIONADAID = new LongField(_TABLE_MODEL, "solicitudFusionadaID", "solicitudfusionadaid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -94,7 +95,8 @@ public interface SolicitudFields extends java.io.Serializable {
     TITULARFIRMANIF,
     TITULARFIRMANOM,
     TITULARFIRMALLINATGES,
-    TITULARFIRMAEMAIL
+    TITULARFIRMAEMAIL,
+    SOLICITUDFUSIONADAID
   };
 
 

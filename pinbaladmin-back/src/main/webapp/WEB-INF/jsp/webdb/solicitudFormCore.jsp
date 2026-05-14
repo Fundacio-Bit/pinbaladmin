@@ -1131,3 +1131,21 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
+        <tr id="solicitud_solicitudFusionadaID_rowid">
+          <td id="solicitud_solicitudFusionadaID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.SOLICITUDFUSIONADAID])?'solicitud.solicitudFusionadaID':__theForm.labels[SolicitudFields.SOLICITUDFUSIONADAID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.SOLICITUDFUSIONADAID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.SOLICITUDFUSIONADAID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_solicitudFusionadaID_columnvalueid">
+            <form:errors path="solicitud.solicitudFusionadaID" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.SOLICITUDFUSIONADAID)? 'true' : 'false'}" cssClass="w-25 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.SOLICITUDFUSIONADAID)? ' uneditable-input' : ''}"  style=""  path="solicitud.solicitudFusionadaID"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
