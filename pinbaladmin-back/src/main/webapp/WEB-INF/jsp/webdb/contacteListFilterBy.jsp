@@ -159,6 +159,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,ContacteFields.USERNAME)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="contacte.username" var="username" />
+              <fmt:message key="genapp.form.searchby" var="cercaperusername" >                
+                 <fmt:param value="${username}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${username}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercaperusername}" path="username" />
+            </div>
+
+
+        </c:if>
 
       <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">
       <c:if test="${ __entry.key >= 0 && not empty __entry.value.searchBy }">

@@ -315,7 +315,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 		solicitudForm.addHiddenField(SolicitudFields.FIRMATDOCSOLICITUD);
 		solicitudForm.addHiddenField(SolicitudFields.PRODUCCIO);
 		solicitudForm.addHiddenField(SolicitudFields.PINFO);
-		solicitudForm.addHiddenField(SolicitudFields.CONTACTETITULARID);
+//		solicitudForm.addHiddenField(SolicitudFields.CONTACTETITULARID);
 		
 
 		Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
@@ -366,6 +366,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 				);
 		
 		Section dadesTitular = new Section("info_titular", "section.dadestitular",
+                SolicitudFields.CONTACTETITULARID,
 				SolicitudFields.TITULARFIRMANIF,
 				SolicitudFields.TITULARFIRMANOM,
 				SolicitudFields.TITULARFIRMALLINATGES,

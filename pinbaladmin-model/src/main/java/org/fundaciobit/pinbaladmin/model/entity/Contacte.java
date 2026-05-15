@@ -26,6 +26,9 @@ public interface Contacte extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getMail();
 	public void setMail(java.lang.String _mail_);
 
+	public java.lang.String getUsername();
+	public void setUsername(java.lang.String _username_);
+
 
 
   // ======================================

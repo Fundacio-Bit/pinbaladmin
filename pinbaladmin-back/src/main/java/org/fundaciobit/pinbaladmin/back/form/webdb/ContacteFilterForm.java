@@ -119,6 +119,17 @@ public class ContacteFilterForm extends PinbalAdminBaseFilterForm implements Con
   }
 
 
+  private java.lang.String username;
+
+  public java.lang.String getUsername() {
+    return this.username;
+  }
+
+  public void setUsername(java.lang.String username) {
+    this.username = username;
+  }
+
+
   public ContacteFilterForm() {
   }
   
@@ -133,6 +144,7 @@ public class ContacteFilterForm extends PinbalAdminBaseFilterForm implements Con
     this.carrec = __toClone.carrec;
     this.telefon = __toClone.telefon;
     this.mail = __toClone.mail;
+    this.username = __toClone.username;
   }
   
   /* ========= UTILS ========== */

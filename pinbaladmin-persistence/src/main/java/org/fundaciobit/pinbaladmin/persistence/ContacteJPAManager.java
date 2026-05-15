@@ -55,8 +55,8 @@ public class ContacteJPAManager
         return list.toArray(new Contacte[list.size()]);
     };
 
-    public Contacte create( java.lang.String _nif_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_, java.lang.String _carrec_, java.lang.String _telefon_, java.lang.String _mail_) throws I18NException {
-        ContacteJPA __bean =  new ContacteJPA(_nif_,_nom_,_llinatge1_,_llinatge2_,_carrec_,_telefon_,_mail_);
+    public Contacte create( java.lang.String _nif_, java.lang.String _nom_, java.lang.String _llinatge1_, java.lang.String _llinatge2_, java.lang.String _carrec_, java.lang.String _telefon_, java.lang.String _mail_, java.lang.String _username_) throws I18NException {
+        ContacteJPA __bean =  new ContacteJPA(_nif_,_nom_,_llinatge1_,_llinatge2_,_carrec_,_telefon_,_mail_,_username_);
         return create(__bean);
     }
 

@@ -16,6 +16,7 @@ public class ContacteBean implements Contacte {
 	java.lang.String carrec;
 	java.lang.String telefon;
 	java.lang.String mail;
+	java.lang.String username;
 
 
   /** Constructor Buit */
@@ -23,7 +24,7 @@ public class ContacteBean implements Contacte {
   }
 
   /** Constructor amb tots els camps  */
-  public ContacteBean(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
+  public ContacteBean(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
     this.ContacteID=ContacteID;
     this.nif=nif;
     this.nom=nom;
@@ -32,9 +33,10 @@ public class ContacteBean implements Contacte {
     this.carrec=carrec;
     this.telefon=telefon;
     this.mail=mail;
+    this.username=username;
 }
   /** Constructor sense valors autoincrementals */
-  public ContacteBean(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
+  public ContacteBean(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
@@ -42,13 +44,11 @@ public class ContacteBean implements Contacte {
     this.carrec=carrec;
     this.telefon=telefon;
     this.mail=mail;
+    this.username=username;
 }
   /** Constructor dels valors Not Null */
-  public ContacteBean(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String mail) {
+  public ContacteBean(long ContacteID) {
     this.ContacteID=ContacteID;
-    this.nif=nif;
-    this.nom=nom;
-    this.mail=mail;
 }
   public ContacteBean(Contacte __bean) {
     this.setContacteID(__bean.getContacteID());
@@ -59,6 +59,7 @@ public class ContacteBean implements Contacte {
     this.setCarrec(__bean.getCarrec());
     this.setTelefon(__bean.getTelefon());
     this.setMail(__bean.getMail());
+    this.setUsername(__bean.getUsername());
 	}
 
 	public long getContacteID() {
@@ -117,6 +118,13 @@ public class ContacteBean implements Contacte {
 		this.mail = _mail_;
 	};
 
+	public java.lang.String getUsername() {
+		return(username);
+	};
+	public void setUsername(java.lang.String _username_) {
+		this.username = _username_;
+	};
+
 
 
   // ======================================
@@ -132,6 +140,7 @@ public class ContacteBean implements Contacte {
     __tmp.setCarrec(__bean.getCarrec());
     __tmp.setTelefon(__bean.getTelefon());
     __tmp.setMail(__bean.getMail());
+    __tmp.setUsername(__bean.getUsername());
 		return __tmp;
 	}
 

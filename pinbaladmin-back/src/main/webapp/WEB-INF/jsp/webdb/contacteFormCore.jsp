@@ -6,7 +6,7 @@
         <tr id="contacte_nif_rowid">
           <td id="contacte_nif_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[ContacteFields.NIF])?'contacte.nif':__theForm.labels[ContacteFields.NIF]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.NIF])?'contacte.nif':__theForm.labels[ContacteFields.NIF]}" />
              </label>
               <c:if test="${not empty __theForm.help[ContacteFields.NIF]}">
               <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.NIF]}" ></i>
@@ -24,7 +24,7 @@
         <tr id="contacte_nom_rowid">
           <td id="contacte_nom_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[ContacteFields.NOM])?'contacte.nom':__theForm.labels[ContacteFields.NOM]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.NOM])?'contacte.nom':__theForm.labels[ContacteFields.NOM]}" />
              </label>
               <c:if test="${not empty __theForm.help[ContacteFields.NOM]}">
               <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.NOM]}" ></i>
@@ -114,7 +114,7 @@
         <tr id="contacte_mail_rowid">
           <td id="contacte_mail_columnlabelid">
             <label>
-              <fmt:message key="${(empty __theForm.labels[ContacteFields.MAIL])?'contacte.mail':__theForm.labels[ContacteFields.MAIL]}" /> &nbsp;(*)
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.MAIL])?'contacte.mail':__theForm.labels[ContacteFields.MAIL]}" />
              </label>
               <c:if test="${not empty __theForm.help[ContacteFields.MAIL]}">
               <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.MAIL]}" ></i>
@@ -123,6 +123,24 @@
           <td id="contacte_mail_columnvalueid">
             <form:errors path="contacte.mail" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.MAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.MAIL)? ' uneditable-input' : ''}"  style="" maxlength="120" path="contacte.mail"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.USERNAME)}">
+        <tr id="contacte_username_rowid">
+          <td id="contacte_username_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.USERNAME])?'contacte.username':__theForm.labels[ContacteFields.USERNAME]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.USERNAME]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.USERNAME]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_username_columnvalueid">
+            <form:errors path="contacte.username" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.USERNAME)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,ContacteFields.USERNAME)? ' uneditable-input' : ''}"  style="" maxlength="200" path="contacte.username"   />
 
            </td>
         </tr>

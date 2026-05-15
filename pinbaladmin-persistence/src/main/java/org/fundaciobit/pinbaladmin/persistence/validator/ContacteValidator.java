@@ -30,18 +30,6 @@ public class ContacteValidator<I extends Contacte>
     ,org.fundaciobit.pinbaladmin.model.dao.IContacteManager __contacteManager) {
 
     // Valors Not Null
-    __vr.rejectIfEmptyOrWhitespace(__target__,NIF, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NIF)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,NOM, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOM)));
-
-    __vr.rejectIfEmptyOrWhitespace(__target__,MAIL, 
-        "genapp.validation.required",
-        new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MAIL)));
-
     // Check size
     if (__vr.getFieldErrorCount(NIF) == 0) {
       java.lang.String __nif = __target__.getNif();
@@ -96,6 +84,14 @@ public class ContacteValidator<I extends Contacte>
       if (__mail!= null && __mail.length() > 120) {
         __vr.rejectValue(MAIL, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(120)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(USERNAME) == 0) {
+      java.lang.String __username = __target__.getUsername();
+      if (__username!= null && __username.length() > 200) {
+        __vr.rejectValue(USERNAME, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(USERNAME)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(200)));
       }
     }
 

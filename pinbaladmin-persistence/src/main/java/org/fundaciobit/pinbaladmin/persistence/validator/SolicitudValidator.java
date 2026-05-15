@@ -327,6 +327,34 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(CONTACTEPERSONAID) == 0) {
+      java.lang.Long __contactepersonaid = __target__.getContactePersonaID();
+      if (__contactepersonaid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contactepersonaid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTEPERSONAID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contactepersonaid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTERESPONSABLEID) == 0) {
+      java.lang.Long __contacteresponsableid = __target__.getContacteResponsableID();
+      if (__contacteresponsableid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contacteresponsableid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTERESPONSABLEID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contacteresponsableid)));
+        }
+      }
+    }
+
   } // Final de mètode
   public String get(Field<?> field) {
     return field.fullName;

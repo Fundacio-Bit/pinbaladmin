@@ -516,6 +516,50 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long contactePersonaIDDesde;
+
+  public java.lang.Long getContactePersonaIDDesde() {
+    return this.contactePersonaIDDesde;
+  }
+
+  public void setContactePersonaIDDesde(java.lang.Long contactePersonaIDDesde) {
+    this.contactePersonaIDDesde = contactePersonaIDDesde;
+  }
+
+
+  private java.lang.Long contactePersonaIDFins;
+
+  public java.lang.Long getContactePersonaIDFins() {
+    return this.contactePersonaIDFins;
+  }
+
+  public void setContactePersonaIDFins(java.lang.Long contactePersonaIDFins) {
+    this.contactePersonaIDFins = contactePersonaIDFins;
+  }
+
+
+  private java.lang.Long contacteResponsableIDDesde;
+
+  public java.lang.Long getContacteResponsableIDDesde() {
+    return this.contacteResponsableIDDesde;
+  }
+
+  public void setContacteResponsableIDDesde(java.lang.Long contacteResponsableIDDesde) {
+    this.contacteResponsableIDDesde = contacteResponsableIDDesde;
+  }
+
+
+  private java.lang.Long contacteResponsableIDFins;
+
+  public java.lang.Long getContacteResponsableIDFins() {
+    return this.contacteResponsableIDFins;
+  }
+
+  public void setContacteResponsableIDFins(java.lang.Long contacteResponsableIDFins) {
+    this.contacteResponsableIDFins = contacteResponsableIDFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -566,6 +610,10 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.titularFirmaEmail = __toClone.titularFirmaEmail;
     this.solicitudFusionadaIDDesde = __toClone.solicitudFusionadaIDDesde;
     this.solicitudFusionadaIDFins = __toClone.solicitudFusionadaIDFins;
+    this.contactePersonaIDDesde = __toClone.contactePersonaIDDesde;
+    this.contactePersonaIDFins = __toClone.contactePersonaIDFins;
+    this.contacteResponsableIDDesde = __toClone.contacteResponsableIDDesde;
+    this.contacteResponsableIDFins = __toClone.contacteResponsableIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;
@@ -576,6 +624,8 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfValuesForConsentimentadjunt = __toClone.mapOfValuesForConsentimentadjunt;
     this.mapOfInfoMadridForInfomadridid = __toClone.mapOfInfoMadridForInfomadridid;
     this.mapOfContacteForContacteTitularID = __toClone.mapOfContacteForContacteTitularID;
+    this.mapOfContacteForContactePersonaID = __toClone.mapOfContacteForContactePersonaID;
+    this.mapOfContacteForContacteResponsableID = __toClone.mapOfContacteForContacteResponsableID;
   }
   
   /* ========= UTILS ========== */
@@ -726,6 +776,30 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfContacteForContacteTitularID(Map<String, String> mapOfContacteForContacteTitularID) {
     this.mapOfContacteForContacteTitularID = mapOfContacteForContacteTitularID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContactePersonaID;
+
+  public Map<String, String> getMapOfContacteForContactePersonaID() {
+    return this.mapOfContacteForContactePersonaID;
+  }
+
+  public void setMapOfContacteForContactePersonaID(Map<String, String> mapOfContacteForContactePersonaID) {
+    this.mapOfContacteForContactePersonaID = mapOfContacteForContactePersonaID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteResponsableID;
+
+  public Map<String, String> getMapOfContacteForContacteResponsableID() {
+    return this.mapOfContacteForContacteResponsableID;
+  }
+
+  public void setMapOfContacteForContacteResponsableID(Map<String, String> mapOfContacteForContacteResponsableID) {
+    this.mapOfContacteForContacteResponsableID = mapOfContacteForContacteResponsableID;
   }
 
 

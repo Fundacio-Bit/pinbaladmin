@@ -1607,9 +1607,9 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 		nifTitular = nifTitular.toUpperCase();
 		
 		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifTitular + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
+		String username = null;
 		
-		
-		ContacteJPA titularJpa = new ContacteJPA(nifTitular, nom, llinatges, null, null, null, mail);
+		ContacteJPA titularJpa = new ContacteJPA(nifTitular, nom, llinatges, null, null, null, mail, username);
 
 		afegirContacteCache(nifTitular, titularJpa);	
 		

@@ -260,6 +260,22 @@
           ${solicitud.solicitudFusionadaID}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTEPERSONAID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contactePersonaID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContactePersonaID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTERESPONSABLEID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteResponsableID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteResponsableID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

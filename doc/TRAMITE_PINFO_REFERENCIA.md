@@ -1,5 +1,16 @@
 # TRÁMITE PINFO - Referencia Completa
 
+**Última actualización:** 14 mayo 2026  
+**Versión:** 2.1 - Aclaración prerequisitos
+
+---
+
+> ⚠️ **IMPORTANTE**: Este documento describe el proceso de **PINFOS** (permisos de usuarios).  
+> Para entender el **flujo completo del sistema** (desde SISTRA hasta PINFO), consulta primero:  
+> 📘 [FLUJO_COMPLETO_SISTEMA.md](FLUJO_COMPLETO_SISTEMA.md)
+
+---
+
 ## 🎯 QUÉ ES
 
 Sistema de **gestión de permisos de usuarios** para acceder a procedimientos y servicios en Pinbal.
@@ -7,9 +18,38 @@ Sistema de **gestión de permisos de usuarios** para acceder a procedimientos y 
 - **Flujo:** Solicitud → Firma digital → Procesamiento → Notificación
 - **Resultado:** Permisos aplicados en base de datos Pinbal
 
+### ⚠️ PREREQUISITO CRÍTICO
+
+**PINFOS requiere procedimientos YA AUTORIZADOS en Madrid** (estado 40 = AUTORITZAT).
+
+**Flujo previo a PINFOS:**
+
+```
+1. Entidad local crea SOLICITUD mediante trámite SISTRA
+   ↓
+2. SOLICITUD pasa por gestión interna (Distribució + revisión + firma)
+   ↓
+3. PREALTAS envía solicitud a Madrid (SOAP)
+   ↓
+4. Madrid autoriza la solicitud (1-4 semanas)
+   ↓
+5. SOLICITUD pasa a estado 40 (AUTORITZAT) ✅
+   ↓
+6. Procedimiento disponible en PINBAL
+   ↓
+   🎯 AHORA los usuarios pueden solicitar permisos mediante PINFOS
+```
+
+**En el wizard de PINFOS**, cuando el usuario selecciona procedimientos:
+- Solo se muestran procedimientos en **estado 40 (AUTORITZAT)**
+- Si un procedimiento NO está autorizado, NO aparecerá en el autocomplete
+- El sistema valida que `solicitud.estatSolicitud = 40`
+
+**📘 Para más detalles del flujo completo:** [FLUJO_COMPLETO_SISTEMA.md](FLUJO_COMPLETO_SISTEMA.md)
+
 ---
 
-## � ACTORES DEL SISTEMA
+## 👥 ACTORES DEL SISTEMA
 
 1. **Solicitante (usuario externo):**
    - Fases 1-8: Crea solicitud y envía a firmar

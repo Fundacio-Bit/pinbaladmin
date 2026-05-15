@@ -481,6 +481,18 @@
           },
           "foreignKeys": [
             {
+              "name": "pad_solicitud_cte_pers_fk",
+              "table": "pad_solicitud",
+              "field": "contactepersonaid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_cte_resp_fk",
+              "table": "pad_solicitud",
+              "field": "contacteresponsableid",
+              "type": 0
+            },
+            {
               "name": "pad_solicitud_cte_tit_fk",
               "table": "pad_solicitud",
               "field": "contactetitularid",
@@ -494,7 +506,7 @@
           "sqlType": 12,
           "size": 30,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "NIF",
             "es": "NIF"
@@ -519,7 +531,7 @@
           "sqlType": 12,
           "size": 60,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "Nom",
             "es": "Nombre"
@@ -644,12 +656,37 @@
           "sqlType": 12,
           "size": 120,
           "digits": 0,
-          "isNotNullable": true,
+          "isNotNullable": false,
           "labels": {
             "ca": "email",
             "es": "email"
           },
           "javaName": "mail",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "username",
+          "sqlType": 12,
+          "size": 200,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Username",
+            "es": "Username"
+          },
+          "javaName": "username",
           "javaType": "java.lang.String",
           "traduible": false,
           "showInWebList": true,
@@ -7758,6 +7795,84 @@
             "webtype": 14
           },
           "foreignKeys": []
+        },
+        {
+          "index": "pad_solicitud_personaid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contactepersonaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Persona de Contacte",
+            "es": "Persona de Contacto"
+          },
+          "javaName": "contactePersonaID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_pers_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_pers_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_responsid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contacteresponsableid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Responsable Proc.",
+            "es": "Responsable Proc."
+          },
+          "javaName": "contacteResponsableID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_resp_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_resp_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
         }
       ]
     },

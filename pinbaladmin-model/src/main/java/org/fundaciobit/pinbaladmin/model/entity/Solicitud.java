@@ -125,6 +125,12 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getSolicitudFusionadaID();
 	public void setSolicitudFusionadaID(java.lang.Long _solicitudFusionadaID_);
 
+	public java.lang.Long getContactePersonaID();
+	public void setContactePersonaID(java.lang.Long _contactePersonaID_);
+
+	public java.lang.Long getContacteResponsableID();
+	public void setContacteResponsableID(java.lang.Long _contacteResponsableID_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

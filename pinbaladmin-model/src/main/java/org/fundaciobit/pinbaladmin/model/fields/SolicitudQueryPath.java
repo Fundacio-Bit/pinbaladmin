@@ -175,6 +175,14 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.SOLICITUDFUSIONADAID);
   }
 
+  public LongField CONTACTEPERSONAID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTEPERSONAID);
+  }
+
+  public LongField CONTACTERESPONSABLEID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTERESPONSABLEID);
+  }
+
 
 
   @Override
@@ -294,10 +302,26 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     });
   }
 
-  public ContacteQueryPath CONTACTE() {
+  public ContacteQueryPath CONTACTETITULAR() {
     return new ContacteQueryPath(new QueryPath() {
       public String getQueryPath() {
-          return SolicitudQueryPath.this.getQueryPath() + "contacte" + ".";
+          return SolicitudQueryPath.this.getQueryPath() + "contacteTitular" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTEPERSONA() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contactePersona" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTERESPONSABLE() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacteResponsable" + ".";
       }
     });
   }

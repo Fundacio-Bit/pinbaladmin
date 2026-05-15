@@ -27,10 +27,10 @@ public class ContacteJPA implements Contacte {
     @Column(name="contacteid",nullable = false,length = 19)
     long ContacteID;
 
-    @Column(name="nif",nullable = false,length = 30)
+    @Column(name="nif",length = 30)
     java.lang.String nif;
 
-    @Column(name="nom",nullable = false,length = 60)
+    @Column(name="nom",length = 60)
     java.lang.String nom;
 
     @Column(name="llinatge1",length = 60)
@@ -45,8 +45,11 @@ public class ContacteJPA implements Contacte {
     @Column(name="telefon",length = 12)
     java.lang.String telefon;
 
-    @Column(name="mail",nullable = false,length = 120)
+    @Column(name="mail",length = 120)
     java.lang.String mail;
+
+    @Column(name="username",length = 200)
+    java.lang.String username;
 
 
 
@@ -55,7 +58,7 @@ public class ContacteJPA implements Contacte {
   }
 
   /** Constructor amb tots els camps  */
-  public ContacteJPA(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
+  public ContacteJPA(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
     this.ContacteID=ContacteID;
     this.nif=nif;
     this.nom=nom;
@@ -64,9 +67,10 @@ public class ContacteJPA implements Contacte {
     this.carrec=carrec;
     this.telefon=telefon;
     this.mail=mail;
+    this.username=username;
 }
   /** Constructor sense valors autoincrementals */
-  public ContacteJPA(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail) {
+  public ContacteJPA(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
@@ -74,13 +78,11 @@ public class ContacteJPA implements Contacte {
     this.carrec=carrec;
     this.telefon=telefon;
     this.mail=mail;
+    this.username=username;
 }
   /** Constructor dels valors Not Null */
-  public ContacteJPA(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String mail) {
+  public ContacteJPA(long ContacteID) {
     this.ContacteID=ContacteID;
-    this.nif=nif;
-    this.nom=nom;
-    this.mail=mail;
 }
   public ContacteJPA(Contacte __bean) {
     this.setContacteID(__bean.getContacteID());
@@ -91,6 +93,7 @@ public class ContacteJPA implements Contacte {
     this.setCarrec(__bean.getCarrec());
     this.setTelefon(__bean.getTelefon());
     this.setMail(__bean.getMail());
+    this.setUsername(__bean.getUsername());
 	}
 
 	public long getContacteID() {
@@ -149,6 +152,13 @@ public class ContacteJPA implements Contacte {
 		this.mail = _mail_;
 	};
 
+	public java.lang.String getUsername() {
+		return(username);
+	};
+	public void setUsername(java.lang.String _username_) {
+		this.username = _username_;
+	};
+
 
 
     @Override
@@ -164,16 +174,42 @@ public class ContacteJPA implements Contacte {
         return __result;
     }
 
-// EXP  Field:contactetitularid | Table: pad_solicitud | Type: 0  
+// EXP  Field:contactepersonaid | Table: pad_solicitud | Type: 0  
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacte")
-    private Set<SolicitudJPA> solicituds = new HashSet<SolicitudJPA>(0);
-    public  Set<SolicitudJPA> getSolicituds() {
-    return this.solicituds;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactePersonaID")
+    private Set<SolicitudJPA> solicitud_contactepersonaids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contactepersonaids() {
+    return this.solicitud_contactepersonaids;
   }
 
-    public void setSolicituds(Set<SolicitudJPA> solicituds) {
-      this.solicituds = solicituds;
+    public void setSolicitud_contactepersonaids(Set<SolicitudJPA> solicitud_contactepersonaids) {
+      this.solicitud_contactepersonaids = solicitud_contactepersonaids;
+    }
+
+
+// EXP  Field:contacteresponsableid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteResponsableID")
+    private Set<SolicitudJPA> solicitud_contacteresponsableids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contacteresponsableids() {
+    return this.solicitud_contacteresponsableids;
+  }
+
+    public void setSolicitud_contacteresponsableids(Set<SolicitudJPA> solicitud_contacteresponsableids) {
+      this.solicitud_contacteresponsableids = solicitud_contacteresponsableids;
+    }
+
+
+// EXP  Field:contactetitularid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteTitularID")
+    private Set<SolicitudJPA> solicitud_contactetitularids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contactetitularids() {
+    return this.solicitud_contactetitularids;
+  }
+
+    public void setSolicitud_contactetitularids(Set<SolicitudJPA> solicitud_contactetitularids) {
+      this.solicitud_contactetitularids = solicitud_contactetitularids;
     }
 
 
@@ -190,6 +226,7 @@ public class ContacteJPA implements Contacte {
     __tmp.setCarrec(__bean.getCarrec());
     __tmp.setTelefon(__bean.getTelefon());
     __tmp.setMail(__bean.getMail());
+    __tmp.setUsername(__bean.getUsername());
 		return __tmp;
 	}
 
@@ -220,8 +257,16 @@ public class ContacteJPA implements Contacte {
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     if(!"SolicitudJPA".equals(origenJPA) 
-       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicituds) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicituds())) ) {
-      __tmp.setSolicituds(SolicitudJPA.copyJPA(__jpa.getSolicituds(), __alreadyCopied,"ContacteJPA"));
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contacteresponsableids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contacteresponsableids())) ) {
+      __tmp.setSolicitud_contacteresponsableids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contacteresponsableids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactetitularids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactetitularids())) ) {
+      __tmp.setSolicitud_contactetitularids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactetitularids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactepersonaids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactepersonaids())) ) {
+      __tmp.setSolicitud_contactepersonaids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactepersonaids(), __alreadyCopied,"ContacteJPA"));
     }
     // Copia de beans complexes (IMP)
 

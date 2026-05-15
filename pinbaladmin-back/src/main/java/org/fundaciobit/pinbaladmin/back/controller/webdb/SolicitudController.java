@@ -316,6 +316,26 @@ public class SolicitudController
       };
     }
 
+    // Field contactePersonaID
+    {
+      _listSKV = getReferenceListForContactePersonaID(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfContacteForContactePersonaID(_tmp);
+      if (filterForm.getGroupByFields().contains(CONTACTEPERSONAID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONTACTEPERSONAID, false);
+      };
+    }
+
+    // Field contacteResponsableID
+    {
+      _listSKV = getReferenceListForContacteResponsableID(request, mav, filterForm, list, groupByItemsMap, null);
+      _tmp = Utils.listToMap(_listSKV);
+      filterForm.setMapOfContacteForContacteResponsableID(_tmp);
+      if (filterForm.getGroupByFields().contains(CONTACTERESPONSABLEID)) {
+        fillValuesToGroupByItems(_tmp, groupByItemsMap, CONTACTERESPONSABLEID, false);
+      };
+    }
+
 
     return groupByItemsMap;
   }
@@ -341,6 +361,8 @@ public class SolicitudController
     __mapping.put(CONSENTIMENTADJUNT, filterForm.getMapOfValuesForConsentimentadjunt());
     __mapping.put(INFOMADRIDID, filterForm.getMapOfInfoMadridForInfomadridid());
     __mapping.put(CONTACTETITULARID, filterForm.getMapOfContacteForContacteTitularID());
+    __mapping.put(CONTACTEPERSONAID, filterForm.getMapOfContacteForContactePersonaID());
+    __mapping.put(CONTACTERESPONSABLEID, filterForm.getMapOfContacteForContacteResponsableID());
     exportData(request, response, dataExporterID, filterForm,
           list, allFields, __mapping, PRIMARYKEY_FIELDS);
   }
@@ -477,6 +499,24 @@ public class SolicitudController
           java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
       }
       solicitudForm.setListOfContacteForContacteTitularID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfContacteForContactePersonaID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForContactePersonaID(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfContacteForContactePersonaID(_listSKV);
+    }
+    // Comprovam si ja esta definida la llista
+    if (solicitudForm.getListOfContacteForContacteResponsableID() == null) {
+      List<StringKeyValue> _listSKV = getReferenceListForContacteResponsableID(request, mav, solicitudForm, null);
+
+      if(_listSKV != null && !_listSKV.isEmpty()) { 
+          java.util.Collections.sort(_listSKV, STRINGKEYVALUE_COMPARATOR);
+      }
+      solicitudForm.setListOfContacteForContacteResponsableID(_listSKV);
     }
     
   }
@@ -1207,6 +1247,86 @@ public java.lang.Long stringToPK(String value) {
 
 
   public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return contacteRefList.getReferenceList(ContacteFields.CONTACTEID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContactePersonaID(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CONTACTEPERSONAID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (solicitudForm.isReadOnlyField(CONTACTEPERSONAID)) {
+      _where = ContacteFields.CONTACTEID.equal(solicitudForm.getSolicitud().getContactePersonaID());
+    }
+    return getReferenceListForContactePersonaID(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContactePersonaID(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CONTACTEPERSONAID)
+       && !solicitudFilterForm.isGroupByField(CONTACTEPERSONAID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(CONTACTEPERSONAID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Solicitud _item : list) {
+        if(_item.getContactePersonaID() == null) { continue; };
+        _pkList.add(_item.getContactePersonaID());
+        }
+        _w = ContacteFields.CONTACTEID.in(_pkList);
+      }
+    return getReferenceListForContactePersonaID(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContactePersonaID(HttpServletRequest request,
+       ModelAndView mav, Where where)  throws I18NException {
+    return contacteRefList.getReferenceList(ContacteFields.CONTACTEID, where );
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteResponsableID(HttpServletRequest request,
+       ModelAndView mav, SolicitudForm solicitudForm, Where where)  throws I18NException {
+    if (solicitudForm.isHiddenField(CONTACTERESPONSABLEID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _where = null;
+    if (solicitudForm.isReadOnlyField(CONTACTERESPONSABLEID)) {
+      _where = ContacteFields.CONTACTEID.equal(solicitudForm.getSolicitud().getContacteResponsableID());
+    }
+    return getReferenceListForContacteResponsableID(request, mav, Where.AND(where, _where));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteResponsableID(HttpServletRequest request,
+       ModelAndView mav, SolicitudFilterForm solicitudFilterForm,
+       List<Solicitud> list, Map<Field<?>, GroupByItem> _groupByItemsMap, Where where)  throws I18NException {
+    if (solicitudFilterForm.isHiddenField(CONTACTERESPONSABLEID)
+       && !solicitudFilterForm.isGroupByField(CONTACTERESPONSABLEID)) {
+      return EMPTY_STRINGKEYVALUE_LIST;
+    }
+    Where _w = null;
+    if (!_groupByItemsMap.containsKey(CONTACTERESPONSABLEID)) {
+      // OBTENIR TOTES LES CLAUS (PK) i despres només cercar referències d'aquestes PK
+      java.util.Set<java.lang.Long> _pkList = new java.util.HashSet<java.lang.Long>();
+      for (Solicitud _item : list) {
+        if(_item.getContacteResponsableID() == null) { continue; };
+        _pkList.add(_item.getContacteResponsableID());
+        }
+        _w = ContacteFields.CONTACTEID.in(_pkList);
+      }
+    return getReferenceListForContacteResponsableID(request, mav, Where.AND(where,_w));
+  }
+
+
+  public List<StringKeyValue> getReferenceListForContacteResponsableID(HttpServletRequest request,
        ModelAndView mav, Where where)  throws I18NException {
     return contacteRefList.getReferenceList(ContacteFields.CONTACTEID, where );
   }

@@ -1,33 +1,42 @@
 # 📘 PREALTAS - REFERENCIA COMPLETA DEL SISTEMA
 
 **Documento Maestro Consolidado**  
-**Última actualización:** 5 mayo 2026  
-**Versión:** 3.0 - Consolidación completa
+**Última actualización:** 14 mayo 2026  
+**Versión:** 3.1 - Aclaración contexto SISTRA
+
+---
+
+> ⚠️ **IMPORTANTE**: Este documento describe el proceso de **PREALTAS** (autorización en Madrid).  
+> Para entender el **flujo completo del sistema** (desde SISTRA hasta PINFO), consulta primero:  
+> 📘 [FLUJO_COMPLETO_SISTEMA.md](FLUJO_COMPLETO_SISTEMA.md)
 
 ---
 
 ## 📋 ÍNDICE
 
 1. [¿Qué es PREALTAS?](#qué-es-prealtas)
-2. [Actores del Sistema](#actores-del-sistema)
-3. [Conceptos Fundamentales](#conceptos-fundamentales)
-4. [Estados del Sistema](#estados-del-sistema)
-5. [Ciclo de Vida Completo](#ciclo-de-vida-completo)
-6. [Servicios SOAP con Madrid](#servicios-soap-con-madrid)
-7. [Respuestas de Madrid](#respuestas-de-madrid)
-8. [Procesos Automáticos](#procesos-automáticos)
-9. [Notificaciones y Emails](#notificaciones-y-emails)
-10. [Entidades de Base de Datos](#entidades-de-base-de-datos)
-11. [Clases Principales del Código](#clases-principales-del-código)
-12. [Casos Especiales](#casos-especiales)
-13. [Tiempos y Duraciones](#tiempos-y-duraciones)
-14. [Diferencias PREALTAS vs PINFO](#diferencias-prealtas-vs-pinfo)
+2. [Prerequisitos: Trámite SISTRA](#prerequisitos-trámite-sistra)
+3. [Actores del Sistema](#actores-del-sistema)
+4. [Conceptos Fundamentales](#conceptos-fundamentales)
+5. [Estados del Sistema](#estados-del-sistema)
+6. [Ciclo de Vida Completo](#ciclo-de-vida-completo)
+7. [Servicios SOAP con Madrid](#servicios-soap-con-madrid)
+8. [Respuestas de Madrid](#respuestas-de-madrid)
+9. [Procesos Automáticos](#procesos-automáticos)
+10. [Notificaciones y Emails](#notificaciones-y-emails)
+11. [Entidades de Base de Datos](#entidades-de-base-de-datos)
+12. [Clases Principales del Código](#clases-principales-del-código)
+13. [Casos Especiales](#casos-especiales)
+14. [Tiempos y Duraciones](#tiempos-y-duraciones)
+15. [Diferencias PREALTAS vs PINFO](#diferencias-prealtas-vs-pinfo)
 
 ---
 
 ## 🎯 QUÉ ES PREALTAS
 
 **PREALTAS** es el sistema de **autorización de procedimientos administrativos** para que entidades locales de las Islas Baleares (ayuntamientos, consejos insulares) puedan consultar datos personales de ciudadanos a través de la **Plataforma de Intermediación de Datos (PID)** del Estado español (Madrid).
+
+**⚠️ IMPORTANTE**: PREALTAS NO es el primer paso del proceso. Antes debe existir una **Solicitud creada mediante trámite SISTRA**.
 
 ### Ejemplo Práctico
 
@@ -47,7 +56,62 @@ Un ayuntamiento tramita "Ayudas al alquiler de vivienda 2026":
 
 ---
 
-## 👥 ACTORES DEL SISTEMA
+## � PREREQUISITOS: TRÁMITE SISTRA
+
+**ANTES de PREALTAS**, debe existir una **Solicitud** creada mediante el trámite SISTRA:
+
+### ¿Qué es SISTRA?
+Sistema de tramitación externa de CAIB que permite a entidades locales iniciar solicitudes de nuevos procedimientos administrativos.
+
+### Flujo previo a PREALTAS:
+
+```
+1. Entidad local → Inicia trámite en SISTRA
+   ↓
+2. Rellena formulario completo (procedimiento, servicios, contactos, normativa)
+   ↓
+3. Envía trámite
+   ↓
+4. Sistema crea registros en: pad_tramit_a, pad_tramit_b, pad_tramit_c, etc.
+   ↓
+5. Sistema crea objeto SOLICITUD en pad_solicitud
+   └─ solicitudID, procedimentCodi, procedimentNom
+   └─ estatSolicitud = 5 (PENDENT_DISTRIBUCIO)
+   └─ dataAutoritzacio = NULL
+   ↓
+6. Solicitud llega a DISTRIBUCIÓ (plataforma externa CAIB)
+   ↓
+7. Operador la ve en PinbalAdmin → Marca como recibida
+   ↓
+8. Operador revisa documentación
+   ↓
+9. Operador envía documento resumen al TITULAR vía PortaFIB para firma
+   ↓
+10. TITULAR firma digitalmente
+   ↓
+11. PortaFIB devuelve documento firmado
+   ↓
+12. Solicitud en estado 19 (PENDENT_ENVIAR_MADRID)
+   ↓
+   🎯 AQUÍ EMPIEZA PREALTAS (operador hace click "Enviar a Madrid")
+```
+
+**Tablas involucradas en SISTRA:**
+- `pad_tramit_a` - Datos generales
+- `pad_tramit_b` - Cesión datos terceros
+- `pad_tramit_c` - Datos cesionarios
+- `pad_tramit_d` - Contacto autorización
+- `pad_tramit_e` - Contacto auditoría
+- `pad_tramit_f` - Contacto técnico
+- `pad_tramit_g` - Datos del titular
+
+**Resultado:** Objeto `Solicitud` en `pad_solicitud` listo para enviar a Madrid.
+
+**📘 Para más detalles del flujo completo:** [FLUJO_COMPLETO_SISTEMA.md](FLUJO_COMPLETO_SISTEMA.md)
+
+---
+
+## �👥 ACTORES DEL SISTEMA
 
 1. **Entidad Local (Solicitante)**
    - Ayuntamiento, Consejo Insular

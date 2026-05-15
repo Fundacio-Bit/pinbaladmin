@@ -20,6 +20,7 @@ public interface ContacteFields extends java.io.Serializable {
 	 public static final StringField CARREC = new StringField(_TABLE_MODEL, "carrec", "carrec");
 	 public static final StringField TELEFON = new StringField(_TABLE_MODEL, "telefon", "telefon");
 	 public static final StringField MAIL = new StringField(_TABLE_MODEL, "mail", "mail");
+	 public static final StringField USERNAME = new StringField(_TABLE_MODEL, "username", "username");
 
 
   public static final Field<?>[] ALL_CONTACTE_FIELDS = {
@@ -30,7 +31,8 @@ public interface ContacteFields extends java.io.Serializable {
     LLINATGE2,
     CARREC,
     TELEFON,
-    MAIL
+    MAIL,
+    USERNAME
   };
 
 

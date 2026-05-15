@@ -135,6 +135,12 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.SOLICITUDFUSIONADAID)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTEPERSONAID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONTACTEPERSONAID)}</th>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTERESPONSABLEID)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CONTACTERESPONSABLEID)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

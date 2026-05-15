@@ -64,6 +64,11 @@
           ${contacte.mail}
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ContacteFields.USERNAME)}">
+          <td>
+          ${contacte.username}
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->
