@@ -61,6 +61,11 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTENOM)}">
+          <td>
+          ${incidenciaTecnica.contacteNom}
+          </td>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.ORGANID)}">
           <td>
           <c:set var="tmp">${incidenciaTecnica.organid}</c:set>
@@ -72,11 +77,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.NOMENTITAT)}">
           <td>
           ${incidenciaTecnica.nomEntitat}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTENOM)}">
-          <td>
-          ${incidenciaTecnica.contacteNom}
           </td>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,IncidenciaTecnicaFields.CONTACTEEMAIL)}">

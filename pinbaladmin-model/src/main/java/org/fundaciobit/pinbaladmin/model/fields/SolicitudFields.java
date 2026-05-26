@@ -55,6 +55,10 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final LongField SOLICITUDFUSIONADAID = new LongField(_TABLE_MODEL, "solicitudFusionadaID", "solicitudfusionadaid");
 	 public static final LongField CONTACTEPERSONAID = new LongField(_TABLE_MODEL, "contactePersonaID", "contactepersonaid");
 	 public static final LongField CONTACTERESPONSABLEID = new LongField(_TABLE_MODEL, "contacteResponsableID", "contacteresponsableid");
+	 public static final LongField CONTACTESOLICITANTID = new LongField(_TABLE_MODEL, "contacteSolicitantID", "contactesolicitantid");
+	 public static final LongField CONTACTEGESTAUTID = new LongField(_TABLE_MODEL, "contacteGestAutID", "contactegestautid");
+	 public static final LongField CONTACTEAUDITORIAID = new LongField(_TABLE_MODEL, "contacteAuditoriaID", "contacteauditoriaid");
+	 public static final LongField CONTACTETECNICID = new LongField(_TABLE_MODEL, "contacteTecnicID", "contactetecnicid");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -100,7 +104,11 @@ public interface SolicitudFields extends java.io.Serializable {
     TITULARFIRMAEMAIL,
     SOLICITUDFUSIONADAID,
     CONTACTEPERSONAID,
-    CONTACTERESPONSABLEID
+    CONTACTERESPONSABLEID,
+    CONTACTESOLICITANTID,
+    CONTACTEGESTAUTID,
+    CONTACTEAUDITORIAID,
+    CONTACTETECNICID
   };
 
 

@@ -44,6 +44,10 @@ public class SolicitudForm extends PinbalAdminBaseForm {
     this.listOfContacteForContacteTitularID = __toClone.listOfContacteForContacteTitularID;
     this.listOfContacteForContactePersonaID = __toClone.listOfContacteForContactePersonaID;
     this.listOfContacteForContacteResponsableID = __toClone.listOfContacteForContacteResponsableID;
+    this.listOfContacteForContacteSolicitantID = __toClone.listOfContacteForContacteSolicitantID;
+    this.listOfContacteForContacteGestAutID = __toClone.listOfContacteForContacteGestAutID;
+    this.listOfContacteForContacteAuditoriaID = __toClone.listOfContacteForContacteAuditoriaID;
+    this.listOfContacteForContacteTecnicID = __toClone.listOfContacteForContacteTecnicID;
   }
   
   public SolicitudForm(SolicitudJPA solicitud, boolean nou) {
@@ -241,6 +245,54 @@ public class SolicitudForm extends PinbalAdminBaseForm {
 
   public void setListOfContacteForContacteResponsableID(List<StringKeyValue> listOfContacteForContacteResponsableID) {
     this.listOfContacteForContacteResponsableID = listOfContacteForContacteResponsableID;
+  }
+
+
+
+  private List<StringKeyValue> listOfContacteForContacteSolicitantID;
+
+  public List<StringKeyValue> getListOfContacteForContacteSolicitantID() {
+    return this.listOfContacteForContacteSolicitantID;
+  }
+
+  public void setListOfContacteForContacteSolicitantID(List<StringKeyValue> listOfContacteForContacteSolicitantID) {
+    this.listOfContacteForContacteSolicitantID = listOfContacteForContacteSolicitantID;
+  }
+
+
+
+  private List<StringKeyValue> listOfContacteForContacteGestAutID;
+
+  public List<StringKeyValue> getListOfContacteForContacteGestAutID() {
+    return this.listOfContacteForContacteGestAutID;
+  }
+
+  public void setListOfContacteForContacteGestAutID(List<StringKeyValue> listOfContacteForContacteGestAutID) {
+    this.listOfContacteForContacteGestAutID = listOfContacteForContacteGestAutID;
+  }
+
+
+
+  private List<StringKeyValue> listOfContacteForContacteAuditoriaID;
+
+  public List<StringKeyValue> getListOfContacteForContacteAuditoriaID() {
+    return this.listOfContacteForContacteAuditoriaID;
+  }
+
+  public void setListOfContacteForContacteAuditoriaID(List<StringKeyValue> listOfContacteForContacteAuditoriaID) {
+    this.listOfContacteForContacteAuditoriaID = listOfContacteForContacteAuditoriaID;
+  }
+
+
+
+  private List<StringKeyValue> listOfContacteForContacteTecnicID;
+
+  public List<StringKeyValue> getListOfContacteForContacteTecnicID() {
+    return this.listOfContacteForContacteTecnicID;
+  }
+
+  public void setListOfContacteForContacteTecnicID(List<StringKeyValue> listOfContacteForContacteTecnicID) {
+    this.listOfContacteForContacteTecnicID = listOfContacteForContacteTecnicID;
   }
 
 

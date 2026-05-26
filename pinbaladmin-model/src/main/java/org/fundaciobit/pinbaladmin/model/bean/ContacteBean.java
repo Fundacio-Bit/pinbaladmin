@@ -17,6 +17,7 @@ public class ContacteBean implements Contacte {
 	java.lang.String telefon;
 	java.lang.String mail;
 	java.lang.String username;
+	java.lang.String nombrecompleto;
 
 
   /** Constructor Buit */
@@ -24,7 +25,7 @@ public class ContacteBean implements Contacte {
   }
 
   /** Constructor amb tots els camps  */
-  public ContacteBean(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
+  public ContacteBean(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username , java.lang.String nombrecompleto) {
     this.ContacteID=ContacteID;
     this.nif=nif;
     this.nom=nom;
@@ -34,9 +35,10 @@ public class ContacteBean implements Contacte {
     this.telefon=telefon;
     this.mail=mail;
     this.username=username;
+    this.nombrecompleto=nombrecompleto;
 }
   /** Constructor sense valors autoincrementals */
-  public ContacteBean(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
+  public ContacteBean(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username , java.lang.String nombrecompleto) {
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
@@ -45,6 +47,7 @@ public class ContacteBean implements Contacte {
     this.telefon=telefon;
     this.mail=mail;
     this.username=username;
+    this.nombrecompleto=nombrecompleto;
 }
   /** Constructor dels valors Not Null */
   public ContacteBean(long ContacteID) {
@@ -60,6 +63,7 @@ public class ContacteBean implements Contacte {
     this.setTelefon(__bean.getTelefon());
     this.setMail(__bean.getMail());
     this.setUsername(__bean.getUsername());
+    this.setNombrecompleto(__bean.getNombrecompleto());
 	}
 
 	public long getContacteID() {
@@ -125,6 +129,13 @@ public class ContacteBean implements Contacte {
 		this.username = _username_;
 	};
 
+	public java.lang.String getNombrecompleto() {
+		return(nombrecompleto);
+	};
+	public void setNombrecompleto(java.lang.String _nombrecompleto_) {
+		this.nombrecompleto = _nombrecompleto_;
+	};
+
 
 
   // ======================================
@@ -141,6 +152,7 @@ public class ContacteBean implements Contacte {
     __tmp.setTelefon(__bean.getTelefon());
     __tmp.setMail(__bean.getMail());
     __tmp.setUsername(__bean.getUsername());
+    __tmp.setNombrecompleto(__bean.getNombrecompleto());
 		return __tmp;
 	}
 

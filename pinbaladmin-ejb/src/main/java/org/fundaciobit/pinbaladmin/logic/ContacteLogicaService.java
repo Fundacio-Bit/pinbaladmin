@@ -16,8 +16,6 @@ public interface ContacteLogicaService extends ContacteService {
 
     public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/ContacteLogicaEJB!org.fundaciobit.pinbaladmin.logic.ContacteLogicaService";
 
-	Contacte crearContacteTitular(Solicitud soli);
-
 	/**
 	 * Busca un contacto exacto con todos los campos. Si no existe, lo crea.
 	 * Todos los campos deben coincidir exactamente (incluyendo nulls).
@@ -29,8 +27,10 @@ public interface ContacteLogicaService extends ContacteService {
 	 * @param carrec Cargo
 	 * @param telefon Teléfono
 	 * @param mail Email
+	 * @param username Nombre de usuario
+	 * @param fullName Nombre completo
 	 * @return El contacto encontrado o creado
 	 */
-	Contacte buscarOCrearContacte(String nif, String nom, String llinatge1, String llinatge2, String carrec, String telefon, String mail, String username);
+	Contacte buscarOCrearContacte(String nif, String nom, String llinatge1, String llinatge2, String carrec, String telefon, String mail, String username, String fullName);
 
 }

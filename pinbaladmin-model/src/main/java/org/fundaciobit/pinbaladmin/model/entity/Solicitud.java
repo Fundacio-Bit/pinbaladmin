@@ -131,6 +131,18 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getContacteResponsableID();
 	public void setContacteResponsableID(java.lang.Long _contacteResponsableID_);
 
+	public java.lang.Long getContacteSolicitantID();
+	public void setContacteSolicitantID(java.lang.Long _contacteSolicitantID_);
+
+	public java.lang.Long getContacteGestAutID();
+	public void setContacteGestAutID(java.lang.Long _contacteGestAutID_);
+
+	public java.lang.Long getContacteAuditoriaID();
+	public void setContacteAuditoriaID(java.lang.Long _contacteAuditoriaID_);
+
+	public java.lang.Long getContacteTecnicID();
+	public void setContacteTecnicID(java.lang.Long _contacteTecnicID_);
+
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();
   // Fitxer

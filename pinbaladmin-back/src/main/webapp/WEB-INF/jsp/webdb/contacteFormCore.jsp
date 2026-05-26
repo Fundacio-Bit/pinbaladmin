@@ -146,3 +146,42 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,ContacteFields.NOMBRECOMPLETO)}">
+        <tr id="contacte_nombrecompleto_rowid">
+          <td id="contacte_nombrecompleto_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[ContacteFields.NOMBRECOMPLETO])?'contacte.nombrecompleto':__theForm.labels[ContacteFields.NOMBRECOMPLETO]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[ContacteFields.NOMBRECOMPLETO]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[ContacteFields.NOMBRECOMPLETO]}" ></i>
+              </c:if>
+            </td>
+          <td id="contacte_nombrecompleto_columnvalueid">
+              <form:errors path="contacte.nombrecompleto" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,ContacteFields.NOMBRECOMPLETO)? 'true' : 'false'}" path="contacte.nombrecompleto"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_nombrecompleto" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_nombrecompleto" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('contacte.nombrecompleto'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('contacte.nombrecompleto'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('contacte.nombrecompleto'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_nombrecompleto').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_nombrecompleto').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_nombrecompleto').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        

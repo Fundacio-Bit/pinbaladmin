@@ -29,6 +29,9 @@ public interface Contacte extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getUsername();
 	public void setUsername(java.lang.String _username_);
 
+	public java.lang.String getNombrecompleto();
+	public void setNombrecompleto(java.lang.String _nombrecompleto_);
+
 
 
   // ======================================

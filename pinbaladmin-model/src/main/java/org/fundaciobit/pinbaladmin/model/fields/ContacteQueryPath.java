@@ -47,6 +47,10 @@ public class ContacteQueryPath extends org.fundaciobit.genapp.common.query.Query
     return new StringField(getQueryPath(), ContacteFields.USERNAME);
   }
 
+  public StringField NOMBRECOMPLETO() {
+    return new StringField(getQueryPath(), ContacteFields.NOMBRECOMPLETO);
+  }
+
 
 
   @Override
@@ -55,6 +59,34 @@ public class ContacteQueryPath extends org.fundaciobit.genapp.common.query.Query
         : this.parentQueryPath.getQueryPath());
   }
 
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudQueryPath SOLICITUD_CONTACTEAUDITORIAIDS() {
+    return new SolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return ContacteQueryPath.this.getQueryPath() + "solicitud_contacteauditoriaids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudQueryPath SOLICITUD_CONTACTEGESTAUTIDS() {
+    return new SolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return ContacteQueryPath.this.getQueryPath() + "solicitud_contactegestautids" + ".";
+      }
+    });
+  }
+*/
 
 /* L'ús d'aquest camp (OneToMany) llança una exception:
  [Illegal attempt to dereference a collection]
@@ -79,6 +111,34 @@ public class ContacteQueryPath extends org.fundaciobit.genapp.common.query.Query
     return new SolicitudQueryPath(new QueryPath() {
       public String getQueryPath() {
           return ContacteQueryPath.this.getQueryPath() + "solicitud_contacteresponsableids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudQueryPath SOLICITUD_CONTACTESOLICITANTIDS() {
+    return new SolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return ContacteQueryPath.this.getQueryPath() + "solicitud_contactesolicitantids" + ".";
+      }
+    });
+  }
+*/
+
+/* L'ús d'aquest camp (OneToMany) llança una exception:
+ [Illegal attempt to dereference a collection]
+
+ // TODO Solució dins el mètode testOneByOneDirect de la classe TestJPA 
+
+  public SolicitudQueryPath SOLICITUD_CONTACTETECNICIDS() {
+    return new SolicitudQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return ContacteQueryPath.this.getQueryPath() + "solicitud_contactetecnicids" + ".";
       }
     });
   }

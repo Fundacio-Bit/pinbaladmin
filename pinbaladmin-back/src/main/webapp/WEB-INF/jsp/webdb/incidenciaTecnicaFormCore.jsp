@@ -193,6 +193,24 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CONTACTENOM)}">
+        <tr id="incidenciaTecnica_contacteNom_rowid">
+          <td id="incidenciaTecnica_contacteNom_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CONTACTENOM])?'incidenciaTecnica.contacteNom':__theForm.labels[IncidenciaTecnicaFields.CONTACTENOM]}" /> &nbsp;(*)
+             </label>
+              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CONTACTENOM]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.CONTACTENOM]}" ></i>
+              </c:if>
+            </td>
+          <td id="incidenciaTecnica_contacteNom_columnvalueid">
+            <form:errors path="incidenciaTecnica.contacteNom" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CONTACTENOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CONTACTENOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="incidenciaTecnica.contacteNom"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.ORGANID)}">
         <tr id="incidenciaTecnica_organid_rowid">
           <td id="incidenciaTecnica_organid_columnlabelid">
@@ -246,24 +264,6 @@
           <td id="incidenciaTecnica_nomEntitat_columnvalueid">
             <form:errors path="incidenciaTecnica.nomEntitat" cssClass="errorField alert alert-danger" />
             <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.NOMENTITAT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.NOMENTITAT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="incidenciaTecnica.nomEntitat"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,IncidenciaTecnicaFields.CONTACTENOM)}">
-        <tr id="incidenciaTecnica_contacteNom_rowid">
-          <td id="incidenciaTecnica_contacteNom_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[IncidenciaTecnicaFields.CONTACTENOM])?'incidenciaTecnica.contacteNom':__theForm.labels[IncidenciaTecnicaFields.CONTACTENOM]}" /> &nbsp;(*)
-             </label>
-              <c:if test="${not empty __theForm.help[IncidenciaTecnicaFields.CONTACTENOM]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[IncidenciaTecnicaFields.CONTACTENOM]}" ></i>
-              </c:if>
-            </td>
-          <td id="incidenciaTecnica_contacteNom_columnvalueid">
-            <form:errors path="incidenciaTecnica.contacteNom" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CONTACTENOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,IncidenciaTecnicaFields.CONTACTENOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="incidenciaTecnica.contacteNom"   />
 
            </td>
         </tr>

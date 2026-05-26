@@ -586,7 +586,7 @@ section {
 					<!-- Avís Paso 1: Usuarios -->
 					<div class="aviso-tip">
 						<i class="fas fa-lightbulb"></i>
-						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys 2 caràcters per iniciar la cerca.
+						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys 2 caràcters per iniciar la cerca. <fmt:message key="tramit.pinfo.usuaris.ajuda"/>
 					</div>
 					
 					<div class="input-container user">
@@ -619,10 +619,10 @@ section {
 						</div>
 					</div>
 					
-					<!-- Avís Paso 2: Procedimientos -->
-					<div class="aviso-tip">
-						<i class="fas fa-lightbulb"></i>
-						<strong>Consell:</strong> Escriu el nom o codi del procediment. Si no apareix el que busques, potser hauries de fer un tramit nou per donar d'alta el procediment.
+					<!-- Avís Paso 2: Procedimientos unificado -->
+					<div class="aviso-info">
+						<i class="fas fa-info-circle"></i>
+						<strong>Informació:</strong> <fmt:message key="tramit.pinfo.procediments.ajuda"/> <fmt:message key="tramit.pinfo.procediments.ajuda.nif"/>
 					</div>
 					
 					<div class="input-container procediment">
@@ -651,18 +651,19 @@ section {
 						</div>
 					</div>
 					
-					<div id="subtitle-usuaris" class="sub-title"></div>
-					
-					<!-- Avís Paso 3: Servicios -->
-					<div class="aviso-important">
-						<i class="fas fa-exclamation-circle"></i>
-						<strong>Important:</strong> Marca els serveis que vols sol·licitar a la taula inferior. Els permisos seleccionats s'aplicaran a <strong>tots els usuaris</strong> que has afegit al pas 1.
-						<br><small style="margin-top: 6px; display: block;">Després podràs revisar i eliminar permisos individuals si cal.</small>
+					<!-- Avís antes del listado de usuarios -->
+					<div class="aviso-warning" style="margin-bottom: 1rem;">
+						<i class="fas fa-exclamation-triangle"></i>
+						<strong>Atenció:</strong> Els permisos seleccionats s'aplicaran a <strong>tots els usuaris</strong> que has afegit. Assegura't de revisar bé la selecció.
 					</div>
+					
+					<div id="subtitle-usuaris" class="sub-title"></div>
 					
 					<div class="input-container servei">
 						<div id="taula-serveis-cont">
 						<table id="taula-serveis"></table>
+						</div>
+					</div>
 				</section>
 
 		</div>
@@ -676,6 +677,15 @@ section {
 		var usuaris = [];
 		var procediments = [];
 		var solicitudServeis = [];
+		
+		// Función para ofuscar NIF: 45186147W -> 45****47W
+		function ofuscarNIF(nif) {
+			if (!nif || nif.length < 4) return nif;
+			var nifUpper = nif.toUpperCase();
+			var inicio = nifUpper.substring(0, 2);
+			var final = nifUpper.substring(nifUpper.length - 3);
+			return inicio + "****" + final;
+		}
 
 		$(document).ready(function() {
 
@@ -831,6 +841,7 @@ section {
             let li = $("<li></li>").addClass("usuari-li");
             let container = $("<div></div>").addClass("usuari-data-container");
             
+            // El NIF ya viene ofuscado del backend
             let text = usuari.administrationID + " - " + usuari.name + " " +  usuari.surname1 + " - " + usuari.username;
             let spanText = $("<span></span>").addClass("usuari-data-text").text(text);
             
@@ -1020,7 +1031,9 @@ section {
 		var usuarisHTML = "<div class='usuaris-titulo'>Usuaris:</div>";
 		usuarisHTML += "<div class='usuaris-lista'>";
 		usuaris.forEach(function(u, index) {
-			usuarisHTML += u.name + " " + u.surname1 + " (" + u.administrationID + " - " + u.username + ")";
+			// Ofuscar NIF en el subtítulo
+			var nifOfuscat = ofuscarNIF(u.administrationID);
+			usuarisHTML += u.name + " " + u.surname1 + " (" + nifOfuscat + " - " + u.username + ")";
 			if (index < usuaris.length - 1) {
 				usuarisHTML += "<br>";
 			}

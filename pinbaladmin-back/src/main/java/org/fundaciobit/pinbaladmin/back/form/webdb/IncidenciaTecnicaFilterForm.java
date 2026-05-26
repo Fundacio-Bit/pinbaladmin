@@ -131,6 +131,17 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
   }
 
 
+  private java.lang.String contacteNom;
+
+  public java.lang.String getContacteNom() {
+    return this.contacteNom;
+  }
+
+  public void setContacteNom(java.lang.String contacteNom) {
+    this.contacteNom = contacteNom;
+  }
+
+
   private java.lang.Long organidDesde;
 
   public java.lang.Long getOrganidDesde() {
@@ -161,17 +172,6 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
 
   public void setNomEntitat(java.lang.String nomEntitat) {
     this.nomEntitat = nomEntitat;
-  }
-
-
-  private java.lang.String contacteNom;
-
-  public java.lang.String getContacteNom() {
-    return this.contacteNom;
-  }
-
-  public void setContacteNom(java.lang.String contacteNom) {
-    this.contacteNom = contacteNom;
   }
 
 
@@ -256,10 +256,10 @@ public class IncidenciaTecnicaFilterForm extends PinbalAdminBaseFilterForm imple
     this.dataFiFins = __toClone.dataFiFins;
     this.estatSelect = __toClone.estatSelect;
     this.tipusSelect = __toClone.tipusSelect;
+    this.contacteNom = __toClone.contacteNom;
     this.organidDesde = __toClone.organidDesde;
     this.organidFins = __toClone.organidFins;
     this.nomEntitat = __toClone.nomEntitat;
-    this.contacteNom = __toClone.contacteNom;
     this.contacteEmail = __toClone.contacteEmail;
     this.contacteTelefon = __toClone.contacteTelefon;
     this.caidIdentificadorConsulta = __toClone.caidIdentificadorConsulta;

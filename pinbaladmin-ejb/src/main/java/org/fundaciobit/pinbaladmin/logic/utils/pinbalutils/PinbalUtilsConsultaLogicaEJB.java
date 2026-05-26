@@ -410,6 +410,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 			} else if (estatSoli == Constants.SOLI_ESTAT_ESMENES) {
 				// Solicitud desestimada - NOTIFICAR a tramitadores (NO email)
 				log.info("Notificando desestimación a tramitadores: solicitud=" + solicitud.getSolicitudID());
+				log.info("Mensaje de Madrid: \n" + infoMad.getMissatge());
 				notificacionLogicaEjb.notificarDesestimacionATramitadores(
 					solicitud, 
 					infoMad.getMissatge(), 

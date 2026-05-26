@@ -276,6 +276,38 @@
           </c:if>
           </td>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTESOLICITANTID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteSolicitantID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteSolicitantID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTEGESTAUTID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteGestAutID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteGestAutID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTEAUDITORIAID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteAuditoriaID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteAuditoriaID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CONTACTETECNICID)}">
+          <td>
+          <c:set var="tmp">${solicitud.contacteTecnicID}</c:set>
+          <c:if test="${not empty tmp}">
+          ${__theFilterForm.mapOfContacteForContacteTecnicID[tmp]}
+          </c:if>
+          </td>
+        </c:if>
 
 
         <!--  /** Additional Fields */  -->

@@ -39,6 +39,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ContacteFields.USERNAME)}">
         <th>${pad:getSortIcons(__theFilterForm,ContacteFields.USERNAME)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,ContacteFields.NOMBRECOMPLETO)}">
+        <th>${pad:getSortIcons(__theFilterForm,ContacteFields.NOMBRECOMPLETO)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

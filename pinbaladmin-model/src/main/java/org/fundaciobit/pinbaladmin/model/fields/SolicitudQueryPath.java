@@ -183,6 +183,22 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.CONTACTERESPONSABLEID);
   }
 
+  public LongField CONTACTESOLICITANTID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTESOLICITANTID);
+  }
+
+  public LongField CONTACTEGESTAUTID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTEGESTAUTID);
+  }
+
+  public LongField CONTACTEAUDITORIAID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTEAUDITORIAID);
+  }
+
+  public LongField CONTACTETECNICID() {
+    return new LongField(getQueryPath(), SolicitudFields.CONTACTETECNICID);
+  }
+
 
 
   @Override
@@ -322,6 +338,38 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new ContacteQueryPath(new QueryPath() {
       public String getQueryPath() {
           return SolicitudQueryPath.this.getQueryPath() + "contacteResponsable" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTESOLICITANT() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacteSolicitant" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTEGESTAUT() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacteGestAut" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTEAUDITORIA() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacteAuditoria" + ".";
+      }
+    });
+  }
+
+  public ContacteQueryPath CONTACTETECNIC() {
+    return new ContacteQueryPath(new QueryPath() {
+      public String getQueryPath() {
+          return SolicitudQueryPath.this.getQueryPath() + "contacteTecnic" + ".";
       }
     });
   }

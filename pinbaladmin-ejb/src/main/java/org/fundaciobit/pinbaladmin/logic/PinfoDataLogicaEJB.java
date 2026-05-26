@@ -140,8 +140,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		List<UsuariData> usuarisList = new ArrayList<UsuariData>();
 
 		List<ProcedimentData> procedimentsList;
-		List<ServeiData> altaList;
-		List<ServeiData> baixaList;
+		List<ServeiData> serveisList;
 
 		UsuariData lastUsuariData = null;
 		ProcedimentData lastProcedimentData = null;
@@ -184,28 +183,24 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 				SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
 				ProcedimentData procedimentData = new ProcedimentData(procedimentID,
 						solicitud.getProcedimentNom(),solicitud.getProcedimentCodi(), 
-						new ArrayList<ServeiData>(), new ArrayList<ServeiData>());
-				altaList = procedimentData.getAltes();
-				baixaList = procedimentData.getBaixes();
+						new ArrayList<ServeiData>());
+				serveisList = procedimentData.getServeis();
 				lastProcedimentData = procedimentData;
 				lastProcedimentID = procedimentID;
 				procedimentsList.add(procedimentData);
 			} else {
 //				log.info("Procediment " + procedimentID + " ja existent, afegirem al seu serveiList.");
-				altaList = lastProcedimentData.getAltes();
-				baixaList = lastProcedimentData.getBaixes();
+				serveisList = lastProcedimentData.getServeis();
 			}
 
 			ServeiJPA servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
-			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), servei.getNom(), pinfoData.getPinfodataID(), pinfoData.getAlta());
-			if (pinfoData.getAlta() == 1) {
-				altaList.add(serveiData);
-			} else {
-				baixaList.add(serveiData);
-			}
+			ServeiData serveiData = new ServeiData(serveiID, servei.getCodi(), servei.getNom(), pinfoData.getPinfodataID());
+			serveisList.add(serveiData);
 		}
 
-		PinfoDataFull pinfoDataFull = new PinfoDataFull(pinfoID, usuarisList);
+		// Obtenir el tipus d'alta/baixa del primer PinfoData (tots haurien de tenir el mateix valor)
+		Long tipusAlta = !llista.isEmpty() ? llista.get(0).getAlta() : null;
+		PinfoDataFull pinfoDataFull = new PinfoDataFull(pinfoID, tipusAlta, usuarisList);
 		printPinfoDataFull(pinfoDataFull);
 
 		log.info(llista.size() + " registres de PinfoData per PINFO" + pinfoID);
@@ -214,26 +209,15 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	}
 
 	private void printPinfoDataFull(PinfoDataFull pinfoDataFull) {
-		log.info("PinfoDataFull: " + pinfoDataFull.getPinfoID());
+		log.info("PinfoDataFull: " + pinfoDataFull.getPinfoID() + " - Tipus: " + 
+				(pinfoDataFull.getTipusAlta() != null && pinfoDataFull.getTipusAlta() == 1 ? "ALTA" : "BAIXA"));
 		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
 			log.info("Usuari: " + usuariData.getUserInfo());
 			for (ProcedimentData procedimentData : usuariData.getProcediments()) {
-				log.info("\tProcediment: " + procedimentData.getProcedimentID());
-
-				if (procedimentData.getAltes().size() > 0) {
-					log.info("\t\tALTA");
-					for (ServeiData serveiData : procedimentData.getAltes()) {
-						log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei() + " - "
-								+ serveiData.getAlta());
-					}
-				}
-
-				if (procedimentData.getBaixes().size() > 0) {
-					log.info("\t\tBAIXA");
-					for (ServeiData serveiData : procedimentData.getBaixes()) {
-						log.info("\t\tServei: " + serveiData.getServeiID() + " - " + serveiData.getServei() + " - "
-								+ serveiData.getAlta());
-					}
+				log.info("\tProcediment: " + procedimentData.getProcedimentID() + " (" + procedimentData.getCodi() + ")");
+				log.info("\t\tServeis: " + procedimentData.getServeis().size());
+				for (ServeiData serveiData : procedimentData.getServeis()) {
+					log.info("\t\t- Servei: " + serveiData.getServeiID() + " - " + serveiData.getServei() + " - " + serveiData.getNom());
 				}
 			}
 		}
@@ -244,14 +228,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		private String servei;
 		private String nom;
 		private Long pinfoDataID;
-		private Long alta;
 
-		public ServeiData(Long serveiID, String servei, String nom, Long pinfoDataID, Long alta) {
+		public ServeiData(Long serveiID, String servei, String nom, Long pinfoDataID) {
 			this.serveiID = serveiID;
 			this.servei = servei;
 			this.nom = nom;
 			this.pinfoDataID = pinfoDataID;
-			this.alta = alta;
 		}
 
 		public Long getServeiID() {
@@ -270,10 +252,6 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			return this.pinfoDataID;
 		}
 
-		public Long getAlta() {
-			return this.alta;
-		}
-
 		public void setServeiID(Long serveiID) {
 			this.serveiID = serveiID;
 		}
@@ -289,26 +267,19 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		public void setPinfoDataID(Long pinfoDataID) {
 			this.pinfoDataID = pinfoDataID;
 		}
-
-		public void setAlta(Long alta) {
-			this.alta = alta;
-		}
 	}
 
 	public class ProcedimentData {
 		private Long procedimentID;
 		private String procediment;
 		private String codi;
-		private List<ServeiData> altes = new ArrayList<ServeiData>();
-		private List<ServeiData> baixes = new ArrayList<ServeiData>();
+		private List<ServeiData> serveis = new ArrayList<ServeiData>();
 
-		public ProcedimentData(Long procedimentID, String procediment, String codi, List<ServeiData> altes,
-				List<ServeiData> baixes) {
+		public ProcedimentData(Long procedimentID, String procediment, String codi, List<ServeiData> serveis) {
 			this.procedimentID = procedimentID;
 			this.procediment = procediment;
 			this.codi = codi;
-			this.altes = altes;
-			this.baixes = baixes;
+			this.serveis = serveis;
 		}
 
 		public Long getProcedimentID() {
@@ -323,12 +294,8 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			return this.codi;
 		}
 
-		public List<ServeiData> getAltes() {
-			return this.altes;
-		}
-
-		public List<ServeiData> getBaixes() {
-			return this.baixes;
+		public List<ServeiData> getServeis() {
+			return this.serveis;
 		}
 
 		public void setProcedimentID(Long procedimentID) {
@@ -343,12 +310,8 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 			this.codi = codi;
 		}
 
-		public void setAltes(List<ServeiData> altes) {
-			this.altes = altes;
-		}
-
-		public void setBaixes(List<ServeiData> baixes) {
-			this.baixes = baixes;
+		public void setServeis(List<ServeiData> serveis) {
+			this.serveis = serveis;
 		}
 	}
 
@@ -406,15 +369,21 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 	public class PinfoDataFull {
 		private Long pinfoID;
+		private Long tipusAlta; // 1=ALTA, 0=BAJA
 		private List<UsuariData> usuaris = new ArrayList<UsuariData>();
 
-		public PinfoDataFull(Long pinfoID, List<UsuariData> usuaris) {
+		public PinfoDataFull(Long pinfoID, Long tipusAlta, List<UsuariData> usuaris) {
 			this.pinfoID = pinfoID;
+			this.tipusAlta = tipusAlta;
 			this.usuaris = usuaris;
 		}
 
 		public Long getPinfoID() {
 			return this.pinfoID;
+		}
+
+		public Long getTipusAlta() {
+			return this.tipusAlta;
 		}
 
 		public List<UsuariData> getUsuaris() {
@@ -423,6 +392,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 		public void setPinfoID(Long pinfoID) {
 			this.pinfoID = pinfoID;
+		}
+
+		public void setTipusAlta(Long tipusAlta) {
+			this.tipusAlta = tipusAlta;
 		}
 
 		public void setUsuaris(List<UsuariData> usuaris) {
@@ -585,7 +558,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 							logDetallat, procedimentsNoExisteixen, cacheProcediments);
 					if (procediment == null) {
 						// Marcar tots els serveis d'aquest procediment com a error
-						for (ServeiData sd : procedimentData.getAltes()) {
+						for (ServeiData sd : procedimentData.getServeis()) {
 							totalPinfodatasProcessats++;
 							pinfodatasError++;
 							pinfodataErrors.put(sd.getPinfoDataID(), "Procediment " + procedimentCodi + " no existeix a Pinbal");
@@ -594,10 +567,10 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 						continue; // Procediment no trobat, passar al següent
 					}
 					
-					logDetallat.append("│  │  Serveis a processar: ").append(procedimentData.getAltes().size()).append("\n");
+					logDetallat.append("│  │  Serveis a processar: ").append(procedimentData.getServeis().size()).append("\n");
 
-					// --- Processar serveis d'alta ---
-					for (ServeiData serveiData : procedimentData.getAltes()) {
+					// --- Processar serveis ---
+					for (ServeiData serveiData : procedimentData.getServeis()) {
 						totalPinfodatasProcessats++;
 						String serveiNom = serveiData.getNom() != null ? serveiData.getNom() : serveiData.getServei();
 						logDetallat.append("│  │\n│  │  ├─ SERVEI: ").append(serveiNom).append(" # ").append(serveiData.getServei()).append(" (").append(serveiData.getServei()).append(")\n");

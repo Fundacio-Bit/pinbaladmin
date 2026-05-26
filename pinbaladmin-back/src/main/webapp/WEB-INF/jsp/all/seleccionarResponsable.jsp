@@ -183,13 +183,9 @@
 
 		<!-- Avís sobre el responsable -->
 		<div class="aviso-info">
-			<h5><i class="fas fa-question-circle"></i> Qui ha de firmar aquesta sol·licitud?</h5>
-			<p style="margin-bottom: 8px;">
-				Selecciona la persona <strong>responsable</strong> que revisarà i firmarà digitalment 
-				aquesta sol·licitud a PortaFIB. Ha de tenir permisos <code style="background: #e3f2fd; padding: 2px 6px; border-radius: 3px;">PFI_USER</code>.
-			</p>
-			<p style="margin-bottom: 0; font-size: 12px;">
-				<i class="fas fa-clock"></i> Aquesta persona rebrà un correu electrònic per firmar el document.
+			<h5><i class="fas fa-question-circle"></i> Informació sobre la signatura</h5>
+			<p style="margin-bottom: 0;">
+				<fmt:message key="tramit.pinfo.responsable.ajuda"/>
 			</p>
 		</div>
 
@@ -204,7 +200,7 @@
 			method="POST">
 			<div id="responsables-list">
 				<c:forEach var="responsable" items="${responsables}">
-					<div class="element responsable-item">
+					<div class="element responsable-item" data-nif="${responsable.nif}">
 						<input type="radio" name="responsable"
 							id="responsable-${responsable.nif}" value="${responsable.nif}" />
 						<label for="responsable-${responsable.nif}">
@@ -219,7 +215,28 @@
 
 	<script>
 	
+	// Función para ofuscar NIF: 45186147W -> 45****47W
+	function ofuscarNIF(nif) {
+		if (!nif || nif.length < 4) return nif;
+		var nifUpper = nif.toUpperCase();
+		var inicio = nifUpper.substring(0, 2);
+		var final = nifUpper.substring(nifUpper.length - 3);
+		return inicio + "****" + final;
+	}
+	
 	$(document).ready(function(){
+		// Ofuscar NIFs al cargar la página
+		$('.responsable-item').each(function() {
+			var nif = $(this).data('nif');
+			if (nif) {
+				var label = $(this).find('label');
+				var text = label.text();
+				var nifOfuscat = ofuscarNIF(nif);
+				var newText = text.replace(nif, nifOfuscat);
+				label.text(newText);
+			}
+		});
+		
 		// Hacer todo el div clickeable para seleccionar el radio
 		$('.responsable-item').on('click', function(e){
 			// Solo si no se ha clickeado directamente en el radio o label

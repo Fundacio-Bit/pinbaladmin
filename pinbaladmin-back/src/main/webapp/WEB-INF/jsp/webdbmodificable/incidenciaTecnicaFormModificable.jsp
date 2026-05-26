@@ -293,272 +293,13 @@ form {
 }
 </style>
 
-
-	<c:if test="${desplegableOrgans == 'true'}">
-		<!-- Incluye jQuery desde un CDN -->
-		<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-	Incluye jQuery UI desde un CDN
-	<link rel="stylesheet"
-		href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
- -->
-		<!--   
-    
-    //1. Coger todos los datos
-    var select = document.getElementById("incidenciaTecnica_organid")
-
-    var organs = [];
-    for(let i = 0; i< select.children.length; i++){
-      var organ = {
-        key : select.children[i].value,
-        val : select.children[i].innerHTML
-      }
-       organs.push(organ);
-    }
-
-    //2. Cambiar Select por input text
-    
-    //3. oninput: filtrar i mostrar datos en ul li
-
- -->
-		<script>
-			document
-					.addEventListener(
-							"DOMContentLoaded",
-							function() {
-								// Obtener el select existente          incidenciaTecnica_organid
-								const select = document
-										.getElementById("incidenciaTecnica_organid");
-
-								// Crear un campo de entrada de texto
-								const input = document.createElement("input");
-								input.type = "search";
-								input.id = "autocomplete-input";
-								input.className = "w-100 form-control";
-								input.placeholder = "Escribe para buscar";
-								input.autocomplete = "off";
-								input.name = "incidenciaTecnica.organid";
-
-								//Asigna valor actual (per si es edici� i no creaci�)
-								const selected = select.selectedOptions[0];
-								if (selected.value.length > 0) {
-									input.value = selected.innerHTML;
-								} else {
-									input.value = "";
-								}
-
-								// Crear un div para el desplegable de opciones
-								const dropdown = document.createElement("div");
-								dropdown.id = "autocomplete-dropdown";
-								dropdown.className = "autocomplete-dropdown";
-								dropdown.style.zIndex = 5;
-
-								// Agregar el campo de entrada de texto y el desplegable despu�s del select
-								select.parentNode.insertBefore(dropdown,
-										select.nextSibling);
-								select.parentNode.insertBefore(input,
-										select.nextSibling);
-
-								// Ocultar el select original
-								select.style.display = "none";
-
-								// Manejar eventos de entrada en el campo de entrada de texto
-								input
-										.addEventListener(
-												"input",
-												function() {
-													const value = input.value
-															.trim()
-															.toLowerCase();
-													const options = select.options;
-
-													// Limpiar el desplegable
-													dropdown.innerHTML = "";
-
-													// Mostrar todas las opciones si el campo de entrada est� vac�o
-													if (value === "") {
-														for (let i = 0; i < options.length; i++) {
-															dropdown
-																	.appendChild(createDropdownOption(options[i]));
-														}
-													} else {
-														// Filtrar y mostrar las opciones que coincidan con el valor ingresado
-														for (let i = 0; i < options.length; i++) {
-															const optionText = options[i].textContent
-																	.toLowerCase();
-															if (optionText
-																	.includes(value)) {
-																dropdown
-																		.appendChild(createDropdownOption(options[i]));
-															}
-														}
-													}
-
-													// Mostrar u ocultar el desplegable seg�n las opciones disponibles
-													if (dropdown.children.length > 0) {
-														dropdown.style.display = "block";
-													} else {
-														dropdown.style.display = "none";
-													}
-												});
-
-								// Controlador de clic en el desplegable para seleccionar la opci�n
-								dropdown
-										.addEventListener(
-												"click",
-												function(e) {
-													if (e.target
-															&& e.target.tagName === "DIV") {
-														const optionText = e.target.textContent;
-														input.value = optionText;
-														select.value = e.target.value;
-														dropdown.style.display = "none";
-														select
-																.dispatchEvent(new Event(
-																		"change")); // Disparar evento "change" en el select
-													}
-												});
-
-								// Funci�n para crear una opci�n en el desplegable
-								function createDropdownOption(option) {
-									const div = document.createElement("div");
-									div.textContent = option.textContent;
-									div.className = "autocomplete-dropdown-item";
-									div.value = option.value;
-									return div;
-								}
-
-								$(document)
-										.click(
-												function(event) {
-													const $target = $(event.target);
-
-													if (!$target.is(input)
-															&& $target
-																	.closest("#autocomplete-dropdown").length === 0) {
-
-														const selected = select.selectedOptions[0];
-														if (selected.value.length > 0) {
-															input.value = selected.innerHTML;
-														} else {
-															input.value = "";
-														}
-														dropdown.style.display = "none";
-													}
-												});
-
-								/* 	    input.addEventListener("focusout", function(e) {
-								 const selected = select.selectedOptions[0];
-								 if (selected.value.length > 0) {
-								 console.log("lostfocus: " + selected.value + " - " + selected.innerHTML );
-								 input.value = selected.innerHTML;
-								 dropdown.dispatchEvent(new Event("click")); // Disparar evento "change" en el select
-								 }
-								 });
-								 */
-
-							});
-		</script>
-
-		<style>
-.autocomplete-container {
-	position: relative;
-}
-
-.autocomplete-input {
-	width: 100%;
-	padding: 5px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	position: relative;
-}
-
-.autocomplete-dropdown {
-	display: none;
-	position: absolute;
-	z-index: 1;
-	border: 1px solid #ccc;
-	border-top: none;
-	max-height: 170px;
-	overflow-y: auto;
-	width: 100%;
-	background-color: white;
-	max-width: 40rem;
-}
-
-.autocomplete-dropdown-item {
-	padding: 5px;
-	cursor: pointer;
-}
-
-.autocomplete-dropdown-item:hover {
-	background-color: #f0f0f0;
-}
-
-.autocomplete-dropdown.active {
-	display: block;
-}
-</style>
-
-	</c:if>
-
-
-
-	<!-- AFEGIR DESPLEGABLE ENTITAT DE L'USUARI  -->
-	
-<!-- Select generado con JSTL y oculto inicialmente -->
-<!-- <select id="incidenciaTecnica_entitatid" name="incidenciaTecnica.entitatid" class="w-100 form-control" style="display: none;">
-    <option value="">Selecciona una opci�</option>
-    <c:forEach var="entitat" items="${entitats}">
-        <option value="${entitat.key}">${entitat.value}</option>
-    </c:forEach>
-</select> -->
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var tbody = document.querySelector("#incidenciaTecnica_tableid tbody");
-        var selectTemplate = document.querySelector("#incidenciaTecnica_entitatid");
-
-        if (!tbody || !selectTemplate) return;
-
-        // Crear la fila y celdas
-        var tr = document.createElement("tr");
-        tr.id = "incidenciaTecnica_entitatid_rowid";
-
-        var tdLabel = document.createElement("td");
-        tdLabel.id = "incidenciaTecnica_entitatid_columnlabelid";
-        tdLabel.innerHTML = '<label>Entitat (*)</label>';
-
-        var tdSelect = document.createElement("td");
-        tdSelect.id = "incidenciaTecnica_entitatid_columnvalueid";
-
-        // Clonar y mostrar el select
-        var selectClone = selectTemplate.cloneNode(true);
-        selectClone.style.display = "block";
-
-        // Insertar el select en la celda y a�adir la fila a la tabla
-        tdSelect.appendChild(selectClone);
-        tr.appendChild(tdLabel);
-        tr.appendChild(tdSelect);
-        tbody.appendChild(tr);
-        
-        //Controlar onsubmit del form. Si nohay valor seleccionado, no enviar el form.
-        
-        var form = document.querySelector("form");
-        form.addEventListener("submit", function(event){
-            var select = document.getElementById("incidenciaTecnica_entitatid");
-            if(select.value === ""){
-                alert("Selecciona una entitat");
-                event.preventDefault();
-            }
-        });
-        
-    });
-</script>
-
 <!-- Script para mover el botón Guardar arriba y cambiar texto a Continuar -->
 <script>
+    // Cargar mensajes de traducción para validación
+    var MSG_TITOL_OBLIGATORI = '<fmt:message key="tramit.pinfo.validacio.titol.obligatori"/>';
+    var MSG_EMAIL_OBLIGATORI = '<fmt:message key="tramit.pinfo.validacio.email.obligatori"/>';
+    var MSG_EMAIL_FORMAT = '<fmt:message key="tramit.pinfo.validacio.email.format"/>';
+    
     $(document).ready(function() {
         // Buscar el botón de guardar original
         var saveButton = $('.navbar-form .btn-primary');
@@ -583,10 +324,107 @@ form {
             // Insertar el header al inicio de module_content
             $('.module_content').prepend(headerDiv);
             
-            // Copiar el evento submit del botón original
-            continuarButton.on('click', function() {
-                saveButton.click();
+            // Copiar el evento submit del botón original con validación
+            continuarButton.on('click', function(e) {
+                e.preventDefault();
+                if (validarFormularioPinfo()) {
+                    saveButton.click();
+                }
+                return false;
             });
+        }
+        
+        // ========================================
+        // VALIDACIÓN DEL FORMULARIO
+        // ========================================
+        
+        // Función para crear mensaje de error al estilo genapp
+        function crearMissatgeError(element, missatge) {
+            var span = document.createElement("span");
+            span.id = element.id + ".errors";
+            span.className = "errorField alert alert-danger";
+            span.innerHTML = missatge;
+            element.parentElement.prepend(span);
+        }
+        
+        // Función de validación del formulario
+        function validarFormularioPinfo() {
+            var validacio = true;
+            
+            // Eliminar errores previos
+            $(".errorField").remove();
+            
+            // Validar Título (obligatorio)
+            var titolInput = document.getElementById("incidenciaTecnica.titol");
+            if (!titolInput || !titolInput.value || titolInput.value.trim() === "") {
+                if (titolInput) {
+                    crearMissatgeError(titolInput, MSG_TITOL_OBLIGATORI);
+                }
+                validacio = false;
+            }
+            
+            // Validar Email del contacto (obligatorio y formato válido)
+            var emailInput = document.getElementById("incidenciaTecnica.contacteEmail");
+            if (!emailInput || !emailInput.value || emailInput.value.trim() === "") {
+                if (emailInput) {
+                    crearMissatgeError(emailInput, MSG_EMAIL_OBLIGATORI);
+                }
+                validacio = false;
+            } else {
+                // Validar formato del email
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailInput.value.trim())) {
+                    crearMissatgeError(emailInput, MSG_EMAIL_FORMAT);
+                    validacio = false;
+                }
+            }
+            
+            return validacio;
+        }
+        
+        // Interceptar el submit del formulario
+        var form = $('form[name="incidenciaTecnicaForm"]');
+        if (form.length > 0) {
+            form.on('submit', function(e) {
+                if (!validarFormularioPinfo()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+        }
+        
+        // Quitar el asterisco obligatorio del campo Observacions (DESCRIPCIO)
+        var labelObservacions = $('#incidenciaTecnica_descripcio_columnlabelid label');
+        if (labelObservacions.length > 0) {
+            var textoLabel = labelObservacions.html();
+            // Eliminar el &nbsp;(*) del final
+            textoLabel = textoLabel.replace(/\s*&nbsp;\(\*\)\s*$/, '');
+            labelObservacions.html(textoLabel);
+        }
+        
+        // Reordenar campos en el orden específico:
+        // 1. Nom (readonly), 2. Órgano gestor (readonly), 3. Departament, 4. Correu, 5. Telèfon, 6. Títol, 7. Observacions
+        var tbody = $('#incidenciaTecnica_tableid tbody');
+        if (tbody.length > 0) {
+			tbody = tbody[0]; // Asegurarse de seleccionar solo el primer tbody si hay más de uno
+            // Obtener todos los campos
+            var contacteNom = $('#incidenciaTecnica_contacteNom_rowid');
+            var organid = $('#incidenciaTecnica_organid_rowid');
+            var nomEntitat = $('#incidenciaTecnica_nomEntitat_rowid');
+            var contacteEmail = $('#incidenciaTecnica_contacteEmail_rowid');
+            var contacteTelefon = $('#incidenciaTecnica_contacteTelefon_rowid');
+            var titol = $('#incidenciaTecnica_titol_rowid');
+            var descripcio = $('#incidenciaTecnica_descripcio_rowid');
+            
+            // Moverlos al inicio en orden inverso (prepend los pone arriba)
+            if (contacteTelefon.length > 0) tbody.prepend(contacteTelefon[0]);
+            if (contacteEmail.length > 0) tbody.prepend(contacteEmail[0]);
+            if (nomEntitat.length > 0) tbody.prepend(nomEntitat[0]);
+            if (descripcio.length > 0) tbody.prepend(descripcio[0]);
+            if (titol.length > 0) tbody.prepend(titol[0]);
+            if (organid.length > 0) tbody.prepend(organid[0]);
+            if (contacteNom.length > 0) tbody.prepend(contacteNom[0]);
         }
     });
 </script>

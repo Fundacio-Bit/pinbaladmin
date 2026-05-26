@@ -60,14 +60,6 @@
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 		<li style="list-style-type: disc; list-style-position: inside;">
-			<a href="<c:url value="/admin/entitat/list"/>">
-				<span style="${(fn:contains(url, 'entitat'))? "font-weight:bold;" : ""}">
-					<fmt:message key="entitat.entitat.plural" />
-				</span>
-			</a>
-		</li>
-
-		<li style="list-style-type: disc; list-style-position: inside;">
 			<a href="<c:url value="/admin/organ/list"/>">
 				<span style="${(fn:contains(url, 'organ'))? "font-weight:bold;" : ""}">
 					<fmt:message key="organ.organ.plural" />

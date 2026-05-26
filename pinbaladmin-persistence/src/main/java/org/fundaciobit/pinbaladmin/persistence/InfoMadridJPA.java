@@ -6,12 +6,14 @@ import javax.persistence.Column;
 import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
+import javax.persistence.Lob;
 import javax.persistence.Index;
 import javax.persistence.GeneratedValue;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Set;
+import org.hibernate.annotations.Type;
 import javax.persistence.Id;
 
 
@@ -36,7 +38,9 @@ public class InfoMadridJPA implements InfoMadrid {
     @Column(name="estatautoritzacio",length = 19)
     java.lang.Long estatAutoritzacio;
 
-    @Column(name="missatge",length = 1024)
+    @Column(name="missatge",length = 2147483647)
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     java.lang.String missatge;
 
     @Column(name="consulta",length = 240)

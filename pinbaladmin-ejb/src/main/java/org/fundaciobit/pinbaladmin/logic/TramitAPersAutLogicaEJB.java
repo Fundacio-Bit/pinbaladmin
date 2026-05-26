@@ -208,6 +208,12 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long contacteTitularID = null;
         Long contacteResponsableID = null;
         Long contactePersonaID = null;
+        
+        Long contacteSolicitantID = null;
+		Long contacteGestAutID = null;
+		Long contacteAuditoriaID = null; 
+		Long contacteTecnicID = null;
+
 
         //Camps a obtenir
         String procedimentCodi = null;
@@ -307,14 +313,14 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     case "D":
                         TramitDCteAut D = (TramitDCteAut) obj;
                         String fullNameD = toFullName(D.getNom(), D.getLlinatge1(), D.getLlinatge2());
+                        responsableProcNom = fullNameD;
+                        responsableProcEmail = D.getMail();
                         map.put("fullNameD", fullNameD);
                     break;
                     case "E":
                         TramitECteAud E = (TramitECteAud) obj;
                         String fullNameE = toFullName(E.getNom(), E.getLlinatge1(), E.getLlinatge2());
                         map.put("fullNameE", fullNameE);
-                        responsableProcNom = fullNameE;
-                        responsableProcEmail = E.getMail();
                     break;
                     case "F":
                         TramitFCteTec F = (TramitFCteTec) obj;
@@ -467,7 +473,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel, creador, operador,
 				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
-				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID);
+				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, 
+                titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID, 
+                contacteGestAutID, contacteAuditoriaID, contacteTecnicID);
 
 		try {
 	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soliJpa);

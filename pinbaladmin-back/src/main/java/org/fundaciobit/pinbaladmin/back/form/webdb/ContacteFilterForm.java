@@ -130,6 +130,17 @@ public class ContacteFilterForm extends PinbalAdminBaseFilterForm implements Con
   }
 
 
+  private java.lang.String nombrecompleto;
+
+  public java.lang.String getNombrecompleto() {
+    return this.nombrecompleto;
+  }
+
+  public void setNombrecompleto(java.lang.String nombrecompleto) {
+    this.nombrecompleto = nombrecompleto;
+  }
+
+
   public ContacteFilterForm() {
   }
   
@@ -145,6 +156,7 @@ public class ContacteFilterForm extends PinbalAdminBaseFilterForm implements Con
     this.telefon = __toClone.telefon;
     this.mail = __toClone.mail;
     this.username = __toClone.username;
+    this.nombrecompleto = __toClone.nombrecompleto;
   }
   
   /* ========= UTILS ========== */

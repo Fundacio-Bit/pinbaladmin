@@ -19,9 +19,9 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
 	 public static final IntegerField ESTAT = new IntegerField(_TABLE_MODEL, "estat", "estat");
 	 public static final IntegerField TIPUS = new IntegerField(_TABLE_MODEL, "tipus", "tipus");
+	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contacteNom", "contactenom");
 	 public static final LongField ORGANID = new LongField(_TABLE_MODEL, "organid", "organid");
 	 public static final StringField NOMENTITAT = new StringField(_TABLE_MODEL, "nomEntitat", "nomentitat");
-	 public static final StringField CONTACTENOM = new StringField(_TABLE_MODEL, "contacteNom", "contactenom");
 	 public static final StringField CONTACTEEMAIL = new StringField(_TABLE_MODEL, "contacteEmail", "contacteemail");
 	 public static final StringField CONTACTETELEFON = new StringField(_TABLE_MODEL, "contacteTelefon", "contactetelefon");
 	 public static final StringField CAIDIDENTIFICADORCONSULTA = new StringField(_TABLE_MODEL, "caidIdentificadorConsulta", "caididentificadorconsulta");
@@ -38,9 +38,9 @@ public interface IncidenciaTecnicaFields extends java.io.Serializable {
     DATAFI,
     ESTAT,
     TIPUS,
+    CONTACTENOM,
     ORGANID,
     NOMENTITAT,
-    CONTACTENOM,
     CONTACTEEMAIL,
     CONTACTETELEFON,
     CAIDIDENTIFICADORCONSULTA,

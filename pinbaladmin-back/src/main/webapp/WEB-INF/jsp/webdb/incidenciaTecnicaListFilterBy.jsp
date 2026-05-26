@@ -248,6 +248,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CONTACTENOM)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="incidenciaTecnica.contacteNom" var="contacteNom" />
+              <fmt:message key="genapp.form.searchby" var="cercapercontacteNom" >                
+                 <fmt:param value="${contacteNom}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${contacteNom}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapercontacteNom}" path="contacteNom" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.ORGANID)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">
             <%-- FILTRE NUMERO DESDE-FINS --%>
@@ -275,19 +288,6 @@
               </fmt:message>
               <span class="add-on"><c:out value="${nomEntitat}" />:</span>
               <form:input cssClass="search-query input-medium" placeholder="${cercapernomEntitat}" path="nomEntitat" />
-            </div>
-
-
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,IncidenciaTecnicaFields.CONTACTENOM)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="incidenciaTecnica.contacteNom" var="contacteNom" />
-              <fmt:message key="genapp.form.searchby" var="cercapercontacteNom" >                
-                 <fmt:param value="${contacteNom}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${contacteNom}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapercontacteNom}" path="contacteNom" />
             </div>
 
 

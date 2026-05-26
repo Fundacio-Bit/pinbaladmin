@@ -472,20 +472,21 @@ public class EntitatOperadorController extends EntitatController {
 		
 		try {
 			
-			
+			log.info("Comprovant si l'usuari " + codi + " ja existeix a l'entitat Pinbal " + entitatCodi + "...");
 			UsuariEntitat usuari = usuariClient.getUsuari(codi, entitatCodi);
-
-			log.info("Usuari Trobat: " + usuari.getCodi() + " - " + usuari.getEntitatCodi());
+			log.info("Resposta de Pinbal per a l'usuari " + codi + " a l'entitat " + entitatCodi + ": " + (usuari != null ? "TROBAT" : "NO TROBAT"));
+			
 			if (usuari != null) {
 				log.info(
 						"L'usuari " + codi + " ja existeix a l'entitat Pinbal " + entitatCodi + ". No es crea de nou.");
 				return usuari;
 			}
 			
+			log.info("L'usuari " + codi + " no existeix a l'entitat Pinbal " + entitatCodi + ". Es crearà un de nou.");
 			
 			
 			//Camps per crear l'usuari a Pinbal
-			final String nif = null;
+			String nif = null;
 			String nom = null;
 			String departament = "PinbalAdmin";
 
@@ -591,7 +592,15 @@ public class EntitatOperadorController extends EntitatController {
 			log.info("   - ClaseTramite: " + procediment.getValorCampClaseTramite());
 			log.info("   - Automatizado: " + procediment.getValorCampAutomatizado());
 
-			procedimentClient.createProcediment(procediment);
+			try {
+				log.info("[PREALTAS] Intentant crear procediment a Pinbal...");
+				procedimentClient.createProcediment(procediment);
+				
+			}catch (Exception e) {
+				log.error("[PREALTAS] Error creant Procediment. Revisar si Entitat "+ codiPinbal + " te DIR3 i Organ Gestor actualitzat a Pinbal");
+				throw new Exception("Revisar si Entitat "+ codiPinbal + " te DIR3 i Organ Gestor actualitzat a Pinbal");
+			}
+			
 			log.info("[PREALTAS] Procediment creat correctament");
 
 			// Recuperar ID del procediment creat
@@ -867,28 +876,20 @@ public class EntitatOperadorController extends EntitatController {
 
 	public void autoritzarServeisPreAltaProcediment(Long procedimentID, ProcedimentClient procedimentClient)  throws Exception {
 		log.info("   Autoritzant serveis per al procediment ID: " + procedimentID);
+		
+		String[] codisServeis = {CODI_CONSULTA, CODI_ALTA, CODI_MODIFICACIO};
+		String[] noms = {"CONSULTA", "ALTA", "MODIFICACIO"};
 
-		try {
-
-			// CONSULTA
-			log.info("      Autoritzant " + CODI_CONSULTA + "...");
-			procedimentClient.enableServeiToProcediment(procedimentID, CODI_CONSULTA);
-
-			// ALTA
-			log.info("      Autoritzant " + CODI_ALTA + "...");
-			procedimentClient.enableServeiToProcediment(procedimentID, CODI_ALTA);
-
-			// MODIFICACIÓ
-			log.info("      Autoritzant " + CODI_MODIFICACIO + "...");
-			procedimentClient.enableServeiToProcediment(procedimentID, CODI_MODIFICACIO);
-
-			log.info("   Serveis autoritzats correctament.");
-
-		} catch (Exception e) {
-			log.error("   Error autoritzant serveis per al procediment PREALTAS amb ID: " + procedimentID);
-			throw e;
+		for (int i = 0; i < codisServeis.length; i++) {
+			try {
+				log.info("      Autoritzant servei " + noms[i] + " - " +  codisServeis[i] +" ...");
+				procedimentClient.enableServeiToProcediment(procedimentID, codisServeis[i]);
+			} catch (Throwable e) {
+				log.error("   Error autoritzant servei " + noms[i] + " a PREALTAS amb ID: " + procedimentID, e);
+				throw new Exception("Error autoritzant servei " + noms[i] + " a PREALTAS amb ID: " + procedimentID + ". Error: " + e.getMessage());
+			}
 		}
-
+		log.info("   Serveis autoritzats correctament.");
 	}
 	
 	public void autoritzarUsuariPreAltasEntitat(Long procedimentID, EntitatJPA entitat, UsuariClient usuariClient)

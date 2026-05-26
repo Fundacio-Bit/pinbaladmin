@@ -23,14 +23,14 @@ public interface IncidenciaTecnica extends org.fundaciobit.genapp.common.IGenApp
 	public int getTipus();
 	public void setTipus(int _tipus_);
 
+	public java.lang.String getContacteNom();
+	public void setContacteNom(java.lang.String _contacteNom_);
+
 	public java.lang.Long getOrganid();
 	public void setOrganid(java.lang.Long _organid_);
 
 	public java.lang.String getNomEntitat();
 	public void setNomEntitat(java.lang.String _nomEntitat_);
-
-	public java.lang.String getContacteNom();
-	public void setContacteNom(java.lang.String _contacteNom_);
 
 	public java.lang.String getContacteEmail();
 	public void setContacteEmail(java.lang.String _contacteEmail_);

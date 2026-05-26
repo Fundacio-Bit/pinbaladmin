@@ -15,9 +15,9 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	java.sql.Timestamp dataFi;
 	int estat;
 	int tipus;
+	java.lang.String contacteNom;
 	java.lang.Long organid;
 	java.lang.String nomEntitat;
-	java.lang.String contacteNom;
 	java.lang.String contacteEmail;
 	java.lang.String contacteTelefon;
 	java.lang.String caidIdentificadorConsulta;
@@ -31,7 +31,7 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
   }
 
   /** Constructor amb tots els camps  */
-  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaBean(long incidenciaTecnicaID , java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String contacteNom , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.incidenciaTecnicaID=incidenciaTecnicaID;
     this.titol=titol;
     this.descripcio=descripcio;
@@ -39,9 +39,9 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.contacteNom=contacteNom;
     this.organid=organid;
     this.nomEntitat=nomEntitat;
-    this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
     this.contacteTelefon=contacteTelefon;
     this.caidIdentificadorConsulta=caidIdentificadorConsulta;
@@ -50,16 +50,16 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.operador=operador;
 }
   /** Constructor sense valors autoincrementals */
-  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteNom , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
+  public IncidenciaTecnicaBean(java.lang.String titol , java.lang.String descripcio , java.sql.Timestamp dataInici , java.sql.Timestamp dataFi , int estat , int tipus , java.lang.String contacteNom , java.lang.Long organid , java.lang.String nomEntitat , java.lang.String contacteEmail , java.lang.String contacteTelefon , java.lang.String caidIdentificadorConsulta , java.lang.String caidNumeroSeguiment , java.lang.String creador , java.lang.String operador) {
     this.titol=titol;
     this.descripcio=descripcio;
     this.dataInici=dataInici;
     this.dataFi=dataFi;
     this.estat=estat;
     this.tipus=tipus;
+    this.contacteNom=contacteNom;
     this.organid=organid;
     this.nomEntitat=nomEntitat;
-    this.contacteNom=contacteNom;
     this.contacteEmail=contacteEmail;
     this.contacteTelefon=contacteTelefon;
     this.caidIdentificadorConsulta=caidIdentificadorConsulta;
@@ -88,9 +88,9 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     this.setDataFi(__bean.getDataFi());
     this.setEstat(__bean.getEstat());
     this.setTipus(__bean.getTipus());
+    this.setContacteNom(__bean.getContacteNom());
     this.setOrganid(__bean.getOrganid());
     this.setNomEntitat(__bean.getNomEntitat());
-    this.setContacteNom(__bean.getContacteNom());
     this.setContacteEmail(__bean.getContacteEmail());
     this.setContacteTelefon(__bean.getContacteTelefon());
     this.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());
@@ -148,6 +148,13 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 		this.tipus = _tipus_;
 	};
 
+	public java.lang.String getContacteNom() {
+		return(contacteNom);
+	};
+	public void setContacteNom(java.lang.String _contacteNom_) {
+		this.contacteNom = _contacteNom_;
+	};
+
 	public java.lang.Long getOrganid() {
 		return(organid);
 	};
@@ -160,13 +167,6 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
 	};
 	public void setNomEntitat(java.lang.String _nomEntitat_) {
 		this.nomEntitat = _nomEntitat_;
-	};
-
-	public java.lang.String getContacteNom() {
-		return(contacteNom);
-	};
-	public void setContacteNom(java.lang.String _contacteNom_) {
-		this.contacteNom = _contacteNom_;
 	};
 
 	public java.lang.String getContacteEmail() {
@@ -225,9 +225,9 @@ public class IncidenciaTecnicaBean implements IncidenciaTecnica {
     __tmp.setDataFi(__bean.getDataFi());
     __tmp.setEstat(__bean.getEstat());
     __tmp.setTipus(__bean.getTipus());
+    __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setOrganid(__bean.getOrganid());
     __tmp.setNomEntitat(__bean.getNomEntitat());
-    __tmp.setContacteNom(__bean.getContacteNom());
     __tmp.setContacteEmail(__bean.getContacteEmail());
     __tmp.setContacteTelefon(__bean.getContacteTelefon());
     __tmp.setCaidIdentificadorConsulta(__bean.getCaidIdentificadorConsulta());

@@ -132,6 +132,14 @@
 		<hr style="margin-top: 6px; margin-bottom: 6px;" />
 
 		<li style="list-style-type: disc; list-style-position: inside;"><a
+			href="<c:url value="/operador/entitat/list"/>"> <span
+				style="${(fn:contains(url, 'entitat'))? "font-weight:bold;" : ""}"><fmt:message
+						key="entitat.entitat.plural" /></span>
+		</a></li>
+		
+		<hr style="margin-top: 6px; margin-bottom: 6px;" />
+
+		<li style="list-style-type: disc; list-style-position: inside;"><a
 			href="<c:url value="/operador/queesticfent/list"/>"> <span
 				style="${(fn:contains(url, '/operador/queesticfent'))? "font-weight:bold;" : ""}">QueEsticFent</span>
 		</a></li>

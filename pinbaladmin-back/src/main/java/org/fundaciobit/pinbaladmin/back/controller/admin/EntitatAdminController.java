@@ -487,7 +487,7 @@ public class EntitatAdminController extends EntitatController {
 			//Camps per crear l'usuari a Pinbal
 			final String nif = null;
 			String nom = null;
-			String departament = "PinbalAdmin";
+			String departament = "IBDIGITAL";
 
 			boolean representatn = false;
 			boolean delegat = false;

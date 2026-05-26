@@ -49,9 +49,9 @@ public class InfoMadridValidator<I extends InfoMadrid>
 
     if (__vr.getFieldErrorCount(MISSATGE) == 0) {
       java.lang.String __missatge = __target__.getMissatge();
-      if (__missatge!= null && __missatge.length() > 1024) {
+      if (__missatge!= null && __missatge.length() > 2147483647) {
         __vr.rejectValue(MISSATGE, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGE)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(1024)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(MISSATGE)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
       }
     }
 

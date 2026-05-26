@@ -37,6 +37,7 @@
 		body.insertBefore(header, body.firstElementChild);
 		body.appendChild(footer);
 		
+		// Ocultar mensajes de éxito (verde)
 		$(".alert.alert-success").hide();
 	});
 </script>
@@ -146,6 +147,62 @@ body {
 
 .titol-tramit-pinfo-botonera{
 
+}
+
+/* ========================================
+   AVISOS - SISTEMA DE COLORES COHERENTE
+   ======================================== */
+
+/* Avisos informativos, consejos, ayudas - AZUL */
+.aviso-tip,
+.aviso-info {
+	background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+	border-left: 5px solid #2196f3;
+	padding: 1rem 1.25rem;
+	border-radius: 8px;
+	margin-bottom: 1.5rem;
+	box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+	color: #1565c0;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.aviso-tip i,
+.aviso-info i {
+	color: #1976d2;
+	margin-right: 8px;
+	font-size: 16px;
+}
+
+.aviso-tip strong,
+.aviso-info strong {
+	color: #0d47a1;
+}
+
+/* Avisos importantes - NARANJA SUAVE */
+.aviso-important,
+.aviso-warning {
+	background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);
+	border-left: 5px solid #ff9800;
+	padding: 1rem 1.25rem;
+	border-radius: 8px;
+	margin-bottom: 1.5rem;
+	box-shadow: 0 2px 8px rgba(255, 152, 0, 0.15);
+	color: #e65100;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.aviso-important i,
+.aviso-warning i {
+	color: #f57c00;
+	margin-right: 8px;
+	font-size: 16px;
+}
+
+.aviso-important strong,
+.aviso-warning strong {
+	color: #e65100;
 }
 
 </style>

@@ -76,7 +76,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-
 /**
  * 
  * @author anadal
@@ -128,10 +127,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
-    
+
     @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
     protected ContacteLogicaService contacteLogicaEjb;
-    
 
     @Autowired
     protected AreaRefList areaNovaRefList;
@@ -215,7 +213,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudForm.addHiddenField(DATAFI);
 
             solicitudForm.setAttachedAdditionalJspCode(true);
-            
+
             soli.setProduccio(true);
             soli.setDataInici(new Timestamp(System.currentTimeMillis()));
             soli.setCreador(request.getRemoteUser());
@@ -235,7 +233,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 }
             }
         }
-        
+
         if (isestatal == null) {
             // NO SABEM SI ES ESTATAL O LOCAL
             // log.info("XYZ ZZZ __isView = " + __isView);
@@ -248,7 +246,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     // Es Estatal
 
                     amagarCampsEstatal(solicitudForm);
-                    
+
                 } else {
                     // Es Local
                     solicitudForm.addHiddenField(ENTITATESTATAL);
@@ -301,92 +299,96 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * solicitudForm.addHiddenField( MARILEN);
          * solicitudForm.addHiddenField(DANI);
          */
-        
+
         getSeccionsFullView(solicitudForm, isestatal != null ? isestatal : false, request, mav);
 
         return solicitudForm;
     }
-    
-	public void getSeccionsFullView(SolicitudForm solicitudForm, boolean isEstatal, HttpServletRequest request,
-			ModelAndView mav) throws I18NException {
-		
-		solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
-		solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
-		solicitudForm.addHiddenField(SolicitudFields.FIRMATDOCSOLICITUD);
-		solicitudForm.addHiddenField(SolicitudFields.PRODUCCIO);
-		solicitudForm.addHiddenField(SolicitudFields.PINFO);
-//		solicitudForm.addHiddenField(SolicitudFields.CONTACTETITULARID);
-		
 
-		Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
-				SolicitudFields.PROCEDIMENTCODI, 
-				SolicitudFields.CODISIACONV,
-				SolicitudFields.PROCEDIMENTNOM, 
-				SolicitudFields.PROCEDIMENTTIPUS,
-				SolicitudFields.CODIDESCRIPTIU,
-				SolicitudFields.ORGANID, 
-				SolicitudFields.DATACADUCITAT, 
-				SolicitudFields.DOCUMENTSOLICITUDID, 
-				SolicitudFields.SOLICITUDXMLID
-				);
-		
-		Section contactes = new Section("info_contactes", "section.contactes", 
-				SolicitudFields.PERSONACONTACTE,
-				SolicitudFields.PERSONACONTACTEEMAIL, 
-				SolicitudFields.RESPONSABLEPROCNOM,
-				SolicitudFields.RESPONSABLEPROCEMAIL
-				);
-		
-		Section dadesEntitat = new Section("info_entitat", "section.dadesentitat", 
-				SolicitudFields.DENOMINACIO,
-				SolicitudFields.DIR3, 
-				SolicitudFields.NIF
-				);
-		
-		Section dadesConsentiment = new Section("info_consentiment", "section.dadesconsentiment",
-				SolicitudFields.CONSENTIMENT, 
-				SolicitudFields.CONSENTIMENTADJUNT, 
-				SolicitudFields.FITXERCONSENTIMENTID, 
-				SolicitudFields.URLCONSENTIMENT
-				);
-		
-		Section dadesGestio = new Section("info_gestio", "section.dadesgestio", 
-				SolicitudFields.ESTATSOLICITUD, 
-				SolicitudFields.CREADOR, 
-				SolicitudFields.OPERADOR,
-				SolicitudFields.DATAINICI, 
-				SolicitudFields.DATAFI, 
-				SolicitudFields.PRODUCCIO,
-				SolicitudFields.NOTES
-				);
-		
-		Section dadesAutoritzacio = new Section("info_autoritzacio", "section.dadesautoritzacio",
-				SolicitudFields.ESTATPINBAL, 
-				SolicitudFields.INFOMADRIDID
-				);
-		
-		Section dadesTitular = new Section("info_titular", "section.dadestitular",
+    public void getSeccionsFullView(SolicitudForm solicitudForm, boolean isEstatal, HttpServletRequest request,
+            ModelAndView mav) throws I18NException {
+
+        solicitudForm.addHiddenField(SolicitudFields.URLCONSENTIMENT);
+        solicitudForm.addHiddenField(SolicitudFields.PORTAFIBID);
+        solicitudForm.addHiddenField(SolicitudFields.FIRMATDOCSOLICITUD);
+        solicitudForm.addHiddenField(SolicitudFields.PRODUCCIO);
+        solicitudForm.addHiddenField(SolicitudFields.PINFO);
+        // solicitudForm.addHiddenField(SolicitudFields.CONTACTETITULARID);
+
+        if (solicitudForm.getSolicitud().getEstatSolicitud() != Constants.SOLI_ESTAT_FUSIONADA) {
+            solicitudForm.addHiddenField(SolicitudFields.SOLICITUDFUSIONADAID);
+        }
+
+        Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
+                SolicitudFields.PROCEDIMENTCODI,
+                SolicitudFields.CODISIACONV,
+                SolicitudFields.PROCEDIMENTNOM,
+                SolicitudFields.PROCEDIMENTTIPUS,
+                SolicitudFields.CODIDESCRIPTIU,
+                SolicitudFields.ORGANID,
+                SolicitudFields.DATACADUCITAT,
+                SolicitudFields.DOCUMENTSOLICITUDID,
+                SolicitudFields.SOLICITUDXMLID);
+
+        // Section contactes = new Section("info_contactes", "section.contactes",
+        // SolicitudFields.CONTACTEPERSONAID,
+        // SolicitudFields.CONTACTERESPONSABLEID,
+
+        // SolicitudFields.PERSONACONTACTE,
+        // SolicitudFields.PERSONACONTACTEEMAIL,
+        // SolicitudFields.RESPONSABLEPROCNOM,
+        // SolicitudFields.RESPONSABLEPROCEMAIL);
+
+        Section dadesEntitat = new Section("info_entitat", "section.dadesentitat",
+                SolicitudFields.DENOMINACIO,
+                SolicitudFields.DIR3,
+                SolicitudFields.NIF);
+
+        Section dadesConsentiment = new Section("info_consentiment", "section.dadesconsentiment",
+                SolicitudFields.CONSENTIMENT,
+                SolicitudFields.CONSENTIMENTADJUNT,
+                SolicitudFields.FITXERCONSENTIMENTID,
+                SolicitudFields.URLCONSENTIMENT);
+
+        Section dadesGestio = new Section("info_gestio", "section.dadesgestio",
+                SolicitudFields.ESTATSOLICITUD,
+                SolicitudFields.CREADOR,
+                SolicitudFields.OPERADOR,
+                SolicitudFields.DATAINICI,
+                SolicitudFields.DATAFI,
+                SolicitudFields.PRODUCCIO,
+                SolicitudFields.NOTES);
+
+        Section dadesAutoritzacio = new Section("info_autoritzacio", "section.dadesautoritzacio",
+                SolicitudFields.ESTATPINBAL,
+                SolicitudFields.INFOMADRIDID);
+
+        // Section dadesTitular = new Section("info_titular", "section.dadestitular",
+        // // SolicitudFields.CONTACTETITULARID,
+        // SolicitudFields.TITULARFIRMANIF,
+        // SolicitudFields.TITULARFIRMANOM,
+        // SolicitudFields.TITULARFIRMALLINATGES,
+        // SolicitudFields.TITULARFIRMAEMAIL);
+
+        Section contactes = new Section("info_contactes", "section.contactes",
                 SolicitudFields.CONTACTETITULARID,
-				SolicitudFields.TITULARFIRMANIF,
-				SolicitudFields.TITULARFIRMANOM,
-				SolicitudFields.TITULARFIRMALLINATGES,
-				SolicitudFields.TITULARFIRMAEMAIL
-				);
-		
-		solicitudForm.addSection(dadesSoli);
-		solicitudForm.addSection(dadesConsentiment);
-		solicitudForm.addSection(dadesGestio);
-		solicitudForm.addSection(dadesTitular);
-		solicitudForm.addSection(dadesAutoritzacio);
-		solicitudForm.addSection(contactes);
-		solicitudForm.addSection(dadesEntitat);
-		
-	}
-  
-  
+                SolicitudFields.CONTACTEAUDITORIAID,
+                SolicitudFields.CONTACTESOLICITANTID,
+                SolicitudFields.CONTACTETECNICID,
+                SolicitudFields.CONTACTEGESTAUTID);
+
+        solicitudForm.addSection(dadesSoli);
+        solicitudForm.addSection(dadesConsentiment);
+        solicitudForm.addSection(dadesGestio);
+        // solicitudForm.addSection(dadesTitular);
+        solicitudForm.addSection(dadesAutoritzacio);
+        solicitudForm.addSection(contactes);
+        solicitudForm.addSection(dadesEntitat);
+
+    }
 
     private void amagarCampsEstatal(SolicitudForm solicitudForm) {
-        
+
         solicitudForm.addHiddenField(ORGANID);
         solicitudForm.addHiddenField(PINFO);
         solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
@@ -492,17 +494,21 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         SolicitudFilterForm solicitudFilterForm = super.getSolicitudFilterForm(pagina, mav, request);
 
         /*
-        log.info("\n------------------------------------\n\n"
-         + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") + "|\n"
-         + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") + "|\n"
-         + "\n"
-         + "     solicitudFilterForm.getGroupBy() = |" + solicitudFilterForm.getGroupBy() + "|\n"
-         + "  solicitudFilterForm.getGroupValue() = |" + solicitudFilterForm.getGroupValue() + "|\n"
-         + "\n\n\n"   
-             
-             );        
-*/        
-        
+         * log.info("\n------------------------------------\n\n"
+         * + "      agruparPerCamp(groupBy) = |" + request.getParameter("groupBy") +
+         * "|\n"
+         * + "  agruparPerValor(groupValue) = |" + request.getParameter("groupValue") +
+         * "|\n"
+         * + "\n"
+         * + "     solicitudFilterForm.getGroupBy() = |" +
+         * solicitudFilterForm.getGroupBy() + "|\n"
+         * + "  solicitudFilterForm.getGroupValue() = |" +
+         * solicitudFilterForm.getGroupValue() + "|\n"
+         * + "\n\n\n"
+         * 
+         * );
+         */
+
         if (solicitudFilterForm.isNou()) {
 
             {
@@ -550,10 +556,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 filterList.remove(DATAINICI);
                 filterList.remove(DATAFI);
                 filterList.remove(ESTATSOLICITUD);
-                
+
                 if (isestatal) {
                     hiddenFields.remove(ENTITATESTATAL);
-//                    hiddenFields.add(SolicitudFields.DEPARTAMENTID);
+                    // hiddenFields.add(SolicitudFields.DEPARTAMENTID);
                 } else {
                     AdditionalField<Long, String> adfield = new AdditionalField<Long, String>();
                     adfield.setCodeName("organ.organ");
@@ -562,18 +568,18 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     adfield.setValueMap(new HashMap<Long, String>());
 
                     solicitudFilterForm.addAdditionalField(adfield);
-                    
+
                     filterList.remove(EXPEDIENTPID);
                     filterList.remove(ENTITATESTATAL);
 
                     groupList.add(ORGANID);
                     groupList.add(ESTATPINBAL);
                     groupList.remove(ENTITATESTATAL);
-                    
+
                     solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_SEARCH, "filtre.organ",
                             "javascript:openFiltreOrgans();", AdditionalButtonStyle.WARNING));
                 }
-                
+
                 solicitudFilterForm.setFilterByFields(filterList);
                 solicitudFilterForm.setGroupByFields(groupList);
 
@@ -614,7 +620,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             // solicitudFilterForm.setActionsRenderer(2);
 
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_LIST,
-                    "servei.servei.plural", "javascript:$('#modal_infoservei_{0}').modal('show');", AdditionalButtonStyle.INFO));
+                    "servei.servei.plural", "javascript:$('#modal_infoservei_{0}').modal('show');",
+                    AdditionalButtonStyle.INFO));
 
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(IconUtils.ICON_EYE,
                     "solicitud.vistacompleta", "/operador/solicitudfullview/view/{0}", AdditionalButtonStyle.INFO));
@@ -622,15 +629,14 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "exportacio.soli_servei",
                     getContextWeb() + "/fullexport", AdditionalButtonStyle.INFO));
 
-            
-//            solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_FILE, "updateDocumentConsentiment",
-//                    getContextWeb() + "/updateDocConsentiment", AdditionalButtonStyle.INFO));
+            // solicitudFilterForm.addAdditionalButton(new
+            // AdditionalButton(IconUtils.ICON_FILE, "updateDocumentConsentiment",
+            // getContextWeb() + "/updateDocConsentiment", AdditionalButtonStyle.INFO));
 
-            solicitudFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_CHECK, "checkEstatSolicitudManual",
-            		"javascript:checkEstatSolicitudManual()", AdditionalButtonStyle.INFO));
+            solicitudFilterForm
+                    .addAdditionalButton(new AdditionalButton(IconUtils.ICON_CHECK, "checkEstatSolicitudManual",
+                            "javascript:checkEstatSolicitudManual()", AdditionalButtonStyle.INFO));
 
-            
-            
             solicitudFilterForm
                     .addAdditionalButtonForEachItem(new AdditionalButton(
                             "fas fa-bullhorn", "events.titol", EventSolicitudOperadorController.CONTEXTWEB
@@ -642,15 +648,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             solicitudFilterForm.setOrderBy(SolicitudFields.DATAINICI.fullName);
             solicitudFilterForm.setOrderAsc(false);
         }
-        
-//        TreeMap<Integer, AdditionalField<?, ?>> fi = solicitudFilterForm.getAdditionalFields();
-//        
-//        for (int i = 0; i < fi.size(); i++) {
-//            log.info(solicitudFilterForm.getAdditionalFields().get(i));
-//            
-//        }
-//        
-        
+
+        // TreeMap<Integer, AdditionalField<?, ?>> fi =
+        // solicitudFilterForm.getAdditionalFields();
+        //
+        // for (int i = 0; i < fi.size(); i++) {
+        // log.info(solicitudFilterForm.getAdditionalFields().get(i));
+        //
+        // }
+        //
+
         return solicitudFilterForm;
     }
 
@@ -685,18 +692,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          */
     }
 
-	@RequestMapping(value = "/updateDocConsentiment", method = RequestMethod.GET)
-	public String updateDocConsentiment(HttpServletRequest request, HttpServletResponse response,
-			SolicitudFilterForm filterForm) throws Exception, I18NException {
+    @RequestMapping(value = "/updateDocConsentiment", method = RequestMethod.GET)
+    public String updateDocConsentiment(HttpServletRequest request, HttpServletResponse response,
+            SolicitudFilterForm filterForm) throws Exception, I18NException {
 
-		
-		solicitudLogicaEjb.updateDocumentsConsentiment();
-		
-		
-		// Tornar al llistat
-		return "redirect:" + getContextWeb() + "/list";
-	}
-    
+        solicitudLogicaEjb.updateDocumentsConsentiment();
+
+        // Tornar al llistat
+        return "redirect:" + getContextWeb() + "/list";
+    }
+
     @Override
     public void postList(HttpServletRequest request, ModelAndView mav, SolicitudFilterForm filterForm,
             List<Solicitud> list) throws I18NException {
@@ -745,11 +750,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         Map<Long, String> mapEntitat = null;
         Map<Long, String> mapOrgan = null;
         log.info("isEstatal(): " + isEstatal());
-        
+
         if (isEstatal() == null) {
             mapEntitat = (Map<Long, String>) filterForm.getAdditionalField(ENTITAT_COLUMN).getValueMap();
             mapEntitat.clear();
-        }else {
+        } else {
             if (!isEstatal()) {
                 mapOrgan = (Map<Long, String>) filterForm.getAdditionalField(COLUMNA_ORGAN).getValueMap();
                 mapOrgan.clear();
@@ -758,18 +763,19 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         for (Solicitud soli : list) {
 
-            if (soli.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO || soli.getProcedimentCodi().startsWith("CODI_")) {
-            	String proc = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
-            	proc = proc.replace("'", "´");
+            if (soli.getEstatSolicitud() == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO
+                    || soli.getProcedimentCodi().startsWith("CODI_")) {
+                String proc = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
+                proc = proc.replace("'", "´");
                 filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                         new AdditionalButton(IconUtils.getWhite("fas fa-cog"), "solicitud.senseestat",
-//								"javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
-//										+ " ha arribat a DISTRIBUCIÓ.')",
-                        		
-								"javascript:openModalSolicitudDistribucio(" + soli.getSolicitudID() + ", '" + proc + "')",
+                                // "javascript:alert('Revisar si la solicitud " + soli.getProcedimentCodi()
+                                // + " ha arribat a DISTRIBUCIÓ.')",
 
-										
-								AdditionalButtonStyle.PRIMARY));
+                                "javascript:openModalSolicitudDistribucio(" + soli.getSolicitudID() + ", '" + proc
+                                        + "')",
+
+                                AdditionalButtonStyle.PRIMARY));
                 solicitudADistribucio = true;
             } else {
                 Long count = solicitudServeiEjb
@@ -778,12 +784,12 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 if (count != 0) {
                     filterForm.addAdditionalButtonByPK(soli.getSolicitudID(),
                             new AdditionalButton(IconUtils.ICON_WARNING, "solicitudservei.senseestat",
-                                    "javascript:alert('Revisi els estats dels serveis associats.')", AdditionalButtonStyle.DANGER));
+                                    "javascript:alert('Revisi els estats dels serveis associats.')",
+                                    AdditionalButtonStyle.DANGER));
                     error = true;
                 }
             }
 
-            
             // COLUMNA ENTITAT
             if (mapEntitat != null) {
                 Long organId = soli.getOrganid();
@@ -818,8 +824,9 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     while (aux.getCif() == null && aux.getDir3pare() != null) {
                         i++;
                         List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                        if (listAux==null || listAux.size() == 0) {
-                            html += "<br>" + "&nbsp;".repeat(3 * i) + " NO s'HA TROBAT ORGAN AMB DIR3 = " + aux.getDir3pare() + "!!!!!!!!";
+                        if (listAux == null || listAux.size() == 0) {
+                            html += "<br>" + "&nbsp;".repeat(3 * i) + " NO s'HA TROBAT ORGAN AMB DIR3 = "
+                                    + aux.getDir3pare() + "!!!!!!!!";
                             break;
                         } else {
                             aux = listAux.get(0);
@@ -832,16 +839,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     html += "</p>";
                     mapOrgan.put(soli.getSolicitudID(), html);
                 }
-            }           
+            }
         }
 
         if (error) {
             HtmlUtils.saveMessageError(request, "Hi ha sol·licituds amb estat incorrecte");
         }
-        
-		if (solicitudADistribucio) {
-			HtmlUtils.saveMessageInfo(request, "Revisar solicituds a Distribució");
-		}
+
+        if (solicitudADistribucio) {
+            HtmlUtils.saveMessageInfo(request, "Revisar solicituds a Distribució");
+        }
 
         // Map<Long, String> map;
         // map = (Map<Long,
@@ -946,26 +953,26 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     }
 
-	public String redirectToSolicitud(Long solicitudID) {
+    public String redirectToSolicitud(Long solicitudID) {
         return "redirect:/operador/solicitudfullview/view/" + solicitudID;
-	}
-    
+    }
+
     @Override
     public String getRedirectWhenCreated(HttpServletRequest request, SolicitudForm solicitudForm) {
-    	Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
+        Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
         return redirectToSolicitud(solicitudID);
     }
 
     @Override
-	public String getRedirectWhenModified(HttpServletRequest request, SolicitudForm solicitudForm, Throwable __e) {
-		Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
-		return redirectToSolicitud(solicitudID);
-	}
-    
+    public String getRedirectWhenModified(HttpServletRequest request, SolicitudForm solicitudForm, Throwable __e) {
+        Long solicitudID = solicitudForm.getSolicitud().getSolicitudID();
+        return redirectToSolicitud(solicitudID);
+    }
+
     @Override
-	public String getRedirectWhenCancel(HttpServletRequest request, Long solicitudID) {
-		return redirectToSolicitud(solicitudID);
-	}
+    public String getRedirectWhenCancel(HttpServletRequest request, Long solicitudID) {
+        return redirectToSolicitud(solicitudID);
+    }
 
     @Override
     public Map<Field<?>, GroupByItem> fillReferencesForList(SolicitudFilterForm filterForm, HttpServletRequest request,
@@ -1123,16 +1130,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     // }
 
     public Where getAdditionalConditionFine(HttpServletRequest request) throws I18NException {
-        
+
         String organidStr = request.getParameter("solicitud.organid");
 
         if (organidStr != null && organidStr.trim().length() != 0) {
             Long organID = Long.parseLong(organidStr);
-            
+
             log.info("\n\norganid: " + organID + "\n\n");
             return SolicitudFields.ORGANID.equal(organID);
         }
-        
+
         return null;
     }
 
@@ -1166,16 +1173,16 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             if (esestatal) {
                 tipusEstatalService = SolicitudFields.ENTITATESTATAL.isNotNull();
             } else {
-                tipusEstatalService =  SolicitudFields.ORGANID.isNotNull();
+                tipusEstatalService = SolicitudFields.ORGANID.isNotNull();
             }
         }
 
-        //Ocultar solicituds fusionades.
-		Where wNoFusionades = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
-		
-		
+        // Ocultar solicituds fusionades.
+        Where wNoFusionades = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
+
         // FILTRE AVANÇAT PER CERCA
-        return Where.AND(getAdditionalConditionFine(request), wBalears, wNoFusionades, super.getAdditionalCondition(request),
+        return Where.AND(getAdditionalConditionFine(request), wBalears, wNoFusionades,
+                super.getAdditionalCondition(request),
                 tipusEstatalService, getAdditionaConditionAdvancedFilter(request));
 
     }
@@ -1183,10 +1190,10 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     protected Where getAdditionaConditionAdvancedFilter(HttpServletRequest request) throws I18NException {
 
         String af = request.getParameter(FILTRE_AVANZAT_FIELD.getFullName());
-//        log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
+        // log.info(" Valor Filtre Avanzat FilterBY => ]" + af + "[");
 
         if (af == null || af.trim().length() == 0) {
-//            log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
+            // log.info("getAdditionalCondition::NO FILTRAM AVANZAT !!!!");
             return null;
         } else {
 
@@ -1201,7 +1208,8 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
             // identificador de consulta o numero seguiment de la solicitud
             if (isNumber) {
-                w = Where.OR(w, SolicitudFields.SOLICITUDID.equal(Long.parseLong(af)),  SolicitudFields.NOTES.like(likeStr));
+                w = Where.OR(w, SolicitudFields.SOLICITUDID.equal(Long.parseLong(af)),
+                        SolicitudFields.NOTES.like(likeStr));
             }
 
             // Procediment: codi i nom
@@ -1222,7 +1230,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 w = Where.OR(w, SolicitudFields.SOLICITUDID.in(subquery2a), SolicitudFields.SOLICITUDID.in(subquery2b));
             }
 
-//            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
+            // log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
             return w;
         }
@@ -1300,25 +1308,25 @@ public abstract class SolicitudOperadorController extends SolicitudController {
          * StringKeyValue("Tributario", "Tributario"));
          */
 
-//        Set<String> tp = TipusProcediments.getAllTipusDeProcediment();
+        // Set<String> tp = TipusProcediments.getAllTipusDeProcediment();
 
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-//        for (String s : tp) {
-//            String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
-//            __tmp.add(new StringKeyValue(s, tipus));
-//        }
-        String lang = "ca";        
+        // for (String s : tp) {
+        // String tipus = TipusProcediments.getTipusProcedimentByLabel(s);
+        // __tmp.add(new StringKeyValue(s, tipus));
+        // }
+        String lang = "ca";
         List<TipusProcediment> tipus = TipusProcediments.getAllTipusProcediments();
-		for (TipusProcediment tp : tipus) {
-			String text;
-			if (lang.equals("es")) {
-				text = tp.castella;
-			} else {
-				text = tp.catala;
-			}
-          __tmp.add(new StringKeyValue(String.valueOf(tp.id),text));
-		}
+        for (TipusProcediment tp : tipus) {
+            String text;
+            if (lang.equals("es")) {
+                text = tp.castella;
+            } else {
+                text = tp.catala;
+            }
+            __tmp.add(new StringKeyValue(String.valueOf(tp.id), text));
+        }
         return __tmp;
     }
 
@@ -1376,7 +1384,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                     operador_old, nom_operador_old);
 
             String asumpte = "Canvi Operador Sol·licitud " + solicitudID;
-            
+
             EventJPA evt = new EventJPA();
             evt.setSolicitudID(solicitudID);
             evt.setDataEvent(data);
@@ -1401,30 +1409,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     }
 
     @RequestMapping(value = "/changeContacte/{solicitudID}/{nom}/{email}", method = RequestMethod.GET)
-   	public String changeContacteIncidenciaTecnicaGet(
-   			@PathVariable("solicitudID") java.lang.Long solicitudID,
-   			@PathVariable("nom") java.lang.String nom, @PathVariable("email") java.lang.String email,
-   			HttpServletRequest request, HttpServletResponse response) throws I18NException {
+    public String changeContacteIncidenciaTecnicaGet(
+            @PathVariable("solicitudID") java.lang.Long solicitudID,
+            @PathVariable("nom") java.lang.String nom, @PathVariable("email") java.lang.String email,
+            HttpServletRequest request, HttpServletResponse response) throws I18NException {
 
-   		SolicitudJPA s = this.findByPrimaryKey(request, solicitudID);
+        SolicitudJPA s = this.findByPrimaryKey(request, solicitudID);
 
-   		s.setPersonaContacte(nom);
-   		s.setPersonaContacteEmail(email);
+        s.setPersonaContacte(nom);
+        s.setPersonaContacteEmail(email);
 
-   		try {
-   			this.update(request, s);
+        try {
+            this.update(request, s);
 
-   			HtmlUtils.saveMessageSuccess(request, "Contacte canviat correctament. (" + nom + " - " + email + ")");
+            HtmlUtils.saveMessageSuccess(request, "Contacte canviat correctament. (" + nom + " - " + email + ")");
 
-   		} catch (Throwable e) {
-   			String msg = "Error canviant contacte: " + e.getMessage();
-   			log.error(msg, e);
-   			HtmlUtils.saveMessageError(request, msg);
-   		}
+        } catch (Throwable e) {
+            String msg = "Error canviant contacte: " + e.getMessage();
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
 
         return "redirect:/operador/solicitudfullview/view/" + solicitudID;
-   	}
-    
+    }
+
     @Override
     public List<StringKeyValue> getReferenceListForCreador(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
@@ -1461,40 +1469,40 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
     @Override
     public List<StringKeyValue> getReferenceListForConsentiment(HttpServletRequest request, ModelAndView mav,
-    		SolicitudForm solicitudForm, Where where) throws I18NException {
-    	
-    	List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-    	
-		for (String consentimentTipus : Constants.CONSENTIMENTS_TIPUS) {
-			String key = consentimentTipus;
-			String value = I18NUtils.tradueix("consentiment.tipus." + key);
+            SolicitudForm solicitudForm, Where where) throws I18NException {
 
-			__tmp.add(new StringKeyValue(key, value));
-		}
-		
-		return __tmp;
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+
+        for (String consentimentTipus : Constants.CONSENTIMENTS_TIPUS) {
+            String key = consentimentTipus;
+            String value = I18NUtils.tradueix("consentiment.tipus." + key);
+
+            __tmp.add(new StringKeyValue(key, value));
+        }
+
+        return __tmp;
     }
-    
+
     @Override
     public List<StringKeyValue> getReferenceListForConsentimentadjunt(HttpServletRequest request, ModelAndView mav,
-			SolicitudForm solicitudForm, Where where) throws I18NException {
+            SolicitudForm solicitudForm, Where where) throws I18NException {
 
-		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-		for (String consentimentAdj : Constants.CONSENTIMENTS) {
-			String key = consentimentAdj;
-			String value = I18NUtils.tradueix("consentiment." + key);
+        for (String consentimentAdj : Constants.CONSENTIMENTS) {
+            String key = consentimentAdj;
+            String value = I18NUtils.tradueix("consentiment." + key);
 
-			__tmp.add(new StringKeyValue(key, value));
-		}
+            __tmp.add(new StringKeyValue(key, value));
+        }
 
-		return __tmp;
-	}
-    
+        return __tmp;
+    }
+
     @Override
     public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav,
             SolicitudForm solicitudForm, Where where) throws I18NException {
-    	log.info("getReferenceListForEstatSolicitud 1488 called");
+        log.info("getReferenceListForEstatSolicitud 1488 called");
         Boolean estatal = isEstatal();
 
         if (estatal == null) {
@@ -1505,65 +1513,65 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         if (estatal) {
             __tmp = new java.util.ArrayList<StringKeyValue>();
             for (long estat : Constants.ESTATS_SOLI) {
-				if (estat == Constants.SOLI_ESTAT_AUTORITZAT 
-						|| estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
-						|| estat == Constants.SOLI_ESTAT_TANCAT
-						|| estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
-						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
+                if (estat == Constants.SOLI_ESTAT_AUTORITZAT
+                        || estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
+                        || estat == Constants.SOLI_ESTAT_TANCAT
+                        || estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
+                        || estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR
 
-//						|| estat == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
-//						|| estat == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
-//						|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
-//						
-//						|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
-//						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID
-//						|| estat == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
-						
-						) {
-            		String key = String.valueOf(estat);
-            		__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
-            	}
+                // || estat == Constants.SOLI_ESTAT_PENDENT_REVISAR_MODIFICACIO
+                // || estat == Constants.SOLI_ESTAT_PENDENT_ENVIAR_MODIFICACIO_MADRID
+                // || estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_MODIFICACIO
+                //
+                // || estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
+                // || estat == Constants.SOLI_ESTAT_AUTORITZAT_ERROR_ENVIANT_MADRID
+                // || estat == Constants.SOLI_ESTAT_AUTORITZAT_ESMENES
+
+                ) {
+                    String key = String.valueOf(estat);
+                    __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
+                }
             }
         } else {
-        	//Sol·licituds locals
-//            __tmp = getReferenceListForEstatSolicitud(request, mav, where);
+            // Sol·licituds locals
+            // __tmp = getReferenceListForEstatSolicitud(request, mav, where);
             __tmp = new java.util.ArrayList<StringKeyValue>();
-			for (long estat : Constants.ESTATS_SOLI) {
-				
-				//Eliminam els estats que l'operador no ha de veure.
-				if (estat == Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE
-					|| estat == Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE
-					|| estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
-	
-					|| estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
-					|| estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
-//					|| estat == Constants.SOLI_ESTAT_REVISIO
-					
-//					|| estat == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR
-					|| estat == Constants.SOLI_ESTAT_AUTORITZAT_Manual
-//					|| estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
-//					|| estat == Constants.SOLI_ESTAT_REVISIO
-						
-						) {
-					
-					continue;
-				}				
-				
-				String key = String.valueOf(estat);
-				__tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
-			}
+            for (long estat : Constants.ESTATS_SOLI) {
+
+                // Eliminam els estats que l'operador no ha de veure.
+                if (estat == Constants.SOLI_ESTAT_ESMENA_AVISAR_CONTACTE
+                        || estat == Constants.SOLI_ESTAT_ESMENA_PENDENT_CONTACTE
+                        || estat == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual
+
+                        || estat == Constants.SOLI_ESTAT_PENDENT_Enviar_Cedents
+                        || estat == Constants.SOLI_ESTAT_PENDENT_Firma_Cedent
+                        // || estat == Constants.SOLI_ESTAT_REVISIO
+
+                        // || estat == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR
+                        || estat == Constants.SOLI_ESTAT_AUTORITZAT_Manual
+                // || estat == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID
+                // || estat == Constants.SOLI_ESTAT_REVISIO
+
+                ) {
+
+                    continue;
+                }
+
+                String key = String.valueOf(estat);
+                __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
+            }
         }
 
         return __tmp;
     }
 
     @Override
-    public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav, Where where)
+    public List<StringKeyValue> getReferenceListForEstatSolicitud(HttpServletRequest request, ModelAndView mav,
+            Where where)
             throws I18NException {
-    	log.info("getReferenceListForEstatSolicitud 1558 called");
+        log.info("getReferenceListForEstatSolicitud 1558 called");
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        
         for (long estat : Constants.ESTATS_SOLI) {
             String key = String.valueOf(estat);
             __tmp.add(new StringKeyValue(key, I18NUtils.tradueix("solicitud.estat." + key)));
@@ -1577,31 +1585,30 @@ public abstract class SolicitudOperadorController extends SolicitudController {
             throws I18NException {
 
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        
+
         if (where != null) {
         }
-        
+
         List<Organ> organs = organEjb.select(where);
 
         for (Organ organ : organs) {
 
             Organ aux = organ;
             List<String> jerarquia = new ArrayList<String>();
-//            log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
+            // log.info("Organ Gestor: " + "(" + aux.getDir3() + ") " + aux.getNom());
             jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
 
             if (where != null) {
                 while (aux.getCif() == null && aux.getDir3pare() != null) {
                     List<Organ> listAux = organEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                    
+
                     if (listAux == null || listAux.size() == 0) {
                         jerarquia.add("( NO TE ORGANS NI DIR3 !!!! ) ");
                         break;
                     } else {
-                    
-                    
+
                         aux = listAux.get(0);
-    //                    log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
+                        // log.info("pare: " + "(" + aux.getDir3() + ") " + aux.getNom());
                         jerarquia.add("(" + aux.getDir3() + ") " + aux.getNom());
                     }
                 }
@@ -1612,32 +1619,31 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
 
         return __tmp;
-        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
-    }    
-    
-    
+        // return organRefList.getReferenceList(OrganFields.ORGANID, where);
+    }
+
     @Override
-    public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request, ModelAndView mav, Where where)
+    public List<StringKeyValue> getReferenceListForContacteTitularID(HttpServletRequest request, ModelAndView mav,
+            Where where)
             throws I18NException {
 
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        
+
         if (where != null) {
         }
-        
+
         List<Contacte> contactes = contacteLogicaEjb.select(where);
 
         for (Contacte cte : contactes) {
 
-			String str = cte.getNif() + " | " + cte.getNom() + cte.getLlinatge1()
-					+ (cte.getLlinatge2() == null ? "" : cte.getLlinatge2()) + " | " + cte.getMail();
+            String str = cte.getNif() + " | " + cte.getNom() + cte.getLlinatge1()
+                    + (cte.getLlinatge2() == null ? "" : cte.getLlinatge2()) + " | " + cte.getMail();
             __tmp.add(new StringKeyValue(String.valueOf(cte.getContacteID()), str));
         }
 
         return __tmp;
-        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
-    }    
-
+        // return organRefList.getReferenceList(OrganFields.ORGANID, where);
+    }
 
     /*
      * 
@@ -1677,29 +1683,29 @@ public abstract class SolicitudOperadorController extends SolicitudController {
     @RequestMapping(value = "/{solicitudID}/edit", method = RequestMethod.POST)
     public String editarSolicitudPost(@ModelAttribute SolicitudForm solicitudForm, BindingResult result,
             SessionStatus status, HttpServletRequest request, HttpServletResponse response) throws I18NException {
-        
+
         String ret = super.editarSolicitudPost(solicitudForm, result, status, request, response);
-        
+
         if (result.hasErrors()) {
             request.setAttribute("desplegableOrgans", true);
         }
         return ret;
     }
-    
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String crearSolicitudPost(@ModelAttribute SolicitudForm solicitudForm,
-        BindingResult result, HttpServletRequest request,
-        HttpServletResponse response) throws Exception {
-        
+            BindingResult result, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
         String ret = super.crearSolicitudPost(solicitudForm, result, request, response);
-        
+
         if (result.hasErrors()) {
             request.setAttribute("desplegableOrgans", true);
         }
 
         return ret;
     }
-    
+
     @Override
     public List<StringKeyValue> getReferenceListForEstatpinbal(HttpServletRequest request, ModelAndView mav,
             Where where) throws I18NException {
@@ -1711,22 +1717,22 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         }
         return __tmp;
     }
-    
+
     @RequestMapping(value = "/canviarEstatSoli/{solicitudID}", method = RequestMethod.GET)
     public String canviarEstatSoli(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {
-    	
-    	log.info("canviarEstatSoli:: " + solicitudID);
-    	
-    	//Actualitzar l'estat de la sol·licitud a Pendent enviar director.
-    	
-    	SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-    	soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Enviar_Director);
-    	soli.setOperador(request.getRemoteUser());
-    	
-    	solicitudLogicaEjb.update(soli);
-    	
-        //Tornar al llistat
+
+        log.info("canviarEstatSoli:: " + solicitudID);
+
+        // Actualitzar l'estat de la sol·licitud a Pendent enviar director.
+
+        SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+        soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Enviar_Director);
+        soli.setOperador(request.getRemoteUser());
+
+        solicitudLogicaEjb.update(soli);
+
+        // Tornar al llistat
         return "redirect:" + getContextWeb() + "/list";
     }
 

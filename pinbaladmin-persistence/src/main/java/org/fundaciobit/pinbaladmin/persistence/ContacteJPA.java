@@ -51,6 +51,9 @@ public class ContacteJPA implements Contacte {
     @Column(name="username",length = 200)
     java.lang.String username;
 
+    @Column(name="nombrecompleto",length = 500)
+    java.lang.String nombrecompleto;
+
 
 
   /** Constructor Buit */
@@ -58,7 +61,7 @@ public class ContacteJPA implements Contacte {
   }
 
   /** Constructor amb tots els camps  */
-  public ContacteJPA(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
+  public ContacteJPA(long ContacteID , java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username , java.lang.String nombrecompleto) {
     this.ContacteID=ContacteID;
     this.nif=nif;
     this.nom=nom;
@@ -68,9 +71,10 @@ public class ContacteJPA implements Contacte {
     this.telefon=telefon;
     this.mail=mail;
     this.username=username;
+    this.nombrecompleto=nombrecompleto;
 }
   /** Constructor sense valors autoincrementals */
-  public ContacteJPA(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username) {
+  public ContacteJPA(java.lang.String nif , java.lang.String nom , java.lang.String llinatge1 , java.lang.String llinatge2 , java.lang.String carrec , java.lang.String telefon , java.lang.String mail , java.lang.String username , java.lang.String nombrecompleto) {
     this.nif=nif;
     this.nom=nom;
     this.llinatge1=llinatge1;
@@ -79,6 +83,7 @@ public class ContacteJPA implements Contacte {
     this.telefon=telefon;
     this.mail=mail;
     this.username=username;
+    this.nombrecompleto=nombrecompleto;
 }
   /** Constructor dels valors Not Null */
   public ContacteJPA(long ContacteID) {
@@ -94,6 +99,7 @@ public class ContacteJPA implements Contacte {
     this.setTelefon(__bean.getTelefon());
     this.setMail(__bean.getMail());
     this.setUsername(__bean.getUsername());
+    this.setNombrecompleto(__bean.getNombrecompleto());
 	}
 
 	public long getContacteID() {
@@ -159,6 +165,13 @@ public class ContacteJPA implements Contacte {
 		this.username = _username_;
 	};
 
+	public java.lang.String getNombrecompleto() {
+		return(nombrecompleto);
+	};
+	public void setNombrecompleto(java.lang.String _nombrecompleto_) {
+		this.nombrecompleto = _nombrecompleto_;
+	};
+
 
 
     @Override
@@ -173,6 +186,32 @@ public class ContacteJPA implements Contacte {
         }
         return __result;
     }
+
+// EXP  Field:contacteauditoriaid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteAuditoriaID")
+    private Set<SolicitudJPA> solicitud_contacteauditoriaids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contacteauditoriaids() {
+    return this.solicitud_contacteauditoriaids;
+  }
+
+    public void setSolicitud_contacteauditoriaids(Set<SolicitudJPA> solicitud_contacteauditoriaids) {
+      this.solicitud_contacteauditoriaids = solicitud_contacteauditoriaids;
+    }
+
+
+// EXP  Field:contactegestautid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteGestAutID")
+    private Set<SolicitudJPA> solicitud_contactegestautids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contactegestautids() {
+    return this.solicitud_contactegestautids;
+  }
+
+    public void setSolicitud_contactegestautids(Set<SolicitudJPA> solicitud_contactegestautids) {
+      this.solicitud_contactegestautids = solicitud_contactegestautids;
+    }
+
 
 // EXP  Field:contactepersonaid | Table: pad_solicitud | Type: 0  
 
@@ -197,6 +236,32 @@ public class ContacteJPA implements Contacte {
 
     public void setSolicitud_contacteresponsableids(Set<SolicitudJPA> solicitud_contacteresponsableids) {
       this.solicitud_contacteresponsableids = solicitud_contacteresponsableids;
+    }
+
+
+// EXP  Field:contactesolicitantid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteSolicitantID")
+    private Set<SolicitudJPA> solicitud_contactesolicitantids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contactesolicitantids() {
+    return this.solicitud_contactesolicitantids;
+  }
+
+    public void setSolicitud_contactesolicitantids(Set<SolicitudJPA> solicitud_contactesolicitantids) {
+      this.solicitud_contactesolicitantids = solicitud_contactesolicitantids;
+    }
+
+
+// EXP  Field:contactetecnicid | Table: pad_solicitud | Type: 0  
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contacteTecnicID")
+    private Set<SolicitudJPA> solicitud_contactetecnicids = new HashSet<SolicitudJPA>(0);
+    public  Set<SolicitudJPA> getSolicitud_contactetecnicids() {
+    return this.solicitud_contactetecnicids;
+  }
+
+    public void setSolicitud_contactetecnicids(Set<SolicitudJPA> solicitud_contactetecnicids) {
+      this.solicitud_contactetecnicids = solicitud_contactetecnicids;
     }
 
 
@@ -227,6 +292,7 @@ public class ContacteJPA implements Contacte {
     __tmp.setTelefon(__bean.getTelefon());
     __tmp.setMail(__bean.getMail());
     __tmp.setUsername(__bean.getUsername());
+    __tmp.setNombrecompleto(__bean.getNombrecompleto());
 		return __tmp;
 	}
 
@@ -257,12 +323,28 @@ public class ContacteJPA implements Contacte {
     __alreadyCopied.put(__jpa, __tmp);
     // Copia de beans complexes (EXP)
     if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactesolicitantids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactesolicitantids())) ) {
+      __tmp.setSolicitud_contactesolicitantids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactesolicitantids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contacteauditoriaids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contacteauditoriaids())) ) {
+      __tmp.setSolicitud_contacteauditoriaids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contacteauditoriaids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contacteresponsableids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contacteresponsableids())) ) {
       __tmp.setSolicitud_contacteresponsableids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contacteresponsableids(), __alreadyCopied,"ContacteJPA"));
     }
     if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactegestautids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactegestautids())) ) {
+      __tmp.setSolicitud_contactegestautids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactegestautids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactetitularids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactetitularids())) ) {
       __tmp.setSolicitud_contactetitularids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactetitularids(), __alreadyCopied,"ContacteJPA"));
+    }
+    if(!"SolicitudJPA".equals(origenJPA) 
+       && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactetecnicids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactetecnicids())) ) {
+      __tmp.setSolicitud_contactetecnicids(SolicitudJPA.copyJPA(__jpa.getSolicitud_contactetecnicids(), __alreadyCopied,"ContacteJPA"));
     }
     if(!"SolicitudJPA".equals(origenJPA) 
        && ( !org.fundaciobit.genapp.common.utils.Utils.isEmpty(__jpa.solicitud_contactepersonaids) || org.hibernate.Hibernate.isInitialized(__jpa.getSolicitud_contactepersonaids())) ) {

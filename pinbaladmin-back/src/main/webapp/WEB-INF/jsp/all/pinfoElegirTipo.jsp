@@ -120,12 +120,7 @@
 			</div>
 		</div>
 		
-		<div id="nota-container">
-			<i class="fas fa-info-circle" style="color: #4DBA79; font-size: 20px;"></i>
-			<p id="nota">
-				<fmt:message key="tramit.pinfo.nota" />
-			</p>
-		</div>
+		<!-- Nota informativa eliminada según petición -->
 
 		<!-- Avís informatiu sobre Alta/Baja -->
 		<div class="aviso-info" style="max-width: 700px; margin: 0 auto 2rem auto;">

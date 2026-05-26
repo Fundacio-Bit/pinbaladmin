@@ -355,7 +355,8 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			
 			String remitent = request.getRemoteUser();
 
-	        Contacte titular = contacteLogicaEjb.crearContacteTitular(soli);
+	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
+
 	        
 			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, titular, remitent);
 

@@ -1229,3 +1229,163 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONTACTESOLICITANTID)}">
+        <tr id="solicitud_contacteSolicitantID_rowid">
+          <td id="solicitud_contacteSolicitantID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONTACTESOLICITANTID])?'solicitud.contacteSolicitantID':__theForm.labels[SolicitudFields.CONTACTESOLICITANTID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONTACTESOLICITANTID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONTACTESOLICITANTID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_contacteSolicitantID_columnvalueid">
+          <form:errors path="solicitud.contacteSolicitantID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTESOLICITANTID)}" >
+          <form:hidden path="solicitud.contacteSolicitantID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.contacteSolicitantID,__theForm.listOfContacteForContacteSolicitantID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTESOLICITANTID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_contacteSolicitantID"  onchange="if(typeof onChangeContacteSolicitantID == 'function') {  onChangeContacteSolicitantID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.contacteSolicitantID">
+            <c:forEach items="${__theForm.listOfContacteForContacteSolicitantID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.contacteSolicitantID }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.contacteSolicitantID }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONTACTEGESTAUTID)}">
+        <tr id="solicitud_contacteGestAutID_rowid">
+          <td id="solicitud_contacteGestAutID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONTACTEGESTAUTID])?'solicitud.contacteGestAutID':__theForm.labels[SolicitudFields.CONTACTEGESTAUTID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONTACTEGESTAUTID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONTACTEGESTAUTID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_contacteGestAutID_columnvalueid">
+          <form:errors path="solicitud.contacteGestAutID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTEGESTAUTID)}" >
+          <form:hidden path="solicitud.contacteGestAutID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.contacteGestAutID,__theForm.listOfContacteForContacteGestAutID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTEGESTAUTID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_contacteGestAutID"  onchange="if(typeof onChangeContacteGestAutID == 'function') {  onChangeContacteGestAutID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.contacteGestAutID">
+            <c:forEach items="${__theForm.listOfContacteForContacteGestAutID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.contacteGestAutID }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.contacteGestAutID }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONTACTEAUDITORIAID)}">
+        <tr id="solicitud_contacteAuditoriaID_rowid">
+          <td id="solicitud_contacteAuditoriaID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONTACTEAUDITORIAID])?'solicitud.contacteAuditoriaID':__theForm.labels[SolicitudFields.CONTACTEAUDITORIAID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONTACTEAUDITORIAID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONTACTEAUDITORIAID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_contacteAuditoriaID_columnvalueid">
+          <form:errors path="solicitud.contacteAuditoriaID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTEAUDITORIAID)}" >
+          <form:hidden path="solicitud.contacteAuditoriaID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.contacteAuditoriaID,__theForm.listOfContacteForContacteAuditoriaID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTEAUDITORIAID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_contacteAuditoriaID"  onchange="if(typeof onChangeContacteAuditoriaID == 'function') {  onChangeContacteAuditoriaID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.contacteAuditoriaID">
+            <c:forEach items="${__theForm.listOfContacteForContacteAuditoriaID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.contacteAuditoriaID }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.contacteAuditoriaID }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CONTACTETECNICID)}">
+        <tr id="solicitud_contacteTecnicID_rowid">
+          <td id="solicitud_contacteTecnicID_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.CONTACTETECNICID])?'solicitud.contacteTecnicID':__theForm.labels[SolicitudFields.CONTACTETECNICID]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.CONTACTETECNICID]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.CONTACTETECNICID]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_contacteTecnicID_columnvalueid">
+          <form:errors path="solicitud.contacteTecnicID" cssClass="errorField alert alert-danger" />
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTETECNICID)}" >
+          <form:hidden path="solicitud.contacteTecnicID"/>
+          <input type="text" readonly="true" class="form-control col-md-9-optional uneditable-input" value="${gen:findValue(__theForm.solicitud.contacteTecnicID,__theForm.listOfContacteForContacteTecnicID)}"  />
+          </c:if>
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,SolicitudFields.CONTACTETECNICID)}" >
+          <c:set var="containEmptyValue"  value="false" />
+          <form:select id="solicitud_contacteTecnicID"  onchange="if(typeof onChangeContacteTecnicID == 'function') {  onChangeContacteTecnicID(this); };"  cssClass="form-control col-md-9-optional" path="solicitud.contacteTecnicID">
+            <c:forEach items="${__theForm.listOfContacteForContacteTecnicID}" var="tmp">
+                <form:option value="${tmp.key}">${tmp.value}</form:option>
+                <c:if test="${empty tmp.key}">
+                  <c:set var="containEmptyValue"  value="true" />
+                </c:if>
+            </c:forEach>
+            <%-- El camp pot ser null, per la qual cosa afegim una entrada buida si no s'ha definit abans --%>
+            <c:if test="${not containEmptyValue}">
+              <c:if test="${empty __theForm.solicitud.contacteTecnicID }">
+                  <form:option value="" selected="true" ></form:option>
+              </c:if>
+              <c:if test="${not empty __theForm.solicitud.contacteTecnicID }">
+                  <form:option value="" ></form:option>
+              </c:if>
+            </c:if>
+          </form:select>
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

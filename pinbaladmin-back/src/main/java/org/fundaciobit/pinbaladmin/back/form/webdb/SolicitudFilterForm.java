@@ -560,6 +560,94 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.Long contacteSolicitantIDDesde;
+
+  public java.lang.Long getContacteSolicitantIDDesde() {
+    return this.contacteSolicitantIDDesde;
+  }
+
+  public void setContacteSolicitantIDDesde(java.lang.Long contacteSolicitantIDDesde) {
+    this.contacteSolicitantIDDesde = contacteSolicitantIDDesde;
+  }
+
+
+  private java.lang.Long contacteSolicitantIDFins;
+
+  public java.lang.Long getContacteSolicitantIDFins() {
+    return this.contacteSolicitantIDFins;
+  }
+
+  public void setContacteSolicitantIDFins(java.lang.Long contacteSolicitantIDFins) {
+    this.contacteSolicitantIDFins = contacteSolicitantIDFins;
+  }
+
+
+  private java.lang.Long contacteGestAutIDDesde;
+
+  public java.lang.Long getContacteGestAutIDDesde() {
+    return this.contacteGestAutIDDesde;
+  }
+
+  public void setContacteGestAutIDDesde(java.lang.Long contacteGestAutIDDesde) {
+    this.contacteGestAutIDDesde = contacteGestAutIDDesde;
+  }
+
+
+  private java.lang.Long contacteGestAutIDFins;
+
+  public java.lang.Long getContacteGestAutIDFins() {
+    return this.contacteGestAutIDFins;
+  }
+
+  public void setContacteGestAutIDFins(java.lang.Long contacteGestAutIDFins) {
+    this.contacteGestAutIDFins = contacteGestAutIDFins;
+  }
+
+
+  private java.lang.Long contacteAuditoriaIDDesde;
+
+  public java.lang.Long getContacteAuditoriaIDDesde() {
+    return this.contacteAuditoriaIDDesde;
+  }
+
+  public void setContacteAuditoriaIDDesde(java.lang.Long contacteAuditoriaIDDesde) {
+    this.contacteAuditoriaIDDesde = contacteAuditoriaIDDesde;
+  }
+
+
+  private java.lang.Long contacteAuditoriaIDFins;
+
+  public java.lang.Long getContacteAuditoriaIDFins() {
+    return this.contacteAuditoriaIDFins;
+  }
+
+  public void setContacteAuditoriaIDFins(java.lang.Long contacteAuditoriaIDFins) {
+    this.contacteAuditoriaIDFins = contacteAuditoriaIDFins;
+  }
+
+
+  private java.lang.Long contacteTecnicIDDesde;
+
+  public java.lang.Long getContacteTecnicIDDesde() {
+    return this.contacteTecnicIDDesde;
+  }
+
+  public void setContacteTecnicIDDesde(java.lang.Long contacteTecnicIDDesde) {
+    this.contacteTecnicIDDesde = contacteTecnicIDDesde;
+  }
+
+
+  private java.lang.Long contacteTecnicIDFins;
+
+  public java.lang.Long getContacteTecnicIDFins() {
+    return this.contacteTecnicIDFins;
+  }
+
+  public void setContacteTecnicIDFins(java.lang.Long contacteTecnicIDFins) {
+    this.contacteTecnicIDFins = contacteTecnicIDFins;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -614,6 +702,14 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.contactePersonaIDFins = __toClone.contactePersonaIDFins;
     this.contacteResponsableIDDesde = __toClone.contacteResponsableIDDesde;
     this.contacteResponsableIDFins = __toClone.contacteResponsableIDFins;
+    this.contacteSolicitantIDDesde = __toClone.contacteSolicitantIDDesde;
+    this.contacteSolicitantIDFins = __toClone.contacteSolicitantIDFins;
+    this.contacteGestAutIDDesde = __toClone.contacteGestAutIDDesde;
+    this.contacteGestAutIDFins = __toClone.contacteGestAutIDFins;
+    this.contacteAuditoriaIDDesde = __toClone.contacteAuditoriaIDDesde;
+    this.contacteAuditoriaIDFins = __toClone.contacteAuditoriaIDFins;
+    this.contacteTecnicIDDesde = __toClone.contacteTecnicIDDesde;
+    this.contacteTecnicIDFins = __toClone.contacteTecnicIDFins;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;
@@ -626,6 +722,10 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.mapOfContacteForContacteTitularID = __toClone.mapOfContacteForContacteTitularID;
     this.mapOfContacteForContactePersonaID = __toClone.mapOfContacteForContactePersonaID;
     this.mapOfContacteForContacteResponsableID = __toClone.mapOfContacteForContacteResponsableID;
+    this.mapOfContacteForContacteSolicitantID = __toClone.mapOfContacteForContacteSolicitantID;
+    this.mapOfContacteForContacteGestAutID = __toClone.mapOfContacteForContacteGestAutID;
+    this.mapOfContacteForContacteAuditoriaID = __toClone.mapOfContacteForContacteAuditoriaID;
+    this.mapOfContacteForContacteTecnicID = __toClone.mapOfContacteForContacteTecnicID;
   }
   
   /* ========= UTILS ========== */
@@ -800,6 +900,54 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setMapOfContacteForContacteResponsableID(Map<String, String> mapOfContacteForContacteResponsableID) {
     this.mapOfContacteForContacteResponsableID = mapOfContacteForContacteResponsableID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteSolicitantID;
+
+  public Map<String, String> getMapOfContacteForContacteSolicitantID() {
+    return this.mapOfContacteForContacteSolicitantID;
+  }
+
+  public void setMapOfContacteForContacteSolicitantID(Map<String, String> mapOfContacteForContacteSolicitantID) {
+    this.mapOfContacteForContacteSolicitantID = mapOfContacteForContacteSolicitantID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteGestAutID;
+
+  public Map<String, String> getMapOfContacteForContacteGestAutID() {
+    return this.mapOfContacteForContacteGestAutID;
+  }
+
+  public void setMapOfContacteForContacteGestAutID(Map<String, String> mapOfContacteForContacteGestAutID) {
+    this.mapOfContacteForContacteGestAutID = mapOfContacteForContacteGestAutID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteAuditoriaID;
+
+  public Map<String, String> getMapOfContacteForContacteAuditoriaID() {
+    return this.mapOfContacteForContacteAuditoriaID;
+  }
+
+  public void setMapOfContacteForContacteAuditoriaID(Map<String, String> mapOfContacteForContacteAuditoriaID) {
+    this.mapOfContacteForContacteAuditoriaID = mapOfContacteForContacteAuditoriaID;
+  }
+
+
+
+  private Map<String, String> mapOfContacteForContacteTecnicID;
+
+  public Map<String, String> getMapOfContacteForContacteTecnicID() {
+    return this.mapOfContacteForContacteTecnicID;
+  }
+
+  public void setMapOfContacteForContacteTecnicID(Map<String, String> mapOfContacteForContacteTecnicID) {
+    this.mapOfContacteForContacteTecnicID = mapOfContacteForContacteTecnicID;
   }
 
 

@@ -1481,9 +1481,14 @@ public class FusionarProcedimentsOperadorController {
 		String expedientPid = null;
 		String entitatEstatal = null;
 		String pinfo = null;
+		//Datos de contactos pendientes de arreglar.
 		Long contacteTitularID = null;
 		Long contacteResponsableID = null;
 		Long contactePersonaID = null;
+		Long contacteSolicitantID = null;
+		Long contacteGestAutID = null;
+		Long contacteAuditoriaID = null; 
+		Long contacteTecnicID = null;
 
 		// Y estos son nulos por ser una fusión nueva:
 		Long docSoliID = null;
@@ -1499,7 +1504,8 @@ public class FusionarProcedimentsOperadorController {
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
 				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
 				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges,
-				titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID);
+				titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID,
+				contacteGestAutID, contacteAuditoriaID, contacteTecnicID);
 
 		return solicitudNueva;
 	}

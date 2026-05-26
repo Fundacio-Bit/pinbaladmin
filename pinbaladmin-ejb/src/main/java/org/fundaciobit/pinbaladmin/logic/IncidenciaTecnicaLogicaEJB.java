@@ -43,12 +43,12 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         return super.create(instance);
     }
 
-	@Override
-	@PermitAll
-	public IncidenciaTecnica update(IncidenciaTecnica instance) throws I18NException {
-		return super.update(instance);
-	}
-    
+    @Override
+    @PermitAll
+    public IncidenciaTecnica update(IncidenciaTecnica instance) throws I18NException {
+        return super.update(instance);
+    }
+
     @Override
     public void deleteFull(Long _ID) throws I18NException {
 
@@ -58,17 +58,18 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
     }
 
     @Override
-    public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, String operador, int tipus) throws I18NException {
+    public IncidenciaTecnica createFromEmail(EmailMessageInfo emi, String creador, String operador, int tipus)
+            throws I18NException {
 
         java.lang.String subject = emi.getSubject();
         java.lang.String missatge = emi.getBody(); // TODO limit tamany
-//        emi.getSentDate();
-//        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
+        // emi.getSentDate();
+        // java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
 
-        //Si el email no te data d'enviament, posar la data actual
-		java.sql.Timestamp data = emi.getSentDate() != null ? new java.sql.Timestamp(emi.getSentDate().getTime())
-				: new Timestamp(System.currentTimeMillis());
-        
+        // Si el email no te data d'enviament, posar la data actual
+        java.sql.Timestamp data = emi.getSentDate() != null ? new java.sql.Timestamp(emi.getSentDate().getTime())
+                : new Timestamp(System.currentTimeMillis());
+
         java.sql.Timestamp dataFi = null;
         int estat = Constants.ESTAT_INCIDENCIA_OBERTA;
         java.lang.String nomEntitat = "";
@@ -82,18 +83,24 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         Long organID = null;
 
         log.info(destinatariEmail);
-        
+
         if (contacteEmail.contains("governdigital.pinbal@fundaciobit.org") && subject.contains("CAI-")) {
             contacteEmail = "suport@caib.es";
         }
-        
-        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge, data, dataFi, estat, tipus, organID, nomEntitat,
-                contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta, caidNumeroSeguiment, creador, operador);
+
+        // IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge,
+        // data, dataFi, estat, tipus, organID, nomEntitat,
+        // contacteNom, contacteEmail, contacteTelefon, caidIdentificadorConsulta,
+        // caidNumeroSeguiment, creador, operador);
+
+        IncidenciaTecnicaJPA itJPA = new IncidenciaTecnicaJPA(subject, missatge, data, dataFi, estat, tipus,
+                contacteNom, organID, nomEntitat, contacteEmail, contacteTelefon, caidIdentificadorConsulta,
+                caidNumeroSeguiment, creador, operador);
 
         IncidenciaTecnica it = (IncidenciaTecnica) this.create(itJPA);
         java.lang.Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
         java.lang.Long solicitudID = null;
-        
+
         // Afegir peticio
         {
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
@@ -102,28 +109,29 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             missatge = "<div>" + missatge + "</div>";
 
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
-                    destinatariEmail, subject, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+                    destinatariEmail, subject, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                    caidNumeroSeguiment);
         }
 
         // Afgegir fitxers
         {
             java.lang.String _missatge_ = "Afegit fitxer";
             java.lang.String _asumpte_ = "Afegit fitxer";
-            
+
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
-            
+
             log.info("attachements " + emi.getAttachments() + " " + emi.getAttachments().size());
             for (EmailAttachmentInfo ads : emi.getAttachments()) {
-            	log.info("attachement " + ads);
-            	log.info("getFileName " + ads.getFileName());
-            	log.info("getData " + ads.getData());
-            	log.info("getContentType " + ads.getContentType());
-            	
-            	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
-            		continue;
-				}
-            	
+                log.info("attachement " + ads);
+                log.info("getFileName " + ads.getFileName());
+                log.info("getData " + ads.getData());
+                log.info("getContentType " + ads.getContentType());
+
+                if (ads.getFileName() == null || ads.getFileName().equals("null")) {
+                    continue;
+                }
+
                 FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
                 fitxerEjb.create(fitxer);
                 FileSystemManager.crearFitxer(new ByteArrayInputStream(ads.getData()), fitxer.getFitxerID());
@@ -135,45 +143,47 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
                         caidNumeroSeguiment);
             }
         }
-        
-//        //Enviar correu a suport si es necessari
-//        {
-//            if (titol.indexOf("CAI-") > 0) {
-//                String nomIncidencia = titol;
-//                String CAI = "2328810" ;
-//                
-//                int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
-//                boolean _noLlegit_ = true;
-//                Long _fitxerID_ = null;
-//                String _contacteNom_ = "PinbalAdmin"; //Quien envia el mensaje
-//                String _destinatari_ = "Suport DGMAD"; //Quien recibe el mensaje
-//                String _destinatariEmail_ = "ptrias@fundaciobit.org"; //Correo de quien lo recibe
-//                String _missatge_ = "A la atenció de suport CAID de la DGMAD. S'ha creat la incidencia numero " + incidenciaTecnicaID + " a PinbalAdmin (CAI-" + CAI + "). <br><br>" + nomIncidencia + " <br><br>" + "Salutacions. FBIT";
-//
-//                eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, _contacteNom_, _destinatari_,
-//                        _destinatariEmail_, _missatge_, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
-//                        caidNumeroSeguiment);
-//            }
-//        }
 
+        // //Enviar correu a suport si es necessari
+        // {
+        // if (titol.indexOf("CAI-") > 0) {
+        // String nomIncidencia = titol;
+        // String CAI = "2328810" ;
+        //
+        // int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC;
+        // boolean _noLlegit_ = true;
+        // Long _fitxerID_ = null;
+        // String _contacteNom_ = "PinbalAdmin"; //Quien envia el mensaje
+        // String _destinatari_ = "Suport DGMAD"; //Quien recibe el mensaje
+        // String _destinatariEmail_ = "ptrias@fundaciobit.org"; //Correo de quien lo
+        // recibe
+        // String _missatge_ = "A la atenció de suport CAID de la DGMAD. S'ha creat la
+        // incidencia numero " + incidenciaTecnicaID + " a PinbalAdmin (CAI-" + CAI +
+        // "). <br><br>" + nomIncidencia + " <br><br>" + "Salutacions. FBIT";
+        //
+        // eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_,
+        // _contacteNom_, _destinatari_,
+        // _destinatariEmail_, _missatge_, _fitxerID_, _noLlegit_,
+        // caidIdentificadorConsulta,
+        // caidNumeroSeguiment);
+        // }
+        // }
 
-        
         return it;
 
     }
-    
-    
+
     @Override
     public IncidenciaTecnica afegirMailAIncidencia(EmailMessageInfo emi, Long incidenciaID) throws I18NException {
 
-    	String asumpte = emi.getSubject();
-    	if (asumpte != null && asumpte.length() > 255) {
-    	    asumpte = asumpte.substring(0, 255);
-    	}
-    	
+        String asumpte = emi.getSubject();
+        if (asumpte != null && asumpte.length() > 255) {
+            asumpte = asumpte.substring(0, 255);
+        }
+
         java.lang.String missatge = emi.getBody(); // TODO limit tamany
 
-        java.sql.Timestamp data= new Timestamp(System.currentTimeMillis());
+        java.sql.Timestamp data = new Timestamp(System.currentTimeMillis());
         java.lang.String contacteNom = emi.getNameFrom();
         java.lang.String caidIdentificadorConsulta = null;
         java.lang.String caidNumeroSeguiment = null;
@@ -181,16 +191,16 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
         java.lang.String destinatariEmail = null;
 
         IncidenciaTecnica it = this.findByPrimaryKey(incidenciaID);
-        
-		if (it == null) {
-			String msg = "Incidencia " + incidenciaID + " no trobada";
-			log.error(msg);
-			throw new I18NException("genapp.comodi", msg);
-		}
-        
+
+        if (it == null) {
+            String msg = "Incidencia " + incidenciaID + " no trobada";
+            log.error(msg);
+            throw new I18NException("genapp.comodi", msg);
+        }
+
         java.lang.Long incidenciaTecnicaID = it.getIncidenciaTecnicaID();
         java.lang.Long solicitudID = null;
-        
+
         // Afegir event de peticio
         {
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
@@ -199,24 +209,25 @@ public class IncidenciaTecnicaLogicaEJB extends IncidenciaTecnicaEJB implements 
             missatge = "<div>" + missatge + "</div>";
 
             eventLogicaEjb.create(solicitudID, incidenciaTecnicaID, data, _tipus_, contacteNom, destinatari,
-                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta, caidNumeroSeguiment);
+                    destinatariEmail, asumpte, missatge, _fitxerID_, _noLlegit_, caidIdentificadorConsulta,
+                    caidNumeroSeguiment);
         }
 
         // Si el correu te fitxers, afegir-los
         {
             java.lang.String _missatge_ = "Afegit fitxer";
             java.lang.String _asumpte_ = "Afegit fitxer";
-            
+
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             boolean _noLlegit_ = true;
-            
+
             log.info("attachements " + emi.getAttachments() + " " + emi.getAttachments().size());
             for (EmailAttachmentInfo ads : emi.getAttachments()) {
-            	
-            	if (ads.getFileName() == null || ads.getFileName().equals("null")) {
-            		continue;
-				}
-            	
+
+                if (ads.getFileName() == null || ads.getFileName().equals("null")) {
+                    continue;
+                }
+
                 FitxerJPA fitxer = new FitxerJPA(ads.getFileName(), ads.getData().length, ads.getContentType(), null);
                 fitxerEjb.create(fitxer);
                 FileSystemManager.crearFitxer(new ByteArrayInputStream(ads.getData()), fitxer.getFitxerID());

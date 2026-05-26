@@ -481,6 +481,18 @@
           },
           "foreignKeys": [
             {
+              "name": "pad_solicitud_cte_audit_fk",
+              "table": "pad_solicitud",
+              "field": "contacteauditoriaid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_cte_gestaut_fk",
+              "table": "pad_solicitud",
+              "field": "contactegestautid",
+              "type": 0
+            },
+            {
               "name": "pad_solicitud_cte_pers_fk",
               "table": "pad_solicitud",
               "field": "contactepersonaid",
@@ -490,6 +502,18 @@
               "name": "pad_solicitud_cte_resp_fk",
               "table": "pad_solicitud",
               "field": "contacteresponsableid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_cte_solic_fk",
+              "table": "pad_solicitud",
+              "field": "contactesolicitantid",
+              "type": 0
+            },
+            {
+              "name": "pad_solicitud_cte_tecnic_fk",
+              "table": "pad_solicitud",
+              "field": "contactetecnicid",
               "type": 0
             },
             {
@@ -697,6 +721,31 @@
           "groupBy": false,
           "webFieldInfo": {
             "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "nombrecompleto",
+          "sqlType": 12,
+          "size": 500,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "nombrecompleto",
+            "es": "nombrecompleto"
+          },
+          "javaName": "nombrecompleto",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
           },
           "foreignKeys": []
         }
@@ -3672,6 +3721,31 @@
           "foreignKeys": []
         },
         {
+          "isAutoIncrement": false,
+          "sqlName": "contactenom",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "es": "Nom del contacte",
+            "ca": "Nom del contacte"
+          },
+          "javaName": "contacteNom",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
           "index": "pad_inctecnica_organid_fk_i",
           "isAutoIncrement": false,
           "sqlName": "organid",
@@ -3728,31 +3802,6 @@
           "showInReferenceList": false,
           "transientField": false,
           "filter": true,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "contactenom",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": true,
-          "labels": {
-            "es": "Nom del contacte",
-            "ca": "Nom del contacte"
-          },
-          "javaName": "contacteNom",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
           "orderBy": 0,
           "groupBy": false,
           "webFieldInfo": {
@@ -4052,7 +4101,7 @@
           "isAutoIncrement": false,
           "sqlName": "missatge",
           "sqlType": 12,
-          "size": 1024,
+          "size": 2147483647,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -7868,6 +7917,162 @@
           "foreignKeys": [
             {
               "name": "pad_solicitud_cte_resp_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_solicitid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contactesolicitantid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Solicitant",
+            "es": "Solicitante"
+          },
+          "javaName": "contacteSolicitantID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_solic_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_solic_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_gestautid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contactegestautid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Gestió i Autorització",
+            "es": "Gestión y Autorización"
+          },
+          "javaName": "contacteGestAutID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_gestaut_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_gestaut_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_auditid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contacteauditoriaid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Auditoria",
+            "es": "Auditoría"
+          },
+          "javaName": "contacteAuditoriaID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_audit_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_audit_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          ]
+        },
+        {
+          "index": "pad_solicitud_tecnicid_fk_i",
+          "isAutoIncrement": false,
+          "sqlName": "contactetecnicid",
+          "sqlType": -5,
+          "size": 19,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Contacte Tècnic",
+            "es": "Contacto Técnico"
+          },
+          "javaName": "contacteTecnicID",
+          "javaType": "java.lang.Long",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 3,
+            "foreignKey": {
+              "name": "pad_solicitud_cte_tecnic_fk",
+              "table": "pad_contacte",
+              "field": "contacteid",
+              "type": 1
+            }
+          },
+          "foreignKeys": [
+            {
+              "name": "pad_solicitud_cte_tecnic_fk",
               "table": "pad_contacte",
               "field": "contacteid",
               "type": 1

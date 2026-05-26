@@ -72,36 +72,17 @@
 								${procediment.procediment} (${procediment.codi})
 							</h6>
 							
-							<c:if test="${not empty procediment.altes}">
+							<c:if test="${not empty procediment.serveis}">
 								<div class="ml-4">
-									<strong class="text-success">
-										<i class="fas fa-plus-circle"></i> 
-										<fmt:message key="pinfo.permisos.altes" />:
+									<strong class="${pinfoDataFull.tipusAlta == 1 ? 'text-success' : 'text-danger'}">
+										<i class="fas ${pinfoDataFull.tipusAlta == 1 ? 'fa-plus-circle' : 'fa-minus-circle'}"></i> 
+										<fmt:message key="pinfo.permisos.${pinfoDataFull.tipusAlta == 1 ? 'altes' : 'baixes'}" />:
 									</strong>
 									<ul class="list-unstyled ml-3">
-										<c:forEach items="${procediment.altes}" var="servei">
+										<c:forEach items="${procediment.serveis}" var="servei">
 											<li>
-												<span class="badge badge-success">
-													<i class="fas fa-check"></i>
-												</span>
-												${servei.nom} (${servei.servei})
-											</li>
-										</c:forEach>
-									</ul>
-								</div>
-							</c:if>
-							
-							<c:if test="${not empty procediment.baixes}">
-								<div class="ml-4">
-									<strong class="text-danger">
-										<i class="fas fa-minus-circle"></i> 
-										<fmt:message key="pinfo.permisos.baixes" />:
-									</strong>
-									<ul class="list-unstyled ml-3">
-										<c:forEach items="${procediment.baixes}" var="servei">
-											<li>
-												<span class="badge badge-danger">
-													<i class="fas fa-times"></i>
+												<span class="badge badge-${pinfoDataFull.tipusAlta == 1 ? 'success' : 'danger'}">
+													<i class="fas ${pinfoDataFull.tipusAlta == 1 ? 'fa-check' : 'fa-times'}"></i>
 												</span>
 												${servei.nom} (${servei.servei})
 											</li>
@@ -287,20 +268,8 @@
 		}
 	</style>
 
-	<!-- Detectar el tipo automáticamente del primer usuario -->
-	<c:set var="tipoPinfo" value="${null}" />
-	<c:forEach items="${pinfoDataFull.usuaris}" var="u" varStatus="status">
-		<c:if test="${status.first and not empty u.procediments and tipoPinfo == null}">
-			<c:forEach items="${u.procediments}" var="p">
-				<c:if test="${not empty p.altes and tipoPinfo == null}">
-					<c:set var="tipoPinfo" value="1" />
-				</c:if>
-				<c:if test="${not empty p.baixes and tipoPinfo == null}">
-					<c:set var="tipoPinfo" value="0" />
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</c:forEach>
+	<!-- Usar el tipo del PinfoDataFull -->
+	<c:set var="tipoPinfo" value="${pinfoDataFull.tipusAlta}" />
 
 	<div class="pinfo-permisos-container mt-4">
 		<!-- Header -->
@@ -358,24 +327,11 @@
 						</div>
 						
 						<div>
-							<!-- Altes -->
-							<c:forEach items="${procediment.altes}" var="servei">
+							<!-- Serveis -->
+							<c:forEach items="${procediment.serveis}" var="servei">
 								<div class="servei-item">
-									<div class="servei-icon alta">
-										<i class="fas fa-check" style="font-size: 0.7rem;"></i>
-									</div>
-									<div class="flex-grow-1">
-										<div class="servei-name">${servei.nom}</div>
-										<div class="servei-code">${servei.servei}</div>
-									</div>
-								</div>
-							</c:forEach>
-							
-							<!-- Baixes -->
-							<c:forEach items="${procediment.baixes}" var="servei">
-								<div class="servei-item">
-									<div class="servei-icon baixa">
-										<i class="fas fa-times" style="font-size: 0.7rem;"></i>
+									<div class="servei-icon ${pinfoDataFull.tipusAlta == 1 ? 'alta' : 'baixa'}">
+										<i class="fas ${pinfoDataFull.tipusAlta == 1 ? 'fa-check' : 'fa-times'}" style="font-size: 0.7rem;"></i>
 									</div>
 									<div class="flex-grow-1">
 										<div class="servei-name">${servei.nom}</div>

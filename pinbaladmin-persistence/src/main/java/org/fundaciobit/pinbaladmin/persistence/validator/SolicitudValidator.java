@@ -355,6 +355,62 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(CONTACTESOLICITANTID) == 0) {
+      java.lang.Long __contactesolicitantid = __target__.getContacteSolicitantID();
+      if (__contactesolicitantid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contactesolicitantid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTESOLICITANTID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contactesolicitantid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTEGESTAUTID) == 0) {
+      java.lang.Long __contactegestautid = __target__.getContacteGestAutID();
+      if (__contactegestautid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contactegestautid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTEGESTAUTID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contactegestautid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTEAUDITORIAID) == 0) {
+      java.lang.Long __contacteauditoriaid = __target__.getContacteAuditoriaID();
+      if (__contacteauditoriaid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contacteauditoriaid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTEAUDITORIAID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contacteauditoriaid)));
+        }
+      }
+    }
+
+    if (__vr.getFieldErrorCount(CONTACTETECNICID) == 0) {
+      java.lang.Long __contactetecnicid = __target__.getContacteTecnicID();
+      if (__contactetecnicid != null ) {
+        Long __count_ = null;
+        try { __count_ = __contacteManager.count(ContacteFields.CONTACTEID.equal(__contactetecnicid)); } catch(org.fundaciobit.genapp.common.i18n.I18NException e) { e.printStackTrace(); };
+        if (__count_ == null || __count_ == 0) {        
+          __vr.rejectValue(CONTACTETECNICID, "error.notfound",
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.contacte"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentCode("contacte.ContacteID"),
+         new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(__contactetecnicid)));
+        }
+      }
+    }
+
   } // Final de mètode
   public String get(Field<?> field) {
     return field.fullName;

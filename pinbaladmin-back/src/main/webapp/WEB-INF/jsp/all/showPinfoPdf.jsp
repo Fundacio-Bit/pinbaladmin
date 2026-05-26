@@ -24,6 +24,12 @@
 
 /* Headers usan clases estándar de tramitPinfoPublic.jsp */
 
+.aviso-warning {
+	max-width: fit-content;
+	margin: 0px auto 1.5rem auto;
+	padding: 1rem 2rem;
+}
+
 .icono-pdf {
 	font-size: 2.5rem;
 	color: #4DBA79;
@@ -126,7 +132,7 @@ canvas {
 			<ul style="margin-bottom: 0;">
 				<li>Revisa que tots els permisos del document siguin correctes</li>
 				<li>Comprova que el responsable seleccionat és el correcte</li>
-				<li>Un cop enviat, el document anirà a <strong>PortaFIB</strong> per a la signatura digital</li>
+				<li><fmt:message key="tramit.pinfo.pdf.ajuda"/></li>
 			</ul>
 		</div>
 		

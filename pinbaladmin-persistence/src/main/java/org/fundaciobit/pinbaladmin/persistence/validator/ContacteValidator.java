@@ -95,6 +95,14 @@ public class ContacteValidator<I extends Contacte>
       }
     }
 
+    if (__vr.getFieldErrorCount(NOMBRECOMPLETO) == 0) {
+      java.lang.String __nombrecompleto = __target__.getNombrecompleto();
+      if (__nombrecompleto!= null && __nombrecompleto.length() > 500) {
+        __vr.rejectValue(NOMBRECOMPLETO, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOMBRECOMPLETO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(500)));
+      }
+    }
+
     if (__isNou__) { // Creació
       // ================ CREATION
       // Fitxers 

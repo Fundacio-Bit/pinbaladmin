@@ -191,11 +191,9 @@
 <%-- 						<p>PinfoID : ${pinfoDataFull.pinfoID}</p> --%>
 						<c:forEach var="usuari" items="${pinfoDataFull.usuaris}">
 							<div class="info-usuari-full">
-								<div class="pinfodata-user">Usuari: ${usuari.usuariNom} - ${usuari.usuariNif} - ${usuari.usuariCodi} </div>
+								<div class="pinfodata-user" data-nif="${usuari.usuariNif}">Usuari: ${usuari.usuariNom} - ${usuari.usuariNif} - ${usuari.usuariCodi} </div>
 								
 								<c:forEach var="procediment" items="${usuari.procediments}">
-									<c:set var="altes" value="${procediment.altes}" />
-									<c:set var="baixes" value="${procediment.baixes}"/>
 									
 									<div class="taula-procediment">
 
@@ -203,20 +201,7 @@
 											<br> ${procediment.procediment}
 										</div>
 										<div class="pinfodata-serveis">
-											<c:forEach var="servei" items="${altes}" varStatus="status">
-												<div class="llista-serveis">
-													<div class="servei-item">
-														${servei.nom} 
-													</div>
-													<div class="btn-delete-container">
-														<a href="<c:url value="/public/pinfodata/${servei.pinfoDataID}/delete" />"
-															class="btn btn-danger"><i class="fas fa-times"></i>
-														</a>
-													</div>
-												</div>
-											</c:forEach>
-
-											<c:forEach var="servei" items="${baixes}" varStatus="status">
+											<c:forEach var="servei" items="${procediment.serveis}" varStatus="status">
 												<div class="llista-serveis">
 													<div class="servei-item">
 														${servei.nom} 
@@ -242,5 +227,29 @@
 			</form:form>
 		</div>
 	</div>
+	
+	<script>
+		// Función para ofuscar NIF: 45186147W -> 45****47W
+		function ofuscarNIF(nif) {
+			if (!nif || nif.length < 4) return nif;
+			var nifUpper = nif.toUpperCase();
+			var inicio = nifUpper.substring(0, 2);
+			var final = nifUpper.substring(nifUpper.length - 3);
+			return inicio + "****" + final;
+		}
+		
+		// Ofuscar NIFs al cargar la página
+		$(document).ready(function() {
+			$('.pinfodata-user').each(function() {
+				var nif = $(this).data('nif');
+				if (nif) {
+					var text = $(this).text();
+					var nifOfuscat = ofuscarNIF(nif);
+					var newText = text.replace(nif, nifOfuscat);
+					$(this).text(newText);
+				}
+			});
+		});
+	</script>
 </body>
 </html>

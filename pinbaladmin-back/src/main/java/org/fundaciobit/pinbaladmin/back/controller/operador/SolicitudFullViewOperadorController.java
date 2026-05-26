@@ -896,7 +896,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			// String nomDestinatari = soli.getTitularFirmaNom();
 
 			String remitent = request.getRemoteUser();
-			Contacte titular = contacteLogicaEjb.crearContacteTitular(soli);
+			Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
 
 			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, titular, remitent);
 
@@ -991,11 +991,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		List<Contacte> contactes = contacteLogicaEjb.select(where);
 
 		for (Contacte contacte : contactes) {
-			// log.info("Contacte => " + contacte.getContacteID() + " - " + contacte.getNom());
+			// log.info("Contacte => " + contacte.getContacteID() + " - " +
+			// contacte.getNom());
 			String key = contacte.getContacteID() + "";
 
 			String value = contacte.getNom() + " " + contacte.getLlinatge1() + " " + contacte.getLlinatge2() + " ("
-					+ contacte.getNif() + " - " + contacte.getUsername() + ")";
+					+ contacte.getNif() + " - " + contacte.getUsername() + ") - " + contacte.getMail();
 
 			// String value = contacte.getNom() + " (" + contacte.getNif() + ")";
 			list.add(new StringKeyValue(key, value));
@@ -1012,7 +1013,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 	@Override
 	public List<StringKeyValue> getReferenceListForContacteResponsableID(HttpServletRequest request, ModelAndView mav,
 			SolicitudForm solicitudForm, Where where) throws I18NException {
-		
+
 		return getReferenceListForContacte(where);
 	}
 
@@ -1021,4 +1022,29 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			SolicitudForm solicitudForm, Where where) throws I18NException {
 		return getReferenceListForContacte(where);
 	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForContacteAuditoriaID(HttpServletRequest request, ModelAndView mav,
+			SolicitudForm solicitudForm, Where where) throws I18NException {
+		return getReferenceListForContacte(where);
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForContacteGestAutID(HttpServletRequest request, ModelAndView mav,
+			SolicitudForm solicitudForm, Where where) throws I18NException {
+		return getReferenceListForContacte(where);
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForContacteSolicitantID(HttpServletRequest request, ModelAndView mav,
+			Where where) throws I18NException {
+		return getReferenceListForContacte(where);
+	}
+
+	@Override
+	public List<StringKeyValue> getReferenceListForContacteTecnicID(HttpServletRequest request, ModelAndView mav,
+			SolicitudForm solicitudForm, Where where) throws I18NException {
+		return getReferenceListForContacte(where);
+	}
+
 }

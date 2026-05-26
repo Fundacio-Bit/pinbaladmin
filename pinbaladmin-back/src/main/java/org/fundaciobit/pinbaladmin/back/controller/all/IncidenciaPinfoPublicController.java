@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
@@ -82,13 +83,13 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 	@EJB(mappedName = PinfoDataLogicaService.JNDI_NAME)
 	protected PinfoDataLogicaService pinfoDataLogicEjb;
-	
+
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicEjb;
-	
+
 	@EJB(mappedName = EntitatLogicaService.JNDI_NAME)
 	protected EntitatLogicaService entitatLogicEjb;
-	
+
 	@Override
 	public String getTileForm() {
 		return "incidenciaTecnicaPinfoFormOperador";
@@ -108,11 +109,12 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	public IncidenciaTecnicaForm getIncidenciaTecnicaForm(IncidenciaTecnicaJPA _jpa, boolean __isView,
 			HttpServletRequest request, ModelAndView mav) throws I18NException {
 		IncidenciaTecnicaForm form = super.getIncidenciaTecnicaForm(_jpa, __isView, request, mav);
-        request.setAttribute("desplegableOrgans", true);
+		// Desplegable de órganos desactivado - se pone automáticamente
+		request.setAttribute("desplegableOrgans", false);
 
 		if (form.isNou()) {
 			form.setTitleCode("pinfo.create");
-			
+
 			IncidenciaTecnicaJPA incidencia = form.getIncidenciaTecnica();
 
 			incidencia.setTipus(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS);
@@ -125,8 +127,6 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addHiddenField(IncidenciaTecnicaFields.DATAINICI);
 			form.addHiddenField(IncidenciaTecnicaFields.DATAFI);
 
-			
-			
 			incidencia.setOperador("pinbaladmin");
 			incidencia.setCreador("pinbladmin");
 			form.addHiddenField(IncidenciaTecnicaFields.OPERADOR);
@@ -135,17 +135,19 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDNUMEROSEGUIMENT);
 			form.addHiddenField(IncidenciaTecnicaFields.CAIDIDENTIFICADORCONSULTA);
 
-			
-//			String token = (String) request.getSession().getAttribute("token");
-//			incidencia.setDescripcio("El meu Token es: " + token);
-//			incidencia.setNomEntitat(token);
-			
+			// String token = (String) request.getSession().getAttribute("token");
+			// incidencia.setDescripcio("El meu Token es: " + token);
+			// incidencia.setNomEntitat(token);
+
 			Properties properties = (Properties) request.getSession().getAttribute("properties");
-			String nomComplet = properties.getProperty("Nom") + " " + properties.getProperty("Cognom1") + " " + properties.getProperty("Cognom2");
+			String nomComplet = properties.getProperty("Nom") + " " + properties.getProperty("Cognom1") + " "
+					+ properties.getProperty("Cognom2");
 			incidencia.setContacteNom(nomComplet);
 			form.addReadOnlyField(IncidenciaTecnicaFields.CONTACTENOM);
 
 			form.addLabel(IncidenciaTecnicaFields.NOMENTITAT, "departament.departament");
+			// Cambiar el label de Descripció a Observacions (no modificar properties)
+			form.addLabel(IncidenciaTecnicaFields.DESCRIPCIO, "pinfo.observacions");
 			// setDadesTest(incidencia);
 
 			String usuariNIF = properties.getProperty("NIF");
@@ -161,30 +163,33 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 				incidencia.setOrganid(organID);
 				form.addReadOnlyField(IncidenciaTecnicaFields.ORGANID);
 			}
-			
+
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
-//DEL			request.getSession().setAttribute("entitats", pinfoLogicEjb.getEntitats());
+			// DEL request.getSession().setAttribute("entitats",
+			// pinfoLogicEjb.getEntitats());
 
 			form.setAttachedAdditionalJspCode(true);
-			mav.addObject("isPinfo", true);
+			// Usar request.setAttribute para que esté disponible también cuando hay errores
+			request.setAttribute("isPinfo", "true");
 		}
 
 		return form;
 	}
 
-	private void setDadesTest(IncidenciaTecnicaJPA incidencia){
+	private void setDadesTest(IncidenciaTecnicaJPA incidencia) {
 		incidencia.setDescripcio("Descripció de test");
 		incidencia.setContacteTelefon("971971971");
 		incidencia.setContacteEmail("ptrias@fundaciobit.org");
-		
+
 		incidencia.setNomEntitat("Govern Digital");
 		incidencia.setTitol("Titol de test");
 	}
-	
-	public String getCodiDIR3FromNif(String nif) throws I18NException {
-    	boolean debug = false;
 
-    	IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+	public String getCodiDIR3FromNif(String nif) throws I18NException {
+		boolean debug = false;
+
+		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug,
+				TipusPluginUserInfo.LDAP);
 
 		UserInfo userInfo = null;
 		try {
@@ -198,47 +203,47 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		if (userInfo == null) {
 			throw new I18NException("error.plugin.userinformation.userinfonotfound", "NIF: " + nif);
 		}
-		
+
 		String dir3 = userInfo.getDir3();
 		log.info("DIR3 de NIF " + nif + " es: " + dir3);
-		
+
 		if (dir3 != null && dir3.trim().length() > 0) {
 			log.info("Codi DIR3 de NIF " + nif + " es: " + dir3);
 			return dir3;
-		}else {
+		} else {
 			String username = userInfo.getUsername();
 			return getCodiDIR3(username);
 		}
 	}
-	
-    public String getCodiDIR3(String username) throws I18NException {
 
-    	boolean debug = false;
-    	boolean caib = true;
-    	
-    	
-        IEstructuraOrganitzativaPlugin instance = PinbalAdminPluginsManager.getEstructuraOrganitzativaPlugin(debug, caib);
-        
-        log.info("Obtenint codi DIR3 de l'usuari: " + username + " amb plugin Estr. Org.: " + instance);
-        
-        
-        String codiDIR3;
-        try {
-            codiDIR3 = instance.getDir3DepartamentDireccioGeneral(username);
-            
-            if (codiDIR3 != null && codiDIR3.trim().length() > 0) {
+	public String getCodiDIR3(String username) throws I18NException {
+
+		boolean debug = false;
+		boolean caib = true;
+
+		IEstructuraOrganitzativaPlugin instance = PinbalAdminPluginsManager.getEstructuraOrganitzativaPlugin(debug,
+				caib);
+
+		log.info("Obtenint codi DIR3 de l'usuari: " + username + " amb plugin Estr. Org.: " + instance);
+
+		String codiDIR3;
+		try {
+			codiDIR3 = instance.getDir3DepartamentDireccioGeneral(username);
+
+			if (codiDIR3 != null && codiDIR3.trim().length() > 0) {
 				log.info("Codi DIR3 de " + username + " es: " + codiDIR3);
-                return codiDIR3;
-            }else {
-                throw new Exception ("El codi DIR3 de l'usuari " + username + " es null o buit ]" + codiDIR3 + "[");
-            }
+				return codiDIR3;
+			} else {
+				throw new Exception("El codi DIR3 de l'usuari " + username + " es null o buit ]" + codiDIR3 + "[");
+			}
 
-        } catch (Exception e) {
-            log.error("Error obtenint codi DIR3 de l'usuari " + username + ": " + e.getMessage(), e);
-//            throw new I18NException("error.plugin.estructuraorganitzativa.dir3notfound", username);
-            throw new I18NException("genapp.comodi", e.getMessage());
-        }
-    }
+		} catch (Exception e) {
+			log.error("Error obtenint codi DIR3 de l'usuari " + username + ": " + e.getMessage(), e);
+			// throw new I18NException("error.plugin.estructuraorganitzativa.dir3notfound",
+			// username);
+			throw new I18NException("genapp.comodi", e.getMessage());
+		}
+	}
 
 	@Override
 	public IncidenciaTecnicaFilterForm getIncidenciaTecnicaFilterForm(Integer pagina, ModelAndView mav,
@@ -257,22 +262,22 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		IncidenciaTecnicaJPA it;
 		it = (IncidenciaTecnicaJPA) incidenciaTecnicaLogicaEjb.create(incidenciaTecnica);
 
-		//Hem de crear el PINFO amb les dades de la incidencia
+		// Hem de crear el PINFO amb les dades de la incidencia
 		Long incidenciaID = it.getIncidenciaTecnicaID();
 		Long estat = Constants.ESTAT_PINFO_CREANT;
 		String solicitantNIF = (String) request.getSession().getAttribute("usuariNIF");
 		String solicitantNom = (String) request.getSession().getAttribute("usuariNom");
-		
+
 		// String entitat = request.getParameter("incidenciaTecnica.entitatid");
 		// log.info("Entitat: " + entitat);
-		
+
 		Long organID = it.getOrganid();
 		Organ organ = organLogicEjb.findByPrimaryKey(organID);
-		
+
 		String entitat = getEntiatPinfoFromOrgan(organ);
-		
+
 		log.info("Entitat per Pinfo: " + entitat);
-		
+
 		Long fitxerID = null;
 		Long fitxerFirmatID = null;
 		String portafibid = null;
@@ -281,18 +286,20 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		String missatgePinbal = null;
 		String logPinbal = null;
 		String missatgeSolicitant = null;
-		
-		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, solicitantNom, estat, fitxerID, fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal, logPinbal, missatgeSolicitant);
+
+		PinfoJPA pinfo = new PinfoJPA(incidenciaID, entitat, solicitantNIF, solicitantNom, estat, fitxerID,
+				fitxerFirmatID, portafibid, destinatariNIF, destinatariNom, missatgePinbal, logPinbal,
+				missatgeSolicitant);
 		Pinfo Pinfo = pinfoLogicEjb.create(pinfo);
-		
+
 		log.info("Creant Pinfo " + Pinfo.getPinfoID());
-		
+
 		// Guardar el pinfoID en sesión para usarlo en procesarPermisos
 		request.getSession().setAttribute("pinfoID", Pinfo.getPinfoID());
-		
+
 		return it;
 	}
-	
+
 	private String objectToJsonString(Object obj) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
@@ -301,74 +308,67 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		return mapper.writeValueAsString(obj);
 	}
-	
+
 	private String getEntiatPinfoFromOrgan(Organ organ) {
-		
-    	final String baseUrl = Configuracio.getApiPinbalClientUrl();
-    	final String username = Configuracio.getApiPinbalClientUsername();
-    	final String password = Configuracio.getApiPinbalClientPassword();
-    	final LogLevel logLevel = LogLevel.INFO;
 
-        log.info("Creant Clients");
+		final String baseUrl = Configuracio.getApiPinbalClientUrl();
+		final String username = Configuracio.getApiPinbalClientUsername();
+		final String password = Configuracio.getApiPinbalClientPassword();
+		final LogLevel logLevel = LogLevel.INFO;
 
-        UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		log.info("Creant Clients");
+
+		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
 		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
-		
+
 		ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
-		
+
 		try {
 			serveiClient.enableLogginFilter();
-			
+
 			usuariClient.enableLogginFilter();
 			UsuariEntitat usuari = usuariClient.getUsuari("e45186147w", "GOVERN");
 			log.info("-> Usuari Pinbal: " + objectToJsonString(usuari));
-			
-			
+
 			procedimentClient.enableLogginFilter();
-			
+
 			clientRecobriment.enableLogginFilter();
 			List<Entitat> entitats = clientRecobriment.getEntitats();
-			
+
 			for (Entitat entitat : entitats) {
 				log.info("-> Entitat Pinbal: " + objectToJsonString(entitat));
 			}
 
 		} catch (IOException e) {
-			
+
 			log.error("Error obteniendo estadistiques d'usuaris: " + e.getMessage(), e);
-			
+
 		}
 
-		
-		
-		
 		log.info("Clients creats");
-		
-		
-		
+
 		if (organ == null || organ.getEntitatid() == null) {
 			return null;
 		}
-		
+
 		try {
 			Long entitatID = organ.getEntitatid();
 			EntitatJPA entitat = entitatLogicEjb.findByPrimaryKey(entitatID);
-			
+
 			if (entitat == null || entitat.getCIF() == null) {
 				return null;
 			}
-			
+
 			String cif = entitat.getCIF().trim().toUpperCase();
-			
+
 			switch (cif) {
 				case "S0711001H":
 					return "GOVERN";
-					
+
 				case "Q0700494H":
 					return "FOGAIBA";
-					
-					
+
 				default:
 					return null;
 			}
@@ -379,95 +379,125 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 	}
 
 	@RequestMapping(value = "/new/{token}", method = RequestMethod.GET)
-	public String obtenirDadesFitxerToken(HttpServletRequest request, HttpServletRequest response, @PathVariable("token") java.lang.String token) {
-		
+	public String obtenirDadesFitxerToken(HttpServletRequest request, HttpServletRequest response,
+			@PathVariable("token") java.lang.String token) {
+
 		log.info("obtenirDadesFitxerToken token: " + token);
-		File file = new File(FileSystemManager.getFilesPath(), token + ".front");		
-		
-		 Properties properties= new Properties();
+		File file = new File(FileSystemManager.getFilesPath(), token + ".front");
+
+		Properties properties = new Properties();
 		try {
 			properties.load(new FileInputStream(file));
 		} catch (IOException e) {
 			log.error("An error occurred." + e.getMessage(), e);
 			e.printStackTrace();
 		}
-		
+
 		request.getSession().setAttribute("properties", properties);
 		request.getSession().setAttribute("token", token);
-        return "redirect:" + CONTEXT_WEB + "/new";
+		return "redirect:" + CONTEXT_WEB + "/new";
 	}
 
 	@Override
 	public void preValidate(HttpServletRequest request, IncidenciaTecnicaForm incidenciaTecnicaForm,
 			BindingResult result) throws I18NException {
 		super.preValidate(request, incidenciaTecnicaForm, result);
-		
+
 		{
 			// Fer que els camps siguin obligatoris
 			IncidenciaTecnicaJPA incidenciaTecnica = incidenciaTecnicaForm.getIncidenciaTecnica();
-						
+
+			// Si las observaciones están vacías, copiar el título (requerido en BD)
+			if (incidenciaTecnica.getDescripcio() == null || incidenciaTecnica.getDescripcio().trim().isEmpty()) {
+				if (incidenciaTecnica.getTitol() != null && !incidenciaTecnica.getTitol().trim().isEmpty()) {
+					incidenciaTecnica.setDescripcio(incidenciaTecnica.getTitol());
+				}
+			}
+
+			// Asegurar que campos opcionales no sean null (necesario para PDF)
+			if (incidenciaTecnica.getContacteTelefon() == null || incidenciaTecnica.getContacteTelefon().trim().isEmpty()) {
+				incidenciaTecnica.setContacteTelefon("-");
+			}
+
+			if (incidenciaTecnica.getNomEntitat() == null) {
+				incidenciaTecnica.setNomEntitat("-");
+			}
+
 			if (incidenciaTecnica.getContacteNom() == null || incidenciaTecnica.getContacteNom().isEmpty()) {
 				ValidationUtils.rejectIfEmptyOrWhitespace(result, get(CONTACTENOM), "genapp.validation.required",
-                        new Object[] { I18NUtils.tradueix(CONTACTENOM.fullName) });
-			}
-			if (incidenciaTecnica.getContacteTelefon() == null || incidenciaTecnica.getContacteTelefon().isEmpty()) {
-				ValidationUtils.rejectIfEmptyOrWhitespace(result, get(CONTACTETELEFON), "genapp.validation.required",
-						new Object[] { I18NUtils.tradueix(CONTACTETELEFON.fullName) });
-			}
-			if (incidenciaTecnica.getNomEntitat() == null || incidenciaTecnica.getNomEntitat().isEmpty()) {
-				ValidationUtils.rejectIfEmptyOrWhitespace(result, get(ORGANID), "genapp.validation.required",
-						new Object[] { I18NUtils.tradueix(ORGANID.fullName) });
+						new Object[] { I18NUtils.tradueix(CONTACTENOM.fullName) });
 			}
 		}
 	}
 	
 	@Override
+	public String crearIncidenciaTecnicaPost(IncidenciaTecnicaForm incidenciaTecnicaForm, BindingResult result,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String ret = super.crearIncidenciaTecnicaPost(incidenciaTecnicaForm, result, request, response);
+
+		log.info("crearIncidenciaTecnicaPost result: " + result);
+		log.info("crearIncidenciaTecnicaPost ret: " + ret);
+
+		if (result.hasErrors()) {
+			log.info("Error detectado. AdditionalJspCode = true");
+			incidenciaTecnicaForm.setAttachedAdditionalJspCode(true);
+			// Establecer atributos necesarios para mantener los estilos cuando hay errores
+			request.setAttribute("isPinfo", "true");
+			request.setAttribute("desplegableOrgans", false);
+		}
+		return ret;
+	}
+
+	@Override
 	public String getRedirectWhenCreated(HttpServletRequest request, IncidenciaTecnicaForm incidenciaTecnicaForm) {
-		// Despres de crear la incidencia, ha de crear el PINFO, i redirigir a la pagina per afegir pinfodatas.
+		// Despres de crear la incidencia, ha de crear el PINFO, i redirigir a la pagina
+		// per afegir pinfodatas.
 		log.info("getRedirectWhenCreated");
-		
-		//guardar inciencicaid a sessio
-		request.getSession().setAttribute("incidenciaId", incidenciaTecnicaForm.getIncidenciaTecnica().getIncidenciaTecnicaID());
-		
+
+		// guardar inciencicaid a sessio
+		request.getSession().setAttribute("incidenciaId",
+				incidenciaTecnicaForm.getIncidenciaTecnica().getIncidenciaTecnicaID());
+
 		return "redirect:" + PinfoDataPublicController.CONTEXT_WEB + "/elegirTipo";
 	}
-	
-    @Override
-    public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where where)
-            throws I18NException {
 
-        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-        
-        if (where != null) {
-        }
-        
-        List<Organ> organs = organLogicEjb.select(where);
+	@Override
+	public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where where)
+			throws I18NException {
 
-        for (Organ organ : organs) {
+		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-            Organ aux = organ;
-            
-            // Buscar la entidad (órgano padre con CIF)
-            String entitatInfo = "";
-            if (where != null) {
-                while (aux.getCif() == null && aux.getDir3pare() != null) {
-                    List<Organ> listAux = organLogicEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
-                    aux = listAux.get(0);
-                }
-                // aux ahora es el órgano padre con CIF (la entidad)
-                if (aux.getCif() != null) {
-                    entitatInfo = " - [" + aux.getCif() + " - " + aux.getNom() + "]";
-                }
-            }
-            
-            // Mostrar solo el órgano gestor + info de la entidad
-            String str = "(" + organ.getDir3() + ") " + organ.getNom() + entitatInfo;
+		if (where != null) {
+		}
 
-            __tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), str));
-        }
+		List<Organ> organs = organLogicEjb.select(where);
 
-        return __tmp;
-        //        return organRefList.getReferenceList(OrganFields.ORGANID, where);
-    }    
-    
+		for (Organ organ : organs) {
+
+			Organ aux = organ;
+
+			// Buscar la entidad (órgano padre con CIF)
+			String entitatInfo = "";
+			if (where != null) {
+				while (aux.getCif() == null && aux.getDir3pare() != null) {
+					List<Organ> listAux = organLogicEjb.select(OrganFields.DIR3.equal(aux.getDir3pare()));
+					aux = listAux.get(0);
+				}
+				// aux ahora es el órgano padre con CIF (la entidad)
+				if (aux.getCif() != null) {
+					entitatInfo = " - [" + aux.getCif() + " - " + aux.getNom() + "]";
+				}
+			}
+
+			// Mostrar solo el órgano gestor + info de la entidad
+			String str = "(" + organ.getDir3() + ") " + organ.getNom() + entitatInfo;
+
+			__tmp.add(new StringKeyValue(String.valueOf(organ.getOrganid()), str));
+		}
+
+		return __tmp;
+		// return organRefList.getReferenceList(OrganFields.ORGANID, where);
+	}
+
 }
