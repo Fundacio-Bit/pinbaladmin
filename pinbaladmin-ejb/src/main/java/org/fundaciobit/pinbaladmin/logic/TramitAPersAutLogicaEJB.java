@@ -32,6 +32,7 @@ import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
@@ -114,6 +115,8 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     protected EntitatLogicaService entitatLogicaEjb;
     @EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
 
     public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
 
@@ -205,14 +208,25 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		Long solicitudFusionadaID = null;
         
         //Dades de contactes.
-        Long contacteTitularID = null;
-        Long contacteResponsableID = null;
-        Long contactePersonaID = null;
-        
         Long contacteSolicitantID = null;
 		Long contacteGestAutID = null;
 		Long contacteAuditoriaID = null; 
 		Long contacteTecnicID = null;
+        Long contacteTitularID = null;
+        
+        // TODO: Camps per esborrar - Migracio de contactes 
+        Long contacteResponsableID = null;
+        Long contactePersonaID = null;
+        
+        String titularFirmaNIF = null;
+        String titularFirmaNom = null;
+        String titularFirmaEmail = null;
+//        String titularFirmaLlinatges = null;
+        String responsableProcNom = null;
+        String responsableProcEmail = null;
+        String personaContacte = null;
+        String personaContacteEmail = null;
+
 
 
         //Camps a obtenir
@@ -222,10 +236,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String procedimentTipus = null;
         Long organid = null;
         Timestamp dataCaducitat = null;
-        String responsableProcNom = null;
-        String responsableProcEmail = null;
-        String personaContacte = null;
-        String personaContacteEmail = null;
         String denominacio = null;
         String dir3arrel = null;
         String nifArrel = null;
@@ -239,10 +249,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         Long fitxerConsentimentID = null;
         String nomFitxerAdjunt = null;
         
-        String titularFirmaNIF = null;
-        String titularFirmaNom = null;
-        String titularFirmaEmail = null;
-        String titularFirmaLlinatges = null;
         
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -274,8 +280,15 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                         }
                         String fullNameA = toFullName(A.getNom(), A.getLlinatge1(), A.getLlinatge2());
                         map.put("fullNameA", fullNameA);
-                        personaContacte = fullNameA;
-                        personaContacteEmail = A.getMail();
+                        // personaContacte = fullNameA;
+                        // personaContacteEmail = A.getMail();
+                        
+                        // Crear contacte SOLICITANT
+                        Contacte contacteSolicitant = contacteLogicaEjb.buscarOCrearContacte(
+                            A.getNif(), A.getNom(), A.getLlinatge1(), A.getLlinatge2(), 
+                            null, A.getTelefon(), A.getMail(), null, fullNameA);
+                        contacteSolicitantID = contacteSolicitant.getContacteID();
+                        log.info("Contacte SOLICITANT creat/trobat amb ID: " + contacteSolicitantID);
                     break;
                     case "B":
                         TramitBDadesSoli B = (TramitBDadesSoli) obj;
@@ -313,28 +326,56 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
                     case "D":
                         TramitDCteAut D = (TramitDCteAut) obj;
                         String fullNameD = toFullName(D.getNom(), D.getLlinatge1(), D.getLlinatge2());
-                        responsableProcNom = fullNameD;
-                        responsableProcEmail = D.getMail();
+                        // responsableProcNom = fullNameD;
+                        // responsableProcEmail = D.getMail();
                         map.put("fullNameD", fullNameD);
+                        
+                        // Crear contacte GEST_AUT (Gestor Autorització)
+                        Contacte contacteGestAut = contacteLogicaEjb.buscarOCrearContacte(
+                            D.getNif(), D.getNom(), D.getLlinatge1(), D.getLlinatge2(), 
+                            D.getCarrec(), D.getTelefon(), D.getMail(), null, fullNameD);
+                        contacteGestAutID = contacteGestAut.getContacteID();
+                        log.info("Contacte GEST_AUT creat/trobat amb ID: " + contacteGestAutID);
                     break;
                     case "E":
                         TramitECteAud E = (TramitECteAud) obj;
                         String fullNameE = toFullName(E.getNom(), E.getLlinatge1(), E.getLlinatge2());
                         map.put("fullNameE", fullNameE);
+                        
+                        // Crear contacte AUDITORIA
+                        Contacte contacteAuditoria = contacteLogicaEjb.buscarOCrearContacte(
+                            E.getNif(), E.getNom(), E.getLlinatge1(), E.getLlinatge2(), 
+                            E.getCarrec(), E.getTelefon(), E.getMail(), null, fullNameE);
+                        contacteAuditoriaID = contacteAuditoria.getContacteID();
+                        log.info("Contacte AUDITORIA creat/trobat amb ID: " + contacteAuditoriaID);
                     break;
                     case "F":
                         TramitFCteTec F = (TramitFCteTec) obj;
                         String fullNameF = toFullName(F.getNom(), F.getLlinatge1(), F.getLlinatge2());
                         map.put("fullNameF", fullNameF);
+                        
+                        // Crear contacte TECNIC
+                        Contacte contacteTecnic = contacteLogicaEjb.buscarOCrearContacte(
+                            F.getNif(), F.getNom(), F.getLlinatge1(), F.getLlinatge2(), 
+                            F.getCarrec(), F.getTelefon(), F.getMail(), null, fullNameF);
+                        contacteTecnicID = contacteTecnic.getContacteID();
+                        log.info("Contacte TECNIC creat/trobat amb ID: " + contacteTecnicID);
                     break;
                     case "G":
                         TramitGDadesTit G = (TramitGDadesTit) obj;
                         String fullNameG = toFullName(G.getNom(), G.getLlinatge1(), G.getLlinatge2());
                         map.put("fullNameG", fullNameG);
-                        titularFirmaNIF = G.getNif();
-                        titularFirmaNom = G.getNom();
-                        titularFirmaEmail = G.getMail();
-                        titularFirmaLlinatges = G.getLlinatge1() + " " + G.getLlinatge2();
+                        // titularFirmaNIF = G.getNif();
+                        // titularFirmaNom = G.getNom();
+                        // titularFirmaEmail = G.getMail();
+                        // titularFirmaLlinatges = G.getLlinatge1() + " " + G.getLlinatge2();
+                        
+                        // Crear contacte TITULAR
+                        Contacte contacteTitular = contacteLogicaEjb.buscarOCrearContacte(
+                            G.getNif(), G.getNom(), G.getLlinatge1(), G.getLlinatge2(), 
+                            G.getCarrec(), G.getTelefon(), G.getMail(), null, fullNameG);
+                        contacteTitularID = contacteTitular.getContacteID();
+                        log.info("Contacte TITULAR creat/trobat amb ID: " + contacteTitularID);
                     break;
                     case "H":
                         TramitHProc H = (TramitHProc) obj;
@@ -470,12 +511,12 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 		SolicitudJPA soliJpa = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
 				procedimentTipus, organid, estatID, expedientPid, entitatEstatal, pinfo, dataInici, dataInici,
-				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
-				solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel, creador, operador,
-				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
-				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges, 
-                titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID, 
-                contacteGestAutID, contacteAuditoriaID, contacteTecnicID);
+				notesSoli, docSoliID, solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel,
+				creador, operador, estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID,
+				infoMadridID, dataCaducitat, fitxerConsentimentID, contacteTitularID, solicitudFusionadaID,
+				contacteResponsableID, contactePersonaID, contacteSolicitantID, contacteGestAutID, contacteAuditoriaID,
+				contacteTecnicID, titularFirmaNIF, personaContacte, personaContacteEmail, responsableProcNom,
+				responsableProcEmail, titularFirmaNom, titularFirmaEmail);
 
 		try {
 	        SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.create(soliJpa);
@@ -485,8 +526,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 			log.info("Enviem mail al sol·licitant. De moment no enviam.");
 //			String destinatariMail = solicitud.getPersonaContacteEmail();
-			String destinatariMail = null;
-			enviarMailSolicitant(solicitud, destinatariMail);
+			Long destinatari = solicitud.getContacteSolicitantID();
+			destinatari = null;
+			enviarMailSolicitant(solicitud, destinatari);
 
 			log.info("Generem documents de la sol·licitud");
 			generarDocumentsSolicitud(soliID, organid, prop);
@@ -687,7 +729,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		return serveisDeLaSolicitud;
 	}
 
-	private void enviarMailSolicitant(SolicitudJPA solicitud, String destinatariMail) {
+	private void enviarMailSolicitant(SolicitudJPA solicitud, Long contacteDestinatariID) {
         // Afegir event de creació de la solicitud.
         try {
             java.lang.Long _solicitudID_ = solicitud.getSolicitudID();
@@ -705,8 +747,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
             java.lang.Long _fitxerID_ = null;
             boolean _noLlegit_ = true;
             
-            java.lang.String _destinatari_ = solicitud.getPersonaContacte();
-            java.lang.String _destinatariMail_ = destinatariMail;
+            Long contacteSolicitantID = solicitud.getContacteSolicitantID();
+            Contacte destinatari = contacteLogicaEjb.findByPrimaryKey(contacteDestinatariID);
+            
+            java.lang.String _destinatari_ = destinatari.getNombrecompleto();
+            java.lang.String _destinatariMail_ = destinatari.getMail();
             java.lang.String _caidConsulta_ = null;
             java.lang.String _caidSeguiment_ = null;
             
@@ -827,11 +872,11 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		log.info("dir3UR: " + dir3UR);
 		log.info("dir3Raiz: " + dir3Raiz);
 
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION", denomincaion);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CIF", cif);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", UR);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dir3UR);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
+		prop.setProperty("DENOMINACION", denomincaion);
+		prop.setProperty("CIF", cif);
+		prop.setProperty("UNIDAD_RESPONSABLE", UR);
+		prop.setProperty("DIR3_UR", dir3UR);
+		prop.setProperty("DIR3_RAIZ", dir3Raiz);
 	}
 
 

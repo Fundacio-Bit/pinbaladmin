@@ -15,7 +15,7 @@
 		</div>
 	</div>
 
-	<div id="titol-tramit" class="third">Sol�litud d'autoritzaci�</div>
+	<div id="titol-tramit" class="third">Sol·litud d'autorització</div>
 	<div id="button-menu" class="third">
 		<a href="<%=request.getContextPath() + TramitAPublicController.CONTEXT_WEB %>/cancelarTramit/${uuid}"><fmt:message key="tramit.sistra.cancelar.tramit"/></a>
 	</div>

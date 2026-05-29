@@ -7066,106 +7066,6 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "personacontacte",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Persona de contacte: Nom",
-            "ca": "Persona de contacte: Nom"
-          },
-          "javaName": "personaContacte",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "personacontacteemail",
-          "sqlType": 12,
-          "size": 100,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Persona de contacte: Email",
-            "ca": "Persona de contacte: Email"
-          },
-          "javaName": "personaContacteEmail",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "responsableprocnom",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Responsable Proc.: Nom",
-            "ca": "Responsable Proc.: Nom"
-          },
-          "javaName": "responsableProcNom",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "responsableprocemail",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Responsable Proc.: Email",
-            "ca": "Responsable Proc.: Email"
-          },
-          "javaName": "responsableProcEmail",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "estat",
           "sqlType": 12,
           "size": 2550,
@@ -7722,106 +7622,6 @@
         },
         {
           "isAutoIncrement": false,
-          "sqlName": "titularfirmanif",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Titular Firma NIF",
-            "es": "Titular Firma NIF"
-          },
-          "javaName": "titularFirmaNif",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "titularfirmanom",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Titular Firma Nom",
-            "es": "Titular Firma Nombre"
-          },
-          "javaName": "titularFirmaNom",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "titularfirmallinatges",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Titular FIrma Llinatges",
-            "es": "Titular FIrma Apellidos"
-          },
-          "javaName": "titularFirmaLlinatges",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "titularfirmaemail",
-          "sqlType": 12,
-          "size": 255,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "ca": "Titular Firma email",
-            "es": "Titular Firma email"
-          },
-          "javaName": "titularFirmaEmail",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 1
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
           "sqlName": "solicitudfusionadaid",
           "sqlType": -5,
           "size": 19,
@@ -8078,6 +7878,181 @@
               "type": 1
             }
           ]
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularfirmanifold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Nif Titular Old",
+            "es": "Nif Titular Old"
+          },
+          "javaName": "titularFirmaNifOld",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "personacontacteold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "personacontacteold",
+            "es": "personacontacteold"
+          },
+          "javaName": "personacontacteold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "personacontacteemailold",
+          "sqlType": 12,
+          "size": 100,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "personacontacteemailold",
+            "es": "personacontacteemailold"
+          },
+          "javaName": "personacontacteemailold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocnomold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "responsableprocnomold",
+            "es": "responsableprocnomold"
+          },
+          "javaName": "responsableprocnomold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "responsableprocemailold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "responsableprocemailold",
+            "es": "responsableprocemailold"
+          },
+          "javaName": "responsableprocemailold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularfirmanomold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "titularfirmanomold",
+            "es": "titularfirmanomold"
+          },
+          "javaName": "titularfirmanomold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "titularfirmaemailold",
+          "sqlType": 12,
+          "size": 255,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "titularfirmaemailold",
+            "es": "titularfirmaemailold"
+          },
+          "javaName": "titularfirmaemailold",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 1
+          },
+          "foreignKeys": []
         }
       ]
     },

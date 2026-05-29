@@ -40,6 +40,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Operador;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
@@ -192,20 +193,20 @@ public class SolicitudActivaAdminController extends SolicitudController {
                     AdditionalButtonStyle.PRIMARY));
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(
                     IconUtils.ICON_FILE,
-                    "Test Button",
+                    "solicitud.admin.test.button",
                     "javascript:alert('Botón de prueba')",
                     AdditionalButtonStyle.SUCCESS));
 
             solicitudFilterForm.addAdditionalButtonForEachItem(new AdditionalButton(
                     "fas fa-flask",
-                    "Probar Acción",
+                    "solicitud.admin.probar.accion",
                     "javascript:console.log('Solicitud ID: {0}'); alert('Probando con ID: {0}');",
                     AdditionalButtonStyle.WARNING));
 
             // Botones de migración masiva
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(
                     "fas fa-database",
-                    "Migrar Fusiones Históricas",
+                    "solicitud.admin.migrar.fusiones.historicas",
                     "javascript:if(confirm('ATENCIÓN: Migración masiva.\\nRellenará solicitudFusionadaID desde notas.\\n¿Continuar?')) { window.location.href='/pinbaladmin"
                             + CONTEXTWEB
                             + "/migrarFusionesHistoricas'; }",
@@ -214,7 +215,7 @@ public class SolicitudActivaAdminController extends SolicitudController {
             // Botón migración completa de todos los contactos
             solicitudFilterForm.addAdditionalButton(new AdditionalButton(
                     "fas fa-users",
-                    "Migrar TODOS los Contactos (XML → BD)",
+                    "solicitud.admin.migrar.contactos.completo",
                     "javascript:if(confirm('ATENCIÓN: Migración completa de contactos.\\n\\n" +
                             "Se migrarán 5 tipos de contactos desde el XML:\\n" +
                             "- Solicitante (persona autenticada)\\n" +
@@ -225,6 +226,17 @@ public class SolicitudActivaAdminController extends SolicitudController {
                             "¿Continuar?')) { window.location.href='/pinbaladmin" + CONTEXTWEB
                             + "/migrarContactosCompleto'; }",
                     AdditionalButtonStyle.SUCCESS));
+
+            // Botón para actualizar titulares no migrados
+            solicitudFilterForm.addAdditionalButton(new AdditionalButton(
+                    "fas fa-user-check",
+                    "solicitud.admin.actualizar.titulares.no.migrados",
+                    "javascript:if(confirm('ATENCIÓN: Actualización de titulares.\\n\\n" +
+                            "Se actualizarán solicitudes con NIF de titular pero sin contacto asociado.\\n" +
+                            "Se buscará el contacto existente o se creará uno nuevo.\\n\\n" +
+                            "¿Continuar?')) { window.location.href='/pinbaladmin" + CONTEXTWEB
+                            + "/actualizarTitularesNoMigrados'; }",
+                    AdditionalButtonStyle.INFO));
 
             solicitudFilterForm.setOrderBy(SolicitudFields.DATAINICI.fullName);
             solicitudFilterForm.setOrderAsc(false);
@@ -254,7 +266,7 @@ public class SolicitudActivaAdminController extends SolicitudController {
             // solicitud.getOrganid());
 
             filterForm.addAdditionalButtonByPK(solicitud.getSolicitudID(), new AdditionalButton("fas fa-sync-alt",
-                    "Actualizar Contactos (XML → BD)",
+                    "solicitud.admin.actualizar.contactos",
                     "javascript:if(confirm('¿Actualizar contactos desde XML para esta solicitud?')) { window.location.href='/pinbaladmin"
                             + CONTEXTWEB + "/migrarContacto/" + solicitud.getSolicitudID() + "'; }",
                     AdditionalButtonStyle.INFO));
@@ -603,6 +615,209 @@ public class SolicitudActivaAdminController extends SolicitudController {
     }
 
     /**
+     * Actualiza titulares que tienen NIF pero no tienen contacto asociado.
+     * Busca el contacto por NIF y si hay más de uno, usa el email para elegir el correcto.
+     * Si no existe contacto, lo crea.
+     */
+    @RequestMapping(value = "/actualizarTitularesNoMigrados", method = RequestMethod.GET)
+    public String actualizarTitularesNoMigrados(HttpServletRequest request, HttpServletResponse response)
+            throws I18NException {
+
+        log.info("=== INICIO ACTUALIZACIÓN TITULARES NO MIGRADOS ===");
+
+        int totalSolicitudes = 0;
+        int titularesActualizados = 0;
+        int titularesCreados = 0;
+        int titularesCreatedConLDAP = 0;
+        int errores = 0;
+        int sinNif = 0;
+        List<String> detalles = new ArrayList<>();
+
+        try {
+            // Obtener plugin de UserInfo (LDAP)
+            IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
+                    TipusPluginUserInfo.LDAP);
+
+            // Buscar solicitudes con NIF de titular pero sin contacto asociado
+            Where where = Where.AND(
+                    SolicitudFields.TITULARFIRMANIFOLD.isNotNull(),
+                    SolicitudFields.CONTACTETITULARID.isNull());
+
+            List<Solicitud> solicitudes = solicitudLogicaEjb.select(where);
+            totalSolicitudes = solicitudes.size();
+
+            log.info("Encontradas " + totalSolicitudes + " solicitudes con titular sin migrar");
+
+            for (Solicitud solicitud : solicitudes) {
+                try {
+                    String nif = solicitud.getTitularFirmaNifOld();
+                    String email = solicitud.getTitularfirmaemailold();
+                    String nombre = solicitud.getTitularfirmanomold();
+
+                    if (nif == null || nif.trim().isEmpty()) {
+                        sinNif++;
+                        log.warn("Solicitud " + solicitud.getSolicitudID() + " tiene NIF vacío");
+                        continue;
+                    }
+
+                    nif = nif.toUpperCase().trim();
+
+                    // Buscar contactos con ese NIF
+                    Where whereContacte = ContacteFields.NIF.equal(nif);
+                    List<Contacte> contactes = contacteLogicaEjb.select(whereContacte);
+
+                    Contacte contacteSeleccionado = null;
+
+                    if (contactes != null && !contactes.isEmpty()) {
+                        if (contactes.size() == 1) {
+                            // Solo hay uno, lo usamos directamente
+                            contacteSeleccionado = contactes.get(0);
+                            log.info("Solicitud " + solicitud.getSolicitudID() + ": encontrado 1 contacto con NIF " + nif);
+                        } else {
+                            // Hay más de uno, intentar filtrar por email
+                            log.info("Solicitud " + solicitud.getSolicitudID() + ": encontrados " + contactes.size() + " contactos con NIF " + nif);
+                            
+                            if (email != null && !email.trim().isEmpty()) {
+                                String emailNormalizado = email.toLowerCase().trim();
+                                for (Contacte c : contactes) {
+                                    if (c.getMail() != null && c.getMail().equalsIgnoreCase(emailNormalizado)) {
+                                        contacteSeleccionado = c;
+                                        log.info("Solicitud " + solicitud.getSolicitudID() + ": seleccionado contacto por email " + email);
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // Si no encontramos por email, usar el primero
+                            if (contacteSeleccionado == null) {
+                                contacteSeleccionado = contactes.get(0);
+                                log.info("Solicitud " + solicitud.getSolicitudID() + ": usando primer contacto encontrado (no se pudo filtrar por email)");
+                            }
+                        }
+
+                        // Actualizar la solicitud con el contacto existente
+                        solicitud.setContacteTitularID(contacteSeleccionado.getContacteID());
+                        solicitudLogicaEjb.update(solicitud);
+                        titularesActualizados++;
+                        
+                        String detalle = String.format("Solicitud %d: asociado contacto existente ID=%d (NIF=%s)",
+                                solicitud.getSolicitudID(), contacteSeleccionado.getContacteID(), nif);
+                        detalles.add(detalle);
+                        log.info(detalle);
+
+                    } else {
+                        // No existe contacto, buscar primero en LDAP y luego crearlo
+                        log.info("Solicitud " + solicitud.getSolicitudID() + ": no existe contacto con NIF " + nif + ", buscando en LDAP...");
+                        
+                        String nom = null;
+                        String llinatge1 = null;
+                        String llinatge2 = null;
+                        String telefon = null;
+                        String username = null;
+                        String nombreCompleto = nombre;
+                        boolean encontradoEnLDAP = false;
+
+                        // Buscar en LDAP por NIF
+                        UserInfo userInfo = obtenerUserInfoConCache(nif, plugin);
+                        if (userInfo != null) {
+                            log.info("Solicitud " + solicitud.getSolicitudID() + ": encontrado en LDAP - " + userInfo.getFullName());
+                            nom = userInfo.getName();
+                            llinatge1 = userInfo.getSurname1();
+                            llinatge2 = userInfo.getSurname2();
+                            telefon = userInfo.getPhoneNumber();
+                            username = userInfo.getUsername();
+                            nombreCompleto = userInfo.getFullName();
+                            // Si LDAP tiene email, usarlo (más fiable que el de la solicitud)
+                            if (userInfo.getEmail() != null && !userInfo.getEmail().trim().isEmpty()) {
+                                email = userInfo.getEmail();
+                            }
+                            encontradoEnLDAP = true;
+                            titularesCreatedConLDAP++;
+                        } else {
+                            log.info("Solicitud " + solicitud.getSolicitudID() + ": no encontrado en LDAP, usando datos de la solicitud");
+                            // Usar datos de la solicitud (ya asignados a variables nom, email, etc.) Para no perder datos..
+
+                            nom = solicitud.getTitularfirmanomold();
+                            llinatge1 = null;
+                            llinatge2 = null;
+                            email = solicitud.getTitularfirmaemailold();
+                        }
+
+                        // Crear el contacto con los datos obtenidos (de LDAP o de la solicitud)
+                        Contacte nuevoContacte = contacteLogicaEjb.buscarOCrearContacte(
+                                nif, nom, llinatge1, llinatge2, null, telefon, email, username, nombreCompleto);
+
+                        if (nuevoContacte != null) {
+                            solicitud.setContacteTitularID(nuevoContacte.getContacteID());
+                            solicitudLogicaEjb.update(solicitud);
+                            titularesCreados++;
+                            
+                            String fuente = encontradoEnLDAP ? "LDAP" : "Solicitud";
+                            String detalle = String.format("Solicitud %d: creado nuevo contacto ID=%d (NIF=%s, Fuente=%s, Nombre=%s)",
+                                    solicitud.getSolicitudID(), nuevoContacte.getContacteID(), nif, fuente, nombreCompleto);
+                            detalles.add(detalle);
+                            log.info(detalle);
+                        } else {
+                            errores++;
+                            log.error("No se pudo crear contacto para solicitud " + solicitud.getSolicitudID());
+                        }
+                    }
+
+                } catch (Exception e) {
+                    errores++;
+                    log.error("Error procesando solicitud " + solicitud.getSolicitudID() + ": " + e.getMessage(), e);
+                }
+            }
+
+            String mensaje = String.format(
+                    "Actualización de titulares finalizada.%n%n" +
+                            "Solicitudes procesadas: %d%n%n" +
+                            "Titulares actualizados (contacto existente): %d%n" +
+                            "Titulares creados (contacto nuevo): %d%n" +
+                            "  - Creados con datos de LDAP: %d%n" +
+                            "  - Creados con datos de solicitud: %d%n" +
+                            "Errores: %d%n" +
+                            "Sin NIF válido: %d",
+                    totalSolicitudes, titularesActualizados, titularesCreados, 
+                    titularesCreatedConLDAP, (titularesCreados - titularesCreatedConLDAP), errores, sinNif);
+
+            log.info(mensaje.replace("%n", "\n"));
+
+            // Mostrar primeros detalles
+            if (!detalles.isEmpty()) {
+                StringBuilder mensajeDetallado = new StringBuilder(mensaje);
+                mensajeDetallado.append("%n%n=== Primeras 20 actualizaciones ===%n");
+                int limite = Math.min(20, detalles.size());
+                for (int i = 0; i < limite; i++) {
+                    mensajeDetallado.append(detalles.get(i)).append("%n");
+                }
+                if (detalles.size() > 20) {
+                    mensajeDetallado.append(String.format("... y %d más%n", detalles.size() - 20));
+                }
+                mensajeDetallado.append("%nVer log para detalles completos");
+                mensaje = mensajeDetallado.toString();
+            }
+
+            if (errores > 0) {
+                HtmlUtils.saveMessageWarning(request, mensaje);
+            } else {
+                HtmlUtils.saveMessageSuccess(request, mensaje);
+            }
+
+            log.info("=== FIN ACTUALIZACIÓN TITULARES NO MIGRADOS ===");
+            log.info(mensaje.replace("%n", "\n"));
+
+
+
+        } catch (Exception e) {
+            log.error("Error durante actualización de titulares: " + e.getMessage(), e);
+            HtmlUtils.saveMessageError(request, "Error: " + e.getMessage());
+        }
+
+        return "redirect:" + CONTEXTWEB + "/list";
+    }
+
+    /**
      * Migra todos los contactos de una solicitud.
      * 
      * @return Map con contador de contactos creados por tipo
@@ -840,20 +1055,20 @@ public class SolicitudActivaAdminController extends SolicitudController {
 
         switch (tipoContacto) {
             case TITULAR:
-                nif = solicitud.getTitularFirmaNif();
-                nom = solicitud.getTitularFirmaNom();
-                llinatge1 = solicitud.getTitularFirmaLlinatges();
-                mail = solicitud.getTitularFirmaEmail();
+//                nif = solicitud.getTitularFirmaNif();
+//                nom = solicitud.getTitularFirmaNom();
+//                llinatge1 = solicitud.getTitularFirmaLlinatges();
+//                mail = solicitud.getTitularFirmaEmail();
                 break;
 
             case GEST_AUT:
-                nom = solicitud.getResponsableProcNom();
-                mail = solicitud.getResponsableProcEmail();
+//                nom = solicitud.getResponsableProcNom();
+//                mail = solicitud.getResponsableProcEmail();
                 break;
 
             case SOLICITANT:
-                nom = solicitud.getPersonaContacte();
-                mail = solicitud.getPersonaContacteEmail();
+//                nom = solicitud.getPersonaContacte();
+//                mail = solicitud.getPersonaContacteEmail();
                 break;
 
             default:

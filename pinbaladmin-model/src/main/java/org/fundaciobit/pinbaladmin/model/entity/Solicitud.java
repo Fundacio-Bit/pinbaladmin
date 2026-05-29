@@ -41,18 +41,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.sql.Timestamp getDataFi();
 	public void setDataFi(java.sql.Timestamp _dataFi_);
 
-	public java.lang.String getPersonaContacte();
-	public void setPersonaContacte(java.lang.String _personaContacte_);
-
-	public java.lang.String getPersonaContacteEmail();
-	public void setPersonaContacteEmail(java.lang.String _personaContacteEmail_);
-
-	public java.lang.String getResponsableProcNom();
-	public void setResponsableProcNom(java.lang.String _responsableProcNom_);
-
-	public java.lang.String getResponsableProcEmail();
-	public void setResponsableProcEmail(java.lang.String _responsableProcEmail_);
-
 	public java.lang.String getNotes();
 	public void setNotes(java.lang.String _notes_);
 
@@ -110,18 +98,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.Long getContacteTitularID();
 	public void setContacteTitularID(java.lang.Long _contacteTitularID_);
 
-	public java.lang.String getTitularFirmaNif();
-	public void setTitularFirmaNif(java.lang.String _titularFirmaNif_);
-
-	public java.lang.String getTitularFirmaNom();
-	public void setTitularFirmaNom(java.lang.String _titularFirmaNom_);
-
-	public java.lang.String getTitularFirmaLlinatges();
-	public void setTitularFirmaLlinatges(java.lang.String _titularFirmaLlinatges_);
-
-	public java.lang.String getTitularFirmaEmail();
-	public void setTitularFirmaEmail(java.lang.String _titularFirmaEmail_);
-
 	public java.lang.Long getSolicitudFusionadaID();
 	public void setSolicitudFusionadaID(java.lang.Long _solicitudFusionadaID_);
 
@@ -142,6 +118,27 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.lang.Long getContacteTecnicID();
 	public void setContacteTecnicID(java.lang.Long _contacteTecnicID_);
+
+	public java.lang.String getTitularFirmaNifOld();
+	public void setTitularFirmaNifOld(java.lang.String _titularFirmaNifOld_);
+
+	public java.lang.String getPersonacontacteold();
+	public void setPersonacontacteold(java.lang.String _personacontacteold_);
+
+	public java.lang.String getPersonacontacteemailold();
+	public void setPersonacontacteemailold(java.lang.String _personacontacteemailold_);
+
+	public java.lang.String getResponsableprocnomold();
+	public void setResponsableprocnomold(java.lang.String _responsableprocnomold_);
+
+	public java.lang.String getResponsableprocemailold();
+	public void setResponsableprocemailold(java.lang.String _responsableprocemailold_);
+
+	public java.lang.String getTitularfirmanomold();
+	public void setTitularfirmanomold(java.lang.String _titularfirmanomold_);
+
+	public java.lang.String getTitularfirmaemailold();
+	public void setTitularfirmaemailold(java.lang.String _titularfirmaemailold_);
 
   // Fitxer
   public <F extends Fitxer> F getDocumentSolicitud();

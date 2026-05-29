@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class NotificacionLogicaEJB implements NotificacionLogicaService {
 
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
+
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
 
 	// ========================================================================
 	// MÉTODOS PÚBLICOS - Notificaciones específicas del flujo PREALTAS
@@ -66,13 +70,16 @@ public class NotificacionLogicaEJB implements NotificacionLogicaService {
 		String mensaje = String.format("La seva sol·licitud amb codi %s ha estat autoritzada. "
 				+ "Ja pot procedir a realitzar els tràmits que desitgi.", solicitud.getProcedimentCodi());
 
+		Long contacteID = solicitud.getContacteSolicitantID();
+		Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(contacteID);
+		
 		log.info("Notificando autorización a contacto: solicitud={}, email={}", solicitud.getSolicitudID(),
-				solicitud.getPersonaContacteEmail());
+				solicitant.getMail());
 
 		// Tipo TRAMITADOR_PUBLIC = mensaje público que SALE de tramitadores
 		// Envía email al contacto
-		crearEventoPublicoConEmail(solicitud, Constants.SISTEMA_PINBALADMIN, solicitud.getPersonaContacte(),
-				solicitud.getPersonaContacteEmail(), asunto, mensaje);
+		crearEventoPublicoConEmail(solicitud, Constants.SISTEMA_PINBALADMIN, solicitant.getNom(),
+				solicitant.getMail(), asunto, mensaje);
 	}
 
 	@Override
@@ -329,6 +336,11 @@ public class NotificacionLogicaEJB implements NotificacionLogicaService {
 		
 		String urlEsmena = generarURLEsmena(solicitud);
 
+		Long contacteID = solicitud.getContacteSolicitantID();
+		Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(contacteID);
+		
+		
+		
 		String missatge = "<div style=\"margin: .5rem;\">" 
 				+ "<strong>NOTIFICACIÓ INTERNA - DESESTIMACIÓ DES DE MADRID</strong><br><br>"
 				+ "La Plataforma Estatal d'Interoperabilitat (PID) ha DESESTIMAT la sol·licitud:<br><br>"
@@ -336,7 +348,7 @@ public class NotificacionLogicaEJB implements NotificacionLogicaService {
 				+ "• <strong>Tipus de procés:</strong> " + tipoProceso + "<br>"
 				+ "• <strong>Procediment:</strong> " + solicitud.getProcedimentCodi() + "<br>"
 				+ "• <strong>ID Sol·licitud:</strong> " + solicitud.getSolicitudID() + "<br>"
-				+ "• <strong>Contacte:</strong> " + (solicitud.getPersonaContacte() != null ? solicitud.getPersonaContacte() : "N/D") + "<br>"
+				+ "• <strong>Contacte:</strong> " + (solicitant.getNombrecompleto() != null ? solicitant.getNombrecompleto() : "N/D") + "<br>"
 				+ "</div><br>"
 				+ "<strong>Motiu de la desestimació:</strong><br>"
 				+ "<div style=\"margin: 0.5rem 1rem; padding: 0.5rem; background-color: #f8f9fa; border-left: 3px solid #dc3545; font-style: italic;\">"

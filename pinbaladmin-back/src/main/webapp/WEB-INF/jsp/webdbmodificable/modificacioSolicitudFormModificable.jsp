@@ -178,15 +178,9 @@
 				</tbody>
 			</table>
 
-
-
 			<table>
 				<tr id="titolProcediment" class="titolRow">
 					<td colspan="2" class="titolSection">Dades Procediment</td>
-				</tr>
-
-				<tr id="titolResponsable" class="titolRow">
-					<td colspan="2" class="titolSection">Dades Responsable</td>
 				</tr>
 
 				<tr id="titolConsentiment" class="titolRow">
@@ -242,7 +236,7 @@
 		}
 
 		// Validar campos obligatorios
-		checkField("modificacioSolicitud.responsableProcNom", "Datos de responsables");
+		// Nota: responsableProcNom ya no se edita, se muestra desde la solicitud original
 		checkField("modificacioSolicitud.procedimentTipus", "Tipo de procedimiento");
 		checkField("modificacioSolicitud.codiSiaNou", "Codigo SIA nuevo");
 		

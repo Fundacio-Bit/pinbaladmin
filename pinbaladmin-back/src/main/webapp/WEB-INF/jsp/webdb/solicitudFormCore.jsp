@@ -332,78 +332,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PERSONACONTACTE)}">
-        <tr id="solicitud_personaContacte_rowid">
-          <td id="solicitud_personaContacte_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PERSONACONTACTE])?'solicitud.personaContacte':__theForm.labels[SolicitudFields.PERSONACONTACTE]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.PERSONACONTACTE]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.PERSONACONTACTE]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_personaContacte_columnvalueid">
-            <form:errors path="solicitud.personaContacte" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTE)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTE)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.personaContacte"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAIL)}">
-        <tr id="solicitud_personaContacteEmail_rowid">
-          <td id="solicitud_personaContacteEmail_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PERSONACONTACTEEMAIL])?'solicitud.personaContacteEmail':__theForm.labels[SolicitudFields.PERSONACONTACTEEMAIL]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.PERSONACONTACTEEMAIL]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.PERSONACONTACTEEMAIL]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_personaContacteEmail_columnvalueid">
-            <form:errors path="solicitud.personaContacteEmail" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAIL)? ' uneditable-input' : ''}"  style="" maxlength="100" path="solicitud.personaContacteEmail"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOM)}">
-        <tr id="solicitud_responsableProcNom_rowid">
-          <td id="solicitud_responsableProcNom_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCNOM])?'solicitud.responsableProcNom':__theForm.labels[SolicitudFields.RESPONSABLEPROCNOM]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCNOM]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCNOM]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_responsableProcNom_columnvalueid">
-            <form:errors path="solicitud.responsableProcNom" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.responsableProcNom"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAIL)}">
-        <tr id="solicitud_responsableProcEmail_rowid">
-          <td id="solicitud_responsableProcEmail_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCEMAIL])?'solicitud.responsableProcEmail':__theForm.labels[SolicitudFields.RESPONSABLEPROCEMAIL]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCEMAIL]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCEMAIL]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_responsableProcEmail_columnvalueid">
-            <form:errors path="solicitud.responsableProcEmail" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAIL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.responsableProcEmail"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.NOTES)}">
         <tr id="solicitud_notes_rowid">
           <td id="solicitud_notes_columnlabelid">
@@ -1059,78 +987,6 @@
         </tr>
         </c:if>
         
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
-        <tr id="solicitud_titularFirmaNif_rowid">
-          <td id="solicitud_titularFirmaNif_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANIF])?'solicitud.titularFirmaNif':__theForm.labels[SolicitudFields.TITULARFIRMANIF]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANIF]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANIF]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_titularFirmaNif_columnvalueid">
-            <form:errors path="solicitud.titularFirmaNif" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIF)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIF)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNif"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
-        <tr id="solicitud_titularFirmaNom_rowid">
-          <td id="solicitud_titularFirmaNom_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANOM])?'solicitud.titularFirmaNom':__theForm.labels[SolicitudFields.TITULARFIRMANOM]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANOM]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANOM]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_titularFirmaNom_columnvalueid">
-            <form:errors path="solicitud.titularFirmaNom" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOM)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNom"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMALLINATGES)}">
-        <tr id="solicitud_titularFirmaLlinatges_rowid">
-          <td id="solicitud_titularFirmaLlinatges_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMALLINATGES])?'solicitud.titularFirmaLlinatges':__theForm.labels[SolicitudFields.TITULARFIRMALLINATGES]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMALLINATGES]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMALLINATGES]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_titularFirmaLlinatges_columnvalueid">
-            <form:errors path="solicitud.titularFirmaLlinatges" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMALLINATGES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMALLINATGES)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaLlinatges"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
-        <tr id="solicitud_titularFirmaEmail_rowid">
-          <td id="solicitud_titularFirmaEmail_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMAEMAIL])?'solicitud.titularFirmaEmail':__theForm.labels[SolicitudFields.TITULARFIRMAEMAIL]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMAEMAIL]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMAEMAIL]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_titularFirmaEmail_columnvalueid">
-            <form:errors path="solicitud.titularFirmaEmail" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAIL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAIL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaEmail"   />
-
-           </td>
-        </tr>
-        </c:if>
-        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
         <tr id="solicitud_solicitudFusionadaID_rowid">
           <td id="solicitud_solicitudFusionadaID_columnlabelid">
@@ -1385,6 +1241,132 @@
             </c:if>
           </form:select>
           </c:if>
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANIFOLD)}">
+        <tr id="solicitud_titularFirmaNifOld_rowid">
+          <td id="solicitud_titularFirmaNifOld_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANIFOLD])?'solicitud.titularFirmaNifOld':__theForm.labels[SolicitudFields.TITULARFIRMANIFOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANIFOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANIFOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularFirmaNifOld_columnvalueid">
+            <form:errors path="solicitud.titularFirmaNifOld" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIFOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANIFOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularFirmaNifOld"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PERSONACONTACTEOLD)}">
+        <tr id="solicitud_personacontacteold_rowid">
+          <td id="solicitud_personacontacteold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PERSONACONTACTEOLD])?'solicitud.personacontacteold':__theForm.labels[SolicitudFields.PERSONACONTACTEOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.PERSONACONTACTEOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.PERSONACONTACTEOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_personacontacteold_columnvalueid">
+            <form:errors path="solicitud.personacontacteold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.personacontacteold"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAILOLD)}">
+        <tr id="solicitud_personacontacteemailold_rowid">
+          <td id="solicitud_personacontacteemailold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.PERSONACONTACTEEMAILOLD])?'solicitud.personacontacteemailold':__theForm.labels[SolicitudFields.PERSONACONTACTEEMAILOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.PERSONACONTACTEEMAILOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.PERSONACONTACTEEMAILOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_personacontacteemailold_columnvalueid">
+            <form:errors path="solicitud.personacontacteemailold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAILOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.PERSONACONTACTEEMAILOLD)? ' uneditable-input' : ''}"  style="" maxlength="100" path="solicitud.personacontacteemailold"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOMOLD)}">
+        <tr id="solicitud_responsableprocnomold_rowid">
+          <td id="solicitud_responsableprocnomold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCNOMOLD])?'solicitud.responsableprocnomold':__theForm.labels[SolicitudFields.RESPONSABLEPROCNOMOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCNOMOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCNOMOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_responsableprocnomold_columnvalueid">
+            <form:errors path="solicitud.responsableprocnomold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOMOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCNOMOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.responsableprocnomold"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAILOLD)}">
+        <tr id="solicitud_responsableprocemailold_rowid">
+          <td id="solicitud_responsableprocemailold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.RESPONSABLEPROCEMAILOLD])?'solicitud.responsableprocemailold':__theForm.labels[SolicitudFields.RESPONSABLEPROCEMAILOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.RESPONSABLEPROCEMAILOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.RESPONSABLEPROCEMAILOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_responsableprocemailold_columnvalueid">
+            <form:errors path="solicitud.responsableprocemailold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAILOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.RESPONSABLEPROCEMAILOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.responsableprocemailold"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMANOMOLD)}">
+        <tr id="solicitud_titularfirmanomold_rowid">
+          <td id="solicitud_titularfirmanomold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMANOMOLD])?'solicitud.titularfirmanomold':__theForm.labels[SolicitudFields.TITULARFIRMANOMOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMANOMOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMANOMOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularfirmanomold_columnvalueid">
+            <form:errors path="solicitud.titularfirmanomold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOMOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMANOMOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularfirmanomold"   />
+
+           </td>
+        </tr>
+        </c:if>
+        
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAILOLD)}">
+        <tr id="solicitud_titularfirmaemailold_rowid">
+          <td id="solicitud_titularfirmaemailold_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.TITULARFIRMAEMAILOLD])?'solicitud.titularfirmaemailold':__theForm.labels[SolicitudFields.TITULARFIRMAEMAILOLD]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.TITULARFIRMAEMAILOLD]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.TITULARFIRMAEMAILOLD]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_titularfirmaemailold_columnvalueid">
+            <form:errors path="solicitud.titularfirmaemailold" cssClass="errorField alert alert-danger" />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAILOLD)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudFields.TITULARFIRMAEMAILOLD)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitud.titularfirmaemailold"   />
+
            </td>
         </tr>
         </c:if>

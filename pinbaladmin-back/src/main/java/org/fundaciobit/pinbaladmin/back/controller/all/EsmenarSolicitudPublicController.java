@@ -55,17 +55,17 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 
 		Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
 
-		modSolicitud.setContactenom(soli.getPersonaContacte());
-		modSolicitud.setContactemail(soli.getPersonaContacteEmail());
+//		modSolicitud.setContactenom(soli.getPersonaContacte());
+//		modSolicitud.setContactemail(soli.getPersonaContacteEmail());
 		modSolicitud.setEsmena(isEsmena()); // Es una esmena
 
 		modSolicitud.setEstatModificacio(Constants.ESTAT_MODIFICACIO_SOLICITUD_CREACIO); // o el campo correcto
 
-		modSolicitud.setSolicitantNif(null);
-		modSolicitud.setSolicitantNom(soli.getPersonaContacte());
+//		modSolicitud.setSolicitantNif(null);
+//		modSolicitud.setSolicitantNom(soli.getPersonaContacte());
 		modSolicitud.setSolicitantUsername(null);
 
-		request.getSession().setAttribute("usuariNom", soli.getPersonaContacte());
+//		request.getSession().setAttribute("usuariNom", soli.getPersonaContacte());
 		
 		ModificacioSolicitud mod = modificacioSolicitudLogicaEjb.create(modSolicitud);
 
@@ -207,8 +207,8 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 		mod.setProcedimentTipus(solicitud.getProcedimentTipus());
 
 		mod.setOrganID(solicitud.getOrganid());
-		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
-		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
+//		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
+//		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
 		mod.setConsentiment(solicitud.getConsentiment());
 		mod.setDoCconsentimentID(solicitud.getFitxerConsentimentID());
 		

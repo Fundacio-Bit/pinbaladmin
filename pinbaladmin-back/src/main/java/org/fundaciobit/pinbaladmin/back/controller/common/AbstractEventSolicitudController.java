@@ -11,8 +11,11 @@ import org.fundaciobit.pinbaladmin.back.controller.all.EventSolicitudPublicContr
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EventForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.validation.BindingResult;
 
@@ -25,6 +28,9 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
+    
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
 
     @Override
     public boolean isSolicitud() {
@@ -52,14 +58,30 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
         return item.getDataInici();
     }
 
+	private Contacte getPersonaContacte(Solicitud item) {
+		Long contacteID = item.getContacteSolicitantID();
+		if (contacteID != null) {
+			return contacteLogicaEjb.findByPrimaryKey(contacteID);
+		}
+		return null;
+	}
+    
     @Override
-    public String getPersonaContacteNom(Solicitud item) {
-        return item.getPersonaContacte();
-    }
+	public String getPersonaContacteNom(Solicitud item) {
+		Contacte contacte = getPersonaContacte(item);
+		if (contacte != null) {
+			return contacte.getNom();
+		}
+		return null;
+	}
 
     @Override
     public String getPersonaContacteEmail(Solicitud item) {
-        return item.getPersonaContacteEmail();
+		Contacte contacte = getPersonaContacte(item);
+		if (contacte != null) {
+			return contacte.getMail();
+		}
+		return null;
     }
 
     @Override
@@ -104,14 +126,26 @@ public abstract class AbstractEventSolicitudController extends AbstractEventCont
 
     @Override
     public String getPersonaContacteEmailByItemID(Long itemID) throws I18NException {
-        return solicitudLogicaEjb.executeQueryOne(SolicitudFields.PERSONACONTACTEEMAIL,
-                SolicitudFields.SOLICITUDID.equal(itemID));
+    	Solicitud item = findItemByPrimaryKey(itemID);
+    	Contacte contacte = getPersonaContacte(item);
+    	
+    	if (contacte != null) {
+    		return contacte.getMail();
+    	}
+    	
+    	return null;
     }
 
     @Override
     public String getPersonaContacteByItemID(Long itemID) throws I18NException {
-        return solicitudLogicaEjb.executeQueryOne(SolicitudFields.PERSONACONTACTE,
-                SolicitudFields.SOLICITUDID.equal(itemID));
+		Solicitud item = findItemByPrimaryKey(itemID);
+		Contacte contacte = getPersonaContacte(item);
+
+		if (contacte != null) {
+			return contacte.getNom();
+		}
+
+		return null;
     }
 
     @Override

@@ -377,6 +377,21 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 SolicitudFields.CONTACTETECNICID,
                 SolicitudFields.CONTACTEGESTAUTID);
 
+        Section perEsborrar = new Section("per_esborrar", "Per esborrar",
+            SolicitudFields.CONTACTEPERSONAID,
+            SolicitudFields.CONTACTERESPONSABLEID, 
+
+            SolicitudFields.PERSONACONTACTEOLD, 
+            SolicitudFields.PERSONACONTACTEEMAILOLD,
+
+            SolicitudFields.RESPONSABLEPROCNOMOLD,
+            SolicitudFields.RESPONSABLEPROCEMAILOLD,
+
+            SolicitudFields.TITULARFIRMANIFOLD,
+            SolicitudFields.TITULARFIRMANOMOLD,
+            SolicitudFields.TITULARFIRMAEMAILOLD
+            );
+
         solicitudForm.addSection(dadesSoli);
         solicitudForm.addSection(dadesConsentiment);
         solicitudForm.addSection(dadesGestio);
@@ -384,6 +399,7 @@ public abstract class SolicitudOperadorController extends SolicitudController {
         solicitudForm.addSection(dadesAutoritzacio);
         solicitudForm.addSection(contactes);
         solicitudForm.addSection(dadesEntitat);
+        solicitudForm.addSection(perEsborrar);
 
     }
 
@@ -391,11 +407,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         solicitudForm.addHiddenField(ORGANID);
         solicitudForm.addHiddenField(PINFO);
-        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
-        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
-
-        solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCEMAIL);
-        solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCNOM);
+//        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTE);
+//        solicitudForm.addHiddenField(SolicitudFields.PERSONACONTACTEEMAIL);
+//
+//        solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCEMAIL);
+//        solicitudForm.addHiddenField(SolicitudFields.RESPONSABLEPROCNOM);
 
         solicitudForm.addHiddenField(SolicitudFields.DENOMINACIO);
         solicitudForm.addHiddenField(SolicitudFields.DIR3);
@@ -1416,8 +1432,11 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         SolicitudJPA s = this.findByPrimaryKey(request, solicitudID);
 
-        s.setPersonaContacte(nom);
-        s.setPersonaContacteEmail(email);
+        log.info("AQUEST METODE JA NO S'HA D'UTILITZAR PERQUE ANAM AMB TAULA DE CONTACTES");
+        
+        
+//        s.setPersonaContacte(nom);
+//        s.setPersonaContacteEmail(email);
 
         try {
             this.update(request, s);

@@ -181,12 +181,13 @@
                             <c:url var="solicitudUrl" value="/operador/solicitudfullview/view/${solicitud.solicitudID}"/>
                             <c:set var="messageCount" value="${not empty eventsMap[solicitud.solicitudID] ? eventsMap[solicitud.solicitudID].count : 0}"/>
                             <c:set var="lastMessageDate" value="${not empty eventsMap[solicitud.solicitudID] ? eventsMap[solicitud.solicitudID].lastMessageDate : 0}"/>
+                            <c:set var="contacteNom" value="${not empty contacteMap[solicitud.contacteSolicitantID] ? contacteMap[solicitud.contacteSolicitantID].nom : solicitud.personacontacteold}"/>
                             <div class="kanban-card" 
                                  onclick="window.location.href='${solicitudUrl}'"
                                  data-solicitud-id="${solicitud.solicitudID}"
                                  data-procediment-codi="${solicitud.procedimentCodi}"
                                  data-data-inici="${solicitud.dataInici.time}"
-                                 data-persona-contacte="${solicitud.personaContacte}"
+                                 data-persona-contacte="${contacteNom}"
                                  data-message-count="${messageCount}"
                                  data-last-message-date="${lastMessageDate}">
                                 <!-- Badge de eventos no leídos - estilo iOS -->
@@ -208,8 +209,8 @@
                                     </c:if>
                                 </div>
                                 <div class="kanban-card-info">
-                                    <c:if test="${not empty solicitud.personaContacte}">
-                                        <i class="fas fa-user"></i> <strong>Contacto:</strong> ${solicitud.personaContacte}
+                                    <c:if test="${not empty contacteNom}">
+                                        <i class="fas fa-user"></i> <strong>Contacto:</strong> ${contacteNom}
                                     </c:if>
                                 </div>
                                 <div class="kanban-card-info">

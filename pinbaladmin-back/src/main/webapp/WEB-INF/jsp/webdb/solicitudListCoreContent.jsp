@@ -94,26 +94,6 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATAFI)}">
           <td> <fmt:formatDate pattern="${gen:getDateTimePattern()}" value="${solicitud.dataFi}" /></td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTE)}">
-          <td>
-          ${solicitud.personaContacte}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAIL)}">
-          <td>
-          ${solicitud.personaContacteEmail}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOM)}">
-          <td>
-          ${solicitud.responsableProcNom}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAIL)}">
-          <td>
-          ${solicitud.responsableProcEmail}
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NOTES)}">
           <td>
           ${solicitud.notes}
@@ -235,26 +215,6 @@
           </c:if>
           </td>
         </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIF)}">
-          <td>
-          ${solicitud.titularFirmaNif}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOM)}">
-          <td>
-          ${solicitud.titularFirmaNom}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMALLINATGES)}">
-          <td>
-          ${solicitud.titularFirmaLlinatges}
-          </td>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAIL)}">
-          <td>
-          ${solicitud.titularFirmaEmail}
-          </td>
-        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.SOLICITUDFUSIONADAID)}">
           <td>
           ${solicitud.solicitudFusionadaID}
@@ -306,6 +266,41 @@
           <c:if test="${not empty tmp}">
           ${__theFilterForm.mapOfContacteForContacteTecnicID[tmp]}
           </c:if>
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANIFOLD)}">
+          <td>
+          ${solicitud.titularFirmaNifOld}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTEOLD)}">
+          <td>
+          ${solicitud.personacontacteold}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.PERSONACONTACTEEMAILOLD)}">
+          <td>
+          ${solicitud.personacontacteemailold}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCNOMOLD)}">
+          <td>
+          ${solicitud.responsableprocnomold}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.RESPONSABLEPROCEMAILOLD)}">
+          <td>
+          ${solicitud.responsableprocemailold}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMANOMOLD)}">
+          <td>
+          ${solicitud.titularfirmanomold}
+          </td>
+        </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.TITULARFIRMAEMAILOLD)}">
+          <td>
+          ${solicitud.titularfirmaemailold}
           </td>
         </c:if>
 

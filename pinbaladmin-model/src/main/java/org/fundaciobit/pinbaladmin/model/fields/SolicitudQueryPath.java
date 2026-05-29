@@ -63,22 +63,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new TimestampField(getQueryPath(), SolicitudFields.DATAFI);
   }
 
-  public StringField PERSONACONTACTE() {
-    return new StringField(getQueryPath(), SolicitudFields.PERSONACONTACTE);
-  }
-
-  public StringField PERSONACONTACTEEMAIL() {
-    return new StringField(getQueryPath(), SolicitudFields.PERSONACONTACTEEMAIL);
-  }
-
-  public StringField RESPONSABLEPROCNOM() {
-    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCNOM);
-  }
-
-  public StringField RESPONSABLEPROCEMAIL() {
-    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCEMAIL);
-  }
-
   public StringField NOTES() {
     return new StringField(getQueryPath(), SolicitudFields.NOTES);
   }
@@ -155,22 +139,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new LongField(getQueryPath(), SolicitudFields.CONTACTETITULARID);
   }
 
-  public StringField TITULARFIRMANIF() {
-    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANIF);
-  }
-
-  public StringField TITULARFIRMANOM() {
-    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANOM);
-  }
-
-  public StringField TITULARFIRMALLINATGES() {
-    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMALLINATGES);
-  }
-
-  public StringField TITULARFIRMAEMAIL() {
-    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMAEMAIL);
-  }
-
   public LongField SOLICITUDFUSIONADAID() {
     return new LongField(getQueryPath(), SolicitudFields.SOLICITUDFUSIONADAID);
   }
@@ -197,6 +165,34 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
   public LongField CONTACTETECNICID() {
     return new LongField(getQueryPath(), SolicitudFields.CONTACTETECNICID);
+  }
+
+  public StringField TITULARFIRMANIFOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANIFOLD);
+  }
+
+  public StringField PERSONACONTACTEOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.PERSONACONTACTEOLD);
+  }
+
+  public StringField PERSONACONTACTEEMAILOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.PERSONACONTACTEEMAILOLD);
+  }
+
+  public StringField RESPONSABLEPROCNOMOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCNOMOLD);
+  }
+
+  public StringField RESPONSABLEPROCEMAILOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.RESPONSABLEPROCEMAILOLD);
+  }
+
+  public StringField TITULARFIRMANOMOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMANOMOLD);
+  }
+
+  public StringField TITULARFIRMAEMAILOLD() {
+    return new StringField(getQueryPath(), SolicitudFields.TITULARFIRMAEMAILOLD);
   }
 
 

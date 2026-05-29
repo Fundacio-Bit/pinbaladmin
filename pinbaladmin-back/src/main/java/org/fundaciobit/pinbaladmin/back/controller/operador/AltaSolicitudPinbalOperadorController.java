@@ -18,8 +18,10 @@ import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -55,10 +57,12 @@ public class AltaSolicitudPinbalOperadorController {
 
     @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
     protected SolicitudLogicaService solicitudLogicaEjb;
-
     
     @EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
     protected InfoMadridLogicaService infoMadridLogicaEjb;
+    
+    @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+    protected ContacteLogicaService contacteLogicaEjb;
 
     
     @RequestMapping(value = "/vistaprevia/{tipus}/{soliID}", method = RequestMethod.GET)
@@ -323,111 +327,138 @@ public class AltaSolicitudPinbalOperadorController {
         return new String(xmlData, StandardCharsets.UTF_8);
     }
 
-    private ScspTitular getTitularFromProperties(Properties prop) {
+//    private ScspTitular getTitularFromProperties(Properties prop) {
+//
+//        ScspTitular titular = new ScspTitular();
+//
+//        ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+//        String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECE");
+//        String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
+//        String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
+//        String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
+//        String fullName = toFullName(nombre, ape1, ape2);
+//
+//        titular.setTipoDocumentacion(tipoDocumentacion);
+//        titular.setDocumentacion(documentacion);
+//        titular.setNombre(nombre);
+//        titular.setApellido1(ape1);
+//        titular.setApellido2(ape2);
+//        titular.setNombreCompleto(fullName);
+//
+//        return titular;
+//    }
 
-        ScspTitular titular = new ScspTitular();
-
-        ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-        String documentacion = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECE");
-        String nombre = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECE");
-        String ape1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECE");
-        String ape2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECE");
-        String fullName = toFullName(nombre, ape1, ape2);
-
-        titular.setTipoDocumentacion(tipoDocumentacion);
-        titular.setDocumentacion(documentacion);
-        titular.setNombre(nombre);
-        titular.setApellido1(ape1);
-        titular.setApellido2(ape2);
-        titular.setNombreCompleto(fullName);
-
-        return titular;
-    }
-    
-    private ScspTitular getTitular(Solicitud soli) throws Exception {
-
-    	Long infoMadridID = soli.getInfomadridid();
-    	InfoMadridJPA infoMad = null;
-    	boolean infoMadridInvalido;
-    	
-		if (infoMadridID == null) {
-		    infoMadridInvalido = true;
-		} else {
-			infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
-			if (infoMad == null || infoMad.getTitularNif() == null || infoMad.getTitularNom() == null) {
-				infoMadridInvalido = true;
-			} else {
-			    infoMadridInvalido = false;
-                
-			}
-		}
-    	
-    	if (infoMadridInvalido) {
-    		/* TODO ERROR: Aquest CODI NO FA RES REVISAR-HO !!!!! */
-			if (soli.getTitularFirmaNif() != null) {
+	private ScspTitular getTitular(Solicitud soli) throws Exception {
+		// Ahora, vamos a obtener el titular desde el contacto. Segun los datos
+		// revisados. Se coge el contacto de Auditorias.
+		Long contacteID = soli.getContacteGestAutID();
+		if (contacteID != null) {
+			Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteID);
+			if (contacte != null) {
 				ScspTitular titular = new ScspTitular();
 				ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
 				titular.setTipoDocumentacion(tipoDocumentacion);
-				titular.setDocumentacion(soli.getTitularFirmaNif());
+				titular.setDocumentacion(contacte.getNif());
+				titular.setNombre(contacte.getNom());
+				titular.setApellido1(contacte.getLlinatge1());
+				titular.setApellido2(contacte.getLlinatge2());
+				titular.setNombreCompleto(contacte.getNombrecompleto());
 
-				titular.setNombre(soli.getTitularFirmaNom());
-
-				String apellidos = soli.getTitularFirmaLlinatges();
-				String ape1 = "";
-				String ape2 = "";
-				if (apellidos.contains(" ")) {
-					ape1 = apellidos.substring(0, apellidos.indexOf(" "));
-					ape2 = apellidos.substring(apellidos.indexOf(" ") + 1);
-				} else {
-					ape1 = apellidos;
-				}
-				String nombreCompleto = soli.getTitularFirmaNom() + " " + soli.getTitularFirmaLlinatges();
-
-				titular.setApellido1(ape1);
-				titular.setApellido2(ape2);
-				titular.setNombreCompleto(nombreCompleto);
+				return titular;
 			}
-			
-    		
-            Long fitxerID = soli.getSolicitudXmlID();
-            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-            
-            return getTitularFromProperties(prop);
-		} else {
-    	
-        	//infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
-        	
-        	String documentacion = infoMad.getTitularNif();
-        	
-        	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
-    
-    		log.info("Titular Nom: " + infoMad.getTitularNom());
-        	
-    		String[] fullName = infoMad.getTitularNom().split("\\|");
-        	log.info("FullName: " + fullName);
-        	
-            ScspTitular titular = new ScspTitular();
-    
-            String nombre = fullName[0];
-            log.info("nombre: " + nombre);
-            String ape1 = fullName[1];
-            log.info("ape1: " + ape1);
-            String ape2 = fullName[2];
-            log.info("ape2: " + ape2);
-            String nombreCompleto = toFullName(nombre, ape1, ape2);
-            log.info("nombreCompleto: " + nombreCompleto);
-    
-            titular.setTipoDocumentacion(tipoDocumentacion);
-            titular.setDocumentacion(documentacion);
-            titular.setNombre(nombre);
-            titular.setApellido1(ape1);
-            titular.setApellido2(ape2);
-            titular.setNombreCompleto(nombreCompleto);
-    
-            return titular;
 		}
-    }
+
+		// Si no podem recuperar les dades del contacte. Intentem recuperar-les de la
+		// solicitud, com es feia fins ara.
+		log.warn("NO hem recuperat les dades del Contacte");
+		return null;
+	}
     
+//    private ScspTitular getTitularOld(Solicitud soli) throws Exception {
+//    	//Para obtener el titular, lo hacemos de la Solicitud, más adelante se podrá recuperar directamente de un Contacte en InfoMadrid.
+//    	
+//    	Long infoMadridID = soli.getInfomadridid();
+//    	InfoMadridJPA infoMad = null;
+//    	boolean infoMadridInvalido;
+//    	
+//		if (infoMadridID == null) {
+//		    infoMadridInvalido = true;
+//		} else {
+//			infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+//			if (infoMad == null || infoMad.getTitularNif() == null || infoMad.getTitularNom() == null) {
+//				infoMadridInvalido = true;
+//			} else {
+//			    infoMadridInvalido = false;
+//                
+//			}
+//		}
+//    	
+//    	if (infoMadridInvalido) {
+//    		/* TODO ERROR: Aquest CODI NO FA RES REVISAR-HO !!!!! */
+//			if (soli.getTitularFirmaNif() != null) {
+//				ScspTitular titular = new ScspTitular();
+//				ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+//				titular.setTipoDocumentacion(tipoDocumentacion);
+//				titular.setDocumentacion(soli.getTitularFirmaNif());
+//
+//				titular.setNombre(soli.getTitularFirmaNom());
+//
+//				String apellidos = soli.getTitularFirmaLlinatges();
+//				String ape1 = "";
+//				String ape2 = "";
+//				if (apellidos.contains(" ")) {
+//					ape1 = apellidos.substring(0, apellidos.indexOf(" "));
+//					ape2 = apellidos.substring(apellidos.indexOf(" ") + 1);
+//				} else {
+//					ape1 = apellidos;
+//				}
+//				String nombreCompleto = soli.getTitularFirmaNom() + " " + soli.getTitularFirmaLlinatges();
+//
+//				titular.setApellido1(ape1);
+//				titular.setApellido2(ape2);
+//				titular.setNombreCompleto(nombreCompleto);
+//			}
+//			
+//    		
+//            Long fitxerID = soli.getSolicitudXmlID();
+//            Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//            
+//            return getTitularFromProperties(prop);
+//		} else {
+//    	
+//        	//infoMad = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+//        	
+//        	String documentacion = infoMad.getTitularNif();
+//        	
+//        	ScspTipoDocumentacion tipoDocumentacion = ScspTipoDocumentacion.NIF;
+//    
+//    		log.info("Titular Nom: " + infoMad.getTitularNom());
+//        	
+//    		String[] fullName = infoMad.getTitularNom().split("\\|");
+//        	log.info("FullName: " + fullName);
+//        	
+//            ScspTitular titular = new ScspTitular();
+//    
+//            String nombre = fullName[0];
+//            log.info("nombre: " + nombre);
+//            String ape1 = fullName[1];
+//            log.info("ape1: " + ape1);
+//            String ape2 = fullName[2];
+//            log.info("ape2: " + ape2);
+//            String nombreCompleto = toFullName(nombre, ape1, ape2);
+//            log.info("nombreCompleto: " + nombreCompleto);
+//    
+//            titular.setTipoDocumentacion(tipoDocumentacion);
+//            titular.setDocumentacion(documentacion);
+//            titular.setNombre(nombre);
+//            titular.setApellido1(ape1);
+//            titular.setApellido2(ape2);
+//            titular.setNombreCompleto(nombreCompleto);
+//    
+//            return titular;
+//		}
+//    }
+//    
 
     private ScspFuncionario getFuncionari() {
 

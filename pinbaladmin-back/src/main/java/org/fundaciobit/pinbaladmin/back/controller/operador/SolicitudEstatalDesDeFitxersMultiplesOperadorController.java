@@ -312,8 +312,8 @@ public class SolicitudEstatalDesDeFitxersMultiplesOperadorController extends Sol
 
             solicitud.setProcedimentCodi(proc.getCodi());
 
-            solicitud.setPersonaContacte(nomContacte );
-            solicitud.setPersonaContacteEmail(mailContacte);
+//            solicitud.setPersonaContacte(nomContacte );
+//            solicitud.setPersonaContacteEmail(mailContacte);
 
             // solicitud.setCodiDescriptiu(null);
             solicitud.setCreador(request.getRemoteUser());

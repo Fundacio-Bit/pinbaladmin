@@ -21,8 +21,6 @@ public interface PinfoDataLogicaService extends PinfoDataService {
 
     public PinfoDataFull getEstructuraUsuarisProcedimentServeis(Long pinfoID)  throws I18NException ;
 
-    public List<String> getResponsablesProcedimentsPinfos(Long pinfoID) throws I18NException;
-
 	public void procesarPermisosPinfo(Long pinfoID) throws I18NException;
 	
 	public void marcarPinfoComTramitat(Long pinfoID) throws I18NException;

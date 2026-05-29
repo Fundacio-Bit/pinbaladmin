@@ -133,38 +133,6 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
-    if (__vr.getFieldErrorCount(PERSONACONTACTE) == 0) {
-      java.lang.String __personacontacte = __target__.getPersonaContacte();
-      if (__personacontacte!= null && __personacontacte.length() > 255) {
-        __vr.rejectValue(PERSONACONTACTE, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PERSONACONTACTE)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(PERSONACONTACTEEMAIL) == 0) {
-      java.lang.String __personacontacteemail = __target__.getPersonaContacteEmail();
-      if (__personacontacteemail!= null && __personacontacteemail.length() > 100) {
-        __vr.rejectValue(PERSONACONTACTEEMAIL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PERSONACONTACTEEMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(RESPONSABLEPROCNOM) == 0) {
-      java.lang.String __responsableprocnom = __target__.getResponsableProcNom();
-      if (__responsableprocnom!= null && __responsableprocnom.length() > 255) {
-        __vr.rejectValue(RESPONSABLEPROCNOM, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(RESPONSABLEPROCNOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(RESPONSABLEPROCEMAIL) == 0) {
-      java.lang.String __responsableprocemail = __target__.getResponsableProcEmail();
-      if (__responsableprocemail!= null && __responsableprocemail.length() > 255) {
-        __vr.rejectValue(RESPONSABLEPROCEMAIL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(RESPONSABLEPROCEMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
     if (__vr.getFieldErrorCount(NOTES) == 0) {
       java.lang.String __notes = __target__.getNotes();
       if (__notes!= null && __notes.length() > 2550) {
@@ -237,35 +205,59 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
-    if (__vr.getFieldErrorCount(TITULARFIRMANIF) == 0) {
-      java.lang.String __titularfirmanif = __target__.getTitularFirmaNif();
-      if (__titularfirmanif!= null && __titularfirmanif.length() > 255) {
-        __vr.rejectValue(TITULARFIRMANIF, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANIF)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+    if (__vr.getFieldErrorCount(TITULARFIRMANIFOLD) == 0) {
+      java.lang.String __titularfirmanifold = __target__.getTitularFirmaNifOld();
+      if (__titularfirmanifold!= null && __titularfirmanifold.length() > 255) {
+        __vr.rejectValue(TITULARFIRMANIFOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANIFOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
-    if (__vr.getFieldErrorCount(TITULARFIRMANOM) == 0) {
-      java.lang.String __titularfirmanom = __target__.getTitularFirmaNom();
-      if (__titularfirmanom!= null && __titularfirmanom.length() > 255) {
-        __vr.rejectValue(TITULARFIRMANOM, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANOM)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+    if (__vr.getFieldErrorCount(PERSONACONTACTEOLD) == 0) {
+      java.lang.String __personacontacteold = __target__.getPersonacontacteold();
+      if (__personacontacteold!= null && __personacontacteold.length() > 255) {
+        __vr.rejectValue(PERSONACONTACTEOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PERSONACONTACTEOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 
-    if (__vr.getFieldErrorCount(TITULARFIRMALLINATGES) == 0) {
-      java.lang.String __titularfirmallinatges = __target__.getTitularFirmaLlinatges();
-      if (__titularfirmallinatges!= null && __titularfirmallinatges.length() > 255) {
-        __vr.rejectValue(TITULARFIRMALLINATGES, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMALLINATGES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+    if (__vr.getFieldErrorCount(PERSONACONTACTEEMAILOLD) == 0) {
+      java.lang.String __personacontacteemailold = __target__.getPersonacontacteemailold();
+      if (__personacontacteemailold!= null && __personacontacteemailold.length() > 100) {
+        __vr.rejectValue(PERSONACONTACTEEMAILOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PERSONACONTACTEEMAILOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(100)));
       }
     }
 
-    if (__vr.getFieldErrorCount(TITULARFIRMAEMAIL) == 0) {
-      java.lang.String __titularfirmaemail = __target__.getTitularFirmaEmail();
-      if (__titularfirmaemail!= null && __titularfirmaemail.length() > 255) {
-        __vr.rejectValue(TITULARFIRMAEMAIL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMAEMAIL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+    if (__vr.getFieldErrorCount(RESPONSABLEPROCNOMOLD) == 0) {
+      java.lang.String __responsableprocnomold = __target__.getResponsableprocnomold();
+      if (__responsableprocnomold!= null && __responsableprocnomold.length() > 255) {
+        __vr.rejectValue(RESPONSABLEPROCNOMOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(RESPONSABLEPROCNOMOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(RESPONSABLEPROCEMAILOLD) == 0) {
+      java.lang.String __responsableprocemailold = __target__.getResponsableprocemailold();
+      if (__responsableprocemailold!= null && __responsableprocemailold.length() > 255) {
+        __vr.rejectValue(RESPONSABLEPROCEMAILOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(RESPONSABLEPROCEMAILOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(TITULARFIRMANOMOLD) == 0) {
+      java.lang.String __titularfirmanomold = __target__.getTitularfirmanomold();
+      if (__titularfirmanomold!= null && __titularfirmanomold.length() > 255) {
+        __vr.rejectValue(TITULARFIRMANOMOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMANOMOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+      }
+    }
+
+    if (__vr.getFieldErrorCount(TITULARFIRMAEMAILOLD) == 0) {
+      java.lang.String __titularfirmaemailold = __target__.getTitularfirmaemailold();
+      if (__titularfirmaemailold!= null && __titularfirmaemailold.length() > 255) {
+        __vr.rejectValue(TITULARFIRMAEMAILOLD, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TITULARFIRMAEMAILOLD)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
       }
     }
 

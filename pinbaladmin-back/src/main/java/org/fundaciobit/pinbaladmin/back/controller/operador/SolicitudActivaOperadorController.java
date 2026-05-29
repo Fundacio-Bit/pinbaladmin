@@ -1358,7 +1358,7 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	@RequestMapping(value = "/actualizarTitulares", method = RequestMethod.GET)
 	public String actualizarTitulares(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		guardarDatosTitularEnContacte();
+//		guardarDatosTitularEnContacte();
 //		buscarNIFsPluginUserInfo() ;
 //		actualizarNifFirmaTitulares();
 //		actualizarTitulares();
@@ -1383,249 +1383,249 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	
 	HashMap<String, List<ContacteJPA>> cacheContactes = new HashMap<>();		
 
-	private void guardarDatosTitularEnContacte() throws Exception{
-		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+//	private void guardarDatosTitularEnContacte() throws Exception{
+//		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+//
+//		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+//		
+//		
+//		int titularsPerXML = 0;
+//		int titularsPerPlugin = 0;
+//		int titularsDirector = 0;
+//		int titularsCacheContactes = 0;
+//		int titularsCacheContactesMultiple = 0;
+//		int titularesCacheMultiplesPosibles = 0;
+//		
+//		for (Solicitud soli : solicituds) {
+//			log.info("Solicitud: " + soli.getSolicitudID());
+//			
+//			Long fitxerID = soli.getSolicitudXmlID();
+//
+//    		if (fitxerID == null) {
+//    			log.info("fitxerID: " + fitxerID);
+//    			continue;
+//    		}
+//
+//    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//    		if (prop == null) {
+//    			log.info("prop: " + prop);
+//    			continue;
+//    		}
+//    		
+//    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
+//    		
+//			if (nifTitular == null || nifTitular.isEmpty()) {
+//				log.info("nifTitular: " + nifTitular);
+//				continue;
+//			}
+//    		
+//			//Si arriba aquí, crear el contacte.
+//			
+//			
+////			titularJpa.setNif(nifTitular);
+//			String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
+//			String llinatge1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
+//			String llinatge2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
+//			//String fullName = nom + " " + llinatge1 + " " + (llinatge2 == null ? "" : llinatge2);
+//			String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
+//
+//			
+//			String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECG");
+//			if (mail == null || mail.trim().length() == 0) {
+//				mail = FALTA_CORREU;
+//			}
+//
+//			setDadesTitular(nifTitular, nom, llinatges, mail, soli, "Fitxer XML");
+//			
+////			Contacte titular = contacteLogicaEjb.create(titularJpa);
+////			Long contacteID = titular.getContacteID();
+////			soli.setContacteTitularID(contacteID);
+//			solicitudLogicaEjb.update(soli);    	
+//			titularsPerXML++;
+//		}
+//		
+//		//Quan acaba el bucle de crear contactes amb dades de xml, agafar les que tenen nif i cercat la informació del mail i el nom amb el plugin userinfo.
+//		
+//		Where titularNoNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
+//		Where faltaEmail = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
+//		Where wTitularsPerPlugin = Where.AND(titularNoNull, faltaEmail);
+//		List<Solicitud> solicitudsRestants = solicitudLogicaEjb.select(Where.AND(wLocals, wTitularsPerPlugin));
+//
+//		//Solicituds sense contacte pero amb NIF del titular. Cercam info a plugin.
+//		boolean debug = false;
+//		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+//		
+//		Map<String, UserInfo> cacheUserInfo = new HashMap<>();
+//		
+//		for(Solicitud soli : solicitudsRestants) {
+//			
+//			log.info("Solicitud (plugin): " + soli.getSolicitudID());
+//			
+//			String nifTitular = soli.getTitularFirmaNif();
+//			
+//			if (cacheUserInfo.containsKey(nifTitular)) {
+//				UserInfo userInfo = cacheUserInfo.get(nifTitular);
+//				
+//				setDadesTitular(userInfo, soli, "PluginUserInfo-Cache");
+//				continue;
+//			}
+//			
+//			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
+//			if (userInfo == null) {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
+//				continue;
+//			}
+//			
+//			cacheUserInfo.put(nifTitular, userInfo);
+//			
+//			setDadesTitular(userInfo, soli, "PluginUserInfo");			
+//			titularsPerPlugin++;
+//		}
+//		
+//		
+//		//Ara agafam totes les solicituds que no tenen info del titular, i a les que siguin de GOVERN, posam les dades del DG.
+//		
+//		Where stillWithoutTitularEmail = SolicitudFields.TITULARFIRMAEMAIL.isNull();
+//		List<Solicitud> solicitudsStillWithout = solicitudLogicaEjb.select(Where.AND(wLocals, stillWithoutTitularEmail));
+//		
+//		String CIF_GOVERN = "S0711001H";
+//		Entitat govern = entitatLogicaEjb.findByCif(CIF_GOVERN);
+//		log.info("Entitat GOVERN - ID: " + govern.getEntitatID() + ", Nom: " + govern.getNom());
+//		
+//		String nifDG = Configuracio.getNIFDirectorGeneral();
+//		UserInfo userInfoDG = plugin.getUserInfoByAdministrationID(nifDG);
+//		
+//		for (Solicitud soli : solicitudsStillWithout) {
+//			
+//			Organ organ = organLogicaEjb.findByPrimaryKey(soli.getOrganid());
+//
+//			log.info("Entitat del organ: " + organ.getEntitatid());
+//			
+//			if (organ.getEntitatid() != govern.getEntitatID()) {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - Organ no és de GOVERN: " + soli.getOrganid());
+//				continue;
+//			}
+//			
+//			setDadesTitular(userInfoDG, soli, "DirectorGeneral");
+//			titularsDirector++;
+//		}
+//		
+//		
+//		
+//		// En aquest punt, hi ha solicituds amb NIF del titular, pero sense la resta de dades, i no son organs de govern. 
+//		// S'hauria de fer una pasada i veure si tenim dades dels nifs a cacheContactes.
+//		Where correuKo = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
+//		Where correuNull = SolicitudFields.TITULARFIRMAEMAIL.isNull();
+//		Where nomNull = SolicitudFields.TITULARFIRMANOM.isNull();
+//		Where llinatgesNull = SolicitudFields.TITULARFIRMALLINATGES.isNull();
+//		
+//		Where NIFOK = SolicitudFields.TITULARFIRMANIF.isNotNull();
+//		
+//		Where wFaltaDades = Where.OR(correuKo, correuNull, nomNull, llinatgesNull);
+//		List<Solicitud> solicitudsFaltaDades = solicitudLogicaEjb.select(Where.AND(wLocals, NIFOK, wFaltaDades));
+//		
+//		for (Solicitud soli : solicitudsFaltaDades) {
+//			String nifTitular = soli.getTitularFirmaNif();
+//			List<ContacteJPA> contactes = cacheContactes.get(nifTitular);
+//			
+//			if (contactes != null && contactes.size() > 0) {
+//				
+//				if (contactes.size() == 1) {
+//
+//					ContacteJPA contacte = contactes.get(0);
+//
+//					setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
+//							"CacheContactes");
+//					titularsCacheContactes++;
+//					log.info("Solicitud: " + soli.getSolicitudID()
+//							+ " - Dades del titular actualitzades a partir de cacheContactes. NIF: " + nifTitular);
+//				} else {
+//					// Casos raros de varios contactos en mismo NIF.
+//					// Tenemos que ver cuantos tienen la información completa. Si solo hay uno, assignar ese. Si hay varios, no assignar ninguno porque no sabemos cual es el correcto.
+//					
+//					int completos = 0;
+//					int idxCompleto = -1;
+//					for (int i = 0; i < contactes.size(); i++) {
+//						ContacteJPA c = contactes.get(i);
+//						if (c.getNom() != null && !c.getNom().isEmpty() && c.getLlinatge1() != null
+//								&& !c.getLlinatge1().isEmpty() && c.getMail() != null && !c.getMail().isEmpty()
+//								&& !c.getMail().equals(FALTA_CORREU)) {
+//							completos++;
+//							idxCompleto = i;
+//						}
+//					}
+//					
+//					if (completos == 1) {
+//                        ContacteJPA contacte = contactes.get(idxCompleto);
+//
+//                        setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
+//                                "CacheContactes-Multiple");
+//                        titularsCacheContactesMultiple++;
+//                        log.info("Solicitud: " + soli.getSolicitudID()
+//                                + " - Dades del titular actualitzades a partir de cacheContactes (caso múltiple, pero solo un contacto con info completa). NIF: " + nifTitular);
+//					} else if (completos > 1) {
+//						//Varios casos posibles para este titular.
+//						titularesCacheMultiplesPosibles++;
+//					}
+//				}
+//			} else {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - No tenim dades del titular a cacheContactes. NIF: "
+//						+ nifTitular);
+//			}
+//		}
+//				
+//		
+//		
+//		
+//		
+//		
+//		log.info("Contactes titulars creats a partir de XML: " + titularsPerXML);
+//		log.info("Contactes titulars creats a partir de Plugin UserInfo: " + titularsPerPlugin);
+//		log.info("Contactes titulars creats a partir de Director General de GOVERN: " + titularsDirector);
+//		log.info("Contactes titulars creats a partir de cacheContactes: " + titularsCacheContactes);
+//		log.info("Contactes titulars creats a partir de cacheContactes en casos múltiples pero con un solo contacto con info completa: " + titularsCacheContactesMultiple);
+//		log.info("Solicituds con múltiples posibles titulares en cacheContactes: " + titularesCacheMultiplesPosibles);
+//	}
 
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
-		
-		
-		int titularsPerXML = 0;
-		int titularsPerPlugin = 0;
-		int titularsDirector = 0;
-		int titularsCacheContactes = 0;
-		int titularsCacheContactesMultiple = 0;
-		int titularesCacheMultiplesPosibles = 0;
-		
-		for (Solicitud soli : solicituds) {
-			log.info("Solicitud: " + soli.getSolicitudID());
-			
-			Long fitxerID = soli.getSolicitudXmlID();
-
-    		if (fitxerID == null) {
-    			log.info("fitxerID: " + fitxerID);
-    			continue;
-    		}
-
-    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-    		if (prop == null) {
-    			log.info("prop: " + prop);
-    			continue;
-    		}
-    		
-    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
-    		
-			if (nifTitular == null || nifTitular.isEmpty()) {
-				log.info("nifTitular: " + nifTitular);
-				continue;
-			}
-    		
-			//Si arriba aquí, crear el contacte.
-			
-			
-//			titularJpa.setNif(nifTitular);
-			String nom = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG");
-			String llinatge1 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG");
-			String llinatge2 = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
-			//String fullName = nom + " " + llinatge1 + " " + (llinatge2 == null ? "" : llinatge2);
-			String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
-
-			
-			String mail = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECG");
-			if (mail == null || mail.trim().length() == 0) {
-				mail = FALTA_CORREU;
-			}
-
-			setDadesTitular(nifTitular, nom, llinatges, mail, soli, "Fitxer XML");
-			
-//			Contacte titular = contacteLogicaEjb.create(titularJpa);
-//			Long contacteID = titular.getContacteID();
-//			soli.setContacteTitularID(contacteID);
-			solicitudLogicaEjb.update(soli);    	
-			titularsPerXML++;
-		}
-		
-		//Quan acaba el bucle de crear contactes amb dades de xml, agafar les que tenen nif i cercat la informació del mail i el nom amb el plugin userinfo.
-		
-		Where titularNoNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
-		Where faltaEmail = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
-		Where wTitularsPerPlugin = Where.AND(titularNoNull, faltaEmail);
-		List<Solicitud> solicitudsRestants = solicitudLogicaEjb.select(Where.AND(wLocals, wTitularsPerPlugin));
-
-		//Solicituds sense contacte pero amb NIF del titular. Cercam info a plugin.
-		boolean debug = false;
-		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
-		
-		Map<String, UserInfo> cacheUserInfo = new HashMap<>();
-		
-		for(Solicitud soli : solicitudsRestants) {
-			
-			log.info("Solicitud (plugin): " + soli.getSolicitudID());
-			
-			String nifTitular = soli.getTitularFirmaNif();
-			
-			if (cacheUserInfo.containsKey(nifTitular)) {
-				UserInfo userInfo = cacheUserInfo.get(nifTitular);
-				
-				setDadesTitular(userInfo, soli, "PluginUserInfo-Cache");
-				continue;
-			}
-			
-			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
-			if (userInfo == null) {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
-				continue;
-			}
-			
-			cacheUserInfo.put(nifTitular, userInfo);
-			
-			setDadesTitular(userInfo, soli, "PluginUserInfo");			
-			titularsPerPlugin++;
-		}
-		
-		
-		//Ara agafam totes les solicituds que no tenen info del titular, i a les que siguin de GOVERN, posam les dades del DG.
-		
-		Where stillWithoutTitularEmail = SolicitudFields.TITULARFIRMAEMAIL.isNull();
-		List<Solicitud> solicitudsStillWithout = solicitudLogicaEjb.select(Where.AND(wLocals, stillWithoutTitularEmail));
-		
-		String CIF_GOVERN = "S0711001H";
-		Entitat govern = entitatLogicaEjb.findByCif(CIF_GOVERN);
-		log.info("Entitat GOVERN - ID: " + govern.getEntitatID() + ", Nom: " + govern.getNom());
-		
-		String nifDG = Configuracio.getNIFDirectorGeneral();
-		UserInfo userInfoDG = plugin.getUserInfoByAdministrationID(nifDG);
-		
-		for (Solicitud soli : solicitudsStillWithout) {
-			
-			Organ organ = organLogicaEjb.findByPrimaryKey(soli.getOrganid());
-
-			log.info("Entitat del organ: " + organ.getEntitatid());
-			
-			if (organ.getEntitatid() != govern.getEntitatID()) {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - Organ no és de GOVERN: " + soli.getOrganid());
-				continue;
-			}
-			
-			setDadesTitular(userInfoDG, soli, "DirectorGeneral");
-			titularsDirector++;
-		}
-		
-		
-		
-		// En aquest punt, hi ha solicituds amb NIF del titular, pero sense la resta de dades, i no son organs de govern. 
-		// S'hauria de fer una pasada i veure si tenim dades dels nifs a cacheContactes.
-		Where correuKo = SolicitudFields.TITULARFIRMAEMAIL.equal(FALTA_CORREU);
-		Where correuNull = SolicitudFields.TITULARFIRMAEMAIL.isNull();
-		Where nomNull = SolicitudFields.TITULARFIRMANOM.isNull();
-		Where llinatgesNull = SolicitudFields.TITULARFIRMALLINATGES.isNull();
-		
-		Where NIFOK = SolicitudFields.TITULARFIRMANIF.isNotNull();
-		
-		Where wFaltaDades = Where.OR(correuKo, correuNull, nomNull, llinatgesNull);
-		List<Solicitud> solicitudsFaltaDades = solicitudLogicaEjb.select(Where.AND(wLocals, NIFOK, wFaltaDades));
-		
-		for (Solicitud soli : solicitudsFaltaDades) {
-			String nifTitular = soli.getTitularFirmaNif();
-			List<ContacteJPA> contactes = cacheContactes.get(nifTitular);
-			
-			if (contactes != null && contactes.size() > 0) {
-				
-				if (contactes.size() == 1) {
-
-					ContacteJPA contacte = contactes.get(0);
-
-					setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
-							"CacheContactes");
-					titularsCacheContactes++;
-					log.info("Solicitud: " + soli.getSolicitudID()
-							+ " - Dades del titular actualitzades a partir de cacheContactes. NIF: " + nifTitular);
-				} else {
-					// Casos raros de varios contactos en mismo NIF.
-					// Tenemos que ver cuantos tienen la información completa. Si solo hay uno, assignar ese. Si hay varios, no assignar ninguno porque no sabemos cual es el correcto.
-					
-					int completos = 0;
-					int idxCompleto = -1;
-					for (int i = 0; i < contactes.size(); i++) {
-						ContacteJPA c = contactes.get(i);
-						if (c.getNom() != null && !c.getNom().isEmpty() && c.getLlinatge1() != null
-								&& !c.getLlinatge1().isEmpty() && c.getMail() != null && !c.getMail().isEmpty()
-								&& !c.getMail().equals(FALTA_CORREU)) {
-							completos++;
-							idxCompleto = i;
-						}
-					}
-					
-					if (completos == 1) {
-                        ContacteJPA contacte = contactes.get(idxCompleto);
-
-                        setDadesTitular(nifTitular, contacte.getNom(), contacte.getLlinatge1(), contacte.getMail(), soli,
-                                "CacheContactes-Multiple");
-                        titularsCacheContactesMultiple++;
-                        log.info("Solicitud: " + soli.getSolicitudID()
-                                + " - Dades del titular actualitzades a partir de cacheContactes (caso múltiple, pero solo un contacto con info completa). NIF: " + nifTitular);
-					} else if (completos > 1) {
-						//Varios casos posibles para este titular.
-						titularesCacheMultiplesPosibles++;
-					}
-				}
-			} else {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - No tenim dades del titular a cacheContactes. NIF: "
-						+ nifTitular);
-			}
-		}
-				
-		
-		
-		
-		
-		
-		log.info("Contactes titulars creats a partir de XML: " + titularsPerXML);
-		log.info("Contactes titulars creats a partir de Plugin UserInfo: " + titularsPerPlugin);
-		log.info("Contactes titulars creats a partir de Director General de GOVERN: " + titularsDirector);
-		log.info("Contactes titulars creats a partir de cacheContactes: " + titularsCacheContactes);
-		log.info("Contactes titulars creats a partir de cacheContactes en casos múltiples pero con un solo contacto con info completa: " + titularsCacheContactesMultiple);
-		log.info("Solicituds con múltiples posibles titulares en cacheContactes: " + titularesCacheMultiplesPosibles);
-	}
-
-	private void setDadesTitular(UserInfo userInfoDG, Solicitud soli, String origen) {
-		String nifDG = userInfoDG.getAdministrationID();
-		String nom = userInfoDG.getName();
-		String llinatge1 = userInfoDG.getSurname1();
-		String llinatge2 = userInfoDG.getSurname2();
-		String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
-		String mail = userInfoDG.getEmail();
-		
-		if (mail == null || mail.trim().length() == 0) {
-			mail = FALTA_CORREU;
-		}
-		
-		setDadesTitular(nifDG, nom, llinatges, mail, soli, origen);
-	}
+//	private void setDadesTitular(UserInfo userInfoDG, Solicitud soli, String origen) {
+//		String nifDG = userInfoDG.getAdministrationID();
+//		String nom = userInfoDG.getName();
+//		String llinatge1 = userInfoDG.getSurname1();
+//		String llinatge2 = userInfoDG.getSurname2();
+//		String llinatges = (llinatge1 == null ? "" : llinatge1) + " " + (llinatge2 == null ? "" : llinatge2);
+//		String mail = userInfoDG.getEmail();
+//		
+//		if (mail == null || mail.trim().length() == 0) {
+//			mail = FALTA_CORREU;
+//		}
+//		
+//		setDadesTitular(nifDG, nom, llinatges, mail, soli, origen);
+//	}
 	
-	private void setDadesTitular(String nifTitular, String nom, String llinatges, String mail, Solicitud soli, String origen) {
-		
-		nifTitular = nifTitular.toUpperCase();
-		
-		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifTitular + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
-		String username = null;
-		
-		ContacteJPA titularJpa = new ContacteJPA(nifTitular, nom, llinatges, null, null, null, mail, username, null);
-
-		afegirContacteCache(nifTitular, titularJpa);	
-		
-		soli.setTitularFirmaNif(nifTitular);
-		soli.setTitularFirmaNom(nom);
-		soli.setTitularFirmaLlinatges(llinatges);
-		soli.setTitularFirmaEmail(mail);
-		
-		try {
-			solicitudLogicaEjb.update(soli);
-		} catch (I18NException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+//	private void setDadesTitular(String nifTitular, String nom, String llinatges, String mail, Solicitud soli, String origen) {
+//		
+//		nifTitular = nifTitular.toUpperCase();
+//		
+//		log.info("Solicitud: " + soli.getSolicitudID() + " - Origen dades titular: " + origen + "\n - NIF: " + nifTitular + "\n - Nom: " + nom +  "\n - Llinatges: " + llinatges +  "\n - Mail: " + mail);
+//		String username = null;
+//		
+//		ContacteJPA titularJpa = new ContacteJPA(nifTitular, nom, llinatges, null, null, null, mail, username, null);
+//
+//		afegirContacteCache(nifTitular, titularJpa);	
+//		
+//		soli.setTitularFirmaNif(nifTitular);
+//		soli.setTitularFirmaNom(nom);
+//		soli.setTitularFirmaLlinatges(llinatges);
+//		soli.setTitularFirmaEmail(mail);
+//		
+//		try {
+//			solicitudLogicaEjb.update(soli);
+//		} catch (I18NException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 	
 	private void afegirContacteCache(String nif, ContacteJPA contacte) {
 		List<ContacteJPA> contactesDelNIF = cacheContactes.get(nif);
@@ -1664,143 +1664,143 @@ public class SolicitudActivaOperadorController extends SolicitudOperadorControll
 	
 	
 	
-	private void buscarNIFsPluginUserInfo() throws Exception{
-		
-		boolean debug = false;
-		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
-
-		Map<String, String> cacheNifNoms= new HashMap<>();
-		
-		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
-		
-		for (Solicitud soli : solicituds) {
-			String nifTitular = soli.getTitularFirmaNif();
-			
-			if (nifTitular == null || nifTitular.isEmpty()) {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - sense NIF titular. Cercam el nif del organ gestor.");
-				nifTitular = buscarNifDelOrganGestor(soli);
-				
-				if (nifTitular == null || nifTitular.isEmpty()) {
-					log.info("Solicitud: " + soli.getSolicitudID() + " - No s'ha pogut trobar NIF del organ gestor.");
-					continue;
-				}
-				soli.setTitularFirmaNif(nifTitular);
-                solicitudLogicaEjb.update(soli);
-			}
-			
-			if (cacheNifNoms.containsKey(nifTitular)) {
-				String nomComplet = cacheNifNoms.get(nifTitular);
-				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom (cache): "
-						+ nomComplet);
-
-				soli.setTitularFirmaNom(nomComplet);
-				solicitudLogicaEjb.update(soli);
-				continue;
-			}
-			
-			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
-			
-			if (userInfo == null) {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
-				continue;
-			}
-			
-			String nomComplet = userInfo.getFullName();
-			cacheNifNoms.put(nifTitular, nomComplet);
-			log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom: " + nomComplet);
-			
-			soli.setTitularFirmaNom(nomComplet);
-			solicitudLogicaEjb.update(soli);
-		}		
-		
-		log.info("NIFs trobats per organ gestor: " + nifsTrobatsOrganGestor);
-	}
+//	private void buscarNIFsPluginUserInfo() throws Exception{
+//		
+//		boolean debug = false;
+//		IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.LDAP);
+//
+//		Map<String, String> cacheNifNoms= new HashMap<>();
+//		
+//		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+//
+//		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+//		
+//		for (Solicitud soli : solicituds) {
+//			String nifTitular = soli.getTitularFirmaNif();
+//			
+//			if (nifTitular == null || nifTitular.isEmpty()) {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - sense NIF titular. Cercam el nif del organ gestor.");
+//				nifTitular = buscarNifDelOrganGestor(soli);
+//				
+//				if (nifTitular == null || nifTitular.isEmpty()) {
+//					log.info("Solicitud: " + soli.getSolicitudID() + " - No s'ha pogut trobar NIF del organ gestor.");
+//					continue;
+//				}
+//				soli.setTitularFirmaNif(nifTitular);
+//                solicitudLogicaEjb.update(soli);
+//			}
+//			
+//			if (cacheNifNoms.containsKey(nifTitular)) {
+//				String nomComplet = cacheNifNoms.get(nifTitular);
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom (cache): "
+//						+ nomComplet);
+//
+//				soli.setTitularFirmaNom(nomComplet);
+//				solicitudLogicaEjb.update(soli);
+//				continue;
+//			}
+//			
+//			UserInfo userInfo = plugin.getUserInfoByAdministrationID(nifTitular);
+//			
+//			if (userInfo == null) {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - No trobat a UserInfo.");
+//				continue;
+//			}
+//			
+//			String nomComplet = userInfo.getFullName();
+//			cacheNifNoms.put(nifTitular, nomComplet);
+//			log.info("Solicitud: " + soli.getSolicitudID() + " - NIF: " + nifTitular + " - Nom: " + nomComplet);
+//			
+//			soli.setTitularFirmaNom(nomComplet);
+//			solicitudLogicaEjb.update(soli);
+//		}		
+//		
+//		log.info("NIFs trobats per organ gestor: " + nifsTrobatsOrganGestor);
+//	}
+//	
+//	private String buscarNifDelOrganGestor(Solicitud soli) {
+//		//Buscamos otras solicitudes con ese organ gestor, y vemos si todas tienen el mismo NIF.
+//		
+//		Where wOrgan = SolicitudFields.ORGANID.equal(soli.getOrganid());
+//		Where wNifNotNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
+//		
+//		List<String> nifsDistints = new java.util.ArrayList<>();
+//		
+//		try {
+//			List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wOrgan, wNifNotNull));
+//			
+//			for (Solicitud s : solicituds) {
+//				String nif = s.getTitularFirmaNif();
+//				if (!nifsDistints.contains(nif)) {
+//					nifsDistints.add(nif);
+//				}
+//			}
+//			
+//			if (nifsDistints.size() == 1) {
+//				String nifTrobat = nifsDistints.get(0);
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF trobat per organ gestor " + soli.getOrganid()
+//						+ ": " + nifTrobat);
+//				nifsTrobatsOrganGestor++;
+//				return nifTrobat;
+//			} else if (nifsDistints.size() > 1) {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - NIFs diferents trobats per organ gestor "
+//						+ soli.getOrganid() + ": " + nifsDistints.toString());
+//				return null;
+//			} else {
+//				log.info("Solicitud: " + soli.getSolicitudID() + " - No hi ha NIFs trobats per organ gestor "
+//						+ soli.getOrganid());
+//				return null;
+//			}
+//			
+//		} catch (Exception e) {
+//			log.error("Error cercant NIFs del organ gestor " + soli.getOrganid(), e);
+//			return null;
+//		}
+//	}
 	
-	private String buscarNifDelOrganGestor(Solicitud soli) {
-		//Buscamos otras solicitudes con ese organ gestor, y vemos si todas tienen el mismo NIF.
-		
-		Where wOrgan = SolicitudFields.ORGANID.equal(soli.getOrganid());
-		Where wNifNotNull = SolicitudFields.TITULARFIRMANIF.isNotNull();
-		
-		List<String> nifsDistints = new java.util.ArrayList<>();
-		
-		try {
-			List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wOrgan, wNifNotNull));
-			
-			for (Solicitud s : solicituds) {
-				String nif = s.getTitularFirmaNif();
-				if (!nifsDistints.contains(nif)) {
-					nifsDistints.add(nif);
-				}
-			}
-			
-			if (nifsDistints.size() == 1) {
-				String nifTrobat = nifsDistints.get(0);
-				log.info("Solicitud: " + soli.getSolicitudID() + " - NIF trobat per organ gestor " + soli.getOrganid()
-						+ ": " + nifTrobat);
-				nifsTrobatsOrganGestor++;
-				return nifTrobat;
-			} else if (nifsDistints.size() > 1) {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - NIFs diferents trobats per organ gestor "
-						+ soli.getOrganid() + ": " + nifsDistints.toString());
-				return null;
-			} else {
-				log.info("Solicitud: " + soli.getSolicitudID() + " - No hi ha NIFs trobats per organ gestor "
-						+ soli.getOrganid());
-				return null;
-			}
-			
-		} catch (Exception e) {
-			log.error("Error cercant NIFs del organ gestor " + soli.getOrganid(), e);
-			return null;
-		}
-	}
 	
-	
-	
-	private void actualizarNifFirmaTitulares() throws Exception{
-		Where wLocals = SolicitudFields.ORGANID.isNotNull();
-
-		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
-		
-		for (Solicitud soli : solicituds) {
-			log.info("Solicitud: " + soli.getSolicitudID());
-			
-			Long fitxerID = soli.getSolicitudXmlID();
-
-    		if (fitxerID == null) {
-    			log.info("fitxerID: " + fitxerID);
-    			continue;
-    		}
-
-    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-    		if (prop == null) {
-    			log.info("prop: " + prop);
-    			continue;
-    		}
-    		
-    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
-    		
-			if (nifTitular == null || nifTitular.isEmpty()) {
-				log.info("nifTitular: " + nifTitular);
-				continue;
-			}
-    		
-			String nomTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG") + " "
-					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG") + " "
-					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
-    		
-    		log.info("Solicitud " + soli.getProcedimentCodi() + ": Titular " + nifTitular + " - nom: " + nomTitular);
-
-    		soli.setTitularFirmaNif(nifTitular);
-    		soli.setTitularFirmaNom(nomTitular);
-    		
-			solicitudLogicaEjb.update(soli);    		
-		}
-	}
-	
+//	
+//	private void actualizarNifFirmaTitulares() throws Exception{
+//		Where wLocals = SolicitudFields.ORGANID.isNotNull();
+//
+//		List<Solicitud> solicituds = solicitudLogicaEjb.select(wLocals);
+//		
+//		for (Solicitud soli : solicituds) {
+//			log.info("Solicitud: " + soli.getSolicitudID());
+//			
+//			Long fitxerID = soli.getSolicitudXmlID();
+//
+//    		if (fitxerID == null) {
+//    			log.info("fitxerID: " + fitxerID);
+//    			continue;
+//    		}
+//
+//    		Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
+//    		if (prop == null) {
+//    			log.info("prop: " + prop);
+//    			continue;
+//    		}
+//    		
+//    		String nifTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NIFSECG");
+//    		
+//			if (nifTitular == null || nifTitular.isEmpty()) {
+//				log.info("nifTitular: " + nifTitular);
+//				continue;
+//			}
+//    		
+//			String nomTitular = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMBRESECG") + " "
+//					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE1SECG") + " "
+//					+ prop.getProperty("FORMULARIO.DATOS_SOLICITUD.APE2SECG");
+//    		
+//    		log.info("Solicitud " + soli.getProcedimentCodi() + ": Titular " + nifTitular + " - nom: " + nomTitular);
+//
+//    		soli.setTitularFirmaNif(nifTitular);
+//    		soli.setTitularFirmaNom(nomTitular);
+//    		
+//			solicitudLogicaEjb.update(soli);    		
+//		}
+//	}
+//	
 	private void actualizarTitulares() throws Exception{
 		
 		Where wLocals = SolicitudFields.ORGANID.isNotNull();

@@ -38,11 +38,13 @@ import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader;
 import org.fundaciobit.pinbaladmin.back.utils.email.EmailReader.EmailSession;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Email;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
@@ -103,6 +105,11 @@ public class LlistaCorreusOperadorController extends EmailController {
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.OperadorService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.ejb.OperadorService operadorEjb;
+    
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
+
+    
 
     @Override
     public String getTileForm() {
@@ -1210,8 +1217,12 @@ public class LlistaCorreusOperadorController extends EmailController {
 				+ "    Desde la Fundación BIT le informamos de que su " + tipus + " titulada <br><b>'" + titol
 				+ "</b>'<br>" + " ha sido recibida correcamente y se encuentra en estudio.<br/><br/>";
 		
+		Long contacteID = soli.getContacteSolicitantID();
+		Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(contacteID);
 		
-		enviarCorreu(soli.getPersonaContacteEmail(), soli.getPersonaContacte(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
+
+		
+		enviarCorreu(solicitant.getMail(), solicitant.getNombrecompleto(), asumpte, msg, solicitudID, incidenciaTecnicaID, Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC);
 
 		boolean isEstatal = soli.getEntitatEstatal() != null && soli.getEntitatEstatal().trim().length() > 0;
 		if (isEstatal) {

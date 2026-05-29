@@ -14,9 +14,11 @@ import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.EventFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
@@ -74,7 +76,8 @@ public class SolicitudLocalPendentOperadorController extends SolicitudLocalOpera
             Constants.SOLI_ESTAT_PENDENT_Enviar_Director,  // 11
             Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID,    // 19
             Constants.SOLI_ESTAT_ESMENES,                  // 30
-            Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR     // 33
+            Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR,     // 33
+            Constants.SOLI_ESTAT_PENDENT_AUTORITZAR        // 20
         };
         
         // Crear lista de columnas
@@ -87,14 +90,39 @@ public class SolicitudLocalPendentOperadorController extends SolicitudLocalOpera
         // Crear mapa de organid -> nombre del órgano (optimizado con una sola consulta)
         Map<Long, String> organMap = createOrganMap(columns);
         
+        // Crear mapa de contacteSolicitantID -> info del contacto (optimizado con una sola consulta)
+        Map<Long, ContacteInfo> contacteMap = createContacteMap(columns);
+        
         // Crear mapa de solicitudID -> Info de eventos no leídos (optimizado)
         Map<Long, EventBadgeInfo> eventsMap = createEventsMap(columns, currentUser);
         
         mav.addObject("columns", columns);
         mav.addObject("organMap", organMap);
+        mav.addObject("contacteMap", contacteMap);
         mav.addObject("eventsMap", eventsMap);
         
         return mav;
+    }
+    
+    /**
+     * Clase interna para almacenar información del contacto solicitante
+     */
+    public static class ContacteInfo {
+        private final String nom;
+        private final String mail;
+        
+        public ContacteInfo(String nom, String mail) {
+            this.nom = nom;
+            this.mail = mail;
+        }
+        
+        public String getNom() {
+            return nom;
+        }
+        
+        public String getMail() {
+            return mail;
+        }
     }
     
     /**
@@ -188,6 +216,64 @@ public class SolicitudLocalPendentOperadorController extends SolicitudLocalOpera
         }
         
         return organMap;
+    }
+    
+    /**
+     * Crea un mapa de contacteSolicitantID -> información del contacto.
+     * Optimizado: hace una sola consulta a BD para obtener todos los contactos necesarios.
+     */
+    private Map<Long, ContacteInfo> createContacteMap(List<KanbanColumn> columns) {
+        Map<Long, ContacteInfo> contacteMap = new HashMap<>();
+        Set<Long> contacteIds = new HashSet<>();
+        
+        // Recopilar todos los contacteSolicitantID únicos de todas las columnas
+        for (KanbanColumn column : columns) {
+            if (column.getSolicituds() != null) {
+                for (Solicitud sol : column.getSolicituds()) {
+                    if (sol.getContacteSolicitantID() != null) {
+                        contacteIds.add(sol.getContacteSolicitantID());
+                    }
+                }
+            }
+        }
+        
+        // Si no hay contacteIds, retornar mapa vacío
+        if (contacteIds.isEmpty()) {
+            return contacteMap;
+        }
+        
+        try {
+            // Una sola consulta para obtener todos los contactos necesarios
+            List<Long> contacteIdList = new ArrayList<>(contacteIds);
+            Where condition = ContacteFields.CONTACTEID.in(contacteIdList);
+            List<Contacte> contactes = contacteLogicaEjb.select(condition);
+            
+            // Poblar el mapa
+            if (contactes != null) {
+                for (Contacte contacte : contactes) {
+                    String nom = contacte.getNombrecompleto();
+                    if (nom == null || nom.trim().isEmpty()) {
+                        // Si no hay nombrecompleto, construirlo con nom + llinatges
+                        StringBuilder sb = new StringBuilder();
+                        if (contacte.getNom() != null) sb.append(contacte.getNom());
+                        if (contacte.getLlinatge1() != null) {
+                            if (sb.length() > 0) sb.append(" ");
+                            sb.append(contacte.getLlinatge1());
+                        }
+                        if (contacte.getLlinatge2() != null) {
+                            if (sb.length() > 0) sb.append(" ");
+                            sb.append(contacte.getLlinatge2());
+                        }
+                        nom = sb.toString();
+                    }
+                    contacteMap.put(contacte.getContacteID(), new ContacteInfo(nom, contacte.getMail()));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error obteniendo contactos", e);
+        }
+        
+        return contacteMap;
     }
     
     /**

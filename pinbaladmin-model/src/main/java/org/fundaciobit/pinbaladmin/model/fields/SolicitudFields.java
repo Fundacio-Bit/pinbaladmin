@@ -25,10 +25,6 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField PINFO = new StringField(_TABLE_MODEL, "pinfo", "pinfo");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
-	 public static final StringField PERSONACONTACTE = new StringField(_TABLE_MODEL, "personaContacte", "personacontacte");
-	 public static final StringField PERSONACONTACTEEMAIL = new StringField(_TABLE_MODEL, "personaContacteEmail", "personacontacteemail");
-	 public static final StringField RESPONSABLEPROCNOM = new StringField(_TABLE_MODEL, "responsableProcNom", "responsableprocnom");
-	 public static final StringField RESPONSABLEPROCEMAIL = new StringField(_TABLE_MODEL, "responsableProcEmail", "responsableprocemail");
 	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "estat");
 	 public static final LongField DOCUMENTSOLICITUDID = new LongField(_TABLE_MODEL, "documentSolicitudID", "documentsolicitudid");
 	 public static final LongField SOLICITUDXMLID = new LongField(_TABLE_MODEL, "solicitudXmlID", "solicitudxmlid");
@@ -48,10 +44,6 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final TimestampField DATACADUCITAT = new TimestampField(_TABLE_MODEL, "dataCaducitat", "datacaducitat");
 	 public static final LongField FITXERCONSENTIMENTID = new LongField(_TABLE_MODEL, "fitxerConsentimentID", "fitxerconsentimentid");
 	 public static final LongField CONTACTETITULARID = new LongField(_TABLE_MODEL, "contacteTitularID", "contactetitularid");
-	 public static final StringField TITULARFIRMANIF = new StringField(_TABLE_MODEL, "titularFirmaNif", "titularfirmanif");
-	 public static final StringField TITULARFIRMANOM = new StringField(_TABLE_MODEL, "titularFirmaNom", "titularfirmanom");
-	 public static final StringField TITULARFIRMALLINATGES = new StringField(_TABLE_MODEL, "titularFirmaLlinatges", "titularfirmallinatges");
-	 public static final StringField TITULARFIRMAEMAIL = new StringField(_TABLE_MODEL, "titularFirmaEmail", "titularfirmaemail");
 	 public static final LongField SOLICITUDFUSIONADAID = new LongField(_TABLE_MODEL, "solicitudFusionadaID", "solicitudfusionadaid");
 	 public static final LongField CONTACTEPERSONAID = new LongField(_TABLE_MODEL, "contactePersonaID", "contactepersonaid");
 	 public static final LongField CONTACTERESPONSABLEID = new LongField(_TABLE_MODEL, "contacteResponsableID", "contacteresponsableid");
@@ -59,6 +51,13 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final LongField CONTACTEGESTAUTID = new LongField(_TABLE_MODEL, "contacteGestAutID", "contactegestautid");
 	 public static final LongField CONTACTEAUDITORIAID = new LongField(_TABLE_MODEL, "contacteAuditoriaID", "contacteauditoriaid");
 	 public static final LongField CONTACTETECNICID = new LongField(_TABLE_MODEL, "contacteTecnicID", "contactetecnicid");
+	 public static final StringField TITULARFIRMANIFOLD = new StringField(_TABLE_MODEL, "titularFirmaNifOld", "titularfirmanifold");
+	 public static final StringField PERSONACONTACTEOLD = new StringField(_TABLE_MODEL, "personacontacteold", "personacontacteold");
+	 public static final StringField PERSONACONTACTEEMAILOLD = new StringField(_TABLE_MODEL, "personacontacteemailold", "personacontacteemailold");
+	 public static final StringField RESPONSABLEPROCNOMOLD = new StringField(_TABLE_MODEL, "responsableprocnomold", "responsableprocnomold");
+	 public static final StringField RESPONSABLEPROCEMAILOLD = new StringField(_TABLE_MODEL, "responsableprocemailold", "responsableprocemailold");
+	 public static final StringField TITULARFIRMANOMOLD = new StringField(_TABLE_MODEL, "titularfirmanomold", "titularfirmanomold");
+	 public static final StringField TITULARFIRMAEMAILOLD = new StringField(_TABLE_MODEL, "titularfirmaemailold", "titularfirmaemailold");
 
 
   public static final Field<?>[] ALL_SOLICITUD_FIELDS = {
@@ -75,10 +74,6 @@ public interface SolicitudFields extends java.io.Serializable {
     PINFO,
     DATAINICI,
     DATAFI,
-    PERSONACONTACTE,
-    PERSONACONTACTEEMAIL,
-    RESPONSABLEPROCNOM,
-    RESPONSABLEPROCEMAIL,
     NOTES,
     DOCUMENTSOLICITUDID,
     SOLICITUDXMLID,
@@ -98,17 +93,20 @@ public interface SolicitudFields extends java.io.Serializable {
     DATACADUCITAT,
     FITXERCONSENTIMENTID,
     CONTACTETITULARID,
-    TITULARFIRMANIF,
-    TITULARFIRMANOM,
-    TITULARFIRMALLINATGES,
-    TITULARFIRMAEMAIL,
     SOLICITUDFUSIONADAID,
     CONTACTEPERSONAID,
     CONTACTERESPONSABLEID,
     CONTACTESOLICITANTID,
     CONTACTEGESTAUTID,
     CONTACTEAUDITORIAID,
-    CONTACTETECNICID
+    CONTACTETECNICID,
+    TITULARFIRMANIFOLD,
+    PERSONACONTACTEOLD,
+    PERSONACONTACTEEMAILOLD,
+    RESPONSABLEPROCNOMOLD,
+    RESPONSABLEPROCEMAILOLD,
+    TITULARFIRMANOMOLD,
+    TITULARFIRMAEMAILOLD
   };
 
 

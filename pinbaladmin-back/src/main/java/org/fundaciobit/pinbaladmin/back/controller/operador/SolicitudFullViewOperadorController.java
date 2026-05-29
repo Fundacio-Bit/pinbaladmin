@@ -1011,19 +1011,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 	}
 
 	@Override
-	public List<StringKeyValue> getReferenceListForContacteResponsableID(HttpServletRequest request, ModelAndView mav,
-			SolicitudForm solicitudForm, Where where) throws I18NException {
-
-		return getReferenceListForContacte(where);
-	}
-
-	@Override
-	public List<StringKeyValue> getReferenceListForContactePersonaID(HttpServletRequest request, ModelAndView mav,
-			SolicitudForm solicitudForm, Where where) throws I18NException {
-		return getReferenceListForContacte(where);
-	}
-
-	@Override
 	public List<StringKeyValue> getReferenceListForContacteAuditoriaID(HttpServletRequest request, ModelAndView mav,
 			SolicitudForm solicitudForm, Where where) throws I18NException {
 		return getReferenceListForContacte(where);

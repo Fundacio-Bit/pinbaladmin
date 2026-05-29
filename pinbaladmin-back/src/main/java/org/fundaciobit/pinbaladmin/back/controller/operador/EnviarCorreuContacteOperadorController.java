@@ -34,13 +34,6 @@ public class EnviarCorreuContacteOperadorController extends EmailOperatorControl
     }
 
     @Override
-    protected String getEmailDestinatari(HttpServletRequest request) throws I18NException {
-
-        return (String) request.getSession().getAttribute(AbstractEventController.SESSION_ENVIARCORREU_DEST);
-
-    }
-
-    @Override
     public boolean mustBeStoredInDDBB() {
         return false;
     }

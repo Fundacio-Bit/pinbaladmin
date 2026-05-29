@@ -74,8 +74,8 @@ public class ModificacioSolicitudLogicaEJB extends ModificacioSolicitudEJB imple
 
 		// 2. Actualizar siempre los campos de solicitud con los de modSoli
 		solicitud.setProcedimentNom(modSoli.getProcedimentNom());
-		solicitud.setResponsableProcNom(modSoli.getResponsableProcNom());
-		solicitud.setResponsableProcEmail(modSoli.getResponsableProceMail());
+//		solicitud.setResponsableProcNom(modSoli.getResponsableProcNom());
+//		solicitud.setResponsableProcEmail(modSoli.getResponsableProceMail());
 		solicitud.setConsentiment(modSoli.getConsentiment());
 		solicitud.setProcedimentTipus(modSoli.getProcedimentTipus());
 		solicitud.setDataFi(modSoli.getDataFi());

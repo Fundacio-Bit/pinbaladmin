@@ -138,7 +138,7 @@ public class EmailOperatorController extends EmailController {
 
             emailForm.setTitleCode("=Enviar Correu");
 
-            String emailsStr = getEmailDestinatari(request);
+            String emailsStr = getEmailDestinatari();
 
             emailForm.getEmail().setDestinataris(emailsStr);
             emailForm.getEmail().setDataEnviament(new Timestamp(System.currentTimeMillis()));
@@ -160,12 +160,12 @@ public class EmailOperatorController extends EmailController {
         return emailForm;
     }
 
-    protected String getEmailDestinatari(HttpServletRequest request) throws I18NException {
+    protected String getEmailDestinatari() throws I18NException {
 
         // Seleccionam els correus de les solicituds Local
         final Where where = Where.AND(SolicitudFields.ORGANID.isNotNull(),
-                SolicitudFields.PERSONACONTACTEEMAIL.isNotNull());
-        List<String> emailsList = solicitudEjb.executeQuery(SolicitudFields.PERSONACONTACTEEMAIL, where);
+                SolicitudFields.PERSONACONTACTEEMAILOLD.isNotNull());
+        List<String> emailsList = solicitudEjb.executeQuery(SolicitudFields.PERSONACONTACTEEMAILOLD, where);
 
         Set<String> emails = new HashSet<String>(emailsList);
 

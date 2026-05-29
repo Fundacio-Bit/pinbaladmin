@@ -23,6 +23,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
@@ -33,6 +34,7 @@ import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Entitat;
@@ -86,6 +88,10 @@ public abstract class PinbalUtilsCommon {
 
 	@EJB(mappedName = org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService.JNDI_NAME)
 	protected org.fundaciobit.pinbaladmin.logic.NotificacionLogicaService notificacionLogicaEjb;
+	
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
+	
 
 	final String PINBAL_CONSENTIMENT_LLEI = "Ley";
 	final String PINBAL_CONSENTIMENT_SI = "Si";
@@ -324,18 +330,22 @@ public abstract class PinbalUtilsCommon {
 		event.setAsumpte(asumpte);
 		event.setComentari(missatge);
 
+		Long contacteSolicitantID = solicitud.getContacteSolicitantID();
+		Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(contacteSolicitantID);
+		
+		
 		if (enviarEmailAlContacte) {
 			// COMPORTAMIENTO ANTERIOR: Enviar email al contacto
 			event.setTipus(Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PUBLIC); // De tramitador a contacto (envía email)
 			event.setNoLlegit(false);
 			event.setPersona("PinbalAdmin");
-			event.setDestinatari(solicitud.getPersonaContacte());
-			event.setDestinatarimail(solicitud.getPersonaContacteEmail());
+			event.setDestinatari(solicitant.getNombrecompleto());
+			event.setDestinatarimail(solicitant.getMail());
 		} else {
 			// COMPORTAMIENTO NUEVO: Notificar a tramitadores sin enviar email
 			event.setTipus(Constants.EVENT_TIPUS_COMENTARI_CONTACTE); // De contacto a tramitador (NO envía email)
 			event.setNoLlegit(true); // Marcar como no leído para que los tramitadores lo vean
-			event.setPersona(solicitud.getPersonaContacte()); // Aparece como enviado por el contacto
+			event.setPersona(solicitant.getNombrecompleto()); // Aparece como enviado por el contacto
 			event.setDestinatari(null);
 			event.setDestinatarimail(null);
 		}

@@ -34,6 +34,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EntitatServeiLogicService;
@@ -44,6 +45,7 @@ import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
@@ -112,6 +114,10 @@ public class FusionarProcedimentsOperadorController {
 
 	@EJB(mappedName = FitxerPublicLogicaService.JNDI_NAME)
 	protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
+	
+//contacteLogicaEjb
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
 
 	public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -414,14 +420,14 @@ public class FusionarProcedimentsOperadorController {
 		private Timestamp dataInici;
 		private Timestamp dataCaducitat;
 		private String creador;
-		private String personaContacte;
-		private String personaContacteEmail;
-		private String responsableProcNom;
-		private String responsableProcEmail;
-		private String titularFirmaNIF;
-		private String titularFirmaNom;
-		private String titularFirmaLlinatges;
-		private String titularFirmaEmail;
+//		private String personaContacte;
+//		private String personaContacteEmail;
+//		private String responsableProcNom;
+//		private String responsableProcEmail;
+//		private String titularFirmaNIF;
+//		private String titularFirmaNom;
+//		private String titularFirmaLlinatges;
+//		private String titularFirmaEmail;
 
 		private String entitatNom;
 		private String entitatCif;
@@ -452,15 +458,15 @@ public class FusionarProcedimentsOperadorController {
 			this.dataInici = soli.getDataInici();
 			this.dataCaducitat = soli.getDataCaducitat();
 			this.creador = soli.getCreador();
-			this.personaContacte = soli.getPersonaContacte();
-			this.personaContacteEmail = soli.getPersonaContacteEmail();
-			this.responsableProcNom = soli.getResponsableProcNom();
-			this.responsableProcEmail = soli.getResponsableProcEmail();
+//			this.personaContacte = soli.getPersonaContacte();
+//			this.personaContacteEmail = soli.getPersonaContacteEmail();
+//			this.responsableProcNom = soli.getResponsableProcNom();
+//			this.responsableProcEmail = soli.getResponsableProcEmail();
 
-			this.titularFirmaNIF = soli.getTitularFirmaNif();
-			this.titularFirmaNom = soli.getTitularFirmaNom();
-			this.titularFirmaEmail = soli.getTitularFirmaEmail();
-			this.titularFirmaLlinatges = soli.getTitularFirmaLlinatges();
+//			this.titularFirmaNIF = soli.getTitularFirmaNif();
+//			this.titularFirmaNom = soli.getTitularFirmaNom();
+//			this.titularFirmaEmail = soli.getTitularFirmaEmail();
+//			this.titularFirmaLlinatges = soli.getTitularFirmaLlinatges();
 
 			this.entitatNom = soli.getDenominacio();
 			this.entitatCif = soli.getNif();
@@ -564,69 +570,69 @@ public class FusionarProcedimentsOperadorController {
             this.creador = creador;
         }
 
-        public String getPersonaContacte() {
-            return personaContacte;
-        }
+//        public String getPersonaContacte() {
+//            return personaContacte;
+//        }
+//
+//        public void setPersonaContacte(String personaContacte) {
+//            this.personaContacte = personaContacte;
+//        }
+//
+//        public String getPersonaContacteEmail() {
+//            return personaContacteEmail;
+//        }
+//
+//        public void setPersonaContacteEmail(String personaContacteEmail) {
+//            this.personaContacteEmail = personaContacteEmail;
+//        }
+//
+//        public String getResponsableProcNom() {
+//            return responsableProcNom;
+//        }
+//
+//        public void setResponsableProcNom(String responsableProcNom) {
+//            this.responsableProcNom = responsableProcNom;
+//        }
+//
+//        public String getResponsableProcEmail() {
+//            return responsableProcEmail;
+//        }
+//
+//        public void setResponsableProcEmail(String responsableProcEmail) {
+//            this.responsableProcEmail = responsableProcEmail;
+//        }
 
-        public void setPersonaContacte(String personaContacte) {
-            this.personaContacte = personaContacte;
-        }
+//        public String getTitularFirmaNIF() {
+//            return titularFirmaNIF;
+//        }
+//
+//        public void setTitularFirmaNIF(String titularFirmaNIF) {
+//            this.titularFirmaNIF = titularFirmaNIF;
+//        }
 
-        public String getPersonaContacteEmail() {
-            return personaContacteEmail;
-        }
+//        public String getTitularFirmaNom() {
+//            return titularFirmaNom;
+//        }
+//
+//        public void setTitularFirmaNom(String titularFirmaNom) {
+//            this.titularFirmaNom = titularFirmaNom;
+//        }
 
-        public void setPersonaContacteEmail(String personaContacteEmail) {
-            this.personaContacteEmail = personaContacteEmail;
-        }
+//        public String getTitularFirmaLlinatges() {
+//            return titularFirmaLlinatges;
+//        }
+//
+//        public void setTitularFirmaLlinatges(String titularFirmaLlinatges) {
+//            this.titularFirmaLlinatges = titularFirmaLlinatges;
+//        }
 
-        public String getResponsableProcNom() {
-            return responsableProcNom;
-        }
-
-        public void setResponsableProcNom(String responsableProcNom) {
-            this.responsableProcNom = responsableProcNom;
-        }
-
-        public String getResponsableProcEmail() {
-            return responsableProcEmail;
-        }
-
-        public void setResponsableProcEmail(String responsableProcEmail) {
-            this.responsableProcEmail = responsableProcEmail;
-        }
-
-        public String getTitularFirmaNIF() {
-            return titularFirmaNIF;
-        }
-
-        public void setTitularFirmaNIF(String titularFirmaNIF) {
-            this.titularFirmaNIF = titularFirmaNIF;
-        }
-
-        public String getTitularFirmaNom() {
-            return titularFirmaNom;
-        }
-
-        public void setTitularFirmaNom(String titularFirmaNom) {
-            this.titularFirmaNom = titularFirmaNom;
-        }
-
-        public String getTitularFirmaLlinatges() {
-            return titularFirmaLlinatges;
-        }
-
-        public void setTitularFirmaLlinatges(String titularFirmaLlinatges) {
-            this.titularFirmaLlinatges = titularFirmaLlinatges;
-        }
-
-        public String getTitularFirmaEmail() {
-            return titularFirmaEmail;
-        }
-
-        public void setTitularFirmaEmail(String titularFirmaEmail) {
-            this.titularFirmaEmail = titularFirmaEmail;
-        }
+//        public String getTitularFirmaEmail() {
+//            return titularFirmaEmail;
+//        }
+//
+//        public void setTitularFirmaEmail(String titularFirmaEmail) {
+//            this.titularFirmaEmail = titularFirmaEmail;
+//        }
 
         public String getEntitatNom() {
             return entitatNom;
@@ -999,11 +1005,11 @@ public class FusionarProcedimentsOperadorController {
 					maxIntents = intents;
 				}
 
-				if (soli.getResponsableProcNom() != null
-						&& soli.getResponsableProcNom().equals(solicitudNueva.getResponsableProcNom())) {
-					titularNom = infoMad.getTitularNom();
-					titularNif = infoMad.getTitularNif();
-				}
+				Long nouTitularInfoMadContacteID = solicitudNueva.getContacteSolicitantID();
+				Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(nouTitularInfoMadContacteID);
+				
+				titularNom = solicitant.getNombrecompleto();
+				titularNif = solicitant.getNif();
 
 				// Si el mensaje ya lo tenemos, no lo añadimos
 				if (infoMad.getMissatge() != null && !mensajes.contains(infoMad.getMissatge())) {
@@ -1304,11 +1310,11 @@ public class FusionarProcedimentsOperadorController {
 		log.info("dir3UR: " + dir3UR);
 		log.info("dir3Raiz: " + dir3Raiz);
 
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION", denomincaion);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CIF", cif);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", UR);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dir3UR);
-		prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIOA", dir3Raiz);
+		prop.setProperty("DENOMINACION", denomincaion);
+		prop.setProperty("CIF", cif);
+		prop.setProperty("UNIDAD_RESPONSABLE", UR);
+		prop.setProperty("DIR3_UR", dir3UR);
+		prop.setProperty("DIR3_RAIZ", dir3Raiz);
 	}
 
 	public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
@@ -1367,15 +1373,15 @@ public class FusionarProcedimentsOperadorController {
 
 		String creador = request.getParameter("creador");
 
-		String personaContacte = request.getParameter("personaContacte");
-		String personaContacteEmail = request.getParameter("personaContacteEmail");
-		String responsableProcNom = request.getParameter("responsableProcNom");
-		String responsableProcEmail = request.getParameter("responsableProcEmail");
+//		String personaContacte = request.getParameter("personaContacte");
+//		String personaContacteEmail = request.getParameter("personaContacteEmail");
+//		String responsableProcNom = request.getParameter("responsableProcNom");
+//		String responsableProcEmail = request.getParameter("responsableProcEmail");
 
-		String titularFirmaNIF = request.getParameter("titularFirmaNIF");
-		String titularFirmaNom = request.getParameter("titularFirmaNom");
-		String titularFirmaEmail = request.getParameter("titularFirmaEmail");
-		String titularFirmaLlinatges = request.getParameter("titularFirmaLlinatges");
+//		String titularFirmaNIF = request.getParameter("titularFirmaNIF");
+//		String titularFirmaNom = request.getParameter("titularFirmaNom");
+//		String titularFirmaEmail = request.getParameter("titularFirmaEmail");
+//		String titularFirmaLlinatges = request.getParameter("titularFirmaLlinatges");
 
 		String entitatNom = request.getParameter("entitatNom");
 		String entitatCif = request.getParameter("entitatCif");
@@ -1413,15 +1419,15 @@ public class FusionarProcedimentsOperadorController {
 
 		log.info("creador: " + creador);
 
-		log.info("personaContacte: " + personaContacte);
-		log.info("personaContacteEmail: " + personaContacteEmail);
-		log.info("responsableProcNom: " + responsableProcNom);
-		log.info("responsableProcEmail: " + responsableProcEmail);
+//		log.info("personaContacte: " + personaContacte);
+//		log.info("personaContacteEmail: " + personaContacteEmail);
+//		log.info("responsableProcNom: " + responsableProcNom);
+//		log.info("responsableProcEmail: " + responsableProcEmail);
 
-		log.info("titularFirmaNif: " + titularFirmaNIF);
-		log.info("titularFirmaNom: " + titularFirmaNom);
-		log.info("titularFirmaEmail: " + titularFirmaEmail);
-		log.info("titularFirmaLlinatges: " + titularFirmaLlinatges);
+//		log.info("titularFirmaNif: " + titularFirmaNIF);
+//		log.info("titularFirmaNom: " + titularFirmaNom);
+//		log.info("titularFirmaEmail: " + titularFirmaEmail);
+//		log.info("titularFirmaLlinatges: " + titularFirmaLlinatges);
 
 		log.info("entitatNom: " + entitatNom);
 		log.info("entitatCif: " + entitatCif);
@@ -1481,7 +1487,19 @@ public class FusionarProcedimentsOperadorController {
 		String expedientPid = null;
 		String entitatEstatal = null;
 		String pinfo = null;
+		
 		//Datos de contactos pendientes de arreglar.
+		String titularFirmaNIFOld = null;
+		String titularFirmaMailOld= null;
+		String titularFirmaNomOld = null;
+		String respoProcNomOld = null;
+		String respoProcEmailOld = null;
+		String personaContacteOld = null;
+		String personaContacteEmailOld = null;
+		
+		
+		
+		
 		Long contacteTitularID = null;
 		Long contacteResponsableID = null;
 		Long contactePersonaID = null;
@@ -1500,12 +1518,13 @@ public class FusionarProcedimentsOperadorController {
 
 		SolicitudJPA solicitudNueva = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
 				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
-				personaContacte, personaContacteEmail, responsableProcNom, responsableProcEmail, notesSoli, docSoliID,
+				    notesSoli, docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
 				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
-				fitxerConsentimentID, contacteTitularID, titularFirmaNIF, titularFirmaNom, titularFirmaLlinatges,
-				titularFirmaEmail, solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID,
-				contacteGestAutID, contacteAuditoriaID, contacteTecnicID);
+				fitxerConsentimentID, contacteTitularID,  
+				 solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID,
+				contacteGestAutID, contacteAuditoriaID, contacteTecnicID, titularFirmaNIFOld, personaContacteOld, personaContacteEmailOld, respoProcNomOld,
+				respoProcEmailOld, titularFirmaNomOld, titularFirmaMailOld);
 
 		return solicitudNueva;
 	}

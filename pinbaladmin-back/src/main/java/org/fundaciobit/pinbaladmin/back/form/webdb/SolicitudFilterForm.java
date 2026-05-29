@@ -208,50 +208,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.String personaContacte;
-
-  public java.lang.String getPersonaContacte() {
-    return this.personaContacte;
-  }
-
-  public void setPersonaContacte(java.lang.String personaContacte) {
-    this.personaContacte = personaContacte;
-  }
-
-
-  private java.lang.String personaContacteEmail;
-
-  public java.lang.String getPersonaContacteEmail() {
-    return this.personaContacteEmail;
-  }
-
-  public void setPersonaContacteEmail(java.lang.String personaContacteEmail) {
-    this.personaContacteEmail = personaContacteEmail;
-  }
-
-
-  private java.lang.String responsableProcNom;
-
-  public java.lang.String getResponsableProcNom() {
-    return this.responsableProcNom;
-  }
-
-  public void setResponsableProcNom(java.lang.String responsableProcNom) {
-    this.responsableProcNom = responsableProcNom;
-  }
-
-
-  private java.lang.String responsableProcEmail;
-
-  public java.lang.String getResponsableProcEmail() {
-    return this.responsableProcEmail;
-  }
-
-  public void setResponsableProcEmail(java.lang.String responsableProcEmail) {
-    this.responsableProcEmail = responsableProcEmail;
-  }
-
-
   private java.lang.String notes;
 
   public java.lang.String getNotes() {
@@ -450,50 +406,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
-  private java.lang.String titularFirmaNif;
-
-  public java.lang.String getTitularFirmaNif() {
-    return this.titularFirmaNif;
-  }
-
-  public void setTitularFirmaNif(java.lang.String titularFirmaNif) {
-    this.titularFirmaNif = titularFirmaNif;
-  }
-
-
-  private java.lang.String titularFirmaNom;
-
-  public java.lang.String getTitularFirmaNom() {
-    return this.titularFirmaNom;
-  }
-
-  public void setTitularFirmaNom(java.lang.String titularFirmaNom) {
-    this.titularFirmaNom = titularFirmaNom;
-  }
-
-
-  private java.lang.String titularFirmaLlinatges;
-
-  public java.lang.String getTitularFirmaLlinatges() {
-    return this.titularFirmaLlinatges;
-  }
-
-  public void setTitularFirmaLlinatges(java.lang.String titularFirmaLlinatges) {
-    this.titularFirmaLlinatges = titularFirmaLlinatges;
-  }
-
-
-  private java.lang.String titularFirmaEmail;
-
-  public java.lang.String getTitularFirmaEmail() {
-    return this.titularFirmaEmail;
-  }
-
-  public void setTitularFirmaEmail(java.lang.String titularFirmaEmail) {
-    this.titularFirmaEmail = titularFirmaEmail;
-  }
-
-
   private java.lang.Long solicitudFusionadaIDDesde;
 
   public java.lang.Long getSolicitudFusionadaIDDesde() {
@@ -648,6 +560,83 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String titularFirmaNifOld;
+
+  public java.lang.String getTitularFirmaNifOld() {
+    return this.titularFirmaNifOld;
+  }
+
+  public void setTitularFirmaNifOld(java.lang.String titularFirmaNifOld) {
+    this.titularFirmaNifOld = titularFirmaNifOld;
+  }
+
+
+  private java.lang.String personacontacteold;
+
+  public java.lang.String getPersonacontacteold() {
+    return this.personacontacteold;
+  }
+
+  public void setPersonacontacteold(java.lang.String personacontacteold) {
+    this.personacontacteold = personacontacteold;
+  }
+
+
+  private java.lang.String personacontacteemailold;
+
+  public java.lang.String getPersonacontacteemailold() {
+    return this.personacontacteemailold;
+  }
+
+  public void setPersonacontacteemailold(java.lang.String personacontacteemailold) {
+    this.personacontacteemailold = personacontacteemailold;
+  }
+
+
+  private java.lang.String responsableprocnomold;
+
+  public java.lang.String getResponsableprocnomold() {
+    return this.responsableprocnomold;
+  }
+
+  public void setResponsableprocnomold(java.lang.String responsableprocnomold) {
+    this.responsableprocnomold = responsableprocnomold;
+  }
+
+
+  private java.lang.String responsableprocemailold;
+
+  public java.lang.String getResponsableprocemailold() {
+    return this.responsableprocemailold;
+  }
+
+  public void setResponsableprocemailold(java.lang.String responsableprocemailold) {
+    this.responsableprocemailold = responsableprocemailold;
+  }
+
+
+  private java.lang.String titularfirmanomold;
+
+  public java.lang.String getTitularfirmanomold() {
+    return this.titularfirmanomold;
+  }
+
+  public void setTitularfirmanomold(java.lang.String titularfirmanomold) {
+    this.titularfirmanomold = titularfirmanomold;
+  }
+
+
+  private java.lang.String titularfirmaemailold;
+
+  public java.lang.String getTitularfirmaemailold() {
+    return this.titularfirmaemailold;
+  }
+
+  public void setTitularfirmaemailold(java.lang.String titularfirmaemailold) {
+    this.titularfirmaemailold = titularfirmaemailold;
+  }
+
+
   public SolicitudFilterForm() {
   }
   
@@ -670,10 +659,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.dataIniciFins = __toClone.dataIniciFins;
     this.dataFiDesde = __toClone.dataFiDesde;
     this.dataFiFins = __toClone.dataFiFins;
-    this.personaContacte = __toClone.personaContacte;
-    this.personaContacteEmail = __toClone.personaContacteEmail;
-    this.responsableProcNom = __toClone.responsableProcNom;
-    this.responsableProcEmail = __toClone.responsableProcEmail;
     this.notes = __toClone.notes;
     this.denominacio = __toClone.denominacio;
     this.dir3 = __toClone.dir3;
@@ -692,10 +677,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.dataCaducitatFins = __toClone.dataCaducitatFins;
     this.contacteTitularIDDesde = __toClone.contacteTitularIDDesde;
     this.contacteTitularIDFins = __toClone.contacteTitularIDFins;
-    this.titularFirmaNif = __toClone.titularFirmaNif;
-    this.titularFirmaNom = __toClone.titularFirmaNom;
-    this.titularFirmaLlinatges = __toClone.titularFirmaLlinatges;
-    this.titularFirmaEmail = __toClone.titularFirmaEmail;
     this.solicitudFusionadaIDDesde = __toClone.solicitudFusionadaIDDesde;
     this.solicitudFusionadaIDFins = __toClone.solicitudFusionadaIDFins;
     this.contactePersonaIDDesde = __toClone.contactePersonaIDDesde;
@@ -710,6 +691,13 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.contacteAuditoriaIDFins = __toClone.contacteAuditoriaIDFins;
     this.contacteTecnicIDDesde = __toClone.contacteTecnicIDDesde;
     this.contacteTecnicIDFins = __toClone.contacteTecnicIDFins;
+    this.titularFirmaNifOld = __toClone.titularFirmaNifOld;
+    this.personacontacteold = __toClone.personacontacteold;
+    this.personacontacteemailold = __toClone.personacontacteemailold;
+    this.responsableprocnomold = __toClone.responsableprocnomold;
+    this.responsableprocemailold = __toClone.responsableprocemailold;
+    this.titularfirmanomold = __toClone.titularfirmanomold;
+    this.titularfirmaemailold = __toClone.titularfirmaemailold;
     this.mapOfValuesForProcedimentTipus = __toClone.mapOfValuesForProcedimentTipus;
     this.mapOfOrganForOrganid = __toClone.mapOfOrganForOrganid;
     this.mapOfValuesForEstatSolicitud = __toClone.mapOfValuesForEstatSolicitud;

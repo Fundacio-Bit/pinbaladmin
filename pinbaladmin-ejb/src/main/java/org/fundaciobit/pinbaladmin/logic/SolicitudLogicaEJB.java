@@ -113,6 +113,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicaEjb;
+	
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
     
 
 //    PinbalUtilsConsulta cons = new PinbalUtilsConsulta();
@@ -320,7 +323,13 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
-            java.lang.String _persona_ = soli.getPersonaContacte();
+            
+            Long contacteSolicitantID = soli.getContacteSolicitantID();
+            Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteSolicitantID);
+            
+            java.lang.String _persona_ = contacte.getNombrecompleto();
+            
+            
             boolean _noLlegit_ = false;
 
             java.lang.String _caidIdentificadorConsulta_ = null;

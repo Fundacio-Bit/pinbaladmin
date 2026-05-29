@@ -176,12 +176,12 @@ public class SolicitudLocalDesDeFitxerXmlOperador extends SolicitudLocalOperador
                 // solicitud.setDataInici(new Timestamp(System.currentTimeMillis()));
                 // java.sql.Timestamp dataFi = null;
                 // java.lang.String personaContacte =
-                solicitud.setResponsableProcNom(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE"));
-                // java.lang.String personaContacteEmail =
-                solicitud.setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
-
-                solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
-                solicitud.setPersonaContacteEmail(prop.getProperty("FORMULARIO.DATOS_REGISTRO.EMAIL"));
+//                solicitud.setResponsableProcNom(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.NOMOCULSECE"));
+//                // java.lang.String personaContacteEmail =
+//                solicitud.setResponsableProcEmail(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.MAILSECE"));
+//
+//                solicitud.setPersonaContacte(prop.getProperty("FORMULARIO.DATOS_REGISTRO.NOMBRECOMPLETO"));
+//                solicitud.setPersonaContacteEmail(prop.getProperty("FORMULARIO.DATOS_REGISTRO.EMAIL"));
 
                 solicitud.setDenominacio(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.DENOMINACION"));
                 solicitud.setDir3(prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR"));

@@ -39,6 +39,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments;
 import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcediment;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
@@ -49,6 +50,7 @@ import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
+import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.ModificacioSolicitud;
@@ -126,6 +128,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
 	protected InfoMadridLogicaService infoMadridLogicaEjb;
 
+	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
+	protected ContacteLogicaService contacteLogicaEjb;
+
 	@Override
 	protected FilesFormManager<Fitxer> getFilesFormManager() {
 		return new PinbalAdminFilesFormManager(fitxerPublicLogicaEjb);
@@ -200,8 +205,11 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			form.addHiddenField(ModificacioSolicitudFields.ESTATID);
 //			form.addHiddenField(ModificacioSolicitudFields.DATAINICI);
 
+			// Ocultar campos de contacto - se muestran desde la solicitud original
 			form.addHiddenField(ModificacioSolicitudFields.CONTACTENOM);
 			form.addHiddenField(ModificacioSolicitudFields.CONTACTEMAIL);
+			form.addHiddenField(ModificacioSolicitudFields.RESPONSABLEPROCNOM);
+			form.addHiddenField(ModificacioSolicitudFields.RESPONSABLEPROCEMAIL);
 
 			form.addHiddenField(ModificacioSolicitudFields.ESMENA);
 			
@@ -224,6 +232,9 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			form.setDeleteButtonVisible(false);
 
 			Long solicitudID = mod.getSolicitudID();
+			
+			// Cargar datos de contactos de la solicitud original para mostrarlos
+			// cargarContactesSolicitud(solicitudID, mav);
 
 			List<ServeiInfo> serveis = getServeisSolicitud(solicitudID);
 			mav.addObject("serveis", serveis);
@@ -244,6 +255,83 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		}
 
 		return form;
+	}
+	
+	/**
+	 * Carga los datos de contacto de la solicitud original para mostrarlos como información read-only
+	 */
+	private void cargarContactesSolicitud(Long solicitudID, ModelAndView mav) {
+		try {
+			SolicitudJPA solicitud = (SolicitudJPA) solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+			if (solicitud != null) {
+				// Cargar contacto solicitante
+				if (solicitud.getContacteSolicitantID() != null) {
+					Contacte contacteSolicitant = contacteLogicaEjb.findByPrimaryKey(solicitud.getContacteSolicitantID());
+					if (contacteSolicitant != null) {
+						String nomSolicitant = obtenerNombreCompleto(contacteSolicitant);
+						mav.addObject("solicitudContacteSolicitantNom", nomSolicitant);
+						mav.addObject("solicitudContacteSolicitantMail", contacteSolicitant.getMail());
+					}
+				} else if (solicitud.getPersonacontacteold() != null) {
+					// Fallback a campos antiguos
+					mav.addObject("solicitudContacteSolicitantNom", solicitud.getPersonacontacteold());
+					mav.addObject("solicitudContacteSolicitantMail", solicitud.getPersonacontacteemailold());
+				}
+				
+				// Cargar contacto responsable
+				if (solicitud.getContacteResponsableID() != null) {
+					Contacte contacteResponsable = contacteLogicaEjb.findByPrimaryKey(solicitud.getContacteResponsableID());
+					if (contacteResponsable != null) {
+						String nomResponsable = obtenerNombreCompleto(contacteResponsable);
+						mav.addObject("solicitudContacteResponsableNom", nomResponsable);
+						mav.addObject("solicitudContacteResponsableMail", contacteResponsable.getMail());
+					}
+				} else if (solicitud.getResponsableprocnomold() != null) {
+					// Fallback a campos antiguos
+					mav.addObject("solicitudContacteResponsableNom", solicitud.getResponsableprocnomold());
+					mav.addObject("solicitudContacteResponsableMail", solicitud.getResponsableprocemailold());
+				}
+				
+				// Cargar titular firma
+				if (solicitud.getContacteTitularID() != null) {
+					Contacte contacteTitular = contacteLogicaEjb.findByPrimaryKey(solicitud.getContacteTitularID());
+					if (contacteTitular != null) {
+						String nomTitular = obtenerNombreCompleto(contacteTitular);
+						mav.addObject("solicitudContacteTitularNom", nomTitular);
+						mav.addObject("solicitudContacteTitularMail", contacteTitular.getMail());
+						mav.addObject("solicitudContacteTitularNif", contacteTitular.getNif());
+					}
+				} else if (solicitud.getTitularfirmanomold() != null) {
+					// Fallback a campos antiguos
+					mav.addObject("solicitudContacteTitularNom", solicitud.getTitularfirmanomold());
+					mav.addObject("solicitudContacteTitularMail", solicitud.getTitularfirmaemailold());
+					mav.addObject("solicitudContacteTitularNif", solicitud.getTitularFirmaNifOld());
+				}
+			}
+		} catch (Exception e) {
+			log.error("Error cargando contactos de la solicitud " + solicitudID, e);
+		}
+	}
+	
+	/**
+	 * Obtiene el nombre completo de un contacto
+	 */
+	private String obtenerNombreCompleto(Contacte contacte) {
+		String nom = contacte.getNombrecompleto();
+		if (nom == null || nom.trim().isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			if (contacte.getNom() != null) sb.append(contacte.getNom());
+			if (contacte.getLlinatge1() != null) {
+				if (sb.length() > 0) sb.append(" ");
+				sb.append(contacte.getLlinatge1());
+			}
+			if (contacte.getLlinatge2() != null) {
+				if (sb.length() > 0) sb.append(" ");
+				sb.append(contacte.getLlinatge2());
+			}
+			nom = sb.toString();
+		}
+		return nom;
 	}
 	
 	@Override
@@ -354,8 +442,8 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		mod.setProcedimentTipus(solicitud.getProcedimentTipus());
 
 		mod.setOrganID(solicitud.getOrganid());
-		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
-		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
+//		mod.setResponsableProcNom(solicitud.getResponsableProcNom());
+//		mod.setResponsableProceMail(solicitud.getResponsableProcEmail());
 		mod.setConsentiment(solicitud.getConsentiment());
 		mod.setDoCconsentimentID(solicitud.getFitxerConsentimentID());
 		
@@ -775,10 +863,10 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 		appendSiModificat(msg, "Tipus Procediment", tpOriginal, tpModificat);
 		appendSiModificat(msg, "Data Caducitat", original.getDataFi(), modificacio.getDataFi());
 
-		appendSiModificat(msg, "Responsable procediment", original.getResponsableProcNom(),
-				modificacio.getResponsableProcNom());
-		appendSiModificat(msg, "Mail Responsable", original.getResponsableProcEmail(),
-				modificacio.getResponsableProceMail());
+//		appendSiModificat(msg, "Responsable procediment", original.getResponsableProcNom(),
+//				modificacio.getResponsableProcNom());
+//		appendSiModificat(msg, "Mail Responsable", original.getResponsableProcEmail(),
+//				modificacio.getResponsableProceMail());
 		appendSiModificat(msg, "Consentiment", original.getConsentiment(), modificacio.getConsentiment());
 
 //		List<Long> listDocumentsSolicitud = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.DOCUMENTID,

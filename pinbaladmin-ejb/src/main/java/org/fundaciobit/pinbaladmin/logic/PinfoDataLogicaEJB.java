@@ -420,26 +420,6 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 //		}
 	}
 
-	@Override
-	public List<String> getResponsablesProcedimentsPinfos(Long pinfoID) throws I18NException {
-
-		List<String> responsablesList = new ArrayList<String>();
-
-		List<PinfoData> pinfoDatas = this.select(PinfoDataFields.PINFOID.equal(pinfoID));
-
-		for (PinfoData pinfoData : pinfoDatas) {
-			Long procedimentID = pinfoData.getProcedimentID();
-			SolicitudJPA procediment = solicitudLogicaEjb.findByPrimaryKey(procedimentID);
-			String responsable = procediment.getResponsableProcNom() + " - " + procediment.getResponsableProcEmail();
-
-			if (!responsablesList.contains(responsable)) {
-				responsablesList.add(responsable);
-			}
-		}
-
-		return responsablesList;
-	}
-
 //	@Override
 	public void procesarPermisosPinfoOld(Long pinfoID) throws I18NException {
 
