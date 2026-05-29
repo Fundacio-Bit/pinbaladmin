@@ -267,15 +267,6 @@
         <put-attribute name="contingut" value="/WEB-INF/jsp/webdb/areaList.jsp" />
     </definition>
 
-    <definition name="formularicaidOperador" extends="operador_base">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/formularicaid.jsp" />
-    </definition>
-    
-    <definition name="formularicaidfitxersOperador" extends="operador_base">
-        <put-attribute name="contingut" value="/WEB-INF/jsp/operador/formularicaidfitxers.jsp" />
-    </definition>
-
-
 <!--     <definition name="actualitzarserveis" extends="operador_base">
         <put-attribute name="contingut" value="/WEB-INF/jsp/operador/actualitzarserveis.jsp" />
     </definition> -->

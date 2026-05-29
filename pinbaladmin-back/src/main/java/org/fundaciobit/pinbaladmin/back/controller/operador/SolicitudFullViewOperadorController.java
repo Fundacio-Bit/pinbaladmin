@@ -33,7 +33,6 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
@@ -42,6 +41,8 @@ import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
+import org.fundaciobit.pinbaladmin.logic.utils.GenerarDocumentsDGLogicaService;
+import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.logic.utils.PdfDownloader;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -96,6 +97,9 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 	@EJB(mappedName = InfoMadridLogicaService.JNDI_NAME)
 	protected InfoMadridLogicaService infoMadridLogicaEjb;
+	
+	@EJB(mappedName = GenerarDocumentsDGLogicaService.JNDI_NAME)
+	protected GenerarDocumentsDGLogicaService generarDocumentsDGLogicaEjb;
 
 	@EJB(mappedName = ContacteLogicaService.JNDI_NAME)
 	protected ContacteLogicaService contacteLogicaEjb;
@@ -337,149 +341,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 				"/operador/solicitudestatal/enviarcorreucedents/" + soliID, AdditionalButtonStyle.WARNING));
 	}
 
-	@RequestMapping(value = "/formularicaidfitxers/{soliID}", method = RequestMethod.GET)
-	public ModelAndView generarFormulariCaidFitxers(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable Long soliID) throws I18NException {
-
-		ModelAndView mav = new ModelAndView("formularicaidfitxersOperador");
-
-		mav.addObject("action", request.getContextPath() + getContextWeb() + "/formularicaid/" + soliID);
-
-		SubQuery<DocumentSolicitud, Long> subQueryDocSoli = documentSolicitudEjb
-				.getSubQuery(DocumentSolicitudFields.DOCUMENTID, DocumentSolicitudFields.SOLICITUDID.equal(soliID));
-
-		List<Document> docs = documentEjb.select(DocumentFields.DOCUMENTID.in(subQueryDocSoli));
-
-		mav.addObject("documents", docs);
-
-		return mav;
-
-	}
-
-	@RequestMapping(value = "/formularicaid/{soliID}", method = RequestMethod.POST)
-	public ModelAndView generarFormulariCaid(HttpServletRequest request,
-			HttpServletResponse response, @PathVariable Long soliID) throws I18NException {
-
-		final String backurl = getContextWeb() + "/view/" + soliID;
-
-		String[] fitxersID = request.getParameterValues("fitxerID");
-
-		// Cercar fitxer
-
-		List<Fitxer> fitxers = new ArrayList<Fitxer>();
-
-		for (String fid : fitxersID) {
-			log.info("Fitxer Seleccionats => " + fid);
-
-			Fitxer f = fitxerEjb.findByPrimaryKey(Long.parseLong(fid));
-
-			fitxers.add(f);
-
-		}
-
-		if (fitxersID == null || fitxersID.length == 0) {
-			HtmlUtils.saveMessageError(request,
-					"Es necessita sellecionar com a mínim un Document-Solicitud per poder crear la incidència.");
-			return new ModelAndView(new RedirectView(backurl, true));
-		}
-
-		// Fer zip
-		byte[] fitxersContent;
-		try {
-
-			// File zipFile = File.createTempFile("pinbaladmin_", ".zip");
-
-			ByteArrayOutputStream fos = new ByteArrayOutputStream();
-			ZipOutputStream zos = new ZipOutputStream(fos);
-
-			for (Fitxer aFile : fitxers) {
-
-				zos.putNextEntry(new ZipEntry(aFile.getNom()));
-
-				byte[] bytes = FileSystemManager.getFileContent(aFile.getFitxerID());
-				zos.write(bytes, 0, bytes.length);
-				zos.closeEntry();
-			}
-
-			zos.close();
-
-			fitxersContent = fos.toByteArray();
-
-		} catch (Exception ex) {
-			String msg = "Error creant zip: " + ex.getMessage();
-			log.error(msg, ex);
-			HtmlUtils.saveMessageError(request, msg);
-			return new ModelAndView(new RedirectView(backurl, true));
-		}
-
-		ModelAndView mav = new ModelAndView("formularicaidOperador");
-
-		mav.addObject("fitxers", fitxers);
-
-		String fitxerB64 = Base64.encode(fitxersContent);
-		mav.addObject("fitxerB64", fitxerB64);
-
-		SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-
-		String callback = Configuracio.getAppBackUrl()
-				+ CallbackSeleniumController.CALLBACK_SELENIUM_CONTEXT + "/" + soli.getSolicitudID();
-
-		mav.addObject("backurl", request.getContextPath() + backurl);
-		mav.addObject("callback", callback);
-		mav.addObject("action", Configuracio.getCAIDSeleniumUrl() + "/RemoteSeleniumAlta");
-
-		String username = request.getUserPrincipal().getName();
-
-		String nom;
-		String llinatge1;
-		String llinatge2;
-		String email = "gd.pinbal@fundaciobit.org";
-
-		if ("pvico".equals(username)) {
-			nom = "Pilar";
-			llinatge1 = "Vico";
-			llinatge2 = "Hervas";
-		} else if ("mcapo".equals(username)) {
-			nom = "Maria Antonia";
-			llinatge1 = "Capo";
-			llinatge2 = "Santandreu";
-		} else if ("anadal".equals(username)) {
-			nom = "Antoni";
-			llinatge1 = "Nadal";
-			llinatge2 = "Bennasar";
-			// email = "anadal@fundaciobit.org";
-		} else {
-			HtmlUtils.saveMessageError(request,
-					"L'username " + username + " no està mapejat a cap nom i llinatges");
-			nom = "Pilar";
-			llinatge1 = "Vico";
-			llinatge2 = "";
-		}
-
-		mav.addObject("nombre", nom);
-		mav.addObject("apellido1", llinatge1);
-		mav.addObject("apellido2", llinatge2);
-		mav.addObject("organismo",
-				"Consejería de Administraciones Públicas y Modernización » (A04027005) Dirección General de Modernización y Administración Digital");
-		mav.addObject("email", email);
-		mav.addObject("asunto", "Alta Servicios");
-		mav.addObject("produccio", soli.isProduccio());
-
-		if (soli.getEntitatEstatal() == null) {
-			// Es entitat local
-			mav.addObject("comentario", "Buenos dias, \r\n"
-					+ "Adjunto formulario para dar de alta unos servicios en el procedimiento ...\r\n"
-					+ "Esperamos respuesta.");
-		} else {
-			// Es entitat estatal
-			mav.addObject("comentario", "Buenos dias, \r\n"
-					+ "Adjunto formulario para dar de alta unos servicios en el procedimiento .... Le recordamos que en este caso el Govern actuar&aacute; como Nodo de Interoperabilidad.\r\n"
-					+ "Esperamos respuesta.");
-		}
-
-		return mav;
-	}
-
 	/**
 	 * 
 	 * @param request
@@ -511,7 +372,7 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 					generarServeis(request, soliID, prop);
 
-					generarFormulari(request, soliID, prop, "");
+					generarDocumentsDGLogicaEjb.generarFormulariDirectorGeneralPDFODT(soliID);
 
 				} catch (I18NException ie) {
 					String msg = I18NUtils.getMessage(ie);
@@ -531,143 +392,16 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 	@RequestMapping(value = "/generarformularidirectorgeneral/{soliID}", method = RequestMethod.GET)
 	public String generarFormulariDirectorGeneral(HttpServletRequest request,
 			@PathVariable Long soliID) throws Exception {
-
-		SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-
-		Long fitxerID = soli.getSolicitudXmlID();
-
-		log.info(" FITXER ID => " + fitxerID);
-
-		if (fitxerID == null) {
-
-			HtmlUtils.saveMessageError(request,
-					"NO ES PODEN GENERAR ELS SERVEIS JA QUE NO HI HA EL FITXER DE XML !!!!!!");
-
-		} else {
-
-			// Si és local
-			if ("application/xml".equals(soli.getSolicitudXml().getMime())) {
-
-				try {
-
-					Properties prop = ParserFormulariXML.getPropertiesFromFormulario(fitxerID);
-
-					String cp = prop.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
-
-					if (cp == null) {
-						prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CP", "");
-					}
-
-					generarFormulari(request, soliID, prop,
-							SolicitudServeiOperadorController.SDF.format(new Date()));
-
-				} catch (I18NException ie) {
-					String msg = I18NUtils.getMessage(ie);
-					log.error(msg, ie);
-					HtmlUtils.saveMessageError(request, msg);
-
-				} catch (Exception e) {
-					log.error(e.getMessage(), e);
-					HtmlUtils.saveMessageError(request, "Error" + e.getMessage());
-				}
-			}
-		}
-
+		
+		log.info("Generant formulari Director General per la sol·licitud [" + soliID + "]");
+		
+		generarDocumentsDGLogicaEjb.generarFormulariDirectorGeneralPDFODT(soliID);
+		
+		log.info("Formulari Director General generat per la sol·licitud [" + soliID + "]");
+		
 		return "redirect:" + getContextWeb() + "/view/" + soliID;
 	}
-
-	public void generarFormulari(HttpServletRequest request, Long solicitudID, Properties prop,
-			String prefix) throws Exception, I18NException {
-
-		log.info("Generant formulari per la sol·licitud [" + solicitudID + "]");
-
-		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
-		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
-
-		File plantilla = new File(Configuracio.getTemplateFormulari());
-
-		SolicitudJPA soli = solicitudEjb.findByPrimaryKey(solicitudID);
-
-		setOrganGestorProperties(soli.getOrganid(), prop);
-
-		// Organ organGestor = organEjb.findByPrimaryKey(soli.getOrganid());
-		// while (organGestor.getDir3pare() != null &&
-		// !organGestor.getDir3pare().equals(organGestor.getDir3())) {
-		// List<Organ> organ =
-		// organEjb.select(OrganFields.DIR3.equal(organGestor.getDir3pare()));
-		// if (organ.size() == 1) {
-		// organGestor = organ.get(0);
-		// }
-		// }
-		//
-		// if (organGestor.getCif().equals("S0711001H")) {
-		// String dir3Dgtic = "A04027005";
-		// List<Organ> organ = organEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
-		// if (organ.size() == 1) {
-		// Organ dgtic = organ.get(0);
-		// prop.setProperty("FORMULARIO.DATOS_SOLICITUD.UNIDAD", dgtic.getNom());
-		// prop.setProperty("FORMULARIO.DATOS_SOLICITUD.CODIUR", dgtic.getDir3());
-		// }
-		//
-		// }
-
-		// Validador de apellido2 mientras en Madrid no funcione.
-		String propApe2Base = "FORMULARIO.DATOS_SOLICITUD.APE2SEC";
-		String[] partes = { "D", "E", "F", "G" };
-
-		boolean faltaApe2 = false;
-		for (String parte : partes) {
-			String propApe2 = propApe2Base + parte;
-			if (prop.getProperty(propApe2) == null) {
-				faltaApe2 = true;
-				log.info("Añadiendo apellido2 vacío: " + propApe2);
-				prop.setProperty(propApe2, "");
-			}
-		}
-
-		if (faltaApe2) {
-			HtmlUtils.saveMessageWarning(request,
-					"NOTA: Falta el apellido 2 en el fomulario XML. Ignoramos porque aun no enviamos a Madrid.");
-		}
-
-		ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
-
-		{
-			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(),
-					"application/pdf", "");
-
-			fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
-
-			FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
-
-			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
-			Document doc = documentEjb.create(prefix + "Formulario_Director_General (PDF)",
-					fitxer.getFitxerID(), null, null, tipus);
-
-			DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
-
-			documentSolicitudEjb.create(ds);
-		}
-
-		{
-			FitxerJPA fitxer = new FitxerJPA(prefix + "Formulario_Director_General.odt",
-					outputODT.length(), "application/vnd.oasis.opendocument.text", "");
-
-			fitxer = (FitxerJPA) fitxerEjb.create(fitxer);
-
-			FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
-
-			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
-			Document doc = documentEjb.create(prefix + "Formulario_Director_General (ODT)",
-					fitxer.getFitxerID(), null, null, tipus);
-
-			DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
-
-			documentSolicitudEjb.create(ds);
-		}
-
-	}
-
+	
 	protected void generarServeis(HttpServletRequest request, Long soliID, Properties prop)
 			throws I18NException {
 		int x = 1;
@@ -938,10 +672,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			log.warn(errorMsg, e);
 			return null;
 		}
-	}
-
-	private void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
-		tramitALogicEjb.setOrganGestorProperties(organID, prop);
 	}
 
 	@RequestMapping(value = "/acceptarModificacio/{modSoliID}", method = RequestMethod.GET)

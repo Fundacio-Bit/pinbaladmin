@@ -284,4 +284,85 @@
 </c:if>
 
 
+<!-- =============================================
+     BOTONES EXPANDIR/COLAPSAR SECCIONES
+     ============================================= -->
+<script>
+	$(document).ready(function() {
+		// Buscar todas las secciones creadas por sections.jsp
+		$('[id^="seccio_"]').each(function() {
+			var $seccio = $(this);
+			var seccioId = $seccio.attr('id');
+			
+			// Buscar el título de la sección (label o h4/h3/h2)
+			var $titol = $seccio.find('> label, > h4, > h3, > h2').first();
+			
+			if ($titol.length > 0) {
+				// Buscar la tabla de la sección
+				var $taula = $seccio.find('table').first();
+				
+				if ($taula.length > 0) {
+					// Crear contenedor flex para el título
+					$titol.css({
+						'display': 'flex',
+						'justify-content': 'space-between',
+						'align-items': 'center',
+						'cursor': 'pointer',
+						'padding': '5px 10px',
+						'margin-bottom': '10px'
+					});
+					
+					// Crear botón de colapsar/expandir
+					var $btnToggle = $('<i>', {
+						class: 'fas fa-chevron-up',
+						style: 'cursor: pointer; transition: transform 0.3s ease; font-size: 1rem; margin-left: 10px;',
+						title: 'Mostrar/Ocultar sección'
+					});
+					
+					// Envolver el texto del título en un span si no está envuelto ya
+					var titolText = $titol.html();
+					$titol.html('<span style="flex: 1;">' + titolText + '</span>');
+					
+					// Añadir el botón al título
+					$titol.append($btnToggle);
+					
+					// Funcionalidad de toggle
+					$titol.on('click', function(e) {
+						e.preventDefault();
+						$taula.slideToggle(300);
+						
+						// Cambiar el icono
+						if ($btnToggle.hasClass('fa-chevron-up')) {
+							$btnToggle.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+						} else {
+							$btnToggle.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+						}
+					});
+				}
+			}
+		});
+	});
+</script>
+
+<style>
+	/* Estilos para las secciones colapsables */
+	[id^="seccio_"] > label,
+	[id^="seccio_"] > h4, 
+	[id^="seccio_"] > h3, 
+	[id^="seccio_"] > h2 {
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+	}
+	
+	[id^="seccio_"] > label:hover,
+	[id^="seccio_"] > h4:hover, 
+	[id^="seccio_"] > h3:hover, 
+	[id^="seccio_"] > h2:hover {
+		opacity: 0.85;
+		background-color: rgba(0, 0, 0, 0.02);
+	}
+</style>
+
 

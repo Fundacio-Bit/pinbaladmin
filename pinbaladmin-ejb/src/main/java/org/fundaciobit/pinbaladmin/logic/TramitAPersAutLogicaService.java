@@ -30,8 +30,4 @@ public interface TramitAPersAutLogicaService extends TramitAPersAutService {
 
     public SolicitudJPA crearSolicitudAmbTramit(Long tramitID) throws I18NException;
 
-	void setOrganGestorProperties(Long organID, Properties prop) throws I18NException;
-	
-    
-
 }

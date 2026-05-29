@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
-import org.fundaciobit.pinbaladmin.back.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.PinbalAdminDaoManager;
 import org.fundaciobit.pinbaladmin.model.dao.IFitxerManager;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;

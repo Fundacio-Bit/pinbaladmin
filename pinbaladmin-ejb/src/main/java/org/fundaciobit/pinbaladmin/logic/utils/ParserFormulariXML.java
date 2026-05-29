@@ -87,27 +87,27 @@ public class ParserFormulariXML {
     data.put("data", new Date());
     
     
-    String cp = props.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
-    if (cp == null || cp.trim().length() == 0 ) {
-      cp = "";
-    }
-    data.put("cp", cp);
-    
-    
-    String entorn = props.getProperty("FORMULARIO.DATOS_SOLICITUD.LDAENTORNOCULTO");
-    if (entorn.indexOf("Producció") == -1) {
-      data.put("produccion", false);
-    } else { 
-      data.put("produccion", true);
-    }
-    
-    System.out.println("entorn.indexOf(Preproducción) => " + entorn.indexOf("Preproducción")); 
-    
-    if (entorn.indexOf("Preproducció") == -1) {
-      data.put("preproduccion", false);
-    } else { 
-      data.put("preproduccion", true);
-    }
+//    String cp = props.getProperty("FORMULARIO.DATOS_SOLICITUD.CP");
+//    if (cp == null || cp.trim().length() == 0 ) {
+//      cp = "";
+//    }
+//    data.put("cp", cp);
+//    
+//    
+//    String entorn = props.getProperty("FORMULARIO.DATOS_SOLICITUD.LDAENTORNOCULTO");
+//    if (entorn.indexOf("Producció") == -1) {
+//      data.put("produccion", false);
+//    } else { 
+//      data.put("produccion", true);
+//    }
+//    
+//    System.out.println("entorn.indexOf(Preproducción) => " + entorn.indexOf("Preproducción")); 
+//    
+//    if (entorn.indexOf("Preproducció") == -1) {
+//      data.put("preproduccion", false);
+//    } else { 
+//      data.put("preproduccion", true);
+//    }
 
     FileOutputStream fosPDF = new FileOutputStream(outputPDF);
     FileOutputStream fosODT = new FileOutputStream(outputOdt);

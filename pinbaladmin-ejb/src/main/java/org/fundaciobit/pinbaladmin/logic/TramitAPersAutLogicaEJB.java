@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.TipusProcediments.TipusProcedim
 import org.fundaciobit.pinbaladmin.ejb.ServeiService;
 import org.fundaciobit.pinbaladmin.ejb.TramitAPersAutEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
+import org.fundaciobit.pinbaladmin.logic.utils.GenerarDocumentsDGLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -117,6 +119,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
     protected FitxerPublicLogicaService fitxerPublicLogicaEjb;
     @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
     protected ContacteLogicaService contacteLogicaEjb;
+    
+    @EJB(mappedName = GenerarDocumentsDGLogicaService.JNDI_NAME)
+    protected GenerarDocumentsDGLogicaService generarDocumentsDGLogicaEjb;
 
     public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
 
@@ -531,7 +536,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			enviarMailSolicitant(solicitud, destinatari);
 
 			log.info("Generem documents de la sol·licitud");
-			generarDocumentsSolicitud(soliID, organid, prop);
+			generarDocumentsDGLogicaEjb.generarFormulariDirectorGeneralPDFODT(soliID);
+
+//			generarDocumentsSolicitud(soliID, organid, prop);
 			
 			log.info("Afegim document de consentiment");
 			Fitxer docConsentiment = afegirDocumentConsentiment(fitxerConsentimentID, solicitud);
@@ -563,17 +570,17 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
         
     }
-
-    private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
-    
-        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
-
-        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
-
-        documentSolicitudLogicEjb.create(ds);
-        log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
-
-    }
+//
+//    private void afegirDocumentSolicitudAmbFitxer(FitxerJPA fitxer, String nom, Long tipus, Long soliID) throws I18NException  {
+//    
+//        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+//
+//        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), soliID);
+//
+//        documentSolicitudLogicEjb.create(ds);
+//        log.info("Afegit document: " + nom + " a la solicitud: " + soliID );
+//
+//    }
 
     private Fitxer afegirDocumentConsentiment(Long fitxerConsentimentID, SolicitudJPA soli) throws I18NException {
 
@@ -774,112 +781,6 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		return msg;
 	}
 
-	public void generarDocumentsSolicitud(Long solicitudID, Long organID, Properties prop) throws Exception, I18NException {
-		
-		setOrganGestorProperties(organID, prop);		
-		
-		File outputPDF = File.createTempFile("pinbaladmin_formulari", ".pdf");
-		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
-
-		File plantilla = new File(Configuracio.getTemplateFormulari());
-
-		ParserFormulariXML.creaDocFormulari(prop, plantilla, outputPDF, outputODT);
-
-		{
-			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.pdf", outputPDF.length(), "application/pdf",
-					"");
-
-			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
-			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (PDF)", tipus, solicitudID);
-
-			FileSystemManager.sobreescriureFitxer(outputPDF, fitxer.getFitxerID());
-		}
-
-		{
-			FitxerJPA fitxer = new FitxerJPA("Formulario_Director_General.odt", outputODT.length(),
-					"application/vnd.oasis.opendocument.text", "");
-
-			fitxer = (FitxerJPA) fitxerPublicLogicaEjb.create(fitxer);
-
-			FileSystemManager.sobreescriureFitxer(outputODT, fitxer.getFitxerID());
-
-			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
-			afegirDocumentSolicitudAmbFitxer(fitxer, "Formulario_Director_General (ODT)", tipus, solicitudID);
-		}
-	}
-
-	@Override
-	public void setOrganGestorProperties(Long organID, Properties prop) throws I18NException {
-		String denomincaion;
-		String cif;
-		String UR;
-		String dir3UR;
-		String dir3Raiz;
-
-		/*
-		 * Denominació: Organ Gestor
-		 * CIF: Primer CIF que trobi cercant als pares.
-		 * Unitat Responsable: Si el CIF es el de Govern, posar DGTIC, sino, la del CIF trobat.
-		 * DIR3 RESPONSABLE: DIR3 UR
-		 * DIR3 RAIZ: Dir3 pare mes alt.
-		 */
-		
-		Organ organGestor = organLogicaEjb.findByPrimaryKey(organID);
-		Organ unitatResponsable = null; 
-		Organ arrel = null; 
-
-		Organ organTest = organGestor;
-		boolean end = false;
-		while (!end) {
-			if (unitatResponsable == null && organTest.getCif() != null) {
-				unitatResponsable = organTest;
-			}
-			if (arrel == null && organTest.getDir3pare() == null) {
-				arrel = organTest;
-			}
-			
-			if (organTest.getDir3pare() != null) {
-				List<Organ> pares = organLogicaEjb.select(OrganFields.DIR3.equal(organTest.getDir3pare()));
-				organTest = pares.get(0);
-			}else {
-				end = true;
-			}
-		}
-		
-		
-		denomincaion = organGestor.getNom();
-		cif = unitatResponsable.getCif();
-		
-		if (arrel.getCif().equals("S0711001H")) {
-			String dir3Dgtic = "A04027005";
-			List<Organ> organs = organLogicaEjb.select(OrganFields.DIR3.equal(dir3Dgtic));
-			if (organs.size() == 1) {
-				Organ dgtic = organs.get(0);
-				unitatResponsable = dgtic;
-			}
-		}
-		
-		UR = unitatResponsable.getNom();
-		dir3UR = unitatResponsable.getDir3();
-		
-		dir3Raiz = arrel.getDir3();
-
-		log.info("denomincaion: " + denomincaion);
-		log.info("cif: " + cif);
-		log.info("UR: " + UR);
-		log.info("dir3UR: " + dir3UR);
-		log.info("dir3Raiz: " + dir3Raiz);
-
-		prop.setProperty("DENOMINACION", denomincaion);
-		prop.setProperty("CIF", cif);
-		prop.setProperty("UNIDAD_RESPONSABLE", UR);
-		prop.setProperty("DIR3_UR", dir3UR);
-		prop.setProperty("DIR3_RAIZ", dir3Raiz);
-	}
-
-
     public void generarExcelDeServeis(SolicitudJPA soli, Fitxer docConsentiment) throws Exception, I18NException {
 
         Long solicitudID = soli.getSolicitudID();
@@ -909,7 +810,15 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 			FileSystemManager.crearFitxer(new ByteArrayInputStream(data), fitxer.getFitxerID());
 
 			Long tipus = Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS;
-			afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
+			
+	        Document doc = documentLogicaEjb.create(nom, fitxer.getFitxerID(), null, null, tipus);
+
+	        DocumentSolicitudJPA ds = new DocumentSolicitudJPA(doc.getDocumentID(), solicitudID);
+
+	        documentSolicitudLogicEjb.create(ds);
+	        log.info("Afegit document: " + nom + " a la solicitud: " + solicitudID );
+	        
+//			afegirDocumentSolicitudAmbFitxer(fitxer, nom, tipus, solicitudID);
 		}
     }
 
