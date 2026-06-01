@@ -15,6 +15,7 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final LongField SOLICITUDID = new LongField(_TABLE_MODEL, "solicitudID", "solicitudid");  // PK
 	 public static final StringField PROCEDIMENTCODI = new StringField(_TABLE_MODEL, "procedimentCodi", "procedimentcodi");
 	 public static final StringField CODIDESCRIPTIU = new StringField(_TABLE_MODEL, "codiDescriptiu", "codidescriptiu");
+	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "notes");
 	 public static final StringField CODISIACONV = new StringField(_TABLE_MODEL, "codiSiaConv", "codisiaconv");
 	 public static final StringField PROCEDIMENTNOM = new StringField(_TABLE_MODEL, "procedimentNom", "procedimentnom");
 	 public static final StringField PROCEDIMENTTIPUS = new StringField(_TABLE_MODEL, "procedimentTipus", "procedimenttipus");
@@ -25,7 +26,6 @@ public interface SolicitudFields extends java.io.Serializable {
 	 public static final StringField PINFO = new StringField(_TABLE_MODEL, "pinfo", "pinfo");
 	 public static final TimestampField DATAINICI = new TimestampField(_TABLE_MODEL, "dataInici", "datainici");
 	 public static final TimestampField DATAFI = new TimestampField(_TABLE_MODEL, "dataFi", "datafi");
-	 public static final StringField NOTES = new StringField(_TABLE_MODEL, "notes", "estat");
 	 public static final LongField DOCUMENTSOLICITUDID = new LongField(_TABLE_MODEL, "documentSolicitudID", "documentsolicitudid");
 	 public static final LongField SOLICITUDXMLID = new LongField(_TABLE_MODEL, "solicitudXmlID", "solicitudxmlid");
 	 public static final BooleanField FIRMATDOCSOLICITUD = new BooleanField(_TABLE_MODEL, "firmatDocSolicitud", "firmatdocsolicitud");
@@ -64,6 +64,7 @@ public interface SolicitudFields extends java.io.Serializable {
     SOLICITUDID,
     PROCEDIMENTCODI,
     CODIDESCRIPTIU,
+    NOTES,
     CODISIACONV,
     PROCEDIMENTNOM,
     PROCEDIMENTTIPUS,
@@ -74,7 +75,6 @@ public interface SolicitudFields extends java.io.Serializable {
     PINFO,
     DATAINICI,
     DATAFI,
-    NOTES,
     DOCUMENTSOLICITUDID,
     SOLICITUDXMLID,
     FIRMATDOCSOLICITUD,

@@ -302,6 +302,13 @@
 				var $taula = $seccio.find('table').first();
 				
 				if ($taula.length > 0) {
+					// Envolver la tabla en un div para que slideToggle funcione correctamente
+					// (slideToggle no funciona bien directamente sobre elementos table)
+					if (!$taula.parent().hasClass('seccio-content-wrapper')) {
+						$taula.wrap('<div class="seccio-content-wrapper"></div>');
+					}
+					var $wrapper = $taula.parent('.seccio-content-wrapper');
+					
 					// Crear contenedor flex para el título
 					$titol.css({
 						'display': 'flex',
@@ -329,7 +336,7 @@
 					// Funcionalidad de toggle
 					$titol.on('click', function(e) {
 						e.preventDefault();
-						$taula.slideToggle(300);
+						$wrapper.slideToggle(500);
 						
 						// Cambiar el icono
 						if ($btnToggle.hasClass('fa-chevron-up')) {
@@ -362,6 +369,11 @@
 	[id^="seccio_"] > h2:hover {
 		opacity: 0.85;
 		background-color: rgba(0, 0, 0, 0.02);
+	}
+	
+	/* Wrapper para permitir slideToggle en tablas */
+	.seccio-content-wrapper {
+		overflow: hidden;
 	}
 </style>
 

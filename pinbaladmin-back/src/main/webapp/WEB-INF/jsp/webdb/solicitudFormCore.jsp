@@ -38,6 +38,45 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.NOTES)}">
+        <tr id="solicitud_notes_rowid">
+          <td id="solicitud_notes_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[SolicitudFields.NOTES])?'solicitud.notes':__theForm.labels[SolicitudFields.NOTES]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[SolicitudFields.NOTES]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.NOTES]}" ></i>
+              </c:if>
+            </td>
+          <td id="solicitud_notes_columnvalueid">
+              <form:errors path="solicitud.notes" cssClass="errorField alert alert-danger" />
+  <table style="width:100%">
+  <tr>
+  <td>
+       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.NOTES)? 'true' : 'false'}" path="solicitud.notes"  />
+   </td>
+   <td style="width:40px">
+      <div id="dropdownMenuButton_notes" style="vertical-align:top;display:inline;position:relative;">
+        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
+        <div id="dropdownMenuContainer_notes" class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='off';" >No Wrap</a>
+          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='soft';">Soft Wrap</a>
+          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='hard';">Hard Wrap</a>
+        </div>
+      </div>
+      <script type="text/javascript">
+			$('#dropdownMenuButton_notes').on('click', function(){
+					var valor = ($('#dropdownMenuContainer_notes').css('display') != 'none') ? 'none' : 'block';
+                 $('#dropdownMenuContainer_notes').css('display', valor);
+                 return false;
+				});
+      </script>   </td>
+   </tr>
+   </table>
+           </td>
+        </tr>
+        </c:if>
+        
         <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.CODISIACONV)}">
         <tr id="solicitud_codiSiaConv_rowid">
           <td id="solicitud_codiSiaConv_columnlabelid">
@@ -329,45 +368,6 @@
                 });
             });
         </script>           </td>
-        </tr>
-        </c:if>
-        
-        <c:if test="${!gen:contains(__theForm.hiddenFields,SolicitudFields.NOTES)}">
-        <tr id="solicitud_notes_rowid">
-          <td id="solicitud_notes_columnlabelid">
-            <label>
-              <fmt:message key="${(empty __theForm.labels[SolicitudFields.NOTES])?'solicitud.notes':__theForm.labels[SolicitudFields.NOTES]}" />
-             </label>
-              <c:if test="${not empty __theForm.help[SolicitudFields.NOTES]}">
-              <i class="fas fa-info-circle" title="${__theForm.help[SolicitudFields.NOTES]}" ></i>
-              </c:if>
-            </td>
-          <td id="solicitud_notes_columnvalueid">
-              <form:errors path="solicitud.notes" cssClass="errorField alert alert-danger" />
-  <table style="width:100%">
-  <tr>
-  <td>
-       <form:textarea rows="3" wrap="soft" style="overflow:auto;display: inline;resize:both;" cssClass="form-control col-md-9-optional" readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudFields.NOTES)? 'true' : 'false'}" path="solicitud.notes"  />
-   </td>
-   <td style="width:40px">
-      <div id="dropdownMenuButton_notes" style="vertical-align:top;display:inline;position:relative;">
-        <button  class="btn btn-secondary btn-sm dropdown-toggle" type="button" style="margin-left:0px;"><span class="caret"></span></button>
-        <div id="dropdownMenuContainer_notes" class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='off';" >No Wrap</a>
-          <a class="dropdown-item"  href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='soft';">Soft Wrap</a>
-          <a class="dropdown-item" href="#" onclick="javascript:var ta=document.getElementById('solicitud.notes'); ta.wrap='hard';">Hard Wrap</a>
-        </div>
-      </div>
-      <script type="text/javascript">
-			$('#dropdownMenuButton_notes').on('click', function(){
-					var valor = ($('#dropdownMenuContainer_notes').css('display') != 'none') ? 'none' : 'block';
-                 $('#dropdownMenuContainer_notes').css('display', valor);
-                 return false;
-				});
-      </script>   </td>
-   </tr>
-   </table>
-           </td>
         </tr>
         </c:if>
         

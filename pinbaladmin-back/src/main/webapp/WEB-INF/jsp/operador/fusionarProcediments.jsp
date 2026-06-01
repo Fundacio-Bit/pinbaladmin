@@ -113,13 +113,6 @@
 	margin-left: 0.5rem;
 }
 
-.results {
-	/* 	display: flex;
-	flex-direction: column;
- */
-	
-}
-
 .tdConsentiment {
 	max-width: 300px;
 	white-space: normal;
@@ -341,7 +334,7 @@ function refrescarAutocompleteHighlight() {
 
 $("#btnFusionar").click(function() {
 	    if(seleccionats.length < 2){
-	        alert("Selecciona almenys dos procediments per fusionar");
+	        alert(MSG_SELECCIONAR_MINIMO_DOS);
 	        return;
 	    }
 
@@ -350,14 +343,14 @@ $("#btnFusionar").click(function() {
 	    $.ajax({
 	        url: "<%=request.getContextPath()%>${contexte}/detallesFusion",
 	        type: "POST",
-	        data: { ids: ids.join(",") }, // 3333,4444
+	        data: { ids: ids.join(",") },
 	        success: function(data){
 	            construirModalFusion(data);
 	            $("#fusionModal").modal("show");
 	        },
 	        error: function(xhr,status,error){
-	            console.error("Error:", error);
-	            alert("No se pudieron cargar los detalles.");
+	            console.error("Error al cargar detalles:", error);
+	            alert(MSG_ERROR_CARGAR_DETALLES);
 	        }
 	    });
 
@@ -371,45 +364,25 @@ $("#btnFusionar").click(function() {
 	mapLabels.set("procedimentNom", "<fmt:message key='solicitud.procedimentNom'/>");
 	mapLabels.set("procedimentTipus", "<fmt:message key='solicitud.procedimentTipus'/>");
 	mapLabels.set("dataInici", "<fmt:message key='solicitud.dataInici'/>");
-	mapLabels.set("personaContacte", "<fmt:message key='solicitud.personaContacte'/>");
-	mapLabels.set("personaContacteEmail", "<fmt:message key='solicitud.personaContacteEmail'/>");
-	mapLabels.set("responsableProcNom", "<fmt:message key='solicitud.responsableProcNom'/>");
-	mapLabels.set("responsableProcEmail", "<fmt:message key='solicitud.responsableProcEmail'/>");
-	
-	/*
-	
-			private String titularFirmaNIF;
-		private String titularFirmaNom;
-		
-		private String entitatNom;
-		private String entitatCif;
-		private String entitatDir3;
-		*/
-		
-	mapLabels.set("titularFirmaNIF", "<fmt:message key='solicitud.titularFirmaNif'/>");
-	mapLabels.set("titularFirmaNom", "<fmt:message key='solicitud.titularFirmaNom'/>");
-	mapLabels.set("titularFirmaEmail", "<fmt:message key='solicitud.titularFirmaEmail'/>");
-	mapLabels.set("titularFirmaLlinatges", "<fmt:message key='solicitud.titularFirmaLlinatges'/>");
-	
-	
 	mapLabels.set("entitatNom", "<fmt:message key='solicitud.denominacio'/>");
 	mapLabels.set("entitatCif", "<fmt:message key='solicitud.nif'/>");
 	mapLabels.set("entitatDir3", "<fmt:message key='solicitud.dir3'/>");
-		
 	mapLabels.set("dataCaducitat", "<fmt:message key='solicitud.dataCaducitat'/>");
-	
 	mapLabels.set("creador", "<fmt:message key='solicitud.creador'/>");
 	mapLabels.set("operador", "<fmt:message key='solicitud.operador'/>");
-	
-	
 	mapLabels.set("consentiment", "<fmt:message key='solicitud.consentiment'/>");
-	mapLabels.set("urlconsentiment", "<fmt:message key='solicitud.urlconsentiment'/>");
-	mapLabels.set("consentimentadjunt", "<fmt:message key='solicitud.consentimentadjunt'/>");
 	mapLabels.set("organid", "<fmt:message key='solicitud.organid'/>");
 	mapLabels.set("estatSolicitud", "<fmt:message key='solicitud.estatSolicitud'/>");
 	mapLabels.set("estatpinbal", "<fmt:message key='solicitud.estatpinbal'/>");
 	mapLabels.set("servicios", "<fmt:message key='solicitud.servicios'/>");
 	mapLabels.set("documentos", "<fmt:message key='solicitud.documentos'/>");
+	
+	// Contactos
+	mapLabels.set("contacteTitular", "<fmt:message key='solicitud.contacteTitularID'/>");
+	mapLabels.set("contacteSolicitant", "<fmt:message key='solicitud.contacteSolicitantID'/>");
+	mapLabels.set("contacteGestAut", "<fmt:message key='solicitud.contacteGestAutID'/>");
+	mapLabels.set("contacteAuditoria", "<fmt:message key='solicitud.contacteAuditoriaID'/>");
+	mapLabels.set("contacteTecnic", "<fmt:message key='solicitud.contacteTecnicID'/>");
 	
 	const mapLabelsConsentiment = new Map();
 	mapLabelsConsentiment.set("tipus", "<fmt:message key='consentiment.tipus'/>");
@@ -417,6 +390,10 @@ $("#btnFusionar").click(function() {
 	mapLabelsConsentiment.set("nomFitxer", "<fmt:message key='consentiment.nomFitxer'/>");
 	
 	const ESTAT_PENDENT_REVISAR = "<fmt:message key='solicitud.estat.100'/>";
+	const MSG_ERROR_CARGAR_DETALLES = "<fmt:message key='error.fusionar.cargar.detalles'/>";
+	const MSG_CONFIRMAR_FUSION = "<fmt:message key='confirmar.fusion.mensaje'/>";
+	const MSG_SELECCIONAR_MINIMO_DOS = "<fmt:message key='error.fusionar.minimo.dos'/>";
+	const MSG_SENSE_DADES_CONSENTIMENT = "<fmt:message key='consentiment.sense.dades'/>";
 	
     function construirModalFusion(procs){
         const tbody = $("#fusionCamposTable tbody").empty();
@@ -430,9 +407,8 @@ $("#btnFusionar").click(function() {
 			todosLosCampos = todosLosCampos.concat(Object.keys(proc));
 	    });
 		
-        const campos = [...new Set(todosLosCampos)].filter(k => !["servicios","documentos","solicitudID", "codiSiaConv", "consentiment"].includes(k));
-  	      
-//        const campos = Object.keys(procs[0]).filter(k => !["servicios","documentos","solicitudID", "codiSiaConv", "consentiment"].includes(k));
+        const campos = [...new Set(todosLosCampos)].filter(k => !["servicios","documentos","solicitudID", "codiSiaConv", "consentiment", 
+        	"contacteTitular", "contacteSolicitant", "contacteGestAut", "contacteAuditoria", "contacteTecnic"].includes(k));
 
         // Cabeceras de procedimientos
         const ths = procs.map(p => p.procedimentCodi + " [" + p.solicitudID + "]");
@@ -513,13 +489,22 @@ $("#btnFusionar").click(function() {
 			procs.forEach(proc => {
 		
                 var consentiment = proc.consentiment;
-                var html = "<b>SolicitudID: " + consentiment.solicitudID +  "</b><br> Tipus: " + (consentiment.tipus || "");
+                var html = "<b>SolicitudID: " + consentiment.solicitudID +  "</b>";
+                
+                if(consentiment.tipus){
+                	html += "<br>Tipus: " + consentiment.tipus;
+                }
+                
                 if(consentiment.url){
-                	html +=  "<br>" + "URL: " + (consentiment.url || "");
+                	html += "<br>URL: " + consentiment.url;
                 }
                 
                 if(consentiment.nomFitxer){
-                	html +=  "<br>" + "Fitxer: " + (consentiment.nomFitxer || "");
+                	html += "<br>Fitxer: " + consentiment.nomFitxer;
+                }
+                
+                if(!consentiment.tipus && !consentiment.url && !consentiment.nomFitxer){
+                	html += "<br><i>" + MSG_SENSE_DADES_CONSENTIMENT + "</i>";
                 }
                 
                 tr.append($("<td class='tdConsentiment'>").html(html));
@@ -554,20 +539,68 @@ $("#btnFusionar").click(function() {
 			
 		}
 		
+		// CONTACTOS - Función auxiliar para renderizar contactos
+		function renderContacteRow(label, fieldName, procs) {
+			const tr = $("<tr>");
+			tr.append($("<td>").text(label));
+			
+			// Mostrar los datos de cada contacto por procedimiento
+			procs.forEach(proc => {
+				const contacte = proc[fieldName];
+				let html = "";
+				if (contacte && contacte.contacteID) {
+					html = "<b>" + (contacte.nombreCompleto || "") + "</b>";
+					if (contacte.nif) html += "<br>NIF: " + contacte.nif;
+					if (contacte.mail) html += "<br>Email: " + contacte.mail;
+					if (contacte.telefon) html += "<br>Tel: " + contacte.telefon;
+					if (contacte.carrec) html += "<br>Cargo: " + contacte.carrec;
+				} else {
+					html = "<i>No definido</i>";
+				}
+				tr.append($("<td class='tdConsentiment'>").html(html));
+			});
+			
+			// Radios para elegir
+			const contacteIDs = [];
+			procs.forEach(p => {
+				const contacte = p[fieldName];
+				if (contacte && contacte.contacteID && !contacteIDs.some(c => c.id === contacte.contacteID)) {
+					contacteIDs.push({ id: contacte.contacteID, solicitudID: contacte.solicitudID, nombre: contacte.nombreCompleto || "Sin nombre" });
+				}
+			});
+			
+			const tdResult = $("<td>");
+			contacteIDs.forEach((contacte, idx) => {
+				const radio = $("<input type='radio'>")
+					.attr("name", fieldName)
+					.val(contacte.id);
+				if (idx === 0) radio.prop("checked", true);
+				const label = $("<label class='me-2'>")
+					.append(radio)
+					.append(" [" + contacte.solicitudID + "] " + contacte.nombre);
+				const div = $("<div class='option'>").append(label);
+				tdResult.append(div);
+			});
+			
+			// Si no hay contactos, poner opción "Ninguno"
+			if (contacteIDs.length === 0) {
+				tdResult.html("<i>Ningún contacto disponible</i>");
+			}
+			
+			tr.append(tdResult);
+			tbody.append(tr);
+		}
+		
+		// Renderizar todos los contactos
+		renderContacteRow(mapLabels.get("contacteTitular"), "contacteTitular", procs);
+		renderContacteRow(mapLabels.get("contacteSolicitant"), "contacteSolicitant", procs);
+		renderContacteRow(mapLabels.get("contacteGestAut"), "contacteGestAut", procs);
+		renderContacteRow(mapLabels.get("contacteAuditoria"), "contacteAuditoria", procs);
+		renderContacteRow(mapLabels.get("contacteTecnic"), "contacteTecnic", procs);
 		
 		
 		
-		//IDs de solicitud:
-		const idsMap = {};
-	    procs.forEach(proc=>{
-               idsMap[proc.solicitudID]=proc.solicitudID;
-           });
-           const idsContainer = $("#fusionIdsContainer").empty();
-           for(const [id] of Object.entries(idsMap)){
-               const chk = $("<input type='checkbox' checked>").attr("data-id",id);
-               idsContainer.append($("<label class='me-3 id-item'>").append(chk).append(" " + id));
-           }
-
+		
         // Servicios: unión sin repetición
         const serviciosMap = {};
         procs.forEach(proc=>{
@@ -623,57 +656,59 @@ $("#btnFusionar").click(function() {
     
     
     $("#btnConfirmFusion").click(function(){
-        const resultado = {
-            fusionados: seleccionats.map(p=>p.id),
-            campos:{},
-            servicios:[],
-            documentos:[]
-        };
-
-        // Campos finales según radio buttons
-        const campos = $("#fusionCamposTable tbody tr td:first-child").map((i,td)=>$(td).text()).get();
-        campos.forEach(campo=>{
-        	// En tu recogida de campos
-        	const val = $("#fusionCamposTable input[name='campo_" + campo + "']:checked").data("valor");
-        	resultado.campos[campo] = val || "";
-
-        });
-
+        // Validar servicios seleccionados
+        const servicios = [];
         $("#fusionServiciosContainer input:checked").each(function(){
-            resultado.servicios.push(parseInt($(this).attr("data-id")));
+            servicios.push(parseInt($(this).attr("data-id")));
         });
+        
+        if(servicios.length === 0){
+            alert("<fmt:message key='error.fusionar.servicios.requeridos'/>");
+            return;
+        }
+        
+        // Validar contactos críticos (titular y solicitante)
+        const contacteTitular = $("input[name='contacteTitular']:checked").val();
+        const contacteSolicitant = $("input[name='contacteSolicitant']:checked").val();
+        
+        if(!contacteTitular){
+            alert("<fmt:message key='error.fusionar.contacte.titular.requerido'/>");
+            return;
+        }
+        
+        if(!contacteSolicitant){
+            alert("<fmt:message key='error.fusionar.contacte.solicitante.requerido'/>");
+            return;
+        }
+        
+        // Confirmación antes de proceder
+        const numProcs = seleccionats.length;
+        const mensaje = MSG_CONFIRMAR_FUSION.replace("{0}", numProcs);
+        if(!confirm(mensaje)){
+            return;
+        }
+        
+        // Recoger IDs de procedimientos fusionados
+        $("#fusionadosInput").val(seleccionats.map(p => p.id).join(","));
+        
+        // Recoger servicios seleccionados
+        $("#serviciosInput").val(servicios.join(","));
 
+        // Recoger documentos seleccionados
+        const documentos = [];
         $("#fusionDocumentosContainer input:checked").each(function(){
-            resultado.documentos.push(parseInt($(this).attr("data-id")));
+            documentos.push(parseInt($(this).attr("data-id")));
         });
+        $("#documentosInput").val(documentos.join(","));
 
-        console.log("Datos para enviar al backend:",resultado);
+        // Los campos de radio se envían automáticamente por el formulario
         
-//        alert("Simulación de fusión. Aquí enviarías los datos al controlador vía AJAX.");
-        
-        $("#fusionadosInput").val(resultado.fusionados.join(","));
-        $("#serviciosInput").val(resultado.servicios.join(","));
-        $("#documentosInput").val(resultado.documentos.join(","));
-
-        $("#fusionForm").submit()
-
+        $("#fusionForm").submit();
         $("#fusionModal").modal("hide");
     });
-    
-    
-    //Añadir evento para cerrar el formulario pulsando en close.
     
     $("#fusionModal .btn-close").click(function(){
     	$("#fusionModal").modal("hide");
     });
-    
-
-/*     $("#fusionForm").on("submit", function(e) {
-        // Guardar arrays en los hidden inputs como strings separados por coma
-        $("#fusionadosInput").val(seleccionats.map(p => p.id).join(","));
-        $("#serviciosInput").val(serviciosSeleccionados.join(","));
-        $("#documentosInput").val(documentosSeleccionados.join(","));
-    });
- */    
 
 </script>

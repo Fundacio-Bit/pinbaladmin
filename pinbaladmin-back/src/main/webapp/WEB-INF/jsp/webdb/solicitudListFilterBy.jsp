@@ -94,6 +94,19 @@
 
 
         </c:if>
+        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.NOTES)}">
+            <%-- FILTRE STRING --%>
+            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
+              <fmt:message key="solicitud.notes" var="notes" />
+              <fmt:message key="genapp.form.searchby" var="cercapernotes" >                
+                 <fmt:param value="${notes}"/>
+              </fmt:message>
+              <span class="add-on"><c:out value="${notes}" />:</span>
+              <form:input cssClass="search-query input-medium" placeholder="${cercapernotes}" path="notes" />
+            </div>
+
+
+        </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.CODISIACONV)}">
             <%-- FILTRE STRING --%>
             <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
@@ -316,19 +329,6 @@
         </script>            </div>
 
     
-        </c:if>
-        <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.NOTES)}">
-            <%-- FILTRE STRING --%>
-            <div class="input-prepend" style="padding-right: 4px;padding-bottom: 4px;">
-              <fmt:message key="solicitud.notes" var="notes" />
-              <fmt:message key="genapp.form.searchby" var="cercapernotes" >                
-                 <fmt:param value="${notes}"/>
-              </fmt:message>
-              <span class="add-on"><c:out value="${notes}" />:</span>
-              <form:input cssClass="search-query input-medium" placeholder="${cercapernotes}" path="notes" />
-            </div>
-
-
         </c:if>
         <c:if test="${gen:contains(__theFilterForm.filterByFields ,SolicitudFields.FIRMATDOCSOLICITUD)}">
             <div class="input-group" style="padding-right: 4px;padding-bottom: 4px;">

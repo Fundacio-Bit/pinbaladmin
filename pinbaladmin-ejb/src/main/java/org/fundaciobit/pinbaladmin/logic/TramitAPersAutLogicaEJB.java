@@ -514,9 +514,9 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
         String codiSiaConv = procedimentCodi;
 
 
-		SolicitudJPA soliJpa = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
+		SolicitudJPA soliJpa = new SolicitudJPA(procedimentCodi, codiDescriptiu, notesSoli, codiSiaConv, procedimentNom,
 				procedimentTipus, organid, estatID, expedientPid, entitatEstatal, pinfo, dataInici, dataInici,
-				notesSoli, docSoliID, solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel,
+				 docSoliID, solicitudXmlID, firmatDocSolicitud, produccio, denominacio, dir3arrel, nifArrel,
 				creador, operador, estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID,
 				infoMadridID, dataCaducitat, fitxerConsentimentID, contacteTitularID, solicitudFusionadaID,
 				contacteResponsableID, contactePersonaID, contacteSolicitantID, contacteGestAutID, contacteAuditoriaID,

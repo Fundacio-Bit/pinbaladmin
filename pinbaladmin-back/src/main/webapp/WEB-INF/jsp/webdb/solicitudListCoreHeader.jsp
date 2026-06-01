@@ -21,6 +21,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CODIDESCRIPTIU)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CODIDESCRIPTIU)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NOTES)}">
+        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.NOTES)}</th>
+        </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.CODISIACONV)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.CODISIACONV)}</th>
         </c:if>
@@ -50,9 +53,6 @@
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DATAFI)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DATAFI)}</th>
-        </c:if>
-        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.NOTES)}">
-        <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.NOTES)}</th>
         </c:if>
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,SolicitudFields.DOCUMENTSOLICITUDID)}">
         <th>${pad:getSortIcons(__theFilterForm,SolicitudFields.DOCUMENTSOLICITUDID)}</th>

@@ -46,7 +46,6 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.CrearExcelDeServeis;
 import org.fundaciobit.pinbaladmin.logic.utils.GenerarDocumentsDGLogicaService;
-import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
@@ -350,6 +349,118 @@ public class FusionarProcedimentsOperadorController {
 		
 	}
 
+	public class ContacteDTO {
+		private Long contacteID;
+		private Long solicitudID;
+		private String nif;
+		private String nom;
+		private String llinatge1;
+		private String llinatge2;
+		private String carrec;
+		private String telefon;
+		private String mail;
+		private String nombreCompleto;
+
+		public ContacteDTO(Long contacteID, Long solicitudID) {
+			this.solicitudID = solicitudID;
+			this.contacteID = contacteID;
+			
+			if (contacteID != null) {
+				Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteID);
+				if (contacte != null) {
+					this.nif = contacte.getNif();
+					this.nom = contacte.getNom();
+					this.llinatge1 = contacte.getLlinatge1();
+					this.llinatge2 = contacte.getLlinatge2();
+					this.carrec = contacte.getCarrec();
+					this.telefon = contacte.getTelefon();
+					this.mail = contacte.getMail();
+					this.nombreCompleto = contacte.getNombrecompleto();
+				}
+			}
+		}
+
+		public Long getContacteID() {
+			return contacteID;
+		}
+
+		public void setContacteID(Long contacteID) {
+			this.contacteID = contacteID;
+		}
+
+		public Long getSolicitudID() {
+			return solicitudID;
+		}
+
+		public void setSolicitudID(Long solicitudID) {
+			this.solicitudID = solicitudID;
+		}
+
+		public String getNif() {
+			return nif;
+		}
+
+		public void setNif(String nif) {
+			this.nif = nif;
+		}
+
+		public String getNom() {
+			return nom;
+		}
+
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+
+		public String getLlinatge1() {
+			return llinatge1;
+		}
+
+		public void setLlinatge1(String llinatge1) {
+			this.llinatge1 = llinatge1;
+		}
+
+		public String getLlinatge2() {
+			return llinatge2;
+		}
+
+		public void setLlinatge2(String llinatge2) {
+			this.llinatge2 = llinatge2;
+		}
+
+		public String getCarrec() {
+			return carrec;
+		}
+
+		public void setCarrec(String carrec) {
+			this.carrec = carrec;
+		}
+
+		public String getTelefon() {
+			return telefon;
+		}
+
+		public void setTelefon(String telefon) {
+			this.telefon = telefon;
+		}
+
+		public String getMail() {
+			return mail;
+		}
+
+		public void setMail(String mail) {
+			this.mail = mail;
+		}
+
+		public String getNombreCompleto() {
+			return nombreCompleto;
+		}
+
+		public void setNombreCompleto(String nombreCompleto) {
+			this.nombreCompleto = nombreCompleto;
+		}
+	}
+
 	public class ConsentimentDTO {
 		private Long fitxerID;
 		private String nomFitxer;
@@ -367,7 +478,12 @@ public class FusionarProcedimentsOperadorController {
 				}
 			}
 
-			this.tipus = I18NUtils.tradueix("consentiment.tipus." + soli.getConsentiment());
+			// Validar que el consentimiento no sea null antes de traducir
+			if (soli.getConsentiment() != null) {
+				this.tipus = I18NUtils.tradueix("consentiment.tipus." + soli.getConsentiment());
+			} else {
+				this.tipus = null;
+			}
 
 			this.solicitudID = soli.getSolicitudID();
 			this.url = soli.getUrlconsentiment();
@@ -454,6 +570,13 @@ public class FusionarProcedimentsOperadorController {
 		private List<DocumentDTO> documentos;
 
 		private ConsentimentDTO consentiment;
+		
+		// Contactos
+		private ContacteDTO contacteTitular;
+		private ContacteDTO contacteSolicitant;
+		private ContacteDTO contacteGestAut;
+		private ContacteDTO contacteAuditoria;
+		private ContacteDTO contacteTecnic;
 
 		public SolicitudFullDTO(Long solicitudID) throws I18NException {
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
@@ -511,6 +634,13 @@ public class FusionarProcedimentsOperadorController {
 			this.documentos = docsList;
 
 			this.consentiment = new ConsentimentDTO(soli);
+			
+			// Cargar contactos
+			this.contacteTitular = new ContacteDTO(soli.getContacteTitularID(), solicitudID);
+			this.contacteSolicitant = new ContacteDTO(soli.getContacteSolicitantID(), solicitudID);
+			this.contacteGestAut = new ContacteDTO(soli.getContacteGestAutID(), solicitudID);
+			this.contacteAuditoria = new ContacteDTO(soli.getContacteAuditoriaID(), solicitudID);
+			this.contacteTecnic = new ContacteDTO(soli.getContacteTecnicID(), solicitudID);
 
 		}
 
@@ -713,6 +843,46 @@ public class FusionarProcedimentsOperadorController {
         public void setConsentiment(ConsentimentDTO consentiment) {
             this.consentiment = consentiment;
         }
+
+        public ContacteDTO getContacteTitular() {
+            return contacteTitular;
+        }
+
+        public void setContacteTitular(ContacteDTO contacteTitular) {
+            this.contacteTitular = contacteTitular;
+        }
+
+        public ContacteDTO getContacteSolicitant() {
+            return contacteSolicitant;
+        }
+
+        public void setContacteSolicitant(ContacteDTO contacteSolicitant) {
+            this.contacteSolicitant = contacteSolicitant;
+        }
+
+        public ContacteDTO getContacteGestAut() {
+            return contacteGestAut;
+        }
+
+        public void setContacteGestAut(ContacteDTO contacteGestAut) {
+            this.contacteGestAut = contacteGestAut;
+        }
+
+        public ContacteDTO getContacteAuditoria() {
+            return contacteAuditoria;
+        }
+
+        public void setContacteAuditoria(ContacteDTO contacteAuditoria) {
+            this.contacteAuditoria = contacteAuditoria;
+        }
+
+        public ContacteDTO getContacteTecnic() {
+            return contacteTecnic;
+        }
+
+        public void setContacteTecnic(ContacteDTO contacteTecnic) {
+            this.contacteTecnic = contacteTecnic;
+        }
 		
 		
 		
@@ -781,11 +951,21 @@ public class FusionarProcedimentsOperadorController {
 				: Collections.emptyList();
 		log.info("Identificadores: " + fusionados);
 
+		// Validar mínimo 2 procedimientos
+		if (fusionados.size() < 2) {
+			throw new I18NException("error.fusionar.minimo.dos.procedimientos");
+		}
+
 		String serviciosParam = request.getParameter("servicios"); // "5555,6666"
 		List<Long> servicios = serviciosParam != null && !serviciosParam.isEmpty()
 				? Arrays.stream(serviciosParam.split(",")).map(Long::parseLong).collect(Collectors.toList())
 				: Collections.emptyList();
 		log.info("Servicios seleccionados: " + servicios);
+		
+		// Validar que al menos un servicio esté seleccionado
+		if (servicios.isEmpty()) {
+			throw new I18NException("error.fusionar.servicios.requeridos");
+		}
 
 		String documentosParam = request.getParameter("documentos"); // "7777,8888"
 		List<Long> documentos = documentosParam != null && !documentosParam.isEmpty()
@@ -801,6 +981,14 @@ public class FusionarProcedimentsOperadorController {
 		// ================================
 		SolicitudJPA solicitudNueva = crearSolicicitudCampos(request);
 		solicitudNueva.setOperador(request.getRemoteUser());
+		
+		// Validar contactos críticos
+		if (solicitudNueva.getContacteTitularID() == null) {
+			throw new I18NException("error.fusionar.contacte.titular.requerido");
+		}
+		if (solicitudNueva.getContacteSolicitantID() == null) {
+			throw new I18NException("error.fusionar.contacte.solicitante.requerido");
+		}
 
 		afegirConsentimentInfo(solicitudNueva, consentimientoParam);
 
@@ -957,11 +1145,6 @@ public class FusionarProcedimentsOperadorController {
 		List<String> mensajes = new ArrayList<>();
 		String mensajeFinal = "";
 
-		List<Long> estadosPinbal = new ArrayList<>();
-
-		//boolean todasEnviadas = true;
-		//boolean todasAutorizadas = true;
-
 		for (SolicitudJPA soli : solicitudes) {
 			if (soli != null && soli.getInfomadridid() != null) {
 				InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(soli.getInfomadridid());
@@ -970,11 +1153,6 @@ public class FusionarProcedimentsOperadorController {
 					log.warn("La solicitud ID " + soli.getSolicitudID() + " no tiene InfoMadrid asociado (ID "
 							+ soli.getInfomadridid() + ").");
 					continue;
-				}
-
-				Long estatPinbal = soli.getEstatpinbal();
-				if (estatPinbal != null && !estadosPinbal.contains(estatPinbal)) {
-					estadosPinbal.add(estatPinbal);
 				}
 
 				Timestamp dataAut = infoMad.getDataAutoritzacio();
@@ -986,8 +1164,6 @@ public class FusionarProcedimentsOperadorController {
 					if (dataAutFinal == null || dataAut.after(dataAutFinal)) {
 						dataAutFinal = dataAut;
 					}
-				} else {
-					//todasAutorizadas = false;
 				}
 
 				Timestamp dataEnvi = infoMad.getDataEnviament();
@@ -996,8 +1172,6 @@ public class FusionarProcedimentsOperadorController {
 					if (dataEnviFinal == null || dataEnvi.after(dataEnviFinal)) {
 						dataEnviFinal = dataEnvi;
 					}
-				} else {
-					//todasEnviadas = false;
 				}
 
 				Timestamp dataCons = infoMad.getDataConsulta();
@@ -1008,16 +1182,19 @@ public class FusionarProcedimentsOperadorController {
 					}
 				}
 
-				Long intents = infoMad.getIntents();
+					Long intents = infoMad.getIntents();
 				if (intents != null && intents > maxIntents) {
 					maxIntents = intents;
 				}
 
 				Long nouTitularInfoMadContacteID = solicitudNueva.getContacteSolicitantID();
-				Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(nouTitularInfoMadContacteID);
-				
-				titularNom = solicitant.getNombrecompleto();
-				titularNif = solicitant.getNif();
+				if (nouTitularInfoMadContacteID != null) {
+					Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(nouTitularInfoMadContacteID);
+					if (solicitant != null) {
+						titularNom = solicitant.getNombrecompleto();
+						titularNif = solicitant.getNif();
+					}
+				}
 
 				// Si el mensaje ya lo tenemos, no lo añadimos
 				if (infoMad.getMissatge() != null && !mensajes.contains(infoMad.getMissatge())) {
@@ -1046,38 +1223,6 @@ public class FusionarProcedimentsOperadorController {
 		infoMadNou.setTitularNif(titularNif);
 
 		infoMadNou.setEstatProcediment(solicitudNueva.getEstatSolicitud());
-		infoMadNou.setEstatProcediment(solicitudNueva.getEstatpinbal());
-
-//		Long estatPinbal = null;
-//
-//		if (estadosPinbal.size() == 1) {
-//			estatPinbal = estadosPinbal.get(0);
-//		} else if (estadosPinbal.size() == 0) {
-//			estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-//		} else {
-//			// Solicitudes con estados Madrid diferentes.
-//
-//			// Si hay alguna no enviada, el estado puede ser o NO_SOLICITAT (si no habia
-//			// ninguna autorizada) o AUTORITZA
-//			if (!todasEnviadas) {
-//				estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-//			} else {
-//				// Si todas están enviadas
-//			}
-//
-//			// Si la fecha de autorización es nula, y la de envio no, está pendiente de
-//			// tramitar.
-//			if (dataAutFinal == null && dataEnviFinal != null) {
-//				estatPinbal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
-//			} else if (dataAutFinal != null) {
-//				estatPinbal = Constants.ESTAT_PINBAL_AUTORITZAT;
-//			} else {
-//				estatPinbal = Constants.ESTAT_PINBAL_NO_SOLICITAT;
-//			}
-//
-//		}
-//
-//		infoMadNou.setEstatAutoritzacio(estatPinbal);
 
 		infoMadNou.setMissatge(mensajeFinal);
 
@@ -1126,11 +1271,11 @@ public class FusionarProcedimentsOperadorController {
 			// Gestión de documentos.
 			generarNousDocumentsSolicitud(solicitudNueva, fusionados, documentos);
 		} catch (I18NException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error I18N generando documentos de solicitud fusionada: " + e.getMessage(), e);
+			throw e;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error generando documentos de solicitud fusionada: " + e.getMessage(), e);
+			throw new I18NException(e, "error.fusion.generacion.documentos");
 		}
 
 		// Falta borrar todas las solicitudes originales.
@@ -1175,9 +1320,9 @@ public class FusionarProcedimentsOperadorController {
 				log.warn("La solicitud ID " + soli.getSolicitudID() + " no tiene fichero XML asociado (ID "
 						+ fitxerXMLID + "). No se podrá copiar el formulario.");
 			} else {
-
+				String dataIniciStr = soli.getDataInici() != null ? SDF.format(soli.getDataInici()) : "";
 				afegirDocumentSolicitudAmbFitxer(fitxerJpa,
-						"formulari_" + soli.getSolicitudID() + "_" + soli.getDataInici() + ".xml",
+						"formulari_" + soli.getSolicitudID() + "_" + dataIniciStr + ".xml",
 						Constants.DOCUMENT_SOLICITUD_XML_SOLI, nuevaSolicitudID);
 			}
 
@@ -1187,10 +1332,10 @@ public class FusionarProcedimentsOperadorController {
 						+ docSoliID + "). No se podrá copiar el documento de solicitud.");
 
 			} else {
-
 				FitxerJPA fitxerDocSoli = fitxerPublicLogicaEjb.findByPrimaryKey(docSoliID);
+				String dataIniciStr = soli.getDataInici() != null ? SDF.format(soli.getDataInici()) : "";
 				afegirDocumentSolicitudAmbFitxer(fitxerDocSoli,
-						"document_solicitud_" + soli.getSolicitudID() + "_" + soli.getDataInici() + ".pdf",
+						"document_solicitud_" + soli.getSolicitudID() + "_" + dataIniciStr + ".pdf",
 						Constants.DOCUMENT_SOLICITUD_ALTRES, nuevaSolicitudID);
 			}
 		}
@@ -1406,16 +1551,16 @@ public class FusionarProcedimentsOperadorController {
 		String personaContacteOld = null;
 		String personaContacteEmailOld = null;
 		
+		// Procesar contactos seleccionados
+		Long contacteTitularID = parseLong(request.getParameter("contacteTitular"));
+		Long contacteSolicitantID = parseLong(request.getParameter("contacteSolicitant"));
+		Long contacteGestAutID = parseLong(request.getParameter("contacteGestAut"));
+		Long contacteAuditoriaID = parseLong(request.getParameter("contacteAuditoria")); 
+		Long contacteTecnicID = parseLong(request.getParameter("contacteTecnic"));
 		
-		
-		
-		Long contacteTitularID = null;
-		Long contacteResponsableID = null;
-		Long contactePersonaID = null;
-		Long contacteSolicitantID = null;
-		Long contacteGestAutID = null;
-		Long contacteAuditoriaID = null; 
-		Long contacteTecnicID = null;
+		log.info("Contactos seleccionados: Titular=" + contacteTitularID + 
+			", Solicitant=" + contacteSolicitantID + ", GestAut=" + contacteGestAutID + 
+			", Auditoria=" + contacteAuditoriaID + ", Tecnic=" + contacteTecnicID);
 
 		// Y estos son nulos por ser una fusión nueva:
 		Long docSoliID = null;
@@ -1425,13 +1570,13 @@ public class FusionarProcedimentsOperadorController {
 		//Este campo es para saber que solicitud es la fusionada, es para las antiguas. Es null para las nuevas fusiones.
 		Long solicitudFusionadaID = null;
 
-		SolicitudJPA solicitudNueva = new SolicitudJPA(procedimentCodi, codiDescriptiu, codiSiaConv, procedimentNom,
+		SolicitudJPA solicitudNueva = new SolicitudJPA(procedimentCodi, codiDescriptiu, notesSoli,codiSiaConv, procedimentNom,
 				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
-				    notesSoli, docSoliID,
+				     docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
 				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
 				fitxerConsentimentID, contacteTitularID,  
-				 solicitudFusionadaID, contacteResponsableID, contactePersonaID, contacteSolicitantID,
+				 solicitudFusionadaID, null, null, contacteSolicitantID,
 				contacteGestAutID, contacteAuditoriaID, contacteTecnicID, titularFirmaNIFOld, personaContacteOld, personaContacteEmailOld, respoProcNomOld,
 				respoProcEmailOld, titularFirmaNomOld, titularFirmaMailOld);
 
@@ -1636,11 +1781,12 @@ public class FusionarProcedimentsOperadorController {
 		}
 		return null;
 	}
-
+	
+	// Sobrecarga para soportar long[] además de Long[]
 	private Long extratEstat(String prefix, long[] estats, String estatStr) {
 		for (long estat : estats) {
 			if (I18NUtils.tradueix(prefix + estat).equals(estatStr)) {
-				return estat; // autoboxing a Long
+				return estat;
 			}
 		}
 		return null;
@@ -1692,6 +1838,18 @@ public class FusionarProcedimentsOperadorController {
 		}
 		return null;
 
+	}
+	
+	private Long parseLong(String value) {
+		if (value == null || value.isEmpty()) {
+			return null;
+		}
+		try {
+			return Long.parseLong(value);
+		} catch (NumberFormatException e) {
+			log.warn("Error parseando Long: " + value);
+			return null;
+		}
 	}
 
 }

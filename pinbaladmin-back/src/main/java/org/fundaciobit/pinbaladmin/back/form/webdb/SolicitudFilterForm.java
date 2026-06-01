@@ -65,6 +65,17 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
   }
 
 
+  private java.lang.String notes;
+
+  public java.lang.String getNotes() {
+    return this.notes;
+  }
+
+  public void setNotes(java.lang.String notes) {
+    this.notes = notes;
+  }
+
+
   private java.lang.String codiSiaConv;
 
   public java.lang.String getCodiSiaConv() {
@@ -205,17 +216,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
 
   public void setDataFiFins(java.sql.Timestamp dataFiFins) {
     this.dataFiFins = dataFiFins;
-  }
-
-
-  private java.lang.String notes;
-
-  public java.lang.String getNotes() {
-    return this.notes;
-  }
-
-  public void setNotes(java.lang.String notes) {
-    this.notes = notes;
   }
 
 
@@ -646,6 +646,7 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.solicitudIDFins = __toClone.solicitudIDFins;
     this.procedimentCodi = __toClone.procedimentCodi;
     this.codiDescriptiu = __toClone.codiDescriptiu;
+    this.notes = __toClone.notes;
     this.codiSiaConv = __toClone.codiSiaConv;
     this.procedimentNom = __toClone.procedimentNom;
     this.procedimentTipus = __toClone.procedimentTipus;
@@ -659,7 +660,6 @@ public class SolicitudFilterForm extends PinbalAdminBaseFilterForm implements So
     this.dataIniciFins = __toClone.dataIniciFins;
     this.dataFiDesde = __toClone.dataFiDesde;
     this.dataFiFins = __toClone.dataFiFins;
-    this.notes = __toClone.notes;
     this.denominacio = __toClone.denominacio;
     this.dir3 = __toClone.dir3;
     this.nif = __toClone.nif;

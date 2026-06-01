@@ -85,6 +85,14 @@ public class SolicitudValidator<I extends Solicitud>
       }
     }
 
+    if (__vr.getFieldErrorCount(NOTES) == 0) {
+      java.lang.String __notes = __target__.getNotes();
+      if (__notes!= null && __notes.length() > 2147483647) {
+        __vr.rejectValue(NOTES, "genapp.validation.sizeexceeds",
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOTES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2147483647)));
+      }
+    }
+
     if (__vr.getFieldErrorCount(CODISIACONV) == 0) {
       java.lang.String __codisiaconv = __target__.getCodiSiaConv();
       if (__codisiaconv!= null && __codisiaconv.length() > 255) {
@@ -130,14 +138,6 @@ public class SolicitudValidator<I extends Solicitud>
       if (__pinfo!= null && __pinfo.length() > 255) {
         __vr.rejectValue(PINFO, "genapp.validation.sizeexceeds",
             new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(PINFO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
-      }
-    }
-
-    if (__vr.getFieldErrorCount(NOTES) == 0) {
-      java.lang.String __notes = __target__.getNotes();
-      if (__notes!= null && __notes.length() > 2550) {
-        __vr.rejectValue(NOTES, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(NOTES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(2550)));
       }
     }
 

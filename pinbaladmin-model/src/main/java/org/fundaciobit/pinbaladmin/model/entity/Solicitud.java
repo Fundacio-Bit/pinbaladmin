@@ -11,6 +11,9 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getCodiDescriptiu();
 	public void setCodiDescriptiu(java.lang.String _codiDescriptiu_);
 
+	public java.lang.String getNotes();
+	public void setNotes(java.lang.String _notes_);
+
 	public java.lang.String getCodiSiaConv();
 	public void setCodiSiaConv(java.lang.String _codiSiaConv_);
 
@@ -40,9 +43,6 @@ public interface Solicitud extends org.fundaciobit.genapp.common.IGenAppEntity {
 
 	public java.sql.Timestamp getDataFi();
 	public void setDataFi(java.sql.Timestamp _dataFi_);
-
-	public java.lang.String getNotes();
-	public void setNotes(java.lang.String _notes_);
 
 	public java.lang.Long getDocumentSolicitudID();
 	public void setDocumentSolicitudID(java.lang.Long _documentSolicitudID_);

@@ -6799,6 +6799,31 @@
         },
         {
           "isAutoIncrement": false,
+          "sqlName": "notes",
+          "sqlType": 12,
+          "size": 2147483647,
+          "digits": 0,
+          "isNotNullable": false,
+          "labels": {
+            "ca": "Notes",
+            "es": "Notas"
+          },
+          "javaName": "notes",
+          "javaType": "java.lang.String",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "filter": false,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 2
+          },
+          "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
           "sqlName": "codisiaconv",
           "sqlType": 12,
           "size": 255,
@@ -7061,31 +7086,6 @@
           "groupBy": false,
           "webFieldInfo": {
             "webtype": 7
-          },
-          "foreignKeys": []
-        },
-        {
-          "isAutoIncrement": false,
-          "sqlName": "estat",
-          "sqlType": 12,
-          "size": 2550,
-          "digits": 0,
-          "isNotNullable": false,
-          "labels": {
-            "es": "Notas",
-            "ca": "Notes"
-          },
-          "javaName": "notes",
-          "javaType": "java.lang.String",
-          "traduible": false,
-          "showInWebList": true,
-          "showInReferenceList": false,
-          "transientField": false,
-          "filter": false,
-          "orderBy": 0,
-          "groupBy": false,
-          "webFieldInfo": {
-            "webtype": 2
           },
           "foreignKeys": []
         },

@@ -23,6 +23,10 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
     return new StringField(getQueryPath(), SolicitudFields.CODIDESCRIPTIU);
   }
 
+  public StringField NOTES() {
+    return new StringField(getQueryPath(), SolicitudFields.NOTES);
+  }
+
   public StringField CODISIACONV() {
     return new StringField(getQueryPath(), SolicitudFields.CODISIACONV);
   }
@@ -61,10 +65,6 @@ public class SolicitudQueryPath extends org.fundaciobit.genapp.common.query.Quer
 
   public TimestampField DATAFI() {
     return new TimestampField(getQueryPath(), SolicitudFields.DATAFI);
-  }
-
-  public StringField NOTES() {
-    return new StringField(getQueryPath(), SolicitudFields.NOTES);
   }
 
   public LongField DOCUMENTSOLICITUDID() {
