@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
+import org.fundaciobit.genapp.common.query.LongField;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
@@ -42,6 +43,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
+import org.fundaciobit.pinbaladmin.persistence.ContacteJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
@@ -238,6 +240,17 @@ public class SolicitudActivaAdminController extends SolicitudController {
                             + "/actualizarTitularesNoMigrados'; }",
                     AdditionalButtonStyle.INFO));
 
+            solicitudFilterForm.addAdditionalButton(new AdditionalButton(
+                    "fas fa-user-check",
+                    "solicitud.admin.actualizar.contactos",
+                    "javascript:if(confirm('ATENCIÓN: Actualizar Datos de Contactos.\\n\\n" +
+                            "Se actualizarán los contactos existentes para reducir los que tenemos.\\n" +
+                            "Se buscarán los contactos con datos basicos iguales, y se fusionaran.\\n\\n" +
+                            "¿Continuar?')) { window.location.href='/pinbaladmin" + CONTEXTWEB
+                            + "/actualizarDatosContactos'; }",
+                    AdditionalButtonStyle.INFO));
+
+            
             solicitudFilterForm.setOrderBy(SolicitudFields.DATAINICI.fullName);
             solicitudFilterForm.setOrderAsc(false);
             solicitudFilterForm.setVisibleMultipleSelection(true);
@@ -274,8 +287,198 @@ public class SolicitudActivaAdminController extends SolicitudController {
 
     }
 
-    // ============================== MIGRACIÓN FUSIONES
-    // ==============================
+	@RequestMapping(value = "/actualizarDatosContactos", method = RequestMethod.GET)
+	public String actualizarDatosContactos(HttpServletRequest request, HttpServletResponse response)
+			throws I18NException {
+
+		log.info("=== INICIO ACTUALIZACIÓN DE DATOS DE CONTACTOS EXISTENTES ===");
+
+		int totalSolicitudes = 0;
+		int contactosActualizados = 0;
+		int errores = 0;
+
+		try {
+			IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
+					TipusPluginUserInfo.LDAP);
+			
+			List<Contacte> contactes = contacteLogicaEjb.select();
+			
+			//Hacer un mapa de NIF y cuantos contactos hay con ese NIF. 
+			Map<String, List<Contacte>> contactosPorNif = new HashMap<>();
+			for (Contacte contacte : contactes) {
+				if (contacte.getNif() != null) {
+					String nif = contacte.getNif().toUpperCase().trim();
+					
+					// Si el NIF no existe en el mapa, lo añadimos con una nueva lista. Si ya existe, añadimos el contacto a la lista existente.
+					if (!contactosPorNif.containsKey(nif)) {
+						List<Contacte> lista = new ArrayList<>();
+						lista.add(contacte);
+						contactosPorNif.put(nif, lista);
+					}else {
+						contactosPorNif.get(nif).add(contacte);
+					}
+				}
+			}
+			
+			// Cuando llegamos aqui, tenemos un mapa con el NIF como clave, y una lista de contactos que tienen ese NIF como valor.
+			// Ahora podremos procesar las posibles fusiones.
+			
+			for (Map.Entry<String, List<Contacte>> entry : contactosPorNif.entrySet()) {
+				String nif = entry.getKey();
+				List<Contacte> contactosConMismoNif = entry.getValue();
+
+				if (contactosConMismoNif.size() > 1) {
+				//	log.info("Encontrados " + contactosConMismoNif.size() + " contactos con NIF " + nif);
+					
+					// Suponemos que los contactos con mismo NIF y mismo mail, son la misma persona. Estos se pueden fusionar.
+					// Primero haremos un listado de los que se pueden fusionar.
+					
+					Map<String, List<Contacte>> contactosPorMail = new HashMap<>();
+					
+					for (Contacte contacte : contactosConMismoNif) {
+						if (contacte.getMail() != null) {
+                            String mail = contacte.getMail().toLowerCase().trim();
+                            
+                            if (!contactosPorMail.containsKey(mail)) {
+                                List<Contacte> lista = new ArrayList<>();
+                                lista.add(contacte);
+                                contactosPorMail.put(mail, lista);
+                            }else {
+                                contactosPorMail.get(mail).add(contacte);
+                            }
+                        }
+                    }
+					
+					// Cuando llegamos aqui, tenemos una lista de contactos con el mismo NIF y mismo mail. Estos se pueden fusionar.
+					for (Map.Entry<String, List<Contacte>> entryMail : contactosPorMail.entrySet()) {
+						String mail = entryMail.getKey();
+						List<Contacte> contactosConMismoNifYMail = entryMail.getValue();
+
+						if (contactosConMismoNifYMail.size() > 1) {
+					//		log.info("Encontrados " + contactosConMismoNifYMail.size() + " contactos con NIF " + nif + " y mail " + mail);
+							comprovacioFusioDeContactes(contactosConMismoNifYMail);
+							contactosActualizados += contactosConMismoNifYMail.size() - 1; 
+														// Si se han fusionado 3 contactos, se han actualizado 2 (los que se han eliminado)
+							
+						}else {
+							// Si solo hay un contacto para ese NIF y mail, no hay duplicados.
+						}
+					}
+						
+						
+				}else {
+					// Si solo hay un contacto para ese NIF, no hay duplicados.
+				}
+			}
+			
+		} catch (Exception e) {
+			log.error("Error durante actualización de datos de contactos: " + e.getMessage(), e);
+			HtmlUtils.saveMessageError(request, "Error: " + e.getMessage());
+		}
+
+		log.info("Actualización de datos de contactos finalizada. Total solicitudes: " + totalSolicitudes + ", contactos actualizados (fusionados): " + contactosActualizados + ", errores: " + errores);
+		
+		return "redirect:" + CONTEXTWEB + "/list";
+	}
+    
+	private void comprovacioFusioDeContactes(List<Contacte> contactos) {
+		// Suponemos que los contactos de la lista tienen el mismo NIF y mail, y por tanto son la misma persona.
+		
+//		log.info("Fusionando " + contactos.size() + " contactos con NIF " + contactos.get(0).getNif() + " y mail " + contactos.get(0).getMail());		
+		//SELECT * FROM pad_contacte WHERE nif = '43051734N' AND mail = 'llbernat@a-soller.es';
+		log.info("SELECT * FROM pad_contacte WHERE nif = '" + contactos.get(0).getNif() + "' AND mail = '" + contactos.get(0).getMail() + "';");
+
+		List<String> nombres = new ArrayList<>();
+		List<String> telefonos = new ArrayList<>();
+		List<String> apellidos1 = new ArrayList<>();
+		List<String> apellidos2 = new ArrayList<>();
+		List<String> cargos = new ArrayList<>();
+		List<String> usernames = new ArrayList<>();
+		
+		for (Contacte contacte : contactos) {
+			testCampValor(nombres, contacte.getNom());
+			testCampValor(telefonos, contacte.getTelefon());
+			testCampValor(apellidos1, contacte.getLlinatge1());
+			testCampValor(apellidos2, contacte.getLlinatge2());
+			testCampValor(cargos, contacte.getCarrec());
+			testCampValor(usernames, contacte.getUsername());
+		}
+		
+		// Ahora tenemos una lista de los valores distintos que hay en cada campo. Eliminando los nulos y vacíos, y sin repetir.
+		// Solo así ya nos podriamos quitar algunos contactos.
+
+		//Vamos a fusionar los que sean casos de nulos que hemos solucionado.
+		
+		if (nombres.size() == 1 && telefonos.size() == 1 && apellidos1.size() == 1 && apellidos2.size() == 1
+				&& cargos.size() == 1 && usernames.size() == 1) {
+			log.info("Fusionamos " + contactos.size() + " en uno solo");
+			String nif = contactos.get(0).getNif();
+			String nom = nombres.get(0);
+			String telefon = telefonos.get(0);
+			String llinatge1 = apellidos1.get(0);
+			String llinatge2 = apellidos2.get(0);
+			String carrec = cargos.get(0);
+			String username = contactos.get(0).getUsername();
+			String mail = contactos.get(0).getMail();
+			
+			String nomComplet = nom + " " + llinatge1 + " " + llinatge2;
+			nomComplet = nomComplet.replaceAll("\\s+", " ").trim(); // Limpiar espacios extras
+			
+			ContacteJPA contacteFusionat = new ContacteJPA(nif, nom, llinatge1, llinatge2, carrec, telefon, mail, username, nomComplet);
+			try {
+				Contacte fusionat = contacteLogicaEjb.create(contacteFusionat);
+				fusionarContactes(contactos, fusionat );
+			} catch (I18NException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+	private void fusionarContactes(List<Contacte> contactos, Contacte contacteFusionat ) {
+        // Aquí se implementaría la lógica para fusionar los contactos en uno solo, manteniendo el ID del contacto que queremos conservar, y eliminando los demás.
+        // Antes de eliminar, se deberían actualizar las referencias a los contactos eliminados para que apunten al contacto que conservamos.
+		
+		// Creamos el contacto nuevo, con los datos anteriores, y actulizamos los IDs anteriores.
+		Long fusionatID = contacteFusionat.getContacteID();
+		
+		List<Long> contacteIDs = new ArrayList<>();
+		for (Contacte contacte : contactos) {
+			Long anteriorID = contacte.getContacteID();
+			
+			contacteIDs.add(contacte.getContacteID());
+
+			updateSoliContacte(SolicitudFields.CONTACTETITULARID, anteriorID, fusionatID);
+			updateSoliContacte(SolicitudFields.CONTACTEAUDITORIAID, anteriorID, fusionatID);
+			updateSoliContacte(SolicitudFields.CONTACTESOLICITANTID, anteriorID, fusionatID);
+			updateSoliContacte(SolicitudFields.CONTACTETECNICID, anteriorID, fusionatID);
+			updateSoliContacte(SolicitudFields.CONTACTEGESTAUTID, anteriorID, fusionatID);
+			
+//			contacteLogicaEjb.delete(contacte.getContacteID());
+		}
+    }
+	
+	private void updateSoliContacte(LongField field, Long contacteIDAnterior, Long contacteIDNuevo) {
+		log.info("UPDATE pad_solicitud SET " + field.getSqlName() + " = " + contacteIDNuevo + " WHERE " + field.getSqlName() + " = " + contacteIDAnterior);
+//		try {
+//			solicitudLogicaEjb.update(field, contacteIDNuevo, field.equal(contacteIDAnterior));
+//		} catch (I18NException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	}
+	
+	private void testCampValor(List<String> llista, String valor) {
+		if (valor != null && !valor.isEmpty() && !llista.contains(valor)) {
+			llista.add(valor);
+		}
+	}
+    
+    
+    
+    // =================== MIGRACIÓN FUSIONES ==========================
 
     /**
      * Migra campo solicitudFusionadaID desde notas históricas.
