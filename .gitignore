@@ -158,3 +158,6 @@ hs_err_pid*
 /scripts/sqlgenerator/.settings/*.prefs
 /scripts/.settings/*.prefs
 *.prefs
+/pinbaladmin-ws/*.project
+*.project
+*.pem
