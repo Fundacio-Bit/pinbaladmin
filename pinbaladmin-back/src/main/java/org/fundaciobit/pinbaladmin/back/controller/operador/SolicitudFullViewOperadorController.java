@@ -48,6 +48,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.DocumentSolicitud;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
+import org.fundaciobit.pinbaladmin.model.entity.InfoMadrid;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
@@ -161,6 +162,31 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			} else {
 				addLocalButtons(solicitudForm, solicitud, soliID);
 			}
+
+			// Calcular y añadir información del wizard al modelo
+			WizardInfo wizardInfo = calcularWizardInfo(solicitud);
+			mav.addObject("wizardInfo", wizardInfo);
+			mav.addObject("solicitudID", solicitud.getSolicitudID());
+			mav.addObject("procedimentCodi", solicitud.getProcedimentCodi());
+
+			//Cercar si tenim info d'algun error:
+			String missatgeError = null;
+			if (solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_ESMENES
+					|| solicitud.getEstatSolicitud() == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
+				Long infoMadridID = solicitud.getInfomadridid();
+				if (infoMadridID != null) {
+					InfoMadrid infoMadrid = infoMadridLogicaEjb.findByPrimaryKey(infoMadridID);
+					String missatge = infoMadrid.getMissatge();
+					if (missatge != null) {
+						missatgeError = missatge.replace("\n", "<br>");
+					}
+				}
+
+				if (missatgeError == null) {
+					missatgeError = "No Info Error";
+				}
+			}
+			mav.addObject("missatgeError", missatgeError);
 
 			// getSeccionsFullView(solicitudForm, isEstatal, request, mav);
 			solicitudForm.setAttachedAdditionalJspCode(true);
@@ -764,4 +790,267 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		return getReferenceListForContacte(where);
 	}
 
+	/**
+	 * Clase interna para representar un estado en el wizard de tramitación.
+	 * Cada estado tiene DOS nombres: uno cuando está pendiente (azul) y otro cuando ya está completado (verde).
+	 */
+	public static class WizardEstado {
+		private Long id;
+		private String labelPendiente;   // Texto cuando está en proceso (azul)
+		private String labelCompletado;  // Texto cuando ya se completó (verde)
+		private String labelActual;      // El que se muestra actualmente (se calcula dinámicamente)
+		private String descripcion;
+		private String cssClass;
+		private String icono;
+
+		public WizardEstado(Long id, String labelPendiente, String labelCompletado, String descripcion) {
+			this.id = id;
+			this.labelPendiente = labelPendiente;
+			this.labelCompletado = labelCompletado;
+			this.descripcion = descripcion;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public String getLabelPendiente() {
+			return labelPendiente;
+		}
+
+		public String getLabelCompletado() {
+			return labelCompletado;
+		}
+
+		public String getLabel() {
+			return labelActual;
+		}
+
+		public void setLabelActual(String labelActual) {
+			this.labelActual = labelActual;
+		}
+
+		public String getDescripcion() {
+			return descripcion;
+		}
+
+		public String getCssClass() {
+			return cssClass;
+		}
+
+		public void setCssClass(String cssClass) {
+			this.cssClass = cssClass;
+		}
+
+		public String getIcono() {
+			return icono;
+		}
+
+		public void setIcono(String icono) {
+			this.icono = icono;
+		}
+	}
+
+	/**
+	 * Clase para encapsular toda la información del wizard de tramitación.
+	 * Workflow LOCAL: 6 fases (no 7) - Estados 20 y 40 son LA MISMA FASE
+	 * 1. Marcar Recibida (5)
+	 * 2. Enviar a Firmar (11)
+	 * 3. Esperando Firma (15)
+	 * 4. Enviar a Madrid (19)
+	 * 5. Proceso Madrid (20→40): azul mientras espera, verde cuando autoriza, rojo si desestima
+	 * 6. Cerrar (60)
+	 */
+	public static class WizardInfo {
+		private List<WizardEstado> estados;
+		private int faseActual;
+		private int totalFases;
+		private boolean errorState;
+		private String estadoActualNombre;
+
+		public WizardInfo(List<WizardEstado> estados, int faseActual, int totalFases, boolean errorState,
+				String estadoActualNombre) {
+			this.estados = estados;
+			this.faseActual = faseActual;
+			this.totalFases = totalFases;
+			this.errorState = errorState;
+			this.estadoActualNombre = estadoActualNombre;
+		}
+
+		public List<WizardEstado> getEstados() {
+			return estados;
+		}
+
+		public int getFaseActual() {
+			return faseActual;
+		}
+
+		public int getTotalFases() {
+			return totalFases;
+		}
+
+		public boolean isErrorState() {
+			return errorState;
+		}
+
+		public String getEstadoActualNombre() {
+			return estadoActualNombre;
+		}
+	}
+
+	/**
+	 * Calcula la información del wizard según el estado de la solicitud.
+	 * Solo para solicitudes LOCALES con workflow de 7 fases.
+	 */
+	private WizardInfo calcularWizardInfo(SolicitudJPA solicitud) throws I18NException {
+		Long estatActual = solicitud.getEstatSolicitud();
+
+		// Workflow para solicitudes locales (6 fases, no 7)
+		// La fase "Proceso Madrid" agrupa los estados 20 y 40:
+		// - Estado 20: azul "Esperando Autorización" (en proceso)
+		// - Estado 40: verde "Autorizada" (completado)
+		// - Estado 30: rojo "Desestimada" (error)
+		List<WizardEstado> estados = new ArrayList<>();
+
+		// ID, PENDIENTE (azul), COMPLETADO (verde), Descripción
+		addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO, "Marcar Recibida", "Recibida Distribución", "Solicitud recibida desde CAIB");
+		addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_Enviar_Director, "Enviar a Firmar", "Enviada a Firmar", "Documento enviado al titular para firma");
+		addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_Firma_Director, "Esperando Firma", "Documento Firmado", "Titular ha firmado digitalmente");
+
+		if (estatActual == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
+			addEstadoWizard(estados, Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR, "Revisar Modificacions", "No veurem aquest missatge", "Solicitud con cambios pendientes de revisión");
+		}
+
+		addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID, "Enviar a Madrid", "Enviada a Madrid", "Solicitud enviada a la Plataforma de Intermediación");
+
+		// Si es una solicitud denegada, se añade una fase más que sea DENEGADA. No hace
+		// falta el resto, y la pondremos en rojo error.
+
+		if (estatActual == Constants.SOLI_ESTAT_DENEGADA) {
+			addEstadoWizard(estados, Constants.SOLI_ESTAT_DENEGADA, "Solicitud Denegada", "Solicitud Denegada", "Solicitud denegada por Madrid");
+			// El estado actual será el de denegada, con lo que se marcará en rojo error, y
+			// las fases anteriores estarán en blanco pendientes (no completadas), porque no
+			// se han completado al no llegar a autorizar.
+		} else {
+			if (estatActual == Constants.SOLI_ESTAT_ESMENES) {
+				// A este estado llegamos cuando han desestimado de Madrid. Así que en el paso
+				// "Pendeinte Autorizar" pondremos "Desestimado", en rojo,
+				// y una fase más que será "solicitar enmienda", que será el nuevo actual.
+
+				// De momento no se solicita la enmienda automaticamente, se solicita
+				// manualmente pero sin cambiar de estado, así el estado actual se llamará
+				// Pendiente Subsanacion, o Pendiente Enmienda.
+
+				// Cuando el solicitante haga el tramite de enmienda, pasará a Pendiente Revisar
+				// Cambio. Ya no nos importará lo que haya pasado antes, porque lo que hay que
+				// hacer está claro.
+				addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_AUTORITZAR, "Desestimada PRE-ALTAS", "Canvi Solicitat", "Proceso de autorización en Madrid (1-6 semanas)");
+				addEstadoWizard(estados, Constants.SOLI_ESTAT_ESMENES, "Pendiente Enmienda", "No veurem aquest missatge", "Solicitud con cambios pendientes de revisión");
+			} else {
+				addEstadoWizard(estados, Constants.SOLI_ESTAT_PENDENT_AUTORITZAR, "Esperando Autorización", "Autorizada PRE-ALTAS", "Proceso de autorización en Madrid (1-6 semanas)");
+			}
+			addEstadoWizard(estados, Constants.SOLI_ESTAT_TANCAT, "Cerrar Solicitud", "Solicitud Cerrada", "Solicitud archivada");
+		}
+
+		// Determinar fase actual y estados especiales
+		int faseActual = 0;
+		boolean errorState = false;
+
+		// Manejar estados especiales (errores, esmenas, denegadas)
+		if (estatActual == Constants.SOLI_ESTAT_AUTORITZAT || estatActual == Constants.SOLI_ESTAT_AUTORITZAT_Manual
+				|| estatActual == Constants.SOLI_ESTAT_AUTORITZAT_Parcial) {
+			// ESTADO 40: Madrid AUTORIZÓ → La fase "Proceso Madrid" está COMPLETADA
+			// La fase actual pasa a ser "Cerrar" (fase 6)
+			faseActual = 6; // Siguiente fase: Cerrar
+		} else if (estatActual == Constants.SOLI_ESTAT_TANCAT) {
+			// ESTADO 60: Solicitud CERRADA → Todas las fases completadas
+			faseActual = 7; // Más allá de la última fase (6) para marcarlas todas como completadas
+		} else if (estatActual == Constants.SOLI_ESTAT_ERROR_ENVIANT_MADRID) {
+			// Error técnico al enviar - error en fase "Enviar a Madrid"
+			errorState = true;
+			faseActual = 4; // Fase "Enviar a Madrid" con error
+		} else if (estatActual == Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR) {
+			// Si hay un cambio pendiente de revisar, despues de revisarlo se envía a
+			// Madrid. No hay error, pero es un estado especial que se muestra en el wizard.
+			faseActual = 4; 
+			// Fase "Enviar a Madrid" pasa a ser el 5, el 4 es pendiente de revisión de cambios
+		} else if (estatActual == Constants.SOLI_ESTAT_DENEGADA) {
+			// Si ha sido denegada, se muestra la fase de "Proceso Madrid" en rojo error, y
+			// el estado actual es "Solicitud Denegada"
+			errorState = true;
+			faseActual = 5; 
+			// Fase "Proceso Madrid" con error, en vez de poner info de Madrid pondremos "Denegada".
+		} else if (estatActual == Constants.SOLI_ESTAT_ESMENES) {
+			// Caso especial. Aqui el actual es el que ponga Pendiente Enmienda, que es el
+			// 6, pero hay que poner el 5 en rojo error. MANUALMENTE
+			faseActual = 6; 
+			// Fase "Pendiente Enmienda", pero el error se muestra en la fase anterior "Proceso Madrid"
+		} else if (estatActual == Constants.SOLI_ESTAT_PENDENT_AUTORITZAR_Manual) {
+			// Igual que pendiente de aurizar, pero manulamente.
+			faseActual = 5; // Fase "Proceso Madrid", pero el mensaje dirá que es una autorización manual.
+		} else {
+			// Buscar en qué fase está según el estado
+			// IMPORTANTE: Para estado 20 (PENDENT_AUTORITZAR), faseActual será 5 (la fase Madrid)
+			for (int i = 0; i < estados.size(); i++) {
+				if (estatActual >= estados.get(i).getId()) {
+					faseActual = i + 1;
+				}
+			}
+		}
+
+		// Asignar iconos, clases CSS y el LABEL CORRECTO a cada estado
+		for (int i = 0; i < estados.size(); i++) {
+			WizardEstado estado = estados.get(i);
+
+			if (errorState && i == faseActual - 1) {
+				// ESTADO CON ERROR
+				estado.setCssClass("error");
+				estado.setIcono("fas fa-exclamation-circle");
+				estado.setLabelActual(estado.getLabelPendiente()); // Muestra lo que había que hacer
+			} else if (i < faseActual - 1) {
+				// ESTADOS YA COMPLETADOS → Verde con texto "completado"
+				estado.setCssClass("completado");
+				estado.setIcono("fas fa-check-circle");
+				estado.setLabelActual(estado.getLabelCompletado()); // "Recibida", "Enviada", "Firmado", etc.
+			} else if (i == faseActual - 1) {
+				// ESTADO ACTUAL → Azul con texto "pendiente"
+				estado.setCssClass("actual");
+				estado.setIcono("fas fa-circle");
+				estado.setLabelActual(estado.getLabelPendiente()); // "Marcar Recibida", "Enviar a Firmar", "Cerrar
+																	// Solicitud", etc.
+			} else {
+				// ESTADOS PENDIENTES (futuros) → Blanco con texto "pendiente"
+				estado.setCssClass("pendiente");
+				estado.setIcono("far fa-circle");
+				estado.setLabelActual(estado.getLabelPendiente()); // Lo que habrá que hacer
+			}
+		}
+
+		// CASO ESPECIAL. PONER ROJO EL DESESTIMADO EN ESTADO ESMENES:
+		if (estatActual == Constants.SOLI_ESTAT_ESMENES) {
+			// Cojemos el estado anterior (que es la posicion 4 empezando por 0), y lo
+			// ponemos en rojo error, con el icono de error, y el label de pendiente, que es
+			// "Desestimada PRE-ALTAS"
+			WizardEstado estado = estados.get(4);
+			errorState = true;
+			estado.setCssClass("error");
+			estado.setIcono("fas fa-exclamation-circle");
+			estado.setLabelActual(estado.getLabelPendiente()); // Muestra lo que había que hacer
+		}
+
+		// Obtener nombre del estado actual
+		String estadoActualNombre;
+		try {
+			estadoActualNombre = I18NUtils.tradueix("solicitud.fullview.estat." + estatActual);
+		} catch (Exception e) {
+			estadoActualNombre = "Estado " + estatActual;
+		}
+
+		return new WizardInfo(estados, faseActual, estados.size(), errorState, estadoActualNombre);
+	}
+
+	private void addEstadoWizard(List<WizardEstado> estados, long estatID, String pendiente, String completado, String desc) {
+		WizardEstado estado = new WizardEstado(estatID, pendiente, completado, desc);
+		estados.add(estado);
+	}
 }

@@ -321,14 +321,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
 
         Section dadesSoli = new Section("info_solicitud", "section.dadessolicitud",
                 SolicitudFields.PROCEDIMENTCODI,
-                SolicitudFields.CODISIACONV,
                 SolicitudFields.PROCEDIMENTNOM,
-                SolicitudFields.PROCEDIMENTTIPUS,
-                SolicitudFields.CODIDESCRIPTIU,
+                SolicitudFields.ESTATSOLICITUD,
                 SolicitudFields.ORGANID,
-                SolicitudFields.DATACADUCITAT,
-                SolicitudFields.DOCUMENTSOLICITUDID,
-                SolicitudFields.SOLICITUDXMLID);
+                SolicitudFields.CODIDESCRIPTIU,
+                SolicitudFields.PROCEDIMENTTIPUS,
+                SolicitudFields.CODISIACONV
+                );
 
         // Section contactes = new Section("info_contactes", "section.contactes",
         // SolicitudFields.CONTACTEPERSONAID,
@@ -351,12 +350,13 @@ public abstract class SolicitudOperadorController extends SolicitudController {
                 SolicitudFields.URLCONSENTIMENT);
 
         Section dadesGestio = new Section("info_gestio", "section.dadesgestio",
-                SolicitudFields.ESTATSOLICITUD,
+                SolicitudFields.DOCUMENTSOLICITUDID,
+                SolicitudFields.SOLICITUDXMLID,
                 SolicitudFields.CREADOR,
                 SolicitudFields.OPERADOR,
                 SolicitudFields.DATAINICI,
                 SolicitudFields.DATAFI,
-                SolicitudFields.PRODUCCIO,
+                SolicitudFields.DATACADUCITAT,
                 SolicitudFields.NOTES);
 
         Section dadesAutoritzacio = new Section("info_autoritzacio", "section.dadesautoritzacio",
