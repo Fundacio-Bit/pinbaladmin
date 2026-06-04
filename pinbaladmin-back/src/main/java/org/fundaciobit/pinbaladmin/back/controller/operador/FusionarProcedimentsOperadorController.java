@@ -564,7 +564,7 @@ public class FusionarProcedimentsOperadorController {
 
 		private String organid;
 		private String estatSolicitud;
-		private String estatpinbal;
+//		private String estatpinbal;
 
 		private List<ServeiDTO> servicios;
 		private List<DocumentDTO> documentos;
@@ -612,7 +612,7 @@ public class FusionarProcedimentsOperadorController {
 
 			this.organid = organ != null ? "(" + organ.getDir3() + ") " + organ.getNom() : "";
 			this.estatSolicitud = I18NUtils.tradueix("solicitud.estat." + soli.getEstatSolicitud());
-			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
+//			this.estatpinbal = I18NUtils.tradueix("estat.pinbal." + soli.getEstatpinbal());
 //			this.procedimentTipus = soli.getProcedimentTipus();
 
 			log.info("ProcedimentTipus ID: " + soli.getProcedimentTipus());
@@ -812,13 +812,13 @@ public class FusionarProcedimentsOperadorController {
             this.estatSolicitud = estatSolicitud;
         }
 
-        public String getEstatpinbal() {
-            return estatpinbal;
-        }
-
-        public void setEstatpinbal(String estatpinbal) {
-            this.estatpinbal = estatpinbal;
-        }
+//        public String getEstatpinbal() {
+//            return estatpinbal;
+//        }
+//
+//        public void setEstatpinbal(String estatpinbal) {
+//            this.estatpinbal = estatpinbal;
+//        }
 
         public List<ServeiDTO> getServicios() {
             return servicios;
@@ -1133,7 +1133,6 @@ public class FusionarProcedimentsOperadorController {
 		// Llistat d'intents per agafar el maxim
 
 //		List<String[]> titularsList = new ArrayList<>();
-		Long maxIntents = 0L;
 
 		Timestamp dataAutFinal = null;
 		Timestamp dataEnviFinal = null;
@@ -1145,6 +1144,8 @@ public class FusionarProcedimentsOperadorController {
 		List<String> mensajes = new ArrayList<>();
 		String mensajeFinal = "";
 
+		List<InfoMadridJPA> infoMadList = new ArrayList<>();
+		
 		for (SolicitudJPA soli : solicitudes) {
 			if (soli != null && soli.getInfomadridid() != null) {
 				InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(soli.getInfomadridid());
@@ -1154,56 +1155,108 @@ public class FusionarProcedimentsOperadorController {
 							+ soli.getInfomadridid() + ").");
 					continue;
 				}
-
-				Timestamp dataAut = infoMad.getDataAutoritzacio();
-
-				if (dataAut != null) {
-					// Se queda la fecha más reciente
-//					autorizados++;
-
-					if (dataAutFinal == null || dataAut.after(dataAutFinal)) {
-						dataAutFinal = dataAut;
-					}
-				}
-
-				Timestamp dataEnvi = infoMad.getDataEnviament();
-				if (dataEnvi != null) {
-					// Se queda la fecha más reciente
-					if (dataEnviFinal == null || dataEnvi.after(dataEnviFinal)) {
-						dataEnviFinal = dataEnvi;
-					}
-				}
-
-				Timestamp dataCons = infoMad.getDataConsulta();
-				if (dataCons != null) {
-					// Se queda la fecha más reciente
-					if (dataConsFinal == null || dataCons.after(dataConsFinal)) {
-						dataConsFinal = dataCons;
-					}
-				}
-
-					Long intents = infoMad.getIntents();
-				if (intents != null && intents > maxIntents) {
-					maxIntents = intents;
-				}
-
-				Long nouTitularInfoMadContacteID = solicitudNueva.getContacteSolicitantID();
-				if (nouTitularInfoMadContacteID != null) {
-					Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(nouTitularInfoMadContacteID);
-					if (solicitant != null) {
-						titularNom = solicitant.getNombrecompleto();
-						titularNif = solicitant.getNif();
-					}
-				}
-
-				// Si el mensaje ya lo tenemos, no lo añadimos
-				if (infoMad.getMissatge() != null && !mensajes.contains(infoMad.getMissatge())) {
-					mensajes.add(infoMad.getMissatge());
-					mensajeFinal += "Procediment " + infoMad.getCodi() + " - " + infoMad.getDataConsulta() + ":\n";
-					mensajeFinal += infoMad.getMissatge() + "\n----------------------\n";
-				}
-
+				
+				infoMadList.add(infoMad);
 			}
+		}
+		
+		if (infoMadList.isEmpty()) {
+			log.warn("Ninguna de las solicitudes tiene InfoMadrid asociado.");
+			return null;
+		}
+		
+		//Primero datos del titular. Que sera el solicitante de la solicitud fusionada.
+		Long nouTitularInfoMadContacteID = solicitudNueva.getContacteSolicitantID();
+		if (nouTitularInfoMadContacteID != null) {
+			Contacte solicitant = contacteLogicaEjb.findByPrimaryKey(nouTitularInfoMadContacteID);
+			if (solicitant != null) {
+				titularNom = solicitant.getNombrecompleto();
+				titularNif = solicitant.getNif();
+			}
+		}
+		
+		// Ahora averiguamos las fechas de autorizacion, consulta, y envio. 
+		// También recuperamos los mensajes anteriores.
+		
+		boolean hayAutorizado = false;
+		boolean hayPendiente = false;
+		boolean hayDenegado = false;
+		boolean hayNoSolicitado = false;
+		boolean hayManual = false;
+		boolean hayError = false;
+		
+		int enviadosPreAltas = 0;
+		
+		for (InfoMadridJPA infoMad : infoMadList) {
+			Timestamp dataAut = infoMad.getDataAutoritzacio();
+
+			if (dataAut != null) {
+				// Se queda la fecha más reciente
+//				autorizados++;
+
+				if (dataAutFinal == null || dataAut.after(dataAutFinal)) {
+					dataAutFinal = dataAut;
+				}
+			}
+
+			Timestamp dataEnvi = infoMad.getDataEnviament();
+			if (dataEnvi != null) {
+				// Se queda la fecha más reciente
+				if (dataEnviFinal == null || dataEnvi.after(dataEnviFinal)) {
+					dataEnviFinal = dataEnvi;
+				}
+			}
+
+			Timestamp dataCons = infoMad.getDataConsulta();
+			if (dataCons != null) {
+				// Se queda la fecha más reciente
+				if (dataConsFinal == null || dataCons.after(dataConsFinal)) {
+					dataConsFinal = dataCons;
+				}
+			}
+
+			// Si el mensaje ya lo tenemos, no lo añadimos
+			if (infoMad.getMissatge() != null && !mensajes.contains(infoMad.getMissatge())) {
+				mensajes.add(infoMad.getMissatge());
+				mensajeFinal += "Procediment " + infoMad.getCodi() + " - " + infoMad.getDataConsulta() + ":\n";
+				mensajeFinal += infoMad.getMissatge() + "\n----------------------\n";
+			}
+			
+			
+			Long estado = infoMad.getEstatAutoritzacio();
+
+			if (Constants.ESTAT_PINBAL_AUTORITZAT.equals(estado)) {
+
+			    hayAutorizado = true;
+
+			} else if (Constants.ESTAT_PINBAL_PENDENT_TRAMITAR.equals(estado)
+			        || Constants.ESTAT_PINBAL_PENDENT_SUBSANACIO.equals(estado)
+			        || Constants.ESTAT_PINBAL_SUBSANAT.equals(estado)
+			        || Constants.ESTAT_PINBAL_PENDENT_AUTORITZACIO_CEDENT.equals(estado)
+			        || Constants.ESTAT_PINBAL_APROVAT.equals(estado)
+			        || Constants.ESTAT_PINBAL_DESISTIT.equals(estado)
+			        || Constants.ESTAT_PINBAL_NO_APROVAT.equals(estado)
+			        || Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO.equals(estado)) {
+
+			    hayPendiente = true;
+
+			} else if (Constants.ESTAT_PINBAL_DESESTIMAT.equals(estado)) {
+
+			    hayDenegado = true;
+
+			} else if (Constants.ESTAT_PINBAL_ERROR.equals(estado)) {
+
+			    hayError = true;
+
+			} else if (Constants.ESTAT_PINBAL_NO_SOLICITAT.equals(estado)) {
+
+			    hayNoSolicitado = true;
+
+			} else if (Constants.ESTAT_PINBAL_MANUAL.equals(estado)) {
+
+			    hayManual = true;
+			}			
+			
 		}
 		
 		log.info("Mensajes concatenados: " + mensajes.size() + " mensajes. Tamaño total: " + mensajeFinal.length());
@@ -1213,18 +1266,41 @@ public class FusionarProcedimentsOperadorController {
 			mensajeFinal = mensajeFinal.substring(0, 1024);
 		}
 
+		Long intents = 0L;
+
+		Long estatPinbalFinal;
+		
+		if (hayPendiente) {
+			estatPinbalFinal = Constants.ESTAT_PINBAL_PENDENT_TRAMITAR;
+		} else if (hayError) {
+			estatPinbalFinal = Constants. ESTAT_PINBAL_ERROR;
+		} else if (hayDenegado) {
+			estatPinbalFinal = Constants. ESTAT_PINBAL_DESESTIMAT;
+		} else if (hayAutorizado) {
+			estatPinbalFinal = Constants. ESTAT_PINBAL_AUTORITZAT;
+		} else if (hayNoSolicitado) {
+			estatPinbalFinal = Constants. ESTAT_PINBAL_NO_SOLICITAT;
+		}else if (hayManual) {
+			estatPinbalFinal = Constants. ESTAT_PINBAL_MANUAL;
+		}else {
+			estatPinbalFinal = Constants.ESTAT_PINBAL_null;
+		}
+
+		
+		//Ponemos los datos en el orden en que los hemos conseguido. Titular, fecha, mensaje, intentos, estado.
+		infoMadNou.setTitularNom(titularNom);
+		infoMadNou.setTitularNif(titularNif);
+
 		infoMadNou.setDataAutoritzacio(dataAutFinal);
 		infoMadNou.setDataEnviament(dataEnviFinal);
 		infoMadNou.setDataConsulta(dataConsFinal);
 
-		infoMadNou.setIntents(maxIntents);
+		infoMadNou.setMissatge(mensajeFinal);
 
-		infoMadNou.setTitularNom(titularNom);
-		infoMadNou.setTitularNif(titularNif);
+		infoMadNou.setIntents(intents);
 
 		infoMadNou.setEstatProcediment(solicitudNueva.getEstatSolicitud());
-
-		infoMadNou.setMissatge(mensajeFinal);
+		infoMadNou.setEstatAutoritzacio(estatPinbalFinal);
 
 		return infoMadNou;
 
@@ -1234,10 +1310,14 @@ public class FusionarProcedimentsOperadorController {
 	private void fusionar(SolicitudJPA solicitudNueva, List<Long> fusionados, List<SolicitudServeiJPA> serviciosNuevos,
 			List<Long> documentos, InfoMadridJPA infoMad) throws I18NException {
 
-		InfoMadrid im = infoMadridLogicaEjb.create(infoMad);
-		Long infoMadridID = im.getInfoMadridID();
-		log.info("InfoMadrid creado ID: " + infoMadridID);
-		solicitudNueva.setInfomadridid(infoMadridID);
+		if (infoMad != null) {
+			InfoMadrid im = infoMadridLogicaEjb.create(infoMad);
+			Long infoMadridID = im.getInfoMadridID();
+			log.info("InfoMadrid creado ID: " + infoMadridID);
+			solicitudNueva.setInfomadridid(infoMadridID);
+		}
+		
+		
 //		solicitudNueva.setEstatpinbal(im.getEstatAutoritzacio());
 
 		Solicitud soli = solicitudLogicaEjb.create(solicitudNueva);
@@ -1451,10 +1531,10 @@ public class FusionarProcedimentsOperadorController {
 		String estatSolicitud = request.getParameter("estatSolicitud");
 		Long estatSolicitudId = extratEstat("solicitud.estat.", Constants.ESTATS_SOLI, estatSolicitud);
 
-		String estatpinbal = request.getParameter("estatpinbal");
-		log.info("estatpinbal recibido: " + estatpinbal);
-		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
-		log.info("estatpinbalId extraído: " + estatpinbalId);
+//		String estatpinbal = request.getParameter("estatpinbal");
+//		log.info("estatpinbal recibido: " + estatpinbal);
+//		Long estatpinbalId = extratEstat("estat.pinbal.", Constants.ESTATS_PINBAL, estatpinbal);
+//		log.info("estatpinbalId extraído: " + estatpinbalId);
 
 //		String procedimentTipus = request.getParameter("procedimentTipus");
 
@@ -1489,7 +1569,7 @@ public class FusionarProcedimentsOperadorController {
 
 		log.info("organId: " + organId);
 		log.info("estatSolicitud: " + estatSolicitudId);
-		log.info("estatpinbal: " + estatpinbalId);
+//		log.info("estatpinbal: " + estatpinbalId);
 		log.info("procedimentTipus: " + procedimentTipus);
 
 //		SolicitudJPA solicitudNueva = new SolicitudJPA();
@@ -1535,7 +1615,7 @@ public class FusionarProcedimentsOperadorController {
 		Long fitxerConsentimentID = null;
 
 		Long infoMadridID = null;
-//		Long estatpinbal = null;
+		Long estatpinbal = null;
 
 		// Estos campos son nulos por ser locales, o porque siempre lo son:
 		String expedientPid = null;
@@ -1574,7 +1654,7 @@ public class FusionarProcedimentsOperadorController {
 				procedimentTipus, organId, estatSolicitudId, expedientPid, entitatEstatal, pinfo, dataInici, dataFi,
 				     docSoliID,
 				solicitudXmlID, firmatDocSolicitud, produccio, entitatNom, entitatDir3, entitatCif, creador, operador,
-				estatpinbalId, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
+				estatpinbal, consentiment, urlconsentiment, consentimentadjunt, portafibID, infoMadridID, dataCaducitat,
 				fitxerConsentimentID, contacteTitularID,  
 				 solicitudFusionadaID, null, null, contacteSolicitantID,
 				contacteGestAutID, contacteAuditoriaID, contacteTecnicID, titularFirmaNIFOld, personaContacteOld, personaContacteEmailOld, respoProcNomOld,
