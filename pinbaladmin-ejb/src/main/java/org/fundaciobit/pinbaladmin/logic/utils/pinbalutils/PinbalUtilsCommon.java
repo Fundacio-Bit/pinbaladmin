@@ -447,6 +447,16 @@ public abstract class PinbalUtilsCommon {
 					log.info("Fa falta el formulari firmat per el DG");
 				}
 
+			} else if (tipus == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
+				FitxerJPA fitxer = (FitxerJPA) fitxerLogicEjb.findByPrimaryKey(document.getFitxerFirmatID());
+				
+				if (fitxer != null) {
+					String desc = "Formulari AEAT PDF firmat";
+					String tipo = "FORMULARIO DE AUTORIZACION";
+					docsAuth.add(new DocAuthInfo(fitxer, desc, tipo));
+				}else {
+					log.info("Fa falta el formulari firmat per l'AEAT");
+				}
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_EXCEL_SERVEIS) {
 				// No se envía
 			} else if (tipus == Constants.DOCUMENT_SOLICITUD_ADUNJT) {

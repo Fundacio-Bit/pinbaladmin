@@ -20,11 +20,14 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.DocumentController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.DocumentForm;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
+import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
@@ -300,7 +303,7 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 		__tmp.add(new StringKeyValue("2", "Formulari ODT"));
 		__tmp.add(new StringKeyValue("3", "Excel Serveis"));
 		__tmp.add(new StringKeyValue("4", "Consentiment noop"));
-		__tmp.add(new StringKeyValue("5", "Consentiment si"));
+		__tmp.add(new StringKeyValue("5", "Formulari AEAT"));
 		__tmp.add(new StringKeyValue("6", "Adjunt"));
 		__tmp.add(new StringKeyValue("7", "XML Solicitud"));
 		
@@ -340,6 +343,8 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
 //			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
 			
+			Document doc = documentLogicaEjb.findByPrimaryKey(documentID);
+			
 			//Obtenir solicitud del document, i obtenir el NIF del titular de la solicitud
 			List<Long> solicitudIDs = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.SOLICITUDID,
 					DocumentSolicitudFields.DOCUMENTID.equal(documentID));
@@ -350,15 +355,34 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			
 			Long solicitudID = solicitudIDs.get(0);
 			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-//			String nifDestinatari = solicitud.getTitularFirmaNif();
-//			String nomDestinatari = solicitud.getTitularFirmaNom();
 			
 			String remitent = request.getRemoteUser();
 
-	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
+			List<Contacte> destinataris = new ArrayList<>();
 
+	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
+	        destinataris.add(titular);
 	        
-			documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, titular, remitent);
+	        //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
+	        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
+	        	//La forma sucia es crear un contactoJPA con NIF y email, y lo enviará como usuario PortaFIB.
+	        	
+	        	
+	        	String nif = Configuracio.getNIFJefeATIB();
+	        	String email = Configuracio.getEmailJefeATIB();
+//	        	
+//	        	String nif = "42994276P";
+//	        	String email = "aroibal@atib.es";
+
+				List<Contacte> listaJefeATIB = contacteLogicaEjb
+						.select(Where.AND(ContacteFields.NIF.equal(nif), ContacteFields.MAIL.equal(email)));
+				
+				if (!listaJefeATIB.isEmpty()) {
+					destinataris.add(listaJefeATIB.get(0));
+				}
+			}
+	        
+			documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);
 
 			log.info("S'ha enviat a firmar el document [" + documentID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");

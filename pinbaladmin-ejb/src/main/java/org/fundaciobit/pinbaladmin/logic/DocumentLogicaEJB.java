@@ -70,7 +70,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 	}
 
 	@Override
-	public void enviarDocumentDGPortaFIB(Long docID, Contacte destinatari, String remitent) throws I18NException {
+	public void enviarDocumentPortaFIB(Long docID, List<Contacte> destinataris, String remitent) throws I18NException {
 
 		Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
 				DocumentSolicitudFields.DOCUMENTID.equal(docID));
@@ -81,15 +81,17 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 		String tipusPeticio;
 		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
 			tipusPeticio = "Solicitud";
-		} else {
+		} else if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
 			tipusPeticio = "Formulari AEAT";
+		} else {
+			tipusPeticio = "Adjunt";
 		}
 		
 		String titolPeticio = tipusPeticio + " Autorització PINBAL. Procediment: " + soli.getProcedimentCodi();
 		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
 		String reason = tipusPeticio + " d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
 
-		Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinatari, titolPeticio, description, reason,
+		Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinataris, titolPeticio, description, reason,
 				remitent);
 
 		log.info("Peticio de firma creada: " + idPortafib);
@@ -104,13 +106,18 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 			solicitudLogicaEjb.update(soli);
 		}
 
-		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinatari: "
-				+ destinatari.getNif() + " - " + destinatari.getNom() + " " + destinatari.getLlinatge1() + "\n" + "Fitxer: " + doc.getNom();
+		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinataris:\n";
+		
+		for (Contacte cte : destinataris) {
+			msg += cte.getNif() + " - " + cte.getNom() + " " + cte.getLlinatge1() + " - " + cte.getMail() + "\n";
+		}
+		
+		msg+= "Fitxer: " + doc.getNom();
 
 		afegirEventSolicitudEnviada(soliID, remitent, msg);
 	}
 
-	public Long crearIEnviarPeticioDeFirma(Document doc, Contacte destinatari, String titolPeticio,
+	public Long crearIEnviarPeticioDeFirma(Document doc, List<Contacte> destinatari, String titolPeticio,
 			String description, String reason, String remitent) throws I18NException {
 
 		String languageUI = "ca";

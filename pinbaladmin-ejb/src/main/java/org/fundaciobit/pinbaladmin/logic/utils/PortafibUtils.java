@@ -195,10 +195,10 @@ public class PortafibUtils {
 	}
 	
 	
-	public static FirmaAsyncSimpleSignatureBlock[] convertContacteToSignatureBlock(Contacte contacte) throws I18NException {
+	public static FirmaAsyncSimpleSignatureBlock[] convertContacteToSignatureBlock(List<Contacte> destinataris) throws I18NException {
 		
 		//De moment, nomes enviam firma a un contacte, per tant nomes hi ha un bloc amb un sol firmant.
-		Contacte[][] contactes = new Contacte[][] { { contacte } };
+		Contacte[][] contactes = new Contacte[][] { destinataris.toArray(new Contacte[destinataris.size()]) };
 		
 		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = new FirmaAsyncSimpleSignatureBlock[contactes.length];
 		

@@ -307,7 +307,15 @@ public class Configuracio implements Constants {
 	public static String getNIFDirectorGeneral() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.directorgeneral");
 	}
+	
+	public static String getNIFJefeATIB() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.jefeatib");
+	}
 
+	public static String getEmailJefeATIB() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.email.jefeatib");
+	}
+	
 	public static String getPortaFIBApiFlowUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.url");
 	}
@@ -324,5 +332,4 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "queesticfent.usuari.default");
 		//return pvico
 	}
-
 }

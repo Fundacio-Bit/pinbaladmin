@@ -449,7 +449,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     //------------ Enviar Solicitud a Firmar -------------------
 	@Override
-	public void enviarFormulariDGPortaFIB(Solicitud soli, Contacte destinatari, String remitent) throws I18NException {
+	public void enviarFormulariDGPortaFIB(Solicitud soli, Contacte titular, String remitent) throws I18NException {
 		
 //		String titolPeticio = "Solicitud Autorització PINBAL Procediment " + soli.getProcedimentCodi();
 //		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
@@ -457,7 +457,10 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		
 		Long documentID = getDocIDFormulariDGPDF(soli.getSolicitudID());
 
-		documentLogicaEjb.enviarDocumentDGPortaFIB(documentID, destinatari, remitent);
+		List<Contacte> destinataris = new ArrayList<Contacte>();
+		destinataris.add(titular);
+		
+		documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);
 		
 		soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
 		this.update(soli);
