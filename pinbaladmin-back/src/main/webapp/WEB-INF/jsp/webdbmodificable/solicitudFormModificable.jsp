@@ -417,6 +417,7 @@
 				"/altapinbal/vistaprevia/alta/",
 				"/altapinbal/consultaestado/",
 				"/altapinbal/vistaprevia/modificacio/",
+				"/rebreSolicitud/",
 				"/enviarAFirmarTitular/",
 				"/afegirFormulariFirmat/",
 				"/solicitudestatal/enviarcorreucedents/",

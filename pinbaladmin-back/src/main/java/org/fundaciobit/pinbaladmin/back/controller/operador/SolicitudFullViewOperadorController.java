@@ -1,16 +1,10 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -20,20 +14,14 @@ import javax.servlet.http.HttpSession;
 import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.filesystem.FileSystemManager;
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.GroupByItem;
-import org.fundaciobit.genapp.common.query.SubQuery;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.genapp.common.utils.Base64;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.all.CallbackSeleniumController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
@@ -55,8 +43,6 @@ import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ModificacioSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
-import org.fundaciobit.pinbaladmin.persistence.DocumentSolicitudJPA;
-import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.ModificacioSolicitudJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -234,6 +220,12 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 
 		Long estatID = solicitud.getEstatSolicitud();
 
+		if (estatID == Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO) {
+			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-cog", "marcar.rebuda.distribucio",
+					getContextWeb() + "/rebreSolicitud/" + soliID, AdditionalButtonStyle.PRIMARY));
+		}
+		
+		
 		if (estatID == Constants.SOLI_ESTAT_PENDENT_Enviar_Director) {
 			solicitudForm.addAdditionalButton(new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
 					getContextWeb() + "/enviarAFirmarTitular/" + soliID, AdditionalButtonStyle.PRIMARY));
@@ -639,6 +631,24 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		}
 		return null;
 	}
+
+
+    @RequestMapping(value = "/rebreSolicitud/{solicitudID}", method = RequestMethod.GET)
+    public String rebreSolicitud(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
+            HttpServletResponse response) throws I18NException {
+
+        log.info("rebreSolicitud de distribucio:: " + solicitudID);
+
+        // Actualitzar l'estat de la sol·licitud a Pendent enviar director.
+
+        SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+        soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Enviar_Director);
+        soli.setOperador(request.getRemoteUser());
+
+        solicitudLogicaEjb.update(soli);
+
+		return "redirect:" + getContextWeb() + "/view/" + solicitudID;
+    }
 
 	@RequestMapping(value = "/enviarAFirmarTitular/{soliID}", method = RequestMethod.GET)
 	public String enviarDocumentAFirmar(HttpServletRequest request, HttpServletResponse response,
