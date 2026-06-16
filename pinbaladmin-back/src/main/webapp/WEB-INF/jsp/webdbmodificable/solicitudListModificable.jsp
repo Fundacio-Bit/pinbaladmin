@@ -432,6 +432,9 @@
 	    const contextPath = '<%= request.getContextPath() %>';
 	    
 	    if (solicitudes.length == 0) {
+
+	    	console.log("No tenemos solicitudes, vamos a buscarlas");
+	    	
 	    	$.ajax({
 	            url: contextPath + '/operador/solicitudlocal/jsonSolicitudEvents',
 	            method: 'GET',
@@ -660,6 +663,294 @@
 
 
 
+
+
+<!-- FUSIONAR CONTACTOS  -->
+<div id="modalContactos" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 id="tituloContacto">Duplicados</h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div id="listaContactos"></div>
+
+        <div style="margin-top: 10px;">
+			<button type="button" onclick="anteriorGrupo()">Anterior</button>
+			<button type="button" onclick="siguienteGrupo()">Siguiente</button>
+			<button type="button" onclick="mostrarResumen()">Finalizar</button>
+			<button type="button" onclick="saltarGrupo()">Revisar después</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+let grupos = [];
+let current = 0;
+let fusionPlan = [];
+let contactoSeleccionado = null;
+let pendientes = [];
+
+const contextPath = '<%=request.getContextPath()%>';
+
+function iniciarFusiones() {
+
+    $.ajax({
+        url: contextPath + '/admin/solicitudactiva/contactos/duplicados',
+        method: 'GET',
+
+        success: function(data) {
+
+            console.log("Grupos de contactos duplicados:");
+            console.log(data);
+
+            if (!data || data.length === 0) {
+                alert("No hay contactos duplicados.");
+                return;
+            }
+
+            grupos = data;
+            current = 0;
+            fusionPlan = [];
+            contactoSeleccionado = null;
+
+            mostrarGrupo();
+
+            $('#modalContactos').modal('show');
+        },
+
+        error: function(xhr, status, error) {
+            console.error("Error obteniendo duplicados", error);
+            alert("Error obteniendo contactos duplicados.");
+        }
+    });
+}
+
+function mostrarGrupo() {
+
+    if (current >= grupos.length) {
+        mostrarResumen();
+        return;
+    }
+
+    const grupoActual = grupos[current];
+    const contactos = grupoActual.contactos;
+
+    console.log("Mostrando grupo:");
+    console.log(grupoActual);
+
+    let html = '';
+
+    html += '<h4>Duplicados (' + (current + 1) + ' de ' + grupos.length + ')</h4>';
+    html += '<p><b>' + grupoActual.nif + '</b> - ' + grupoActual.mail + '</p>';
+
+    html += '<table class="table table-bordered table-hover">';
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th>Sel.</th>';
+    html += '<th>ID</th>';
+    html += '<th>Nombre</th>';
+    html += '<th>Apellido 1</th>';
+    html += '<th>Apellido 2</th>';
+    html += '<th>Teléfono</th>';
+    html += '<th>Cargo</th>';
+    html += '<th>Username</th>';
+    html += '<th>Full Name</th>';
+    html += '<th>Solicituds</th>';
+    html += '</tr>';
+    html += '</thead>';
+    html += '<tbody>';
+
+    contactos.forEach(function(c) {
+
+        console.log(c);
+
+        const seleccionado = contactoSeleccionado === c.contacteID;
+
+        html += '<tr '
+              + 'onclick="seleccionar(' + c.contacteID + ')" '
+              + 'style="cursor:pointer;' 
+              + (seleccionado ? 'background-color:#d4edda;' : '')
+              + '">';
+
+        html += '<td>' + (seleccionado ? 'X' : '') + '</td>';
+        html += '<td>' + (c.contacteID || '') + '</td>';
+        html += '<td>' + (c.nom || '') + '</td>';
+        html += '<td>' + (c.llinatge1 || '') + '</td>';
+        html += '<td>' + (c.llinatge2 || '') + '</td>';
+        html += '<td>' + (c.telefon || '') + '</td>';
+        html += '<td>' + (c.carrec || '') + '</td>';
+        html += '<td>' + (c.username || '') + '</td>';
+        html += '<td>' + (c.nombrecompleto || '') + '</td>';
+        html += '<td>' + c.numSolicituds + '</td>';
+
+        html += '</tr>';
+    });
+
+    html += '</tbody>';
+    html += '</table>';
+
+    $('#listaContactos').html(html);
+}
+
+function seleccionar(id) {
+
+    console.log("Seleccionado contacto ID:", id);
+
+    contactoSeleccionado = id;
+
+    mostrarGrupo();
+}
+
+function siguienteGrupo() {
+
+    console.log("Siguiente grupo");
+    console.log("Contacto seleccionado:", contactoSeleccionado);
+
+    if (contactoSeleccionado == null) {
+
+        alert("Selecciona un contacto maestro.");
+        return;
+    }
+
+    const grupoActual = grupos[current];
+    const contactos = grupoActual.contactos;
+
+    fusionPlan.push({
+        masterId: contactoSeleccionado,
+        mergeIds: contactos
+            .map(c => c.contacteID)
+            .filter(id => id !== contactoSeleccionado)
+    });
+
+    console.log("Plan de fusiones:");
+    console.log(fusionPlan);
+
+    contactoSeleccionado = null;
+
+    current++;
+
+    if (current < grupos.length) {
+
+        console.log("Mostrando siguiente grupo");
+        mostrarGrupo();
+
+    } else {
+
+        console.log("No quedan grupos");
+        mostrarResumen();
+    }
+}
+
+function anteriorGrupo() {
+
+    if (current > 0) {
+
+        current--;
+
+        contactoSeleccionado = null;
+
+        mostrarGrupo();
+    }
+}
+
+function saltarGrupo() {
+
+    pendientes.push(grupos[current]);
+
+    current++;
+
+    contactoSeleccionado = null;
+
+    if (current < grupos.length) {
+        mostrarGrupo();
+    } else {
+        mostrarResumen();
+    }
+}
+
+function mostrarResumen() {
+
+    let html = '';
+
+    html += '<h4>Fusiones a ejecutar</h4>';
+    html += '<ul>';
+
+    fusionPlan.forEach(function(f) {
+
+        html += '<li>';
+        html += '<b>Master:</b> ' + f.masterId;
+        html += ' | ';
+        html += '<b>Merge:</b> ' + f.mergeIds.join(', ');
+        html += '</li>';
+    });
+
+    html += '</ul>';
+
+    html += '<h4>Casos pendientes</h4>';
+
+    html += '<ul>';
+
+    pendientes.forEach(g => {
+        html += '<li>'
+             + g.nif
+             + ' - '
+             + g.mail
+             + ' ('
+             + g.contactos.length
+             + ' contactos)'
+             + '</li>';
+    });
+
+    html += '</ul>';
+    
+    html += '<button type="button" class="btn btn-success" onclick="ejecutarFusiones()">';
+    html += 'Ejecutar fusiones';
+    html += '</button>';
+
+    $('#listaContactos').html(html);
+}
+
+function ejecutarFusiones() {
+
+    console.log("Enviando plan de fusiones:");
+    console.log(fusionPlan);
+
+    $.ajax({
+
+        url: contextPath + '/admin/solicitudactiva/contactes/fusionar',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(fusionPlan),
+
+        success: function(response) {
+
+            console.log("Respuesta:");
+            console.log(response);
+
+            alert("Fusiones realizadas");
+
+            $('#modalContactos').modal('hide');
+        },
+
+        error: function(xhr, status, error) {
+
+            console.error("Error ejecutando fusiones", error);
+
+            alert("Error realizando las fusiones.");
+        }
+    });
+}
+
+</script>
 
 
 

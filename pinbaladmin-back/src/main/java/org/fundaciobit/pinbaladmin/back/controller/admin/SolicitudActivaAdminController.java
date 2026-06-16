@@ -1,5 +1,6 @@
 package org.fundaciobit.pinbaladmin.back.controller.admin;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,12 +20,14 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Field;
 import org.fundaciobit.genapp.common.query.LongField;
+import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.HtmlUtils;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
+import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController.SolicitudConEventos;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
@@ -54,6 +57,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 /**
  * Controlador de administración para Solicitudes Activas.
@@ -240,15 +245,19 @@ public class SolicitudActivaAdminController extends SolicitudController {
                             + "/actualizarTitularesNoMigrados'; }",
                     AdditionalButtonStyle.INFO));
 
-            solicitudFilterForm.addAdditionalButton(new AdditionalButton(
-                    "fas fa-user-check",
-                    "solicitud.admin.actualizar.contactos",
-                    "javascript:if(confirm('ATENCIÓN: Actualizar Datos de Contactos.\\n\\n" +
-                            "Se actualizarán los contactos existentes para reducir los que tenemos.\\n" +
-                            "Se buscarán los contactos con datos basicos iguales, y se fusionaran.\\n\\n" +
-                            "¿Continuar?')) { window.location.href='/pinbaladmin" + CONTEXTWEB
-                            + "/actualizarDatosContactos'; }",
-                    AdditionalButtonStyle.INFO));
+//            solicitudFilterForm.addAdditionalButton(new AdditionalButton(
+//                    "fas fa-user-check",
+//                    "solicitud.admin.actualizar.contactos",
+//                    "javascript:if(confirm('ATENCIÓN: Actualizar Datos de Contactos.\\n\\n" +
+//                            "Se actualizarán los contactos existentes para reducir los que tenemos.\\n" +
+//                            "Se buscarán los contactos con datos basicos iguales, y se fusionaran.\\n\\n" +
+//                            "¿Continuar?')) { window.location.href='/pinbaladmin" + CONTEXTWEB
+//                            + "/actualizarDatosContactos'; }",
+//                    AdditionalButtonStyle.INFO));
+
+            solicitudFilterForm
+            .addAdditionalButton(new AdditionalButton(IconUtils.ICON_CHECK,"solicitud.admin.actualizar.contactos",
+                    "javascript:iniciarFusiones()", AdditionalButtonStyle.INFO));
 
             
             solicitudFilterForm.setOrderBy(SolicitudFields.DATAINICI.fullName);
@@ -287,195 +296,380 @@ public class SolicitudActivaAdminController extends SolicitudController {
 
     }
 
-	@RequestMapping(value = "/actualizarDatosContactos", method = RequestMethod.GET)
-	public String actualizarDatosContactos(HttpServletRequest request, HttpServletResponse response)
-			throws I18NException {
-
-		log.info("=== INICIO ACTUALIZACIÓN DE DATOS DE CONTACTOS EXISTENTES ===");
-
-		int totalSolicitudes = 0;
-		int contactosActualizados = 0;
-		int errores = 0;
-
-		try {
-			IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
-					TipusPluginUserInfo.LDAP);
-			
-			List<Contacte> contactes = contacteLogicaEjb.select();
-			
-			//Hacer un mapa de NIF y cuantos contactos hay con ese NIF. 
-			Map<String, List<Contacte>> contactosPorNif = new HashMap<>();
-			for (Contacte contacte : contactes) {
-				if (contacte.getNif() != null) {
-					String nif = contacte.getNif().toUpperCase().trim();
-					
-					// Si el NIF no existe en el mapa, lo añadimos con una nueva lista. Si ya existe, añadimos el contacto a la lista existente.
-					if (!contactosPorNif.containsKey(nif)) {
-						List<Contacte> lista = new ArrayList<>();
-						lista.add(contacte);
-						contactosPorNif.put(nif, lista);
-					}else {
-						contactosPorNif.get(nif).add(contacte);
-					}
-				}
-			}
-			
-			// Cuando llegamos aqui, tenemos un mapa con el NIF como clave, y una lista de contactos que tienen ese NIF como valor.
-			// Ahora podremos procesar las posibles fusiones.
-			
-			for (Map.Entry<String, List<Contacte>> entry : contactosPorNif.entrySet()) {
-				String nif = entry.getKey();
-				List<Contacte> contactosConMismoNif = entry.getValue();
-
-				if (contactosConMismoNif.size() > 1) {
-				//	log.info("Encontrados " + contactosConMismoNif.size() + " contactos con NIF " + nif);
-					
-					// Suponemos que los contactos con mismo NIF y mismo mail, son la misma persona. Estos se pueden fusionar.
-					// Primero haremos un listado de los que se pueden fusionar.
-					
-					Map<String, List<Contacte>> contactosPorMail = new HashMap<>();
-					
-					for (Contacte contacte : contactosConMismoNif) {
-						if (contacte.getMail() != null) {
-                            String mail = contacte.getMail().toLowerCase().trim();
-                            
-                            if (!contactosPorMail.containsKey(mail)) {
-                                List<Contacte> lista = new ArrayList<>();
-                                lista.add(contacte);
-                                contactosPorMail.put(mail, lista);
-                            }else {
-                                contactosPorMail.get(mail).add(contacte);
-                            }
-                        }
-                    }
-					
-					// Cuando llegamos aqui, tenemos una lista de contactos con el mismo NIF y mismo mail. Estos se pueden fusionar.
-					for (Map.Entry<String, List<Contacte>> entryMail : contactosPorMail.entrySet()) {
-						String mail = entryMail.getKey();
-						List<Contacte> contactosConMismoNifYMail = entryMail.getValue();
-
-						if (contactosConMismoNifYMail.size() > 1) {
-					//		log.info("Encontrados " + contactosConMismoNifYMail.size() + " contactos con NIF " + nif + " y mail " + mail);
-							comprovacioFusioDeContactes(contactosConMismoNifYMail);
-							contactosActualizados += contactosConMismoNifYMail.size() - 1; 
-														// Si se han fusionado 3 contactos, se han actualizado 2 (los que se han eliminado)
-							
-						}else {
-							// Si solo hay un contacto para ese NIF y mail, no hay duplicados.
-						}
-					}
-						
-						
-				}else {
-					// Si solo hay un contacto para ese NIF, no hay duplicados.
-				}
-			}
-			
-		} catch (Exception e) {
-			log.error("Error durante actualización de datos de contactos: " + e.getMessage(), e);
-			HtmlUtils.saveMessageError(request, "Error: " + e.getMessage());
-		}
-
-		log.info("Actualización de datos de contactos finalizada. Total solicitudes: " + totalSolicitudes + ", contactos actualizados (fusionados): " + contactosActualizados + ", errores: " + errores);
-		
-		return "redirect:" + CONTEXTWEB + "/list";
-	}
-    
-	private void comprovacioFusioDeContactes(List<Contacte> contactos) {
-		// Suponemos que los contactos de la lista tienen el mismo NIF y mail, y por tanto son la misma persona.
-		
-//		log.info("Fusionando " + contactos.size() + " contactos con NIF " + contactos.get(0).getNif() + " y mail " + contactos.get(0).getMail());		
-		//SELECT * FROM pad_contacte WHERE nif = '43051734N' AND mail = 'llbernat@a-soller.es';
-		log.info("SELECT * FROM pad_contacte WHERE nif = '" + contactos.get(0).getNif() + "' AND mail = '" + contactos.get(0).getMail() + "';");
-
-		List<String> nombres = new ArrayList<>();
-		List<String> telefonos = new ArrayList<>();
-		List<String> apellidos1 = new ArrayList<>();
-		List<String> apellidos2 = new ArrayList<>();
-		List<String> cargos = new ArrayList<>();
-		List<String> usernames = new ArrayList<>();
-		
-		for (Contacte contacte : contactos) {
-			testCampValor(nombres, contacte.getNom());
-			testCampValor(telefonos, contacte.getTelefon());
-			testCampValor(apellidos1, contacte.getLlinatge1());
-			testCampValor(apellidos2, contacte.getLlinatge2());
-			testCampValor(cargos, contacte.getCarrec());
-			testCampValor(usernames, contacte.getUsername());
-		}
-		
-		// Ahora tenemos una lista de los valores distintos que hay en cada campo. Eliminando los nulos y vacíos, y sin repetir.
-		// Solo así ya nos podriamos quitar algunos contactos.
-
-		//Vamos a fusionar los que sean casos de nulos que hemos solucionado.
-		
-		if (nombres.size() == 1 && telefonos.size() == 1 && apellidos1.size() == 1 && apellidos2.size() == 1
-				&& cargos.size() == 1 && usernames.size() == 1) {
-			log.info("Fusionamos " + contactos.size() + " en uno solo");
-			String nif = contactos.get(0).getNif();
-			String nom = nombres.get(0);
-			String telefon = telefonos.get(0);
-			String llinatge1 = apellidos1.get(0);
-			String llinatge2 = apellidos2.get(0);
-			String carrec = cargos.get(0);
-			String username = contactos.get(0).getUsername();
-			String mail = contactos.get(0).getMail();
-			
-			String nomComplet = nom + " " + llinatge1 + " " + llinatge2;
-			nomComplet = nomComplet.replaceAll("\\s+", " ").trim(); // Limpiar espacios extras
-			
-			ContacteJPA contacteFusionat = new ContacteJPA(nif, nom, llinatge1, llinatge2, carrec, telefon, mail, username, nomComplet);
-			try {
-				Contacte fusionat = contacteLogicaEjb.create(contacteFusionat);
-				fusionarContactes(contactos, fusionat );
-			} catch (I18NException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		
-	}
-	
-	private void fusionarContactes(List<Contacte> contactos, Contacte contacteFusionat ) {
-        // Aquí se implementaría la lógica para fusionar los contactos en uno solo, manteniendo el ID del contacto que queremos conservar, y eliminando los demás.
-        // Antes de eliminar, se deberían actualizar las referencias a los contactos eliminados para que apunten al contacto que conservamos.
-		
-		// Creamos el contacto nuevo, con los datos anteriores, y actulizamos los IDs anteriores.
-		Long fusionatID = contacteFusionat.getContacteID();
-		
-		List<Long> contacteIDs = new ArrayList<>();
-		for (Contacte contacte : contactos) {
-			Long anteriorID = contacte.getContacteID();
-			
-			contacteIDs.add(contacte.getContacteID());
-
-			updateSoliContacte(SolicitudFields.CONTACTETITULARID, anteriorID, fusionatID);
-			updateSoliContacte(SolicitudFields.CONTACTEAUDITORIAID, anteriorID, fusionatID);
-			updateSoliContacte(SolicitudFields.CONTACTESOLICITANTID, anteriorID, fusionatID);
-			updateSoliContacte(SolicitudFields.CONTACTETECNICID, anteriorID, fusionatID);
-			updateSoliContacte(SolicitudFields.CONTACTEGESTAUTID, anteriorID, fusionatID);
-			
-//			contacteLogicaEjb.delete(contacte.getContacteID());
-		}
+    @RequestMapping(value = "/actualizarDatosContactos", method = RequestMethod.GET)
+	public String actualizarDatosContactos(HttpServletRequest request, HttpServletResponse response) {
+    	
+    	HtmlUtils.saveMessageInfo(request, "Funcionalidad en desarrollo. Próximamente...");
+    	return "redirect:" + CONTEXTWEB + "/list";
     }
-	
+    
+    public class ContacteDuplicatGroup {
+
+        private String nif;
+        private String mail;
+        private List<ContacteDTO> contactos;
+
+        public ContacteDuplicatGroup(String nif, String mail, List<ContacteDTO> contactos) {
+            this.nif = nif;
+            this.mail = mail;
+            this.contactos = contactos;
+        }
+
+        public String getNif() { return nif; }
+        public String getMail() { return mail; }
+        public List<ContacteDTO> getContactos() { return contactos; }
+    }
+    
+    public class FusionContacteDTO {
+        private Long masterId;
+        private List<Long> mergeIds;
+
+        public Long getMasterId() { return masterId; }
+        public List<Long> getMergeIds() { return mergeIds; }
+    }
+    
+    public class ContacteDTO {
+
+        private Long contacteID;
+        private String nif;
+        private String nom;
+        private String llinatge1;
+        private String llinatge2;
+        private String carrec;
+        private String telefon;
+        private String mail;
+        private String username;
+        private String nombrecompleto;
+        private Long numSolicituds;
+
+        public ContacteDTO() {}
+
+        public ContacteDTO(Contacte c) {
+            this.contacteID = c.getContacteID();
+            this.nif = c.getNif();
+            this.nom = c.getNom();
+            this.llinatge1 = c.getLlinatge1();
+            this.llinatge2 = c.getLlinatge2();
+            this.carrec = c.getCarrec();
+            this.telefon = c.getTelefon();
+            this.mail = c.getMail();
+            this.username = c.getUsername();
+            this.nombrecompleto = c.getNombrecompleto();
+        }
+
+        public Long getContacteID() { return contacteID; }
+        public String getNif() { return nif; }
+        public String getNom() { return nom; }
+        public String getLlinatge1() { return llinatge1; }
+        public String getLlinatge2() { return llinatge2; }
+        public String getCarrec() { return carrec; }
+        public String getTelefon() { return telefon; }
+        public String getMail() { return mail; }
+        public String getUsername() { return username; }
+        public String getNombrecompleto() { return nombrecompleto; }
+        public Long getNumSolicituds() { return numSolicituds; }
+        
+        public void setContacteID(Long contacteID) { this.contacteID = contacteID; }
+        public void setNif(String nif) { this.nif = nif; }
+        public void setNom(String nom) { this.nom = nom; }
+        public void setLlinatge1(String llinatge1) { this.llinatge1 = llinatge1; }
+        public void setLlinatge2(String llinatge2) { this.llinatge2 = llinatge2; }
+        public void setCarrec(String carrec) { this.carrec = carrec; }
+        public void setTelefon(String telefon) { this.telefon = telefon; }
+        public void setMail(String mail) { this.mail = mail; }
+        public void setUsername(String username) { this.username = username; }
+        public void setNombrecompleto(String nombrecompleto) { this.nombrecompleto = nombrecompleto; }
+		public void setNumSolicituds(Long numSolicituds) { this.numSolicituds = numSolicituds; }
+        
+    }
+    
+    @RequestMapping(value = "/contactos/duplicados", method = RequestMethod.GET)
+    public void jsonDuplicados(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        log.info("jsonDuplicados: INICIO");
+
+        
+        OrderBy orderBy = new OrderBy(ContacteFields.NIF);
+        
+		List<Contacte> contactes = contacteLogicaEjb.select(orderBy);
+
+        Map<String, List<ContacteDTO>> grups = new HashMap<>();
+
+        for (Contacte c : contactes) {
+
+            if (c.getNif() == null || c.getMail() == null)
+                continue;
+
+            String key = c.getNif().trim().toUpperCase() + "|" + c.getMail().trim().toLowerCase();
+
+            Long contacteID = c.getContacteID();
+            
+            ContacteDTO dto = new ContacteDTO();
+            dto.setContacteID(contacteID);
+            dto.setNif(c.getNif());
+            dto.setNom(c.getNom());
+            dto.setLlinatge1(c.getLlinatge1());
+            dto.setLlinatge2(c.getLlinatge2());
+            dto.setCarrec(c.getCarrec());
+            dto.setTelefon(c.getTelefon());
+            dto.setMail(c.getMail());
+            dto.setUsername(c.getUsername());
+            dto.setNombrecompleto(c.getNombrecompleto());
+            
+			Long numSolicituds = solicitudLogicaEjb
+					.count(Where.OR(SolicitudFields.CONTACTETITULARID.equal(contacteID),
+							SolicitudFields.CONTACTEAUDITORIAID.equal(contacteID),
+							SolicitudFields.CONTACTESOLICITANTID.equal(contacteID),
+							SolicitudFields.CONTACTETECNICID.equal(contacteID),
+							SolicitudFields.CONTACTEGESTAUTID.equal(contacteID)));
+			dto.setNumSolicituds(numSolicituds);
+
+            grups.computeIfAbsent(key, k -> new ArrayList<>()).add(dto);
+        }
+
+        List<ContacteDuplicatGroup> result = new ArrayList<>();
+
+        for (Map.Entry<String, List<ContacteDTO>> e : grups.entrySet()) {
+
+            if (e.getValue().size() > 1) {
+                String[] parts = e.getKey().split("\\|");
+
+                result.add(new ContacteDuplicatGroup(
+                    parts[0],
+                    parts[1],
+                    e.getValue()
+                ));
+                
+                log.info("Encontrados " + e.getValue().size() + " contactos con NIF " + parts[0] + " y mail " + parts[1]);
+            }
+        }
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter().print(new Gson().toJson(result));
+    }
+    
+    @RequestMapping(value = "/contactes/fusionar", method = RequestMethod.POST)
+    public void fusionarContactes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        log.info("fusionarContactes: INICIO");
+
+        String body = request.getReader().lines().reduce("", (a, b) -> a + b);
+
+        Gson g = new Gson();
+        FusionContacteDTO[] fusiones = g.fromJson(body, FusionContacteDTO[].class);
+
+        for (FusionContacteDTO f : fusiones) {
+
+            Long masterId = f.getMasterId();
+
+            for (Long id : f.getMergeIds()) {
+
+                log.info("Fusionando contacto " + id + " -> " + masterId);
+
+                updateSoliContacte(SolicitudFields.CONTACTETITULARID, id, masterId);
+                updateSoliContacte(SolicitudFields.CONTACTEAUDITORIAID, id, masterId);
+                updateSoliContacte(SolicitudFields.CONTACTESOLICITANTID, id, masterId);
+                updateSoliContacte(SolicitudFields.CONTACTETECNICID, id, masterId);
+                updateSoliContacte(SolicitudFields.CONTACTEGESTAUTID, id, masterId);
+
+                contacteLogicaEjb.delete(id);
+            }
+        }
+
+        response.setContentType("application/json");
+        response.getWriter().print("{\"status\":\"OK\"}");
+    }
+//	@RequestMapping(value = "/actualizarDatosContactos", method = RequestMethod.GET)
+//	public String actualizarDatosContactos(HttpServletRequest request, HttpServletResponse response)
+//			throws I18NException {
+//
+//		log.info("=== INICIO ACTUALIZACIÓN DE DATOS DE CONTACTOS EXISTENTES ===");
+//
+//		int totalSolicitudes = 0;
+//		int contactosActualizados = 0;
+//		int errores = 0;
+//
+//		try {
+//			IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
+//					TipusPluginUserInfo.LDAP);
+//			
+//			List<Contacte> contactes = contacteLogicaEjb.select();
+//			
+//			//Hacer un mapa de NIF y cuantos contactos hay con ese NIF. 
+//			Map<String, List<Contacte>> contactosPorNif = new HashMap<>();
+//			for (Contacte contacte : contactes) {
+//				if (contacte.getNif() != null) {
+//					String nif = contacte.getNif().toUpperCase().trim();
+//					
+//					// Si el NIF no existe en el mapa, lo añadimos con una nueva lista. Si ya existe, añadimos el contacto a la lista existente.
+//					if (!contactosPorNif.containsKey(nif)) {
+//						List<Contacte> lista = new ArrayList<>();
+//						lista.add(contacte);
+//						contactosPorNif.put(nif, lista);
+//					}else {
+//						contactosPorNif.get(nif).add(contacte);
+//					}
+//				}
+//			}
+//			
+//			// Cuando llegamos aqui, tenemos un mapa con el NIF como clave, y una lista de contactos que tienen ese NIF como valor.
+//			// Ahora podremos procesar las posibles fusiones.
+//			
+//			for (Map.Entry<String, List<Contacte>> entry : contactosPorNif.entrySet()) {
+//				String nif = entry.getKey();
+//				List<Contacte> contactosConMismoNif = entry.getValue();
+//
+//				if (contactosConMismoNif.size() > 1) {
+//				//	log.info("Encontrados " + contactosConMismoNif.size() + " contactos con NIF " + nif);
+//					
+//					// Suponemos que los contactos con mismo NIF y mismo mail, son la misma persona. Estos se pueden fusionar.
+//					// Primero haremos un listado de los que se pueden fusionar.
+//					
+//					Map<String, List<Contacte>> contactosPorMail = new HashMap<>();
+//					
+//					for (Contacte contacte : contactosConMismoNif) {
+//						if (contacte.getMail() != null) {
+//                            String mail = contacte.getMail().toLowerCase().trim();
+//                            
+//                            if (!contactosPorMail.containsKey(mail)) {
+//                                List<Contacte> lista = new ArrayList<>();
+//                                lista.add(contacte);
+//                                contactosPorMail.put(mail, lista);
+//                            }else {
+//                                contactosPorMail.get(mail).add(contacte);
+//                            }
+//                        }
+//                    }
+//					
+//					// Cuando llegamos aqui, tenemos una lista de contactos con el mismo NIF y mismo mail. Estos se pueden fusionar.
+//					for (Map.Entry<String, List<Contacte>> entryMail : contactosPorMail.entrySet()) {
+//						String mail = entryMail.getKey();
+//						List<Contacte> contactosConMismoNifYMail = entryMail.getValue();
+//
+//						if (contactosConMismoNifYMail.size() > 1) {
+//					//		log.info("Encontrados " + contactosConMismoNifYMail.size() + " contactos con NIF " + nif + " y mail " + mail);
+//							comprovacioFusioDeContactes(contactosConMismoNifYMail);
+//							contactosActualizados += contactosConMismoNifYMail.size() - 1; 
+//														// Si se han fusionado 3 contactos, se han actualizado 2 (los que se han eliminado)
+//							
+//						}else {
+//							// Si solo hay un contacto para ese NIF y mail, no hay duplicados.
+//						}
+//					}
+//						
+//						
+//				}else {
+//					// Si solo hay un contacto para ese NIF, no hay duplicados.
+//				}
+//			}
+//			
+//		} catch (Exception e) {
+//			log.error("Error durante actualización de datos de contactos: " + e.getMessage(), e);
+//			HtmlUtils.saveMessageError(request, "Error: " + e.getMessage());
+//		}
+//
+//		log.info("Actualización de datos de contactos finalizada. Total solicitudes: " + totalSolicitudes + ", contactos actualizados (fusionados): " + contactosActualizados + ", errores: " + errores);
+//		
+//		return "redirect:" + CONTEXTWEB + "/list";
+//	}
+//    
+//	private void comprovacioFusioDeContactes(List<Contacte> contactos) {
+//		// Suponemos que los contactos de la lista tienen el mismo NIF y mail, y por tanto son la misma persona.
+//		
+////		log.info("Fusionando " + contactos.size() + " contactos con NIF " + contactos.get(0).getNif() + " y mail " + contactos.get(0).getMail());		
+//		//SELECT * FROM pad_contacte WHERE nif = '43051734N' AND mail = 'llbernat@a-soller.es';
+//		log.info("SELECT * FROM pad_contacte WHERE nif = '" + contactos.get(0).getNif() + "' AND mail = '" + contactos.get(0).getMail() + "';");
+//
+//		List<String> nombres = new ArrayList<>();
+//		List<String> telefonos = new ArrayList<>();
+//		List<String> apellidos1 = new ArrayList<>();
+//		List<String> apellidos2 = new ArrayList<>();
+//		List<String> cargos = new ArrayList<>();
+//		List<String> usernames = new ArrayList<>();
+//		
+//		for (Contacte contacte : contactos) {
+//			testCampValor(nombres, contacte.getNom());
+//			testCampValor(telefonos, contacte.getTelefon());
+//			testCampValor(apellidos1, contacte.getLlinatge1());
+//			testCampValor(apellidos2, contacte.getLlinatge2());
+//			testCampValor(cargos, contacte.getCarrec());
+//			testCampValor(usernames, contacte.getUsername());
+//		}
+//		
+//		// Ahora tenemos una lista de los valores distintos que hay en cada campo. Eliminando los nulos y vacíos, y sin repetir.
+//		// Solo así ya nos podriamos quitar algunos contactos.
+//
+//		//Vamos a fusionar los que sean casos de nulos que hemos solucionado.
+//		
+//		if (nombres.size() == 1 && telefonos.size() == 1 && apellidos1.size() == 1 && apellidos2.size() == 1
+//				&& cargos.size() == 1 && usernames.size() == 1) {
+//			log.info("Fusionamos " + contactos.size() + " en uno solo");
+//			String nif = contactos.get(0).getNif();
+//			String nom = nombres.get(0);
+//			String telefon = telefonos.get(0);
+//			String llinatge1 = apellidos1.get(0);
+//			String llinatge2 = apellidos2.get(0);
+//			String carrec = cargos.get(0);
+//			String username = contactos.get(0).getUsername();
+//			String mail = contactos.get(0).getMail();
+//			
+//			String nomComplet = nom + " " + llinatge1 + " " + llinatge2;
+//			nomComplet = nomComplet.replaceAll("\\s+", " ").trim(); // Limpiar espacios extras
+//			
+//			ContacteJPA contacteFusionat = new ContacteJPA(nif, nom, llinatge1, llinatge2, carrec, telefon, mail, username, nomComplet);
+//			try {
+//				Contacte fusionat = contacteLogicaEjb.create(contacteFusionat);
+//				fusionarContactes(contactos, fusionat );
+//			} catch (I18NException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//		}
+//		
+//	}
+//	
+//	private void fusionarContactes(List<Contacte> contactos, Contacte contacteFusionat ) {
+//        // Aquí se implementaría la lógica para fusionar los contactos en uno solo, manteniendo el ID del contacto que queremos conservar, y eliminando los demás.
+//        // Antes de eliminar, se deberían actualizar las referencias a los contactos eliminados para que apunten al contacto que conservamos.
+//		
+//		// Creamos el contacto nuevo, con los datos anteriores, y actulizamos los IDs anteriores.
+//		Long fusionatID = contacteFusionat.getContacteID();
+//		
+//		List<Long> contacteIDs = new ArrayList<>();
+//		for (Contacte contacte : contactos) {
+//			Long anteriorID = contacte.getContacteID();
+//			
+//			contacteIDs.add(contacte.getContacteID());
+//
+//			updateSoliContacte(SolicitudFields.CONTACTETITULARID, anteriorID, fusionatID);
+//			updateSoliContacte(SolicitudFields.CONTACTEAUDITORIAID, anteriorID, fusionatID);
+//			updateSoliContacte(SolicitudFields.CONTACTESOLICITANTID, anteriorID, fusionatID);
+//			updateSoliContacte(SolicitudFields.CONTACTETECNICID, anteriorID, fusionatID);
+//			updateSoliContacte(SolicitudFields.CONTACTEGESTAUTID, anteriorID, fusionatID);
+//			
+////			contacteLogicaEjb.delete(contacte.getContacteID());
+//		}
+//    }
+//	
 	private void updateSoliContacte(LongField field, Long contacteIDAnterior, Long contacteIDNuevo) {
 		log.info("UPDATE pad_solicitud SET " + field.getSqlName() + " = " + contacteIDNuevo + " WHERE " + field.getSqlName() + " = " + contacteIDAnterior);
-//		try {
-//			solicitudLogicaEjb.update(field, contacteIDNuevo, field.equal(contacteIDAnterior));
-//		} catch (I18NException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	}
-	
-	private void testCampValor(List<String> llista, String valor) {
-		if (valor != null && !valor.isEmpty() && !llista.contains(valor)) {
-			llista.add(valor);
+		try {
+			solicitudLogicaEjb.update(field, contacteIDNuevo, field.equal(contacteIDAnterior));
+		} catch (I18NException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-    
+//	
+//	private void testCampValor(List<String> llista, String valor) {
+//		if (valor != null && !valor.isEmpty() && !llista.contains(valor)) {
+//			llista.add(valor);
+//		}
+//	}
+//    
     
     
     // =================== MIGRACIÓN FUSIONES ==========================
