@@ -342,38 +342,45 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
         } else {
 
             final String likeStr = "%" + af + "%";
-
             final boolean isNumber = PinbalAdminUtils.isNumber(af);
 
             // Dades general
-            Where w = Where.OR(TITOL.like(likeStr), DESCRIPCIO.like(likeStr), NOMENTITAT.like(likeStr),
-                    CONTACTENOM.like(likeStr), CONTACTEEMAIL.like(likeStr));
+            Where wTitol = IncidenciaTecnicaFields.TITOL.like(likeStr);
+			Where wDescripcio = IncidenciaTecnicaFields.DESCRIPCIO.like(likeStr);
+			Where wNomEntitat = IncidenciaTecnicaFields.NOMENTITAT.like(likeStr);
+			Where wContacteNom = IncidenciaTecnicaFields.CONTACTENOM.like(likeStr);
+			Where wContacteEmail = IncidenciaTecnicaFields.CONTACTEEMAIL.like(likeStr);
 
-            // identificador de consulta o numero seguiment de la incidència
+			Where wIncidenciaID = null;
+            // identificador de la incidència
             if (isNumber) {
-                w = Where.OR(w, CAIDIDENTIFICADORCONSULTA.like(likeStr), CAIDNUMEROSEGUIMENT.like(likeStr),
-                        INCIDENCIATECNICAID.equal(Long.parseLong(af)));
+            	wIncidenciaID = INCIDENCIATECNICAID.equal(Long.parseLong(af));
             }
-
+            
             // Comentari dels Events
-            SubQuery<Event, Long> subquery1 = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-                    Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
-            w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery1));
+			List<Long> ids = eventLogicaEjb.executeQuery(EventFields.INCIDENCIATECNICAID,
+					Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
+
+			Where wEventsIncidencia = IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(ids);
 
             // identificador de consulta o numero seguiment dels events
-            if (isNumber) {
-                SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-                        Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
-                                EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));
-                SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
-                        Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
-                                EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
-                w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2a),
-                        IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2b));
-            }
+//            if (isNumber) {
+//            	
+//                SubQuery<Event, Long> subquery2a = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+//                        Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
+//                                EventFields.CAIDIDENTIFICADORCONSULTA.like(likeStr)));
+//                
+//                SubQuery<Event, Long> subquery2b = eventLogicaEjb.getSubQuery(EventFields.INCIDENCIATECNICAID,
+//                        Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(),
+//                                EventFields.CAIDNUMEROSEGUIMENT.like(likeStr)));
+//                
+//                w = Where.OR(w, IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2a),
+//                        IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(subquery2b));
+//            }
 
 //            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
+			Where w = Where.OR(wTitol, wDescripcio, wNomEntitat, wContacteNom, wContacteEmail, wEventsIncidencia, wIncidenciaID);
             log.info("Where ]" + w.toSQL() + "[");
             return w;
         }
