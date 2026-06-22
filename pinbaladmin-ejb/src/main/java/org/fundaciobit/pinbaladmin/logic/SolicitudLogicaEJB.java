@@ -1047,15 +1047,15 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 //	}
 
 	@Override
-	public void crearOActualitzarSolicitudPinbal(Long soliID) {
+	public void crearOActualitzarSolicitudPinbal(Long soliID) throws I18NException {
 		
 		// 1. Obtener la solicitud
 		SolicitudJPA solicitud = findByPrimaryKey(soliID);
 		
 	    // 2️. Comprobar si la solicitud está autorizada
 	    if (!estaAutorizada(solicitud)) {
-	        log.info("Solicitud "+soliID+" no autorizada. No se creará/actualizará en PINBAL.");
-	        return;
+	        log.info("Solicitud ID="+soliID+" no autorizada. No se creará/actualizará en PINBAL.");
+	        throw new I18NException("La solicitud no está autorizada. No se creará/actualizará en PINBAL.");
 	    }
 	    
 		ProcedimentClient procedimentClient = createProcedimentClient();
@@ -1161,24 +1161,30 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	}
 	
 	private boolean estaAutorizada(SolicitudJPA solicitud) {
+		
 		if (solicitud == null) {
 			return false;
 		}
-
+		String codi = solicitud.getProcedimentCodi();
+		log.info("Comprovant si la solicitud amb codi " + codi + " està autoritzada a PINBAL.");
+		
 		if (solicitud.getInfomadridid() == null) {
 			return false;
 		}
-
+		log.info("Cercam InfoMadrid per veure si esta autoritzada.");
 		InfoMadridJPA infoMad = infoMadridLogicaEjb.findByPrimaryKey(solicitud.getInfomadridid());
 
 		if (infoMad == null) {
+			log.info("No tenim InfoMadrid.");
 			return false;
 		}
 
 		if (infoMad.getDataAutoritzacio() == null) {
-			log.info("La solicitud " + solicitud.getProcedimentCodi() + " no está autorizada. No se creará/actualizará en PINBAL.");
+			log.info("La solicitud no te data d'autorització.");
 			return false;
 		}
+		
+		log.info("La solicitud esta autoritzada. Data autorització: " + infoMad.getDataAutoritzacio());
 		
 		return true;
 	}

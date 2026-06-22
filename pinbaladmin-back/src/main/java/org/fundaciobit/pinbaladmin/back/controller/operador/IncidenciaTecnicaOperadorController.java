@@ -346,8 +346,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
             // Dades general
             Where wTitol = IncidenciaTecnicaFields.TITOL.like(likeStr);
-			Where wDescripcio = IncidenciaTecnicaFields.DESCRIPCIO.like(likeStr);
-			Where wNomEntitat = IncidenciaTecnicaFields.NOMENTITAT.like(likeStr);
+//			Where wDescripcio = IncidenciaTecnicaFields.DESCRIPCIO.like(likeStr);
+//			Where wNomEntitat = IncidenciaTecnicaFields.NOMENTITAT.like(likeStr);
 			Where wContacteNom = IncidenciaTecnicaFields.CONTACTENOM.like(likeStr);
 			Where wContacteEmail = IncidenciaTecnicaFields.CONTACTEEMAIL.like(likeStr);
 
@@ -358,10 +358,10 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             }
             
             // Comentari dels Events
-			List<Long> ids = eventLogicaEjb.executeQuery(EventFields.INCIDENCIATECNICAID,
-					Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
-
-			Where wEventsIncidencia = IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(ids);
+//			List<Long> ids = eventLogicaEjb.executeQuery(EventFields.INCIDENCIATECNICAID,
+//					Where.AND(EventFields.INCIDENCIATECNICAID.isNotNull(), EventFields.COMENTARI.like(likeStr)));
+//
+//			Where wEventsIncidencia = IncidenciaTecnicaFields.INCIDENCIATECNICAID.in(ids);
 
             // identificador de consulta o numero seguiment dels events
 //            if (isNumber) {
@@ -380,7 +380,8 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
 
 //            log.info("getAdditionalCondition::FILTRAM AVANZAT !!!!!!!!!!");
 
-			Where w = Where.OR(wTitol, wDescripcio, wNomEntitat, wContacteNom, wContacteEmail, wEventsIncidencia, wIncidenciaID);
+//			Where w = Where.OR(wTitol, wDescripcio, wNomEntitat, wContacteNom, wContacteEmail, wEventsIncidencia, wIncidenciaID);
+			Where w = Where.OR(wTitol, wContacteNom, wContacteEmail, wIncidenciaID);
             log.info("Where ]" + w.toSQL() + "[");
             return w;
         }

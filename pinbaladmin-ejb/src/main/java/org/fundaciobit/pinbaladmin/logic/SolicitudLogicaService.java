@@ -83,7 +83,7 @@ public interface SolicitudLogicaService extends SolicitudService {
 
 	void crearInfoMadridFromSolicitud(Solicitud solicitud);
 
-	void crearOActualitzarSolicitudPinbal(Long soliID);
+	void crearOActualitzarSolicitudPinbal(Long soliID) throws I18NException;
 
 	/**
 	 * Obtiene el ID de la solicitud final activa siguiendo la cadena de fusiones.

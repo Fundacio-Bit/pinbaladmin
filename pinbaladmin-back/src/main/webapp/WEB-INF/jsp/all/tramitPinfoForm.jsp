@@ -774,7 +774,7 @@ section {
 		function afegirProcediment(proc) {
 			var procedimentDiv = document.createElement("div");
             procedimentDiv.classList.add("procediment-item");
-            procedimentDiv.innerHTML = proc.key + " - " + proc.value;
+            procedimentDiv.innerHTML = "[" + proc.id + "] " + proc.key + " - " + proc.value;
             procedimentDiv.onclick = function() {
                 elegirProcediment(proc);
             };
@@ -809,7 +809,7 @@ section {
             let li = $("<li></li>").addClass("procediment-li");
             let container = $("<div></div>").addClass("procediment-data-container");
             
-            let spanText = $("<span></span>").addClass("procediment-data-text").text(proc.key + " - " + proc.value);
+            let spanText = $("<span></span>").addClass("procediment-data-text").text("[" + proc.id + "] " + proc.key + " - " + proc.value);
             
             let spanDelete = $("<span></span>").addClass("procediment-data-delete").html('<i class="fas fa-times"></i>').click(function() {
                 procediments = procediments.filter(function(p) {

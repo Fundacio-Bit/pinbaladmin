@@ -433,6 +433,10 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		Long fitxerID = pinfo.getFitxerID();
 		String titolPeticio = incidencia.getTitol();
 		String description = incidencia.getDescripcio();
+		if (description != null && description.length() > 250) {
+			description = description.substring(0, 250);
+		}
+		
 		String reason = "Autorització de la solicitud de permisos";
 		String senderUsername = pinfo.getSolicitantNIF();
 		String senderFullName = incidencia.getContacteNom();

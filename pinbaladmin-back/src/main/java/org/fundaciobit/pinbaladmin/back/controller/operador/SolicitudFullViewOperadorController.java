@@ -632,7 +632,6 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 		return null;
 	}
 
-
     @RequestMapping(value = "/rebreSolicitud/{solicitudID}", method = RequestMethod.GET)
     public String rebreSolicitud(@PathVariable("solicitudID") java.lang.Long solicitudID, HttpServletRequest request,
             HttpServletResponse response) throws I18NException {

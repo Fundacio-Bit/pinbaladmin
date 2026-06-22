@@ -506,7 +506,7 @@ public class TramitIOperadorController extends TramitIServController {
 		Gson g = new Gson();
 		String serveisJsonString = g.toJson(items);
 
-		log.info(serveisJsonString );
+//		log.info(serveisJsonString );
 
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");

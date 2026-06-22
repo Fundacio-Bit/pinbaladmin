@@ -703,6 +703,16 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 		Where wGrupPublic = EntitatFields.GRUPENTITATID.in(grups);
 		List<String> dir3List = entitatLogicaEjb.executeQuery(EntitatFields.DIR3, wGrupPublic);
+		
+		
+		//Imprimir los DIR3 para ver que esta todo ok.
+		log.info("Mostrar DIR3");
+		for (String dir3 : dir3List) {
+			log.info(dir3);
+		}
+
+		log.info("Totals: " + dir3List.size());
+		
 		return dir3List;
 	}
 
@@ -713,7 +723,8 @@ public class PinfoDataPublicController extends PinfoDataController {
 			List<String> dir3GovernEmpresPublica = getDir3GovernEmpresPublica();
 
 			Where wEntitatPublica = SolicitudFields.DIR3.in(dir3GovernEmpresPublica);
-			List<Solicitud> solicituds = solicitudLogicaEjb.select(wEntitatPublica);
+			Where wNoFusionats = SolicitudFields.ESTATSOLICITUD.notEqual(Constants.SOLI_ESTAT_FUSIONADA);
+			List<Solicitud> solicituds = solicitudLogicaEjb.select(Where.AND(wEntitatPublica, wNoFusionats));
 			cacheProcediments = new java.util.ArrayList<Item>();
 
 			for (Solicitud soli : solicituds) {
@@ -807,15 +818,14 @@ public class PinfoDataPublicController extends PinfoDataController {
 			Long serveiID = ss.getServeiID();
 			Servei servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
 
-			// if (servei.getEstatServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT)
-			// {
-			String id = String.valueOf(ss.getId());
-			String key = servei.getCodi();
-			String value = servei.getNom();
+			if (servei.getEstatServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT) {
+				String id = String.valueOf(ss.getId());
+				String key = servei.getCodi();
+				String value = servei.getNom();
 
-			Item item = new Item(id, key, value);
-			items.add(item);
-			// }
+				Item item = new Item(id, key, value);
+				items.add(item);
+			}
 		}
 
 		Gson g = new Gson();
