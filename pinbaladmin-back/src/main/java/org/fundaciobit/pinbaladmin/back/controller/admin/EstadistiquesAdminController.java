@@ -146,6 +146,7 @@ public class EstadistiquesAdminController {
 			for (IncidenciaTecnica incidencia : incidencies) {
 				switch (incidencia.getTipus()) {
 				
+				case Constants.INCIDENCIA_TIPUS_TRAMIT_PINFO:
 				case Constants.INCIDENCIA_TIPUS_ROLEPERMISOS:
 					registres2.add(new Registre2("ROL", incidencia.getDataInici()));
 					break;

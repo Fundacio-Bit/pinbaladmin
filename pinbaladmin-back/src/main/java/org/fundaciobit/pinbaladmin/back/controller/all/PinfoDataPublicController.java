@@ -812,13 +812,16 @@ public class PinfoDataPublicController extends PinfoDataController {
 		List<SolicitudServei> solicitudServeis = solicitudServeiLogicaEjb
 				.select(SolicitudServeiFields.SOLICITUDID.equal(procedimentID));
 
+		log.info("Serveis trobats: " + solicitudServeis.size());
+		
 		List<Item> items = new java.util.ArrayList<Item>();
 
 		for (SolicitudServei ss : solicitudServeis) {
 			Long serveiID = ss.getServeiID();
 			Servei servei = serveiLogicaEjb.findByPrimaryKey(serveiID);
-
-			if (servei.getEstatServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT) {
+			log.info("Servei:  " + servei.getCodi() + " - Estat: " + ss.getEstatSolicitudServeiID());
+			
+			if (ss.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_AUTORITZAT) {
 				String id = String.valueOf(ss.getId());
 				String key = servei.getCodi();
 				String value = servei.getNom();

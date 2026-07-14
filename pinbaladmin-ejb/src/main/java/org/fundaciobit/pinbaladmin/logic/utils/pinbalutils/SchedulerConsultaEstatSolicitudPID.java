@@ -19,6 +19,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
+import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
@@ -54,19 +55,28 @@ public class SchedulerConsultaEstatSolicitudPID {
 	public void init() {
 		// Configurar la tarea con valores dinámicos
 
-		// String horaStr = Configuracio.getHoraTancamentExpedientsScheduler(); // 14
-		// String nHoresStr = Configuracio.getNhoresTancamentExpedientsScheduler(); // 2
-		//
-		// int nHores = Integer.parseInt(nHoresStr);
-		// if (nHores > 1) {
-		// int hores = Integer.parseInt(horaStr);
-		// horaStr += "-" + (hores + nHores - 1);
-		// }
-		//
-		// log.info("initScheduler:: Tancar expedients a les " + horaStr + " hores");
-		String horaStr = "14";
-		String minuteStr = "00";
-
+//		 String horaStr = Configuracio.getHoraTancamentExpedientsScheduler(); // 14
+//		 String nHoresStr = Configuracio.getNhoresTancamentExpedientsScheduler(); // 2
+//		
+//		 int nHores = Integer.parseInt(nHoresStr);
+//		 if (nHores > 1) {
+//		 int hores = Integer.parseInt(horaStr);
+//		 horaStr += "-" + (hores + nHores - 1);
+//		 }
+		
+//		String timeStr = Configuracio.getHoraConsultaSolicitudsScheduler(); // 14:30
+//		
+//		String[] timeParts = timeStr.split(":");
+//		String horaStr = timeParts[0];
+//		String minuteStr = timeParts[1];
+//		minuteStr = "*/5";
+		
+		String horaStr = "9,12,15";
+		String minuteStr = "0";
+		
+		
+//		 log.info("initScheduler:: Tancar expedients a les " + horaStr + " hores");
+		log.info("initScheduler:: Consultar estat de les solicituds a les " + horaStr + ":" + minuteStr + " hores");
 		scheduleTask(horaStr, minuteStr);
 	}
 
@@ -86,8 +96,8 @@ public class SchedulerConsultaEstatSolicitudPID {
 
 	@Timeout
 	public void onTimeout(Timer timer) {
-		log.info("No executam el cron per canviar estats encara.");
-		// obtenirEstatsSolicitudsPinbal();
+//		log.info("No executam el cron per canviar estats encara.");
+		 obtenirEstatsSolicitudsPinbal();
 	}
 
 	protected void obtenirEstatsSolicitudsPinbal() {
@@ -181,24 +191,29 @@ public class SchedulerConsultaEstatSolicitudPID {
 							solicitud.getSolicitudID());
 
 					final String SOLICITUD_TROBADA = "0";
-					if (retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
-
-						EstadoProcedimiento estadoActual = retorno.getProcedimiento().getEstadoProcedimiento();
-						Long estatPinbalNou = Long.valueOf(estadoActual.getEstado());
-
-						if (estatPinbalOld != estatPinbalNou) {
-							if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR
-									&& estatPinbalNou != Constants.ESTAT_PINBAL_ERROR) {
-								crearMissatgeCanviEstat(solicitud.getSolicitudID(), estatPinbalOld, estadoActual);
-							}
-						}
-						solicitud.setEstatpinbal(estatPinbalNou);
+					
+					if (retorno == null) {
+						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Retorn null.");
 					} else {
-						log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: "
-								+ retorno.getEstado().getCodigoEstado() + " - "
-								+ retorno.getEstado().getLiteralError());
-					}
+						if (retorno != null && retorno.getEstado().getCodigoEstado().equals(SOLICITUD_TROBADA)) {
 
+							EstadoProcedimiento estadoActual = retorno.getProcedimiento().getEstadoProcedimiento();
+							Long estatPinbalNou = Long.valueOf(estadoActual.getEstado());
+
+							if (estatPinbalOld != estatPinbalNou) {
+								if (estatPinbalOld != Constants.ESTAT_PINBAL_ERROR
+										&& estatPinbalNou != Constants.ESTAT_PINBAL_ERROR) {
+									crearMissatgeCanviEstat(solicitud.getSolicitudID(), estatPinbalOld, estadoActual);
+								}
+							}
+							solicitud.setEstatpinbal(estatPinbalNou);
+						} else {
+							log.error("No s'ha trobat la solicitud " + codi + " a Pinbal. Estat: "
+									+ retorno.getEstado().getCodigoEstado() + " - "
+									+ retorno.getEstado().getLiteralError());
+						}
+					}
+					
 				} catch (I18NException e) {
 					log.error("Error creant event de canvi de solicitud " + solicitud.getProcedimentCodi() + ": "
 							+ e.getMessage());

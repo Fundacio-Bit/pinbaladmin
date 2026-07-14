@@ -410,10 +410,16 @@ public class IncidenciaTecnicaOperadorController extends IncidenciaTecnicaContro
             throws I18NException {
         List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
 
-        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
-        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
-        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
-        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
+        int [] tipus = Constants.TIPUS_INCIDENCIES;
+		for (int t : tipus) {
+			StringKeyValue skv = new StringKeyValue(String.valueOf(t), I18NUtils.tradueix("incidencia.tipus." + t));
+			__tmp.add(skv);
+		}
+        
+//        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_TECNICA), "Tècnica"));
+//        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_CONSULTA), "Consulta"));
+//        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_INTEGRACIONS), "Integracions"));
+//        __tmp.add(new StringKeyValue(String.valueOf(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS), "Roles de permisos"));
         return __tmp;
     }
 

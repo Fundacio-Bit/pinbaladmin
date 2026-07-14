@@ -66,9 +66,10 @@ public interface Constants {
     public static final int INCIDENCIA_TIPUS_CONSULTA = 2;
     public static final int INCIDENCIA_TIPUS_INTEGRACIONS = 3;
     public static final int INCIDENCIA_TIPUS_ROLEPERMISOS = 4;
-
+    public static final int INCIDENCIA_TIPUS_TRAMIT_PINFO= 5;
+    
 	public static final int[] TIPUS_INCIDENCIES = { INCIDENCIA_TIPUS_TECNICA, INCIDENCIA_TIPUS_CONSULTA,
-			INCIDENCIA_TIPUS_INTEGRACIONS, INCIDENCIA_TIPUS_ROLEPERMISOS };
+			INCIDENCIA_TIPUS_INTEGRACIONS, INCIDENCIA_TIPUS_ROLEPERMISOS, INCIDENCIA_TIPUS_TRAMIT_PINFO };
 
     // Estats de una solicitud
     public static final long SOLI_ESTAT_SENSE_ESTAT = -1;

@@ -72,12 +72,13 @@ public class SolicitudLocalPendentOperadorController extends SolicitudLocalOpera
         
         // Definir los estados a mostrar (fácil añadir nuevos estados aquí)
         long[] estats = {
-            Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO,      // 5
-            Constants.SOLI_ESTAT_PENDENT_Enviar_Director,  // 11
-            Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID,    // 19
-            Constants.SOLI_ESTAT_ESMENES,                  // 30
+            Constants.SOLI_ESTAT_PENDENT_DISTRIBUCIO,       // 5
+            Constants.SOLI_ESTAT_PENDENT_Enviar_Director,   // 11
             Constants.SOLI_ESTAT_CANVI_PENDENT_REVISAR,     // 33
-            Constants.SOLI_ESTAT_PENDENT_AUTORITZAR        // 20
+            Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID,     // 19
+            Constants.SOLI_ESTAT_PENDENT_AUTORITZAR,        // 20
+            Constants.SOLI_ESTAT_ESMENES,                   // 30
+            Constants.SOLI_ESTAT_AUTORITZAT 				// 40
         };
         
         // Crear lista de columnas

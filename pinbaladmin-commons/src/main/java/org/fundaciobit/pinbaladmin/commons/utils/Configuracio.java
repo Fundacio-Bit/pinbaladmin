@@ -332,4 +332,8 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "queesticfent.usuari.default");
 		//return pvico
 	}
+
+	public static String getHoraConsultaSolicitudsScheduler() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "scheduler.consultaexpedients.hora");
+	}
 }

@@ -340,7 +340,6 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 				|| estadoMadridNuevo.equals(Constants.ESTAT_PINBAL_AUTORITZAT_SOLICITUTS_PENDENTS_SUBSANACIO)) {
 
 			solicitud.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
-
 			infoMadrid.setEstatProcediment(Constants.SOLI_ESTAT_PENDENT_AUTORITZAR);
 		}
 	}

@@ -117,7 +117,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 
 			IncidenciaTecnicaJPA incidencia = form.getIncidenciaTecnica();
 
-			incidencia.setTipus(Constants.INCIDENCIA_TIPUS_ROLEPERMISOS);
+			incidencia.setTipus(Constants.INCIDENCIA_TIPUS_TRAMIT_PINFO);
 			form.addHiddenField(IncidenciaTecnicaFields.TIPUS);
 
 			incidencia.setEstat(Constants.ESTAT_INCIDENCIA_OBERTA);

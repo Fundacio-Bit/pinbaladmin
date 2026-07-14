@@ -127,7 +127,7 @@ public abstract class AbstractEventIncidenciaTecnicaController extends AbstractE
 
         }
         
-        if (item.getTipus() == Constants.INCIDENCIA_TIPUS_ROLEPERMISOS) {
+        if (item.getTipus() == Constants.INCIDENCIA_TIPUS_TRAMIT_PINFO) {
 			//Es un PINFO. Cercar estats del pinfo.
         	return I18NUtils.tradueix("estat.pinfo." + (item.getEstat() - 10));
         }
