@@ -4,66 +4,171 @@
     Permet introduïr configuracions relacionades amb el desplegament.
     Com ara ignorar mòduls del servidor si el nostre EAR conté versions més recents.
     -->
-	<deployment>
+    <deployment>
         <dependencies>
-            <module name="org.hibernate" slot="5.3" export="true"/>
-            <module name="org.apache.xerces" export="true" />
-            
-			<module name="org.keycloak.keycloak-core" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-adapter-spi" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-adapter-subsystem" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-authz-client" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-common" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-jboss-adapter-core" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-undertow-adapter" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-wildfly-adapter" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-wildfly-elytron-oidc-adapter" optional="TRUE"/>
-			<module name="org.keycloak.keycloak-wildfly-subsystem" optional="TRUE"/>
-            
-            
-            <module name="com.sun.xml.bind" export="TRUE"/>
-            <module name="com.sun.xml.txw2" export="TRUE"/>
-            <module name="org.apache.commons.codec" export="TRUE"/>
-            <module name="org.apache.httpcomponents.core" export="TRUE"/>
-            <module name="org.apache.commons.beanutils" export="TRUE"/>
-            <module name="javax.annotation.api" export="TRUE"/>
-            <module name="org.jboss.ejb3" export="TRUE"/>
-            <module name="javax.xml.bind.api" export="TRUE"/>
-            <module name="org.codehaus.jettison" export="TRUE"/>
-            <module name="org.apache.commons.io" export="TRUE"/>
-            <module name="org.apache.velocity" export="TRUE"/>
-            <module name="com.sun.xml.fastinfoset" export="TRUE"/>
-            <module name="org.bouncycastle" export="TRUE"/>
-            <module name="org.apache.commons.lang3" export="TRUE"/>
-            <module name="com.google.code.gson" export="TRUE"/>
-            <module name="javax.activation.api" export="TRUE"/>
-            <module name="com.sun.istack" export="TRUE"/> 
+            <module
+                name="org.hibernate"
+                slot="5.3"
+                export="true" />
+            <module
+                name="org.apache.xerces"
+                export="true" />
 
-            <module name="javax.validation.api" export="TRUE"/>
+            <module
+                name="org.keycloak.keycloak-core"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-adapter-spi"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-adapter-subsystem"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-authz-client"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-common"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-jboss-adapter-core"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-undertow-adapter"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-wildfly-adapter"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-wildfly-elytron-oidc-adapter"
+                optional="TRUE" />
+            <module
+                name="org.keycloak.keycloak-wildfly-subsystem"
+                optional="TRUE" />
 
 
-            <module name="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" export="TRUE"/>
-            <module name="org.jboss.logging.commons.logging" export="TRUE"/>
+            <module
+                name="com.sun.xml.bind"
+                export="TRUE" />
+            <module
+                name="com.sun.xml.txw2"
+                export="TRUE" />
+            <module
+                name="org.apache.commons.codec"
+                export="TRUE" />
+            <module
+                name="org.apache.httpcomponents.core"
+                export="TRUE" />
+            <module
+                name="org.apache.commons.beanutils"
+                export="TRUE" />
+            <module
+                name="javax.annotation.api"
+                export="TRUE" />
+            <module
+                name="org.jboss.ejb3"
+                export="TRUE" />
+            <module
+                name="javax.xml.bind.api"
+                export="TRUE" />
+            <module
+                name="org.codehaus.jettison"
+                export="TRUE" />
+            <module
+                name="org.apache.commons.io"
+                export="TRUE" />
+            <module
+                name="org.apache.velocity"
+                export="TRUE" />
+            <module
+                name="com.sun.xml.fastinfoset"
+                export="TRUE" />
+            <module
+                name="org.bouncycastle"
+                export="TRUE" />
+            <module
+                name="org.apache.commons.lang3"
+                export="TRUE" />
+            <module
+                name="com.google.code.gson"
+                export="TRUE" />
+            <module
+                name="javax.activation.api"
+                export="TRUE" />
+            <module
+                name="com.sun.istack"
+                export="TRUE" />
 
-            <module name="org.slf4j" export="TRUE"/>
-            <module name="javax.mail.api" export="TRUE"/>
+            <module
+                name="javax.validation.api"
+                export="TRUE" />
+
+
+            <module
+                name="com.fasterxml.jackson.datatype.jackson-datatype-jsr310"
+                export="TRUE" />
+            <module
+                name="org.jboss.logging.commons.logging"
+                export="TRUE" />
+
+            <module
+                name="org.slf4j"
+                export="TRUE" />
+            <module
+                name="javax.mail.api"
+                export="TRUE" />
             
             <!--  APISIB JERSEY-CORE   -->
-            <module name="org.codehaus.jackson.jackson-core-asl" export="true"/>
-            <module name="org.codehaus.jackson.jackson-mapper-asl" export="true"/>
-            <module name="org.codehaus.jackson.jackson-jaxrs" export="true"/>
-            <module name="org.codehaus.jackson.jackson-xc" export="true"/>
+            <module
+                name="org.codehaus.jackson.jackson-core-asl"
+                export="true" />
+            <module
+                name="org.codehaus.jackson.jackson-mapper-asl"
+                export="true" />
+            <module
+                name="org.codehaus.jackson.jackson-jaxrs"
+                export="true" />
+            <module
+                name="org.codehaus.jackson.jackson-xc"
+                export="true" />
 
-            
+
         </dependencies>
+        <!-- Per evitar problemes amb els Bindings de les APIs RestEasy -->
+        <!-- Així suporten tipus especials com byte[], timestamp, ...   -->
+        <exclusions>
+            <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
+        </exclusions>
     </deployment>
-    
+
     <sub-deployment name="pinbaladmin-back.war">
         <dependencies>
-            <module name="org.apache.commons.beanutils" export="TRUE" />
-            <module name="org.apache.commons.collections" export="TRUE" />
-            <module name="javax.xml.bind.api" export="TRUE"/>  
+            <module
+                name="org.apache.commons.beanutils"
+                export="TRUE" />
+            <module
+                name="org.apache.commons.collections"
+                export="TRUE" />
+            <module
+                name="javax.xml.bind.api"
+                export="TRUE" />
         </dependencies>
-    </sub-deployment>    
+        <!-- Per evitar problemes amb els Bindings de les APIs RestEasy -->
+        <!-- Així suporten tipus especials com byte[], timestamp, ...   -->
+        <exclusions>
+            <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
+        </exclusions>
+
+    </sub-deployment>
+
+
+    <sub-deployment name="pinbaladmin-front.war">
+
+        <!-- Per evitar problemes amb els Bindings de les APIs RestEasy -->
+        <!-- Així suporten tipus especials com byte[], timestamp, ...   -->
+        <exclusions>
+            <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
+        </exclusions>
+
+    </sub-deployment>
 
 </jboss-deployment-structure>

@@ -12301,6 +12301,6 @@
   ],
   "generateBack": true,
   "generateFront": true,
-  "generateApiInterna": false,
-  "generateApiExterna": true
+  "generateApiInterna": true,
+  "generateApiExterna": false
 }

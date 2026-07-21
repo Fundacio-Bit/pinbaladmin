@@ -328,6 +328,7 @@
                     <displayName>PinbalAdmin</displayName>
                     <description>PinbalAdmin</description>
 
+                    <skipClassPathModification>true</skipClassPathModification>
                     <generateApplicationXml>true</generateApplicationXml>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <skinnyWars>true</skinnyWars>

@@ -138,12 +138,6 @@ hs_err_pid*
 /pinbaladmin-api-interna/.classpath
 /pinbaladmin-api-interna/.gitignore
 /pinbaladmin-api-interna/.project
-/pinbaladmin-api-interna/.settings
-/pinbaladmin-api-interna/.classpath
-/pinbaladmin-api-interna/.project
-/pinbaladmin-api-interna/.settings
-/pinbaladmin-api-interna/.classpath
-/pinbaladmin-api-interna/.project
 /onlyEar.bat
 /pemfiles/intranet_caib_es.pem
 /tree.txt
@@ -163,3 +157,7 @@ hs_err_pid*
 *.pem
 /pinbaladmin-api-interna/target
 /deps.txt
+/pinbaladmin-front/.settings
+/pinbaladmin-front/.classpath
+/pinbaladmin-front/target
+/apialtapeticions/gen_consulta.bat

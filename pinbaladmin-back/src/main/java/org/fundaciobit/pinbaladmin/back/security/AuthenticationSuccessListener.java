@@ -119,16 +119,11 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         
         log.info("Authorities: " + sc.getAuthentication().getAuthorities().toString());
         
-        
-		nif = info.getAdministrationID();
-		log.info("NIF: " + nif);        
-        
-        
-        
-        
-        
-        
-        
+        if (info != null) {
+		    nif = info.getAdministrationID();
+        }
+        log.info("NIF: " + nif);
+
         LoginInfo loginInfo;
         // create a new authentication token
         loginInfo = new LoginInfo(user, username, new HashSet<GrantedAuthority>(realAuthorities), language, info);

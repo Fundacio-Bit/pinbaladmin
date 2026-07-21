@@ -50,7 +50,6 @@ public class LoginInfo {
         for (GrantedAuthority grantedAuthority : this.grantedAuthorities) {
             this.roles.add(grantedAuthority.getAuthority());
         }
-
     }
 
     public Set<String> getRoles() {
