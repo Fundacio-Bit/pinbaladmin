@@ -171,4 +171,12 @@
 
     </sub-deployment>
 
+    <sub-deployment name="pinbaladmin-api-interna.war">
+    <!-- Per evitar problemes amb els Bindings de les APIs RestEasy -->
+    <!-- Així suporten tipus especials com byte[], timestamp, ...   -->
+        <exclusions>
+            <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
+        </exclusions>
+    </sub-deployment>
+
 </jboss-deployment-structure>
