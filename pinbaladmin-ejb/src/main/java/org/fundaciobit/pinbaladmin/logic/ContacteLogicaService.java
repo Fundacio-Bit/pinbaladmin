@@ -4,7 +4,6 @@ import javax.ejb.Local;
 
 import org.fundaciobit.pinbaladmin.ejb.ContacteService;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 
 /**
  * 

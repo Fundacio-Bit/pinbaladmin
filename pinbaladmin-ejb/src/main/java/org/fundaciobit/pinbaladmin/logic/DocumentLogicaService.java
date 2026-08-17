@@ -6,7 +6,7 @@ import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.DocumentService;
-import org.fundaciobit.pinbaladmin.model.entity.Contacte;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 
 /**
  * 
@@ -17,10 +17,11 @@ import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 public interface DocumentLogicaService extends DocumentService {
 
     public static final String JNDI_NAME = "java:app/pinbaladmin-ejb/DocumentLogicaEJB!org.fundaciobit.pinbaladmin.logic.DocumentLogicaService";
-    
-	public void enviarDocumentPortaFIB(Long docID, List<Contacte> destinatari, String remitent) throws I18NException;
-	
-//	public Long crearIEnviarPeticioDeFirma(Long documentID, String destinatariNif, String titolPeticio, String description, String reason, String remitent) throws Exception;
 
-	public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException;
+    public void enviarDocumentPortaFIB(Long docID, List<ContactePortaFIB> destinatari, String remitent)
+            throws I18NException;
+
+    //	public Long crearIEnviarPeticioDeFirma(Long documentID, String destinatariNif, String titolPeticio, String description, String reason, String remitent) throws Exception;
+
+    public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException;
 }

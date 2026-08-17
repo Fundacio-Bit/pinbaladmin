@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.back.controller.admin;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +26,6 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButton;
 import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
-import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudLocalOperadorController.SolicitudConEventos;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.SolicitudController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudForm;
@@ -46,7 +44,6 @@ import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
-import org.fundaciobit.pinbaladmin.persistence.ContacteJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
 import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;

@@ -77,10 +77,10 @@ public class AuthenticationSuccessListener implements ApplicationListener<Intera
         try {
         	boolean debug = true;
         	//boolean caib = false;
-        	log.info("Instanciarem plugin");
+        	log.info("\n\nInstanciarem plugin");
 //        	username = "e45186147w";
         	IUserInformationPlugin plugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.OTAE);
-        	log.info("Plugin instanciat, provam getUserInfoByUserName: " + username);
+        	log.info("Plugin instanciat, provam getUserInfoByUserName: " + username + "\n\n");
             info = plugin.getUserInfoByUserName(username);
             log.info(info);
         } catch (Throwable e) {

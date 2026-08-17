@@ -27,6 +27,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.FitxerService;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudEJB;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
@@ -449,7 +450,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 
     //------------ Enviar Solicitud a Firmar -------------------
 	@Override
-	public void enviarFormulariDGPortaFIB(Solicitud soli, Contacte titular, String remitent) throws I18NException {
+	public void enviarFormulariDGPortaFIB(Solicitud soli, ContactePortaFIB titular, String remitent) throws I18NException {
 		
 //		String titolPeticio = "Solicitud Autorització PINBAL Procediment " + soli.getProcedimentCodi();
 //		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
@@ -457,7 +458,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		
 		Long documentID = getDocIDFormulariDGPDF(soli.getSolicitudID());
 
-		List<Contacte> destinataris = new ArrayList<Contacte>();
+		List<ContactePortaFIB> destinataris = new ArrayList<ContactePortaFIB>();
 		destinataris.add(titular);
 		
 		documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);

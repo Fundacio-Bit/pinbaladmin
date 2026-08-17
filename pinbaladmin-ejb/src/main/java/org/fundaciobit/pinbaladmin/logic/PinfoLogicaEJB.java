@@ -136,7 +136,10 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		
 		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
 			log.info("Usuari: " + usuariData.getUsuariNom() + " (" + usuariData.getUsuariNif() +  " - " + usuariData.getUsuariCodi() + ")");
+			
 		}
+		
+		
 
 		IncidenciaTecnica incidencia = incidenciaLogicaEjb.findByPrimaryKey(pinfo.getIncidenciaID());
 		data.put("incidencia", incidencia);
@@ -148,6 +151,9 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			organGestor = organ.getNom() + " (" + organ.getDir3() + ")";
 		}
 		data.put("organGestor", organGestor);
+
+        data.put("infoEntitat", organGestor);
+		
 		
 		String fileName = "PINFO_" + incidencia.getIncidenciaTecnicaID() + ".pdf";
 		File outputPDF = File.createTempFile("pinbaladmin_formulari_pinfo", ".pdf");

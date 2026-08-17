@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import javax.ejb.Stateless;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
-import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.PinfoDataEJB;
@@ -31,9 +29,6 @@ import org.fundaciobit.pinbaladmin.model.entity.PinfoData;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoDataFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
-import org.fundaciobit.pinbaladmin.model.fields.ServeiFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
-import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pinbaladmin.persistence.ServeiJPA;
@@ -54,7 +49,6 @@ import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.comu.Page;
 import es.caib.pinbal.client.procediments.Procediment;
 import es.caib.pinbal.client.procediments.ProcedimentClient;
-import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
 import es.caib.pinbal.client.serveis.Servei;
 import es.caib.pinbal.client.serveis.ServeiBasic;
 import es.caib.pinbal.client.serveis.ServeiClient;
@@ -193,7 +187,8 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 				} catch (Exception e) {
 					String msg = "Error obtenint usuari " + usuariID + ": " + e.getMessage();
 					log.error(msg, e);
-					throw new I18NException("genapp.comodi", msg);
+					continue;
+					//throw new I18NException("genapp.comodi", msg);
 				}
 			} else {
 //				log.info("Usuari " + usuariID + " ja existent, afegirem al seu procediment.");

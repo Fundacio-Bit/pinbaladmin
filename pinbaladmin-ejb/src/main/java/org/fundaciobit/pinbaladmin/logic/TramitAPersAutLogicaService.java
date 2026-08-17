@@ -1,6 +1,5 @@
 package org.fundaciobit.pinbaladmin.logic;
 
-import java.util.Properties;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Local;

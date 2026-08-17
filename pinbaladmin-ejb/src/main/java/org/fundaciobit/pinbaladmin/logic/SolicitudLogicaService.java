@@ -10,10 +10,10 @@ import javax.ejb.Local;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.ejb.SolicitudService;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.logic.dto.SolicitudDTO;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailAttachmentInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.email.EmailMessageInfo;
-import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.persistence.InfoMadridJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
@@ -70,7 +70,7 @@ public interface SolicitudLogicaService extends SolicitudService {
 
 	public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long solicitudID) throws I18NException;
 
-	public void enviarFormulariDGPortaFIB(Solicitud soli, Contacte destinatari, String remitent) throws I18NException;
+	public void enviarFormulariDGPortaFIB(Solicitud soli, ContactePortaFIB destinatari, String remitent) throws I18NException;
 
 	public void updateDocumentsConsentiment();
 

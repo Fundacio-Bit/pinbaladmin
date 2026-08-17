@@ -1,11 +1,8 @@
 package org.fundaciobit.pinbaladmin.logic.utils;
 
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Local;
 
-import org.fundaciobit.genapp.common.StringKeyValue;
 
 @Local
 public interface GenerarDocumentsDGLogicaService {

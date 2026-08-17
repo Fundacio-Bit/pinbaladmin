@@ -24,6 +24,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
@@ -358,10 +359,12 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			
 			String remitent = request.getRemoteUser();
 
-			List<Contacte> destinataris = new ArrayList<>();
+			List<ContactePortaFIB> destinataris = new ArrayList<>();
 
 	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
-	        destinataris.add(titular);
+	        final boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
+	        final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
+	        destinataris.add(new ContactePortaFIB(titular, ENVIAR_COM_USUARI_EXTERN));
 	        
 	        //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
 	        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
@@ -373,12 +376,13 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 //	        	
 //	        	String nif = "42994276P";
 //	        	String email = "aroibal@atib.es";
+	        	
 
 				List<Contacte> listaJefeATIB = contacteLogicaEjb
 						.select(Where.AND(ContacteFields.NIF.equal(nif), ContacteFields.MAIL.equal(email)));
 				
 				if (!listaJefeATIB.isEmpty()) {
-					destinataris.add(listaJefeATIB.get(0));
+					destinataris.add(new ContactePortaFIB(listaJefeATIB.get(0), ENVIAR_COM_USUARI_INTERN));
 				}
 			}
 	        

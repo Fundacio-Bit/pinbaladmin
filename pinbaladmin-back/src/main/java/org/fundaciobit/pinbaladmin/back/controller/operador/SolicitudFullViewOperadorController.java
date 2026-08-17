@@ -28,6 +28,7 @@ import org.fundaciobit.pinbaladmin.logic.InfoMadridLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ModificacioSolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.TramitAPersAutLogicaService;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.logic.utils.FileInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.GenerarDocumentsDGLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.ParserFormulariXML;
@@ -667,7 +668,10 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
 			String remitent = request.getRemoteUser();
 			Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
 
-			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, titular, remitent);
+			final boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
+			ContactePortaFIB contactePortaFIB = new ContactePortaFIB(titular, ENVIAR_COM_USUARI_EXTERN); // Indica que s'ha d'enviar com a usuari extern );
+
+			solicitudLogicaEjb.enviarFormulariDGPortaFIB(soli, contactePortaFIB, remitent);
 
 			log.info("S'ha enviat a firmar la sol·licitud [" + soliID + "]");
 			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar la sol·licitud [" + soliID + "]");

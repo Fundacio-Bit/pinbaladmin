@@ -180,11 +180,19 @@
 						</h3>
 					</div>
 					<div class="titol-tramit-pinfo-botonera">
-						<a href="<c:url value="/public/pinfodata/seleccionarResponsable"/>" class="btn-seguent">
+						<a href="<c:url value="/public/pinfodata/seleccionarResponsable"/>"  id="nextButton" class="btn-seguent">
 							<span>Següent</span>
 							<i class="fas fa-arrow-right"></i>
 						</a>
 					</div>
+
+                    <script>
+                        document.getElementById('nextButton').onclick = function() {
+                            // Canviar l'estat del cursor a "espera"
+                            document.body.style.cursor = 'wait';                    
+                        };
+                    </script>
+                                        
 				</div>
 
 				<div id="pinfo-data-content">

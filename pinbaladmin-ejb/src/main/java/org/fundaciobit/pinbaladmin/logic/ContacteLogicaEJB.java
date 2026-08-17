@@ -9,7 +9,6 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.ejb.ContacteEJB;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
-import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
 import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.persistence.ContacteJPA;
 

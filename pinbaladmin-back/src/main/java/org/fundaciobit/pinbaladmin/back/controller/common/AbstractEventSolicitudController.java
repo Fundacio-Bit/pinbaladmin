@@ -15,8 +15,6 @@ import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Solicitud;
-import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
-import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.springframework.validation.BindingResult;
 
 /**

@@ -23,6 +23,7 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEJB;
 import org.fundaciobit.pinbaladmin.ejb.OperadorService;
+import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.logic.utils.PortafibUtils;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -39,240 +40,243 @@ import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 @Stateless(name = "DocumentLogicaEJB")
 public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaService {
 
-	@EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
-	protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
+    @EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
+    protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
 
-	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
-	protected SolicitudLogicaService solicitudLogicaEjb;
+    @EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
+    protected SolicitudLogicaService solicitudLogicaEjb;
 
-	@EJB(mappedName = OperadorService.JNDI_NAME)
-	protected OperadorService operadorEjb;
+    @EJB(mappedName = OperadorService.JNDI_NAME)
+    protected OperadorService operadorEjb;
 
-	@EJB(mappedName = EventLogicaService.JNDI_NAME)
-	protected EventLogicaService eventLogicaEjb;
+    @EJB(mappedName = EventLogicaService.JNDI_NAME)
+    protected EventLogicaService eventLogicaEjb;
 
-	@EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)
-	protected org.fundaciobit.pinbaladmin.ejb.FitxerService fitxerEjb;
+    @EJB(mappedName = org.fundaciobit.pinbaladmin.ejb.FitxerService.JNDI_NAME)
+    protected org.fundaciobit.pinbaladmin.ejb.FitxerService fitxerEjb;
 
-	@EJB(mappedName = NotificacionLogicaService.JNDI_NAME)
-	protected NotificacionLogicaService notificacionLogicaEjb;
+    @EJB(mappedName = NotificacionLogicaService.JNDI_NAME)
+    protected NotificacionLogicaService notificacionLogicaEjb;
 
-	@Override
-	@PermitAll
-	public Document create(Document instance) throws I18NException {
-		return super.create(instance);
-	}
+    @Override
+    @PermitAll
+    public Document create(Document instance) throws I18NException {
+        return super.create(instance);
+    }
 
-	@PermitAll
-	@Override
-	public Document update(Document instance) throws I18NException {
-		return super.update(instance);
-	}
+    @PermitAll
+    @Override
+    public Document update(Document instance) throws I18NException {
+        return super.update(instance);
+    }
 
-	@Override
-	public void enviarDocumentPortaFIB(Long docID, List<Contacte> destinataris, String remitent) throws I18NException {
+    @Override
+    public void enviarDocumentPortaFIB(Long docID, List<ContactePortaFIB> destinataris, String remitent)
+            throws I18NException {
 
-		Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
-				DocumentSolicitudFields.DOCUMENTID.equal(docID));
-		
-		Document doc = this.findByPrimaryKey(docID);
-		SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-		
-		String tipusPeticio;
-		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-			tipusPeticio = "Solicitud";
-		} else if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
-			tipusPeticio = "Formulari AEAT";
-		} else {
-			tipusPeticio = "Adjunt";
-		}
-		
-		String titolPeticio = tipusPeticio + " Autorització PINBAL. Procediment: " + soli.getProcedimentCodi();
-		String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
-		String reason = tipusPeticio + " d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
+        Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
+                DocumentSolicitudFields.DOCUMENTID.equal(docID));
 
-		Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinataris, titolPeticio, description, reason,
-				remitent);
+        Document doc = this.findByPrimaryKey(docID);
+        SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
 
-		log.info("Peticio de firma creada: " + idPortafib);
-		// S'ha d'afegir un camp a la taula documentSolicitud per saber l'estat a PortaFIB
+        String tipusPeticio;
+        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+            tipusPeticio = "Solicitud";
+        } else if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
+            tipusPeticio = "Formulari AEAT";
+        } else {
+            tipusPeticio = "Adjunt";
+        }
 
-		doc.setNotes(idPortafib.toString());
-		this.update(doc);
+        String titolPeticio = tipusPeticio + " Autorització PINBAL. Procediment: " + soli.getProcedimentCodi();
+        String description = soli.getProcedimentCodi() + " - " + soli.getProcedimentNom();
+        String reason = tipusPeticio + " d'autorització als Serveis de la Plataforma d'Intermediació: SVD";
 
-		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-			soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
-			soli.setPortafibID(idPortafib);
-			solicitudLogicaEjb.update(soli);
-		}
+        Long idPortafib = crearIEnviarPeticioDeFirma(doc, destinataris, titolPeticio, description, reason, remitent);
 
-		String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinataris:\n";
-		
-		for (Contacte cte : destinataris) {
-			msg += cte.getNif() + " - " + cte.getNom() + " " + cte.getLlinatge1() + " - " + cte.getMail() + "\n";
-		}
-		
-		msg+= "Fitxer: " + doc.getNom();
+        log.info("Peticio de firma creada: " + idPortafib);
+        // S'ha d'afegir un camp a la taula documentSolicitud per saber l'estat a PortaFIB
 
-		afegirEventSolicitudEnviada(soliID, remitent, msg);
-	}
+        doc.setNotes(idPortafib.toString());
+        this.update(doc);
 
-	public Long crearIEnviarPeticioDeFirma(Document doc, List<Contacte> destinatari, String titolPeticio,
-			String description, String reason, String remitent) throws I18NException {
+        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+            soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
+            soli.setPortafibID(idPortafib);
+            solicitudLogicaEjb.update(soli);
+        }
 
-		String languageUI = "ca";
-		String languageDoc = "ca";
+        String msg = "Peticio de firma enviada a Portafib.\n" + "Remitent: " + remitent + "\n" + "Destinataris:\n";
 
-		// Fitxer a Firmar
-		FirmaAsyncSimpleFile fitxerAFirmar = getFitxerPortafibFromDoc(doc);
-		if (fitxerAFirmar == null) {
-			throw new I18NException("genapp.comodi", "No s'ha definit fitxer a firmar");
-		}
+        for (ContactePortaFIB cteP : destinataris) {
 
-		Long tipusDocumentalID = 14L; // Elegir un tipus documental: Autorització. 14 - Sol·licitud
+            Contacte cte = cteP.getContacte();
 
-		String senderUsername = remitent;
-		String senderFullName = operadorEjb.executeQueryOne(OperadorFields.NOM,
-				OperadorFields.USERNAME.equal(remitent));
+            msg += cte.getNif() + " - " + cte.getNom() + " " + cte.getLlinatge1() + " - " + cte.getMail() + "("
+                    + (cteP.isEnviarComUsuariExtern() ? "EXTERN" : "INTERN") + ")\n";
+        }
 
-		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertContacteToSignatureBlock(destinatari);
-//		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
+        msg += "Fitxer: " + doc.getNom();
 
-		String profileCode = Configuracio.getPortafibProfile();
-		int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
+        afegirEventSolicitudEnviada(soliID, remitent, msg);
+    }
 
-		// Annexes
-		List<FirmaAsyncSimpleAnnex> annexs = new ArrayList<FirmaAsyncSimpleAnnex>();
+    public Long crearIEnviarPeticioDeFirma(Document doc, List<ContactePortaFIB> destinatari, String titolPeticio,
+            String description, String reason, String remitent) throws I18NException {
 
-		String title = titolPeticio.length() > 250 ? titolPeticio.substring(0, 250) : titolPeticio;
+        String languageUI = "ca";
+        String languageDoc = "ca";
 
-		FirmaAsyncSimpleFile originalDetachedSignature = null;
+        // Fitxer a Firmar
+        FirmaAsyncSimpleFile fitxerAFirmar = getFitxerPortafibFromDoc(doc);
+        if (fitxerAFirmar == null) {
+            throw new I18NException("genapp.comodi", "No s'ha definit fitxer a firmar");
+        }
 
-		String descripcioTipusDocumental = null;
+        Long tipusDocumentalID = 14L; // Elegir un tipus documental: Autorització. 14 - Sol·licitud
 
-		String expedientCode = null;
-		String expedientName = null;
-		String expedientUrl = null;
-		String procedureCode = null;
-		String procedureName = null;
-		String additionalInformation = null;
-		Double additionalInformationEvaluable = null;
+        String senderUsername = remitent;
+        String senderFullName = operadorEjb.executeQueryOne(OperadorFields.NOM,
+                OperadorFields.USERNAME.equal(remitent));
 
-		List<FirmaAsyncSimpleMetadata> metadadaList = null;
+        FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertContacteToSignatureBlock(destinatari);
+        //		FirmaAsyncSimpleSignatureBlock[] signatureBlocks = PortafibUtils.convertNifToSignatureBlocks(destinatariNif);
 
-		FirmaAsyncSimpleSignatureRequestBase signatureRequestBase;
-		signatureRequestBase = new FirmaAsyncSimpleSignatureRequestBase(profileCode, title, description, reason,
-				fitxerAFirmar, originalDetachedSignature, tipusDocumentalID, descripcioTipusDocumental, languageDoc,
-				languageUI, priority, senderUsername, senderFullName, expedientCode, expedientName, expedientUrl,
-				procedureCode, procedureName, additionalInformation, additionalInformationEvaluable, annexs,
-				metadadaList);
+        String profileCode = Configuracio.getPortafibProfile();
+        int priority = FirmaAsyncSimpleSignatureRequestWithSignBlockList.PRIORITY_NORMAL_NORMAL;
 
-		Long peticioDeFirmaID;
+        // Annexes
+        List<FirmaAsyncSimpleAnnex> annexs = new ArrayList<FirmaAsyncSimpleAnnex>();
 
-		FirmaAsyncSimpleSignatureRequestWithSignBlockList signatureRequest;
-		signatureRequest = new FirmaAsyncSimpleSignatureRequestWithSignBlockList(signatureRequestBase, signatureBlocks);
+        String title = titolPeticio.length() > 250 ? titolPeticio.substring(0, 250) : titolPeticio;
 
-		ApiFirmaAsyncSimple api = PortafibUtils.getApiFirmaAsyncSimple();
-		
-		try {
-			peticioDeFirmaID = api.createAndStartSignatureRequestWithSignBlockList(signatureRequest);
-			return peticioDeFirmaID;
-		} catch (AbstractApisIBException e) {
-//			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
-			log.error("Error creant peticio de firma a Portafib: " + e.getMessage(), e);
-			throw new I18NException("error.portafib.generic", new I18NArgumentString(e.getMessage()));
-		}
-	}
+        FirmaAsyncSimpleFile originalDetachedSignature = null;
 
-	protected FirmaAsyncSimpleFile getFitxerPortafibFromDoc(Document doc) throws I18NException {
-		Long fitxerID = doc.getFitxerOriginalID();
+        String descripcioTipusDocumental = null;
 
-		log.info("fitxerID: " + fitxerID);
-		return PortafibUtils.getPortaFIBFileFromFitxerID(fitxerID, fitxerEjb);
-	}
+        String expedientCode = null;
+        String expedientName = null;
+        String expedientUrl = null;
+        String procedureCode = null;
+        String procedureName = null;
+        String additionalInformation = null;
+        Double additionalInformationEvaluable = null;
 
-	
+        List<FirmaAsyncSimpleMetadata> metadadaList = null;
 
-	protected void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException {
-		log.info("Afegir event de peticio enviada a portafib");
-		{
-			Long _solicitudID_ = soliID;
-			Long _incidenciaTecnicaID_ = null;
+        FirmaAsyncSimpleSignatureRequestBase signatureRequestBase;
+        signatureRequestBase = new FirmaAsyncSimpleSignatureRequestBase(profileCode, title, description, reason,
+                fitxerAFirmar, originalDetachedSignature, tipusDocumentalID, descripcioTipusDocumental, languageDoc,
+                languageUI, priority, senderUsername, senderFullName, expedientCode, expedientName, expedientUrl,
+                procedureCode, procedureName, additionalInformation, additionalInformationEvaluable, annexs,
+                metadadaList);
 
-			Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
+        Long peticioDeFirmaID;
 
-			int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
-			boolean _noLlegit_ = false;
-			Long _fitxerID_ = null;
-			String _missatge_ = missatge;
-			String _asumpte_ = "Peticio de firma enviada a Portafib";
-			String _persona_ = remitent;
-			String _destinatari_ = null;
-			String _destinatariEmail_ = null;
-			String _caidIdentificadorConsulta_ = null;
-			String _caidNumeroSeguiment_ = null;
+        FirmaAsyncSimpleSignatureRequestWithSignBlockList signatureRequest;
+        signatureRequest = new FirmaAsyncSimpleSignatureRequestWithSignBlockList(signatureRequestBase, signatureBlocks);
 
-			eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
-					_destinatariEmail_, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
-					_caidNumeroSeguiment_);
-		}
-	}
-	// ------------ Rebre Document Firmat -------------------{
-	@Override
-	public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException {
-		Long docID = getDocIDFromPortafibID(portafibID);
+        ApiFirmaAsyncSimple api = PortafibUtils.getApiFirmaAsyncSimple();
 
-		if (docID == null) {
-			log.error("No hi ha cap document amb portafibID=" + portafibID);
-		} else {
-			FirmaAsyncSimpleSignedFile firma = PortafibUtils.getFitxerSignat(portafibID);
-			Long fitxerFirmatID = PortafibUtils.guardarFitxer(firma, fitxerEjb);
-			
-			//El document de l'event ha de ser una copia del document original.
-			Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(firma, fitxerEjb);
-			
-			Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
-					DocumentSolicitudFields.DOCUMENTID.equal(docID));
-			if (soliID != null) {
-				afegirFitxerADocSolicitud(docID, soliID, fitxerFirmatID);
-				crearEventSolcitudFirmada(soliID, fitxerFirmatIDCopia );
-			} else {
-				log.error("No hi ha cap sol·licitud amb documentID=" + docID);
-			}
-		}
-		return docID;
-	}
+        try {
+            peticioDeFirmaID = api.createAndStartSignatureRequestWithSignBlockList(signatureRequest);
+            return peticioDeFirmaID;
+        } catch (AbstractApisIBException e) {
+            //			String msg = I18NLogicUtils.tradueix(new Locale(languageUI), "error.portafib.generic", e.getMessage());
+            log.error("Error creant peticio de firma a Portafib: " + e.getMessage(), e);
+            throw new I18NException("error.portafib.generic", new I18NArgumentString(e.getMessage()));
+        }
+    }
 
-	protected Long getDocIDFromPortafibID(Long portafibID) throws I18NException {
-		return this.executeQueryOne(DocumentFields.DOCUMENTID, DocumentFields.NOTES.like("%" + portafibID + "%"));
-	}
-	
-	protected void afegirFitxerADocSolicitud(Long docID, Long soliID, Long fitxerID) throws I18NException {
-		Document doc = this.findByPrimaryKey(docID);
-		doc.setFitxerFirmatID(fitxerID);
+    protected FirmaAsyncSimpleFile getFitxerPortafibFromDoc(Document doc) throws I18NException {
+        Long fitxerID = doc.getFitxerOriginalID();
 
-		if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
-			// Si el document es un formulari de director, canviar l'estat de la sol·licitud
-			// a PENDENT_Enviar a Madrid
+        log.info("fitxerID: " + fitxerID);
+        return PortafibUtils.getPortaFIBFileFromFitxerID(fitxerID, fitxerEjb);
+    }
 
-			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
-			soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
-			solicitudLogicaEjb.update(soli);
-		}
+    protected void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException {
+        log.info("Afegir event de peticio enviada a portafib");
+        {
+            Long _solicitudID_ = soliID;
+            Long _incidenciaTecnicaID_ = null;
 
-		this.update(doc);
-	}
+            Timestamp _dataEvent_ = new Timestamp(System.currentTimeMillis());
 
-	protected void crearEventSolcitudFirmada(Long soliID, Long fitxerFirmatID) throws I18NException {
+            int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_TRAMITADOR_PRIVAT;
+            boolean _noLlegit_ = false;
+            Long _fitxerID_ = null;
+            String _missatge_ = missatge;
+            String _asumpte_ = "Peticio de firma enviada a Portafib";
+            String _persona_ = remitent;
+            String _destinatari_ = null;
+            String _destinatariEmail_ = null;
+            String _caidIdentificadorConsulta_ = null;
+            String _caidNumeroSeguiment_ = null;
 
-		log.info("Afegir event de peticio rebuda de portafib");
-		SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(soliID);
-		
-		try {
-			notificacionLogicaEjb.registrarRecepcionFirma(solicitud, fitxerFirmatID);
-		} catch (I18NException e) {
-			log.error("Error registrant recepció de firma: " + e.getMessage(), e);
-			throw e;
-		}
-	}
+            eventLogicaEjb.create(_solicitudID_, _incidenciaTecnicaID_, _dataEvent_, _tipus_, _persona_, _destinatari_,
+                    _destinatariEmail_, _asumpte_, _missatge_, _fitxerID_, _noLlegit_, _caidIdentificadorConsulta_,
+                    _caidNumeroSeguiment_);
+        }
+    }
+
+    // ------------ Rebre Document Firmat -------------------{
+    @Override
+    public Long cosesAFerDocumentFirmat(Long portafibID) throws I18NException {
+        Long docID = getDocIDFromPortafibID(portafibID);
+
+        if (docID == null) {
+            log.error("No hi ha cap document amb portafibID=" + portafibID);
+        } else {
+            FirmaAsyncSimpleSignedFile firma = PortafibUtils.getFitxerSignat(portafibID);
+            Long fitxerFirmatID = PortafibUtils.guardarFitxer(firma, fitxerEjb);
+
+            //El document de l'event ha de ser una copia del document original.
+            Long fitxerFirmatIDCopia = PortafibUtils.guardarFitxer(firma, fitxerEjb);
+
+            Long soliID = documentSolicitudLogicaEjb.executeQueryOne(DocumentSolicitudFields.SOLICITUDID,
+                    DocumentSolicitudFields.DOCUMENTID.equal(docID));
+            if (soliID != null) {
+                afegirFitxerADocSolicitud(docID, soliID, fitxerFirmatID);
+                crearEventSolcitudFirmada(soliID, fitxerFirmatIDCopia);
+            } else {
+                log.error("No hi ha cap sol·licitud amb documentID=" + docID);
+            }
+        }
+        return docID;
+    }
+
+    protected Long getDocIDFromPortafibID(Long portafibID) throws I18NException {
+        return this.executeQueryOne(DocumentFields.DOCUMENTID, DocumentFields.NOTES.like("%" + portafibID + "%"));
+    }
+
+    protected void afegirFitxerADocSolicitud(Long docID, Long soliID, Long fitxerID) throws I18NException {
+        Document doc = this.findByPrimaryKey(docID);
+        doc.setFitxerFirmatID(fitxerID);
+
+        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF) {
+            // Si el document es un formulari de director, canviar l'estat de la sol·licitud
+            // a PENDENT_Enviar a Madrid
+
+            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
+            soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_ENVIAR_MADRID);
+            solicitudLogicaEjb.update(soli);
+        }
+
+        this.update(doc);
+    }
+
+    protected void crearEventSolcitudFirmada(Long soliID, Long fitxerFirmatID) throws I18NException {
+
+        log.info("Afegir event de peticio rebuda de portafib");
+        SolicitudJPA solicitud = solicitudLogicaEjb.findByPrimaryKey(soliID);
+
+        try {
+            notificacionLogicaEjb.registrarRecepcionFirma(solicitud, fitxerFirmatID);
+        } catch (I18NException e) {
+            log.error("Error registrant recepció de firma: " + e.getMessage(), e);
+            throw e;
+        }
+    }
 }

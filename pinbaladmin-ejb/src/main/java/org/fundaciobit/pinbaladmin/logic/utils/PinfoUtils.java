@@ -6,18 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
-import org.fundaciobit.pinbaladmin.commons.utils.Constants;
-import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
-import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.ProcedimentData;
-import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.ServeiData;
-import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.UsuariData;
-import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
-import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 
 import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.procediments.Procediment;
@@ -25,7 +17,6 @@ import es.caib.pinbal.client.procediments.ProcedimentClient;
 import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
 import es.caib.pinbal.client.serveis.ServeiBasic;
 import es.caib.pinbal.client.serveis.ServeiClient;
-import es.caib.pinbal.client.usuaris.ProcedimentServei;
 import es.caib.pinbal.client.usuaris.UsuariClient;
 
 public final class PinfoUtils {
