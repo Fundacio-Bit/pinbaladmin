@@ -2037,6 +2037,32 @@
             "webtype": 1
           },
           "foreignKeys": []
+        },
+        {
+          "isAutoIncrement": false,
+          "sqlName": "gestionatpergoverndigital",
+          "sqlType": -7,
+          "size": 1,
+          "digits": 0,
+          "isNotNullable": true,
+          "labels": {
+            "ca": "Entitat Gestionada per Govern Digital",
+            "es": "Entidad Gestionada per Govern Digital"
+          },
+          "javaName": "gestionatPerGovernDigital",
+          "javaType": "boolean",
+          "traduible": false,
+          "showInWebList": true,
+          "showInReferenceList": false,
+          "transientField": false,
+          "defaultValue": "false",
+          "filter": true,
+          "orderBy": 0,
+          "groupBy": false,
+          "webFieldInfo": {
+            "webtype": 4
+          },
+          "foreignKeys": []
         }
       ]
     },
@@ -2955,7 +2981,7 @@
           "isAutoIncrement": false,
           "sqlName": "descripcio",
           "sqlType": 12,
-          "size": 1000,
+          "size": 1500,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -5806,8 +5832,8 @@
           "digits": 0,
           "isNotNullable": false,
           "labels": {
-            "ca": "Entitat",
-            "es": "Entidad"
+            "ca": "Codi Pinbal de l\u0027Entitat",
+            "es": "Código Pinbal de la Entidad"
           },
           "javaName": "entitat",
           "javaType": "java.lang.String",
@@ -5815,7 +5841,7 @@
           "showInWebList": true,
           "showInReferenceList": false,
           "transientField": false,
-          "minAllowedValue": "GOVERN,FOGAIBA,IBSALUT",
+          "minAllowedValue": "07023,07032,07031,07020,07049,Q0700515J,07038,07004,07056,IBISEC,07050,07044,ATB,07058,IMAS,07029,PARLAMENT,07017,07048,IBAVI,07001,07007,07046,Q0700740D,07009,07060,07022,07051,07065,07052,IDI,07014,GOVERN,07901,CIME,07010,CIMA,FOGAIBA,07061,07033,07013,PACT,07019,07053,07012,07028,07045,07041,A07251895,07005,07055,07011,ICIB,07030,07008,SIC,07021,07015,G57357030,PortsIB,07018,07043,07003,CIEI,07054,FBSTIB,07047,CTM,LA0004547,07062,IEB,ATIB,07902,07034,07063,07025,07042,07059,07035,07036,07039,07024,LA0023695,SEMILLA,07037,07040,07064,07002,IBSALUT,07027,07057,07026,IBJOVE,UIB,07006,07016",
           "filter": false,
           "orderBy": 0,
           "groupBy": false,
@@ -8224,7 +8250,7 @@
           "isAutoIncrement": false,
           "sqlName": "enllaznormalegal",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -8249,7 +8275,7 @@
           "isAutoIncrement": false,
           "sqlName": "tipusconsentiment",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -8275,7 +8301,7 @@
           "isAutoIncrement": false,
           "sqlName": "consentiment",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": true,
           "labels": {
@@ -8301,7 +8327,7 @@
           "isAutoIncrement": false,
           "sqlName": "enllazconsentiment",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -8351,7 +8377,7 @@
           "isAutoIncrement": false,
           "sqlName": "caduca",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -8377,7 +8403,7 @@
           "isAutoIncrement": false,
           "sqlName": "fechacaduca",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {
@@ -8466,7 +8492,7 @@
           "isAutoIncrement": false,
           "sqlName": "articles",
           "sqlType": 12,
-          "size": 255,
+          "size": 355,
           "digits": 0,
           "isNotNullable": false,
           "labels": {

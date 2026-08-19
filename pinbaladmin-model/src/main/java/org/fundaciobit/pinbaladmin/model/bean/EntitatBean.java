@@ -16,6 +16,7 @@ public class EntitatBean implements Entitat {
 	boolean convenipmsbae;
 	java.lang.String dir3;
 	java.lang.String codiPinbal;
+	boolean gestionatPerGovernDigital;
 
 
   /** Constructor Buit */
@@ -23,7 +24,7 @@ public class EntitatBean implements Entitat {
   }
 
   /** Constructor amb tots els camps  */
-  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal) {
+  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal , boolean gestionatPerGovernDigital) {
     this.entitatID=entitatID;
     this.nom=nom;
     this.personaContacte=personaContacte;
@@ -32,9 +33,10 @@ public class EntitatBean implements Entitat {
     this.convenipmsbae=convenipmsbae;
     this.dir3=dir3;
     this.codiPinbal=codiPinbal;
+    this.gestionatPerGovernDigital=gestionatPerGovernDigital;
 }
   /** Constructor sense valors autoincrementals */
-  public EntitatBean(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal) {
+  public EntitatBean(java.lang.String nom , java.lang.String personaContacte , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , java.lang.String dir3 , java.lang.String codiPinbal , boolean gestionatPerGovernDigital) {
     this.nom=nom;
     this.personaContacte=personaContacte;
     this.CIF=CIF;
@@ -42,14 +44,16 @@ public class EntitatBean implements Entitat {
     this.convenipmsbae=convenipmsbae;
     this.dir3=dir3;
     this.codiPinbal=codiPinbal;
+    this.gestionatPerGovernDigital=gestionatPerGovernDigital;
 }
   /** Constructor dels valors Not Null */
-  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae) {
+  public EntitatBean(long entitatID , java.lang.String nom , java.lang.String CIF , long grupEntitatID , boolean convenipmsbae , boolean gestionatPerGovernDigital) {
     this.entitatID=entitatID;
     this.nom=nom;
     this.CIF=CIF;
     this.grupEntitatID=grupEntitatID;
     this.convenipmsbae=convenipmsbae;
+    this.gestionatPerGovernDigital=gestionatPerGovernDigital;
 }
   public EntitatBean(Entitat __bean) {
     this.setEntitatID(__bean.getEntitatID());
@@ -60,6 +64,7 @@ public class EntitatBean implements Entitat {
     this.setConvenipmsbae(__bean.isConvenipmsbae());
     this.setDir3(__bean.getDir3());
     this.setCodiPinbal(__bean.getCodiPinbal());
+    this.setGestionatPerGovernDigital(__bean.isGestionatPerGovernDigital());
 	}
 
 	public long getEntitatID() {
@@ -118,6 +123,13 @@ public class EntitatBean implements Entitat {
 		this.codiPinbal = _codiPinbal_;
 	};
 
+	public boolean isGestionatPerGovernDigital() {
+		return(gestionatPerGovernDigital);
+	};
+	public void setGestionatPerGovernDigital(boolean _gestionatPerGovernDigital_) {
+		this.gestionatPerGovernDigital = _gestionatPerGovernDigital_;
+	};
+
 
 
   // ======================================
@@ -133,6 +145,7 @@ public class EntitatBean implements Entitat {
     __tmp.setConvenipmsbae(__bean.isConvenipmsbae());
     __tmp.setDir3(__bean.getDir3());
     __tmp.setCodiPinbal(__bean.getCodiPinbal());
+    __tmp.setGestionatPerGovernDigital(__bean.isGestionatPerGovernDigital());
 		return __tmp;
 	}
 

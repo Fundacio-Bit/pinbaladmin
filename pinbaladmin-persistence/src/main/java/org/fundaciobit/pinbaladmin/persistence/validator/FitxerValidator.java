@@ -61,9 +61,9 @@ public class FitxerValidator<I extends Fitxer>
 
     if (__vr.getFieldErrorCount(DESCRIPCIO) == 0) {
       java.lang.String __descripcio = __target__.getDescripcio();
-      if (__descripcio!= null && __descripcio.length() > 1000) {
+      if (__descripcio!= null && __descripcio.length() > 1500) {
         __vr.rejectValue(DESCRIPCIO, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(1000)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(DESCRIPCIO)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(1500)));
       }
     }
 

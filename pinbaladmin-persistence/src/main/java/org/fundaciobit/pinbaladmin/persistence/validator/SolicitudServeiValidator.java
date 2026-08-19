@@ -53,33 +53,33 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
     // Check size
     if (__vr.getFieldErrorCount(ENLLAZNORMALEGAL) == 0) {
       java.lang.String __enllaznormalegal = __target__.getEnllazNormaLegal();
-      if (__enllaznormalegal!= null && __enllaznormalegal.length() > 255) {
+      if (__enllaznormalegal!= null && __enllaznormalegal.length() > 355) {
         __vr.rejectValue(ENLLAZNORMALEGAL, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENLLAZNORMALEGAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENLLAZNORMALEGAL)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
     if (__vr.getFieldErrorCount(TIPUSCONSENTIMENT) == 0) {
       java.lang.String __tipusconsentiment = __target__.getTipusConsentiment();
-      if (__tipusconsentiment!= null && __tipusconsentiment.length() > 255) {
+      if (__tipusconsentiment!= null && __tipusconsentiment.length() > 355) {
         __vr.rejectValue(TIPUSCONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUSCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(TIPUSCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
     if (__vr.getFieldErrorCount(CONSENTIMENT) == 0) {
       java.lang.String __consentiment = __target__.getConsentiment();
-      if (__consentiment!= null && __consentiment.length() > 255) {
+      if (__consentiment!= null && __consentiment.length() > 355) {
         __vr.rejectValue(CONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
     if (__vr.getFieldErrorCount(ENLLAZCONSENTIMENT) == 0) {
       java.lang.String __enllazconsentiment = __target__.getEnllazConsentiment();
-      if (__enllazconsentiment!= null && __enllazconsentiment.length() > 255) {
+      if (__enllazconsentiment!= null && __enllazconsentiment.length() > 355) {
         __vr.rejectValue(ENLLAZCONSENTIMENT, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENLLAZCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ENLLAZCONSENTIMENT)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
@@ -93,17 +93,17 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
 
     if (__vr.getFieldErrorCount(CADUCA) == 0) {
       java.lang.String __caduca = __target__.getCaduca();
-      if (__caduca!= null && __caduca.length() > 255) {
+      if (__caduca!= null && __caduca.length() > 355) {
         __vr.rejectValue(CADUCA, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(CADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
     if (__vr.getFieldErrorCount(FECHACADUCA) == 0) {
       java.lang.String __fechacaduca = __target__.getFechaCaduca();
-      if (__fechacaduca!= null && __fechacaduca.length() > 255) {
+      if (__fechacaduca!= null && __fechacaduca.length() > 355) {
         __vr.rejectValue(FECHACADUCA, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(FECHACADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(FECHACADUCA)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 
@@ -117,9 +117,9 @@ public class SolicitudServeiValidator<I extends SolicitudServei>
 
     if (__vr.getFieldErrorCount(ARTICLES) == 0) {
       java.lang.String __articles = __target__.getArticles();
-      if (__articles!= null && __articles.length() > 255) {
+      if (__articles!= null && __articles.length() > 355) {
         __vr.rejectValue(ARTICLES, "genapp.validation.sizeexceeds",
-            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(255)));
+            new org.fundaciobit.genapp.common.i18n.I18NArgumentCode(get(ARTICLES)), new org.fundaciobit.genapp.common.i18n.I18NArgumentString(String.valueOf(355)));
       }
     }
 

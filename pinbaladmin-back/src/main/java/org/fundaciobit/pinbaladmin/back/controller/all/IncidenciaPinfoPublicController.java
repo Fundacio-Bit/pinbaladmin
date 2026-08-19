@@ -20,7 +20,6 @@ import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.IncidenciaTecnicaController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.IncidenciaTecnicaForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
@@ -33,6 +32,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.OrganFields;
+import org.fundaciobit.pinbaladmin.model.fields.OrganQueryPath;
 import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
 import org.fundaciobit.pinbaladmin.persistence.IncidenciaTecnicaJPA;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
@@ -54,13 +54,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import es.caib.pinbal.client.comu.LogLevel;
-import es.caib.pinbal.client.procediments.ProcedimentClient;
-import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
-import es.caib.pinbal.client.recobriment.v2.Entitat;
-import es.caib.pinbal.client.serveis.ServeiClient;
-import es.caib.pinbal.client.usuaris.UsuariClient;
-import es.caib.pinbal.client.usuaris.UsuariEntitat;
+
+//import es.caib.pinbal.client.comu.LogLevel;
+//import es.caib.pinbal.client.procediments.ProcedimentClient;
+//import es.caib.pinbal.client.recobriment.v2.ClientRecobriment;
+//import es.caib.pinbal.client.recobriment.v2.Entitat;
+//import es.caib.pinbal.client.serveis.ServeiClient;
+//import es.caib.pinbal.client.usuaris.UsuariClient;
+//import es.caib.pinbal.client.usuaris.UsuariEntitat;
+
 
 /**
  * 
@@ -156,11 +158,29 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			request.getSession().setAttribute("usuariNom", nomComplet);
 			request.getSession().setAttribute("usuariUsername", username);
 
+
+
+
+            //  Mostram organ a pinyo fix, només en el cas de que estigui associat a una Entitat amb  isGestionatPerGovernDigital = true.
 			String dir3Solicitant = getCodiDIR3FromNif(usuariNIF);
-			Long organID = organLogicEjb.executeQueryOne(OrganFields.ORGANID, OrganFields.DIR3.equal(dir3Solicitant));
-			if (organID != null) {
-				incidencia.setOrganid(organID);
-				form.addReadOnlyField(IncidenciaTecnicaFields.ORGANID);
+			
+			if (dir3Solicitant != null && !dir3Solicitant.trim().isEmpty()) {
+                
+    			List<Organ> organs = organLogicEjb.select(OrganFields.DIR3.equal(dir3Solicitant));
+    			
+    			if (organs != null && !organs.isEmpty()) {
+        			Organ organ = organs.get(0);       			
+        			
+        			
+        			EntitatJPA entitat = getEntitatPinfoFromOrgan(organ);
+        			
+        			if (entitat != null && entitat.isGestionatPerGovernDigital()) {
+            				incidencia.setOrganid(organ.getOrganid());
+            				form.addReadOnlyField(IncidenciaTecnicaFields.ORGANID);
+            			
+        			}
+    			}
+			
 			}
 
 			request.getSession().setAttribute("usuariData", usuariNIF + " - " + username);
@@ -270,10 +290,24 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		// String entitat = request.getParameter("incidenciaTecnica.entitatid");
 		// log.info("Entitat: " + entitat);
 
-		Long organID = it.getOrganid();
-		Organ organ = organLogicEjb.findByPrimaryKey(organID);
+        Long organID = it.getOrganid();
+        
+        // Problema d'Entitats dins de Pinfo #414
 
-		String entitat = getEntiatPinfoFromOrgan(organ);
+        String entitat = null;
+        if (organID != null) {
+
+            Organ organ = organLogicEjb.findByPrimaryKey(organID);
+
+            if (organ != null) {
+
+                EntitatJPA e = getEntitatPinfoFromOrgan(organ);
+
+                if (e != null) {
+                    entitat = e.getCodiPinbal();
+                }
+            }
+        }
 
 		log.info("Entitat per Pinfo: " + entitat);
 
@@ -308,8 +342,10 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		return mapper.writeValueAsString(obj);
 	}
 
-	private String getEntiatPinfoFromOrgan(Organ organ) {
+	private EntitatJPA getEntitatPinfoFromOrgan(Organ organ) {
 
+	    // Problema d'Entitats dins de Pinfo #414
+	    /* TODO ANADAL Això per a que serveix ????
 		final String baseUrl = Configuracio.getApiPinbalClientUrl();
 		final String username = Configuracio.getApiPinbalClientUsername();
 		final String password = Configuracio.getApiPinbalClientPassword();
@@ -346,6 +382,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		}
 
 		log.info("Clients creats");
+		*/
 
 		if (organ == null || organ.getEntitatid() == null) {
 			return null;
@@ -355,10 +392,16 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			Long entitatID = organ.getEntitatid();
 			EntitatJPA entitat = entitatLogicEjb.findByPrimaryKey(entitatID);
 
-			if (entitat == null || entitat.getCIF() == null) {
+			if (entitat == null || entitat.getCIF() == null || entitat.isGestionatPerGovernDigital() == false) {
 				return null;
 			}
+			
+			
+			return entitat;
 
+			// Problema d'Entitats dins de Pinfo #414
+
+			/*
 			String cif = entitat.getCIF().trim().toUpperCase();
 
 			switch (cif) {
@@ -371,6 +414,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 				default:
 					return null;
 			}
+			*/
 		} catch (Exception e) {
 			log.error("Error obteniendo entitat de organ: " + organ.getOrganid(), e);
 			return null;
@@ -461,14 +505,29 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 		return "redirect:" + PinfoDataPublicController.CONTEXT_WEB + "/elegirTipo";
 	}
 
+
+
 	@Override
-	public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where where)
+	public List<StringKeyValue> getReferenceListForOrganid(HttpServletRequest request, ModelAndView mav, Where whereOriginal)
 			throws I18NException {
 
 		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+		
+		// Problema d'Entitats dins de Pinfo #414		
+		// Afegir condició que només acceptam organs on Entitat té isGestionatPerGovernDigital = true
+		Where w = Where.AND(
+		   OrganFields.ENTITATID.isNotNull(),
+		   new OrganQueryPath().ENTITAT().GESTIONATPERGOVERNDIGITAL().equal(true)
+		  );
+		
+		
+        final Where where;
+        if (whereOriginal == null) {
+            where = w;
+        } else {
+            where = Where.AND(whereOriginal, w);
+        }
 
-		if (where != null) {
-		}
 
 		List<Organ> organs = organLogicEjb.select(where);
 

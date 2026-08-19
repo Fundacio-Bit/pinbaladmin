@@ -41,7 +41,7 @@
 </div>
 
 <div id="footer">
-	<p>2026 - Fundació BIT</p>
+	<p>2026 - IBDigital</p>
 </div>
 
 <script>

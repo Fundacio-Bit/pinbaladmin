@@ -789,7 +789,12 @@ section {
 		function afegirUsuari(usuari) {
             var usuariDiv = document.createElement("div");
             usuariDiv.classList.add("usuari-item");
-            usuariDiv.innerHTML = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1;
+            var entrada =  usuari.administrationID + " - " + usuari.name + " " + usuari.surname1;
+            if (usuari.surname2 && usuari.surname2.trim() !== "") {
+                entrada += " " + usuari.surname2;
+            }
+            entrada += " - " + usuari.username + " - " + usuari.email;
+            usuariDiv.innerHTML =entrada;
             usuariDiv.onclick = function() {
                 elegirUsuari(usuari);
             };

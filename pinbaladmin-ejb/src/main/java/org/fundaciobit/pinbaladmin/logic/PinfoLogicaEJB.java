@@ -49,6 +49,7 @@ import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Organ;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
 import org.fundaciobit.pinbaladmin.persistence.FitxerJPA;
@@ -82,6 +83,9 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 	
 	@EJB(mappedName = OrganLogicaService.JNDI_NAME)
 	protected OrganLogicaService organLogicaEjb;
+	
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicaEjb;
 	
 	
 	@Override
@@ -134,8 +138,16 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		PinfoDataFull pinfoDataFull = pinfoDataLogicaEjb.getEstructuraUsuarisProcedimentServeis(pinfoID);
 		data.put("pinfoDataFull", pinfoDataFull);
 		
+		
+		// Això no ESTA BE !!!!!
+		String departament = ""; 
+		
 		for (UsuariData usuariData : pinfoDataFull.getUsuaris()) {
 			log.info("Usuari: " + usuariData.getUsuariNom() + " (" + usuariData.getUsuariNif() +  " - " + usuariData.getUsuariCodi() + ")");
+			
+			if (usuariData.getDepartament() != null && !usuariData.getDepartament().isEmpty()) {
+			    departament = usuariData.getDepartament();
+			}
 			
 		}
 		
@@ -151,8 +163,26 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 			organGestor = organ.getNom() + " (" + organ.getDir3() + ")";
 		}
 		data.put("organGestor", organGestor);
+		
+		String entitat = "";
+		String codiPinbal = pinfo.getEntitat();
+        if (codiPinbal != null && !codiPinbal.isEmpty()) {
 
-        data.put("infoEntitat", organGestor);
+            String nom = entitatLogicaEjb.executeQueryOne(EntitatFields.NOM,
+                    EntitatFields.CODIPINBAL.equal(codiPinbal));
+
+            if (nom == null || nom.isEmpty()) {
+                entitat = codiPinbal;
+            } else {
+                entitat = nom + " (" + codiPinbal + ")";
+            }
+        }
+		
+		
+        data.put("infoEntitat", entitat);
+        
+        
+        data.put("departament", departament);
 		
 		
 		String fileName = "PINFO_" + incidencia.getIncidenciaTecnicaID() + ".pdf";
@@ -658,7 +688,7 @@ public class PinfoLogicaEJB extends PinfoEJB implements PinfoLogicaService {
 		String msg = "Bon dia, " + incidencia.getContacteNom() + " <br><br>" + "Hem tramitat la seva sol·licitud (PINFO "
 				+ pinfoID + "): <br><br>"
 				+ "<div style=\"border: 1px solid #00000040;padding: .5rem;background-color: #f7f7f7;border-radius: 3px;\">"
-				+ missatgeSolicitant + "</div><br>" + "Salutacions cordials, <br><br>" + operador.getFullName() + ", Fundació BIT";
+				+ missatgeSolicitant + "</div><br>" + "Salutacions cordials, <br><br>" + operador.getFullName() + ", IBDigital";
 
 		log.info("Afegir event de PINFO rebut de portafib");
 

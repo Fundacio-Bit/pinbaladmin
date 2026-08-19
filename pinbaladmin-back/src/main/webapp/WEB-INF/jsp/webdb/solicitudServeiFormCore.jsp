@@ -117,7 +117,7 @@
            <c:if test="${not (gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL))}">
 
             <form:errors path="solicitudServei.enllazNormaLegal" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.enllazNormaLegal"   />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZNORMALEGAL)? ' uneditable-input' : ''}"  style="" maxlength="355" path="solicitudServei.enllazNormaLegal"   />
 
            </c:if>
 
@@ -218,7 +218,7 @@
            <c:if test="${not (gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZCONSENTIMENT))}">
 
             <form:errors path="solicitudServei.enllazConsentiment" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.enllazConsentiment"   />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZCONSENTIMENT)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ENLLAZCONSENTIMENT)? ' uneditable-input' : ''}"  style="" maxlength="355" path="solicitudServei.enllazConsentiment"   />
 
            </c:if>
 
@@ -317,7 +317,7 @@
             </td>
           <td id="solicitudServei_fechaCaduca_columnvalueid">
             <form:errors path="solicitudServei.fechaCaduca" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.fechaCaduca"   />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.FECHACADUCA)? ' uneditable-input' : ''}"  style="" maxlength="355" path="solicitudServei.fechaCaduca"   />
 
            </td>
         </tr>
@@ -430,7 +430,7 @@
             </td>
           <td id="solicitudServei_articles_columnvalueid">
             <form:errors path="solicitudServei.articles" cssClass="errorField alert alert-danger" />
-            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="255" path="solicitudServei.articles"   />
+            <form:input readonly="${ gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? 'true' : 'false'}" cssClass="w-100 form-control  ${gen:contains(__theForm.readOnlyFields ,SolicitudServeiFields.ARTICLES)? ' uneditable-input' : ''}"  style="" maxlength="355" path="solicitudServei.articles"   />
 
            </td>
         </tr>

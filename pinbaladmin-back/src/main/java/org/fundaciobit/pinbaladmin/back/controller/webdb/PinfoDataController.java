@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Arrays;
 
-import org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.*;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoDataForm;
 
@@ -299,17 +298,6 @@ public class PinfoDataController
     PinfoDataForm pinfoDataForm = getPinfoDataForm(null, false, request, mav);
     mav.addObject("pinfoDataForm" ,pinfoDataForm);
     fillReferencesForForm(pinfoDataForm, request, mav);
-    
-    // Carregar cache
-    long start = System.currentTimeMillis();
-    PinfoDataPublicController.getLlistaUserInfo(log);
-    
-    long end = System.currentTimeMillis();
-    
-    long elapsedTime = end - start;
-    if (elapsedTime > 5000) {
-      log.warn(" Temps de càrrega de PinfoDataPublicController.getLlistaUserInfo: " + elapsedTime + " ms");
-    }
   
     return mav;
   }

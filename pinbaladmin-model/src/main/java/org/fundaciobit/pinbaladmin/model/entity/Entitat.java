@@ -26,6 +26,9 @@ public interface Entitat extends org.fundaciobit.genapp.common.IGenAppEntity {
 	public java.lang.String getCodiPinbal();
 	public void setCodiPinbal(java.lang.String _codiPinbal_);
 
+	public boolean isGestionatPerGovernDigital();
+	public void setGestionatPerGovernDigital(boolean _gestionatPerGovernDigital_);
+
 
 
   // ======================================

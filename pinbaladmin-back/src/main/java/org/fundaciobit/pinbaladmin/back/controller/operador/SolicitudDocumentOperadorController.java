@@ -24,6 +24,8 @@ import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
+import org.fundaciobit.pinbaladmin.logic.OrganLogicaService;
 import org.fundaciobit.pinbaladmin.logic.dto.ContactePortaFIB;
 import org.fundaciobit.pinbaladmin.model.entity.Contacte;
 import org.fundaciobit.pinbaladmin.model.entity.Document;
@@ -32,6 +34,8 @@ import org.fundaciobit.pinbaladmin.model.fields.ContacteFields;
 import org.fundaciobit.pinbaladmin.model.fields.DocumentSolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.persistence.DocumentJPA;
+import org.fundaciobit.pinbaladmin.persistence.EntitatJPA;
+import org.fundaciobit.pinbaladmin.persistence.OrganJPA;
 import org.fundaciobit.pinbaladmin.persistence.SolicitudJPA;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -334,6 +338,16 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			}
 		}
 	}
+	
+	   @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+	    protected OrganLogicaService organLogicaEjb;
+	   
+	    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+	    protected EntitatLogicaService entitatLogicaEjb;
+	    
+	    
+	    public static final  boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
+        public static final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
 
 	@RequestMapping(value = "/enviarDocAFirmar/{documentID}")
 	public String enviarDocAFirmar(HttpServletRequest request, HttpServletResponse response,
@@ -360,11 +374,31 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 			String remitent = request.getRemoteUser();
 
 			List<ContactePortaFIB> destinataris = new ArrayList<>();
+			
+			Long organID = soli.getOrganid();
+			
+			OrganJPA organ = organLogicaEjb.findByPrimaryKey(organID);
+			
+			Long entitatID = organ.getEntitatid();
+            EntitatJPA entitat = entitatLogicaEjb.findByPrimaryKey(entitatID);
+
+            boolean enviarCom;
+            if (entitat == null || entitat.getCIF() == null) {
+                enviarCom = ENVIAR_COM_USUARI_EXTERN;
+            } else {
+                
+                if (entitat.isGestionatPerGovernDigital() == false) {
+                    enviarCom = ENVIAR_COM_USUARI_INTERN;
+                } else {
+                    enviarCom = ENVIAR_COM_USUARI_EXTERN;
+                }
+            }
+			
+			
 
 	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
-	        final boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
-	        final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
-	        destinataris.add(new ContactePortaFIB(titular, ENVIAR_COM_USUARI_EXTERN));
+
+	        destinataris.add(new ContactePortaFIB(titular, enviarCom));
 	        
 	        //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
 	        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {

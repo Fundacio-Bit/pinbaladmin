@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.ApiFirmaAsyncSimple;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleExternalSigner;
 import org.fundaciobit.apisib.apifirmaasyncsimple.v2.beans.FirmaAsyncSimpleFile;
@@ -35,8 +36,14 @@ import org.fundaciobit.pluginsib.userinformation.RolesInfo;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 
 public class PortafibUtils {
+    
+    
+    public static final Logger log = Logger.getLogger(PortafibUtils.class); 
+    
 
-    public static final String ROL_USUARI_PORTAFIB = "usuari-tipus-I";
+    public static final String ROL_USUARI_TIPUS_I = "usuari-tipus-I";
+    
+    public static final String ROL_USUARI_PORTAFIB = "PFI_USER";
 
     public static ApiFirmaAsyncSimple getApiFirmaAsyncSimple() throws I18NException {
 
@@ -158,7 +165,7 @@ public class PortafibUtils {
                     boolean isPortaFIBUser = false;
                     for (String rol : rols.getRoles()) {
                         System.out.println("ROL de l'usuari: " + rol);
-                        if (rol.equals(ROL_USUARI_PORTAFIB)) {
+                        if (rol.equals(ROL_USUARI_PORTAFIB) || rol.equals(ROL_USUARI_TIPUS_I)) {
                             isPortaFIBUser = true;
                             break;
                         }
@@ -178,7 +185,7 @@ public class PortafibUtils {
             }
 
             //Si arriba aqui, cream usuari extern.
-            System.out.println("Creant usuari extern a PortaFIB: \n" + contacte.getNif() + ",\n " + contacte.getNom()
+            log.info("Creant usuari extern a PortaFIB: \n" + contacte.getNif() + ",\n " + contacte.getNom()
                     + " " + contacte.getLlinatge1() + " " + contacte.getLlinatge2() + ",\n " + contacte.getMail());
 
             String nif = contacte.getNif();
@@ -188,7 +195,7 @@ public class PortafibUtils {
             String lang = "ca";
             int securityLevel = FirmaAsyncSimpleExternalSigner.SECURITY_LEVEL_TOKEN;
 
-            System.out.println("Dades per a l'extern: \nNIF: " + nif + "\nNom: " + name + "\nCognoms: " + surnames
+            log.info("Dades per a l'extern: \nNIF: " + nif + "\nNom: " + name + "\nCognoms: " + surnames
                     + "\nEmail: " + email + "\nLang: " + lang + "\nSecurityLevel: " + securityLevel);
 
             FirmaAsyncSimpleExternalSigner externalSigner = new FirmaAsyncSimpleExternalSigner(nif, name, surnames,

@@ -43,6 +43,10 @@ public class EntitatQueryPath extends org.fundaciobit.genapp.common.query.QueryP
     return new StringField(getQueryPath(), EntitatFields.CODIPINBAL);
   }
 
+  public BooleanField GESTIONATPERGOVERNDIGITAL() {
+    return new BooleanField(getQueryPath(), EntitatFields.GESTIONATPERGOVERNDIGITAL);
+  }
+
 
 
   @Override

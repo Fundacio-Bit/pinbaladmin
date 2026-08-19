@@ -771,7 +771,7 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 		String msg = ""
 				+ "<div id=\"missatge\" style=\"margin: .5rem;\">"
 				+ "    Bon dia,<br />"
-				+ "    Desde la Fundació BIT l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
+				+ "    Des de IBDigital l'informam que hem rebut la seva sol·licitud d'autorització correctament. <br /><br />"
 				+ "    <b>Procediment:</b> " + soli.getProcedimentNom() +  "<br />"
 				+ "    <b>Codi:</b> "+ soli.getProcedimentCodi() +"<br />"
 				+ "</div>";

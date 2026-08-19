@@ -21,12 +21,14 @@ import org.fundaciobit.genapp.common.web.form.AdditionalButtonStyle;
 import org.fundaciobit.genapp.common.web.form.AdditionalField;
 import org.fundaciobit.genapp.common.web.i18n.I18NUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
+import org.fundaciobit.pinbaladmin.back.controller.operador.PinfoOperadorController;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.PinfoController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.PinfoForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.hibernate.HibernateFileUtil;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.EventLogicaService;
 import org.fundaciobit.pinbaladmin.logic.IncidenciaTecnicaLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
@@ -34,6 +36,7 @@ import org.fundaciobit.pinbaladmin.logic.utils.EmailUtil;
 import org.fundaciobit.pinbaladmin.model.entity.Event;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
 import org.fundaciobit.pinbaladmin.model.fields.IncidenciaTecnicaFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.EventJPA;
@@ -73,6 +76,10 @@ public class PinfoPublicController extends PinfoController {
 
 	@EJB(mappedName = EventLogicaService.JNDI_NAME)
 	protected EventLogicaService eventLogicaEjb;
+	
+
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicEjb;
 
 	@Override
 	public String getTileForm() {
@@ -234,7 +241,7 @@ public class PinfoPublicController extends PinfoController {
 				+ "</div>"
 				+ "<div style='background-color: #e9ecef; padding: 15px; text-align: center; font-size: 12px; color: #666;'>"
 				+ "<p style='margin: 5px 0;'>Salutacions,</p>"
-				+ "<p style='margin: 5px 0;'><em>Àrea de Govern Digital - Fundació BIT</em></p>"
+				+ "<p style='margin: 5px 0;'><em>Àrea de Govern Digital - IBDigital</em></p>"
 				+ "<p style='margin: 10px 0; padding-top: 10px; border-top: 1px solid #ccc;'>"
 				+ "Si us plau, NO CONTESTEU directament a aquest correu. Per a qualsevol consulta, accediu a l'enllaç proporcionat."
 				+ "</p>"
@@ -439,7 +446,7 @@ public class PinfoPublicController extends PinfoController {
 		ev.setFitxerID(fitxerPinfoID);
 
 		ev.setAsumpte("Pinfo creat i enviat a firmar");
-		String msg = "<div style='margin: 0.5rem;'>Bon dia, <br> <br> Des de la Fundació BIT l'informam que el seu Pinfo:\r\n"
+		String msg = "<div style='margin: 0.5rem;'>Bon dia, <br> <br> Des de IBDigital l'informam que el seu Pinfo:\r\n"
 				+ "  <div style='margin: 0.7rem;font-weight: bold;'>" + it.getTitol() + "</div>"
 				+ "  s'ha donat d'alta correctament i s'ha enviat al seu responsable (" + destinatariNIF
 				+ ") per a que ho firmi.</div>";
@@ -501,4 +508,20 @@ public class PinfoPublicController extends PinfoController {
 
 		return _tmp;
 	}
+	
+	
+	
+	
+	// Problema d'Entitats dins de Pinfo #414
+
+    @Override
+     public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request,
+             ModelAndView mav, Where where)  throws I18NException {
+
+
+       return  PinfoOperadorController.getReferenceListForEntitat(where, this.entitatLogicEjb, this.pinfoLogicaEjb);
+        
+        
+        
+    }
 }

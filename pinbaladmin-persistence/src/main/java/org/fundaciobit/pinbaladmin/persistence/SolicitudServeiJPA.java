@@ -48,25 +48,25 @@ public class SolicitudServeiJPA implements SolicitudServei {
     @Column(name="estatsolicitudserveiid",nullable = false,length = 19)
     java.lang.Long estatSolicitudServeiID;
 
-    @Column(name="enllaznormalegal",length = 255)
+    @Column(name="enllaznormalegal",length = 355)
     java.lang.String enllazNormaLegal;
 
-    @Column(name="tipusconsentiment",length = 255)
+    @Column(name="tipusconsentiment",length = 355)
     java.lang.String tipusConsentiment;
 
-    @Column(name="consentiment",nullable = false,length = 255)
+    @Column(name="consentiment",nullable = false,length = 355)
     java.lang.String consentiment;
 
-    @Column(name="enllazconsentiment",length = 255)
+    @Column(name="enllazconsentiment",length = 355)
     java.lang.String enllazConsentiment;
 
     @Column(name="notes",length = 2000)
     java.lang.String notes;
 
-    @Column(name="caduca",length = 255)
+    @Column(name="caduca",length = 355)
     java.lang.String caduca;
 
-    @Column(name="fechacaduca",length = 255)
+    @Column(name="fechacaduca",length = 355)
     java.lang.String fechaCaduca;
 
     @Column(name="normalegal",length = 3000)
@@ -75,7 +75,7 @@ public class SolicitudServeiJPA implements SolicitudServei {
     @Column(name="fitxernormaid",length = 19)
     java.lang.Long fitxernormaID;
 
-    @Column(name="articles",length = 255)
+    @Column(name="articles",length = 355)
     java.lang.String articles;
 
     @Column(name="norma2",length = 240)

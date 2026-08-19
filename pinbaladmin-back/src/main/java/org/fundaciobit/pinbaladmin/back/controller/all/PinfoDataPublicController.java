@@ -531,6 +531,7 @@ public class PinfoDataPublicController extends PinfoDataController {
                     userMap.put("name", user.getName());
                     userMap.put("surname1", user.getSurname1());
                     userMap.put("surname2", user.getSurname2());
+                    userMap.put("email", user.getEmail());
                     // Ofuscar el NIF antes de añadirlo
                     String nifOriginal = user.getAdministrationID();
                     userMap.put("administrationID", ofuscarNIF(nifOriginal));
@@ -660,7 +661,8 @@ public class PinfoDataPublicController extends PinfoDataController {
                   user.getName().toLowerCase().contains(entrada) ||
                   user.getSurname1().toLowerCase().contains(entrada) ||
                  (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada)) ||
-                  user.getAdministrationID().toLowerCase().contains(entrada)
+                  user.getAdministrationID().toLowerCase().contains(entrada) ||
+                  (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))
                   ) {
                   
                   filteredList.add(user);
@@ -729,11 +731,25 @@ public class PinfoDataPublicController extends PinfoDataController {
         final String s = apellido.toLowerCase();
         
         for (UserInfo user : users) {
+            // Nombre + Apellido1 o Apellido2
             if (user.getName().toLowerCase().contains(n) &&
                 (user.getSurname1().toLowerCase().contains(s) ||
                  (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s)))) {
                 
                 filteredList.add(user);
+                continue;
+            }
+            // Apellido1 i Apellido2
+            if (user.getSurname1().toLowerCase().contains(n) &&
+                     (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s))) {
+                
+                filteredList.add(user);
+                continue;                
+            }
+            // Apellido 1: les dues paraules estan al llinatge 1
+            if (user.getSurname1().toLowerCase().contains(n) && user.getSurname1().toLowerCase().contains(s)) {
+                filteredList.add(user);
+                continue;
             }
         }
         
@@ -1043,8 +1059,8 @@ public class PinfoDataPublicController extends PinfoDataController {
                 String mail = ui.getEmail();
                 String nomOcult = ui.getFullName();
 
-                log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + username + " - " + mail + " - "
-                        + nomOcult);
+                //log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + username + " - " + mail + " - "
+                //        + nomOcult);
 
                 Responsable responsable = new Responsable(nif, nom, ape1, ape2, rol, telefon, mail, nomOcult, username);
 

@@ -1059,6 +1059,7 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	        throw new I18NException("La solicitud no está autorizada. No se creará/actualizará en PINBAL.");
 	    }
 	    
+	    //solicitud.isProduccio()
 		ProcedimentClient procedimentClient = createProcedimentClient();
 		
 		

@@ -20,6 +20,7 @@ public interface EntitatFields extends java.io.Serializable {
 	 public static final BooleanField CONVENIPMSBAE = new BooleanField(_TABLE_MODEL, "convenipmsbae", "convenipmsbae");
 	 public static final StringField DIR3 = new StringField(_TABLE_MODEL, "dir3", "dir3");
 	 public static final StringField CODIPINBAL = new StringField(_TABLE_MODEL, "codiPinbal", "codipinbal");
+	 public static final BooleanField GESTIONATPERGOVERNDIGITAL = new BooleanField(_TABLE_MODEL, "gestionatPerGovernDigital", "gestionatpergoverndigital");
 
 
   public static final Field<?>[] ALL_ENTITAT_FIELDS = {
@@ -30,7 +31,8 @@ public interface EntitatFields extends java.io.Serializable {
     GRUPENTITATID,
     CONVENIPMSBAE,
     DIR3,
-    CODIPINBAL
+    CODIPINBAL,
+    GESTIONATPERGOVERNDIGITAL
   };
 
 

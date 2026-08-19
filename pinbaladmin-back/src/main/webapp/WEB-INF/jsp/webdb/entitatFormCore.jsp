@@ -145,3 +145,25 @@
         </tr>
         </c:if>
         
+        <c:if test="${!gen:contains(__theForm.hiddenFields,EntitatFields.GESTIONATPERGOVERNDIGITAL)}">
+        <tr id="entitat_gestionatPerGovernDigital_rowid">
+          <td id="entitat_gestionatPerGovernDigital_columnlabelid">
+            <label>
+              <fmt:message key="${(empty __theForm.labels[EntitatFields.GESTIONATPERGOVERNDIGITAL])?'entitat.gestionatPerGovernDigital':__theForm.labels[EntitatFields.GESTIONATPERGOVERNDIGITAL]}" />
+             </label>
+              <c:if test="${not empty __theForm.help[EntitatFields.GESTIONATPERGOVERNDIGITAL]}">
+              <i class="fas fa-info-circle" title="${__theForm.help[EntitatFields.GESTIONATPERGOVERNDIGITAL]}" ></i>
+              </c:if>
+            </td>
+          <td id="entitat_gestionatPerGovernDigital_columnvalueid">
+          <c:if test="${!gen:contains(__theForm.readOnlyFields ,EntitatFields.GESTIONATPERGOVERNDIGITAL)}" >
+              <form:errors path="entitat.gestionatPerGovernDigital" cssClass="errorField alert alert-danger" />
+              <form:checkbox cssClass="" onclick="javascript:return ${ gen:contains(__theForm.readOnlyFields ,EntitatFields.GESTIONATPERGOVERNDIGITAL)? 'false' : 'true'}" path="entitat.gestionatPerGovernDigital" />
+          </c:if>
+          <c:if test="${gen:contains(__theForm.readOnlyFields ,EntitatFields.GESTIONATPERGOVERNDIGITAL)}" >
+                <fmt:message key="genapp.checkbox.${__theForm.entitat.gestionatPerGovernDigital}" />
+          </c:if>
+           </td>
+        </tr>
+        </c:if>
+        

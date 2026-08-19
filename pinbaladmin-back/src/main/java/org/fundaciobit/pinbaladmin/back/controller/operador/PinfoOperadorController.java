@@ -1,6 +1,8 @@
 package org.fundaciobit.pinbaladmin.back.controller.operador;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +22,10 @@ import org.fundaciobit.pinbaladmin.back.security.LoginInfo;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
+import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaEJB.PinfoDataFull;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
+import org.fundaciobit.pinbaladmin.model.fields.EntitatFields;
 import org.fundaciobit.pinbaladmin.model.fields.PinfoFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoJPA;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
@@ -35,7 +39,6 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author ptrias 26 nov 2024 14:13:17
  */
-
 @Controller
 @RequestMapping(value = PinfoOperadorController.WEBCONTEXT)
 @SessionAttributes(types = { PinfoForm.class, PinfoFilterForm.class })
@@ -47,7 +50,11 @@ public class PinfoOperadorController extends PinfoController {
 	protected PinfoDataLogicaService pinfoDataLogicaEjb;
 	
 	@EJB(mappedName = PinfoLogicaService.JNDI_NAME)
-	protected PinfoLogicaService pinfoLogicEjb;
+	protected PinfoLogicaService pinfoLogicaEjb;
+	
+
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicEjb;
 
 	@Override
 	public String getTileForm() {
@@ -76,7 +83,7 @@ public class PinfoOperadorController extends PinfoController {
 			pinfoFilterForm.setEditButtonVisible(true);
 			pinfoFilterForm.setViewButtonVisible(true);
 			
-			pinfoFilterForm.addHiddenField(ENTITAT);
+			//pinfoFilterForm.addHiddenField(ENTITAT);
 			pinfoFilterForm.addHiddenField(PORTAFIBID);
 //			pinfoFilterForm.addHiddenField(FITXERID);
 			pinfoFilterForm.addHiddenField(FITXERFIRMATID);
@@ -100,6 +107,53 @@ public class PinfoOperadorController extends PinfoController {
 
 		return pinfoFilterForm;
 	}
+	
+	
+	
+	// Problema d'Entitats dins de Pinfo #414
+
+	@Override
+	 public List<StringKeyValue> getReferenceListForEntitat(HttpServletRequest request,
+	         ModelAndView mav, Where where)  throws I18NException {
+	    
+
+        return getReferenceListForEntitat(where, this.entitatLogicEjb, this.pinfoLogicaEjb);
+	    
+	    
+	}
+
+    public static List<StringKeyValue> getReferenceListForEntitat(Where where, EntitatLogicaService entitatLogicEjb, PinfoLogicaService pinfoLogicEjb) throws I18NException {
+        // Seleccionam tots els CodisPinbal de les entitats que hi ha 
+	    List<String> codisPinbalEntitats;
+	 
+	    codisPinbalEntitats = entitatLogicEjb.executeQuery(EntitatFields.CODIPINBAL, EntitatFields.GESTIONATPERGOVERNDIGITAL.equal(true));
+	    
+	    
+	    // Seleccionam el codispinbal de tots els PINFO entitats segons Where
+	    List<String> codisPinbalRef  = pinfoLogicEjb.executeQuery(PinfoFields.ENTITAT, where);
+	    
+	    
+	    
+	    Set<String> codisPinbal = new HashSet<String>();
+	    
+	    codisPinbal.addAll(codisPinbalEntitats);
+	    codisPinbal.addAll(codisPinbalRef);
+	          
+	
+	    List<StringKeyValue> _tmp = new java.util.ArrayList<StringKeyValue>();
+	    for (String nom : codisPinbal) {
+	        if (nom == null || nom.trim().isEmpty()) {
+                continue;
+	        }
+	        
+            _tmp.add(new StringKeyValue(nom, nom));
+        }
+	    
+	    return _tmp;
+    }
+	
+	
+	
 	
 	
 	@Override
@@ -209,7 +263,7 @@ public class PinfoOperadorController extends PinfoController {
 
 		try {
 			UserInfo operador = LoginInfo.getInstance().getUserInfo();
-			pinfoLogicEjb.enviarMissatgeSolicitant(operador, pinfoID);
+			pinfoLogicaEjb.enviarMissatgeSolicitant(operador, pinfoID);
 			String msg = "Missatge enviat al solicitant del PINFO " + pinfoID;
 			HtmlUtils.saveMessageSuccess(request, msg);
 			

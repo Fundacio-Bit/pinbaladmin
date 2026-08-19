@@ -213,6 +213,9 @@ public class EntitatController
       fillValuesToGroupByItemsBoolean("genapp.checkbox", groupByItemsMap, CONVENIPMSBAE);
 
 
+      fillValuesToGroupByItemsBoolean("genapp.checkbox", groupByItemsMap, GESTIONATPERGOVERNDIGITAL);
+
+
     return groupByItemsMap;
   }
 

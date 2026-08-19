@@ -36,6 +36,9 @@
         <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.CODIPINBAL)}">
         <th>${pad:getSortIcons(__theFilterForm,EntitatFields.CODIPINBAL)}</th>
         </c:if>
+        <c:if test="${!gen:contains(__theFilterForm.hiddenFields,EntitatFields.GESTIONATPERGOVERNDIGITAL)}">
+        <th>${pad:getSortIcons(__theFilterForm,EntitatFields.GESTIONATPERGOVERNDIGITAL)}</th>
+        </c:if>
 
 
         <c:forEach var="__entry" items="${__theFilterForm.additionalFields}">

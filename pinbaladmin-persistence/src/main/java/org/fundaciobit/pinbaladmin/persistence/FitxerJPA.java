@@ -36,7 +36,7 @@ public class FitxerJPA implements Fitxer {
     @Column(name="mime",nullable = false,length = 100)
     java.lang.String mime;
 
-    @Column(name="descripcio",length = 1000)
+    @Column(name="descripcio",length = 1500)
     java.lang.String descripcio;
 
 
