@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
 import org.fundaciobit.genapp.common.query.Where;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.logic.PinfoDataLogicaService;
 import org.fundaciobit.pinbaladmin.logic.PinfoLogicaService;
 import org.fundaciobit.pinbaladmin.logic.ServeiLogicaService;
@@ -96,13 +96,11 @@ public class DadesPinbalController {
         
         ModelAndView mav = new ModelAndView("operador/modalPermisos");
         
-        final String baseUrl = Configuracio.getApiPinbalClientUrl();
-        final String username = Configuracio.getApiPinbalClientUsername();
-        final String password = Configuracio.getApiPinbalClientPassword();
+        PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
         final LogLevel logLevel = LogLevel.INFO;
         
         try {
-            UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+            UsuariClient usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
             PermisosServei permisos = usuariClient.getUserPermissions(usuariCodi, entitatCodi);
             
             if (permisos != null) {
@@ -143,12 +141,10 @@ public class DadesPinbalController {
 
         ModelAndView mav = new ModelAndView("procedimentspinbal");
 
-        final String baseUrl = Configuracio.getApiPinbalClientUrl();
-        final String username = Configuracio.getApiPinbalClientUsername();
-        final String password = Configuracio.getApiPinbalClientPassword();
+        PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
         final LogLevel logLevel = LogLevel.INFO;
 
-        ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+        ProcedimentClient procedimentClient = new ProcedimentClient(c.baseUrl, c.username, c.password, logLevel);
         
         // Obtener lista de entidades (reutilizando lógica)
         List<Entitat> entitats = new ArrayList<Entitat>();
@@ -156,7 +152,7 @@ public class DadesPinbalController {
         
         try {
             if (cachedEntitats == null) {
-                ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+                ClientRecobriment clientRecobriment = new ClientRecobriment(c.baseUrl, c.username, c.password, logLevel);
                 clientRecobriment.enableLogginFilter();
                 cachedEntitats = clientRecobriment.getEntitats();
             }
@@ -232,13 +228,11 @@ public class DadesPinbalController {
 
         ModelAndView mav = new ModelAndView("usuarispinbal");
 
-		final String baseUrl = Configuracio.getApiPinbalClientUrl();
-		final String username = Configuracio.getApiPinbalClientUsername();
-		final String password = Configuracio.getApiPinbalClientPassword();
+        PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 		final LogLevel logLevel = LogLevel.INFO;
 
-		log.info("Inicializando UsuariClient con baseUrl: " + baseUrl);
-		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		log.info("Inicializando UsuariClient con baseUrl: " + c.baseUrl);
+		UsuariClient usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
         // usuariClient.getUserPermissions(usuariCodi, entitatCodi);
 		
 		// Obtener lista de entidades
@@ -247,7 +241,7 @@ public class DadesPinbalController {
 		
 		try {
 			if (cachedEntitats == null) {
-				ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+				ClientRecobriment clientRecobriment = new ClientRecobriment(c.baseUrl, c.username, c.password, logLevel);
 				clientRecobriment.enableLogginFilter();
 				cachedEntitats = clientRecobriment.getEntitats();
 			}

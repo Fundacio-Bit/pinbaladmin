@@ -23,6 +23,7 @@ import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEntitatService;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
 import org.fundaciobit.pinbaladmin.model.entity.Entitat;
@@ -76,36 +77,30 @@ public class EntitatOperadorController extends EntitatController {
 
 	private ClientRecobriment getClientRecobriment() {
 		if (clientRecobriment == null) {
-			final String baseUrl = Configuracio.getApiPinbalClientUrl();
-			final String username = Configuracio.getApiPinbalClientUsername();
-			final String password = Configuracio.getApiPinbalClientPassword();
+		    PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 			final LogLevel logLevel = LogLevel.INFO;
-			log.info("Inicialitzant ClientRecobriment. URL: " + baseUrl + ", User: " + username);
-			clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+			log.info("Inicialitzant ClientRecobriment. URL: " + c.baseUrl + ", User: " + c.username);
+			clientRecobriment = new ClientRecobriment(c.baseUrl, c.username, c.password, logLevel);
 		}
 		return clientRecobriment;
 	}
 
 	private ProcedimentClient getProcedimentClient() {
 		if (procedimentClient == null) {
-			final String baseUrl = Configuracio.getApiPinbalClientUrl();
-			final String username = Configuracio.getApiPinbalClientUsername();
-			final String password = Configuracio.getApiPinbalClientPassword();
+		    PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 			final LogLevel logLevel = LogLevel.INFO;
-			log.info("Inicialitzant ProcedimentClient. URL: " + baseUrl + ", User: " + username);
-			procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+			log.info("Inicialitzant ProcedimentClient. URL: " + c.baseUrl + ", User: " + c.username);
+			procedimentClient = new ProcedimentClient(c.baseUrl, c.username, c.password, logLevel);
 		}
 		return procedimentClient;
 	}
 	
 	private UsuariClient getUsuariClient() {
 		if (usuariClient == null) {
-			final String baseUrl = Configuracio.getApiPinbalClientUrl();
-			final String username = Configuracio.getApiPinbalClientUsername();
-			final String password = Configuracio.getApiPinbalClientPassword();
+		    PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 			final LogLevel logLevel = LogLevel.INFO;
-			log.info("Inicialitzant usuariClient . URL: " + baseUrl + ", User: " + username);
-			usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+			log.info("Inicialitzant usuariClient . URL: " + c.baseUrl + ", User: " + c.username);
+			usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
 		}
 		return usuariClient;
 	}

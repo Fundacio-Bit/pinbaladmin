@@ -1059,11 +1059,11 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	        throw new I18NException("La solicitud no está autorizada. No se creará/actualizará en PINBAL.");
 	    }
 	    
-	    //solicitud.isProduccio()
-		ProcedimentClient procedimentClient = createProcedimentClient();
+	    
+		ProcedimentClient procedimentClient = createProcedimentClient(solicitud.isProduccio());
 		
 		
-		String entitatCodi = getEntitatCodiFromCIF(solicitud.getNif());
+		String entitatCodi = getEntitatCodiFromCIF(solicitud.getNif(),solicitud.isProduccio());
 		String procedimentCodi = solicitud.getProcedimentCodi();
 
 	    // 3. Si está autorizada, buscarla en Pinbal.
@@ -1211,9 +1211,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		}
 	}
 
-	private ProcedimentClient createProcedimentClient() {
-		return new ProcedimentClient(Configuracio.getApiPinbalClientUrl(), Configuracio.getApiPinbalClientUsername(),
-				Configuracio.getApiPinbalClientPassword(), LogLevel.INFO);
+	private ProcedimentClient createProcedimentClient(boolean produccio) {
+		return new ProcedimentClient(Configuracio.getApiPinbalClientUrl(produccio), Configuracio.getApiPinbalClientUsername(produccio),
+				Configuracio.getApiPinbalClientPassword(produccio), LogLevel.INFO);
 	}
 
 	private es.caib.pinbal.client.procediments.Procediment buildProcedimentPinbal(SolicitudJPA solicitud,
@@ -1240,11 +1240,11 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		return procedimentPinbal == null || procedimentPinbal.getCodi() == null;
 	}
 
-	private String getEntitatCodiFromCIF(String entitatCif) {
+	private String getEntitatCodiFromCIF(String entitatCif, boolean produccio) {
 		
-		final String baseUrl = Configuracio.getApiPinbalClientUrl();
-		final String username = Configuracio.getApiPinbalClientUsername();
-		final String password = Configuracio.getApiPinbalClientPassword();
+		final String baseUrl = Configuracio.getApiPinbalClientUrl(produccio);
+		final String username = Configuracio.getApiPinbalClientUsername(produccio);
+		final String password = Configuracio.getApiPinbalClientPassword(produccio);
 
 		LogLevel logLevel = LogLevel.INFO;
 		

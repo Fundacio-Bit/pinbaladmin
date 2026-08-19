@@ -58,8 +58,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
-import es.caib.pinbal.client.comu.LogLevel;
-import es.caib.pinbal.client.usuaris.UsuariClient;
 
 /**
  * 
@@ -402,12 +400,7 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
-    final String baseUrl = Configuracio.getApiPinbalClientUrl();
-    final String username = Configuracio.getApiPinbalClientUsername();
-    final String password = Configuracio.getApiPinbalClientPassword();
-    final LogLevel logLevel = LogLevel.INFO;
 
-    UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
 
     // @RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
     // public void obtenirJsonUsuaris(HttpServletRequest request,

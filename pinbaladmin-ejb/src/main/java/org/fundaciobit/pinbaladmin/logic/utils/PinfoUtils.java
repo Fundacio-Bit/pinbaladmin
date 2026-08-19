@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.fundaciobit.genapp.common.i18n.I18NException;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 
 import es.caib.pinbal.client.comu.LogLevel;
 import es.caib.pinbal.client.procediments.Procediment;
@@ -257,15 +257,13 @@ public final class PinfoUtils {
 
 			this.entitatCif = entitatCif;
 			
-			final String baseUrl = Configuracio.getApiPinbalClientUrl();
-			final String username = Configuracio.getApiPinbalClientUsername();
-			final String password = Configuracio.getApiPinbalClientPassword();
+			PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 			final LogLevel logLevel = LogLevel.INFO;
 
-			ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
-			UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
-			ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
-			ClientRecobriment clientRecobriment = new ClientRecobriment(baseUrl, username, password, logLevel);
+			ServeiClient serveiClient = new ServeiClient(c.baseUrl, c.username, c.password, logLevel);
+			UsuariClient usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
+			ProcedimentClient procedimentClient = new ProcedimentClient(c.baseUrl, c.username, c.password, logLevel);
+			ClientRecobriment clientRecobriment = new ClientRecobriment(c.baseUrl, c.username, c.password, logLevel);
 
 			this.serveiClient = serveiClient;
 			this.usuariClient = usuariClient;

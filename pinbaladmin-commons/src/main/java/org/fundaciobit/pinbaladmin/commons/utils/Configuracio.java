@@ -109,6 +109,7 @@ public class Configuracio implements Constants {
     public static String getAppBackUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "url.back");
     }
+
     public static String getAppFrontUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "url.front");
     }
@@ -215,11 +216,10 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "template_serveis_excel");
     }
 
-    
     public static String getTemplateTramitSistraXml() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "template_tramit_sistra_xml");
     }
-    
+
     public static String getCAIDSeleniumUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "caidseleniumurl");
     }
@@ -256,19 +256,33 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "codiprocediment");
     }
 
-    public static String getApiPinbalClientUrl() {
-        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "client.urlbase");
+    /**
+     * 
+     * @param isProduction Veure #Constants.API_PINBAL_PRO i #Constants.API_PINBAL_PRE
+     * @return
+     */
+    public static String getApiPinbalClientUrl(boolean isProduction) {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + (isProduction ? "pro" : "pre") + ".client.urlbase");
     }
 
-    public static String getApiPinbalClientUsername() {
-        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "client.username");
+    /**
+     * 
+     * @param isProduction Veure #Constants.API_PINBAL_PRO i #Constants.API_PINBAL_PRE
+     * @return
+     */
+    public static String getApiPinbalClientUsername(boolean isProduction) {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + (isProduction ? "pro" : "pre") + ".client.username");
     }
 
-    public static String getApiPinbalClientPassword() {
-        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + "client.password");
+    /**
+     * 
+     * @param isProduction Veure #Constants.API_PINBAL_PRO i #Constants.API_PINBAL_PRE     *  
+     * @return 
+     */
+    public static String getApiPinbalClientPassword(boolean isProduction) {
+        return getProperty(PINBALADMIN_PINBALAPI_PROPERTY_BASE + (isProduction ? "pro" : "pre") + ".client.password");
     }
 
-    
     public static String getUrlFormulariToSistra() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "sistra.formulariurl");
     }
@@ -277,17 +291,18 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "sistra.returnurl");
     }
 
-	public static String getCorreusCedentsDefault() {
-		return getProperty(PINBALADMIN_PROPERTY_BASE + "correuscedents.default");
-	}
-	
-	public static String getCorreuSuportCAIB() {
-		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.caib");
-	}
-	public static String getCorreoSoporteEstatal() {
-		return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.estatal");
-	}
-	
+    public static String getCorreusCedentsDefault() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "correuscedents.default");
+    }
+
+    public static String getCorreuSuportCAIB() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.caib");
+    }
+
+    public static String getCorreoSoporteEstatal() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "mail.suport.estatal");
+    }
+
     public static String getPortafibGatewayV2() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.url");
     }
@@ -304,36 +319,36 @@ public class Configuracio implements Constants {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apifirmaasync.profile.pades");
     }
 
-	public static String getNIFDirectorGeneral() {
+    public static String getNIFDirectorGeneral() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.directorgeneral");
-	}
-	
-	public static String getNIFJefeATIB() {
+    }
+
+    public static String getNIFJefeATIB() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.nif.jefeatib");
-	}
+    }
 
-	public static String getEmailJefeATIB() {
+    public static String getEmailJefeATIB() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.email.jefeatib");
-	}
-	
-	public static String getPortaFIBApiFlowUrl() {
+    }
+
+    public static String getPortaFIBApiFlowUrl() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.url");
-	}
+    }
 
-	public static String getPortaFIBApiFlowUsername() {
+    public static String getPortaFIBApiFlowUsername() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.username");
-	}
+    }
 
-	public static String getPortaFIBApiFlowPassword() {
+    public static String getPortaFIBApiFlowPassword() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "portafib.apiflow.password");
-	}
+    }
 
-	public static String getUsuariQueEsticFentDefault() {
+    public static String getUsuariQueEsticFentDefault() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "queesticfent.usuari.default");
-		//return pvico
-	}
+        //return pvico
+    }
 
-	public static String getHoraConsultaSolicitudsScheduler() {
+    public static String getHoraConsultaSolicitudsScheduler() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "scheduler.consultaexpedients.hora");
-	}
+    }
 }

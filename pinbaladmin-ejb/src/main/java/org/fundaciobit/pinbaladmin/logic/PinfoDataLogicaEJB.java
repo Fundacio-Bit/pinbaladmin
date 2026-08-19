@@ -15,8 +15,8 @@ import javax.ejb.Stateless;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.query.OrderBy;
 import org.fundaciobit.genapp.common.query.OrderType;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.ejb.PinfoDataEJB;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
@@ -1587,13 +1587,11 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 	@Override
 	public void llistatUsuarisPinbal() {
 
-		final String baseUrl = Configuracio.getApiPinbalClientUrl();
-		final String username = Configuracio.getApiPinbalClientUsername();
-		final String password = Configuracio.getApiPinbalClientPassword();
+	    PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 		final LogLevel logLevel = LogLevel.INFO;
 
 		log.info("Creant Clients");
-		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
+		UsuariClient usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
 		log.info("Clients creats");
 
 		final String ENTITAT_CIF = "GOVERN"; // "S0711001H";
@@ -1635,9 +1633,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 		log.info("Cridant a Pinbal per permisos");
 
-		final String baseUrl = Configuracio.getApiPinbalClientUrl();
-		final String username = Configuracio.getApiPinbalClientUsername();
-		final String password = Configuracio.getApiPinbalClientPassword();
+		PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
 
 		final String ENTITAT_CIF = "GOVERN"; // "S0711001H";
 		/*
@@ -1650,9 +1646,9 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		LogLevel logLevel = LogLevel.INFO;
 		log.info("Creant Clients");
 
-		ServeiClient serveiClient = new ServeiClient(baseUrl, username, password, logLevel);
-		UsuariClient usuariClient = new UsuariClient(baseUrl, username, password, logLevel);
-		ProcedimentClient procedimentClient = new ProcedimentClient(baseUrl, username, password, logLevel);
+		ServeiClient serveiClient = new ServeiClient(c.baseUrl, c.username, c.password, logLevel);
+		UsuariClient usuariClient = new UsuariClient(c.baseUrl, c.username, c.password, logLevel);
+		ProcedimentClient procedimentClient = new ProcedimentClient(c.baseUrl, c.username, c.password, logLevel);
 
 		log.info("Clients creats");
 
@@ -1661,9 +1657,12 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 
 		Procediment procediment = procedimentClient.getProcediment(codiProcediment, ENTITAT_CIF);
 		log.info(objectToJsonString(procediment));
+		
+		
 
 		Servei servei = serveiClient.getServei(codiServei);
 		log.info(objectToJsonString(servei));
+		
 
 		procedimentClient.enableServeiToProcediment(procediment.getId(), codiServei);
 		// AFEGIR PERMISOS.
