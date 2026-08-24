@@ -1,18 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.fundaciobit.pinbaladmin</groupId>
     <version>2.0.0</version>
     <artifactId>pinbaladmin</artifactId>
     <packaging>pom</packaging>
     <name>PinbalAdmin</name>
-    
+
     <parent>
-        <artifactId>
-            caib-artifacts-github-governib-distribution-with-jdk11-jboss72</artifactId>
+        <artifactId>caib-artifacts-jdk11-jboss72or74-with-github-governib-distribution</artifactId>
         <groupId>es.caib.maven</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
+        <relativePath />
     </parent>
-    
+
     <modules>
         <module>pinbaladmin-model</module>
         <module>pinbaladmin-persistence</module>
@@ -21,12 +22,12 @@
         <module>pinbaladmin-back</module>
         <module>pinbaladmin-front</module>
         <module>pinbaladmin-ws</module>
-         <!--<module>pinbaladmin-api-externa</module>-->
+        <!--<module>pinbaladmin-api-externa</module>-->
         <module>pinbaladmin-api-interna</module>
         <module>pinbaladmin-ear</module>
         <module>apialtapeticions</module>
         <module>scripts</module>
-        
+
     </modules>
     <repositories>
         <!--
@@ -151,7 +152,6 @@
         <pluginsib.core.version>3.0.0-SNAPSHOT</pluginsib.core.version>
 
 
-
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -169,7 +169,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            
+
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
@@ -194,15 +194,15 @@
             </dependency>
 
             <dependency>
-              <groupId>jakarta.xml.bind</groupId>
-              <artifactId>jakarta.xml.bind-api</artifactId>
-              <version>4.0.0</version>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
-              <groupId>com.sun.xml.bind</groupId>
-              <artifactId>jaxb-impl</artifactId>
-              <version>4.0.0</version>
-              <scope>runtime</scope>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>4.0.0</version>
+                <scope>runtime</scope>
             </dependency>
 
             <dependency>
@@ -221,11 +221,11 @@
                 <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
                 <exclusions>
-				   <exclusion>
-					  <groupId>org.dom4j</groupId>
-					  <artifactId>dom4j</artifactId>
-				   </exclusion>
-				</exclusions>
+                    <exclusion>
+                        <groupId>org.dom4j</groupId>
+                        <artifactId>dom4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- Dependències de test -->
             <dependency>
@@ -242,8 +242,8 @@
                 <version>${jboss-logging.version}</version>
                 <scope>test</scope>
             </dependency>
-            
-             <!--  REST SERVICES -->
+
+            <!--  REST SERVICES -->
             <!-- Anotacions de documentació de openapi -->
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
@@ -325,19 +325,19 @@
             </dependency>
 
             <dependency>
-				<groupId>xerces</groupId>
-				<artifactId>xercesImpl</artifactId>
-				<version>2.12.0.SP02-redhat-00001</version>
-				<!-- <scope>provided</scope> -->
-				<exclusions>
-				   <exclusion>
-					  <groupId>xml-apis</groupId>
-					  <artifactId>xml-apis</artifactId>
-				   </exclusion>
-				</exclusions>
-			</dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>2.12.0.SP02-redhat-00001</version>
+                <!-- <scope>provided</scope> -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>xml-apis</groupId>
+                        <artifactId>xml-apis</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
-            
+
             <!-- ==== JBOSS ========== --><!--
             <dependency>
                 <groupId>org.jboss.bom</groupId>
@@ -482,48 +482,48 @@
                         <requireJavaVersion>
                             <version>11</version>
                         </requireJavaVersion>
-                        
+
                         <!-- Per detectar problemes de dependències -->
-                        <banDuplicatePomDependencyVersions/>
-                        <dependencyConvergence/>
+                        <banDuplicatePomDependencyVersions />
+                        <dependencyConvergence />
                         <!--  <reactorModuleConvergence/> -->
 
-                       
-                </rules>
-            </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>enforce</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>com.google.code.maven-replacer-plugin</groupId>
-            <artifactId>maven-replacer-plugin</artifactId>
-            <version>1.4.0</version>
-            <inherited>false</inherited>
-            <executions>
-                <execution>
-                    <phase>process-sources</phase>
-                    <goals>
-                        <goal>replace</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <file>${version_txt_template_file}</file>
-                <outputFile>versio.txt</outputFile>
-                <replacements>
-                    <replacement>
-                        <token>@project.version@</token>
-                        <value>${project.version}</value>
-                    </replacement>
-                </replacements>
-            </configuration>
-        </plugin>
-    </plugins>
+
+                    </rules>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.4.0</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>${version_txt_template_file}</file>
+                    <outputFile>versio.txt</outputFile>
+                    <replacements>
+                        <replacement>
+                            <token>@project.version@</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     <profiles>
         <profile>

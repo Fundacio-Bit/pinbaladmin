@@ -35,6 +35,7 @@ import org.fundaciobit.pinbaladmin.logic.SolicitudServeiLogicaService;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager;
 import org.fundaciobit.pinbaladmin.logic.utils.PinbalAdminPluginsManager.TipusPluginUserInfo;
 import org.fundaciobit.pinbaladmin.logic.utils.Responsable;
+import org.fundaciobit.pinbaladmin.logic.utils.UsersWithPfiUserCache;
 import org.fundaciobit.pinbaladmin.model.entity.Fitxer;
 import org.fundaciobit.pinbaladmin.model.entity.IncidenciaTecnica;
 import org.fundaciobit.pinbaladmin.model.entity.Pinfo;
@@ -643,7 +644,7 @@ public class PinfoDataPublicController extends PinfoDataController {
         
         entrada = entrada.toLowerCase(); 
         
-          List<UserInfo> list = PinfoDataPublicController.getLlistaUserInfo(log);
+          List<UserInfo> list = UsersWithPfiUserCache.getLlistaUserInfo();
           
           
           List<UserInfo> filteredList = new java.util.ArrayList<>();
@@ -714,7 +715,7 @@ public class PinfoDataPublicController extends PinfoDataController {
         return users;
         */
         
-        List<UserInfo> users = PinfoDataPublicController.getLlistaUserInfo(log);
+        List<UserInfo> users = UsersWithPfiUserCache.getLlistaUserInfo();
         
         
         
@@ -949,133 +950,12 @@ public class PinfoDataPublicController extends PinfoDataController {
         log.info("pinfoID: " + pinfoID);
 
         // Obtenir els procediments dels PinfoDatas:
-        List<Responsable> responsablesList = getLlistaResponsables(log);
+        List<Responsable> responsablesList = UsersWithPfiUserCache.getLlistaResponsables();
         request.getSession().setAttribute(LLISTA_RESPONSABLES, responsablesList);
         mav.addObject("responsables", responsablesList);
         return mav;
     }
 
-    private static List<UserInfo> userInfoListCache = null;
-
-    private static List<Responsable> responsablesListCache = null;
-
-    private static long lastCacheTime = 0;
-
-    public static synchronized List<Responsable> getLlistaResponsables(org.apache.log4j.Logger log)
-            throws I18NException {
-
-        // Comprovar si fa manco de 24 hores que s'ha actualitzat la cache. Si és així, retornar la cache.
-        long currentTime = System.currentTimeMillis();
-        long cacheDuration = 24 * 60 * 60 * 1000; //  24 hores en mil·lisegons
-
-        if ((currentTime - lastCacheTime) < cacheDuration) {
-            log.info("Retornant responsables de la cache. Temps des de l'última actualització: "
-                    + (currentTime - lastCacheTime) + " ms");
-            return responsablesListCache;
-        }
-
-        initResponsablesAndUserInfoLists(log);
-
-        return responsablesListCache;
-    }
-
-    public static synchronized List<UserInfo> getLlistaUserInfo(org.apache.log4j.Logger log) throws I18NException {
-
-        // Comprovar si fa manco de 24 hores que s'ha actualitzat la cache. Si és així, retornar la cache.
-        long currentTime = System.currentTimeMillis();
-        long cacheDuration = 24 * 60 * 60 * 1000; //  24 hores en mil·lisegons
-
-        if ((currentTime - lastCacheTime) < cacheDuration) {
-            log.info("Retornant userInfo de la cache. Temps des de l'última actualització: "
-                    + (currentTime - lastCacheTime) + " ms");
-            return userInfoListCache;
-        }
-
-        initResponsablesAndUserInfoLists(log);
-
-        return userInfoListCache;
-    }
-
-    private static void initResponsablesAndUserInfoLists(org.apache.log4j.Logger log) {
-        final String rol = "PFI_USER";
-        try {
-
-            List<Responsable> responsablesList = new java.util.ArrayList<Responsable>();
-            List<UserInfo> userInfoList = new java.util.ArrayList<UserInfo>();
-
-            final boolean debug = false;
-            // boolean caib = true;
-            IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug,
-                    TipusPluginUserInfo.LDAP);
-
-            // String rol = "usuari-tipus-I";
-
-            UserInfo[] userInfo = pluginUserInfo.getUserInfoByRol(rol);
-
-            log.info("Usuaris amb rol " + rol + ": " + userInfo.length);
-
-            for (UserInfo ui : userInfo) {
-                
-                String username = ui.getUsername();
-                
-                
-                if (username == null || username.isEmpty()) {
-                    log.info("L'usuari null o '' amb rol " + rol + " no té username. No l'afegim a la llista de responsables.");
-                    continue;
-                }
-                
-
-                // Eliminar usuaris que no són persones
-                if (username.startsWith("$") || username.startsWith("e") || username.startsWith("x")) {
-                    continue;
-                }
-
-               
-                String nif = ui.getAdministrationID();
-
-                if (nif == null || nif.isEmpty()) {
-                    log.info("L'usuari " + username + " no té NIF. No l'afegim a les llistes de cache");
-                    continue;
-                }
-
-                if (!isValidNIF(nif)) {
-                    log.info("L'usuari " + username + " té un NIF invàlid (" + nif
-                            + "). No l'afegim a les llistes de cache");
-
-                    continue;
-                }
-
-                String nom = ui.getName();
-                String ape1 = ui.getSurname1();
-                String ape2 = ui.getSurname2();
-                String telefon = ui.getPhoneNumber();
-                String mail = ui.getEmail();
-                String nomOcult = ui.getFullName();
-
-                //log.info(nif + " - " + nom + " " + ape1 + " " + ape2 + " - " + username + " - " + mail + " - "
-                //        + nomOcult);
-
-                Responsable responsable = new Responsable(nif, nom, ape1, ape2, rol, telefon, mail, nomOcult, username);
-
-                responsablesList.add(responsable);
-                userInfoList.add(ui);
-            }
-
-            responsablesListCache = responsablesList;
-            userInfoListCache = userInfoList;
-            lastCacheTime = System.currentTimeMillis();
-
-            log.info("Total responsables/userInfo " + rol + ": " + responsablesList.size());
-        } catch (Exception e) {
-            log.error("Error cercant usuaris amb rol " + rol + ": " + e.getMessage());
-        }
-    }
-
-    public static boolean isValidNIF(String nif) {
-        // RegEx para saber si el NIF es valido.
-        String nifRegex = "^[0-9]{8}[A-Za-z]$";
-        return nif.matches(nifRegex);
-    }
 
     // private List<Responsable> getLlistaResponsablesProcedimentsOld(Long pinfoID)
     // throws I18NException {
