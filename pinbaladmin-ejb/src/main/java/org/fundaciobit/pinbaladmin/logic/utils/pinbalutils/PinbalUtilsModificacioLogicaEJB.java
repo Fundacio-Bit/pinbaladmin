@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.ejb.Stateless;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsApi;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
 import org.fundaciobit.pinbaladmin.logic.SolicitudLogicaEJB.TipusCridada;
@@ -380,11 +381,22 @@ public class PinbalUtilsModificacioLogicaEJB extends PinbalUtilsCommon implement
 		return docs;
 	}
 
+	/**
+	 * Només els serveis pendents d'autoritzar
+	 * @param soli
+	 * @return
+	 * @throws Exception
+	 */
 	private Servicios getServicios(SolicitudJPA soli) throws Exception {
 
 		Servicios servicios = new Servicios();
 		List<SolicitudServei> serveisDeLaSolicitud = solicitudServeiLogicaEjb
-				.select(SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()));
+				.select(
+				        Where.AND(
+				                SolicitudServeiFields.SOLICITUDID.equal(soli.getSolicitudID()),
+				                // Només enviar a Madrid Serveis en estat "Pendents d'autoritzar" #420
+				                SolicitudServeiFields.ESTATSOLICITUDSERVEIID.equal(Constants.ESTAT_SOLICITUD_SERVEI_PENDENT_AUTORITZAR)
+				                ));
 
 		int serveisPerAfegir = 0;
 		int serveisAfegits = 0;

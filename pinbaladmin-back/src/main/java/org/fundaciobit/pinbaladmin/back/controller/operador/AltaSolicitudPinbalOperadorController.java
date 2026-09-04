@@ -117,7 +117,7 @@ public class AltaSolicitudPinbalOperadorController {
                 if (solicitudM.getProcedimiento().getServicios().getServicio().size() == 0) {
                     errors.add("No hi ha serveis pendents d'autoritzar");
                 }
-
+                
                 request.getSession().setAttribute("solicitud", solicitudM);
                 mav = new ModelAndView("modificaciosolicitudpinbal");
                 mav.addObject("solicitud", solicitudM);
@@ -347,9 +347,11 @@ public class AltaSolicitudPinbalOperadorController {
 //    }
 
 	private ScspTitular getTitular(Solicitud soli) throws Exception {
-		// Ahora, vamos a obtener el titular desde el contacto. Segun los datos
-		// revisados. Se coge el contacto de Auditorias.
-		Long contacteID = soli.getContacteGestAutID();
+	    
+	    
+		// Ahora, vamos a obtener el titular desde el contacto. 
+        // Només enviar a Madrid Serveis en estat "Pendents d'autoritzar" (punt 2) #420
+		Long contacteID = soli.getContacteTitularID();
 		if (contacteID != null) {
 			Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteID);
 			if (contacte != null) {
