@@ -325,10 +325,16 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
             java.sql.Timestamp _dataEvent_ = soli.getDataInici();
             int _tipus_ = Constants.EVENT_TIPUS_COMENTARI_CONTACTE;
             
-            Long contacteSolicitantID = soli.getContacteSolicitantID();
-            Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteSolicitantID);
             
-            java.lang.String _persona_ = contacte.getNombrecompleto();
+            java.lang.String _persona_ = "--DESCONEGUT --";
+            
+            Long contacteSolicitantID = soli.getContacteSolicitantID();
+            if (contacteSolicitantID != null) {
+                Contacte contacte = contacteLogicaEjb.findByPrimaryKey(contacteSolicitantID);
+                if (contacte != null) {
+                    _persona_ = contacte.getNombrecompleto();
+                }
+            }
             
             
             boolean _noLlegit_ = false;

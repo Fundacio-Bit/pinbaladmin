@@ -206,10 +206,28 @@ public class EmailEmlFormatParser {
 			
 			List<EmailAttachmentInfo> attachments = emi.getAttachments();
 			
-			String fileName = MimeUtility.decodeText(part.getFileName());
-
+			InputStream is = part.getInputStream();
+			
+			if (is == null) {
+                log.warn("rePart: No es posible obtener el InputStream del adjunto. " + part.getFileName());
+                return;
+            }
+			
 			byte[] data = IOUtils.toByteArray(part.getInputStream());
 			
+			if (part.getFileName() == null || part.getFileName().trim().equals("")) {
+                log.info("rePart: Adjunto sin nombre. " + part.getContentType());
+                return;
+            }
+			
+			String partFileName = part.getFileName();
+			if (partFileName == null || partFileName.trim().equals("")) {
+                partFileName = "adjunt-amb-nom-null-o-buit-" + System.currentTimeMillis();
+            }
+			
+			
+			String fileName = MimeUtility.decodeText(partFileName);
+
 			String mime = MimeUtility.decodeText(part.getContentType());
 			int pos = mime.indexOf(';');
 			if (pos != -1) {
