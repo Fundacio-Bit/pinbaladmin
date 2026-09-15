@@ -161,3 +161,5 @@ hs_err_pid*
 /pinbaladmin-front/.classpath
 /pinbaladmin-front/target
 /apialtapeticions/gen_consulta.bat
+/target
+/scripts/target

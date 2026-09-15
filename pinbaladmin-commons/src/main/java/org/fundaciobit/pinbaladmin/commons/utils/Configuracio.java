@@ -351,4 +351,10 @@ public class Configuracio implements Constants {
     public static String getHoraConsultaSolicitudsScheduler() {
         return getProperty(PINBALADMIN_PROPERTY_BASE + "scheduler.consultaexpedients.hora");
     }
+    
+    
+    public static String getCacheUsuarisDir() {
+        return getProperty(PINBALADMIN_PROPERTY_BASE + "cacheusuarisdir");
+    }
+    
 }

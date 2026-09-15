@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
 <%@ include file="/WEB-INF/jsp/all/tramitPinfoPublic.jsp"%>
+<%@ page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController" %>
 
 <html>
 <head>
@@ -586,21 +587,23 @@ section {
 					<!-- Avís Paso 1: Usuarios -->
 					<div class="aviso-tip">
 						<i class="fas fa-lightbulb"></i>
-						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys 2 caràcters per iniciar la cerca. <fmt:message key="tramit.pinfo.usuaris.ajuda"/>
+						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys <%= PinfoDataPublicController.MINIM_CARACTERS_CERCA %> caràcters per iniciar la cerca. <fmt:message key="tramit.pinfo.usuaris.ajuda"/>
 					</div>
-					
+					<% request.setAttribute("MINIM_CARACTERS_CERCA", PinfoDataPublicController.MINIM_CARACTERS_CERCA); %>
 					<div class="input-container user">
 						<div id="cercador-usuaris">
 							<div id="input-usuari-container">
 								<input id="usuariNom" name="userID" type="text"
 									autocomplete="off" class="campsUsuari"
-									placeholder="<fmt:message key="tramit.pinfo.usuaris.placeholder"/>">
+									placeholder="<fmt:message key="tramit.pinfo.usuaris.placeholder"><fmt:param value="${MINIM_CARACTERS_CERCA}" /></fmt:message>">
 							</div>
 							<div id="autocomplete-usuaris" class="hidden"></div>
 						</div>
 						<div id="llistat-usuaris">
 							<ul></ul>
 						</div>
+                        <%-- Afegir checkbox per cerca avançada --%>
+                        <input type="checkbox" id="cercaCompleta" name="cercaCompleta"><label for="cercaCompleta"><fmt:message key="tramit.pinfo.usuaris.cercaCompleta"/></label>
 					</div>
 				</section>
 
@@ -737,7 +740,7 @@ section {
 		        var nom = $("#usuariNom").val();
 
 		        console.log("nom: " + nom);
-		        if (nom.length < 3) {
+		        if (nom.length < <%= PinfoDataPublicController.MINIM_CARACTERS_CERCA %>) {
 		            $("#autocomplete-usuaris").empty().addClass("hidden");
 		            return;
 		        }
@@ -748,7 +751,7 @@ section {
 		        $.ajax({
 		            url : "jsonUsuaris",
 		            type : "GET",
-		            data : { nom : nom },
+		            data : { nom : nom, cercaCompleta : $("#cercaCompleta").is(":checked") },
 		            success : function(data) {
 		                $("#autocomplete-usuaris").empty().removeClass("hidden");
 		                

@@ -50,6 +50,7 @@ import org.fundaciobit.pinbaladmin.model.fields.SolicitudFields;
 import org.fundaciobit.pinbaladmin.model.fields.SolicitudServeiFields;
 import org.fundaciobit.pinbaladmin.persistence.PinfoDataJPA;
 import org.fundaciobit.pluginsib.userinformation.IUserInformationPlugin;
+import org.fundaciobit.pluginsib.userinformation.SearchUsersResult;
 import org.fundaciobit.pluginsib.userinformation.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +70,9 @@ import com.google.gson.Gson;
 @RequestMapping(value = PinfoDataPublicController.CONTEXT_WEB)
 @SessionAttributes(types = { PinfoDataForm.class, PinfoDataFilterForm.class })
 public class PinfoDataPublicController extends PinfoDataController {
+    
+    
+    public static final int MINIM_CARACTERS_CERCA = 5;
 
     public static final String CONTEXT_WEB = "/public/pinfodata";
 
@@ -107,7 +111,24 @@ public class PinfoDataPublicController extends PinfoDataController {
     public final Long INCIDENCIAID_DEFAULT = 50275l;
 
     public static final String RESPONSABLE = "responsable";
-    public final String LLISTA_RESPONSABLES = "llistaResponsables";
+    public static final String LLISTA_RESPONSABLES = "llistaResponsables";
+    
+    
+    private static IUserInformationPlugin cachedPlugin = null;
+    
+    private static IUserInformationPlugin getPluginUserInfo(Logger log) throws Exception {
+        if (cachedPlugin == null) {
+            synchronized (PinfoDataPublicController.class) {
+                if (cachedPlugin == null) {
+                    final boolean debug = true;
+                    log.info("Inicializando plugin SOFFID (solo una vez)...");
+                    cachedPlugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.SOFFID);
+                }
+            }
+        }
+        return cachedPlugin;
+    }
+    
 
     @Override
     public String getTileForm() {
@@ -510,9 +531,21 @@ public class PinfoDataPublicController extends PinfoDataController {
     public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String nom = (String) request.getParameter("nom");
+        
+        String cercaCompletaStr = (String) request.getParameter("cercaCompleta");
+        
+        final boolean cercaCompleta; 
+        if (cercaCompletaStr != null && cercaCompletaStr.equalsIgnoreCase("true")) {
+            cercaCompleta = true;
+            log.info("Cerca completa activada");
+        } else {
+            cercaCompleta = false;
+            log.info("Cerca completa desactivada");
+        }
+        
         log.info("/jsonUsuaris(]" + nom + "[)");
 
-        List<UserInfo> llistatUsuaris = getUsuarisParam(nom);
+        List<UserInfo> llistatUsuaris = getUsuarisParam(nom, cercaCompleta);
 
         try {
             // Crear una lista de objetos simplificados con NIFs ofuscados
@@ -556,13 +589,13 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 
 
-    private List<UserInfo> getUsuarisParam(String entrada) throws Exception {
+    private List<UserInfo> getUsuarisParam(String entrada, boolean cercaCompleta) throws Exception {
 
         try {
             //IUserInformationPlugin plugin = getPluginUserInfo();
 
             // Primera busqueda
-            List<UserInfo> usuarisList = testPartialOR( entrada, log);
+            List<UserInfo> usuarisList = testPartialOR( entrada, cercaCompleta, log);
 
             if (usuarisList == null) {
                 // Si la primera busqueda da más de 500 resultados, no seguimos.
@@ -586,7 +619,7 @@ public class PinfoDataPublicController extends PinfoDataController {
                         String nombre = String.join(" ", java.util.Arrays.copyOfRange(palabras, 0, i));
                         String apellidos = String.join(" ", java.util.Arrays.copyOfRange(palabras, i, palabras.length));
 
-                        List<UserInfo> resultadoAnd = testNombreApellido(log, nombre, apellidos);
+                        List<UserInfo> resultadoAnd = testNombreApellido(log, cercaCompleta, nombre, apellidos);
 
                         if (resultadoAnd != null) {
                             usuarisList.addAll(resultadoAnd);
@@ -638,117 +671,119 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
-    private static  List<UserInfo> testPartialOR( String entrada, Logger log) throws Exception {
-        
+    private static List<UserInfo> testPartialOR(String entrada, boolean cercaCompleta, Logger log) throws Exception {
+
         // NOu COdi per filtrar a partir de CAche de llistat d'usuaris
-        
-        entrada = entrada.toLowerCase(); 
-        
-          List<UserInfo> list = UsersWithPfiUserCache.getLlistaUserInfo();
-          
-          
-          List<UserInfo> filteredList = new java.util.ArrayList<>();
-          
-          
-          for (UserInfo user : list) {
-              if (user.getUsername().toLowerCase().contains(entrada) ||
-                  user.getName().toLowerCase().contains(entrada) ||
-                  user.getSurname1().toLowerCase().contains(entrada) ||
-                 (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada)) ||
-                  user.getAdministrationID().toLowerCase().contains(entrada) ||
-                  (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))
-                  ) {
-                  
-                  filteredList.add(user);
-              }
-          }
-          
-        
-        return filteredList;
-        
-        
-        // Codi antic que cridava al PLugin
-      //entrada = "*" + entrada + "*";
-        /*
-        System.out.println("\n=== Test de búsqueda OR: '" + entrada + "' ===");
 
-        SearchUsersResult result = plugin.getUsersByPartialValuesOr(entrada, entrada, entrada, null, entrada);
-        List<UserInfo> users = result.getUsers();
+       
 
-        if (users != null) {
-            // System.out.println("Usuarios encontrados: " + users.size());
-            for (UserInfo user : users) {
-                System.out.println(" - " + user.getUsername() + ": " + user.getName() + " " + user.getSurname1() + " "
-                        + user.getSurname2() + " | NIF: " + user.getAdministrationID());
+        if (!cercaCompleta) {
+            // Si no es cerca completa, només fem la cerca per prefix
+            entrada = entrada.toLowerCase();
+
+            List<UserInfo> list = UsersWithPfiUserCache.getLlistaUserInfo();
+
+            List<UserInfo> filteredList = new java.util.ArrayList<>();
+
+            for (UserInfo user : list) {
+                if (user.getUsername().toLowerCase().contains(entrada) || user.getName().toLowerCase().contains(entrada)
+                        || user.getSurname1().toLowerCase().contains(entrada)
+                        || (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada))
+                        || user.getAdministrationID().toLowerCase().contains(entrada)
+                        || (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))) {
+
+                    filteredList.add(user);
+                }
             }
-            System.out.println("Usuarios encontrados: " + users.size());
+
+            return filteredList;
         } else {
-            System.out.println("Más de 500 resultados encontrados.");
+            IUserInformationPlugin plugin = getPluginUserInfo(log);
+
+            // Codi antic que cridava al PLugin
+            // entrada = "*" + entrada + "*";  Per SOFFID NO FUNCIONEN els "*"
+
+            System.out.println("\n=== Test de búsqueda OR: '" + entrada + "' ===");
+
+            SearchUsersResult result = plugin.getUsersByPartialValuesOr(entrada, entrada, entrada, null, entrada);
+            List<UserInfo> users = result.getUsers();
+
+            if (users != null) {
+                // System.out.println("Usuarios encontrados: " + users.size());
+                for (UserInfo user : users) {
+                    System.out.println(" - " + user.getUsername() + ": " + user.getName() + " " + user.getSurname1()
+                            + " " + user.getSurname2() + " | NIF: " + user.getAdministrationID());
+                }
+                System.out.println("Usuarios encontrados: " + users.size());
+            } else {
+                System.out.println("Más de 500 resultados encontrados.");
+            }
+            return users;
         }
-        return users;
-        */
     }
 
-    private static List<UserInfo> testNombreApellido(Logger log, String nombre, String apellido)
+    private static List<UserInfo> testNombreApellido(Logger log, boolean cercaCompleta, String nombre, String apellido)
             throws Exception {
-        
-        /*
-        nombre = "*" + nombre + "*";
-        apellido = "*" + apellido + "*";
 
-        System.out.println("\n=== Test de búsqueda AND: nombre='" + nombre + "', apellido='" + apellido + "' ===");
+        if (cercaCompleta) {
+            
+            IUserInformationPlugin plugin = getPluginUserInfo(log);
+            
+            // Per SOFFID NO FUNCIONEN els "*"
+            //nombre = "*" + nombre + "*";
+            //apellido = "*" + apellido + "*";
 
-        SearchUsersResult result = plugin.getUsersByPartialValuesAnd(null, nombre, apellido, null, null);
+            System.out.println("\n=== Test de búsqueda AND: nombre='" + nombre + "', apellido='" + apellido + "' ===");
 
-        List<UserInfo> users = result.getUsers();
+            SearchUsersResult result = plugin.getUsersByPartialValuesAnd(null, nombre, apellido, null, null);
 
-        if (users != null) {
-            // System.out.println("Usuarios encontrados: " + users.size());
-            for (UserInfo user : users) {
-                System.out.println(" - " + user.getUsername() + ": " + user.getName() + " " + user.getSurname1() + " "
-                        + user.getSurname2() + " | NIF: " + user.getAdministrationID());
+            List<UserInfo> users = result.getUsers();
+
+            if (users != null) {
+                // System.out.println("Usuarios encontrados: " + users.size());
+                for (UserInfo user : users) {
+                    System.out.println(" - " + user.getUsername() + ": " + user.getName() + " " + user.getSurname1()
+                            + " " + user.getSurname2() + " | NIF: " + user.getAdministrationID());
+                }
+                System.out.println("Usuarios encontrados: " + users.size());
+            } else {
+                System.out.println("Más de 500 resultados encontrados.");
             }
-            System.out.println("Usuarios encontrados: " + users.size());
+            return users;
         } else {
-            System.out.println("Más de 500 resultados encontrados.");
+
+            List<UserInfo> users = UsersWithPfiUserCache.getLlistaUserInfo();
+
+            List<UserInfo> filteredList = new java.util.ArrayList<>();
+
+            final String n = nombre.toLowerCase();
+            final String s = apellido.toLowerCase();
+
+            for (UserInfo user : users) {
+                // Nombre + Apellido1 o Apellido2
+                if (user.getName().toLowerCase().contains(n) && (user.getSurname1().toLowerCase().contains(s)
+                        || (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s)))) {
+
+                    filteredList.add(user);
+                    continue;
+                }
+                // Apellido1 i Apellido2
+                if (user.getSurname1().toLowerCase().contains(n)
+                        && (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s))) {
+
+                    filteredList.add(user);
+                    continue;
+                }
+                // Apellido 1: les dues paraules estan al llinatge 1
+                if (user.getSurname1().toLowerCase().contains(n) && user.getSurname1().toLowerCase().contains(s)) {
+                    filteredList.add(user);
+                    continue;
+                }
+            }
+
+            return filteredList;
         }
-        return users;
-        */
-        
-        List<UserInfo> users = UsersWithPfiUserCache.getLlistaUserInfo();
-        
-        
-        
-        List<UserInfo> filteredList = new java.util.ArrayList<>();
-        
-        final String n = nombre.toLowerCase();
-        final String s = apellido.toLowerCase();
-        
-        for (UserInfo user : users) {
-            // Nombre + Apellido1 o Apellido2
-            if (user.getName().toLowerCase().contains(n) &&
-                (user.getSurname1().toLowerCase().contains(s) ||
-                 (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s)))) {
-                
-                filteredList.add(user);
-                continue;
-            }
-            // Apellido1 i Apellido2
-            if (user.getSurname1().toLowerCase().contains(n) &&
-                     (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(s))) {
-                
-                filteredList.add(user);
-                continue;                
-            }
-            // Apellido 1: les dues paraules estan al llinatge 1
-            if (user.getSurname1().toLowerCase().contains(n) && user.getSurname1().toLowerCase().contains(s)) {
-                filteredList.add(user);
-                continue;
-            }
-        }
-        
-        return filteredList;
-        
+
     }
 
     List<Item> cacheProcediments = null;

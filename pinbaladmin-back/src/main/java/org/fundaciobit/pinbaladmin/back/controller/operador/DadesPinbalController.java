@@ -453,7 +453,9 @@ public class DadesPinbalController {
 			
 			// Buscar en LDAP con asteriscos
 			IUserInformationPlugin plugin = getPluginUserInfo();
-			String searchTerm = "*" + search.trim() + "*";
+			// Per SOFFID NO FUNCIONEN els "*"
+			//String searchTerm = "*" + search.trim() + "*";
+			String searchTerm = search.trim();
 			SearchUsersResult result = plugin.getUsersByPartialValuesOr(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
 			
 			if (result != null && result.getUsers() != null) {
