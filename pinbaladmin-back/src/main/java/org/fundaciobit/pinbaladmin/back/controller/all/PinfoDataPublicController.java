@@ -72,7 +72,7 @@ import com.google.gson.Gson;
 public class PinfoDataPublicController extends PinfoDataController {
     
     
-    public static final int MINIM_CARACTERS_CERCA = 5;
+    public static final int MINIM_CARACTERS_CERCA = 8;
 
     public static final String CONTEXT_WEB = "/public/pinfodata";
 
@@ -532,6 +532,11 @@ public class PinfoDataPublicController extends PinfoDataController {
 
         String nom = (String) request.getParameter("nom");
         
+        
+        final boolean cercaEnPluginUserInformation = true;
+        
+        final boolean cercaNomesNif = true; 
+        /*
         String cercaCompletaStr = (String) request.getParameter("cercaCompleta");
         
         final boolean cercaCompleta; 
@@ -542,10 +547,11 @@ public class PinfoDataPublicController extends PinfoDataController {
             cercaCompleta = false;
             log.info("Cerca completa desactivada");
         }
+        */
         
         log.info("/jsonUsuaris(]" + nom + "[)");
 
-        List<UserInfo> llistatUsuaris = getUsuarisParam(nom, cercaCompleta);
+        List<UserInfo> llistatUsuaris = getUsuarisParam(nom, cercaEnPluginUserInformation, cercaNomesNif);
 
         try {
             // Crear una lista de objetos simplificados con NIFs ofuscados
@@ -589,13 +595,13 @@ public class PinfoDataPublicController extends PinfoDataController {
 
 
 
-    private List<UserInfo> getUsuarisParam(String entrada, boolean cercaCompleta) throws Exception {
+    private List<UserInfo> getUsuarisParam(String entrada, boolean cercaEnPluginUserInformation, boolean cercaNomesNif) throws Exception {
 
         try {
             //IUserInformationPlugin plugin = getPluginUserInfo();
 
             // Primera busqueda
-            List<UserInfo> usuarisList = testPartialOR( entrada, cercaCompleta, log);
+            List<UserInfo> usuarisList = testPartialOR( entrada, cercaEnPluginUserInformation, cercaNomesNif, log);
 
             if (usuarisList == null) {
                 // Si la primera busqueda da más de 500 resultados, no seguimos.
@@ -619,7 +625,7 @@ public class PinfoDataPublicController extends PinfoDataController {
                         String nombre = String.join(" ", java.util.Arrays.copyOfRange(palabras, 0, i));
                         String apellidos = String.join(" ", java.util.Arrays.copyOfRange(palabras, i, palabras.length));
 
-                        List<UserInfo> resultadoAnd = testNombreApellido(log, cercaCompleta, nombre, apellidos);
+                        List<UserInfo> resultadoAnd = testNombreApellido(log, cercaEnPluginUserInformation, nombre, apellidos);
 
                         if (resultadoAnd != null) {
                             usuarisList.addAll(resultadoAnd);
@@ -671,13 +677,13 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
-    private static List<UserInfo> testPartialOR(String entrada, boolean cercaCompleta, Logger log) throws Exception {
+    private static List<UserInfo> testPartialOR(String entrada, boolean cercaEnPluginUserInformation, boolean cercaNomesNif, Logger log) throws Exception {
 
         // NOu COdi per filtrar a partir de CAche de llistat d'usuaris
 
        
 
-        if (!cercaCompleta) {
+        if (!cercaEnPluginUserInformation) {
             // Si no es cerca completa, només fem la cerca per prefix
             entrada = entrada.toLowerCase();
 
@@ -686,13 +692,20 @@ public class PinfoDataPublicController extends PinfoDataController {
             List<UserInfo> filteredList = new java.util.ArrayList<>();
 
             for (UserInfo user : list) {
-                if (user.getUsername().toLowerCase().contains(entrada) || user.getName().toLowerCase().contains(entrada)
-                        || user.getSurname1().toLowerCase().contains(entrada)
-                        || (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada))
-                        || user.getAdministrationID().toLowerCase().contains(entrada)
-                        || (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))) {
-
-                    filteredList.add(user);
+                
+                if (cercaNomesNif) {
+                    if (user.getAdministrationID().toLowerCase().contains(entrada)) {
+                        filteredList.add(user);
+                    }
+                } else {
+                    if (user.getUsername().toLowerCase().contains(entrada) || user.getName().toLowerCase().contains(entrada)
+                            || user.getSurname1().toLowerCase().contains(entrada)
+                            || (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada))
+                            || user.getAdministrationID().toLowerCase().contains(entrada)
+                            || (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))) {
+    
+                        filteredList.add(user);
+                    }
                 }
             }
 
@@ -704,8 +717,19 @@ public class PinfoDataPublicController extends PinfoDataController {
             // entrada = "*" + entrada + "*";  Per SOFFID NO FUNCIONEN els "*"
 
             System.out.println("\n=== Test de búsqueda OR: '" + entrada + "' ===");
+            
+            final String administrationIdField = entrada;
+            final String otherFields;
+            if (cercaNomesNif) {
+                otherFields = null;
+            } else {
+                otherFields = entrada;
+            }
+            
+            
+            
 
-            SearchUsersResult result = plugin.getUsersByPartialValuesOr(entrada, entrada, entrada, null, entrada);
+            SearchUsersResult result = plugin.getUsersByPartialValuesOr(otherFields, otherFields, otherFields, null, administrationIdField);
             List<UserInfo> users = result.getUsers();
 
             if (users != null) {

@@ -587,7 +587,11 @@ section {
 					<!-- Avís Paso 1: Usuarios -->
 					<div class="aviso-tip">
 						<i class="fas fa-lightbulb"></i>
-						<strong>Consell:</strong> Pots cercar usuaris per NIF, codi d'usuari o nom. Escriu almenys <%= PinfoDataPublicController.MINIM_CARACTERS_CERCA %> caràcters per iniciar la cerca. <fmt:message key="tramit.pinfo.usuaris.ajuda"/>
+						<strong>Consell:</strong> 
+                          <%--  Pots cercar usuaris per NIF, codi d'usuari o nom. --%>
+                          Només es pot cercar per NIF. 
+                         Escriu almenys <%= PinfoDataPublicController.MINIM_CARACTERS_CERCA %> caràcters per iniciar la cerca. 
+                         <fmt:message key="tramit.pinfo.usuaris.ajuda"/>
 					</div>
 					<% request.setAttribute("MINIM_CARACTERS_CERCA", PinfoDataPublicController.MINIM_CARACTERS_CERCA); %>
 					<div class="input-container user">
@@ -603,7 +607,9 @@ section {
 							<ul></ul>
 						</div>
                         <%-- Afegir checkbox per cerca avançada --%>
+                        <%--
                         <input type="checkbox" id="cercaCompleta" name="cercaCompleta"><label for="cercaCompleta"><fmt:message key="tramit.pinfo.usuaris.cercaCompleta"/></label>
+                         --%>
 					</div>
 				</section>
 
@@ -751,7 +757,7 @@ section {
 		        $.ajax({
 		            url : "jsonUsuaris",
 		            type : "GET",
-		            data : { nom : nom, cercaCompleta : $("#cercaCompleta").is(":checked") },
+		            data : { nom : nom <%-- , cercaCompleta : $("#cercaCompleta").is(":checked") --%>},
 		            success : function(data) {
 		                $("#autocomplete-usuaris").empty().removeClass("hidden");
 		                
