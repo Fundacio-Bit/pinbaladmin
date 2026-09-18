@@ -21,6 +21,7 @@
 </c:if>
 
 
+
 <!-- AFEGIR NORMES A UN SERVEI -->
 <div id="botones-normas">
 	<div id="afegirNorma" class="btn-norma btn">Afegir una altra norma</div>
@@ -48,6 +49,16 @@
 
 <script type="text/javascript">
 
+    <%--  Si existeix el select amb ID solicitudServei_serveiID llavors aplicar-li que sigui select desplegable --%>
+    if ($("#solicitudServei_serveiID").length > 0) {
+        $("#solicitudServei_serveiID").select2({
+            width: '100%',
+            placeholder: "Selecciona un servei",
+            allowClear: true
+        });
+    }
+
+
 	$(document).ready(function() {
 	
 		var totalNormes = 3;
@@ -68,7 +79,7 @@
 		
 		
 		function testNormes() {
-			console.log("añadriermos " + normesAfegides + " normas");
+			console.log("aÃ±adiremos " + normesAfegides + " normas");
 			for (var i = 1; i <= totalNormes; i++) {
 				if (i <= normesAfegides) {
 					$("#seccio_norma" + i).show();
@@ -76,7 +87,7 @@
 					$("#seccio_norma" + i).hide();
 				}
 			}
-			//Si solo hay una norma, no se puede eliminar, y si hay 3, no se puede añadir
+			//Si solo hay una norma, no se puede eliminar, y si hay 3, no se puede aï¿½adir
 			if (normesAfegides > 1) {
                 $("#eliminarNorma").show();
             } else {
@@ -133,7 +144,7 @@
 			    if (!hasNormaLegal) missingFields.push("Norma legal");
 			    if (!hasCaducaDate) missingFields.push("Fecha de caducidad");
 
-			    alert("El formulario está sin rellenar. Faltan: " + missingFields.join(", "));
+			    alert("El formulario estÃ  sin rellenar. Faltan: " + missingFields.join(", "));
 			    return false;
 			  }
 
@@ -141,12 +152,12 @@
 			}
 
 
-		// onsubmit, poner vacíos los campos de normas que no estén visibles
+		// onsubmit, poner vacÃ­os los campos de normas que no estÃ¡n visibles
 		$("form").submit(function(event) {
 			console.log("submit");
 
 			if (!preValidate()) {
-				event.preventDefault(); // Detener el envío
+				event.preventDefault(); // Detener el envï¿½o
 				return false;
 			}
 
@@ -173,7 +184,7 @@
 		    }
 		  }
 	
-		  // Asignar función al cambio del select SIN borrar otros handlers
+		  // Asignar funciï¿½n al cambio del select SIN borrar otros handlers
 		  $selectCaduca.on("change", actualizarCampoFecha);
 	
 		  // Ejecutar al cargar para establecer el estado inicial
