@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
  * 24 ago 2026 12:17:11
  */
 public class UsersWithPfiUserCache {
-    
+
     private static final Logger log = Logger.getLogger(UsersWithPfiUserCache.class);
 
     private static List<UserInfo> userInfoListCache = null;
@@ -28,8 +28,7 @@ public class UsersWithPfiUserCache {
 
     private static long lastCacheTime = 0;
 
-    public static synchronized List<Responsable> getLlistaResponsables()
-            throws I18NException {
+    public static synchronized List<Responsable> getLlistaResponsables() throws I18NException {
 
         // Comprovar si fa manco de 24 hores que s'ha actualitzat la cache. Si és així, retornar la cache.
         long currentTime = System.currentTimeMillis();
@@ -40,6 +39,8 @@ public class UsersWithPfiUserCache {
                     + (currentTime - lastCacheTime) + " ms");
             return responsablesListCache;
         }
+
+        log.warn("La cache de responsables i userInfo ha caducat. Es procedirà a actualitzar-la.");
 
         initResponsablesAndUserInfoLists();
 
@@ -73,16 +74,10 @@ public class UsersWithPfiUserCache {
             // Miram de llegir la llista d'usuaris emprant fitxers JSON de cache. 
             // Si no es poden llegir, llavors fem la consulta al UserInformation.
             boolean errorLlegintFitxers = llegirUsuarisDeFitxers(responsablesList, userInfoList);
-            if (!errorLlegintFitxers) {                
+            if (errorLlegintFitxers == false) { 
+                // Hem llegit el usuaris de fitxers JSON correctament. No cal consultar el UserInformation.
                 return;
             }
-                  
-            
-            
-            
-            
-            
-            
 
             final boolean debug = false;
             // boolean caib = true;
@@ -143,14 +138,8 @@ public class UsersWithPfiUserCache {
             responsablesListCache = responsablesList;
             userInfoListCache = userInfoList;
             lastCacheTime = System.currentTimeMillis();
-            
-            
+
             guardarResultatAFitxer(responsablesList, userInfoList);
-      
-            
-            
-            
-            
 
             log.info("Total responsables/userInfo " + rol + ": " + responsablesList.size());
         } catch (Exception e) {
@@ -159,83 +148,79 @@ public class UsersWithPfiUserCache {
     }
 
     public static boolean llegirUsuarisDeFitxers(List<Responsable> responsablesList, List<UserInfo> userInfoList) {
-        
-        boolean errorLlegintFitxers = false;
+
         String dirCache = Configuracio.getCacheUsuarisDir();
-        if (dirCache != null && !dirCache.isEmpty() && new File(dirCache).exists()) {
-            // Llegir responsablesList i userInfoList de fitxers JSON si existeixen
-            String responsablesFilePath = dirCache + "/" + RESPONSABLES_FILENAME;
-            String userInfoFilePath = dirCache + "/" + USERSINFO_FILENAME;
-
-            Gson gson = new Gson();
+        if (dirCache == null || dirCache.isEmpty() || !(new File(dirCache).exists())) {
             
             
-
-            // Llegir responsablesList
-            File responsablesFile = new File(responsablesFilePath);
-            if (responsablesFile.exists()) {
-                try (java.io.FileReader reader = new java.io.FileReader(responsablesFile)) {
-                    Responsable[] responsablesArray = gson.fromJson(reader, Responsable[].class);
-                    if (responsablesArray != null) {
-                        for (Responsable r : responsablesArray) {
-                            responsablesList.add(r);
-                        }
-                    }
-                    log.info("Llista de responsables carregada des de " + responsablesFilePath);
-                } catch (Exception e) {
-                    log.error("Error llegint la llista de responsables des de " + responsablesFilePath + ": "
-                            + e.getMessage());
-                    errorLlegintFitxers = true;
-                }
-            } else {
-                errorLlegintFitxers = true;
-            }
-
-            // Llegir userInfoList
-            File userInfoFile = new File(userInfoFilePath);
-            if (userInfoFile.exists()) {
-                try (java.io.FileReader reader = new java.io.FileReader(userInfoFile)) {
-                    UserInfo[] userInfoArray = gson.fromJson(reader, UserInfo[].class);
-                    if (userInfoArray != null) {
-                        for (UserInfo ui : userInfoArray) {
-                            userInfoList.add(ui);
-                        }
-                    }
-                    log.info("Llista de userInfo carregada des de " + userInfoFilePath);
-                } catch (Exception e) {
-                    log.error("Error llegint la llista de userInfo des de " + userInfoFilePath + ": "
-                            + e.getMessage());
-                    errorLlegintFitxers = true;
-                }
-            } else {
-                errorLlegintFitxers = true;
-            }
+            log.info("No s'ha definit el directori de cache o no existeix. "
+                    + "No es poden llegir les llistes de responsables i userInfo de fitxers.");
             
-            
-            if (!errorLlegintFitxers && !responsablesList.isEmpty() && !userInfoList.isEmpty()) {
-                responsablesListCache = responsablesList;
-                userInfoListCache = userInfoList;
-                lastCacheTime = System.currentTimeMillis();
-                log.info("Llistes carregades correctament des de fitxers. No cal consultar el UserInformation.");
-                
-            } else {
-                log.info("No s'han pogut carregar correctament les llistes des de fitxers. Es procedirà a consultar el UserInformation.");
-                errorLlegintFitxers = true;
-            }
+            return true; // Error llegint fitxers, ja que no existeix el directori de cache
         }
-        
-        return errorLlegintFitxers;
+        // Llegir responsablesList i userInfoList de fitxers JSON si existeixen
+        String responsablesFilePath = dirCache + "/" + RESPONSABLES_FILENAME;
+        String userInfoFilePath = dirCache + "/" + USERSINFO_FILENAME;
+
+        Gson gson = new Gson();
+
+        // Llegir responsablesList
+        File responsablesFile = new File(responsablesFilePath);
+        if (!responsablesFile.exists()) {
+            return true; // Error llegint fitxers, ja que no existeix el fitxer de responsables
+        }
+        try (java.io.FileReader reader = new java.io.FileReader(responsablesFile)) {
+            Responsable[] responsablesArray = gson.fromJson(reader, Responsable[].class);
+            if (responsablesArray != null) {
+                for (Responsable r : responsablesArray) {
+                    responsablesList.add(r);
+                }
+            }
+            log.info("Llista de responsables carregada des de " + responsablesFilePath);
+        } catch (Exception e) {
+            log.error("Error llegint la llista de responsables des de " + responsablesFilePath + ": " + e.getMessage());
+            return true; // Error llegint fitxers;
+        }
+
+        // Llegir userInfoList
+        File userInfoFile = new File(userInfoFilePath);
+        if (userInfoFile.exists()) {
+            return true;
+        }
+        try (java.io.FileReader reader = new java.io.FileReader(userInfoFile)) {
+            UserInfo[] userInfoArray = gson.fromJson(reader, UserInfo[].class);
+            if (userInfoArray != null) {
+                for (UserInfo ui : userInfoArray) {
+                    userInfoList.add(ui);
+                }
+            }
+            log.info("Llista de userInfo carregada des de " + userInfoFilePath);
+        } catch (Exception e) {
+            log.error("Error llegint la llista de userInfo des de " + userInfoFilePath + ": " + e.getMessage());
+            return true;
+        }
+
+        if (responsablesList.isEmpty() || userInfoList.isEmpty()) {
+            return true; // Error llegint fitxers, ja que alguna de les llistes està buida
+        }
+        responsablesListCache = responsablesList;
+        userInfoListCache = userInfoList;
+        lastCacheTime = System.currentTimeMillis();
+        log.info("Llistes carregades correctament des de fitxers. No cal consultar el UserInformation.");
+
+        return false; // No hi ha hagut error llegint fitxers
+
     }
 
     public static void guardarResultatAFitxer(List<Responsable> responsablesList, List<UserInfo> userInfoList) {
         String dirCache = Configuracio.getCacheUsuarisDir();
         if (dirCache != null && !dirCache.isEmpty() && new File(dirCache).exists()) {
-            
+
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setPrettyPrinting();
-            
+
             Gson gson = gsonBuilder.create();
-            
+
             String responsablesFilePath = dirCache + "/" + RESPONSABLES_FILENAME;
             String userInfoFilePath = dirCache + "/" + USERSINFO_FILENAME;
 
@@ -258,13 +243,9 @@ public class UsersWithPfiUserCache {
             log.warn("No s'ha definit el directori de cache. No es guardaran les llistes a fitxers.");
         }
     }
-    
-    
-    
+
     public static final String RESPONSABLES_FILENAME = "responsables.json";
     public static final String USERSINFO_FILENAME = "usersInfo.json";
-    
-    
 
     public static boolean isValidNIF(String nif) {
         // RegEx para saber si el NIF es valido.

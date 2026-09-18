@@ -1010,8 +1010,12 @@ public class PinfoDataPublicController extends PinfoDataController {
 
         // Obtenir els procediments dels PinfoDatas:
         List<Responsable> responsablesList = UsersWithPfiUserCache.getLlistaResponsables();
+        
+        log.info("\n\n\n\nResponsables trobats: " + responsablesList.size() + "\n\n\n\n");
+        
+        
         request.getSession().setAttribute(LLISTA_RESPONSABLES, responsablesList);
-        mav.addObject("responsables", responsablesList);
+        mav.addObject(LLISTA_RESPONSABLES, responsablesList);
         return mav;
     }
 

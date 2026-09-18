@@ -3,12 +3,12 @@
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
 <%@ include file="/WEB-INF/jsp/all/tramitPinfoPublic.jsp"%>
 
-
+<%--
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Seleccionar responsable</title>
-
+--%>
 <style>
 /* Contenedor principal */
 .container-responsable {
@@ -164,9 +164,10 @@
 	margin: 0;
 }
 </style>
-
+<%--
 </head>
 <body>
+ --%>
 	<div class="container-responsable">
 		<div class="titol-tramit-pinfo-header">
 			<div class="titol-tramit-pinfo-container">
@@ -196,10 +197,9 @@
 			<input type="text" id="filtro-responsables" placeholder="<fmt:message key="tramit.pinfo.responsable.placeholder"/>" />
 		</div>
 
-		<form id="seleccionarResponsable" action="seleccionarResponsable"
-			method="POST">
+		<form id="seleccionarResponsable" action="seleccionarResponsable" method="POST">
 			<div id="responsables-list">
-				<c:forEach var="responsable" items="${responsables}">
+				<c:forEach var="responsable" items="${llistaResponsables}">
 					<div class="element responsable-item" data-nif="${responsable.nif}">
 						<input type="radio" name="responsable"
 							id="responsable-${responsable.nif}" value="${responsable.nif}" />
@@ -333,5 +333,8 @@
 		}
 	}
 	</script>
+    
+    <%--
+    
 </body>
-</html>
+</html>  --%>
