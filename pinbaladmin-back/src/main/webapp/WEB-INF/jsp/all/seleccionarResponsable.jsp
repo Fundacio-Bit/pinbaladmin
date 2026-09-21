@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="org.fundaciobit.genapp.common.web.html.IconUtils"%>
+<%@ page import="org.fundaciobit.pinbaladmin.back.controller.all.PinfoDataPublicController"%>
 <%@ include file="/WEB-INF/jsp/moduls/includes.jsp"%>
 <%@ include file="/WEB-INF/jsp/all/tramitPinfoPublic.jsp"%>
 
@@ -83,85 +84,111 @@
 	box-shadow: 0 0 0 3px rgba(77, 186, 121, 0.1);
 }
 
-/* Lista de responsables - altura fija */
-#responsables-list {
-	height: 400px;
-	min-height: 400px;
-	max-height: 400px;
+/* Contenidor de resultats de la cerca (autocomplete) */
+.filter-container {
+	position: relative;
+}
+
+#autocomplete-responsables {
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	background-color: white;
+	border: none;
+	border-radius: 12px;
+	max-height: 280px;
 	overflow-y: auto;
-	padding-right: 8px;
+	width: 100%;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	margin-top: 8px;
+}
+
+#autocomplete-responsables.hidden {
+	display: none;
 }
 
 /* Scrollbar personalizado */
-#responsables-list::-webkit-scrollbar {
+#autocomplete-responsables::-webkit-scrollbar {
 	width: 8px;
 }
 
-#responsables-list::-webkit-scrollbar-track {
+#autocomplete-responsables::-webkit-scrollbar-track {
 	background: #f1f1f1;
 	border-radius: 4px;
 }
 
-#responsables-list::-webkit-scrollbar-thumb {
+#autocomplete-responsables::-webkit-scrollbar-thumb {
 	background: #c1c1c1;
 	border-radius: 4px;
 }
 
-#responsables-list::-webkit-scrollbar-thumb:hover {
+#autocomplete-responsables::-webkit-scrollbar-thumb:hover {
 	background: #a8a8a8;
 }
 
-/* Items de responsable */
+/* Item d'un resultat de cerca */
 .responsable-item {
-	transition: all 0.2s ease;
-	margin-bottom: 8px;
-	padding: 12px 16px;
-	border-radius: 8px;
-	border: 1px solid #e8e8e8;
-	background: white;
 	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 12px;
+	padding: 14px 18px;
+	background-color: white;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid #f8f9fa;
+	transition: all 0.2s;
+	font-size: 14px;
+}
+
+.responsable-item:first-child {
+	border-radius: 12px 12px 0 0;
+}
+
+.responsable-item:last-child {
+	border-radius: 0 0 12px 12px;
+	border-bottom: none;
 }
 
 .responsable-item:hover {
-	background-color: #f8f9fa;
-	border-color: #4DBA79;
-	box-shadow: 0 2px 8px rgba(77, 186, 121, 0.1);
+	background: linear-gradient(90deg, #f0f9f4 0%, #f8f9fa 100%);
+	border-left: 3px solid #4DBA79;
+	padding-left: 15px;
 }
 
-/* Radio button - estilo nativo con acento verde */
-.responsable-item input[type="radio"] {
-	cursor: pointer;
-	margin: 0;
-	accent-color: #4DBA79;
-	width: 16px;
-	height: 16px;
-	min-width: 16px;
+/* Requadre del responsable seleccionat */
+#responsable-seleccionat-wrapper {
+	margin-bottom: 1.5rem;
 }
 
-/* Label del responsable */
-.responsable-item label {
-	cursor: pointer;
-	margin: 0;
-	font-size: 14px;
-	color: #4a5568;
-	flex: 1;
-	line-height: 1.5;
-}
-
-.responsable-item input[type="radio"]:checked + label {
-	font-weight: 600;
-	color: #2d3748;
-}
-
-.responsable-item:hidden {
+#responsable-seleccionat-wrapper.hidden {
 	display: none;
 }
 
-#seleccionarResponsable {
-	margin: 0;
+#responsable-seleccionat-wrapper label {
+	font-size: 14px;
+	font-weight: 600;
+	color: #2d3748;
+	margin-bottom: 0.5rem;
+	display: block;
+}
+
+#responsable-seleccionat-wrapper label i {
+	color: #4DBA79;
+	margin-right: 6px;
+}
+
+.responsable-seleccionat-box {
+	padding: 12px 16px;
+	border-radius: 8px;
+	border: 1px solid #4DBA79;
+	background: #f0f9f4;
+	font-size: 14px;
+	color: #2d3748;
+	font-weight: 600;
+}
+
+.spinner {
+	margin: 14px 18px;
+	color: #666;
+	font-size: 13px;
 }
 </style>
 <%--
@@ -194,142 +221,121 @@
 			<label for="filtro-responsables">
 				<i class="fas fa-search"></i> <fmt:message key="tramit.pinfo.responsable.buscar"/>
 			</label>
-			<input type="text" id="filtro-responsables" placeholder="<fmt:message key="tramit.pinfo.responsable.placeholder"/>" />
+            <%
+              request.setAttribute("MINIM_CARACTERS_CERCA_RESPONSABLE", PinfoDataPublicController.MINIM_CARACTERS_CERCA_RESPONSABLE);
+            %>            
+			<input type="text" id="filtro-responsables" autocomplete="off"
+				placeholder="<fmt:message key="tramit.pinfo.responsable.placeholder"><fmt:param>${MINIM_CARACTERS_CERCA_RESPONSABLE}</fmt:param></fmt:message>" />
+			<div id="autocomplete-responsables" class="hidden"></div>
 		</div>
 
-		<form id="seleccionarResponsable" action="seleccionarResponsable" method="POST">
-			<div id="responsables-list">
-				<c:forEach var="responsable" items="${llistaResponsables}">
-					<div class="element responsable-item" data-nif="${responsable.nif}">
-						<input type="radio" name="responsable"
-							id="responsable-${responsable.nif}" value="${responsable.nif}" />
-						<label for="responsable-${responsable.nif}">
-							${responsable.nif} - ${responsable.nomOcult} - ${responsable.username} - ${responsable.mail}
-							
-						</label>
-					</div>
-				</c:forEach>
-			</div>
+		<div id="responsable-seleccionat-wrapper" class="hidden">
+			<label><i class="fas fa-user-check"></i> <fmt:message key="tramit.pinfo.responsable.seleccionat"/></label>
+			<div id="responsable-seleccionat-info" class="responsable-seleccionat-box"></div>
+		</div>
+
+		<form id="formResponsable" action="seleccionarResponsable" method="POST">
+			<input type="hidden" id="responsable" name="responsable" value="" />
 		</form>
 	</div>
 
 	<script>
-	
-	// Función para ofuscar NIF: 45186147W -> 45****47W
-	function ofuscarNIF(nif) {
-		if (!nif || nif.length < 4) return nif;
-		var nifUpper = nif.toUpperCase();
-		var inicio = nifUpper.substring(0, 2);
-		var final = nifUpper.substring(nifUpper.length - 3);
-		return inicio + "****" + final;
+
+	// URL de cerca d'usuaris (ve del controlador, paràmetre GET "nom")
+	var urlSearchUser = "${urlSearchUser}";
+
+	// Nombre mínim de caràcters per iniciar la cerca
+	var MINIM_CARACTERS_CERCA = <%= PinfoDataPublicController.MINIM_CARACTERS_CERCA_RESPONSABLE %>;
+
+	// Construeix el text a mostrar per un usuari retornat pel servidor
+	function textUsuari(usuari) {
+		var text = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1;
+		if (usuari.surname2 && usuari.surname2.trim() !== "") {
+			text += " " + usuari.surname2;
+		}
+		text += " - " + usuari.username + " - " + usuari.email;
+		return text;
 	}
-	
+
+	// Afegeix un item a la llista de resultats de la cerca
+	function afegirResponsableAutocomplete(usuari) {
+		var item = $('<div>', { "class": "responsable-item" }).text(textUsuari(usuari));
+		item.on('click', function() {
+			seleccionarResponsable(usuari);
+		});
+		$('#autocomplete-responsables').append(item);
+	}
+
+	// Guarda el NIF del responsable seleccionat a l'input hidden i el mostra
+	function seleccionarResponsable(usuari) {
+		$('#responsable').val(usuari.administrationID);
+		$('#responsable-seleccionat-info').text(textUsuari(usuari));
+		$('#responsable-seleccionat-wrapper').removeClass('hidden');
+
+		// Tancar i buidar la llista de resultats i el camp de cerca
+		$('#autocomplete-responsables').empty().addClass('hidden');
+		$('#filtro-responsables').val('');
+	}
+
 	$(document).ready(function(){
-		// Ofuscar NIFs al cargar la página
-		$('.responsable-item').each(function() {
-			var nif = $(this).data('nif');
-			if (nif) {
-				var label = $(this).find('label');
-				var text = label.text();
-				var nifOfuscat = ofuscarNIF(nif);
-				var newText = text.replace(nif, nifOfuscat);
-				label.text(newText);
-			}
-		});
-		
-		// Hacer todo el div clickeable para seleccionar el radio
-		$('.responsable-item').on('click', function(e){
-			// Solo si no se ha clickeado directamente en el radio o label
-			if (!$(e.target).is('input[type="radio"]') && !$(e.target).is('label')) {
-				var radio = $(this).find('input[type="radio"]');
-				radio.prop('checked', true);
-			}
-		});
-		
-		// Mover el responsable seleccionado al principio
-		var selectedItem = null;
-		$('.responsable-item').each(function(){
-			var input = $(this).find('input[type="radio"]');
-			if (input.is(':checked')) {
-				selectedItem = this;
-				$(this).prependTo('#responsables-list');
-			}
-		});
-		
-		// Inicialmente ocultar todos los responsables EXCEPTO el que esté seleccionado
-		$('.responsable-item').each(function(){
-			var input = $(this).find('input[type="radio"]');
-			if (!input.is(':checked')) {
-				$(this).hide();
-			}
-		});
-		
-		// Funcionalidad de filtrado de responsables
+
+		var debounceTimer;
+
 		$('#filtro-responsables').on('input', function(){
-			var filtro = $(this).val().toLowerCase();
-			var selectedItem = null;
-			var count = 0;
-			
-			// Encontrar el elemento seleccionado
-			$('.responsable-item').each(function(){
-				var input = $(this).find('input[type="radio"]');
-				if (input.is(':checked')) {
-					selectedItem = this;
+			clearTimeout(debounceTimer);
+
+			var filtro = $(this).val();
+
+			debounceTimer = setTimeout(function(){
+				if (filtro.length < MINIM_CARACTERS_CERCA) {
+					$('#autocomplete-responsables').empty().addClass('hidden');
+					return;
 				}
-			});
-			
-			// Solo mostrar elementos si hay al menos 2 caracteres
-			if (filtro.length >= 2) {
-				$('.responsable-item').each(function(){
-					var input = $(this).find('input[type="radio"]');
-					var texto = $(this).find('label').text().toLowerCase();
-					
-					// Si está seleccionado, siempre mostrar
-					if (input.is(':checked')) {
-						$(this).show();
-						$(this).prependTo('#responsables-list');
-					} else if (texto.includes(filtro)) {
-						if (count < 5) { // Máximo 5 resultados además del seleccionado
-							$(this).show();
-							count++;
+
+				// Mostrar indicador de càrrega
+				$('#autocomplete-responsables').html("<div class='spinner'><fmt:message key="tramit.pinfo.responsable.cercant"/></div>").removeClass('hidden');
+
+				$.ajax({
+					url: urlSearchUser,
+					method: "GET",
+					dataType: "json",
+					data: { nom: filtro },
+					success: function(usuaris) {
+						$('#autocomplete-responsables').empty();
+
+						if (usuaris == null || usuaris.length === 0) {
+							$('#autocomplete-responsables').html("<div style='padding: 14px 18px; color: #666;'><fmt:message key="tramit.pinfo.responsable.notrobats"/></div>").removeClass('hidden');
 						} else {
-							$(this).hide();
+							$.each(usuaris, function(i, usuari) {
+								afegirResponsableAutocomplete(usuari);
+							});
+							$('#autocomplete-responsables').removeClass('hidden');
 						}
-					} else {
-						$(this).hide();
+					},
+					error: function() {
+						$('#autocomplete-responsables').html("<div style='padding: 14px 18px; color: red;'><fmt:message key="tramit.pinfo.responsable.errorcerca"/></div>").removeClass('hidden');
 					}
 				});
-			} else {
-				// Ocultar todos los elementos EXCEPTO el que esté seleccionado
-				$('.responsable-item').each(function(){
-					var input = $(this).find('input[type="radio"]');
-					if (input.is(':checked')) {
-						$(this).show();
-						$(this).prependTo('#responsables-list');
-					} else {
-						$(this).hide();
-					}
-				});
+			}, 500);
+		});
+
+		// Tancar la llista de resultats si es clica fora
+		$(document).on('click', function(e){
+			if (!$(e.target).closest('.filter-container').length) {
+				$('#autocomplete-responsables').empty().addClass('hidden');
 			}
 		});
 	});
-	
+
 	function submitForm() {
 		console.log('submitForm');
-		var responsables = document.getElementsByName("responsable");
-		var seleccionado = false;
 
-		for (var i = 0; i < responsables.length; i++) {
-			if (responsables[i].checked) {
-				seleccionado = true;
-				break;
-			}
-		}
+		var responsableSeleccionat = $('#responsable').val();
 
-		if (!seleccionado) {
-			alert('Debe seleccionar un responsable antes de enviar el formulario.');
+		if (!responsableSeleccionat) {
+			alert('Ha de seleccionar un responsable abans d´enviar el formulari.');
 		} else {
-			document.getElementById('seleccionarResponsable').submit();
+			document.getElementById('formResponsable').submit();
 		}
 	}
 	</script>

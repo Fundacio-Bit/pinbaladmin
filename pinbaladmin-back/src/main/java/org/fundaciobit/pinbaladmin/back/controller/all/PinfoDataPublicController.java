@@ -60,7 +60,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
-
 /**
  * 
  * @author ptrias 17 oct 2024 15:38:55
@@ -70,9 +69,10 @@ import com.google.gson.Gson;
 @RequestMapping(value = PinfoDataPublicController.CONTEXT_WEB)
 @SessionAttributes(types = { PinfoDataForm.class, PinfoDataFilterForm.class })
 public class PinfoDataPublicController extends PinfoDataController {
-    
-    
+
     public static final int MINIM_CARACTERS_CERCA = 8;
+
+    public static final int MINIM_CARACTERS_CERCA_RESPONSABLE = 5;
 
     public static final String CONTEXT_WEB = "/public/pinfodata";
 
@@ -112,23 +112,22 @@ public class PinfoDataPublicController extends PinfoDataController {
 
     public static final String RESPONSABLE = "responsable";
     public static final String LLISTA_RESPONSABLES = "llistaResponsables";
-    
-    
+
     private static IUserInformationPlugin cachedPlugin = null;
-    
+
     private static IUserInformationPlugin getPluginUserInfo(Logger log) throws Exception {
         if (cachedPlugin == null) {
             synchronized (PinfoDataPublicController.class) {
                 if (cachedPlugin == null) {
                     final boolean debug = true;
                     log.info("Inicializando plugin SOFFID (solo una vez)...");
-                    cachedPlugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug, TipusPluginUserInfo.SOFFID);
+                    cachedPlugin = PinbalAdminPluginsManager.getUserInformationPluginInstance(debug,
+                            TipusPluginUserInfo.SOFFID);
                 }
             }
         }
         return cachedPlugin;
     }
-    
 
     @Override
     public String getTileForm() {
@@ -422,8 +421,6 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
-
-
     // @RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
     // public void obtenirJsonUsuaris(HttpServletRequest request,
     // HttpServletResponse response) throws Exception {
@@ -527,15 +524,15 @@ public class PinfoDataPublicController extends PinfoDataController {
         return inicio + medio + fin;
     }
 
-    @RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
-    public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(value = { "/jsonUsuarisSeleccioResponsable" }, method = RequestMethod.GET)
+    public void obtenirJsonUsuarisSeleccioResponsable(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
         String nom = (String) request.getParameter("nom");
-        
-        
-        final boolean cercaEnPluginUserInformation = true;
-        
-        final boolean cercaNomesNif = true; 
+
+        final boolean cercaEnPluginUserInformation = false; // Cercar en Cache de llistat d'usuaris (UsersWithPfiUserCache)
+
+        final boolean cercaNomesNif = false;
         /*
         String cercaCompletaStr = (String) request.getParameter("cercaCompleta");
         
@@ -548,29 +545,14 @@ public class PinfoDataPublicController extends PinfoDataController {
             log.info("Cerca completa desactivada");
         }
         */
-        
+
         log.info("/jsonUsuaris(]" + nom + "[)");
 
         List<UserInfo> llistatUsuaris = getUsuarisParam(nom, cercaEnPluginUserInformation, cercaNomesNif);
 
         try {
-            // Crear una lista de objetos simplificados con NIFs ofuscados
-            List<java.util.Map<String, String>> usuarisOfuscats = new java.util.ArrayList<>();
 
-            if (llistatUsuaris != null) {
-                for (UserInfo user : llistatUsuaris) {
-                    java.util.Map<String, String> userMap = new java.util.HashMap<>();
-                    userMap.put("username", user.getUsername());
-                    userMap.put("name", user.getName());
-                    userMap.put("surname1", user.getSurname1());
-                    userMap.put("surname2", user.getSurname2());
-                    userMap.put("email", user.getEmail());
-                    // Ofuscar el NIF antes de añadirlo
-                    String nifOriginal = user.getAdministrationID();
-                    userMap.put("administrationID", ofuscarNIF(nifOriginal));
-                    usuarisOfuscats.add(userMap);
-                }
-            }
+            List<java.util.Map<String, String>> usuarisOfuscats = ofuscarUserInfo(llistatUsuaris);
 
             Gson g = new Gson();
             String usuarisJson = g.toJson(usuarisOfuscats);
@@ -593,15 +575,87 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
+    @RequestMapping(value = { "/jsonUsuaris" }, method = RequestMethod.GET)
+    public void obtenirJsonUsuaris(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        String nom = (String) request.getParameter("nom");
 
-    private List<UserInfo> getUsuarisParam(String entrada, boolean cercaEnPluginUserInformation, boolean cercaNomesNif) throws Exception {
+        final boolean cercaEnPluginUserInformation = true;
+
+        final boolean cercaNomesNif = true;
+        /*
+        String cercaCompletaStr = (String) request.getParameter("cercaCompleta");
+        
+        final boolean cercaCompleta; 
+        if (cercaCompletaStr != null && cercaCompletaStr.equalsIgnoreCase("true")) {
+            cercaCompleta = true;
+            log.info("Cerca completa activada");
+        } else {
+            cercaCompleta = false;
+            log.info("Cerca completa desactivada");
+        }
+        */
+
+        log.info("/jsonUsuaris(]" + nom + "[)");
+
+        List<UserInfo> llistatUsuaris = getUsuarisParam(nom, cercaEnPluginUserInformation, cercaNomesNif);
+
+        try {
+
+            List<java.util.Map<String, String>> usuarisOfuscats = ofuscarUserInfo(llistatUsuaris);
+
+            Gson g = new Gson();
+            String usuarisJson = g.toJson(usuarisOfuscats);
+
+            // log.info(usuarisJson);
+
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(usuarisJson);
+            out.flush();
+        } catch (Exception e) {
+            log.error("Error obtenirJsonUsuaris: " + e.getMessage());
+
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print("[]");
+            out.flush();
+        }
+    }
+
+    private List<java.util.Map<String, String>> ofuscarUserInfo(List<UserInfo> llistatUsuaris) {
+
+        // Crear una lista de objetos simplificados con NIFs ofuscados
+        List<java.util.Map<String, String>> usuarisOfuscats = new java.util.ArrayList<>();
+
+        if (llistatUsuaris != null) {
+            for (UserInfo user : llistatUsuaris) {
+                java.util.Map<String, String> userMap = new java.util.HashMap<>();
+                userMap.put("username", user.getUsername());
+                userMap.put("name", user.getName());
+                userMap.put("surname1", user.getSurname1());
+                userMap.put("surname2", user.getSurname2());
+                userMap.put("email", user.getEmail());
+                // Ofuscar el NIF antes de añadirlo
+                String nifOriginal = user.getAdministrationID();
+                userMap.put("administrationID", ofuscarNIF(nifOriginal));
+                usuarisOfuscats.add(userMap);
+            }
+        }
+
+        return usuarisOfuscats;
+    }
+
+    private List<UserInfo> getUsuarisParam(String entrada, boolean cercaEnPluginUserInformation, boolean cercaNomesNif)
+            throws Exception {
 
         try {
             //IUserInformationPlugin plugin = getPluginUserInfo();
 
             // Primera busqueda
-            List<UserInfo> usuarisList = testPartialOR( entrada, cercaEnPluginUserInformation, cercaNomesNif, log);
+            List<UserInfo> usuarisList = testPartialOR(entrada, cercaEnPluginUserInformation, cercaNomesNif, log);
 
             if (usuarisList == null) {
                 // Si la primera busqueda da más de 500 resultados, no seguimos.
@@ -625,7 +679,8 @@ public class PinfoDataPublicController extends PinfoDataController {
                         String nombre = String.join(" ", java.util.Arrays.copyOfRange(palabras, 0, i));
                         String apellidos = String.join(" ", java.util.Arrays.copyOfRange(palabras, i, palabras.length));
 
-                        List<UserInfo> resultadoAnd = testNombreApellido(log, cercaEnPluginUserInformation, nombre, apellidos);
+                        List<UserInfo> resultadoAnd = testNombreApellido(log, cercaEnPluginUserInformation, nombre,
+                                apellidos);
 
                         if (resultadoAnd != null) {
                             usuarisList.addAll(resultadoAnd);
@@ -659,8 +714,9 @@ public class PinfoDataPublicController extends PinfoDataController {
                 if (usuarisList != null && usuarisList.size() == 0) {
                     System.out.println("\nNo hay resultados tras búsqueda AND. Refinar búsqueda.");
                 } else if (usuarisList != null) {
-                    
-                    log.info("getUsuarisParam() Ha filtrat " + usuarisList.size() + " usuaris amb dada parcial[" + entrada + "]");
+
+                    log.info("getUsuarisParam() Ha filtrat " + usuarisList.size() + " usuaris amb dada parcial["
+                            + entrada + "]");
                     /*
                     for (UserInfo user : usuarisList) {
                         System.out.println(" - " + user.getUsername() + ": " + user.getName() + " " + user.getSurname1()
@@ -677,11 +733,10 @@ public class PinfoDataPublicController extends PinfoDataController {
         }
     }
 
-    private static List<UserInfo> testPartialOR(String entrada, boolean cercaEnPluginUserInformation, boolean cercaNomesNif, Logger log) throws Exception {
+    private static List<UserInfo> testPartialOR(String entrada, boolean cercaEnPluginUserInformation,
+            boolean cercaNomesNif, Logger log) throws Exception {
 
         // NOu COdi per filtrar a partir de CAche de llistat d'usuaris
-
-       
 
         if (!cercaEnPluginUserInformation) {
             // Si no es cerca completa, només fem la cerca per prefix
@@ -692,18 +747,19 @@ public class PinfoDataPublicController extends PinfoDataController {
             List<UserInfo> filteredList = new java.util.ArrayList<>();
 
             for (UserInfo user : list) {
-                
+
                 if (cercaNomesNif) {
                     if (user.getAdministrationID().toLowerCase().contains(entrada)) {
                         filteredList.add(user);
                     }
                 } else {
-                    if (user.getUsername().toLowerCase().contains(entrada) || user.getName().toLowerCase().contains(entrada)
+                    if (user.getUsername().toLowerCase().contains(entrada)
+                            || user.getName().toLowerCase().contains(entrada)
                             || user.getSurname1().toLowerCase().contains(entrada)
                             || (user.getSurname2() != null && user.getSurname2().toLowerCase().contains(entrada))
                             || user.getAdministrationID().toLowerCase().contains(entrada)
                             || (user.getEmail() != null && user.getEmail().toLowerCase().contains(entrada))) {
-    
+
                         filteredList.add(user);
                     }
                 }
@@ -717,7 +773,7 @@ public class PinfoDataPublicController extends PinfoDataController {
             // entrada = "*" + entrada + "*";  Per SOFFID NO FUNCIONEN els "*"
 
             System.out.println("\n=== Test de búsqueda OR: '" + entrada + "' ===");
-            
+
             final String administrationIdField = entrada;
             final String otherFields;
             if (cercaNomesNif) {
@@ -725,11 +781,9 @@ public class PinfoDataPublicController extends PinfoDataController {
             } else {
                 otherFields = entrada;
             }
-            
-            
-            
 
-            SearchUsersResult result = plugin.getUsersByPartialValuesOr(otherFields, otherFields, otherFields, null, administrationIdField);
+            SearchUsersResult result = plugin.getUsersByPartialValuesOr(otherFields, otherFields, otherFields, null,
+                    administrationIdField);
             List<UserInfo> users = result.getUsers();
 
             if (users != null) {
@@ -750,9 +804,9 @@ public class PinfoDataPublicController extends PinfoDataController {
             throws Exception {
 
         if (cercaCompleta) {
-            
+
             IUserInformationPlugin plugin = getPluginUserInfo(log);
-            
+
             // Per SOFFID NO FUNCIONEN els "*"
             //nombre = "*" + nombre + "*";
             //apellido = "*" + apellido + "*";
@@ -1009,16 +1063,19 @@ public class PinfoDataPublicController extends PinfoDataController {
         log.info("pinfoID: " + pinfoID);
 
         // Obtenir els procediments dels PinfoDatas:
+        /*
         List<Responsable> responsablesList = UsersWithPfiUserCache.getLlistaResponsables();
         
-        log.info("\n\n\n\nResponsables trobats: " + responsablesList.size() + "\n\n\n\n");
-        
+               
         
         request.getSession().setAttribute(LLISTA_RESPONSABLES, responsablesList);
         mav.addObject(LLISTA_RESPONSABLES, responsablesList);
+        */
+
+        mav.addObject("urlSearchUser", request.getContextPath() + getContextWeb() + "/jsonUsuarisSeleccioResponsable");
+
         return mav;
     }
-
 
     // private List<Responsable> getLlistaResponsablesProcedimentsOld(Long pinfoID)
     // throws I18NException {
