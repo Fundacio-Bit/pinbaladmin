@@ -9,6 +9,9 @@ import org.fundaciobit.pinbaladmin.model.entity.Contacte;
  */
 public class ContactePortaFIB {
 
+    public static final boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
+    public static final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
+
     public final Contacte contacte;
 
     public final boolean enviarComUsuariExtern;

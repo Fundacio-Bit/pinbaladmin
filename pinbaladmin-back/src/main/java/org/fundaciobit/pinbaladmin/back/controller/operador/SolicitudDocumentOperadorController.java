@@ -57,19 +57,24 @@ import org.springframework.web.servlet.view.RedirectView;
 @SessionAttributes(types = { DocumentForm.class, DocumentFilterForm.class })
 public class SolicitudDocumentOperadorController extends DocumentController {
 
+
+    @EJB(mappedName = OrganLogicaService.JNDI_NAME)
+    protected OrganLogicaService organLogicaEjb;
+
+    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
+    protected EntitatLogicaService entitatLogicaEjb;
+
     @EJB(mappedName = DocumentSolicitudLogicaService.JNDI_NAME)
     protected DocumentSolicitudLogicaService documentSolicitudLogicaEjb;
-    
+
     @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.DocumentLogicaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.logic.DocumentLogicaService documentLogicaEjb;
 
     @EJB(mappedName = org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService.JNDI_NAME)
     protected org.fundaciobit.pinbaladmin.logic.SolicitudLogicaService solicitudLogicaEjb;
-    
 
     @EJB(mappedName = ContacteLogicaService.JNDI_NAME)
     protected ContacteLogicaService contacteLogicaEjb;
-    
 
     public static final String SESSIO_SOLIID_MANAGE_DOCUMENTS = "SESSIO_SOLIID_MANAGE_DOCUMENTS";
 
@@ -116,15 +121,16 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
             Solicitud soli = solicitudLogicaEjb.findByPrimaryKey(soliID);
             String codi = soli.getProcedimentCodi();
-            
+
             // TODO Traduir
             documentFilterForm.setSubTitleCode("=Documents de la Solicitud amb Codi de Procediment " + codi);
 
             if (documentFilterForm.isNou()) {
 
                 documentFilterForm.setAddButtonVisible(false);
-                documentFilterForm.addAdditionalButton(new AdditionalButton(IconUtils.ICON_PLUS_SIGN,
-                        "solicitudservei.afegirfitxer", "/operador/solicitud/document/new", AdditionalButtonStyle.WARNING));
+                documentFilterForm.addAdditionalButton(
+                        new AdditionalButton(IconUtils.ICON_PLUS_SIGN, "solicitudservei.afegirfitxer",
+                                "/operador/solicitud/document/new", AdditionalButtonStyle.WARNING));
 
                 documentFilterForm.setVisibleMultipleSelection(false);
                 documentFilterForm.setFilterByFields(new ArrayList<Field<?>>());
@@ -132,7 +138,7 @@ public class SolicitudDocumentOperadorController extends DocumentController {
             }
         }
 
-//        log.info("Passa per getDocumentFilterForm:" + soliID);
+        //        log.info("Passa per getDocumentFilterForm:" + soliID);
 
         return documentFilterForm;
     }
@@ -184,8 +190,10 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     @Override
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String crearDocumentPost(@ModelAttribute DocumentForm documentForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String crearDocumentPost(
+            @ModelAttribute
+            DocumentForm documentForm, BindingResult result, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
         Long soli = getSolicitudID(request);
 
@@ -226,40 +234,40 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
     }
 
-	@Override
-	public void postValidate(HttpServletRequest request, DocumentForm documentForm, BindingResult result)
-			throws I18NException {
+    @Override
+    public void postValidate(HttpServletRequest request, DocumentForm documentForm, BindingResult result)
+            throws I18NException {
 
-		super.postValidate(request, documentForm, result);
+        super.postValidate(request, documentForm, result);
 
-		// Si cream un document de consentiment, hem d'actualizar els camps de consentiment de la solicitud.
-		// UPDATE. Ara el consentiment s'ha de tenir tot a la taula solicitud. No als documents. Es manté el tipus de document per solicituds antigues.
-		
-//		Long tipusDoc = documentForm.getDocument().getTipus();
-//		updateConsentiment(request, tipusDoc);
-	}
-   
-//	public void updateConsentiment(HttpServletRequest request, Long tipusDoc) {
-//		log.info("Provant si s'executa el metode");
-//		if (tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
-//			try {
-//				Long solicitudID = getSolicitudID(request);
-//				if (solicitudID != null) {
-//					SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-//					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
-//							? Constants.CONSENTIMENT_TIPUS_SI
-//							: Constants.CONSENTIMENT_TIPUS_NOOP);
-//
-//					soli.setUrlconsentiment(null);
-//					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
-//					solicitudLogicaEjb.update(soli);
-//				}
-//			} catch (Throwable th) {
-//				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
-//			}
-//		}
-//	}
-	
+        // Si cream un document de consentiment, hem d'actualizar els camps de consentiment de la solicitud.
+        // UPDATE. Ara el consentiment s'ha de tenir tot a la taula solicitud. No als documents. Es manté el tipus de document per solicituds antigues.
+
+        //		Long tipusDoc = documentForm.getDocument().getTipus();
+        //		updateConsentiment(request, tipusDoc);
+    }
+
+    //	public void updateConsentiment(HttpServletRequest request, Long tipusDoc) {
+    //		log.info("Provant si s'executa el metode");
+    //		if (tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT) {
+    //			try {
+    //				Long solicitudID = getSolicitudID(request);
+    //				if (solicitudID != null) {
+    //					SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+    //					soli.setConsentiment(tipusDoc == Constants.DOCUMENT_SOLICITUD_CONSENTIMENT_SI
+    //							? Constants.CONSENTIMENT_TIPUS_SI
+    //							: Constants.CONSENTIMENT_TIPUS_NOOP);
+    //
+    //					soli.setUrlconsentiment(null);
+    //					soli.setConsentimentadjunt(Constants.CONSENTIMENT_ADJUNT);
+    //					solicitudLogicaEjb.update(soli);
+    //				}
+    //			} catch (Throwable th) {
+    //				log.error("Error actualitzant els camps de consentiment de la solicitud: " + th.getMessage(), th);
+    //			}
+    //		}
+    //	}
+
     public Where getAdditionalCondition(HttpServletRequest request) throws I18NException {
         Long soli = getSolicitudID(request);
 
@@ -300,137 +308,124 @@ public class SolicitudDocumentOperadorController extends DocumentController {
         return "redirect:/operador/solicitudfullview/viewsessio";
     }
 
-	public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request, ModelAndView mav, Where where)
-			throws I18NException {
-		List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
-		__tmp.add(new StringKeyValue("0", "Altres"));
-		__tmp.add(new StringKeyValue("1", "Formulari Director PDF"));
-		__tmp.add(new StringKeyValue("2", "Formulari ODT"));
-		__tmp.add(new StringKeyValue("3", "Excel Serveis"));
-		__tmp.add(new StringKeyValue("4", "Consentiment noop"));
-		__tmp.add(new StringKeyValue("5", "Formulari AEAT"));
-		__tmp.add(new StringKeyValue("6", "Adjunt"));
-		__tmp.add(new StringKeyValue("7", "XML Solicitud"));
-		
-//		Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF
-		return __tmp;
-	}
+    public List<StringKeyValue> getReferenceListForTipus(HttpServletRequest request, ModelAndView mav, Where where)
+            throws I18NException {
+        List<StringKeyValue> __tmp = new java.util.ArrayList<StringKeyValue>();
+        __tmp.add(new StringKeyValue("0", "Altres"));
+        __tmp.add(new StringKeyValue("1", "Formulari Director PDF"));
+        __tmp.add(new StringKeyValue("2", "Formulari ODT"));
+        __tmp.add(new StringKeyValue("3", "Excel Serveis"));
+        __tmp.add(new StringKeyValue("4", "Consentiment noop"));
+        __tmp.add(new StringKeyValue("5", "Formulari AEAT"));
+        __tmp.add(new StringKeyValue("6", "Adjunt"));
+        __tmp.add(new StringKeyValue("7", "XML Solicitud"));
 
-	@Override
-	public void postList(HttpServletRequest request, ModelAndView mav, DocumentFilterForm filterForm,
-			List<Document> list) throws I18NException {
-		super.postList(request, mav, filterForm, list);
+        //		Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF
+        return __tmp;
+    }
 
-		filterForm.getAdditionalButtonsByPK().clear();
+    @Override
+    public void postList(HttpServletRequest request, ModelAndView mav, DocumentFilterForm filterForm,
+            List<Document> list) throws I18NException {
+        super.postList(request, mav, filterForm, list);
 
-		for (Document doc : list) {
-			if (doc.getNotes() == null && doc.getFitxerFirmatID() == null) {
-				// Si es null es que encara no s'ha enviat.
+        filterForm.getAdditionalButtonsByPK().clear();
 
-				boolean isPdf = doc.getFitxerOriginal().getMime().equals("application/pdf");
-				
-				if (isPdf) {
-					filterForm.addAdditionalButtonByPK(doc.getDocumentID(),
-							new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
-									getContextWeb() + "/enviarDocAFirmar/" + doc.getDocumentID(),
-									AdditionalButtonStyle.PRIMARY));
-				}
-			}
-		}
-	}
-	
-	   @EJB(mappedName = OrganLogicaService.JNDI_NAME)
-	    protected OrganLogicaService organLogicaEjb;
-	   
-	    @EJB(mappedName = EntitatLogicaService.JNDI_NAME)
-	    protected EntitatLogicaService entitatLogicaEjb;
-	    
-	    
-	    public static final  boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
-        public static final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
+        for (Document doc : list) {
+            if (doc.getNotes() == null && doc.getFitxerFirmatID() == null) {
+                // Si es null es que encara no s'ha enviat.
 
-	@RequestMapping(value = "/enviarDocAFirmar/{documentID}")
-	public String enviarDocAFirmar(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable Long documentID) throws I18NException {
+                boolean isPdf = doc.getFitxerOriginal().getMime().equals("application/pdf");
 
-		try {
-			log.info("Enviem a firmar el document[" + documentID + "]");
+                if (isPdf) {
+                    filterForm.addAdditionalButtonByPK(doc.getDocumentID(),
+                            new AdditionalButton("fas fa-file-signature", "firmar.director.portafib",
+                                    getContextWeb() + "/enviarDocAFirmar/" + doc.getDocumentID(),
+                                    AdditionalButtonStyle.PRIMARY));
+                }
+            }
+        }
+    }
 
-//			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
-			
-			Document doc = documentLogicaEjb.findByPrimaryKey(documentID);
-			
-			//Obtenir solicitud del document, i obtenir el NIF del titular de la solicitud
-			List<Long> solicitudIDs = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.SOLICITUDID,
-					DocumentSolicitudFields.DOCUMENTID.equal(documentID));
-			
-			if (solicitudIDs.isEmpty()) {
-				throw new I18NException("error", "El document [" + documentID + "] no està associat a cap solicitud");
-			}
-			
-			Long solicitudID = solicitudIDs.get(0);
-			SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
-			
-			String remitent = request.getRemoteUser();
+    @RequestMapping(value = "/enviarDocAFirmar/{documentID}")
+    public String enviarDocAFirmar(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable
+            Long documentID) throws I18NException {
 
-			List<ContactePortaFIB> destinataris = new ArrayList<>();
-			
-			Long organID = soli.getOrganid();
-			
-			OrganJPA organ = organLogicaEjb.findByPrimaryKey(organID);
-			
-			Long entitatID = organ.getEntitatid();
+        try {
+            log.info("Enviem a firmar el document[" + documentID + "]");
+
+            //			String nifDestinatari = Configuracio.getNIFDirectorGeneral();
+
+            Document doc = documentLogicaEjb.findByPrimaryKey(documentID);
+
+            //Obtenir solicitud del document, i obtenir el NIF del titular de la solicitud
+            List<Long> solicitudIDs = documentSolicitudLogicaEjb.executeQuery(DocumentSolicitudFields.SOLICITUDID,
+                    DocumentSolicitudFields.DOCUMENTID.equal(documentID));
+
+            if (solicitudIDs.isEmpty()) {
+                throw new I18NException("error", "El document [" + documentID + "] no està associat a cap solicitud");
+            }
+
+            Long solicitudID = solicitudIDs.get(0);
+            SolicitudJPA soli = solicitudLogicaEjb.findByPrimaryKey(solicitudID);
+
+            String remitent = request.getRemoteUser();
+
+            List<ContactePortaFIB> destinataris = new ArrayList<>();
+
+            Long organID = soli.getOrganid();
+
+            OrganJPA organ = organLogicaEjb.findByPrimaryKey(organID);
+
+            Long entitatID = organ.getEntitatid();
             EntitatJPA entitat = entitatLogicaEjb.findByPrimaryKey(entitatID);
 
             boolean enviarCom;
             if (entitat == null || entitat.getCIF() == null) {
-                enviarCom = ENVIAR_COM_USUARI_EXTERN;
+                enviarCom = ContactePortaFIB.ENVIAR_COM_USUARI_EXTERN;
             } else {
-                
-                if (entitat.isGestionatPerGovernDigital() == false) {
-                    enviarCom = ENVIAR_COM_USUARI_INTERN;
+
+                if (entitat.isGestionatPerGovernDigital() == true) {
+                    enviarCom = ContactePortaFIB.ENVIAR_COM_USUARI_INTERN;
                 } else {
-                    enviarCom = ENVIAR_COM_USUARI_EXTERN;
+                    enviarCom = ContactePortaFIB.ENVIAR_COM_USUARI_EXTERN;
                 }
             }
-			
-			
 
-	        Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
+            Contacte titular = contacteLogicaEjb.findByPrimaryKey(soli.getContacteTitularID());
 
-	        destinataris.add(new ContactePortaFIB(titular, enviarCom));
-	        
-	        //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
-	        if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
-	        	//La forma sucia es crear un contactoJPA con NIF y email, y lo enviará como usuario PortaFIB.
-	        	
-	        	
-	        	String nif = Configuracio.getNIFJefeATIB();
-	        	String email = Configuracio.getEmailJefeATIB();
-//	        	
-//	        	String nif = "42994276P";
-//	        	String email = "aroibal@atib.es";
-	        	
+            destinataris.add(new ContactePortaFIB(titular, enviarCom));
 
-				List<Contacte> listaJefeATIB = contacteLogicaEjb
-						.select(Where.AND(ContacteFields.NIF.equal(nif), ContacteFields.MAIL.equal(email)));
-				
-				if (!listaJefeATIB.isEmpty()) {
-					destinataris.add(new ContactePortaFIB(listaJefeATIB.get(0), ENVIAR_COM_USUARI_INTERN));
-				}
-			}
-	        
-			documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);
+            //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
+            if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
+                //La forma sucia es crear un contactoJPA con NIF y email, y lo enviará como usuario PortaFIB.
 
-			log.info("S'ha enviat a firmar el document [" + documentID + "]");
-			HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");
-		} catch (I18NException e) {
+                String nif = Configuracio.getNIFJefeATIB();
+                String email = Configuracio.getEmailJefeATIB();
+                //	        	
+                //	        	String nif = "42994276P";
+                //	        	String email = "aroibal@atib.es";
 
-			String msg = "Error enviant a firmar el document [" + documentID + "]: " + I18NUtils.getMessage(e);
-			log.error(msg, e);
-			HtmlUtils.saveMessageError(request, msg);
-		}
-		return "redirect:/operador/solicitudfullview/viewsessio";
-	}
+                List<Contacte> listaJefeATIB = contacteLogicaEjb
+                        .select(Where.AND(ContacteFields.NIF.equal(nif), ContacteFields.MAIL.equal(email)));
+
+                if (!listaJefeATIB.isEmpty()) {
+                    destinataris.add(new ContactePortaFIB(listaJefeATIB.get(0), ContactePortaFIB.ENVIAR_COM_USUARI_INTERN));
+                }
+            }
+
+            documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);
+
+            log.info("S'ha enviat a firmar el document [" + documentID + "]");
+            HtmlUtils.saveMessageInfo(request, "S'ha enviat a firmar el document [" + documentID + "]");
+        } catch (I18NException e) {
+
+            String msg = "Error enviant a firmar el document [" + documentID + "]: " + I18NUtils.getMessage(e);
+            log.error(msg, e);
+            HtmlUtils.saveMessageError(request, msg);
+        }
+        return "redirect:/operador/solicitudfullview/viewsessio";
+    }
 
 }

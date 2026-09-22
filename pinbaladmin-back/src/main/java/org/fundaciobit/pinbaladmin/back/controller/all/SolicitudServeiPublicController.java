@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,8 +18,6 @@ import org.fundaciobit.genapp.common.StringKeyValue;
 import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.genapp.common.i18n.I18NValidationException;
 import org.fundaciobit.genapp.common.query.Field;
-import org.fundaciobit.genapp.common.query.Select;
-import org.fundaciobit.genapp.common.query.SelectConstant;
 import org.fundaciobit.genapp.common.query.Where;
 import org.fundaciobit.genapp.common.web.controller.FilesFormManager;
 import org.fundaciobit.genapp.common.web.form.AdditionalButton;
@@ -30,7 +27,6 @@ import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.FileDownloadController;
 import org.fundaciobit.pinbaladmin.back.controller.PinbalAdminFilesFormManager;
 import org.fundaciobit.pinbaladmin.back.controller.operador.SolicitudsServeiOnlyContentOperadorControlador;
-import org.fundaciobit.pinbaladmin.back.form.webdb.ServeiRefList;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.SolicitudServeiForm;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
