@@ -640,7 +640,7 @@ public class PinfoDataPublicController extends PinfoDataController {
                 userMap.put("email", user.getEmail());
                 // Ofuscar el NIF antes de añadirlo
                 String nifOriginal = user.getAdministrationID();
-                userMap.put("administrationID", ofuscarNIF(nifOriginal));
+                userMap.put("administrationID", nifOriginal);
                 usuarisOfuscats.add(userMap);
             }
         }

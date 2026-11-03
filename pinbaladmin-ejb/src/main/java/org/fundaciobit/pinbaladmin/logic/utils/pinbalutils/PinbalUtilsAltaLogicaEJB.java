@@ -48,10 +48,10 @@ public class PinbalUtilsAltaLogicaEJB extends PinbalUtilsCommon implements Pinba
 
 	@Override
 	public Respuesta altaSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario,
-			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF) throws Exception {
+			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF, boolean isProduccio) throws Exception {
 
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
-				getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA, CIF));
+				getPinbalAdminSolicitudsConfiguration(TipusCridada.ALTA, CIF, isProduccio));
 
 		Respuesta respuesta = api.altaSolicitudPinbalApi(solicitud, titular, funcionario);
 

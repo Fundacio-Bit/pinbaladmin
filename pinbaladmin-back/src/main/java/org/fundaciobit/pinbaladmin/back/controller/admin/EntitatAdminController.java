@@ -22,7 +22,6 @@ import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEntitatService;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
@@ -85,9 +84,9 @@ public class EntitatAdminController extends EntitatController {
 		return clientRecobriment;
 	}
 
-	private ProcedimentClient getProcedimentClient() {
+	private ProcedimentClient getProcedimentClient(boolean isProduction) {
 		if (procedimentClient == null) {
-		    PinbalClientConnection c = PinbalClientConnection.getDefaultConnection();
+		    PinbalClientConnection c = PinbalClientConnection.getConnection(isProduction);
 			final LogLevel logLevel = LogLevel.INFO;
 			log.info("Inicialitzant ProcedimentClient. URL: " + c.baseUrl + ", User: " + c.username);
 			procedimentClient = new ProcedimentClient(c.baseUrl, c.username, c.password, logLevel);
@@ -462,7 +461,7 @@ public class EntitatAdminController extends EntitatController {
 
 	public UsuariEntitat crearUsuariPinbalAdminEntitat(EntitatJPA entitat, UsuariClient usuariClient) {
 		
-		String codi = Configuracio.getApiPinbalUsername();
+		String codi = PinbalClientConnection.getDefaultConnection().username;
 		String entitatCodi = entitat.getCodiPinbal();
 		
 		try {
@@ -470,12 +469,13 @@ public class EntitatAdminController extends EntitatController {
 			
 			UsuariEntitat usuari = usuariClient.getUsuari(codi, entitatCodi);
 
-			log.info("Usuari Trobat: " + usuari.getCodi() + " - " + usuari.getEntitatCodi());
+			
 			if (usuari != null) {
 				log.info(
 						"L'usuari " + codi + " ja existeix a l'entitat Pinbal " + entitatCodi + ". No es crea de nou.");
 				return usuari;
 			}
+			log.info("No s'ha trobat usuari amb codi ]" + codi + "[ de l'entitat ]" + entitatCodi + "[. Es crearà un de nou.");
 			
 			
 			
@@ -512,8 +512,18 @@ public class EntitatAdminController extends EntitatController {
 		return null;
 	}
 	
-	public void crearPreAltaPerEntitatJPA(EntitatJPA entitat, ClientRecobriment clientRecobriment,
-			ProcedimentClient procedimentClient, UsuariClient usuariClient) throws Exception {
+	public void crearPreAltaPerEntitatJPA(EntitatJPA entitat) throws Exception {
+	    
+	    
+	    
+	    
+	    
+        ClientRecobriment clientRecobriment = getClientRecobriment();
+        boolean PRO = true;
+        ProcedimentClient procedimentClient = getProcedimentClient(PRO);
+        UsuariClient usuariClient = getUsuariClient();
+	    
+	    
 
 		String dir3Local = entitat.getDir3();
 		String codiPinbal = entitat.getCodiPinbal();
@@ -573,6 +583,12 @@ public class EntitatAdminController extends EntitatController {
 			log.info("[PREALTAS] Creant nou procediment PREALTAS");
 
 			Procediment procediment = crearProcPreAlta(codiPinbal, dir3Local);
+			
+			
+			
+			
+
+			
 
 			log.info("[PREALTAS] Dades del procediment:");
 			log.info("   - ID: " + procediment.getId());
@@ -754,9 +770,7 @@ public class EntitatAdminController extends EntitatController {
 		log.info("[PREALTAS] Iniciant creació per a l'entitat amb id: " + id);
 
 		try {
-			ClientRecobriment clientRecobriment = getClientRecobriment();
-			ProcedimentClient procedimentClient = getProcedimentClient();
-			UsuariClient usuariClient = getUsuariClient();
+
 
 			EntitatJPA entitatLocal = entitatLogicaEjb.findByPrimaryKey(id);
 
@@ -780,7 +794,7 @@ public class EntitatAdminController extends EntitatController {
 			log.info("[PREALTAS] Usuari Pinbal creat o existent per a l'entitat");
 
 			// Crear procediment PREALTAS
-			crearPreAltaPerEntitatJPA(entitatLocal, clientRecobriment, procedimentClient, usuariClient);
+			crearPreAltaPerEntitatJPA(entitatLocal);
 
 			HtmlUtils.saveMessageInfo(request,
 					"El procediment PREALTAS s'ha creat correctament per a l'entitat " + entitatLocal.getNom());
@@ -804,9 +818,7 @@ public class EntitatAdminController extends EntitatController {
 		int creats = 0;
 		int errors = 0;
 		try {
-			ClientRecobriment clientRecobriment = getClientRecobriment();
-			ProcedimentClient procedimentClient = getProcedimentClient();
-			UsuariClient usuariClient = getUsuariClient();
+
 
 			List<Entitat> entitatsLocals = entitatLogicaEjb.select();
 			total = entitatsLocals.size();
@@ -815,7 +827,7 @@ public class EntitatAdminController extends EntitatController {
 			for (Entitat entitatLocal : entitatsLocals) {
 				EntitatJPA entitatLocalJPA = (EntitatJPA) entitatLocal;
 				try {
-					crearPreAltaPerEntitatJPA(entitatLocalJPA, clientRecobriment, procedimentClient, usuariClient);
+					crearPreAltaPerEntitatJPA(entitatLocalJPA);
 					creats++;
 				} catch (I18NException e) {
 					errors++;
@@ -892,7 +904,7 @@ public class EntitatAdminController extends EntitatController {
 		log.info("   Autoritzant usuari per al procediment PREALTAS i l'entitat: " + entitat.getNom());
 
 		try {
-			String codiUsuari = Configuracio.getApiPinbalUsername();
+			String codiUsuari = PinbalClientConnection.getDefaultConnection().username;
 			String codiEntitat = entitat.getCodiPinbal();
 
 			log.info("      Autoritzant usuari al procediment...");

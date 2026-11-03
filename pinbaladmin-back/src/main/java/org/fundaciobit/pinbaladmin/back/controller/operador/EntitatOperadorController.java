@@ -22,7 +22,6 @@ import org.fundaciobit.genapp.common.web.html.IconUtils;
 import org.fundaciobit.pinbaladmin.back.controller.webdb.EntitatController;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatFilterForm;
 import org.fundaciobit.pinbaladmin.back.form.webdb.EntitatForm;
-import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.ejb.DocumentEntitatService;
 import org.fundaciobit.pinbaladmin.logic.EntitatLogicaService;
@@ -462,7 +461,7 @@ public class EntitatOperadorController extends EntitatController {
 
 	public UsuariEntitat crearUsuariPinbalAdminEntitat(EntitatJPA entitat, UsuariClient usuariClient) {
 		
-		String codi = Configuracio.getApiPinbalUsername();
+		String codi = PinbalClientConnection.getDefaultConnection().username;
 		String entitatCodi = entitat.getCodiPinbal();
 		
 		try {
@@ -893,7 +892,7 @@ public class EntitatOperadorController extends EntitatController {
 		log.info("   Autoritzant usuari per al procediment PREALTAS i l'entitat: " + entitat.getNom());
 
 		try {
-			String codiUsuari = Configuracio.getApiPinbalUsername();
+			String codiUsuari = PinbalClientConnection.getDefaultConnection().username;
 			String codiEntitat = entitat.getCodiPinbal();
 
 			log.info("      Autoritzant usuari al procediment...");

@@ -523,18 +523,18 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 	@Override
 	public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal(
 			ScspTitular titular, ScspFuncionario funcionario,
-			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF) throws Exception {
+			es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF, boolean isProduccio) throws Exception {
 
 //		PinbalUtilsAltaLogicaEJB alta = new PinbalUtilsAltaLogicaEJB();
-		return pinbalAltaLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud, CIF);
+		return pinbalAltaLogicaEjb.altaSolicitudApiPinbal(titular, funcionario, solicitud, CIF, isProduccio);
 	}
 
 	@Override
 	public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal(
 			ScspTitular titular, ScspFuncionario funcionario,
-			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud, String CIF) throws Exception {
+			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud, String CIF, boolean isProduccio) throws Exception {
 
-		return pinbalModificacioLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud, CIF);
+		return pinbalModificacioLogicaEjb.modificacioSolicitudApiPinbal(titular, funcionario, solicitud, CIF, isProduccio);
 	}
 
 	@Override

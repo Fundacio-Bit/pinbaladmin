@@ -43,8 +43,8 @@ public interface SolicitudLogicaService extends SolicitudService {
 
     public SolicitudJPA findByPrimaryKeyFull(Long _ID_) throws I18NException;
 
-//    @PermitAll
-//    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
+    //    @PermitAll
+    //    public void updateCAID(Long soliID, String incidencia, String seguiment) throws I18NException;
 
     /**
      * 
@@ -56,48 +56,57 @@ public interface SolicitudLogicaService extends SolicitudService {
     public void crearSolicituds(List<SolicitudJPA> solicituds, EmailAttachmentInfo xlsx,
             List<EmailAttachmentInfo> attachs, String msg) throws I18NException;
 
-    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesSolicitudApiPinbalAlta(SolicitudJPA soli) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud getDadesSolicitudApiPinbalAlta(
+            SolicitudJPA soli) throws Exception;
 
-    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF) throws Exception;
-    
-    public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID) throws Exception;
-    
-    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(Long solicitudID) throws Exception;
+    public es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta altaSolicitudApiPinbal(
+            ScspTitular titular, ScspFuncionario funcionario,
+            es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Solicitud solicitud, String CIF,
+            boolean isProduccio) throws Exception;
 
-    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal (ScspTitular titular, ScspFuncionario funcionario, es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud, String CIF) throws Exception;
+    public Retorno consultaEstatApiPinbal(ScspTitular titular, ScspFuncionario funcionario, Long soliID)
+            throws Exception;
+
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud getDadesModificarSolicitudApiPinbal(
+            Long solicitudID) throws Exception;
+
+    public es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta modificacioSolicitudApiPinbal(
+            ScspTitular titular, ScspFuncionario funcionario,
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Solicitud solicitud, String CIF,
+            boolean isProduccio) throws Exception;
 
     public List<Solicitud> getSolicitudFromTramitID(String ticketGFE);
 
-	public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long solicitudID) throws I18NException;
+    public Solicitud afegirMailASolicitud(EmailMessageInfo emi, Long solicitudID) throws I18NException;
 
-	public void enviarFormulariDGPortaFIB(Solicitud soli, ContactePortaFIB destinatari, String remitent) throws I18NException;
+    public void enviarFormulariDGPortaFIB(Solicitud soli, ContactePortaFIB destinatari, String remitent)
+            throws I18NException;
 
-	public void updateDocumentsConsentiment();
+    public void updateDocumentsConsentiment();
 
-	public void processarRespostaPinbalAlta(Solicitud solicitud, Respuesta resposta, ScspTitular titular,
-			ScspFuncionario funcionario, InfoMadridJPA infoMadrid) throws Exception;
+    public void processarRespostaPinbalAlta(Solicitud solicitud, Respuesta resposta, ScspTitular titular,
+            ScspFuncionario funcionario, InfoMadridJPA infoMadrid) throws Exception;
 
-	public void processarRespostaPinbalModificacio(Solicitud solicitud,
-			es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta,
-			ScspTitular titular, ScspFuncionario funcionario) throws Exception;
+    public void processarRespostaPinbalModificacio(Solicitud solicitud,
+            es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta,
+            ScspTitular titular, ScspFuncionario funcionario) throws Exception;
 
-	void crearInfoMadridFromSolicitud(Solicitud solicitud);
+    void crearInfoMadridFromSolicitud(Solicitud solicitud);
 
-	void crearOActualitzarSolicitudPinbal(Long soliID) throws I18NException;
+    void crearOActualitzarSolicitudPinbal(Long soliID) throws I18NException;
 
-	/**
-	 * Obtiene el ID de la solicitud final activa siguiendo la cadena de fusiones.
-	 * Si la solicitud ha sido fusionada varias veces (1→3→5), devuelve el ID final (5).
-	 * Si la solicitud no ha sido fusionada, devuelve el mismo ID.
-	 * 
-	 * @param solicitudID ID de la solicitud original
-	 * @return ID de la solicitud final activa, o el mismo ID si no ha sido fusionada
-	 */
-	public Long obtenerSolicitudFinalActiva(Long solicitudID);
-	
+    /**
+     * Obtiene el ID de la solicitud final activa siguiendo la cadena de fusiones.
+     * Si la solicitud ha sido fusionada varias veces (1→3→5), devuelve el ID final (5).
+     * Si la solicitud no ha sido fusionada, devuelve el mismo ID.
+     * 
+     * @param solicitudID ID de la solicitud original
+     * @return ID de la solicitud final activa, o el mismo ID si no ha sido fusionada
+     */
+    public Long obtenerSolicitudFinalActiva(Long solicitudID);
 
-//	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
-	
-//	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;
-	
+    //	public void afegirEventSolicitudEnviada(Long soliID, String remitent, String missatge) throws I18NException;
+
+    //	public void cosesAFerSolicitudFirmada(Long portafibID) throws I18NException;
+
 }

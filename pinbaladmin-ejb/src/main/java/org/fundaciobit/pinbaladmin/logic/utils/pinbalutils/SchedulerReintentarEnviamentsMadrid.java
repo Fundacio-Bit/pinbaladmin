@@ -149,7 +149,7 @@ public class SchedulerReintentarEnviamentsMadrid {
 						// Enviar solicitud
 						String CIF = solicitud.getNif();
 						es.caib.scsp.esquemas.SVDPIDSOLAUTWS01.alta.datosespecificos.Respuesta resposta = alta
-								.altaSolicitudApiPinbal(titular, funcionario, solicitudAlta, CIF);
+								.altaSolicitudApiPinbal(titular, funcionario, solicitudAlta, CIF, solicitud.isProduccio());
 
 						// 3. Procesar respuesta: ACTUALIZAR SOLI + CREAR INFO MADRID
 						solicitudLogicaEjb.processarRespostaPinbalAlta(solicitud, resposta, titular, funcionario,
@@ -161,7 +161,7 @@ public class SchedulerReintentarEnviamentsMadrid {
 
 						String CIF = solicitud.getNif();
 						es.caib.scsp.esquemas.SVDPIDACTPROCWS01.modificacio.datosespecificos.Respuesta resposta = pinbalModificacioLogicaEjb
-								.modificacioSolicitudApiPinbal(titular, funcionario, solicitudMod, CIF);
+								.modificacioSolicitudApiPinbal(titular, funcionario, solicitudMod, CIF, solicitud.isProduccio());
 
 						solicitudLogicaEjb.processarRespostaPinbalModificacio(solicitud, resposta, titular,
 								funcionario);

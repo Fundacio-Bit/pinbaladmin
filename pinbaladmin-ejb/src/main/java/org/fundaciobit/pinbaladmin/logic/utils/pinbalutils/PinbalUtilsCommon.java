@@ -23,6 +23,7 @@ import org.fundaciobit.genapp.common.i18n.I18NException;
 import org.fundaciobit.pinbaladmin.apiclientpeticions.PinbalAdminSolicitudsConfiguration;
 import org.fundaciobit.pinbaladmin.commons.utils.Configuracio;
 import org.fundaciobit.pinbaladmin.commons.utils.Constants;
+import org.fundaciobit.pinbaladmin.commons.utils.PinbalClientConnection;
 import org.fundaciobit.pinbaladmin.logic.ContacteLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentLogicaService;
 import org.fundaciobit.pinbaladmin.logic.DocumentSolicitudLogicaService;
@@ -165,14 +166,17 @@ public abstract class PinbalUtilsCommon {
 
 	}
 
-	public PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus, String cif)
+	public PinbalAdminSolicitudsConfiguration getPinbalAdminSolicitudsConfiguration(TipusCridada tipus, String cif, boolean isProduccio)
 			throws Exception {
 
 		PinbalAdminSolicitudsConfiguration config = new PinbalAdminSolicitudsConfiguration();
+		
+		
+		PinbalClientConnection connection = PinbalClientConnection.getConnection(isProduccio);
 
-		config.setUrlBase(Configuracio.getApiPinbalUrl());
-		config.setUsername(Configuracio.getApiPinbalUsername());
-		config.setPassword(Configuracio.getApiPinbalPassword());
+		config.setUrlBase(connection.baseUrl);
+		config.setUsername(connection.username);
+		config.setPassword(connection.password);
 
 		config.setFinalidad("Solicitar autorización procedimiento");
 		

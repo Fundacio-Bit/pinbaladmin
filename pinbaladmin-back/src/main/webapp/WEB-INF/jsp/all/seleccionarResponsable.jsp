@@ -249,13 +249,21 @@
 
 	// Construeix el text a mostrar per un usuari retornat pel servidor
 	function textUsuari(usuari) {
-		var text = usuari.administrationID + " - " + usuari.name + " " + usuari.surname1;
+		var text = ofuscarNIF(usuari.administrationID) + " - " + usuari.name + " " + usuari.surname1;
 		if (usuari.surname2 && usuari.surname2.trim() !== "") {
 			text += " " + usuari.surname2;
 		}
 		text += " - " + usuari.username + " - " + usuari.email;
 		return text;
 	}
+	
+	function ofuscarNIF(nif) {
+	    if (nif == null || nif.length <= 4) {
+	        return nif; // Si es null o muy corto, no ofuscar
+	    }
+	    return nif.substring(0, 2) + "*".repeat(4) + nif.substring(nif.length - 3);
+	}
+
 
 	// Afegeix un item a la llista de resultats de la cerca
 	function afegirResponsableAutocomplete(usuari) {

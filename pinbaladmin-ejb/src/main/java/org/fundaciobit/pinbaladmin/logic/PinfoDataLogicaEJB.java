@@ -1128,7 +1128,7 @@ public class PinfoDataLogicaEJB extends PinfoDataEJB implements PinfoDataLogicaS
 		}
 		
 		// Carregar totes les línies de PinfoData per generar el missatge
-		List<PinfoData> pinfodatas = this.select(PinfoDataFields.PINFOID.equal(pinfoID), null);
+		List<PinfoData> pinfodatas = this.select(PinfoDataFields.PINFOID.equal(pinfoID));
 		
 		// Estructura jeràrquica: Usuari -> Procediment -> Servei -> Estat
 		// Map<usuariID, Map<procedimentNom, Map<serveiNom, estat>>>

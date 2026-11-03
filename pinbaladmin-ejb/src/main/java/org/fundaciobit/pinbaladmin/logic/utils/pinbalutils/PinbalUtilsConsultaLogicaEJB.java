@@ -78,7 +78,7 @@ public class PinbalUtilsConsultaLogicaEJB extends PinbalUtilsCommon implements P
 		String CIF = solicitud.getNif();
 		
 		PinbalAdminSolicitudsApi api = new PinbalAdminSolicitudsApi(
-				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA, CIF));
+				getPinbalAdminSolicitudsConfiguration(TipusCridada.CONSULTA, CIF, solicitud.isProduccio()));
 
 		retorno = api.consultaEstatPinbalApi(consulta, titular, funcionario);
 		

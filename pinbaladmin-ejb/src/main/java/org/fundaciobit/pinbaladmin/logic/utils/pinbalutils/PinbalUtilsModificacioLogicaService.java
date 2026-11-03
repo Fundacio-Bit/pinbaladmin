@@ -18,7 +18,7 @@ public interface PinbalUtilsModificacioLogicaService {
 	public Solicitud getDadesSolicitudApiPinbalMod(SolicitudJPA soli) throws Exception;
 
 	public Respuesta modificacioSolicitudApiPinbal(ScspTitular titular, ScspFuncionario funcionario,
-			Solicitud solicitud, String CIF) throws Exception;
+			Solicitud solicitud, String CIF, boolean isProduccio) throws Exception;
 
 	public void processarRespostaPinbalModificacio(org.fundaciobit.pinbaladmin.model.entity.Solicitud solicitud,
 			Respuesta resposta, ScspTitular titular, ScspFuncionario funcionario, InfoMadridJPA infoMadrid)
