@@ -154,6 +154,8 @@ public class PortafibUtils {
 
             UserInfo usuari = pluginUserInfo.getUserInfoByAdministrationID(contacte.getNif());
 
+            System.out.println("Usuari recuperat de PortaFIB: " + "\nNom: " + contacte.getNombrecompleto() + "\nNIF: " + contacte.getNif() + "\nEmail: " + contacte.getMail());
+            
             if (usuari != null) {
 
                 String emailUI = usuari.getEmail();

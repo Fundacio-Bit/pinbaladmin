@@ -3,6 +3,7 @@ package org.fundaciobit.pinbaladmin.logic.utils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ import org.fundaciobit.pluginsib.core.v3.utils.FileUtils;
 public class GenerarDocumentsDG implements GenerarDocumentsDGLogicaService {
 	
 	private static final Logger log = Logger.getLogger(GenerarDocumentsDG.class);
+	
+	final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 	
 	@EJB(mappedName = SolicitudLogicaService.JNDI_NAME)
 	protected SolicitudLogicaService solicitudLogicaEjb;
@@ -121,13 +124,14 @@ public class GenerarDocumentsDG implements GenerarDocumentsDGLogicaService {
 		File outputODT = File.createTempFile("pinbaladmin_formulari", ".odt");
 
 		crearDocuments(data, outputPDF, outputODT);
-		
+		String timestamp = SDF.format(new Date());
+
 		{
 			String fileName = "Formulario_Director_General.pdf";
 			File output = outputPDF;
 			String mimeType = "application/pdf";
 			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_PDF;
-			String nomDocument = "Formulario_Director_General (PDF)";
+			String nomDocument = "Formulario DG (PDF)" + " - " + timestamp;
 			
 			afegirFitxerADocumentsSolicitud(fileName, output, mimeType, nomDocument, tipus, solicitudID);
 		}
@@ -136,7 +140,7 @@ public class GenerarDocumentsDG implements GenerarDocumentsDGLogicaService {
 			File output = outputODT;
 			String mimeType = "application/vnd.oasis.opendocument.text";
 			Long tipus = Constants.DOCUMENT_SOLICITUD_FORMULARI_DIRECTOR_ODT;
-			String nomDocument = "Formulario_Director_General (ODT)";
+			String nomDocument = "Formulario DG (ODT)"+ " - " + timestamp;
 
 			afegirFitxerADocumentsSolicitud(fileName, output, mimeType, nomDocument, tipus, solicitudID);
 		}
