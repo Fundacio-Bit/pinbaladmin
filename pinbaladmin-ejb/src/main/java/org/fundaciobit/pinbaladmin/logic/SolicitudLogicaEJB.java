@@ -468,6 +468,9 @@ public class SolicitudLogicaEJB extends SolicitudEJB implements SolicitudLogicaS
 		destinataris.add(titular);
 		
 		documentLogicaEjb.enviarDocumentPortaFIB(documentID, destinataris, remitent);
+
+		//NOTA: Tambien se esta actualizando en el metodo.
+		/* Aunque tenga mas sentido hacerlo aqui, ahí podemos guardar el portafibID."*/
 		
 		soli.setEstatSolicitud(Constants.SOLI_ESTAT_PENDENT_Firma_Director);
 		this.update(soli);
