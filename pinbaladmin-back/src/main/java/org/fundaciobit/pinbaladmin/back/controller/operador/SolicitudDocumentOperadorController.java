@@ -399,19 +399,20 @@ public class SolicitudDocumentOperadorController extends DocumentController {
 
             //Si es un formulari per AEAT, s'ha d'enviar a firmar també al jefe de ATIB.
             if (doc.getTipus() == Constants.DOCUMENT_SOLICITUD_FORMULARI_AEAT) {
-                //La forma sucia es crear un contactoJPA con NIF y email, y lo enviará como usuario PortaFIB.
 
-                String nif = Configuracio.getNIFJefeATIB();
+            	//Obtenim les dades del jefe d'atib i l'enviam com usuari intern.
+                String nif = Configuracio.getNIFJefeATIB(); //local -> el de ptrias
                 String email = Configuracio.getEmailJefeATIB();
-                //	        	
-                //	        	String nif = "42994276P";
-                //	        	String email = "aroibal@atib.es";
 
                 List<Contacte> listaJefeATIB = contacteLogicaEjb
                         .select(Where.AND(ContacteFields.NIF.equal(nif), ContacteFields.MAIL.equal(email)));
 
                 if (!listaJefeATIB.isEmpty()) {
-                    destinataris.add(new ContactePortaFIB(listaJefeATIB.get(0), ContactePortaFIB.ENVIAR_COM_USUARI_INTERN));
+                	Contacte jefeATIB = listaJefeATIB.get(0);
+                	
+                	log.info("Dades del jefe d'atib: \nNIF: " + jefeATIB.getNif() + "\nCarrec: " + jefeATIB.getCarrec() + "\nNom: " + jefeATIB.getNombrecompleto() + "\nContacteID: " + jefeATIB.getContacteID());
+                	
+                    destinataris.add(new ContactePortaFIB(jefeATIB, ContactePortaFIB.ENVIAR_COM_USUARI_INTERN));
                 }
             }
 

@@ -128,95 +128,95 @@ public class PortafibUtils {
         return fitxerID;
     }
 
-    public static FirmaAsyncSimpleSigner getPersonToSignFromNif(String nif) {
+//    public static FirmaAsyncSimpleSigner getPersonToSignFromNif(String nif) {
+//
+//        //Volem confirmar que l'usuari amb nif està a portafib, i que es el mateix email, sino ho es, crear-lo com a extern.
+//        FirmaAsyncSimpleSigner personToSign;
+//
+//        personToSign = new FirmaAsyncSimpleSigner();
+//
+//        personToSign.setAdministrationID(nif);
+//
+//        return personToSign;
+//
+//    }
 
-        //Volem confirmar que l'usuari amb nif està a portafib, i que es el mateix email, sino ho es, crear-lo com a extern.
-        FirmaAsyncSimpleSigner personToSign;
-
-        personToSign = new FirmaAsyncSimpleSigner();
-
-        personToSign.setAdministrationID(nif);
-
-        return personToSign;
-
-    }
-
-    public static FirmaAsyncSimpleSigner getPersonToSignFromContacte(Contacte contacte) {
-
-        //Volem confirmar que l'usuari amb nif està a portafib, i que es el mateix email, sino ho es, crear-lo com a extern.
-        FirmaAsyncSimpleSigner personToSign;
-
-        personToSign = new FirmaAsyncSimpleSigner();
-
-        try {
-            IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
-                    TipusPluginUserInfo.LDAP);
-
-            UserInfo usuari = pluginUserInfo.getUserInfoByAdministrationID(contacte.getNif());
-
-            System.out.println("Usuari recuperat de PortaFIB: " + "\nNom: " + contacte.getNombrecompleto() + "\nNIF: " + contacte.getNif() + "\nEmail: " + contacte.getMail());
-            
-            if (usuari != null) {
-
-                String emailUI = usuari.getEmail();
-                if (emailUI != null && emailUI.equals(contacte.getMail())) {
-
-                    RolesInfo rols = pluginUserInfo.getRolesByUsername(usuari.getUsername());
-                    // rols.getRoles() array to list y comparar si te rol "PFI_USER";
-
-                    boolean isPortaFIBUser = false;
-                    for (String rol : rols.getRoles()) {
-                        System.out.println("ROL de l'usuari: " + rol);
-                        if (rol.equals(ROL_USUARI_PORTAFIB) || rol.equals(ROL_USUARI_TIPUS_I)) {
-                            isPortaFIBUser = true;
-                            break;
-                        }
-                    }
-
-                    if (isPortaFIBUser) {
-                        personToSign.setAdministrationID(contacte.getNif());
-                        return personToSign;
-                    } else {
-                        // L'usuari existeix pero no te rol de PortaFIB User.
-                    }
-                } else {
-                    // L'usuari existeix pero es un altre email.
-                }
-            } else {
-                //No existeix l'usuari, crear-lo com a extern.
-            }
-
-            //Si arriba aqui, cream usuari extern.
-            log.info("Creant usuari extern a PortaFIB: \n" + contacte.getNif() + ",\n " + contacte.getNom()
-                    + " " + contacte.getLlinatge1() + " " + contacte.getLlinatge2() + ",\n " + contacte.getMail());
-
-            String nif = contacte.getNif();
-            String name = contacte.getNom();
-            String surnames = contacte.getLlinatge1();
-            String email = contacte.getMail();
-            String lang = "ca";
-            int securityLevel = FirmaAsyncSimpleExternalSigner.SECURITY_LEVEL_TOKEN;
-
-            log.info("Dades per a l'extern: \nNIF: " + nif + "\nNom: " + name + "\nCognoms: " + surnames
-                    + "\nEmail: " + email + "\nLang: " + lang + "\nSecurityLevel: " + securityLevel);
-
-            FirmaAsyncSimpleExternalSigner externalSigner = new FirmaAsyncSimpleExternalSigner(nif, name, surnames,
-                    email, lang, securityLevel);
-
-            personToSign.setExternalSigner(externalSigner);
-            return personToSign;
-
-        } catch (I18NException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
+//    public static FirmaAsyncSimpleSigner getPersonToSignFromContacte(Contacte contacte) {
+//
+//        //Volem confirmar que l'usuari amb nif està a portafib, i que es el mateix email, sino ho es, crear-lo com a extern.
+//        FirmaAsyncSimpleSigner personToSign;
+//
+//        personToSign = new FirmaAsyncSimpleSigner();
+//
+//        try {
+//            IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
+//                    TipusPluginUserInfo.LDAP);
+//
+//            UserInfo usuari = pluginUserInfo.getUserInfoByAdministrationID(contacte.getNif());
+//
+//            System.out.println("Usuari recuperat de PortaFIB: " + "\nNom: " + contacte.getNombrecompleto() + "\nNIF: " + contacte.getNif() + "\nEmail: " + contacte.getMail());
+//            
+//            if (usuari != null) {
+//
+//                String emailUI = usuari.getEmail();
+//                if (emailUI != null && emailUI.equals(contacte.getMail())) {
+//
+//                    RolesInfo rols = pluginUserInfo.getRolesByUsername(usuari.getUsername());
+//                    // rols.getRoles() array to list y comparar si te rol "PFI_USER";
+//
+//                    boolean isPortaFIBUser = false;
+//                    for (String rol : rols.getRoles()) {
+//                        System.out.println("ROL de l'usuari: " + rol);
+//                        if (rol.equals(ROL_USUARI_PORTAFIB) || rol.equals(ROL_USUARI_TIPUS_I)) {
+//                            isPortaFIBUser = true;
+//                            break;
+//                        }
+//                    }
+//
+//                    if (isPortaFIBUser) {
+//                        personToSign.setAdministrationID(contacte.getNif());
+//                        return personToSign;
+//                    } else {
+//                        // L'usuari existeix pero no te rol de PortaFIB User.
+//                    }
+//                } else {
+//                    // L'usuari existeix pero es un altre email.
+//                }
+//            } else {
+//                //No existeix l'usuari, crear-lo com a extern.
+//            }
+//
+//            //Si arriba aqui, cream usuari extern.
+//            log.info("Creant usuari extern a PortaFIB: \n" + contacte.getNif() + ",\n " + contacte.getNom()
+//                    + " " + contacte.getLlinatge1() + " " + contacte.getLlinatge2() + ",\n " + contacte.getMail());
+//
+//            String nif = contacte.getNif();
+//            String name = contacte.getNom();
+//            String surnames = contacte.getLlinatge1();
+//            String email = contacte.getMail();
+//            String lang = "ca";
+//            int securityLevel = FirmaAsyncSimpleExternalSigner.SECURITY_LEVEL_TOKEN;
+//
+//            log.info("Dades per a l'extern: \nNIF: " + nif + "\nNom: " + name + "\nCognoms: " + surnames
+//                    + "\nEmail: " + email + "\nLang: " + lang + "\nSecurityLevel: " + securityLevel);
+//
+//            FirmaAsyncSimpleExternalSigner externalSigner = new FirmaAsyncSimpleExternalSigner(nif, name, surnames,
+//                    email, lang, securityLevel);
+//
+//            personToSign.setExternalSigner(externalSigner);
+//            return personToSign;
+//
+//        } catch (I18NException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//
+//    }
 
     public static FirmaAsyncSimpleSignatureBlock[] convertContacteToSignatureBlock(List<ContactePortaFIB> destinataris)
             throws I18NException {
@@ -237,11 +237,15 @@ public class PortafibUtils {
 
                 ContactePortaFIB contacteDestinatari = contactesBloc[j];
                 
+                //Si l'hem d'enviar com extern, cream l'usuari extern amb dades del contacte, sino, cercam l'usuari amb el nif del contacte.
                 FirmaAsyncSimpleSigner personToSign;
                 if (contacteDestinatari.isEnviarComUsuariExtern()) {
-                    personToSign =  getPersonToSignFromContacte(contacteDestinatari.getContacte());
+//                    personToSign =  getPersonToSignFromContacte(contacteDestinatari.getContacte());
+                    personToSign = getExternalPersonToSign(contacteDestinatari.getContacte());
+                    
                 } else {
-                    personToSign = getPersonToSignFromNif(contacteDestinatari.getContacte().getNif());
+//                    personToSign = getPersonToSignFromNif(contacteDestinatari.getContacte().getNif());
+					personToSign = getInternalPersonToSign(contacteDestinatari.getContacte().getNif());
                 }
                 
                 boolean required = true;
@@ -335,5 +339,92 @@ public class PortafibUtils {
         FirmaAsyncSimpleFile portafibFile = new FirmaAsyncSimpleFile(fitxer.getNom(), fitxer.getMime(), data);
         return portafibFile;
     }
+    
+    
+	public static FirmaAsyncSimpleSigner getExternalPersonToSign(Contacte contacte) throws I18NException {
+		// Creem usuari extern amb dades del contacte.
+		String nif = contacte.getNif();
+		String name = contacte.getNom();
+		String surnames = contacte.getLlinatge1() + " " + contacte.getLlinatge2();
+		String email = contacte.getMail();
+		String lang = "ca";
+		int securityLevel = FirmaAsyncSimpleExternalSigner.SECURITY_LEVEL_TOKEN;
+
+		log.info("Creant usuari extern a PortaFIB: \nNIF: " + nif + "\nNom: " + name + "\nCognoms: " + surnames
+				+ "\nEmail: " + email + "\nLang: " + lang + "\nSecurityLevel: " + securityLevel);
+		
+		FirmaAsyncSimpleExternalSigner externalSigner = new FirmaAsyncSimpleExternalSigner(nif, name, surnames, email,
+				lang, securityLevel);
+
+		FirmaAsyncSimpleSigner personToSign = new FirmaAsyncSimpleSigner();
+		personToSign.setExternalSigner(externalSigner);
+		return personToSign;
+    }
+    
+	public static FirmaAsyncSimpleSigner getInternalPersonToSign(String nif) throws I18NException {
+		// Un usuari intern te usuari a portafib i rol correcte. Per tant, cercam
+		// l'usuari i si trobam el rol, el retornam.
+
+		// Si no el trobam, es un error, no enviam com extern si s'ha d'enviar com
+		// intern.
+
+		FirmaAsyncSimpleSigner personToSign;
+		personToSign = new FirmaAsyncSimpleSigner();
+
+		try {
+			log.info("Cercant usuari intern a PortaFIB amb NIF: " + nif + ". Plugin UserInfo: " + TipusPluginUserInfo.OTAE);
+			IUserInformationPlugin pluginUserInfo = PinbalAdminPluginsManager.getUserInformationPluginInstance(false,
+					TipusPluginUserInfo.OTAE);
+
+			UserInfo usuari = pluginUserInfo.getUserInfoByAdministrationID(nif);
+
+			if (usuari != null) {
+
+				System.out.println("Usuari recuperat de PortaFIB: " + "\nNom: " + usuari.getFullName() + "\nNIF: "
+						+ usuari.getAdministrationID() + "\nUsername: " + usuari.getUsername());
+
+				RolesInfo rols = pluginUserInfo.getRolesByUsername(usuari.getUsername());
+
+				boolean isPortaFIBUser = false;
+				for (String rol : rols.getRoles()) {
+					System.out.println("ROL de l'usuari: " + rol);
+					if (rol.equals(ROL_USUARI_PORTAFIB) || rol.equals(ROL_USUARI_TIPUS_I)) {
+						isPortaFIBUser = true;
+						break;
+					}
+				}
+
+				if (isPortaFIBUser) {
+					personToSign.setAdministrationID(usuari.getAdministrationID());
+					return personToSign;
+				} else {
+					// L'usuari existeix pero no te rol de PortaFIB User.
+//					log.error("L'usuari amb NIF " + contacte.getNif() + " no té rol de PortaFIB User.");
+//					throw new I18NException("error.portafib.usuariintern.norol", contacte.getNif(), contacte.getNombrecompleto());
+
+					String errorMsg = "L'usuari amb NIF " + nif + " no té rol de PortaFIB User.";
+					log.error(errorMsg);
+					throw new I18NException(errorMsg);
+				}
+			} else {
+				// No existeix l'usuari, crear-lo com a extern.
+//				log.error("L'usuari amb NIF " + contacte.getNif() + " no existeix a PortaFIB.");
+//				throw new I18NException("error.portafib.usuariintern.nouser", contacte.getNif(), contacte.getNombrecompleto());
+
+				String errorMsg = "L'usuari amb NIF " + nif + " no existeix a PortaFIB.";
+				log.error(errorMsg);
+				throw new I18NException(errorMsg);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+//			log.error("Error al cercar usuari intern a PortaFIB: " + contacte.getNif() + " - " + contacte.getNombrecompleto() + ". " + e.getMessage(), e);
+//			throw new I18NException("error.portafib.usuariintern", contacte.getNif(), contacte.getNombrecompleto(), e.getMessage());
+
+			String errorMsg = "Error al cercar usuari intern a PortaFIB amb NIF " + nif + ". " + e.getMessage();
+			log.error(errorMsg, e);
+			throw new I18NException(errorMsg);
+		}
+	}
 
 }

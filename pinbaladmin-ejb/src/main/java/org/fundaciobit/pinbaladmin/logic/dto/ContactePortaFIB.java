@@ -12,9 +12,9 @@ public class ContactePortaFIB {
     public static final boolean ENVIAR_COM_USUARI_EXTERN = true; // Indica que s'ha d'enviar com a usuari extern
     public static final boolean ENVIAR_COM_USUARI_INTERN = false; // Indica que s'ha d'enviar com a usuari intern
 
-    public final Contacte contacte;
+    private final Contacte contacte;
 
-    public final boolean enviarComUsuariExtern;
+    private final boolean enviarComUsuariExtern;
 
     public ContactePortaFIB(Contacte contacte, boolean enviarComUsuariExtern) {
         this.contacte = contacte;

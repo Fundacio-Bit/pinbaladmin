@@ -113,7 +113,7 @@ public class DocumentLogicaEJB extends DocumentEJB implements DocumentLogicaServ
 
             Contacte cte = cteP.getContacte();
 
-            msg += cte.getNif() + " - " + cte.getNom() + " " + cte.getLlinatge1() + " - " + cte.getMail() + "("
+            msg += cte.getNif() + " - " + cte.getNom() + " " + cte.getLlinatge1() + " - " + cte.getMail() + " ("
                     + (cteP.isEnviarComUsuariExtern() ? "EXTERN" : "INTERN") + ")\n";
         }
 

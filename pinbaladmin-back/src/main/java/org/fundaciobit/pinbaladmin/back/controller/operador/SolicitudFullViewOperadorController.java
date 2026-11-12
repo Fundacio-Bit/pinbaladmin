@@ -677,6 +677,8 @@ public class SolicitudFullViewOperadorController extends SolicitudOperadorContro
             Long entitatID = organ.getEntitatid();
             EntitatJPA entitat = entitatLogicaEjb.findByPrimaryKey(entitatID);
 
+            //Si l'entitat la gestiona Govern Digital, la solicitud s'envia al DG (com usuari intern de PortaFIB), si no, s'envia com a usuari extern.
+            
             boolean enviarCom;
             if (entitat == null || entitat.getCIF() == null) {
                 enviarCom = ContactePortaFIB.ENVIAR_COM_USUARI_EXTERN;
