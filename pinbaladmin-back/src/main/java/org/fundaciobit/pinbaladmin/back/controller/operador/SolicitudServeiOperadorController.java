@@ -488,7 +488,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
             throw new I18NException("error", "getAdditionalCondition() :: El valor de solicitudID es null");
         }
 
-        log.info("getAdditionalCondition(); => SOLI = " + soli);
+//        log.info("getAdditionalCondition(); => SOLI = " + soli);
 
         return SOLICITUDID.equal(soli);
     }
@@ -510,7 +510,7 @@ public class SolicitudServeiOperadorController extends SolicitudServeiController
         filterForm.getAdditionalButtonsByPK().clear();
 
         for (SolicitudServei solicitudServei : list) {
-        	log.info("solicitudServei: " + solicitudServei);
+//        	log.info("solicitudServei: " + solicitudServei);
         	log.info("  - serveiID: " + solicitudServei.getServeiID() + " estatActual: " + solicitudServei.getEstatSolicitudServeiID());
             if (solicitudServei.getEstatSolicitudServeiID() == Constants.ESTAT_SOLICITUD_SERVEI_SENSE_ESTAT) {
                 error = true;

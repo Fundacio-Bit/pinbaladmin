@@ -168,12 +168,14 @@ public class TramitAPersAutLogicaEJB extends TramitAPersAutEJB implements Tramit
 
 		String result = TemplateEngine.processExpressionLanguage(plantilla, map);
 
-		String fileName = "D:/Projectes/pinbaladmin-files/formulario_nuevo.xml";
+//		String fileName = "D:/Projectes/pinbaladmin-files/formulario_nuevo.xml";
 
-		FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
+//		FileUtils.writeStringToFile(new File(fileName), result, StandardCharsets.UTF_8, false);
 
-		byte[] data = FileUtils.readFileToByteArray(new File(fileName));
+//		byte[] data = FileUtils.readFileToByteArray(new File(fileName));
 
+		byte[] data = result.getBytes(StandardCharsets.UTF_8);
+		
 		Fitxer f = fitxerPublicLogicaEjb.create("formulari.xml", data.length, "application/xml", null);
 		FileSystemManager.crearFitxer(new ByteArrayInputStream(data), f.getFitxerID());
 

@@ -127,7 +127,7 @@ public class SolicitudsServeiOnlyContentOperadorControlador extends SolicitudSer
     public List<StringKeyValue> getReferenceListForServeiID(HttpServletRequest request, ModelAndView mav, Where where)
             throws I18NException {
         
-        log.info("XXXXXXXXXXXXXXX Where: " + where.toSQL());
+//        log.info("XXXXXXXXXXXXXXX Where: " + where.toSQL());
         
         String separator = "|";
         OrderBy order = new OrderBy(ServeiFields.SERVEIID);
