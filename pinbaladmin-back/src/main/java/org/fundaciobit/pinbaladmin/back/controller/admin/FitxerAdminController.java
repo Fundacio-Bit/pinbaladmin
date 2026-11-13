@@ -330,14 +330,13 @@ public class FitxerAdminController extends FitxerController {
 
 		Set<Long> fisicsPerEsborrar = new HashSet<>();
 
+		List<Long> fitxersIDBBDD = fitxerLogicaEjb.executeQuery(FitxerFields.FITXERID);
+		
 		// Afegirem fisics que no tenen referencia en BD
-		for (Map.Entry<Long, File> entry : allFiles.entrySet()) {
-			Long fileId = entry.getKey();
+		for (Long fileIDFisic: allFiles.keySet()) {
 
-			FitxerJPA fitxer = fitxerLogicaEjb.findByPrimaryKey(fileId);
-
-			if (fitxer == null) {
-				fisicsPerEsborrar.add(fileId);
+			if(!fitxersIDBBDD.contains(fileIDFisic)) {
+				fisicsPerEsborrar.add(fileIDFisic);
 			}
 		}
 
@@ -359,7 +358,7 @@ public class FitxerAdminController extends FitxerController {
 		log.info("eliminarFitxersFisic");
 
 		Map<Long, File> allFiles = FileSystemManager.getAllFiles();
-		List<Long> fitxersBBDD = fitxerLogicaEjb.executeQuery(FITXERID, new OrderBy(FITXERID));
+		List<Long> fitxersBBDD = fitxerLogicaEjb.executeQuery(FITXERID);
 
 		Set<Long> fitxersEsborrarBBDD = new HashSet<>();
 		
@@ -378,9 +377,6 @@ public class FitxerAdminController extends FitxerController {
 		return "redirect:" + getContextWeb() + "/list/1";
 	}
     
-	
-	
-	
     @Override
     public String getTileForm() {
         return "fitxerForm_admin";
