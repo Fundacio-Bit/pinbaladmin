@@ -275,12 +275,21 @@ public class InicioController {
 	}
 
 	private void loginInfoToFile(String token, LoginInfo loginInfo) {
-		File file = null;
+
+		File frontFile = null;
+		File filesPath = FileSystemManager.getFilesPath();
 		FileWriter myWriter = null;
 		
 		try {
-			file = new File(token + ".front");
-			log.info("Creando fichero temporal: " + file.getAbsolutePath());
+			log.info("Files path: " + filesPath);
+
+			File frontFileDirectory = new File(filesPath, "front");
+			frontFileDirectory.mkdirs(); // Crear directorio si no existe
+			
+			frontFile = new File(frontFileDirectory, token + ".front");
+			frontFile.deleteOnExit(); // Se borra automáticamente al salir de la JVM (o sea, cada cierto tiempo se borran todos)
+
+			log.info("Creando fichero front: " + frontFile.getAbsolutePath());
 
 			// Escribir todos los datos en el fichero.
 			String nif = loginInfo.getAdministrationID();
@@ -296,7 +305,7 @@ public class InicioController {
 			log.info("Datos de usuario - NIF: " + nif + ", Nombre: " + nom);
 
 			// Escribir en el fichero.
-			myWriter = new FileWriter(file);
+			myWriter = new FileWriter(frontFile);
 			myWriter.write("NIF=" + nif + "\n");
 			myWriter.write("Nom=" + nom + "\n");
 			myWriter.write("Cognom1=" + ape1 + "\n");
@@ -308,22 +317,12 @@ public class InicioController {
 			myWriter.write("QAA=" + qaa + "\n");
 			myWriter.close();
 			myWriter = null;
-
-			File filesPath = FileSystemManager.getFilesPath();
-			log.info("Files path: " + filesPath);
-			
-			File newFile = new File(filesPath, token + ".front");
-			log.info("Copiando a: " + newFile.getAbsolutePath());
-			
-			FileSystemManager.copy(file, newFile);
-
+		
 			log.info("Fichero de token creado correctamente: " + token + ".front");
 			
 		} catch (IOException e) {
 			log.error("Error de IO al escribir fichero de token: " + e.getMessage(), e);
-			log.error("Fichero: " + (file != null ? file.getAbsolutePath() : "null"));
-		} catch (I18NException e) {
-			log.error("Error de I18N al obtener el path de ficheros: " + e.getMessage(), e);
+			log.error("Fichero: " + (frontFile != null ? frontFile.getAbsolutePath() : "null"));
 		} catch (Exception e) {
 			log.error("Error inesperado al escribir fichero de token: " + e.getMessage(), e);
 			log.error("Tipo: " + e.getClass().getName());

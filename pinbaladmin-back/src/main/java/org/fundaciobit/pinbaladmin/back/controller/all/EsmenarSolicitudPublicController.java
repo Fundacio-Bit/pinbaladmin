@@ -117,7 +117,7 @@ public class EsmenarSolicitudPublicController extends ModificarSolicitudPublicCo
 //			@PathVariable("token") java.lang.String token) {
 //
 //		log.info("obtenirDadesFitxerToken token: " + token);
-//		File file = new File(FileSystemManager.getFilesPath(), token + ".front");
+//		File file = new File(FileSystemManager.getFilesPath() + "/front", token + ".front");
 //
 //		Properties properties = new Properties();
 //		try {

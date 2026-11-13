@@ -426,7 +426,7 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			@PathVariable("token") java.lang.String token) {
 
 		log.info("obtenirDadesFitxerToken token: " + token);
-		File file = new File(FileSystemManager.getFilesPath(), token + ".front");
+		File file = new File(FileSystemManager.getFilesPath() + "/front", token + ".front");
 
 		Properties properties = new Properties();
 		try {
@@ -436,6 +436,11 @@ public class IncidenciaPinfoPublicController extends IncidenciaTecnicaController
 			e.printStackTrace();
 		}
 
+		if (!properties.isEmpty()) {
+			//Si hem aconseguit les dades del fitxer, l'esborram.
+			file.delete();
+		}
+		
 		request.getSession().setAttribute("properties", properties);
 		request.getSession().setAttribute("token", token);
 		return "redirect:" + CONTEXT_WEB + "/new";

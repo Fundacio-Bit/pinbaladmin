@@ -141,7 +141,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			@PathVariable("token") java.lang.String token) {
 
 		log.info("obtenirDadesFitxerToken token: " + token);
-		File file = new File(FileSystemManager.getFilesPath(), token + ".front");
+		File file = new File(FileSystemManager.getFilesPath() + "/front", token + ".front");
 
 		Properties properties = new Properties();
 		try {
@@ -1159,7 +1159,7 @@ public class ModificarSolicitudPublicController extends ModificacioSolicitudCont
 			@RequestParam("norma") String norma, @RequestParam("articles") String articles,
 			@RequestParam("fitxer") MultipartFile fitxer) throws I18NException {
 
-		log.info("Buenas");
+		log.info("Bones. Afegim norma: " + norma + ", articles: " + articles);
 
 		if (fitxer != null && !fitxer.isEmpty()) {
 			String nombreFichero = fitxer.getOriginalFilename();
